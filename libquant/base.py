@@ -2,7 +2,7 @@ from abc import abstractmethod, ABC
 from sklearn.base import BaseEstimator
 
 
-class Quantifier(BaseEstimator, ABC):
+class Quantifier(ABC, BaseEstimator):
     
     @abstractmethod
     def fit(self, *args, **kwargs):
