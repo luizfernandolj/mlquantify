@@ -1,2 +1,0 @@
-class NPP:
-    pass
