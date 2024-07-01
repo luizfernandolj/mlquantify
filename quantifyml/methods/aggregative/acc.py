@@ -25,7 +25,7 @@ class ACC(Quantifier):
         scores = np.stack([scores, np.asarray(y)], axis=1)
             
         tprfpr = getTPRFPR(scores, _class)
-        threshold, tpr, fpr = tprfpr[tprfpr['threshold'] == self.__threshold].to_numpy()[0]
+        threshold, fpr, tpr = tprfpr[tprfpr['threshold'] == self.__threshold].to_numpy()[0]
         
         return [threshold, tpr, fpr]
     
@@ -49,18 +49,12 @@ class ACC(Quantifier):
     
     
     def _adjust_classify_count(self, scores: np.ndarray, tpr:float, fpr:float) -> float:
-        count = len(scores[scores >= self.__threshold])  
-        cc_ouput = count/len(scores)
+        count = len(scores[scores >= self.threshold])
+        cc_output = count / len(scores)
         
-        if tpr - fpr == 0:
-            prevalence = cc_ouput
-        else:
-            prevalence = (cc_ouput - fpr)/(tpr - fpr)   #adjusted class proportion
+        prevalence = (cc_output - fpr) / (tpr - fpr) if tpr != fpr else cc_output
         
-        prevalence = 1 if prevalence >= 1 else prevalence
-        prevalence = 0 if prevalence <= 0 else prevalence
-        
-        return prevalence
+        return np.clip(prevalence, 0, 1)
         
     def predict(self, X) -> dict:
         

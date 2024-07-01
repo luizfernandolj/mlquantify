@@ -21,7 +21,7 @@ class PACC(Quantifier):
         scores = np.stack([scores, np.asarray(y)], axis=1)
             
         tprfpr = getTPRFPR(scores, _class)
-        threshold, tpr, fpr = tprfpr[tprfpr['threshold'] == self.__threshold].to_numpy()[0]
+        threshold, fpr, tpr = tprfpr[tprfpr['threshold'] == self.__threshold].to_numpy()[0]
         
         return [threshold, tpr, fpr]
     

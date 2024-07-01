@@ -23,8 +23,9 @@ class MAX(Quantifier):
             
         tprfpr = getTPRFPR(scores, _class)
         
-        max_index = (np.abs((1 - tprfpr['tpr']) - tprfpr['fpr'])).idxmax()
-            
+        diff_tpr_fpr = list(abs(tprfpr['tpr'] - tprfpr['fpr']))
+    
+        max_index = diff_tpr_fpr.index(max(diff_tpr_fpr))         #Finding index where (tpr-fpr) is maximum
         threshold, fpr, tpr = tprfpr.loc[max_index]
         
         return [threshold, tpr, fpr]

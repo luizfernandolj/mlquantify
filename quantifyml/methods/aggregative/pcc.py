@@ -3,7 +3,6 @@ import numpy as np
 from sklearn.base import BaseEstimator
 
 from ...base import Quantifier
-from ...utils import One_vc_All
 
 class PCC(Quantifier):
     
