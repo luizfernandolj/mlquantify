@@ -1,100 +1,79 @@
+
 import numpy as np
 from sklearn.base import BaseEstimator
 
-from ...base import Quantifier
+from ...base import Quantifier, Utils
 from ...utils import getTPRFPR
 
-class PACC(Quantifier):
+class PACC(Quantifier, Utils):
+    """ Implementation of Adjusted Classify and Count
+    """
     
-    def __init__(self, classifier:BaseEstimator, threshold:float=0.5):
+    def __init__(self, classifier:BaseEstimator, threshold:float=0.5, round_to:int=3):
         assert isinstance(classifier, BaseEstimator), "Classifier object is not an estimator"
         
-        self.__classifier = classifier
-        self.__threshold = threshold
-        self.__n_class = 2
-        self.__classes = None
+        self.classifier = classifier
+        self.threshold = threshold
+        self.n_class = 2
+        self.classes = None
+        self.round_to = round_to
         self.tprfpr = []
-    
-    def _get_tprfpr(self, X, y, i:int, _class:int) -> list:
-            
-        scores = self.__classifier.predict_proba(X)[:, i]
-        scores = np.stack([scores, np.asarray(y)], axis=1)
-            
-        tprfpr = getTPRFPR(scores, _class)
-        threshold, fpr, tpr = tprfpr[tprfpr['threshold'] == self.__threshold].to_numpy()[0]
-        
-        return [threshold, tpr, fpr]
     
     def fit(self, X, y):
         
-        self.__classes = np.unique(y)
-        self.__n_class = len(np.unique(y))
+        self.classes = np.unique(y)
+        self.n_class = len(np.unique(y))
+        self.classifier.fit(X, y)
         
-        self.__classifier.fit(X, y)
-        
-        if self.__n_class > 2:
-            for i in range(self.__n_class):
-                self.tprfpr.append(self._get_tprfpr(X, y, i))
+        if self.n_class > 2 or not self.is_binary(y):
+             # Applying one vs all for each class if number of class is greater than 2
+            for _, y_class in self.one_vs_all(y):
+                values = self.get_values(X, y_class, self.classifier, tprfpr=True)
+                tprfpr = values["tprfpr"]
                 
+                threshold, tpr, fpr = tprfpr[tprfpr['threshold'] == self.threshold].to_numpy()[0]
+                
+                self.tprfpr.append([threshold, tpr, fpr])
+            return self
         
-        self.tprfpr = self._get_tprfpr(X, y, 0, self.__classes[0])
-            
+        values = self.get_values(X, y, self.classifier, tprfpr=True)
+        tprfpr = values["tprfpr"]
+        
+        #getting tpr and fpr for threshold equals threshold argument of the class
+        threshold, tpr, fpr = tprfpr[tprfpr['threshold'] == self.threshold].to_numpy()[0]
+        
+        self.tprfpr = [threshold, tpr, fpr]
             
         return self
     
     
-    def _adjust_pcc(self, scores_mean, tpr, fpr) -> float:
+    def _adjust_classify_count(self, mean_scores: np.ndarray, tpr:float, fpr:float) -> float:
         diff_tpr_fpr = tpr - fpr
-        prevalence = (scores_mean - fpr) / diff_tpr_fpr  #adjusted class proportion
+        prevalence = (mean_scores - fpr) / diff_tpr_fpr
         
-        prevalence = 1 if prevalence >= 1 else prevalence
-        prevalence = 0 if prevalence <= 0 else prevalence
-        
-        return prevalence
-
-        
+        return np.clip(prevalence, 0, 1)
     
         
-    def predict(self, X):
+    def predict(self, X) -> dict:
         
         prevalences = {}
+        
+        scores = self.classifier.predict_proba(X)
 
-        scores = self.__classifier.predict_proba(X)
-
-
-        for i, _class in enumerate(self.__classes):
-            scores_class = scores[:, i]
-            scores_class_mean = np.mean(scores_class)
+        if self.n_class > 2 or not self.binary: 
             
-            if self.__n_class > 2:
-                _, tpr, fpr = self.tprfpr[i]
-                prevalence = self._adjust_classify_count(scores_class, tpr, fpr)
-                prevalences[_class] = np.round(prevalence, 3)
-            else:  
-                if len(prevalences) > 0:
-                    prevalences[_class] = 1 - prevalences[self.__classes[0]]
-                    
-                    return prevalences
-                
-                _, tpr, fpr = self.tprfpr
-            
-                prevalence = self._adjust_pcc(scores_class_mean, tpr, fpr)
-
-                prevalences[_class] = np.round(prevalence, 3)
+            for i, (_class, [_, tpr, fpr]) in enumerate(zip(self.classes, self.tprfpr)):
+                mean_scores = np.mean(scores[:, i])
+                prevalence = self._adjust_classify_count(mean_scores, tpr, fpr)
+                prevalences[_class] = np.round(prevalence, self.round_to)
+            prevalences = {_class:round(p/sum(prevalences.values()), self.round_to) for _class, p in prevalences.items()}
+            return prevalences
+        
+        mean_scores = np.mean(scores[:, 1])
+        _, tpr, fpr = self.tprfpr
+        prevalence = self._adjust_classify_count(mean_scores, tpr, fpr)
+        prevalences[1] = np.round(prevalence, self.round_to)
+        prevalences[0] = np.round(1 - prevalence, self.round_to)
         
         return prevalences
-        
     
-    @property
-    def n_class(self):
-        return self.__n_class
-    
-    @property
-    def classifier(self):
-        return self.__classifier
-    
-    @classifier.setter
-    def classifier(self, new_classifier):
-        assert isinstance(new_classifier, BaseEstimator), "Classifier object is not an estimator"
-        
-        self.__classifier = new_classifier

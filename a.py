@@ -5,7 +5,7 @@ from sklearn.model_selection import train_test_split
 from sklearn.ensemble import RandomForestClassifier
 
 df = pd.read_csv("data/BNG.csv")
-df["class"].replace(2, 0, inplace=True)
+df["class"] = df["class"].replace(2, 0)
 X = df.drop("class", axis=1)
 Y = df["class"]
 
@@ -19,7 +19,7 @@ rfc = RandomForestClassifier(n_estimators=200, random_state=69, n_jobs=-1)
 print("Real proportion:")
 print(np.round(y_test.value_counts(normalize=True), 3).to_dict())
 
-quantifier = HDy(classifier=rfc)
+quantifier = PACC(classifier=rfc)
 
 
 quantifier.fit(X_train, y_train)
