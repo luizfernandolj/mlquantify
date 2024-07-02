@@ -19,7 +19,7 @@ rfc = RandomForestClassifier(n_estimators=200, random_state=69, n_jobs=-1)
 print("Real proportion:")
 print(np.round(y_test.value_counts(normalize=True), 3).to_dict())
 
-quantifier = PACC(classifier=rfc)
+quantifier = ACC(classifier=rfc)
 
 
 quantifier.fit(X_train, y_train)

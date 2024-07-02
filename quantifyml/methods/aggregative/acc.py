@@ -1,11 +1,12 @@
 
 import numpy as np
 from sklearn.base import BaseEstimator
+import pdb
 
-from ...base import Quantifier, Utils
-from ...utils import getTPRFPR
+from ...base import AggregativeQuantifier
+from ...utils.utilities import get_values
 
-class ACC(Quantifier, Utils):
+class ACC(AggregativeQuantifier):
     """ Implementation of Adjusted Classify and Count
     """
     
@@ -14,31 +15,15 @@ class ACC(Quantifier, Utils):
         
         self.classifier = classifier
         self.threshold = threshold
-        self.n_class = 2
-        self.classes = None
         self.round_to = round_to
-        self.tprfpr = []
+        self.tprfpr = None
     
-    def fit(self, X, y):
-        
-        self.classes = np.unique(y)
-        self.n_class = len(np.unique(y))
+    def _fit_binary(self, X, y):
+    
         self.classifier.fit(X, y)
         
-        if self.n_class > 2 or not self.is_binary(y):
-             # Applying one vs all for each class if number of class is greater than 2
-            for _, y_class in self.one_vs_all(y):
-                values = self.get_values(X, y_class, self.classifier, tprfpr=True)
-                tprfpr = values["tprfpr"]
-                
-                threshold, tpr, fpr = tprfpr[tprfpr['threshold'] == self.threshold].to_numpy()[0]
-                
-                self.tprfpr.append([threshold, tpr, fpr])
-            return self
-        
-        values = self.get_values(X, y, self.classifier, tprfpr=True)
+        values = get_values(X, y, self.classifier, tprfpr=True)
         tprfpr = values["tprfpr"]
-        
         #getting tpr and fpr for threshold equals threshold argument of the class
         threshold, tpr, fpr = tprfpr[tprfpr['threshold'] == self.threshold].to_numpy()[0]
         
@@ -56,20 +41,11 @@ class ACC(Quantifier, Utils):
         return np.clip(prevalence, 0, 1)
     
         
-    def predict(self, X) -> dict:
+    def _predict_binary(self, X) -> dict:
         
         prevalences = {}
         
         scores = self.classifier.predict_proba(X)
-
-        if self.n_class > 2 or not self.binary: 
-            
-            for i, (_class, [_, tpr, fpr]) in enumerate(zip(self.classes, self.tprfpr)):
-                scores_class = scores[:, i]
-                prevalence = self._adjust_classify_count(scores_class, tpr, fpr)
-                prevalences[_class] = np.round(prevalence, self.round_to)
-            prevalences = {_class:round(p/sum(prevalences.values()), self.round_to) for _class, p in prevalences.items()}
-            return prevalences
         
         scores_class = scores[:, 1]
         _, tpr, fpr = self.tprfpr

@@ -1,7 +1,10 @@
 import numpy as np
 import pandas as pd
+from .get_scores import get_scores
 
-def getTPRFPR(scores):
+def get_tprfpr(X, y, classifier, folds=10):
+    
+    scores = get_scores(X, y, classifier, folds)
     
     unique_scores = np.linspace(0,1,101)
         

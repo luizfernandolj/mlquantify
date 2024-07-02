@@ -1,92 +1,87 @@
+from typing import List
 from abc import abstractmethod, ABC
-import numpy as np
-import pandas as pd
 from sklearn.base import BaseEstimator
-from sklearn.model_selection import StratifiedKFold
+import numpy as np
+from joblib import Parallel, delayed
+from copy import deepcopy
+from functools import partial
 
 
 class Quantifier(ABC, BaseEstimator):
+    """ Abstract class for all types of quantifiers
+    """
     
     @abstractmethod
     def fit(self, *args, **kwargs):
         ...
-      
-    @abstractmethod  
+        
+    @abstractmethod
     def predict(self, *args, **kwargs):
         ...
 
-class Utils(ABC):
 
-    def is_binary(self, y):
-        unique_values = np.unique(y)
-        self.binary = set(unique_values).issubset({0, 1})
-        return self.binary
-    
-    def one_vs_all(self, y):
-        for label in np.unique(y):
-            y_label = np.asarray([1 if _class == label else 0 for _class in y])
-            yield label, y_label
-    
-    def get_values(self, X, y, clf, scores:bool=False, tprfpr:bool=False):
-        values = {}
-        
-        if scores:
-            values["scores"] = self.get_scores(X, y, clf)
-        if tprfpr:
-            values["tprfpr"] = self.get_tprfpr(X, y, clf)
-            
-        return values
-    
-    
-    def get_scores(self, X, y, clf, folds=10):
-        
-        if isinstance(X, np.ndarray):
-            X = pd.DataFrame(X)
-        if isinstance(y, np.ndarray):
-            y = pd.Series(y)
-    
-        skf = StratifiedKFold(n_splits=folds)    
-        scores = []
-        labels = []
-        
-        for train_index,valid_index in skf.split(X,y):
-            
-            tr_data = pd.DataFrame(X.iloc[train_index])   #Train data and labels
-            tr_lbl = y.iloc[train_index]
-            
-            valid_data = pd.DataFrame(X.iloc[valid_index])  #Validation data and labels
-            valid_lbl = y.iloc[valid_index]
-            
-            clf.fit(tr_data, tr_lbl)
-            
-            scores.extend(clf.predict_proba(valid_data)[:,1])     #evaluating scores
-            labels.extend(valid_lbl)
-        
-        scores = np.c_[scores,labels]
-        
-        return scores
-    
-    
-    def get_tprfpr(self, X, y, clf):
-        
-        scores = self.get_scores(X, y, clf)
-        
-        unique_scores = np.linspace(0,1,101)
-        
-        TprFpr = pd.DataFrame(columns=['threshold','tpr', 'fpr'])
-        total_positive = len(scores[scores[:, 1] == 1])
-        total_negative = len(scores[scores[:, 1] == 0])  
-        for threshold in unique_scores:
-            fp = len(scores[(scores[:, 0] > threshold) & (scores[:, 1] == 0)])  
-            tp = len(scores[(scores[:, 0] > threshold) & (scores[:, 1] == 1)])
 
-            tpr = round(tp/total_positive,4) if total_positive != 0 else 0
-            fpr = round(fp/total_negative,4) if total_negative != 0 else 0
-        
-            aux = pd.DataFrame([[threshold, tpr, fpr]])
-            aux.columns = ['threshold', 'tpr', 'fpr']    
-            TprFpr = pd.concat([None if TprFpr.empty else TprFpr, aux])
+class AggregativeQuantifier(Quantifier):
+    """Generic class for aggregative quantification, in this case, all aggregative methods use a classifier
+    """
+    
+    
+    def __init__(self):
+        self.n_classes = None
+        self.classes = None
+        self.binary_quantifiers = None
 
+
+    def fit(self, X, y):
+        if len(np.unique(y)) > 2:
+
+            self.binary_quantifiers = {_class: deepcopy(self) for _class in np.unique(y)}
+            self._parallel(self._delayed_binary_fit, X, y)
+            
+            self.n_classes = len(np.unique(y))
+        else:
+            # Treina o quantificador diretamente para binário no método fit
+            self.n_classes = 2
+            self._fit_binary(X, y)
+            
+        return self
+
+
+    def predict(self, X):
+        if self.n_classes > 2:
+            for i in range(self.n_classes):
+                prevalences = self._parallel(self._delayed_binary_predict, X)
+            summ = prevalences.sum(axis=-1, keepdims=True)
+            prevalences = np.true_divide(prevalences, summ, where=summ>0)
+            prevalences = {_class:prev for _class, prev in zip(self.classes, prevalences)}
+        else:
+            # Faz previsões para dados binários
+            prevalences = self._predict_binary(X)
+
+        return prevalences
+
+
+    def _parallel(self, func, *args, **kwargs):
+        return np.asarray(
+            Parallel(n_jobs=-1, backend='threading')(
+                delayed(func)(c, *args, **kwargs) for c in self.classes
+            )
+        )
+
+
+    def _delayed_binary_predict(self, _class, X):
+        return self.binary_quantifiers[_class].predict(X)[1]
+    
+    def _delayed_binary_fit(self, _class, X, y,):
+        y_class = (y == _class).astype(int)
+        return self.binary_quantifiers[_class].fit(X, y_class)
+    
+    
+    
+    @abstractmethod
+    def _fit_binary(self, X, y):
+        ...
         
-        return TprFpr.reset_index(drop=True)
-        
+    @abstractmethod 
+    def _predict_binary(self, X):
+        ...
