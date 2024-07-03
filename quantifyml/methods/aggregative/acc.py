@@ -16,9 +16,11 @@ class ACC(AggregativeQuantifier):
         self.classifier = classifier
         self.threshold = threshold
         self.round_to = round_to
+        self.classes = None
         self.tprfpr = None
     
     def _fit_binary(self, X, y):
+        self.classes = np.unique(y)
     
         self.classifier.fit(X, y)
         
@@ -50,8 +52,8 @@ class ACC(AggregativeQuantifier):
         scores_class = scores[:, 1]
         _, tpr, fpr = self.tprfpr
         prevalence = self._adjust_classify_count(scores_class, tpr, fpr)
-        prevalences[1] = np.round(prevalence, self.round_to)
-        prevalences[0] = np.round(1 - prevalence, self.round_to)
+        prevalences[self.classes[1]] = np.round(prevalence, self.round_to)
+        prevalences[self.classes[0]] = np.round(1 - prevalence, self.round_to)
         
         return prevalences
     

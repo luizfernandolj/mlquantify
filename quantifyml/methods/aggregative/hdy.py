@@ -21,46 +21,10 @@ class HDy(Quantifier):
         self.one_vs_all = None
         self.__distance = {}
     
-    
-    def _get_pos_neg_scores(self, X, y) -> tuple:
         
-        pos, neg, self.__classifier = get_scores(X, pd.Series(y), 10, self.__classifier)
-        
-        return (pos, neg) 
-        
-        
-    def _get_binary(self, y, _class):
-        
-        binary = np.zeros_like(y)
-        binary[y == _class] = 1
-        
-        return binary
-    
-    def _check_binary(self, y):
-        unique = np.unique(y)
-        
-        if 0 in unique and 1 in unique:
-            return True
-        return False
-    
     def fit(self, X, y):
         self.__classes = np.unique(y)
         self.__n_class = len(np.unique(y))
-             
-        self.__classifier.fit(X, y)
-        
-        if self.__n_class > 2:
-            self.one_vs_all = One_vs_All(y)
-            for _class, y_label in self.one_vs_all.generate_trains():
-                pos_neg_scores = self._get_pos_neg_scores(X, y_label, 1)
-                
-                self.__pos_neg_scores[_class] = pos_neg_scores
-        
-        if self._check_binary(y):   
-            self.__pos_neg_scores = self._get_pos_neg_scores(X, y)
-        else:
-            y = self._get_binary(y, self.__classes[0])
-            self.__pos_neg_scores = self._get_pos_neg_scores(X, y)
         
         return self
         

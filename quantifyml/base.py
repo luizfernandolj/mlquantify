@@ -2,9 +2,8 @@ from typing import List
 from abc import abstractmethod, ABC
 from sklearn.base import BaseEstimator
 import numpy as np
-from joblib import Parallel, delayed
 from copy import deepcopy
-from functools import partial
+from .utils.utilities import parallel
 
 
 class Quantifier(ABC, BaseEstimator):
@@ -27,46 +26,36 @@ class AggregativeQuantifier(Quantifier):
     
     
     def __init__(self):
-        self.n_classes = None
+        self.n_class = None
         self.classes = None
         self.binary_quantifiers = None
 
 
     def fit(self, X, y):
+        
         if len(np.unique(y)) > 2:
-
+            self.n_class = len(np.unique(y))
             self.binary_quantifiers = {_class: deepcopy(self) for _class in np.unique(y)}
-            self._parallel(self._delayed_binary_fit, X, y)
+            parallel(self._delayed_binary_fit, self.n_class, X, y)
             
-            self.n_classes = len(np.unique(y))
-        else:
-            # Treina o quantificador diretamente para binário no método fit
-            self.n_classes = 2
+        else:  
+            self.n_class = 2
             self._fit_binary(X, y)
             
         return self
 
 
     def predict(self, X):
-        if self.n_classes > 2:
-            for i in range(self.n_classes):
-                prevalences = self._parallel(self._delayed_binary_predict, X)
+        if self.n_class > 2:
+            for i in range(self.n_class):
+                prevalences = parallel(self._delayed_binary_predict,self.n_class, X)
             summ = prevalences.sum(axis=-1, keepdims=True)
-            prevalences = np.true_divide(prevalences, summ, where=summ>0)
+            prevalences = np.true_divide(prevalences, sum(prevalences), where=summ>0)
             prevalences = {_class:prev for _class, prev in zip(self.classes, prevalences)}
         else:
-            # Faz previsões para dados binários
             prevalences = self._predict_binary(X)
 
         return prevalences
-
-
-    def _parallel(self, func, *args, **kwargs):
-        return np.asarray(
-            Parallel(n_jobs=-1, backend='threading')(
-                delayed(func)(c, *args, **kwargs) for c in self.classes
-            )
-        )
 
 
     def _delayed_binary_predict(self, _class, X):

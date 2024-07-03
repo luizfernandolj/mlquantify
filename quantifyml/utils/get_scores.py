@@ -1,6 +1,7 @@
 import pandas as pd
 import numpy as np
 from sklearn.model_selection import StratifiedKFold
+import pdb
 
 def get_scores(X_train, Y_train, clf, folds=10):
     
@@ -15,11 +16,11 @@ def get_scores(X_train, Y_train, clf, folds=10):
     
     for train_index, valid_index in skf.split(X_train,Y_train):
         
-        tr_data = pd.DataFrame(X_train[train_index])   #Train data and labels
-        tr_lbl = Y_train[train_index]
+        tr_data = pd.DataFrame(X_train.iloc[train_index])   #Train data and labels
+        tr_lbl = Y_train.iloc[train_index]
         
-        valid_data = pd.DataFrame(X_train[valid_index])  #Validation data and labels
-        valid_lbl = Y_train[valid_index]
+        valid_data = pd.DataFrame(X_train.iloc[valid_index])  #Validation data and labels
+        valid_lbl = Y_train.iloc[valid_index]
         
         clf.fit(tr_data, tr_lbl)
         

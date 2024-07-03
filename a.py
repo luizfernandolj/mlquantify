@@ -21,7 +21,6 @@ print(np.round(y_test.value_counts(normalize=True), 3).to_dict())
 
 quantifier = ACC(classifier=rfc)
 
-
 quantifier.fit(X_train, y_train)
 result = quantifier.predict(X_test)
 
