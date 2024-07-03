@@ -7,9 +7,9 @@ def get_values(X, y, clf, scores:bool=False, tprfpr:bool=False):
         values = {}
         
         if scores:
-            values["scores"] = get_scores(X, y, clf)
+            values["scores"] = get_scores(X, y, clf, 3)
         if tprfpr:
-            values["tprfpr"] = get_tprfpr(X, y, clf)
+            values["tprfpr"] = get_tprfpr(X, y, clf, 3)
             
         return values
 
@@ -20,3 +20,11 @@ def parallel(func, classes, *args, **kwargs):
             delayed(func)(c, *args, **kwargs) for c in classes
         )
     )
+    
+
+def normalize_prevalence(prevalences: np.ndarray, classes:list):
+    summ = prevalences.sum(axis=-1, keepdims=True)
+    prevalences = np.true_divide(prevalences, sum(prevalences), where=summ>0)
+    prevalences = {_class:np.round(prev, 3) for _class, prev in zip(classes, prevalences)}
+    
+    return prevalences

@@ -1,60 +1,50 @@
 
 import numpy as np
 from sklearn.base import BaseEstimator
+import pdb
 
 from ...base import Quantifier
+from ...utils.utilities import get_values
 
 class PCC(Quantifier):
+    """ Implementation of Probabilistic Classify and Count
+    """
     
-    def __init__(self, classifier:BaseEstimator):
+    def __init__(self, classifier:BaseEstimator, round_to:int=3):
         assert isinstance(classifier, BaseEstimator), "Classifier object is not an estimator"
         
-        self.__classifier = classifier
-        self.__n_class = 2
-        self.__classes = None
+        self.classifier = classifier
+        self.round_to = round_to
+        self.tprfpr = None
     
-    def fit(self, X, y):
-        self.__classes = np.unique(y)
-        self.__n_class = len(np.unique(y))
-
-        self.__classifier.fit(X, y)
-        
+    def _fit_binary(self, X, y):
+        self.classifier.fit(X, y)
         return self
+    
+    def _fit_multiclass(self, X, y):
+        self.classifier.fit(X, y)
+        return self
+    
+    def _predict_multiclass(self, X):
+        prevalences = {}
         
-    def predict(self, X):
+        scores = self.classifier.predict_proba(X)
+        
+        for i, _class in enumerate(self.classes):
+            prevalences[_class] = np.round(np.mean(scores[:, i]), self.round_to)
+        
+        return prevalences
+    
+        
+    def _predict_binary(self, X) -> dict:
         
         prevalences = {}
         
-        scores = self.__classifier.predict_proba(X)
+        scores = self.classifier.predict_proba(X)
         
-        for i, _class in enumerate(self.__classes):
-            
-            if self.__n_class > 2:
-                prevalences[_class] = np.round(np.mean(scores[:, i]), 3)
-            else:             
-                if len(prevalences) > 0:
-                    prevalences[_class] = 1 - prevalences[self.__classes[0]]
-                    
-                    return prevalences
-            
-                prevalence = np.round(np.mean(scores[:, i]), 3)  
-
-                prevalences[_class] = np.round(prevalence, 3)    
-            
+        prevalence =  np.mean(scores[:, 1])
+        prevalences[self.classes[1]] = np.round(prevalence, self.round_to)
+        prevalences[self.classes[0]] = np.round(1 - prevalence, self.round_to)
         
         return prevalences
-        
     
-    @property
-    def n_class(self):
-        return self.__n_class
-    
-    @property
-    def classifier(self):
-        return self.__classifier
-    
-    @classifier.setter
-    def classifier(self, new_classifier):
-        assert isinstance(new_classifier, BaseEstimator), "Classifier object is not an estimator"
-        
-        self.__classifier = new_classifier

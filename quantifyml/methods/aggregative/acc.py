@@ -1,12 +1,11 @@
 
 import numpy as np
 from sklearn.base import BaseEstimator
-import pdb
 
-from ...base import AggregativeQuantifier
+from ...base import Quantifier
 from ...utils.utilities import get_values
 
-class ACC(AggregativeQuantifier):
+class ACC(Quantifier):
     """ Implementation of Adjusted Classify and Count
     """
     
@@ -16,12 +15,9 @@ class ACC(AggregativeQuantifier):
         self.classifier = classifier
         self.threshold = threshold
         self.round_to = round_to
-        self.classes = None
         self.tprfpr = None
     
     def _fit_binary(self, X, y):
-        self.classes = np.unique(y)
-    
         self.classifier.fit(X, y)
         
         values = get_values(X, y, self.classifier, tprfpr=True)
@@ -32,16 +28,6 @@ class ACC(AggregativeQuantifier):
         self.tprfpr = [threshold, tpr, fpr]
             
         return self
-    
-    
-    def _adjust_classify_count(self, scores: np.ndarray, tpr:float, fpr:float) -> float:
-        count = len(scores[scores >= self.threshold])
-        cc_output = count / len(scores)
-        
-        prevalence = (cc_output - fpr) / (tpr - fpr) if tpr != fpr else cc_output
-        
-        return np.clip(prevalence, 0, 1)
-    
         
     def _predict_binary(self, X) -> dict:
         
@@ -52,8 +38,18 @@ class ACC(AggregativeQuantifier):
         scores_class = scores[:, 1]
         _, tpr, fpr = self.tprfpr
         prevalence = self._adjust_classify_count(scores_class, tpr, fpr)
-        prevalences[self.classes[1]] = np.round(prevalence, self.round_to)
-        prevalences[self.classes[0]] = np.round(1 - prevalence, self.round_to)
+        prevalences[self.classes[0]] = np.round(prevalence, self.round_to)
+        prevalences[self.classes[1]] = np.round(1 - prevalence, self.round_to)
         
         return prevalences
+    
+        
+    def _adjust_classify_count(self, scores: np.ndarray, tpr:float, fpr:float) -> float:
+        count = len(scores[scores >= self.threshold])
+        cc_output = count / len(scores)
+        
+        prevalence = (cc_output - fpr) / (tpr - fpr) if tpr != fpr else cc_output
+        
+        return np.clip(prevalence, 0, 1)
+    
     
