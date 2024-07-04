@@ -10,24 +10,19 @@ class CC(Quantifier):
     """    
     
     def __init__(self, classifier:BaseEstimator):
-        
         assert isinstance(classifier, BaseEstimator), "Classifier object is not an estimator"
         
         self.__classifier = classifier
-        self.__n_class = 2
-        self.__classes = None
     
     
-    def fit(self, X, y):
-        self.__classes = np.unique(y)
-        self.__n_class = len(np.unique(y))
+    def _fit_binary(self, X, y):
              
         self.__classifier.fit(X, y)
         
         return self
         
         
-    def predict(self, X) -> dict:
+    def _predict_binary(self, X) -> dict:
         
         y_pred = self.__classifier.predict(X)
         classes, nclasses = np.unique(y_pred, return_counts=True)
@@ -35,16 +30,8 @@ class CC(Quantifier):
         return { _class : round(nclass/len(y_pred), 3) for _class, nclass in zip(classes, nclasses) }
     
     
-    @property
-    def n_class(self):
-        return self.__n_class
+    def _fit_multiclass(self, X, y):
+        self._fit_binary(X, y)
     
-    @property
-    def classifier(self):
-        return self.__classifier
-    
-    @classifier.setter
-    def classifier(self, new_classifier):
-        assert isinstance(new_classifier, BaseEstimator), "Classifier object is not an estimator"
-        
-        self.__classifier = new_classifier
+    def _predict_multiclass(self, X):
+        return self._predict_binary(X)

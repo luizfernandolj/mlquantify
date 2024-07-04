@@ -1,100 +1,76 @@
-import pandas as pd
+
 import numpy as np
 from sklearn.base import BaseEstimator
-from sklearn.utils.validation import check_is_fitted
 
 from ...base import Quantifier
-from ...utils import One_vs_All, getHist, get_distance, ternary_search, get_scores
+from ...utils.utilities import get_values
+from ...utils import getHist, get_distance
 
 class HDy(Quantifier):
-    """ Implementation of HDy
-    """    
+    """ Implementation of Adjusted Classify and Count
+    """
     
-    def __init__(self, classifier:BaseEstimator):
-        
+    def __init__(self, classifier:BaseEstimator, round_to:int=3, return_distance:str="none"):
         assert isinstance(classifier, BaseEstimator), "Classifier object is not an estimator"
+        assert return_distance in ["none", "only", "all"], "return distance is not a valid choice"
         
-        self.__classifier = classifier
-        self.__n_class = 2
-        self.__classes = None
-        self.__pos_neg_scores = {}
-        self.one_vs_all = None
-        self.__distance = {}
+        self.classifier = classifier
+        self.round_to = round_to
+        self.return_distance = return_distance
+        self.pos_scores = None
+        self.neg_scores = None
     
+    def _fit_binary(self, X, y):
+        self.classifier.fit(X, y)
         
-    def fit(self, X, y):
-        self.__classes = np.unique(y)
-        self.__n_class = len(np.unique(y))
+        _class = np.unique(y)[1]
         
+        values = get_values(X, y, self.classifier, scores=True)
+        scores = values["scores"]
+        
+        self.pos_scores = scores[scores[:, 1] == _class][:, 0]
+        self.neg_scores = scores[scores[:, 1] != _class][:, 0]
+            
         return self
         
-        
-    def _mixture_hellinger_distance(self, pos_scores, neg_scores, test_scores):
-        bin_size = np.linspace(2,20,10)   #creating bins from 2 to 10 with step size 2
-        bin_size = np.append(bin_size, 30)
-        
-        result  = []
-        for bins in bin_size:
-            #....Creating Histograms bins score\counts for validation and test set...............
-            
-            p_bin_count = getHist(pos_scores, bins)
-            n_bin_count = getHist(neg_scores, bins)
-            te_bin_count = getHist(test_scores, bins)
-            
-            def f(x):            
-                return(get_distance(((p_bin_count*x) + (n_bin_count*(1-x))), te_bin_count, measure = "hellinger"))
-        
-            result.append(ternary_search(0, 1, f))                                           
-                            
-        prevalence = np.median(result)
-        
-        return prevalence
-        
-    
-        
-    def predict(self, X) -> dict:
+    def _predict_binary(self, X) -> dict:
         
         prevalences = {}
-
-        scores = self.__classifier.predict_proba(X)
         
-        for i, _class in enumerate(self.__classes):
-            scores_class = scores[:, ]
-            
-            if self.__n_class > 2:
-                pos_scores, neg_scores = self.__pos_neg_scores[_class]
-                prevalence = self._mixture_hellinger_distance(pos_scores, neg_scores, scores_class)
-                prevalences[_class] = np.round(prevalence, 3)
-            else:
-
-                if len(prevalences) > 0:
-                    prevalences[_class] = np.round(1 - prevalences[self.__classes[0]], 3)
-                    
-                    return prevalences
-
-                pos_scores, neg_scores = self.__pos_neg_scores
-            
-                prevalence = self._mixture_hellinger_distance(pos_scores, neg_scores, scores_class)
-
-                prevalences[_class] = np.round(prevalence, 3)
+        scores = self.classifier.predict_proba(X)[:, 1]
         
+        prevalence = self._hellinger_distance(scores)
+        prevalences[self.classes[0]] = np.round(1 - prevalence, self.round_to)
+        prevalences[self.classes[1]] = np.round(prevalence, self.round_to)
         
         return prevalences
+    
+        
+    def _hellinger_distance(self, scores: np.ndarray) -> float:
+        bin_size = np.linspace(10,110,11)       #creating bins from 10 to 110 with step size 10
+    #alpha_values = [round(x, 2) for x in np.linspace(0,1,101)]
+        alpha_values = np.linspace(0,1,101)
+        
+        result = []
+ 
+        for bins in bin_size:
+            
+            p_bin_density = getHist(self.pos_scores, bins)
+            n_bin_density = getHist(self.neg_scores, bins)
+            te_bin_density = getHist(scores, bins) 
+
+            vDist = []
+            
+            for x in alpha_values:
+                x = np.round(x,2)
+                vDist.append(get_distance(((p_bin_density*x) + (n_bin_density*(1-x))), te_bin_density, measure="hellinger"))
+
+            result.append(alpha_values[np.argmin(vDist)])
         
         
+        prevalence = np.median(result)
+            
+        return np.clip(prevalence, 0, 1)
         
     
     
-    @property
-    def n_class(self):
-        return self.__n_class
-    
-    @property
-    def classifier(self):
-        return self.__classifier
-    
-    @classifier.setter
-    def classifier(self, new_classifier):
-        assert isinstance(new_classifier, BaseEstimator), "Classifier object is not an estimator"
-        
-        self.__classifier = new_classifier

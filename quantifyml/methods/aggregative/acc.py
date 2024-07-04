@@ -38,8 +38,8 @@ class ACC(Quantifier):
         scores_class = scores[:, 1]
         _, tpr, fpr = self.tprfpr
         prevalence = self._adjust_classify_count(scores_class, tpr, fpr)
-        prevalences[self.classes[0]] = np.round(prevalence, self.round_to)
-        prevalences[self.classes[1]] = np.round(1 - prevalence, self.round_to)
+        prevalences[self.classes[0]] = np.round(1 - prevalence, self.round_to)
+        prevalences[self.classes[1]] = np.round(prevalence, self.round_to)
         
         return prevalences
     

@@ -33,6 +33,8 @@ class Quantifier(ABC):
             prevalences = self._predict_multiclass(X)
             if isinstance(prevalences, dict):
                 return prevalences
+            if len(prevalences) == 3:
+                return prevalences
             prevalences = normalize_prevalence(prevalences, self.classes)
 
         return prevalences

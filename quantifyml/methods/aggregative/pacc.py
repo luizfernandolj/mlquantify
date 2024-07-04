@@ -38,15 +38,15 @@ class PACC(Quantifier):
         scores_mean = np.mean(scores[:, 1])
         _, tpr, fpr = self.tprfpr
         prevalence = self._probabilistic_adjust_classify_count(scores_mean, tpr, fpr)
-        prevalences[self.classes[0]] = np.round(prevalence, self.round_to)
-        prevalences[self.classes[1]] = np.round(1 - prevalence, self.round_to)
+        prevalences[self.classes[0]] = np.round(1 - prevalence, self.round_to)
+        prevalences[self.classes[1]] = np.round(prevalence, self.round_to)
         
         return prevalences
     
         
     def _probabilistic_adjust_classify_count(self, mean_scores: float, tpr:float, fpr:float) -> float:
         diff_tpr_fpr = tpr - fpr
-        prevalence = (mean_scores - fpr) / diff_tpr_fpr if diff_tpr_fpr != 0 else (mean_scores - fpr)
+        prevalence = (mean_scores - fpr) / diff_tpr_fpr if diff_tpr_fpr != 0 else mean_scores
         
         return np.clip(prevalence, 0, 1)
     

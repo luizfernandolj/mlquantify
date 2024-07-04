@@ -43,8 +43,8 @@ class PCC(Quantifier):
         scores = self.classifier.predict_proba(X)
         
         prevalence =  np.mean(scores[:, 1])
-        prevalences[self.classes[1]] = np.round(prevalence, self.round_to)
         prevalences[self.classes[0]] = np.round(1 - prevalence, self.round_to)
+        prevalences[self.classes[1]] = np.round(prevalence, self.round_to)
         
         return prevalences
     

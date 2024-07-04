@@ -29,7 +29,7 @@ print("Real proportion:")
 rp = np.round(y_test.value_counts(normalize=True), 3).to_dict()
 print(dict(sorted(rp.items())))
 
-quantifier = PACC(classifier=rfc)
+quantifier = CC(classifier=rfc)
 
 start = time.time()
 result = fitting_predicting(quantifier, X_train, y_train, X_test)
