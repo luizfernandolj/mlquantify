@@ -1,0 +1,2 @@
+class APP:
+    pass
