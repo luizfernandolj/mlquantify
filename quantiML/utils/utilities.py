@@ -23,8 +23,15 @@ def parallel(func, classes, *args, **kwargs):
     
 
 def normalize_prevalence(prevalences: np.ndarray, classes:list):
+    
+    if isinstance(prevalences, dict):
+        summ = sum(prevalences.values())
+        print(summ)
+        prevalences = {_class:value/summ for _class, value in prevalences}
+        return prevalences
+    
     summ = prevalences.sum(axis=-1, keepdims=True)
     prevalences = np.true_divide(prevalences, sum(prevalences), where=summ>0)
-    prevalences = {_class:np.round(prev, 3) for _class, prev in zip(classes, prevalences)}
+    prevalences = {_class:prev for _class, prev in zip(classes, prevalences)}
     
     return prevalences
