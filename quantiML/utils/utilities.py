@@ -1,6 +1,8 @@
 from . import *
 from joblib import Parallel, delayed
 import numpy as np
+import pandas as pd
+from sklearn.model_selection import StratifiedKFold
 
 
 def get_values(X, y, clf, scores:bool=False, tprfpr:bool=False):
@@ -26,8 +28,7 @@ def normalize_prevalence(prevalences: np.ndarray, classes:list):
     
     if isinstance(prevalences, dict):
         summ = sum(prevalences.values())
-        print(summ)
-        prevalences = {_class:value/summ for _class, value in prevalences}
+        prevalences = {_class:value/summ for _class, value in prevalences.items()}
         return prevalences
     
     summ = prevalences.sum(axis=-1, keepdims=True)
@@ -35,3 +36,34 @@ def normalize_prevalence(prevalences: np.ndarray, classes:list):
     prevalences = {_class:prev for _class, prev in zip(classes, prevalences)}
     
     return prevalences
+
+
+def GetScores(X, y, learner, folds:int=10, learner_fitted:bool=False) -> tuple:
+    if isinstance(X, np.ndarray):
+        X = pd.DataFrame(X)
+    if isinstance(y, np.ndarray):
+        y = pd.DataFrame(y)
+        
+    if learner_fitted:
+        probabilities = learner.predict_proba(X)[:, 1]
+        y_label = y
+    else:
+    
+        skf = StratifiedKFold(n_splits=folds)    
+        probabilities = []
+        y_label = []
+        
+        for train_index, valid_index in skf.split(X,y):
+            
+            tr_data = pd.DataFrame(X.iloc[train_index])   #Train data and labels
+            tr_lbl = y.iloc[train_index]
+            
+            valid_data = pd.DataFrame(X.iloc[valid_index])  #Validation data and labels
+            valid_lbl = y.iloc[valid_index]
+            
+            learner.fit(tr_data, tr_lbl)
+            
+            probabilities.extend(learner.predict_proba(valid_data)[:,1])     #evaluating scores
+            y_label.extend(valid_lbl)
+    
+    return y, probabilities

@@ -2,9 +2,10 @@ from abc import abstractmethod, ABC
 from sklearn.base import BaseEstimator
 import pandas as pd
 import numpy as np
+from copy import deepcopy
 from sklearn.model_selection import StratifiedKFold
 
-from .utils.utilities import parallel, normalize_prevalence
+from .utils.utilities import parallel, normalize_prevalence, GetScores
 
 class Quantifier(ABC, BaseEstimator):
     """ Abstract Class for quantifiers """
@@ -58,8 +59,9 @@ class AggregativeQuantifier(Quantifier, ABC):
             return self._fit_method(X, y, learner_fitted)
         
         # Making one vs all
-        qtf_fitted = parallel(self.delayed_fit, self.classes, X, y, learner_fitted)
-        self.binary_quantifiers = {class_:qtf for class_, qtf in zip(self.classes, qtf_fitted)}
+        self.binary_quantifiers = {class_:deepcopy(self) for class_ in self.classes}
+        parallel(self.delayed_fit, self.classes, X, y, learner_fitted)
+        
         
         return self
         
@@ -68,10 +70,11 @@ class AggregativeQuantifier(Quantifier, ABC):
         
         if self.binary_data or self.multiclass_method:
             prevalences = self._predict_method(X)
-            return normalize_prevalence(prevalences)
-        # Making one vs all
+            return normalize_prevalence(prevalences, self.classes)
+        # Making one vs all 
         prevalences = parallel(self.delayed_predict, self.classes, X)
-        return normalize_prevalence(prevalences)
+        #print(prevalences)
+        return normalize_prevalence(prevalences, self.classes)
     
     @abstractmethod
     def _fit_method(self, X, y): ...
@@ -92,42 +95,12 @@ class AggregativeQuantifier(Quantifier, ABC):
     # MULTICLASS METHODS
     
     def delayed_fit(self, class_, X, y, learner_fitted):
-        return self.binary_quantifiers[class_]._fit_method(X, y, learner_fitted)
+        y_class = np.where(y == class_, 1, 0)
+        return self.binary_quantifiers[class_]._fit_method(X, y_class, learner_fitted)
     
     def delayed_predict(self, class_, X):
-        return self.binary_quantifiers[class_]._predict_method(X)
+        return self.binary_quantifiers[class_]._predict_method(X)[1]
     
-    
-    @classmethod
-    def GetScores(self, X, y, folds:int=10, learner_fitted:bool=False) -> tuple:
-        if isinstance(X, np.ndarray):
-            X = pd.DataFrame(X)
-        if isinstance(y, np.ndarray):
-            y = pd.DataFrame(y)
-            
-        if learner_fitted:
-            probabilities = self.learner.predict_proba(X)[:, 1]
-            y_label = y
-        else:
-        
-            skf = StratifiedKFold(n_splits=folds)    
-            probabilities = []
-            y_label = []
-            
-            for train_index, valid_index in skf.split(X,y):
-                
-                tr_data = pd.DataFrame(X.iloc[train_index])   #Train data and labels
-                tr_lbl = y.iloc[train_index]
-                
-                valid_data = pd.DataFrame(X.iloc[valid_index])  #Validation data and labels
-                valid_lbl = y.iloc[valid_index]
-                
-                self.learner.fit(tr_data, tr_lbl)
-                
-                probabilities.extend(self.learner.predict_proba(valid_data)[:,1])     #evaluating scores
-                y_label.extend(valid_lbl)
-        
-        return y, probabilities
     
     
     
@@ -143,8 +116,8 @@ class ThresholdOptimization(AggregativeQuantifier):
         self.tpr = None
         self.fpr = None
     
-    
-    def multiclass_method(self):
+    @property
+    def multiclass_method(self) -> bool:
         return False
     
     
@@ -158,33 +131,18 @@ class ThresholdOptimization(AggregativeQuantifier):
         if learner_fitted:
             probabilities = self.learner.predict_proba(X)[:, 1]
             y_label = y
-        else:
+        else:   
+            y_label, probabilities = GetScores(X, y, self.learner, cv_folds, learner_fitted)
         
-            skf = StratifiedKFold(n_splits=cv_folds)    
-            probabilities = []
-            y_label = []
-            
-            for train_index, valid_index in skf.split(X,y):
-                
-                tr_data = pd.DataFrame(X.iloc[train_index])   #Train data and labels
-                tr_lbl = y.iloc[train_index]
-                
-                valid_data = pd.DataFrame(X.iloc[valid_index])  #Validation data and labels
-                valid_lbl = y.iloc[valid_index]
-                
-                self.learner.fit(tr_data, tr_lbl)
-                
-                probabilities.extend(self.learner.predict_proba(valid_data)[:,1])     #evaluating scores
-                y_label.extend(valid_lbl)
         
         probabilities = np.asarray(probabilities)
-        #y_labels, probabilities = self.GetScores(X, y, folds=cv_folds, learner_fitted=learner_fitted)
         
         self.learner.fit(X, y)
         
         self.cc_output = len(probabilities[probabilities >= self.threshold]) / len(probabilities)
         
         thresholds, tprs, fprs = self.adjust_threshold(y_label, probabilities)
+        
         self.tpr, self.fpr = self.best_tprfpr(thresholds, tprs, fprs)
         
         return self
@@ -223,7 +181,7 @@ class ThresholdOptimization(AggregativeQuantifier):
 
 
     def adjust_threshold(self, y, probabilities:np.ndarray) -> tuple:
-        unique_scores = np.linspace(0,1,100)
+        unique_scores = np.linspace(0,1,101)
         
         tprs = []
         fprs = []
