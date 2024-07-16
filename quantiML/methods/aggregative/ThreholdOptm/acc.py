@@ -2,7 +2,7 @@
 import numpy as np
 from sklearn.base import BaseEstimator
 
-from ....base import ThresholdOptimization
+from ._ThreholdOptimization import ThresholdOptimization
 
 class ACC(ThresholdOptimization):
     """ Implementation of Adjusted Classify and Count
@@ -13,7 +13,7 @@ class ACC(ThresholdOptimization):
         super().__init__(learner, threshold)
     
     
-    def best_tprfpr(self, threshold:np.ndarray, tpr: np.ndarray, fpr: np.ndarray) -> tuple:
-        tpr = tpr[threshold == self.threshold][0]
-        fpr = fpr[threshold == self.threshold][0]
+    def best_tprfpr(self, threshold:np.ndarray, tprs: np.ndarray, fprs: np.ndarray) -> tuple:
+        tpr = tprs[threshold == self.threshold][0]
+        fpr = fprs[threshold == self.threshold][0]
         return (tpr, fpr)
