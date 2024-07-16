@@ -4,18 +4,6 @@ import numpy as np
 import pandas as pd
 from sklearn.model_selection import StratifiedKFold
 
-
-def get_values(X, y, clf, scores:bool=False, tprfpr:bool=False):
-        values = {}
-        
-        if scores:
-            values["scores"] = get_scores(X, y, clf, 3)
-        if tprfpr:
-            values["tprfpr"] = get_tprfpr(X, y, clf, 3)
-            
-        return values
-
-
 def parallel(func, classes, *args, **kwargs):
     return np.asarray(
         Parallel(n_jobs=-1, backend='threading')(
@@ -66,4 +54,4 @@ def GetScores(X, y, learner, folds:int=10, learner_fitted:bool=False) -> tuple:
             probabilities.extend(learner.predict_proba(valid_data)[:,1])     #evaluating scores
             y_label.extend(valid_lbl)
     
-    return y, probabilities
+    return np.asarray(y_label), np.asarray(probabilities)

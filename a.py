@@ -12,7 +12,7 @@ def fitting_predicting(quantifier, X_train, y_train, X_test):
     
     return result
 
-df = pd.read_csv("data/BNG.csv")
+df = pd.read_csv("data/click-prediction.csv")
 df["class"] = df["class"].replace(2, 0)
 X = df.drop("class", axis=1)
 Y = df["class"]
@@ -29,7 +29,7 @@ print("Real proportion:")
 rp = np.round(y_test.value_counts(normalize=True), 3).to_dict()
 print(dict(sorted(rp.items())))
 
-quantifier = MS2(learner=rfc)
+quantifier = MixtureModel(learner=rfc, measure="topsoe")
 
 start = time.time()
 result = fitting_predicting(quantifier, X_train, y_train, X_test)
