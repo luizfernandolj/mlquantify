@@ -3,14 +3,15 @@ import numpy as np
 from sklearn.base import BaseEstimator
 
 from ._ThreholdOptimization import ThresholdOptimization
+from ....utils import adjust_threshold
 
 class PACC(ThresholdOptimization):
     """ Implementation of Adjusted Classify and Count
     """
     
-    def __init__(self, learner:BaseEstimator):
+    def __init__(self, learner:BaseEstimator, threshold:float=0.5):
         assert isinstance(learner, BaseEstimator), "learner object is not an estimator"
-        super().__init__(learner)
+        super().__init__(learner, threshold)
     
     
     def _predict_method(self, X):
@@ -21,9 +22,9 @@ class PACC(ThresholdOptimization):
         mean_scores = np.mean(probabilities)
         
         if self.tpr - self.fpr == 0:
-            prevalence = self.cc_output
+            prevalence = mean_scores
         else:
-            prevalence = np.clip((mean_scores - self.fpr) / (self.tpr - self.fpr), 0, 1)
+            prevalence = (mean_scores - self.fpr) / (self.tpr - self.fpr)
         
         prevalences[self.classes[1]] = prevalence
         prevalences[self.classes[0]] = 1 - prevalence

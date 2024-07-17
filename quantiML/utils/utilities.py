@@ -44,14 +44,14 @@ def GetScores(X, y, learner, folds:int=10, learner_fitted:bool=False) -> tuple:
         for train_index, valid_index in skf.split(X,y):
             
             tr_data = pd.DataFrame(X.iloc[train_index])   #Train data and labels
-            tr_lbl = y.iloc[train_index]
+            tr_label = y.iloc[train_index]
             
             valid_data = pd.DataFrame(X.iloc[valid_index])  #Validation data and labels
-            valid_lbl = y.iloc[valid_index]
+            valid_label = y.iloc[valid_index]
             
-            learner.fit(tr_data, tr_lbl)
+            learner.fit(tr_data, tr_label)
             
             probabilities.extend(learner.predict_proba(valid_data)[:,1])     #evaluating scores
-            y_label.extend(valid_lbl)
+            y_label.extend(valid_label)
     
     return np.asarray(y_label), np.asarray(probabilities)

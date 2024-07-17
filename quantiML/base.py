@@ -52,15 +52,15 @@ class AggregativeQuantifier(Quantifier, ABC):
         self.binary_quantifiers = {}
     
 
-    def fit(self, X, y, learner_fitted=False):
+    def fit(self, X, y, learner_fitted=False, cv_folds:int=10):
         self.classes = np.unique(y)
         #Binary quantification or multiclass quantification if method is multiclass it self
         if self.binary_data or self.multiclass_method:  
-            return self._fit_method(X, y, learner_fitted)
+            return self._fit_method(X, y, learner_fitted, cv_folds)
         
         # Making one vs all
         self.binary_quantifiers = {class_:deepcopy(self) for class_ in self.classes}
-        parallel(self.delayed_fit, self.classes, X, y, learner_fitted)
+        parallel(self.delayed_fit, self.classes, X, y, learner_fitted, cv_folds)
         
         
         return self
@@ -94,9 +94,9 @@ class AggregativeQuantifier(Quantifier, ABC):
         
     # MULTICLASS METHODS
     
-    def delayed_fit(self, class_, X, y, learner_fitted):
+    def delayed_fit(self, class_, X, y, learner_fitted, cv_folds):
         y_class = (y == class_).astype(int)
-        return self.binary_quantifiers[class_]._fit_method(X, y_class, learner_fitted)
+        return self.binary_quantifiers[class_]._fit_method(X, y_class, learner_fitted, cv_folds)
     
     def delayed_predict(self, class_, X):
         return self.binary_quantifiers[class_]._predict_method(X)[1]

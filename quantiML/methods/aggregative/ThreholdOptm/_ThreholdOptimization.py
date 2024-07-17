@@ -6,13 +6,14 @@ from sklearn.base import BaseEstimator
 
 from ....base import AggregativeQuantifier
 from ....utils.utilities import GetScores
+from ....utils import adjust_threshold
 
 class ThresholdOptimization(AggregativeQuantifier):
     
     
-    def __init__(self, learner: BaseEstimator, threshold:float=0.5):
+    def __init__(self, learner: BaseEstimator):
         self.learner = learner
-        self.threshold = threshold
+        self.threshold = None
         self.cc_output = None
         self.tpr = None
         self.fpr = None
@@ -24,11 +25,6 @@ class ThresholdOptimization(AggregativeQuantifier):
     
     def _fit_method(self, X, y, learner_fitted:bool=False, cv_folds:int=10):
         
-        if isinstance(X, np.ndarray):
-            X = pd.DataFrame(X)
-        if isinstance(y, np.ndarray):
-            y = pd.DataFrame(y)
-            
         if learner_fitted:
             probabilities = self.learner.predict_proba(X)[:, 1]
             y_label = y
@@ -40,9 +36,9 @@ class ThresholdOptimization(AggregativeQuantifier):
         
         self.learner.fit(X, y)
         
-        thresholds, tprs, fprs = self.adjust_threshold(y_label, probabilities)
+        thresholds, tprs, fprs = adjust_threshold(y_label, probabilities, self.classes)
         
-        self.tpr, self.fpr = self.best_tprfpr(thresholds, tprs, fprs)
+        self.threshold, self.tpr, self.fpr = self.best_tprfpr(thresholds, tprs, fprs)
         
         return self
     
@@ -63,46 +59,6 @@ class ThresholdOptimization(AggregativeQuantifier):
         prevalences[self.classes[0]] = 1 - prevalence
 
         return prevalences
-    
-    
-    def count_predictions(self, y, y_pred) -> list:
-        TP = np.logical_and(y == y_pred, y == self.classes[1]).sum()
-        FP = np.logical_and(y != y_pred, y == self.classes[0]).sum()
-        FN = np.logical_and(y != y_pred, y == self.classes[1]).sum()
-        TN = np.logical_and(y == y_pred, y == self.classes[0]).sum()
-        return TP, FP, TN, FN
-    
-    
-    def get_tpr(self, TP, FP):
-        if TP + FP == 0:
-            return 0
-        return TP / (TP + FP)
-
-    def get_fpr(self, TN, FP):
-        if FP + TN == 0:
-            return 0
-        return FP / (FP + TN)
-
-
-    def adjust_threshold(self, y, probabilities:np.ndarray) -> tuple:
-        unique_scores = np.linspace(0,1,101)
-        
-        tprs = []
-        fprs = []
-        
-        for threshold in unique_scores:
-            y_pred = np.where(probabilities < threshold, 0, 1)
-            
-            TP, FP, TN, _ = self.count_predictions(y, y_pred)
-            
-            tpr = self.get_tpr(TP, FP)
-            fpr = self.get_fpr(TN, FP)   
-            
-            tprs.append(tpr)
-            fprs.append(fpr)
-        
-        #best_tpr, best_fpr = self.adjust_threshold(np.asarray(tprs), np.asarray(fprs))
-        return (unique_scores, np.asarray(tprs), np.asarray(fprs))
     
     
     @abstractmethod

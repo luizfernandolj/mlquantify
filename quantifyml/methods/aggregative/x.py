@@ -27,6 +27,7 @@ class X_method(Quantifier):
         min_index = (np.abs((1 - tprfpr['tpr']) - tprfpr['fpr'])).idxmin()
             
         threshold, tpr, fpr = tprfpr.loc[min_index]
+        print(tpr, fpr)
         
         self.tprfpr = [threshold, tpr, fpr]
             
@@ -42,6 +43,7 @@ class X_method(Quantifier):
         scores_class = scores[:, 1]
         
         threshold, tpr, fpr = self.tprfpr
+        
         prevalence = self._threshold_x(scores_class, threshold, tpr, fpr)
         
         prevalences[self.classes[0]] = np.round(1 - prevalence, self.round_to)
@@ -52,7 +54,10 @@ class X_method(Quantifier):
         
     def _threshold_x(self, scores: np.ndarray, threshold:float, tpr:float, fpr:float) -> float:
         class_prop = len(np.where(scores >= threshold)[0])/len(scores)
-            
+        print(len(np.where(scores >= threshold)[0]))
+        
+        print(class_prop)
+        
         if (tpr - fpr) == 0:
             prevalence = class_prop
         else:

@@ -7,12 +7,15 @@ class MAX(ThresholdOptimization):
     """ Implementation of MAX
     """
     
-    def __init__(self, learner:BaseEstimator, threshold:float=0.5):
+    def __init__(self, learner:BaseEstimator):
         assert isinstance(learner, BaseEstimator), "learner object is not an estimator"
-        super().__init__(learner, threshold)
+        super().__init__(learner)
     
     
-    def best_tprfpr(self, threshold:np.ndarray, tprs: np.ndarray, fprs: np.ndarray) -> tuple:
+    def best_tprfpr(self, thresholds:np.ndarray, tprs: np.ndarray, fprs: np.ndarray) -> tuple:
         max_index = np.argmax(np.abs(tprs - fprs))
-        tpr, fpr = tprs[max_index], fprs[max_index]
-        return (tpr, fpr)
+        
+        threshold = thresholds[max_index]
+        tpr= tprs[max_index]
+        fpr = fprs[max_index]
+        return (threshold, tpr, fpr)

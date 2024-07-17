@@ -24,6 +24,6 @@ def get_tprfpr(X, y, classifier, folds=10):
         TprFpr.loc[i, 'tpr'] = tp / total_positive if total_positive != 0 else 0
         TprFpr.loc[i, 'fpr'] = fp / total_negative if total_negative != 0 else 0
 
-    TprFpr[['tpr', 'fpr']] = TprFpr[['tpr', 'fpr']].round(4)
+    TprFpr[['tpr', 'fpr']] = TprFpr[['tpr', 'fpr']]
 
     return TprFpr

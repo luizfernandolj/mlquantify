@@ -46,6 +46,8 @@ class PACC(Quantifier):
         
     def _probabilistic_adjust_classify_count(self, mean_scores: float, tpr:float, fpr:float) -> float:
         diff_tpr_fpr = tpr - fpr
+        
+        print(mean_scores, fpr, tpr)
         prevalence = (mean_scores - fpr) / diff_tpr_fpr if diff_tpr_fpr != 0 else mean_scores
         
         return np.clip(prevalence, 0, 1)

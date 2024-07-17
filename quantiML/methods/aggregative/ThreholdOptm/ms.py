@@ -9,10 +9,11 @@ class MS(ThresholdOptimization):
     
     def __init__(self, learner:BaseEstimator, threshold:float=0.5):
         assert isinstance(learner, BaseEstimator), "learner object is not an estimator"
-        super().__init__(learner, threshold)
+        super().__init__(learner)
+        self.threshold = threshold
     
     
-    def best_tprfpr(self, threshold:np.ndarray, tprs: np.ndarray, fprs: np.ndarray) -> tuple:
+    def best_tprfpr(self, thresholds:np.ndarray, tprs: np.ndarray, fprs: np.ndarray) -> tuple:
         tpr = np.median(tprs)
         fpr = np.median(fprs)
-        return (tpr, fpr)
+        return (self.threshold, tpr, fpr)
