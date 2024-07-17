@@ -1,5 +1,6 @@
 from abc import abstractmethod
 import numpy as np
+import pandas as pd
 from sklearn.base import BaseEstimator
 
 from ....base import AggregativeQuantifier
@@ -8,7 +9,7 @@ from ....utils.distances import probsymm, sqEuclidean, topsoe, hellinger
 
 class MixtureModel(AggregativeQuantifier):
     
-    def __init__(self, learner: BaseEstimator, measure:str):
+    def __init__(self, learner: BaseEstimator, measure:str=None):
         assert measure in ["hellinger", "topsoe", "probsymm", None], "measure not valid, please choose between: hellinger, topsoe or probsymm or None if it is a sample operation with scores"
         self.learner = learner
         self.measure = measure
@@ -63,6 +64,7 @@ class MixtureModel(AggregativeQuantifier):
             raise "One or both vector are zero (empty)..."
         if len(dist_train)!=len(dist_test):
             raise "Arrays need to be of equal sizes..."
+        
         #use numpy arrays for efficient coding
         dist_train=np.array(dist_train,dtype=float);dist_test=np.array(dist_test,dtype=float)
         #Correct for zero values

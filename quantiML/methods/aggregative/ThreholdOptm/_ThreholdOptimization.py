@@ -40,8 +40,6 @@ class ThresholdOptimization(AggregativeQuantifier):
         
         self.learner.fit(X, y)
         
-        self.cc_output = len(probabilities[probabilities >= self.threshold]) / len(probabilities)
-        
         thresholds, tprs, fprs = self.adjust_threshold(y_label, probabilities)
         
         self.tpr, self.fpr = self.best_tprfpr(thresholds, tprs, fprs)
@@ -52,9 +50,14 @@ class ThresholdOptimization(AggregativeQuantifier):
     def _predict_method(self, X):
         prevalences = {}
         
+        probabilities = self.learner.predict_proba(X)[:, 1]
+        
+        self.cc_output = len(probabilities[probabilities >= self.threshold]) / len(probabilities)
+        
         if self.tpr - self.fpr == 0:
-            return self.cc_output
-        prevalence = np.clip((self.cc_output - self.fpr) / (self.tpr - self.fpr), 0, 1)
+            prevalence = self.cc_output
+        else:
+            prevalence = np.clip((self.cc_output - self.fpr) / (self.tpr - self.fpr), 0, 1)
         
         prevalences[self.classes[1]] = prevalence
         prevalences[self.classes[0]] = 1 - prevalence
