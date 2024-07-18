@@ -5,8 +5,7 @@ import pandas as pd
 from sklearn.base import BaseEstimator
 
 from ....base import AggregativeQuantifier
-from ....utils.utilities import GetScores
-from ....utils import adjust_threshold
+from ....utils import adjust_threshold, GetScores
 
 class ThresholdOptimization(AggregativeQuantifier):
     
@@ -25,18 +24,10 @@ class ThresholdOptimization(AggregativeQuantifier):
     
     def _fit_method(self, X, y, learner_fitted:bool=False, cv_folds:int=10):
         
-        if learner_fitted:
-            probabilities = self.learner.predict_proba(X)[:, 1]
-            y_label = y
-        else:   
-            y_label, probabilities = GetScores(X, y, self.learner, cv_folds, learner_fitted)
+        y_label, probabilities = GetScores(X, y, self.learner, cv_folds, learner_fitted)
+        self.learner.fit(X, y) if learner_fitted is False else None
         
-        
-        probabilities = np.asarray(probabilities)
-        
-        self.learner.fit(X, y)
-        
-        thresholds, tprs, fprs = adjust_threshold(y_label, probabilities, self.classes)
+        thresholds, tprs, fprs = adjust_threshold(y_label, probabilities[:, 1], self.classes)
         
         self.threshold, self.tpr, self.fpr = self.best_tprfpr(thresholds, tprs, fprs)
         
@@ -50,12 +41,9 @@ class ThresholdOptimization(AggregativeQuantifier):
         
         self.cc_output = len(probabilities[probabilities >= self.threshold]) / len(probabilities)
         
-        print(self.cc_output, self.tpr, self.fpr)
-        
         if self.tpr - self.fpr == 0:
             prevalence = self.cc_output
         else:
-            print((self.cc_output - self.fpr) / (self.tpr - self.fpr))
             prevalence = np.clip((self.cc_output - self.fpr) / (self.tpr - self.fpr), 0, 1)
         
         prevalences[self.classes[1]] = prevalence

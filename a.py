@@ -32,6 +32,8 @@ quantifier = PACC(rfc)
 start = time.time()
 quantifier.fit(X_train, y_train, learner_fitted=False, cv_folds=3)
 result = quantifier.predict(X_test)
+#distance = quantifier.distance
+#print(distance)
 end = time.time()
 
 total_time = end-start

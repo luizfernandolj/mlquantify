@@ -9,12 +9,11 @@ from ....utils.distances import probsymm, sqEuclidean, topsoe, hellinger
 
 class MixtureModel(AggregativeQuantifier):
     
-    def __init__(self, learner: BaseEstimator, measure:str=None):
-        assert measure in ["hellinger", "topsoe", "probsymm", None], "measure not valid, please choose between: hellinger, topsoe or probsymm or None if it is a sample operation with scores"
+    def __init__(self, learner: BaseEstimator):
         self.learner = learner
-        self.measure = measure
         self.pos_scores = None
         self.neg_scores = None
+        self.distance = None
     
     @property
     def multiclass_method(self) -> bool:
@@ -22,23 +21,13 @@ class MixtureModel(AggregativeQuantifier):
     
         
     def _fit_method(self, X, y, learner_fitted:bool=False, cv_folds:int=10):
+         
+        y_label, probabilities = GetScores(X, y, self.learner, cv_folds, learner_fitted)
+        self.learner.fit(X, y) if learner_fitted is False else None
         
-        if isinstance(X, np.ndarray):
-            X = pd.DataFrame(X)
-        if isinstance(y, np.ndarray):
-            y = pd.DataFrame(y)
-            
-        if learner_fitted or cv_folds is None:
-            probabilities = self.learner.predict_proba(X)[:, 1]
-            y_label = y
-        else:   
-            y_label, probabilities = GetScores(X, y, self.learner, cv_folds, learner_fitted)
-            
-        self.pos_scores = probabilities[y_label == self.classes[1]]
-        self.neg_scores = probabilities[y_label == self.classes[0]]
-        
-        self.learner.fit(X, y)
-        
+        self.pos_scores = probabilities[y_label == self.classes[1]][:, 1]
+        self.neg_scores = probabilities[y_label == self.classes[0]][:, 1]
+    
         return self
     
     def _predict_method(self, X) -> dict:
@@ -46,9 +35,9 @@ class MixtureModel(AggregativeQuantifier):
         
         test_scores = self.learner.predict_proba(X)[:, 1]
         
-        prevalence = self._compute_prevalence(self.pos_scores, self.neg_scores, test_scores, self.measure)
+        prevalence = self._compute_prevalence(test_scores)
         
-        prevalences[self.classes[1]] = prevalence
+        prevalences[self.classes[1]] = np.clip(prevalence, 0, 1)
         prevalences[self.classes[0]] = 1 - prevalence
         
         return prevalences
@@ -66,7 +55,8 @@ class MixtureModel(AggregativeQuantifier):
             raise "Arrays need to be of equal sizes..."
         
         #use numpy arrays for efficient coding
-        dist_train=np.array(dist_train,dtype=float);dist_test=np.array(dist_test,dtype=float)
+        dist_train=np.array(dist_train,dtype=float)
+        dist_test=np.array(dist_test,dtype=float)
         #Correct for zero values
         dist_train[np.where(dist_train<1e-20)]=1e-20
         dist_test[np.where(dist_test<1e-20)]=1e-20

@@ -3,7 +3,6 @@ import numpy as np
 from sklearn.base import BaseEstimator
 
 from ._ThreholdOptimization import ThresholdOptimization
-from ....utils import adjust_threshold
 
 class PACC(ThresholdOptimization):
     """ Implementation of Adjusted Classify and Count
@@ -13,7 +12,6 @@ class PACC(ThresholdOptimization):
         assert isinstance(learner, BaseEstimator), "learner object is not an estimator"
         super().__init__(learner)
         self.threshold = threshold
-    
     
     def _predict_method(self, X):
         prevalences = {}
@@ -25,7 +23,7 @@ class PACC(ThresholdOptimization):
         if self.tpr - self.fpr == 0:
             prevalence = mean_scores
         else:
-            prevalence = (mean_scores - self.fpr) / (self.tpr - self.fpr)
+            prevalence = np.clip(abs(mean_scores - self.fpr) / (self.tpr - self.fpr), 0, 1)
         
         prevalences[self.classes[1]] = prevalence
         prevalences[self.classes[0]] = 1 - prevalence
@@ -33,7 +31,8 @@ class PACC(ThresholdOptimization):
         return prevalences
     
     
-    def best_tprfpr(self, threshold:np.ndarray, tprs: np.ndarray, fprs: np.ndarray) -> tuple:
-        tpr = tprs[threshold == self.threshold][0]
-        fpr = fprs[threshold == self.threshold][0]
+    
+    def best_tprfpr(self, thresholds:np.ndarray, tprs: np.ndarray, fprs: np.ndarray) -> tuple:
+        tpr = tprs[thresholds == self.threshold][0]
+        fpr = fprs[thresholds == self.threshold][0]
         return (self.threshold, tpr, fpr)

@@ -12,38 +12,50 @@ class SORD(MixtureModel):
     def __init__(self, learner:BaseEstimator):
         assert isinstance(learner, BaseEstimator), "learner object is not an estimator"
         super().__init__(learner)
+        self.distance = None
         
     
-    def _compute_prevalence(self, pos_scores:np.ndarray, neg_scores:np.ndarray, test_scores:np.ndarray, measure:str) -> float:
-        alpha = np.linspace(0,1,101)
+    def _compute_prevalence(self, test_scores:np.ndarray) -> float:
+        alpha, distances = self._calculate_distances(test_scores)
         
-        vDist   = []
-        for k in alpha:        
-            pos = np.array(pos_scores)
-            neg = np.array(neg_scores)
-            test = np.array(test_scores)
-            pos_prop = k        
-            
-            p_w = pos_prop / len(pos)
-            n_w = (1 - pos_prop) / len(neg)
-            t_w = -1 / len(test)
+        self.distance = np.argmin(distances)
+        prevalence = alpha[self.distance]
+        
+        return prevalence
+    
+    def _calculate_distances(self, test_scores):
+        alpha = np.linspace(0, 1, 101)
+        pos_len = len(self.pos_scores)
+        neg_len = len(self.neg_scores)
+        test_len = len(test_scores)
 
-            p = list(map(lambda x: (x, p_w), pos))
-            n = list(map(lambda x: (x, n_w), neg))
-            t = list(map(lambda x: (x, t_w), test))
+        distances = []
 
-            v = sorted(p + n + t, key = lambda x: x[0])
+        for k in alpha:
+            pos_prop = k
+            p_w = pos_prop / pos_len
+            n_w = (1 - pos_prop) / neg_len
+            t_w = -1 / test_len
 
-            acc = v[0][1] 
+            pos_weights = np.full(pos_len, p_w)
+            neg_weights = np.full(neg_len, n_w)
+            test_weights = np.full(test_len, t_w)
+
+            scores = np.concatenate([self.pos_scores, self.neg_scores, test_scores])
+            weights = np.concatenate([pos_weights, neg_weights, test_weights])
+
+            sorted_indices = np.argsort(scores)
+            sorted_scores = scores[sorted_indices]
+            sorted_weights = weights[sorted_indices]
+
+            acc = sorted_weights[0]
             total_cost = 0
 
-            for i in range(1, len(v)):
-                cost_mul = v[i][0] - v[i - 1][0] 
-                total_cost = total_cost + abs(cost_mul * acc)
-                acc = acc + v[i][1]
+            for i in range(1, len(sorted_scores)):
+                cost_mul = sorted_scores[i] - sorted_scores[i - 1]
+                total_cost += abs(cost_mul * acc)
+                acc += sorted_weights[i]
 
-            vDist.append(total_cost)        
-            
-        prevalence = alpha[vDist.index(min(vDist))]
-            
-        return np.clip(prevalence, 0, 1)
+            distances.append(total_cost)
+
+        return alpha, distances

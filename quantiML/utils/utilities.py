@@ -33,7 +33,7 @@ def GetScores(X, y, learner, folds:int=10, learner_fitted:bool=False) -> tuple:
         y = pd.DataFrame(y)
         
     if learner_fitted:
-        probabilities = learner.predict_proba(X)[:, 1]
+        probabilities = learner.predict_proba(X)
         y_label = y
     else:
     
@@ -51,7 +51,7 @@ def GetScores(X, y, learner, folds:int=10, learner_fitted:bool=False) -> tuple:
             
             learner.fit(tr_data, tr_label)
             
-            probabilities.extend(learner.predict_proba(valid_data)[:,1])     #evaluating scores
+            probabilities.extend(learner.predict_proba(valid_data))     #evaluating scores
             y_label.extend(valid_label)
     
     return np.asarray(y_label), np.asarray(probabilities)

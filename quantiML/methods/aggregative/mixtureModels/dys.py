@@ -9,30 +9,34 @@ class DyS(MixtureModel):
     Implementation of Hellinger Distance-based Quantifier (HDy)
     """
     
-    def __init__(self, learner:BaseEstimator, measure:str="topsoe"):
+    def __init__(self, learner:BaseEstimator, measure:str="topsoe", bins_size:np.ndarray=None):
+        assert measure in ["hellinger", "topsoe", "probsymm"], "measure not valid"
         assert isinstance(learner, BaseEstimator), "learner object is not an estimator"
-        super().__init__(learner, measure)
+        super().__init__(learner)
+        
+        if not bins_size:
+            bins_size = np.append(np.linspace(2,20,10), 30)
+        self.bins_size = bins_size
+        self.measure = measure
         
     
-    def _compute_prevalence(self, pos_scores:np.ndarray, neg_scores:np.ndarray, test_scores:np.ndarray, measure:str) -> float:
-        bin_size = np.linspace(10,110,11)       #creating bins from 10 to 110 with step size 10
-    #alpha_values = [round(x, 2) for x in np.linspace(0,1,101)]
-        alpha_values = np.linspace(0,1,101)
+    def _compute_prevalence(self, test_scores:np.ndarray) -> float:    #creating bins from 10 to 110 with step size 10
         
         result = []
  
-        for bins in bin_size:
+        for bins in self.bins_size:
             
-            pos_bin_density = getHist(pos_scores, bins)
-            neg_bin_density = getHist(neg_scores, bins)
+            pos_bin_density = getHist(self.pos_scores, bins)
+            neg_bin_density = getHist(self.neg_scores, bins)
             test_bin_density = getHist(test_scores, bins) 
 
-            def f(x):            
-                return(self.get_distance(((pos_bin_density*x) + (neg_bin_density*(1-x))), test_bin_density, measure=self.measure))
+            def f(x):
+                train_combined_density = (pos_bin_density * x) + (neg_bin_density * (1 - x))    
+                return(self.get_distance(train_combined_density, test_bin_density, measure=self.measure))
         
             result.append(ternary_search(0, 1, f))                                           
                             
         prevalence = np.median(result)
             
-        return np.clip(prevalence, 0, 1)
+        return prevalence
         
