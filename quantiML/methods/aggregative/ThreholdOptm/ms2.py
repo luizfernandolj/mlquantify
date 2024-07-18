@@ -7,10 +7,9 @@ class MS2(ThresholdOptimization):
     """ Implementation of MAX
     """
     
-    def __init__(self, learner:BaseEstimator, threshold:float=0.5):
+    def __init__(self, learner:BaseEstimator):
         assert isinstance(learner, BaseEstimator), "learner object is not an estimator"
         super().__init__(learner)
-        self.threshold = threshold
     
     
     def best_tprfpr(self, thresholds:np.ndarray, tprs: np.ndarray, fprs: np.ndarray) -> tuple:

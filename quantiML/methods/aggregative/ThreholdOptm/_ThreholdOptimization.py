@@ -50,9 +50,12 @@ class ThresholdOptimization(AggregativeQuantifier):
         
         self.cc_output = len(probabilities[probabilities >= self.threshold]) / len(probabilities)
         
+        print(self.cc_output, self.tpr, self.fpr)
+        
         if self.tpr - self.fpr == 0:
             prevalence = self.cc_output
         else:
+            print((self.cc_output - self.fpr) / (self.tpr - self.fpr))
             prevalence = np.clip((self.cc_output - self.fpr) / (self.tpr - self.fpr), 0, 1)
         
         prevalences[self.classes[1]] = prevalence

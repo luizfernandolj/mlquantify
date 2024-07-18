@@ -22,13 +22,13 @@ def compute_fpr(FP, TN):
 
 
 def adjust_threshold(y, probabilities:np.ndarray, classes:np.ndarray) -> tuple:
-    unique_scores = np.unique(probabilities)
+    unique_scores = np.linspace(0, 1, 101)
     
     tprs = []
     fprs = []
     
     for threshold in unique_scores:
-        y_pred = np.where(probabilities >= threshold, 1, 0)
+        y_pred = np.where(probabilities >= threshold, classes[1], classes[0])
         
         TP, FP, FN, TN = compute_table(y, y_pred, classes)
         

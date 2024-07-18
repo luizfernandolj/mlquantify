@@ -11,7 +11,8 @@ class PACC(ThresholdOptimization):
     
     def __init__(self, learner:BaseEstimator, threshold:float=0.5):
         assert isinstance(learner, BaseEstimator), "learner object is not an estimator"
-        super().__init__(learner, threshold)
+        super().__init__(learner)
+        self.threshold = threshold
     
     
     def _predict_method(self, X):
@@ -35,4 +36,4 @@ class PACC(ThresholdOptimization):
     def best_tprfpr(self, threshold:np.ndarray, tprs: np.ndarray, fprs: np.ndarray) -> tuple:
         tpr = tprs[threshold == self.threshold][0]
         fpr = fprs[threshold == self.threshold][0]
-        return (tpr, fpr)
+        return (self.threshold, tpr, fpr)
