@@ -2,6 +2,7 @@ import numpy as np
 import pandas as pd
 from sklearn.base import BaseEstimator
 from sklearn.metrics import confusion_matrix
+import cvxpy as cvx
 
 from ...base import AggregativeQuantifier
 from sklearn.model_selection import StratifiedKFold
@@ -15,44 +16,32 @@ class FM(AggregativeQuantifier):
         self.CM = None
     
     def _fit_method(self, X, y, learner_fitted: bool = False, cv_folds: int = 10):
-        y_label, probabilities = GetScores(X, y, self.learner, cv_folds, learner_fitted)
+        y_labels, probabilities = GetScores(X, y, self.learner, cv_folds, learner_fitted)
         self.learner.fit(X, y) if learner_fitted is False else None
         
         CM = np.zeros((self.n_class, self.n_class))
-
-        # Count the occurrences of each class in the training labels
-        class_counts = np.array([np.count_nonzero(y_label == _class) for _class in self.classes])
-
-        # Calculate the prior probabilities of each class
-        priors = class_counts / len(y_label)
-
-        # Populate the confusion matrix
-        for i, _class in enumerate(self.classes):
-            idx = np.where(y_label == _class)[0]
-            CM[:, i] += np.sum(probabilities[idx] > priors, axis=0)
-        CM = CM / class_counts
-
-        self.CM = CM
+        y_cts = np.array([np.count_nonzero(y_labels == _class) for _class in self.classes])
+        self.p_yt = y_cts / len(y_labels)
+        
+        for i, _class in enumerate(self.classes):       
+            idx = np.where(y_labels == _class)[0]
+            CM[:, i] = np.sum(probabilities[idx] > self.p_yt, axis=0) 
+        self.CM = CM / y_cts
         
         return self
     
     def _predict_method(self, X) -> dict:
-        # Initialize the confusion matrix
-
-        # Estimate the distribution of predictions in the test set
-        p_y_hat = np.sum(test_scores > p_yt, axis=0) / test_scores.shape[0]
-
-        # Solve the linear system to adjust the prevalences
-        try:
-            p_hat = np.linalg.solve(CM, p_y_hat)
-            p_hat = np.clip(p_hat, 0, 1)
-            p_hat /= p_hat.sum()
-        except np.linalg.LinAlgError:
-            p_hat = p_y_hat  # If the system cannot be solved, use the initial estimated prevalences
-        except ValueError:
-            p_hat = p_y_hat  # If there is a value error (e.g., due to mismatched dimensions), use the initial estimated prevalences
-            print('Error: Unable to adjust prevalences due to dimension mismatch or singular matrix.')
-
-        # Return prevalences in dictionary format
-        prevalences = {i: p_hat[i] for i in range(nclasses)}
+        prevalences = {}
+        
+        test_scores = self.learner.predict_proba(X)
+        p_y_hat = np.sum(test_scores > self.p_yt, axis = 0) / test_scores.shape[0]
+        
+        p_hat = cvx.Variable(self.CM.shape[1])
+        constraints = [p_hat >= 0, cvx.sum(p_hat) == 1.0]
+        problem = cvx.Problem(cvx.Minimize(cvx.norm(self.CM @ p_hat - p_y_hat)), constraints)
+        problem.solve()
+        
+        prevalences = {_class:prevalence for _class, prevalence in zip(self.classes, p_hat.value)}
+        
+        
         return prevalences

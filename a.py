@@ -8,7 +8,7 @@ from quapy.data.base import LabelledCollection
 #from quapy.method.aggregative import T50
 import time
 
-df = pd.read_csv("data/click-prediction.csv")
+df = pd.read_csv("data/UWave.csv")
 
 #df["class"] = df["class"].replace(2, 0)
 
@@ -27,7 +27,7 @@ rp = np.round(y_test.value_counts(normalize=True), 3).to_dict()
 rp = dict(sorted(rp.items()))
 
 
-quantifier = PACC(rfc)
+quantifier = FM(rfc)
 
 start = time.time()
 quantifier.fit(X_train, y_train, learner_fitted=False, cv_folds=3)
