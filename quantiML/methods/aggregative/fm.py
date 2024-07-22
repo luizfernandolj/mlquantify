@@ -1,11 +1,8 @@
 import numpy as np
-import pandas as pd
 from sklearn.base import BaseEstimator
-from sklearn.metrics import confusion_matrix
-import cvxpy as cvx
+from scipy.optimize import minimize
 
 from ...base import AggregativeQuantifier
-from sklearn.model_selection import StratifiedKFold
 from ...utils import GetScores
 
 class FM(AggregativeQuantifier):
@@ -20,28 +17,42 @@ class FM(AggregativeQuantifier):
         self.learner.fit(X, y) if learner_fitted is False else None
         
         CM = np.zeros((self.n_class, self.n_class))
-        y_cts = np.array([np.count_nonzero(y_labels == _class) for _class in self.classes])
-        self.p_yt = y_cts / len(y_labels)
+        counts = np.array([np.count_nonzero(y_labels == _class) for _class in self.classes])
+        self.prior = counts / len(y_labels)
         
         for i, _class in enumerate(self.classes):       
             idx = np.where(y_labels == _class)[0]
-            CM[:, i] = np.sum(probabilities[idx] > self.p_yt, axis=0) 
-        self.CM = CM / y_cts
+            CM[:, i] = np.sum(probabilities[idx] > self.prior, axis=0) 
+        self.CM = CM / counts
         
         return self
+    
+    
     
     def _predict_method(self, X) -> dict:
         prevalences = {}
         
         test_scores = self.learner.predict_proba(X)
-        p_y_hat = np.sum(test_scores > self.p_yt, axis = 0) / test_scores.shape[0]
+        p_y_hat = np.sum(test_scores > self.prior, axis=0) / test_scores.shape[0]
         
-        p_hat = cvx.Variable(self.CM.shape[1])
-        constraints = [p_hat >= 0, cvx.sum(p_hat) == 1.0]
-        problem = cvx.Problem(cvx.Minimize(cvx.norm(self.CM @ p_hat - p_y_hat)), constraints)
-        problem.solve()
+        def objective(p_hat):
+            return np.linalg.norm(self.CM @ p_hat - p_y_hat)
         
-        prevalences = {_class:prevalence for _class, prevalence in zip(self.classes, p_hat.value)}
+        # Constraints for the optimization problem
+        cons = ({'type': 'eq', 'fun': lambda p_hat: np.sum(p_hat) - 1.0},
+                {'type': 'ineq', 'fun': lambda p_hat: p_hat})
         
+        # Initial guess
+        p_hat_initial = np.ones(self.CM.shape[1]) / self.CM.shape[1]
+        
+        # Solve the optimization problem
+        result = minimize(objective, p_hat_initial, constraints=cons, bounds=[(0, 1)]*self.CM.shape[1])
+        
+        if result.success:
+            p_hat = result.x
+        else:
+            raise ValueError("Optimization did not converge")
+        
+        prevalences = {_class: prevalence for _class, prevalence in zip(self.classes, p_hat)}
         
         return prevalences

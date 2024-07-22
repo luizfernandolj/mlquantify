@@ -8,7 +8,7 @@ from quapy.data.base import LabelledCollection
 #from quapy.method.aggregative import T50
 import time
 
-df = pd.read_csv("data/UWave.csv")
+df = pd.read_csv("data/BNG.csv")
 
 #df["class"] = df["class"].replace(2, 0)
 
