@@ -3,7 +3,7 @@ from sklearn.base import BaseEstimator
 from scipy.optimize import minimize
 
 from ...base import AggregativeQuantifier
-from ...utils import GetScores
+from ...utils import get_scores
 
 class FM(AggregativeQuantifier):
     
@@ -13,46 +13,55 @@ class FM(AggregativeQuantifier):
         self.CM = None
     
     def _fit_method(self, X, y, learner_fitted: bool = False, cv_folds: int = 10):
-        y_labels, probabilities = GetScores(X, y, self.learner, cv_folds, learner_fitted)
-        self.learner.fit(X, y) if learner_fitted is False else None
+        # Get predicted labels and probabilities using cross-validation
+        y_labels, probabilities = get_scores(X, y, self.learner, cv_folds, learner_fitted)
         
+        # Fit the learner if it hasn't been fitted already
+        if not learner_fitted:
+            self.learner.fit(X, y)
+        
+        # Initialize the confusion matrix
         CM = np.zeros((self.n_class, self.n_class))
-        counts = np.array([np.count_nonzero(y_labels == _class) for _class in self.classes])
-        self.prior = counts / len(y_labels)
         
+        # Calculate the class priors
+        class_counts = np.array([np.count_nonzero(y_labels == _class) for _class in self.classes])
+        self.priors = class_counts / len(y_labels)
+        
+        # Populate the confusion matrix
         for i, _class in enumerate(self.classes):       
-            idx = np.where(y_labels == _class)[0]
-            CM[:, i] = np.sum(probabilities[idx] > self.prior, axis=0) 
-        self.CM = CM / counts
+            indices = np.where(y_labels == _class)[0]
+            CM[:, i] = np.sum(probabilities[indices] > self.priors, axis=0) 
+        
+        # Normalize the confusion matrix by class counts
+        self.CM = CM / class_counts
         
         return self
     
-    
-    
     def _predict_method(self, X) -> dict:
-        prevalences = {}
+        posteriors = self.learner.predict_proba(X)
         
-        test_scores = self.learner.predict_proba(X)
-        p_y_hat = np.sum(test_scores > self.prior, axis=0) / test_scores.shape[0]
-        
-        def objective(p_hat):
-            return np.linalg.norm(self.CM @ p_hat - p_y_hat)
+        # Calculate the estimated prevalences in the test set
+        prevs_estim = np.sum(posteriors > self.priors, axis=0) / posteriors.shape[0]
+        # Define the objective function for optimization
+        def objective(prevs_pred):
+            return np.linalg.norm(self.CM @ prevs_pred - prevs_estim)
         
         # Constraints for the optimization problem
-        cons = ({'type': 'eq', 'fun': lambda p_hat: np.sum(p_hat) - 1.0},
-                {'type': 'ineq', 'fun': lambda p_hat: p_hat})
+        constraints = [{'type': 'eq', 'fun': lambda prevs_pred: np.sum(prevs_pred) - 1.0},
+                       {'type': 'ineq', 'fun': lambda prevs_pred: prevs_pred}]
         
-        # Initial guess
-        p_hat_initial = np.ones(self.CM.shape[1]) / self.CM.shape[1]
+        # Initial guess for the optimization
+        initial_guess = np.ones(self.CM.shape[1]) / self.CM.shape[1]
         
         # Solve the optimization problem
-        result = minimize(objective, p_hat_initial, constraints=cons, bounds=[(0, 1)]*self.CM.shape[1])
+        result = minimize(objective, initial_guess, constraints=constraints, bounds=[(0, 1)]*self.CM.shape[1])
         
         if result.success:
-            p_hat = result.x
+            prevalences = result.x
         else:
-            raise ValueError("Optimization did not converge")
-        
-        prevalences = {_class: prevalence for _class, prevalence in zip(self.classes, p_hat)}
+            print("Optimization did not converge")
+            prevalences = self.priors
+
+        prevalences = {_class: prevalence for _class, prevalence in zip(self.classes, prevalences)}
         
         return prevalences

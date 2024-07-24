@@ -2,9 +2,10 @@ import numpy as np
 import pandas as pd
 from sklearn.base import BaseEstimator
 from sklearn.metrics import confusion_matrix
+from sklearn.model_selection import StratifiedKFold
 
 from ...base import AggregativeQuantifier
-from sklearn.model_selection import StratifiedKFold
+
 
 class GAC(AggregativeQuantifier):
     
@@ -14,6 +15,7 @@ class GAC(AggregativeQuantifier):
         self.cond_prob_matrix = None
     
     def _fit_method(self, X, y, learner_fitted: bool = False, cv_folds: int = 10):
+        # Ensure X and y are DataFrames
         if isinstance(X, np.ndarray):
             X = pd.DataFrame(X)
         if isinstance(y, np.ndarray):
@@ -23,48 +25,44 @@ class GAC(AggregativeQuantifier):
             y_pred = self.learner.predict(X)
             y_label = y
         else:
-            skf = StratifiedKFold(n_splits=cv_folds)    
+            # Cross-validation for generating predictions
+            skf = StratifiedKFold(n_splits=cv_folds)
             y_pred = []
             y_label = []
             
-            for train_index, valid_index in skf.split(X,y):
+            for train_index, valid_index in skf.split(X, y):
+                train_data = pd.DataFrame(X.iloc[train_index])
+                train_label = y.iloc[train_index]
                 
-                tr_data = pd.DataFrame(X.iloc[train_index])   #Train data and labels
-                tr_label = y.iloc[train_index]
-                
-                valid_data = pd.DataFrame(X.iloc[valid_index])  #Validation data and labels
+                valid_data = pd.DataFrame(X.iloc[valid_index])
                 valid_label = y.iloc[valid_index]
                 
-                self.learner.fit(tr_data, tr_label)
+                self.learner.fit(train_data, train_label)
                 
-                y_pred.extend(self.learner.predict(valid_data))     #evaluating scores
+                y_pred.extend(self.learner.predict(valid_data))
                 y_label.extend(valid_label)
         
-        self.cond_prob_matrix = self.getCondProbMatrix(self.classes, y, y_pred)
+        # Compute conditional probability matrix
+        self.cond_prob_matrix = self.get_cond_prob_matrix(self.classes, y, y_pred)
         
         return self
     
     def _predict_method(self, X) -> dict:
-        prevalences = {}
-        
+        # Predict class labels for the test data
         y_pred = self.learner.predict(X)
 
         # Distribution of predictions in the test set
-        prevs_estim = np.zeros(self.n_class)
         _, counts = np.unique(y_pred, return_counts=True)
-        prevs_estim = counts
-        prevs_estim = prevs_estim / prevs_estim.sum()
+        predicted_prevalences = counts / counts.sum()
         
-        adjusted_prevs = self.solve_adjustment(self.cond_prob_matrix, prevs_estim)
+        # Adjust prevalences based on conditional probability matrix
+        adjusted_prevalences = self.solve_adjustment(self.cond_prob_matrix, predicted_prevalences)
 
-        prevalences = {_class:prevalence for _class,prevalence in zip(self.classes, adjusted_prevs)}
-        
-        return prevalences
+        return {_class: prevalence for _class, prevalence in zip(self.classes, adjusted_prevalences)}
     
     @classmethod
-    def getCondProbMatrix(cls, classes, y, y_pred):
-        # estimate the matrix with entry (i,j) being the estimate of P(yi|yj), that is, the probability that a
-        # document that belongs to yj ends up being classified as belonging to yi
+    def get_cond_prob_matrix(cls, classes, y, y_pred):
+        # Estimate the conditional probability matrix P(yi|yj)
         CM = confusion_matrix(y, y_pred, labels=classes).T
         CM = CM.astype(np.float32)
         class_counts = CM.sum(axis=0)
@@ -76,16 +74,14 @@ class GAC(AggregativeQuantifier):
         return CM
     
     @classmethod
-    def solve_adjustment(cls, PteCondEstim, prevs_estim):
-        # solve for the linear system Ax = B with A=PteCondEstim and B = prevs_estim
-        A = PteCondEstim
-        B = prevs_estim
+    def solve_adjustment(cls, cond_prob_matrix, predicted_prevalences):
+        # Solve the linear system Ax = B with A=cond_prob_matrix and B=predicted_prevalences
+        A = cond_prob_matrix
+        B = predicted_prevalences
         try:
-            adjusted_prevs = np.linalg.solve(A, B)
-            adjusted_prevs = np.clip(adjusted_prevs, 0, 1)
-            adjusted_prevs /= adjusted_prevs.sum()
-        except np.linalg.LinAlgError:
-            adjusted_prevs = prevs_estim  # no way to adjust them!
-        except ValueError:
-            adjusted_prevs = prevs_estim  # no way to adjust them!
-        return adjusted_prevs
+            adjusted_prevalences = np.linalg.solve(A, B)
+            adjusted_prevalences = np.clip(adjusted_prevalences, 0, 1)
+            adjusted_prevalences /= adjusted_prevalences.sum()
+        except (np.linalg.LinAlgError, ValueError):
+            adjusted_prevalences = predicted_prevalences  # No way to adjust them
+        return adjusted_prevalences

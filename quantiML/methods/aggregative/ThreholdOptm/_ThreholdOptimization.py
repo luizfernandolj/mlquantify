@@ -1,15 +1,13 @@
-
 from abc import abstractmethod
 import numpy as np
-import pandas as pd
 from sklearn.base import BaseEstimator
 
 from ....base import AggregativeQuantifier
-from ....utils import adjust_threshold, GetScores
+from ....utils import adjust_threshold, get_scores
 
 class ThresholdOptimization(AggregativeQuantifier):
-    
-    
+    # Class for optimizing classification thresholds
+
     def __init__(self, learner: BaseEstimator):
         self.learner = learner
         self.threshold = None
@@ -21,26 +19,27 @@ class ThresholdOptimization(AggregativeQuantifier):
     def multiclass_method(self) -> bool:
         return False
     
-    
-    def _fit_method(self, X, y, learner_fitted:bool=False, cv_folds:int=10):
+    def _fit_method(self, X, y, learner_fitted: bool = False, cv_folds: int = 10):
+
+        y_labels, probabilities = get_scores(X, y, self.learner, cv_folds, learner_fitted)
         
-        y_label, probabilities = GetScores(X, y, self.learner, cv_folds, learner_fitted)
-        self.learner.fit(X, y) if learner_fitted is False else None
+        # Adjust thresholds and compute true and false positive rates
+        thresholds, tprs, fprs = adjust_threshold(y_labels, probabilities[:, 1], self.classes)
         
-        thresholds, tprs, fprs = adjust_threshold(y_label, probabilities[:, 1], self.classes)
-        
+        # Find the best threshold based on TPR and FPR
         self.threshold, self.tpr, self.fpr = self.best_tprfpr(thresholds, tprs, fprs)
         
         return self
     
-    
-    def _predict_method(self, X):
+    def _predict_method(self, X) -> dict:
         prevalences = {}
         
         probabilities = self.learner.predict_proba(X)[:, 1]
         
+        # Compute the classification count output
         self.cc_output = len(probabilities[probabilities >= self.threshold]) / len(probabilities)
         
+        # Calculate prevalence, ensuring it's within [0, 1]
         if self.tpr - self.fpr == 0:
             prevalence = self.cc_output
         else:
@@ -51,11 +50,7 @@ class ThresholdOptimization(AggregativeQuantifier):
 
         return prevalences
     
-    
     @abstractmethod
-    def best_tprfpr(self, thresholds:np.ndarray, tpr:np.ndarray, fpr:np.ndarray) -> float:
+    def best_tprfpr(self, thresholds: np.ndarray, tpr: np.ndarray, fpr: np.ndarray) -> float:
+        # Abstract method for determining the best threshold based on TPR and FPR
         ...
-    
-    
-            
-            

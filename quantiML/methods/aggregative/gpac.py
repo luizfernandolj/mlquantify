@@ -1,11 +1,10 @@
 import numpy as np
 import pandas as pd
 from sklearn.base import BaseEstimator
-from sklearn.metrics import confusion_matrix
-
-from ...base import AggregativeQuantifier
 from sklearn.model_selection import StratifiedKFold
+
 from .gac import GAC
+from ...base import AggregativeQuantifier
 
 class GPAC(AggregativeQuantifier):
     
@@ -15,62 +14,67 @@ class GPAC(AggregativeQuantifier):
         self.cond_prob_matrix = None
     
     def _fit_method(self, X, y, learner_fitted: bool = False, cv_folds: int = 10):
+        # Convert X and y to DataFrames if they are numpy arrays
         if isinstance(X, np.ndarray):
             X = pd.DataFrame(X)
         if isinstance(y, np.ndarray):
             y = pd.DataFrame(y)
             
         if learner_fitted:
-            y_pred = self.learner.predict(X)
-            y_label = y
+            # Use existing model to predict
+            predictions = self.learner.predict(X)
+            true_labels = y
         else:
-            skf = StratifiedKFold(n_splits=cv_folds)    
-            y_pred = []
-            y_label = []
+            # Perform cross-validation to generate predictions
+            skf = StratifiedKFold(n_splits=cv_folds)
+            predictions = []
+            true_labels = []
             
-            for train_index, valid_index in skf.split(X,y):
+            for train_index, valid_index in skf.split(X, y):
+                # Split data into training and validation sets
+                train_data = pd.DataFrame(X.iloc[train_index])
+                train_labels = y.iloc[train_index]
                 
-                tr_data = pd.DataFrame(X.iloc[train_index])   #Train data and labels
-                tr_label = y.iloc[train_index]
+                valid_data = pd.DataFrame(X.iloc[valid_index])
+                valid_labels = y.iloc[valid_index]
                 
-                valid_data = pd.DataFrame(X.iloc[valid_index])  #Validation data and labels
-                valid_label = y.iloc[valid_index]
+                # Train the learner
+                self.learner.fit(train_data, train_labels)
                 
-                self.learner.fit(tr_data, tr_label)
-                
-                y_pred.extend(self.learner.predict(valid_data))     #evaluating scores
-                y_label.extend(valid_label)
+                # Predict and collect results
+                predictions.extend(self.learner.predict(valid_data))
+                true_labels.extend(valid_labels)
         
-        self.cond_prob_matrix = GAC.getCondProbMatrix(self.classes, y, y_pred)
+        # Compute conditional probability matrix using GAC
+        self.cond_prob_matrix = GAC.get_cond_prob_matrix(self.classes, true_labels, predictions)
         
         return self
     
     def _predict_method(self, X) -> dict:
-        prevalences = {}
-        
-        y_pred = self.learner.predict(X)
+        # Predict class labels for the test data
+        predictions = self.learner.predict(X)
 
-        # Distribution of predictions in the test set
-        prevs_estim = np.zeros(self.n_class)
-        _, counts = np.unique(y_pred, return_counts=True)
-        prevs_estim = counts
-        prevs_estim = prevs_estim / prevs_estim.sum()
+        # Calculate the distribution of predictions in the test set
+        predicted_prevalences = np.zeros(self.n_class)
+        _, counts = np.unique(predictions, return_counts=True)
+        predicted_prevalences[:len(counts)] = counts
+        predicted_prevalences = predicted_prevalences / predicted_prevalences.sum()
         
-        adjusted_prevs = GAC.solve_adjustment(self.cond_prob_matrix, prevs_estim)
+        # Adjust prevalences based on the conditional probability matrix from GAC
+        adjusted_prevalences = GAC.solve_adjustment(self.cond_prob_matrix, predicted_prevalences)
 
-        prevalences = {_class:prevalence for _class,prevalence in zip(self.classes, adjusted_prevs)}
-        
-        return prevalences
+        # Map class labels to their corresponding prevalences
+        return {_class: prevalence for _class, prevalence in zip(self.classes, adjusted_prevalences)}
     
     @classmethod
-    def getPteCondEstim(cls, classes, y, y_pred):
-        # estimate the matrix with entry (i,j) being the estimate of P(yi|yj), that is, the probability that a
-        # document that belongs to yj ends up being classified as belonging to yi
+    def get_cond_prob_matrix(cls, classes, true_labels, predictions):
+        # Estimate the matrix where entry (i,j) is the estimate of P(yi|yj)
         n_classes = len(classes)
-        # confusion = np.zeros(shape=(n_classes, n_classes))
-        CM = np.eye(n_classes)
+        cond_prob_matrix = np.eye(n_classes)
+        
         for i, class_ in enumerate(classes):
-            idx = y == class_
-            if idx.any():
-                CM[i] = y_pred[idx].mean(axis=0)
-        return CM.T
+            class_indices = true_labels == class_
+            if class_indices.any():
+                cond_prob_matrix[i] = predictions[class_indices].mean(axis=0)
+        
+        return cond_prob_matrix.T

@@ -1,32 +1,8 @@
-from . import *
-from joblib import Parallel, delayed
-import numpy as np
 import pandas as pd
+import numpy as np
 from sklearn.model_selection import StratifiedKFold
 
-def parallel(func, classes, *args, **kwargs):
-    return np.asarray(
-        Parallel(n_jobs=-1, backend='threading')(
-            delayed(func)(c, *args, **kwargs) for c in classes
-        )
-    )
-    
-
-def normalize_prevalence(prevalences: np.ndarray, classes:list):
-    
-    if isinstance(prevalences, dict):
-        summ = sum(prevalences.values())
-        prevalences = {_class:value/summ for _class, value in prevalences.items()}
-        return prevalences
-    
-    summ = prevalences.sum(axis=-1, keepdims=True)
-    prevalences = np.true_divide(prevalences, sum(prevalences), where=summ>0)
-    prevalences = {_class:prev for _class, prev in zip(classes, prevalences)}
-    
-    return prevalences
-
-
-def GetScores(X, y, learner, folds:int=10, learner_fitted:bool=False) -> tuple:
+def get_scores(X, y, learner, folds:int=10, learner_fitted:bool=False) -> tuple:
     if isinstance(X, np.ndarray):
         X = pd.DataFrame(X)
     if isinstance(y, np.ndarray):
