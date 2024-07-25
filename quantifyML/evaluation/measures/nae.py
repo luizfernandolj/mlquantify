@@ -10,8 +10,7 @@ def normalized_absolute_error(prev_real:np.any, prev_pred:np.any):
     
     abs_error = absolute_error(prev_real, prev_pred)
     
-    print(2 * (1 - np.argmin(prev_real)))
-    z_abs_error = (2 * (1 - np.argmin(prev_real))).mean(axis=-1)
+    z_abs_error = (2 * (1 - min(prev_real)))
     
     normalized = abs_error / z_abs_error
     

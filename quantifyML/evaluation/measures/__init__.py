@@ -6,4 +6,3 @@ from .nae import normalized_absolute_error
 from .bias import bias
 from .nrae import normalized_relative_absolute_error
 from .se import squared_error
-from .pd import pearson_divergence

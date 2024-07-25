@@ -1,9 +1,8 @@
-#from quantifyml.methods.aggregative import *
-from quantiML.methods import *
-from quantiML.utils import get_real_prev
-from quantiML.evaluation import *
+from quantifyML.methods import *
+from quantifyML.utils import get_real_prev
+from quantifyML.evaluation import *
 
-import pandas as pd
+import pandas as person
 import numpy as np
 from sklearn.model_selection import train_test_split
 from sklearn.ensemble import RandomForestClassifier
@@ -11,7 +10,7 @@ from quapy.data.base import LabelledCollection
 #from quapy.method.aggregative import T50
 import time
 
-df = pd.read_csv("data/click-prediction.csv")
+df = person.read_csv("data/click-prediction.csv")
 
 #df["class"] = df["class"].replace(2, 0)
 
@@ -39,9 +38,9 @@ end = time.time()
 
 total_time = end-start
 
-results = pd.DataFrame([real_prevalences, result])
+results = person.DataFrame([real_prevalences, result])
 results.index = ["real", "pred"]
 print(results)
 print(f"time: {total_time} seconds")
 
-print(normalized_absolute_error(real_prevalences, result))
+print(normalized_kullback_leibler_divergence(real_prevalences, result))

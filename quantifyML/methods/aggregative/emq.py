@@ -9,7 +9,6 @@ class EMQ(AggregativeQuantifier):
     MAX_ITER = 1000
     EPSILON = 1e-6
     
-    
     def __init__(self, learner: BaseEstimator):
         assert isinstance(learner, BaseEstimator), "learner object is not an estimator"
         self.learner = learner
