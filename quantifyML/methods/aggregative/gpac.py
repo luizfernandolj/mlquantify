@@ -13,20 +13,20 @@ class GPAC(AggregativeQuantifier):
         self.learner = learner
         self.cond_prob_matrix = None
     
-    def _fit_method(self, X, y, learner_fitted: bool = False, cv_folds: int = 10):
+    def _fit_method(self, X, y):
         # Convert X and y to DataFrames if they are numpy arrays
         if isinstance(X, np.ndarray):
             X = pd.DataFrame(X)
         if isinstance(y, np.ndarray):
             y = pd.DataFrame(y)
             
-        if learner_fitted:
+        if self.learner_fitted:
             # Use existing model to predict
             predictions = self.learner.predict(X)
             true_labels = y
         else:
             # Perform cross-validation to generate predictions
-            skf = StratifiedKFold(n_splits=cv_folds)
+            skf = StratifiedKFold(n_splits=self.cv_folds)
             predictions = []
             true_labels = []
             
@@ -64,7 +64,7 @@ class GPAC(AggregativeQuantifier):
         adjusted_prevalences = GAC.solve_adjustment(self.cond_prob_matrix, predicted_prevalences)
 
         # Map class labels to their corresponding prevalences
-        return {_class: prevalence for _class, prevalence in zip(self.classes, adjusted_prevalences)}
+        return adjusted_prevalences
     
     @classmethod
     def get_cond_prob_matrix(cls, classes, true_labels, predictions):

@@ -16,9 +16,9 @@ class MixtureModel(AggregativeQuantifier):
     def multiclass_method(self) -> bool:
         return False
 
-    def _fit_method(self, X, y, learner_fitted: bool = False, cv_folds: int = 10):
+    def _fit_method(self, X, y):
         # Compute scores with cross validation and fit the learner if not already fitted
-        y_label, probabilities = get_scores(X, y, self.learner, cv_folds, learner_fitted)
+        y_label, probabilities = get_scores(X, y, self.learner, self.cv_folds, self.learner_fitted)
 
         # Separate positive and negative scores based on labels
         self.pos_scores = probabilities[y_label == self.classes[1]][:, 1]
@@ -33,11 +33,10 @@ class MixtureModel(AggregativeQuantifier):
         test_scores = self.learner.predict_proba(X)[:, 1]
 
         # Compute the prevalence using the provided measure
-        prevalence = self._compute_prevalence(test_scores)
+        prevalence = np.clip(self._compute_prevalence(test_scores), 0, 1)
 
         # Clip the prevalence to be within the [0, 1] range and compute the complement for the other class
-        prevalences[self.classes[1]] = np.clip(prevalence, 0, 1)
-        prevalences[self.classes[0]] = 1 - prevalences[self.classes[1]]
+        prevalences = [1- prevalence, prevalence]
 
         return prevalences
 

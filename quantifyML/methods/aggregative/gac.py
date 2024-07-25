@@ -14,19 +14,19 @@ class GAC(AggregativeQuantifier):
         self.learner = learner
         self.cond_prob_matrix = None
     
-    def _fit_method(self, X, y, learner_fitted: bool = False, cv_folds: int = 10):
+    def _fit_method(self, X, y):
         # Ensure X and y are DataFrames
         if isinstance(X, np.ndarray):
             X = pd.DataFrame(X)
         if isinstance(y, np.ndarray):
             y = pd.DataFrame(y)
             
-        if learner_fitted:
+        if self.learner_fitted:
             y_pred = self.learner.predict(X)
             y_label = y
         else:
             # Cross-validation for generating predictions
-            skf = StratifiedKFold(n_splits=cv_folds)
+            skf = StratifiedKFold(n_splits=self.cv_folds)
             y_pred = []
             y_label = []
             
@@ -58,7 +58,7 @@ class GAC(AggregativeQuantifier):
         # Adjust prevalences based on conditional probability matrix
         adjusted_prevalences = self.solve_adjustment(self.cond_prob_matrix, predicted_prevalences)
 
-        return {_class: prevalence for _class, prevalence in zip(self.classes, adjusted_prevalences)}
+        return adjusted_prevalences
     
     @classmethod
     def get_cond_prob_matrix(cls, classes, y, y_pred):

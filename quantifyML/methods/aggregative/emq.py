@@ -14,9 +14,10 @@ class EMQ(AggregativeQuantifier):
         self.learner = learner
         self.priors = None
     
-    def _fit_method(self, X, y, learner_fitted: bool = False, cv_folds: int = 10):
+    def _fit_method(self, X, y):
         
-        self.learner.fit(X, y) if learner_fitted is False else None
+        if not self.learner_fitted:
+            self.learner.fit(X, y)
         
         counts = np.array([np.count_nonzero(y == _class) for _class in self.classes])
         self.priors = counts / len(y)
@@ -27,21 +28,20 @@ class EMQ(AggregativeQuantifier):
         
         posteriors = self.learner.predict_proba(X)
         prevalences, _ = self.EM(self.priors, posteriors)
-        prevalences = {_class:prevalence for _class,prevalence in zip(self.classes, prevalences)}
         
         return prevalences
     
     
     def predict_proba(self, X, epsilon:float=EPSILON, max_iter:int=MAX_ITER) -> np.ndarray:
         posteriors = self.learner.predict_proba(X)
-        _, posteriors = self.EM(self.priors, posteriors)
+        _, posteriors = self.EM(self.priors, posteriors, epsilon, max_iter)
         return posteriors
     
     
     @classmethod
-    def EM(classifier, training_prevalence, posterior_probabilities, epsilon=EPSILON, max_iter=MAX_ITER):
-        Px = posterior_probabilities
-        prev_prevalence = np.copy(training_prevalence)
+    def EM(cls, priors, posteriors, epsilon, max_iter):
+        Px = posteriors
+        prev_prevalence = np.copy(priors)
         running_estimate = np.copy(prev_prevalence)  # Initialized with the training prevalence
 
         iteration, converged = 0, False

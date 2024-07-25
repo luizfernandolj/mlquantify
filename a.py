@@ -1,4 +1,5 @@
 from quantifyML.methods import *
+from quantifyML.classfication import *
 from quantifyML.utils import get_real_prev
 from quantifyML.evaluation import *
 
@@ -10,7 +11,7 @@ from quapy.data.base import LabelledCollection
 #from quapy.method.aggregative import T50
 import time
 
-df = person.read_csv("data/click-prediction.csv")
+df = person.read_csv("data/UWave.csv")
 
 #df["class"] = df["class"].replace(2, 0)
 
@@ -19,19 +20,20 @@ Y = df["class"]
 
 X_train, X_test, y_train, y_test = train_test_split(X, Y, test_size=0.3, random_state=64)
 
-rfc = RandomForestClassifier(n_estimators=200, random_state=69, n_jobs=-1)
-
+clf = RandomForestClassifier(n_estimators=200, random_state=69, n_jobs=-1)
+#clf = PWKCLF(alpha=10,n_neighbors=100, n_jobs=-1)
 
 data = LabelledCollection(X_train, y_train)
 
 
 real_prevalences = get_real_prev(y_test)
 
-quantifier = PCC(rfc)
+quantifier = CC(clf)
+
 
 start = time.time()
-quantifier.fit(X_train, y_train, learner_fitted=False, cv_folds=3)
-result = quantifier.predict(X_test)
+quantifier.fit(X_train.values, y_train.values, learner_fitted=False, cv_folds=3)
+result = quantifier.predict(X_test.values)
 #distance = quantifier.distance
 #print(distance)
 end = time.time()
@@ -43,4 +45,4 @@ results.index = ["real", "pred"]
 print(results)
 print(f"time: {total_time} seconds")
 
-print(normalized_kullback_leibler_divergence(real_prevalences, result))
+print(bias(real_prevalences, result))

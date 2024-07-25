@@ -8,14 +8,14 @@ class PCC(AggregativeQuantifier):
         assert isinstance(learner, BaseEstimator), "learner object is not an estimator"
         self.learner = learner
     
-    def _fit_method(self, X, y, learner_fitted: bool = False, cv_folds: int = 10):
-        if not learner_fitted:
+    def _fit_method(self, X, y):
+        if not self.learner_fitted:
             self.learner.fit(X, y)
         return self
     
     def _predict_method(self, X) -> dict:
         # Initialize a dictionary to store the prevalence for each class
-        prevalences = {}
+        prevalences = []
         
         # Calculate the prevalence for each class
         for class_index, class_label in enumerate(self.classes):
@@ -24,6 +24,6 @@ class PCC(AggregativeQuantifier):
         
             # Compute the average probability (prevalence) for the current class
             mean_prev = np.mean(class_probabilities)
-            prevalences[class_label] = mean_prev
+            prevalences.append(mean_prev)
         
         return prevalences

@@ -12,12 +12,12 @@ class FM(AggregativeQuantifier):
         self.learner = learner
         self.CM = None
     
-    def _fit_method(self, X, y, learner_fitted: bool = False, cv_folds: int = 10):
+    def _fit_method(self, X, y):
         # Get predicted labels and probabilities using cross-validation
-        y_labels, probabilities = get_scores(X, y, self.learner, cv_folds, learner_fitted)
+        y_labels, probabilities = get_scores(X, y, self.learner, self.cv_folds, self.learner_fitted)
         
         # Fit the learner if it hasn't been fitted already
-        if not learner_fitted:
+        if not self.learner_fitted:
             self.learner.fit(X, y)
         
         # Initialize the confusion matrix
@@ -61,7 +61,5 @@ class FM(AggregativeQuantifier):
         else:
             print("Optimization did not converge")
             prevalences = self.priors
-
-        prevalences = {_class: prevalence for _class, prevalence in zip(self.classes, prevalences)}
         
         return prevalences

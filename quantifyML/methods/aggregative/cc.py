@@ -11,8 +11,8 @@ class CC(AggregativeQuantifier):
         self.learner = learner
     
     
-    def _fit_method(self, X, y, learner_fitted: bool = False, cv_folds: int = 10):
-        if not learner_fitted:
+    def _fit_method(self, X, y):
+        if not self.learner_fitted:
             self.learner.fit(X, y)
         return self
     
@@ -26,4 +26,4 @@ class CC(AggregativeQuantifier):
         # Calculate the prevalence of each class
         prevalences = class_counts / len(predicted_labels)
         
-        return {_class: prevalence for _class, prevalence in zip(self.classes, prevalences)}
+        return prevalences

@@ -1,6 +1,6 @@
 import numpy as np
 from sklearn.base import BaseEstimator
-from scipy.optimize import minimize
+from collections import defaultdict
 
 from ...base import AggregativeQuantifier
 
@@ -10,12 +10,14 @@ class PWK(AggregativeQuantifier):
         assert isinstance(learner, BaseEstimator), "learner object is not an estimator"
         self.learner = learner
     
-    def _fit_method(self, X, y, learner_fitted: bool = False, cv_folds: int = 10):
-        if not learner_fitted:
+    def _fit_method(self, X, y):
+        if not self.learner_fitted:
             self.learner.fit(X, y)
         return self
     
     def _predict_method(self, X) -> dict:
+        prevalences = {_class:0 for _class in self.classes}
+        
         # Predict class labels for the given data
         predicted_labels = self.learner.predict(X)
         
@@ -28,4 +30,10 @@ class PWK(AggregativeQuantifier):
         # Map each class label to its prevalence
         prevalences  = {label: prevalence for label, prevalence in zip(unique_labels, class_prevalences)}
         
-        return prevalences
+        prevalences = defaultdict(lambda: 0, prevalences)
+    
+        # Ensure all classes are present in the result
+        for cls in self.classes:
+            prevalences[cls] = prevalences[cls]  # This will ensure the class is present and initialize with 0 if not already in the dictionary
+        
+        return dict(prevalences)

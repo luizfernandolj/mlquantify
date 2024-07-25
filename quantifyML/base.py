@@ -41,6 +41,8 @@ class AggregativeQuantifier(Quantifier, ABC):
     def __init__(self):
         # Dictionary to hold binary quantifiers for each class.
         self.binary_quantifiers = {}
+        self.learner_fitted = False
+        self.cv_folds = 10
 
     def fit(self, X, y, learner_fitted=False, cv_folds: int = 10):
         """Fit the quantifier model.
@@ -54,13 +56,16 @@ class AggregativeQuantifier(Quantifier, ABC):
         Returns:
             self: Fitted quantifier.
         """
+        self.learner_fitted = learner_fitted
+        self.cv_folds = cv_folds
+        
         self.classes = np.unique(y)
         if self.binary_data or self.multiclass_method:
-            return self._fit_method(X, y, learner_fitted, cv_folds)
+            return self._fit_method(X, y)
         
         # Making one vs all
         self.binary_quantifiers = {class_: deepcopy(self) for class_ in self.classes}
-        parallel(self.delayed_fit, self.classes, X, y, learner_fitted, cv_folds)
+        parallel(self.delayed_fit, self.classes, X, y)
         
         return self
 
@@ -82,7 +87,7 @@ class AggregativeQuantifier(Quantifier, ABC):
         return normalize_prevalence(prevalences, self.classes)
     
     @abstractmethod
-    def _fit_method(self, X, y, learner_fitted: bool, cv_folds: int):
+    def _fit_method(self, X, y):
         """Abstract fit method that each quantification method must implement.
 
         Args:
@@ -115,7 +120,7 @@ class AggregativeQuantifier(Quantifier, ABC):
         
     # MULTICLASS METHODS
     
-    def delayed_fit(self, class_, X, y, learner_fitted, cv_folds):
+    def delayed_fit(self, class_, X, y):
         """Delayed fit method for one-vs-all strategy, with parallel running.
 
         Args:
@@ -129,7 +134,7 @@ class AggregativeQuantifier(Quantifier, ABC):
             self: Fitted binary quantifier for the given class.
         """
         y_class = (y == class_).astype(int)
-        return self.binary_quantifiers[class_]._fit_method(X, y_class, learner_fitted, cv_folds)
+        return self.binary_quantifiers[class_].fit(X, y_class)
     
     def delayed_predict(self, class_, X):
         """Delayed predict method for one-vs-all strategy, with parallel running.
@@ -141,4 +146,4 @@ class AggregativeQuantifier(Quantifier, ABC):
         Returns:
             float: Predicted prevalence for the given class.
         """
-        return self.binary_quantifiers[class_]._predict_method(X)[1]
+        return self.binary_quantifiers[class_].predict(X)[1]

@@ -6,7 +6,7 @@ def get_scores(X, y, learner, folds:int=10, learner_fitted:bool=False) -> tuple:
     if isinstance(X, np.ndarray):
         X = pd.DataFrame(X)
     if isinstance(y, np.ndarray):
-        y = pd.DataFrame(y)
+        y = pd.Series(y)
         
     if learner_fitted:
         probabilities = learner.predict_proba(X)

@@ -1,4 +1,5 @@
 import numpy as np
+from collections import defaultdict
 
 def normalize_prevalence(prevalences: np.ndarray, classes:list):
     
@@ -10,5 +11,10 @@ def normalize_prevalence(prevalences: np.ndarray, classes:list):
     summ = prevalences.sum(axis=-1, keepdims=True)
     prevalences = np.true_divide(prevalences, sum(prevalences), where=summ>0)
     prevalences = {_class:prev for _class, prev in zip(classes, prevalences)}
+    prevalences = defaultdict(lambda: 0, prevalences)
     
-    return prevalences
+    # Ensure all classes are present in the result
+    for cls in classes:
+        prevalences[cls] = prevalences[cls]
+    
+    return dict(prevalences)

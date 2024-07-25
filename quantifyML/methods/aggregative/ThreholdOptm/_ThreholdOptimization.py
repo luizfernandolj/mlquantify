@@ -19,9 +19,9 @@ class ThresholdOptimization(AggregativeQuantifier):
     def multiclass_method(self) -> bool:
         return False
     
-    def _fit_method(self, X, y, learner_fitted: bool = False, cv_folds: int = 10):
+    def _fit_method(self, X, y):
 
-        y_labels, probabilities = get_scores(X, y, self.learner, cv_folds, learner_fitted)
+        y_labels, probabilities = get_scores(X, y, self.learner, self.cv_folds, self.learner_fitted)
         
         # Adjust thresholds and compute true and false positive rates
         thresholds, tprs, fprs = adjust_threshold(y_labels, probabilities[:, 1], self.classes)
@@ -32,8 +32,7 @@ class ThresholdOptimization(AggregativeQuantifier):
         return self
     
     def _predict_method(self, X) -> dict:
-        prevalences = {}
-        
+              
         probabilities = self.learner.predict_proba(X)[:, 1]
         
         # Compute the classification count output
@@ -45,8 +44,7 @@ class ThresholdOptimization(AggregativeQuantifier):
         else:
             prevalence = np.clip((self.cc_output - self.fpr) / (self.tpr - self.fpr), 0, 1)
         
-        prevalences[self.classes[1]] = prevalence
-        prevalences[self.classes[0]] = 1 - prevalence
+        prevalences = [1- prevalence, prevalence]
 
         return prevalences
     
