@@ -11,7 +11,7 @@ from quapy.data.base import LabelledCollection
 #from quapy.method.aggregative import T50
 import time
 
-df = person.read_csv("data/UWave.csv")
+df = person.read_csv("data/click-prediction.csv")
 
 #df["class"] = df["class"].replace(2, 0)
 
@@ -28,11 +28,11 @@ data = LabelledCollection(X_train, y_train)
 
 real_prevalences = get_real_prev(y_test)
 
-quantifier = CC(clf)
+quantifier = DySsyn(clf)
 
 
 start = time.time()
-quantifier.fit(X_train.values, y_train.values, learner_fitted=False, cv_folds=3)
+quantifier.fit(X_train.values, y_train.values)
 result = quantifier.predict(X_test.values)
 #distance = quantifier.distance
 #print(distance)

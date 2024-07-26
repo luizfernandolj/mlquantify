@@ -8,7 +8,8 @@ MEASURES = {
     "nkld": normalized_kullback_leibler_divergence,
     "nrae": normalized_relative_absolute_error,
     "rae": relative_absolute_error,
-    "se": squared_error
+    "se": squared_error,
+    "mse": mean_squared_error
 }
 
 

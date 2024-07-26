@@ -17,12 +17,8 @@ class DyS(MixtureModel):
         # Set up bins_size
         if not bins_size:
             bins_size = np.append(np.linspace(2,20,10), 30)
-        if isinstance(bins_size, int):
-            bins_size = np.linspace(2,bins_size,10)
-        if len(bins_size) == 2:
-            bins_size = np.linspace(bins_size[0],bins_size[1],10)
-        if len(bins_size) == 3:
-            bins_size = np.linspace(bins_size[0],bins_size[1],bins_size[2])
+        if isinstance(bins_size, list):
+            bins_size = np.asarray(bins_size)
             
         self.bins_size = bins_size
         self.measure = measure

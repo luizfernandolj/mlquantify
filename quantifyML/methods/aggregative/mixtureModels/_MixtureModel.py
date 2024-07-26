@@ -36,7 +36,7 @@ class MixtureModel(AggregativeQuantifier):
         prevalence = np.clip(self._compute_prevalence(test_scores), 0, 1)
 
         # Clip the prevalence to be within the [0, 1] range and compute the complement for the other class
-        prevalences = [1- prevalence, prevalence]
+        prevalences = np.asarray([1- prevalence, prevalence])
 
         return prevalences
 

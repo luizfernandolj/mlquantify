@@ -1,6 +1,8 @@
 from .aggregative import *
+from .non_aggregative import *
 
-METHODS = {
+
+AGGREGATIVE = {
     "CC": CC,
     "PCC": PCC,
     "EMQ": EMQ,
@@ -20,6 +22,12 @@ METHODS = {
     "SMM": SMM,
     "SORD": SORD,
 }
+
+NON_AGGREGATIVE = {
+    "HDx": HDx,
+}
+
+METHODS = AGGREGATIVE | NON_AGGREGATIVE
 
 def get_class(method):
     return METHODS.get(method)

@@ -13,7 +13,7 @@ class HDy(MixtureModel):
         
     def _compute_prevalence(self, test_scores: np.ndarray) -> float:
         # Define bin sizes and alpha values
-        bin_size = np.linspace(10, 110, 11)  # Bins from 10 to 110 with a step size of 10
+        bin_size = np.arange(10, 110, 11)  # Bins from 10 to 110 with a step size of 10
         alpha_values = np.round(np.linspace(0, 1, 101), 2)  # Alpha values from 0 to 1, rounded to 2 decimal places
         
         best_alphas = []

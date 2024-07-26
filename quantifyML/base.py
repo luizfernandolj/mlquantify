@@ -147,3 +147,70 @@ class AggregativeQuantifier(Quantifier, ABC):
             float: Predicted prevalence for the given class.
         """
         return self.binary_quantifiers[class_].predict(X)[1]
+
+
+class NonAggregativeQuantifier(Quantifier):
+    
+    def fit(self, X, y):
+        """Fit the quantifier model.
+
+        Args:
+            X (array-like): Training features.
+            y (array-like): Training labels.
+            learner_fitted (bool, optional): Whether the learner is already fitted. Defaults to False.
+            cv_folds (int, optional): Number of cross-validation folds. Defaults to 10.
+
+        Returns:
+            self: Fitted quantifier.
+        """
+        self.classes = np.unique(y)
+        if self.binary_data or self.multiclass_method:
+            return self._fit_method(X, y)
+        
+        # Making one vs all
+        self.binary_quantifiers = {class_: deepcopy(self) for class_ in self.classes}
+        parallel(self.delayed_fit, self.classes, X, y)
+        
+        return self
+
+    def predict(self, X) -> dict:
+        """Predict class prevalences for the given data.
+
+        Args:
+            X (array-like): Test features.
+
+        Returns:
+            dict: Dictionary with class prevalences.
+        """
+        if self.binary_data or self.multiclass_method:
+            prevalences = self._predict_method(X)
+            return normalize_prevalence(prevalences, self.classes)
+        
+        # Making one vs all 
+        prevalences = parallel(self.delayed_predict, self.classes, X)
+        return normalize_prevalence(prevalences, self.classes)
+    
+    
+    @abstractmethod
+    def _fit_method(self, X, y):
+        """Abstract fit method that each quantification method must implement.
+
+        Args:
+            X (array-like): Training features.
+            y (array-like): Training labels.
+            learner_fitted (bool): Whether the learner is already fitted.
+            cv_folds (int): Number of cross-validation folds.
+        """
+        ...
+
+    @abstractmethod
+    def _predict_method(self, X) -> dict:
+        """Abstract predict method that each quantification method must implement.
+
+        Args:
+            X (array-like): Test data to generate class prevalences.
+
+        Returns:
+            dict: Dictionary with class:prevalence for each class.
+        """
+        ...
