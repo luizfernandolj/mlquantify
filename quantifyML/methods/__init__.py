@@ -1,5 +1,6 @@
 from .aggregative import *
 from .non_aggregative import *
+from .meta import *
 
 
 AGGREGATIVE = {
@@ -26,6 +27,11 @@ AGGREGATIVE = {
 NON_AGGREGATIVE = {
     "HDx": HDx,
 }
+
+META = {
+    "ENSEMBLE": Ensemble
+}
+
 
 METHODS = AGGREGATIVE | NON_AGGREGATIVE
 
