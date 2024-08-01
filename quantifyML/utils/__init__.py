@@ -7,3 +7,4 @@ from .get_scores import get_scores
 from .parallel import parallel
 from .get_real_prev import get_real_prev
 from .moss import MoSS
+from .make_prevs import make_prevs

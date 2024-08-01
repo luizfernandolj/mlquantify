@@ -18,7 +18,7 @@ class PCC(AggregativeQuantifier):
         prevalences = []
         
         # Calculate the prevalence for each class
-        for class_index, class_label in enumerate(self.classes):
+        for class_index in range(self.n_class):
             # Get the predicted probabilities for the current class
             class_probabilities = self.learner.predict_proba(X)[:, class_index]
         
@@ -26,4 +26,4 @@ class PCC(AggregativeQuantifier):
             mean_prev = np.mean(class_probabilities)
             prevalences.append(mean_prev)
         
-        return prevalences
+        return np.asarray(prevalences)

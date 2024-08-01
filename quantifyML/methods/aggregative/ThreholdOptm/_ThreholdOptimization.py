@@ -46,7 +46,7 @@ class ThresholdOptimization(AggregativeQuantifier):
         
         prevalences = [1- prevalence, prevalence]
 
-        return prevalences
+        return np.asarray(prevalences)
     
     @abstractmethod
     def best_tprfpr(self, thresholds: np.ndarray, tpr: np.ndarray, fpr: np.ndarray) -> float:

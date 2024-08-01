@@ -8,7 +8,7 @@ def normalize_prevalence(prevalences: np.ndarray, classes:list):
         prevalences = {_class:value/summ for _class, value in prevalences.items()}
         return prevalences
     
-    summ = prevalences.sum(axis=-1, keepdims=True)
+    summ = np.sum(prevalences, axis=-1, keepdims=True)
     prevalences = np.true_divide(prevalences, sum(prevalences), where=summ>0)
     prevalences = {_class:prev for _class, prev in zip(classes, prevalences)}
     prevalences = defaultdict(lambda: 0, prevalences)

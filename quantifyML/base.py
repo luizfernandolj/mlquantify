@@ -44,7 +44,7 @@ class AggregativeQuantifier(Quantifier, ABC):
         self.learner_fitted = False
         self.cv_folds = 10
 
-    def fit(self, X, y, learner_fitted=False, cv_folds: int = 10):
+    def fit(self, X, y, learner_fitted=False, cv_folds: int = 10, n_jobs:int=1):
         """Fit the quantifier model.
 
         Args:
@@ -56,6 +56,7 @@ class AggregativeQuantifier(Quantifier, ABC):
         Returns:
             self: Fitted quantifier.
         """
+        self.n_jobs = n_jobs
         self.learner_fitted = learner_fitted
         self.cv_folds = cv_folds
         
@@ -65,7 +66,7 @@ class AggregativeQuantifier(Quantifier, ABC):
         
         # Making one vs all
         self.binary_quantifiers = {class_: deepcopy(self) for class_ in self.classes}
-        parallel(self.delayed_fit, self.classes, X, y)
+        parallel(self.delayed_fit, self.classes, self.n_jobs, X, y)
         
         return self
 
@@ -83,7 +84,7 @@ class AggregativeQuantifier(Quantifier, ABC):
             return normalize_prevalence(prevalences, self.classes)
         
         # Making one vs all 
-        prevalences = parallel(self.delayed_predict, self.classes, X)
+        prevalences = np.asarray(parallel(self.delayed_predict, self.classes, self.n_jobs, X))
         return normalize_prevalence(prevalences, self.classes)
     
     @abstractmethod
@@ -151,7 +152,7 @@ class AggregativeQuantifier(Quantifier, ABC):
 
 class NonAggregativeQuantifier(Quantifier):
     
-    def fit(self, X, y):
+    def fit(self, X, y, n_jobs:int=1):
         """Fit the quantifier model.
 
         Args:
@@ -163,13 +164,14 @@ class NonAggregativeQuantifier(Quantifier):
         Returns:
             self: Fitted quantifier.
         """
+        self.n_jobs = n_jobs
         self.classes = np.unique(y)
         if self.binary_data or self.multiclass_method:
             return self._fit_method(X, y)
         
         # Making one vs all
         self.binary_quantifiers = {class_: deepcopy(self) for class_ in self.classes}
-        parallel(self.delayed_fit, self.classes, X, y)
+        parallel(self.delayed_fit, self.classes, self.n_jobs, X, y)
         
         return self
 
@@ -187,7 +189,7 @@ class NonAggregativeQuantifier(Quantifier):
             return normalize_prevalence(prevalences, self.classes)
         
         # Making one vs all 
-        prevalences = parallel(self.delayed_predict, self.classes, X)
+        prevalences = np.asarray(parallel(self.delayed_predict, self.classes, self.n_jobs, X))
         return normalize_prevalence(prevalences, self.classes)
     
     

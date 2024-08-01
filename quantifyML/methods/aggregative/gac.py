@@ -19,8 +19,8 @@ class GAC(AggregativeQuantifier):
         if isinstance(X, np.ndarray):
             X = pd.DataFrame(X)
         if isinstance(y, np.ndarray):
-            y = pd.DataFrame(y)
-            
+            y = pd.Series(y)
+
         if self.learner_fitted:
             y_pred = self.learner.predict(X)
             y_label = y
@@ -31,6 +31,7 @@ class GAC(AggregativeQuantifier):
             y_label = []
             
             for train_index, valid_index in skf.split(X, y):
+                
                 train_data = pd.DataFrame(X.iloc[train_index])
                 train_label = y.iloc[train_index]
                 
