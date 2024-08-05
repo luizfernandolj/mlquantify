@@ -33,7 +33,7 @@ META = {
 }
 
 
-METHODS = AGGREGATIVE | NON_AGGREGATIVE
+METHODS = AGGREGATIVE | NON_AGGREGATIVE | META
 
 def get_class(method):
     return METHODS.get(method)
