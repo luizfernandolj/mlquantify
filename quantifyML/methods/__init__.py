@@ -35,5 +35,5 @@ META = {
 
 METHODS = AGGREGATIVE | NON_AGGREGATIVE | META
 
-def get_class(method):
+def get_method(method:str):
     return METHODS.get(method)
