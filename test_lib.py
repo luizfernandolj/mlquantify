@@ -3,7 +3,7 @@ from quantifyML.classfication import *
 from quantifyML.utils import get_real_prev
 from quantifyML.evaluation import *
 
-import pandas as person
+import pandas as pd
 import numpy as np
 from sklearn.model_selection import train_test_split
 from sklearn.ensemble import RandomForestClassifier
@@ -11,7 +11,7 @@ from quapy.data.base import LabelledCollection
 #from quapy.method.aggregative import T50
 import time
 
-df = person.read_csv("data/click-prediction.csv")
+df = pd.read_csv("data/click-prediction.csv")
 
 #df["class"] = df["class"].replace(2, 0)
 
@@ -28,12 +28,14 @@ real_prevalences = get_real_prev(y_test)
 
 app = APP(learner=clf,
           models="CC", 
-          batch_size=5000,
+          batch_size=[5000, 1000],
+          n_prevs=10,
           n_jobs=-1,
-          return_type="table")
+          return_type="table",
+          measures=["ae", "rae"])
 
 app.fit(X_train.values, y_train.values)
 
 table = app.predict(X_test.values, y_test.values)
 
-print(table)
+print(table.round(3))

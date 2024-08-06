@@ -4,8 +4,7 @@ from copy import deepcopy
 from tqdm import tqdm
 from sklearn.linear_model import LogisticRegression
 from sklearn.model_selection import GridSearchCV, cross_val_predict
-import quantifyML
-from quantifyML import evaluation
+from quantifyML.evaluation import measures
 from ...base import Quantifier
 from ...utils import make_prevs, getHist, normalize_prevalence, parallel, hellinger, generate_indexes
 
@@ -123,7 +122,7 @@ class Ensemble(Quantifier):
         """
         test_prev_estim = prevalences.mean(axis=0)
         tr_prevs = [m[1] for m in self.ensemble]
-        ptr_differences = [evaluation.mean_squared_error(test_prev_estim, ptr_i) for ptr_i in tr_prevs]
+        ptr_differences = [measures.mean_squared_error(test_prev_estim, ptr_i) for ptr_i in tr_prevs]
         order = np.argsort(ptr_differences)
         return _select_k(prevalences, order, k=self.p_metric)
 
