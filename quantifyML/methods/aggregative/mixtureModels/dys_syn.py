@@ -5,8 +5,7 @@ from ._MixtureModel import MixtureModel
 from ....utils import getHist, ternary_search, MoSS
 
 class DySsyn(MixtureModel):
-    """
-    Implementation of Hellinger Distance-based Quantifier (HDy)
+    """Synthetic Distribution y-Similarity.
     """
     
     def __init__(self, learner:BaseEstimator, measure:str="topsoe", bins_size:np.ndarray=None, alpha_train:float=0.5, n:int=None):

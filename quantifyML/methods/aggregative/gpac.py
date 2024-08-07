@@ -7,6 +7,12 @@ from .gac import GAC
 from ...base import AggregativeQuantifier
 
 class GPAC(AggregativeQuantifier):
+    """Generalized Probabilistic Adjusted Count. Like 
+    GAC, it also build a system of linear equations, but 
+    utilize the confidence scores from probabilistic 
+    classifiers as in the PAC method.
+    """
+    
     
     def __init__(self, learner: BaseEstimator):
         assert isinstance(learner, BaseEstimator), "learner object is not an estimator"
@@ -67,8 +73,9 @@ class GPAC(AggregativeQuantifier):
         return adjusted_prevalences
     
     @classmethod
-    def get_cond_prob_matrix(cls, classes, true_labels, predictions):
-        # Estimate the matrix where entry (i,j) is the estimate of P(yi|yj)
+    def get_cond_prob_matrix(cls, classes:list, true_labels:np.ndarray, predictions:np.ndarray) -> np.ndarray:
+        """Estimate the matrix where entry (i,j) is the estimate of P(yi|yj)"""
+        
         n_classes = len(classes)
         cond_prob_matrix = np.eye(n_classes)
         

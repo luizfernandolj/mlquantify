@@ -3,6 +3,10 @@ from sklearn.base import BaseEstimator
 from ...base import AggregativeQuantifier
 
 class PCC(AggregativeQuantifier):
+    """Probabilistic Classify and Count. This method
+    takes the probabilistic predictions and takes the 
+    mean of them for each class.
+    """
     
     def __init__(self, learner: BaseEstimator):
         assert isinstance(learner, BaseEstimator), "learner object is not an estimator"

@@ -2,10 +2,16 @@ import numpy as np
 from sklearn.base import BaseEstimator
 
 from ._MixtureModel import MixtureModel
-from ....utils import getHist, ternary_search
 
 class SORD(MixtureModel):
-    # Implementation of Simple Optimal Regression Density-based Quantifier (SORD)
+    """Sample Ordinal Distance. Is a method 
+    that does not rely on distributions, but 
+    estimates the prevalence of the positive 
+    class in a test dataset by calculating and 
+    minimizing a sample ordinal distance measure 
+    between the test scores and known positive 
+    and negative scores.
+    """
 
     def __init__(self, learner: BaseEstimator):
         assert isinstance(learner, BaseEstimator), "learner object is not an estimator"

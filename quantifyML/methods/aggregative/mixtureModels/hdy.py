@@ -5,7 +5,11 @@ from ._MixtureModel import MixtureModel
 from ....utils import getHist
 
 class HDy(MixtureModel):
-    # Implementation of Hellinger Distance-based Quantifier (HDy)
+    """Hellinger Distance Minimization. The method
+    is based on computing the hellinger distance of 
+    two distributions, test distribution and the mixture
+    of the positive and negative distribution of the train.
+    """
 
     def __init__(self, learner: BaseEstimator):
         assert isinstance(learner, BaseEstimator), "learner object is not an estimator"

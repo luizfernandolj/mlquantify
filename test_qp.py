@@ -2,12 +2,11 @@ import numpy as np
 import pandas as pd
 import time
 from quapy.data import LabelledCollection
-from quapy.method.aggregative import DyS
+from quapy.method.aggregative import CC
 from quapy.method.meta import Ensemble
 from sklearn.ensemble import RandomForestClassifier
 from sklearn.model_selection import train_test_split
-from quapy.error import ae
-
+from quapy.error import rae
 # Leitura do dataset
 def read_dataset(file_path, label_column):
     df = pd.read_csv(file_path)
@@ -20,7 +19,7 @@ def create_labelled_collection(X, y):
     return LabelledCollection(X, y)
 
 # Função principal para rodar o ensemble
-def run_ensemble(file_path, label_column, clf, ensemble_size=50, test_size=0.3):
+def run_ensemble(file_path, label_column, clf, ensemble_size=5, test_size=0.3):
     X, y = read_dataset(file_path, label_column)
     
     # Dividir os dados em treinamento e teste
@@ -30,7 +29,7 @@ def run_ensemble(file_path, label_column, clf, ensemble_size=50, test_size=0.3):
     test_collection = create_labelled_collection(X_test, y_test)
 
     # Criação do ensemble
-    base_learner = MS(clf)  # Classificação de Conteúdo
+    base_learner = CC(clf)  # Classificação de Conteúdo
     ensemble = Ensemble(base_learner, size=ensemble_size, policy="ptr", verbose=True, n_jobs=-1)
     
     # Treinamento do ensemble
@@ -38,9 +37,9 @@ def run_ensemble(file_path, label_column, clf, ensemble_size=50, test_size=0.3):
     
     # Avaliação do ensemble
     predictions = ensemble.quantify(test_collection.instances)
-    
+    print(type(predictions), predictions)
     # Retornar as previsões e a acurácia
-    accuracy = (test_collection.prevalence(), predictions)
+    accuracy = rae(np.asarray([0., 1.]), predictions, eps=1e-10)
     
     return predictions, accuracy
 

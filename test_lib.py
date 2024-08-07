@@ -10,7 +10,6 @@ from sklearn.ensemble import RandomForestClassifier
 from quapy.data.base import LabelledCollection
 #from quapy.method.aggregative import T50
 import time
-
 df = pd.read_csv("data/click-prediction.csv")
 
 #df["class"] = df["class"].replace(2, 0)
@@ -32,7 +31,8 @@ app = APP(learner=clf,
           n_prevs=10,
           n_jobs=-1,
           return_type="table",
-          measures=["ae", "rae"])
+          measures=["ae", "rae"],
+          verbose=True)
 
 app.fit(X_train.values, y_train.values)
 

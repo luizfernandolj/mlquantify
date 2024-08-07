@@ -4,7 +4,8 @@ from sklearn.base import BaseEstimator
 from ._ThreholdOptimization import ThresholdOptimization
 
 class T50(ThresholdOptimization):
-    """ Implementation of MAX
+    """ Threshold 50. This method tries to
+    use the threshold where tpr = 0.5.
     """
     
     def __init__(self, learner:BaseEstimator):

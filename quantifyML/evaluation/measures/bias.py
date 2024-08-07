@@ -2,7 +2,6 @@ import numpy as np
 
 def bias(prev_real:np.any, prev_pred:np.any):
     classes = None
-    
     if isinstance(prev_real, dict):
         classes = prev_real.keys()
         prev_real = np.asarray(list(prev_real.values()))

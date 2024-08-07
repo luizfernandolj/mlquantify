@@ -5,6 +5,13 @@ from collections import defaultdict
 from ...base import AggregativeQuantifier
 
 class PWK(AggregativeQuantifier):
+    """ Nearest-Neighbor based Quantification. This method 
+    is based on nearest-neighbor based classification to the
+    setting of quantification. In this k-NN approach, it applies
+    a weighting scheme which applies less weight on neighbors 
+    from the majority class.
+    Must be used with PWKCLF to work as expected.
+    """
     
     def __init__(self, learner: BaseEstimator):
         assert isinstance(learner, BaseEstimator), "learner object is not an estimator"
@@ -16,8 +23,6 @@ class PWK(AggregativeQuantifier):
         return self
     
     def _predict_method(self, X) -> dict:
-        prevalences = {_class:0 for _class in self.classes}
-        
         # Predict class labels for the given data
         predicted_labels = self.learner.predict(X)
         
@@ -30,10 +35,4 @@ class PWK(AggregativeQuantifier):
         # Map each class label to its prevalence
         prevalences  = {label: prevalence for label, prevalence in zip(unique_labels, class_prevalences)}
         
-        prevalences = defaultdict(lambda: 0, prevalences)
-    
-        # Ensure all classes are present in the result
-        for cls in self.classes:
-            prevalences[cls] = prevalences[cls]  # This will ensure the class is present and initialize with 0 if not already in the dictionary
-        
-        return dict(prevalences)
+        return prevalences

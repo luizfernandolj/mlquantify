@@ -8,6 +8,10 @@ from ...base import AggregativeQuantifier
 
 
 class GAC(AggregativeQuantifier):
+    """Generalized Adjusted Count. It applies a 
+    classifier to build a system of linear equations, 
+    and solve it via constrained least-squares regression.
+    """
     
     def __init__(self, learner: BaseEstimator):
         assert isinstance(learner, BaseEstimator), "learner object is not an estimator"
@@ -62,9 +66,10 @@ class GAC(AggregativeQuantifier):
         return adjusted_prevalences
     
     @classmethod
-    def get_cond_prob_matrix(cls, classes, y, y_pred):
-        # Estimate the conditional probability matrix P(yi|yj)
-        CM = confusion_matrix(y, y_pred, labels=classes).T
+    def get_cond_prob_matrix(cls, classes:list, true_labels:np.ndarray, predictions:np.ndarray) -> np.ndarray:
+        """ Estimate the conditional probability matrix P(yi|yj)"""
+
+        CM = confusion_matrix(true_labels, predictions, labels=classes).T
         CM = CM.astype(np.float32)
         class_counts = CM.sum(axis=0)
         for i, _ in enumerate(classes):
@@ -76,7 +81,10 @@ class GAC(AggregativeQuantifier):
     
     @classmethod
     def solve_adjustment(cls, cond_prob_matrix, predicted_prevalences):
-        # Solve the linear system Ax = B with A=cond_prob_matrix and B=predicted_prevalences
+        """ Solve the linear system Ax = B with A=cond_prob_matrix and B=predicted_prevalences
+        """
+        
+        #
         A = cond_prob_matrix
         B = predicted_prevalences
         try:

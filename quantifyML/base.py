@@ -7,7 +7,7 @@ import numpy as np
 from .utils import parallel, normalize_prevalence
 
 class Quantifier(ABC, BaseEstimator):
-    """ Abstract Class for quantifiers, with  """
+    """ Abstract Class for quantifiers."""
     
     @abstractmethod
     def fit(self, X, y) -> object: ...
@@ -37,6 +37,12 @@ class Quantifier(ABC, BaseEstimator):
 
 
 class AggregativeQuantifier(Quantifier, ABC):
+    """Abstract class for all Aggregative quantifiers, it means that each one of the quantifiers,
+     uses a learner or possibly a classifier to generate predictions.
+     This class is mostly used to detect whether or not its a binary or multiclass problem, and doing 
+     One-Vs-All in case of multiclass dataset and not multiclass quantifier method. 
+    """
+    
     
     def __init__(self):
         # Dictionary to hold binary quantifiers for each class.
@@ -151,6 +157,11 @@ class AggregativeQuantifier(Quantifier, ABC):
 
 
 class NonAggregativeQuantifier(Quantifier):
+    """Abstract class for Non Aggregative quantifiers, it means that 
+    theses methods does not use a classifier or specift learner on it's 
+    predictions.
+    """
+    
     
     def fit(self, X, y, n_jobs:int=1):
         """Fit the quantifier model.

@@ -5,7 +5,10 @@ from sklearn.base import BaseEstimator
 from ._ThreholdOptimization import ThresholdOptimization
 
 class PACC(ThresholdOptimization):
-    """ Implementation of Adjusted Classify and Count
+    """ Probabilistic Adjusted Classify and Count. 
+    This method adapts the AC approach by using average
+    classconditional confidences from a probabilistic 
+    classifier instead of true positive and false positive rates.
     """
     
     def __init__(self, learner:BaseEstimator, threshold:float=0.5):

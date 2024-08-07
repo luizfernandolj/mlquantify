@@ -4,7 +4,9 @@ from sklearn.base import BaseEstimator
 from ._ThreholdOptimization import ThresholdOptimization
 
 class MAX(ThresholdOptimization):
-    """ Implementation of MAX
+    """ Threshold MAX. This method tries to use the
+    threshold where it maximizes the difference between
+    tpr and fpr to use in the denominator of the equation.
     """
     
     def __init__(self, learner:BaseEstimator):

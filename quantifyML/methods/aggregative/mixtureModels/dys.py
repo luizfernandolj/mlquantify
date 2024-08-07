@@ -5,8 +5,10 @@ from ._MixtureModel import MixtureModel
 from ....utils import getHist, ternary_search
 
 class DyS(MixtureModel):
-    """
-    Implementation of Hellinger Distance-based Quantifier (HDy)
+    """Distribution y-Similarity framework. Is a 
+    method that generalises the HDy approach by 
+    considering the dissimilarity function DS as 
+    a parameter of the model
     """
     
     def __init__(self, learner:BaseEstimator, measure:str="topsoe", bins_size:np.ndarray=None):

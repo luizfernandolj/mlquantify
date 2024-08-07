@@ -5,6 +5,9 @@ from sklearn.base import BaseEstimator
 from ...base import AggregativeQuantifier
 
 class EMQ(AggregativeQuantifier):
+    """Expectation Maximisation Quantifier. It is a method that
+    ajust the priors and posteriors probabilities of a learner
+    """
     
     MAX_ITER = 1000
     EPSILON = 1e-6
@@ -40,6 +43,22 @@ class EMQ(AggregativeQuantifier):
     
     @classmethod
     def EM(cls, priors, posteriors, epsilon, max_iter):
+        """Expectaion Maximization function, it iterates several times
+        and At each iteration step, both the a posteriori and the a 
+        priori probabilities are reestimated sequentially for each new 
+        observation and each class. The iterative procedure proceeds 
+        until the convergence of the estimated probabilities.
+
+        Args:
+            priors (array-like): priors probabilites of the train.
+            posteriors (array-like): posteriors probabiblities of the test.
+            epsilon (float): value that helps to indify the convergence.
+            max_iter (int): max number of iterations.
+
+        Returns:
+            the predicted prevalence and the ajusted posteriors.
+        """
+        
         Px = posteriors
         prev_prevalence = np.copy(priors)
         running_estimate = np.copy(prev_prevalence)  # Initialized with the training prevalence

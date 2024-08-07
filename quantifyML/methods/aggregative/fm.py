@@ -6,6 +6,13 @@ from ...base import AggregativeQuantifier
 from ...utils import get_scores
 
 class FM(AggregativeQuantifier):
+    """The Friedman Method. Similar to GPAC, 
+    but instead of averaging the confidence scores
+    from probabilistic classifiers, it uses the proportion
+    of confidence scores that are higher or lower than the
+    expected class frequencies found in the training data.
+    """
+    
     
     def __init__(self, learner: BaseEstimator):
         assert isinstance(learner, BaseEstimator), "learner object is not an estimator"

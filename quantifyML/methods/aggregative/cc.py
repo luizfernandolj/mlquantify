@@ -3,7 +3,10 @@ from sklearn.base import BaseEstimator
 from ...base import AggregativeQuantifier
 
 class CC(AggregativeQuantifier):
-    """Classify and Count, the simplest quantification method involves classifying each instance and then counting the number of instances assigned to each class to estimate the class prevalence.
+    """Classify and Count. The simplest quantification method
+    involves classifying each instance and then counting the 
+    number of instances assigned to each class to estimate 
+    the class prevalence.
     """
     
     def __init__(self, learner: BaseEstimator):

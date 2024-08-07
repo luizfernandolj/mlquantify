@@ -4,7 +4,9 @@ from sklearn.base import BaseEstimator
 from ._ThreholdOptimization import ThresholdOptimization
 
 class MS(ThresholdOptimization):
-    """ Implementation of MAX
+    """ Median Sweep. This method uses an
+    ensemble of such threshold-based methods and 
+    takes the median prediction.
     """
     
     def __init__(self, learner:BaseEstimator, threshold:float=0.5):

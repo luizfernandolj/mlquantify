@@ -6,6 +6,12 @@ from ....base import AggregativeQuantifier
 from ....utils import probsymm, sqEuclidean, topsoe, hellinger, get_scores
 
 class MixtureModel(AggregativeQuantifier):
+    """Generic Class for the Mixture Models methods, which
+    are based oon the assumption that the cumulative 
+    distribution of the scores assigned to data points in the test
+    is a mixture of the scores in train data
+    """
+    
     def __init__(self, learner: BaseEstimator):
         self.learner = learner
         self.pos_scores = None
@@ -42,10 +48,11 @@ class MixtureModel(AggregativeQuantifier):
 
     @abstractmethod
     def _compute_prevalence(self, test_scores: np.ndarray) -> float:
-        pass
+        """ Abstract method for computing the prevalence using the test scores """
+        ...
 
     def get_distance(self, dist_train, dist_test, measure: str) -> float:
-        # Compute the distance between training and test distributions using the specified metric
+        """Compute the distance between training and test distributions using the specified metric"""
 
         # Check if any vector is too small or if they have different lengths
         if np.sum(dist_train) < 1e-20 or np.sum(dist_test) < 1e-20:

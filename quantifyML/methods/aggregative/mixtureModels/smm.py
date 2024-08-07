@@ -4,7 +4,12 @@ from sklearn.base import BaseEstimator
 from ._MixtureModel import MixtureModel
 
 class SMM(MixtureModel):
-    # Implementation of Simple Mean-based Quantifier (SMM)
+    """Sample Mean Matching. The method is 
+    a member of the DyS framework that uses 
+    simple means to represent the score 
+    distribution for positive, negative 
+    and unlabelled scores.
+    """
 
     def __init__(self, learner: BaseEstimator):
         assert isinstance(learner, BaseEstimator), "learner object is not an estimator"

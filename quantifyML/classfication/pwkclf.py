@@ -4,6 +4,11 @@ import numpy as np
 import pandas as pd
 
 class PWKCLF(BaseEstimator):
+    """Learner based on k-Nearest Neighborst (KNN) to use on the method PWK, 
+    that also is based on KNN.
+    """
+    
+    
     def __init__(self,
                  alpha=1,
                  n_neighbors=10,

@@ -81,7 +81,7 @@ class Ensemble(Quantifier):
         
         self.ensemble = parallel(
             _delayed_new_sample,
-            tqdm(args, desc='fitting ensamble', total=self.size) if self.verbose else args,
+            tqdm(args, desc='fitting ensemble', total=self.size) if self.verbose else args,
             n_jobs=self.n_jobs)
 
         self.sout('Fit [Done]')
@@ -196,7 +196,7 @@ def _delayed_new_sample(args):
     tr_prevalence = prev
     tr_distribution = get_probability_distribution(posteriors[sample_index]) if (posteriors is not None) else None
     if verbose:
-        print(f'\t\--fit-ended for prev {str(prev)}')
+        print(f'\t \\--fit-ended for prev {str(prev)}')
     return (model, tr_prevalence, tr_distribution, X, y)
 
 

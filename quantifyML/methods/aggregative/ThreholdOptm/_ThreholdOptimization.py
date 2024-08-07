@@ -6,6 +6,12 @@ from ....base import AggregativeQuantifier
 from ....utils import adjust_threshold, get_scores
 
 class ThresholdOptimization(AggregativeQuantifier):
+    """Generic Class for methods that are based on adjustments
+    of the decision boundary of the underlying classifier in order
+    to make the ACC (base method for threshold methods) estimation
+    more numerically stable. Most of its strategies involve changing
+    the behavior of the denominator of the ACC equation.
+    """
     # Class for optimizing classification thresholds
 
     def __init__(self, learner: BaseEstimator):
@@ -17,6 +23,7 @@ class ThresholdOptimization(AggregativeQuantifier):
     
     @property
     def multiclass_method(self) -> bool:
+        """ All threshold Methods are binary or non multiclass """
         return False
     
     def _fit_method(self, X, y):
@@ -42,6 +49,7 @@ class ThresholdOptimization(AggregativeQuantifier):
         if self.tpr - self.fpr == 0:
             prevalence = self.cc_output
         else:
+            # Equation of all threshold methods to compute prevalence
             prevalence = np.clip((self.cc_output - self.fpr) / (self.tpr - self.fpr), 0, 1)
         
         prevalences = [1- prevalence, prevalence]
@@ -50,5 +58,5 @@ class ThresholdOptimization(AggregativeQuantifier):
     
     @abstractmethod
     def best_tprfpr(self, thresholds: np.ndarray, tpr: np.ndarray, fpr: np.ndarray) -> float:
-        # Abstract method for determining the best threshold based on TPR and FPR
+        """Abstract method for determining the best TPR and FPR to use in the equation"""
         ...

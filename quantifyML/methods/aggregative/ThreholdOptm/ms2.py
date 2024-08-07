@@ -4,7 +4,10 @@ from sklearn.base import BaseEstimator
 from ._ThreholdOptimization import ThresholdOptimization
 
 class MS2(ThresholdOptimization):
-    """ Implementation of MAX
+    """ Median Sweep 2. It relies on the same
+    strategy of the Median Sweep, but compute 
+    the median only for cases in which 
+    tpr -fpr > 0.25
     """
     
     def __init__(self, learner:BaseEstimator):
