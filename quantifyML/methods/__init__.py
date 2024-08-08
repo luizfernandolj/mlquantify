@@ -19,6 +19,7 @@ AGGREGATIVE = {
     "T50": T50,
     "X": X_method,
     "DyS": DyS,
+    "DySsyn": DySsyn,
     "HDy": HDy,
     "SMM": SMM,
     "SORD": SORD,
@@ -33,7 +34,7 @@ META = {
 }
 
 
-METHODS = AGGREGATIVE | NON_AGGREGATIVE | META
+METHODS = AGGREGATIVE | NON_AGGREGATIVE
 
 def get_method(method:str):
     return METHODS.get(method)

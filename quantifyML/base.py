@@ -125,6 +125,14 @@ class AggregativeQuantifier(Quantifier, ABC):
     def learner(self, value):
         self.learner_ = value
         
+        
+    def get_params(self, deep=True):
+        return self.learner.get_params()
+
+    def set_params(self, **parameters):
+        self.learner.set_params(**parameters)
+    
+        
     # MULTICLASS METHODS
     
     def delayed_fit(self, class_, X, y):

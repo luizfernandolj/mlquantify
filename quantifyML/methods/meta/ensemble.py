@@ -6,13 +6,12 @@ from sklearn.linear_model import LogisticRegression
 from sklearn.model_selection import GridSearchCV, cross_val_predict
 from quantifyML.evaluation import measures
 from ...base import Quantifier
-from ...utils import make_prevs, getHist, normalize_prevalence, parallel, hellinger, generate_indexes
+from ...utils import make_prevs, getHist, normalize_prevalence, parallel, hellinger, generate_artificial_indexes
 
 class Ensemble(Quantifier):
     SELECTION_METRICS = {'all', 'ptr', 'ds'}
 
-    """
-    Methods from the articles:
+    """Ensemble method, based on the articles:
     Pérez-Gállego, P., Quevedo, J. R., & del Coz, J. J. (2017).
     Using ensembles for problems with characterizable changes in data distribution: A case study on quantification.
     Information Fusion, 34, 87-100.
@@ -20,6 +19,16 @@ class Ensemble(Quantifier):
     Pérez-Gállego, P., Castano, A., Quevedo, J. R., & del Coz, J. J. (2019). 
     Dynamic ensemble selection for quantification tasks. 
     Information Fusion, 45, 1-15.
+    
+        This approach of Ensemble is made of taking multiple
+    samples varying class proportions on each, and for the 
+    predictions, it takes the k models which as the minimum
+    seletion metric, which are:
+     - all -> return all the predictions
+     - ptr -> computes the selected error measure
+     - ds -> computes the hellinger distance of the train and test
+     distributions for each model
+    
     """
 
     def __init__(self,
@@ -90,9 +99,12 @@ class Ensemble(Quantifier):
     def predict(self, X):
         self.sout('Predict')
         
+        args = ((Qi, X) for Qi in self.ensemble)
         
         prevalences = np.asarray(
-            parallel(_delayed_predict, ((Qi, X) for Qi in self.ensemble), n_jobs=self.n_jobs)
+            parallel(_delayed_predict, 
+                     tqdm(args, desc="Predicting Ensemble", total=len(self.ensemble)) if self.verbose else args, 
+                     n_jobs=self.n_jobs)
         )
 
         prevalences = pd.DataFrame(prevalences).to_numpy()
@@ -158,19 +170,11 @@ class Ensemble(Quantifier):
 
     def ds_selection_metric(self, prevalences, test):
         test_posteriors = self.proba_generator(test)
-        test_distribution = get_probability_distribution(test_posteriors)
+        test_distribution = getHist(test_posteriors, 8)
         tr_distributions = [m[2] for m in self.ensemble]
         dist = [hellinger(tr_dist_i, test_distribution) for tr_dist_i in tr_distributions]
         order = np.argsort(dist)
         return _select_k(prevalences, order, k=self.p_metric)
-
-
-def get_probability_distribution(posterior_probabilities, bins=8):
-    assert posterior_probabilities.shape[1] == 2, 'the posterior probabilities do not seem to be for a binary problem'
-    posterior_probabilities = posterior_probabilities[:, 1]  # take the positive posteriors only
-    distribution, _ = np.histogram(posterior_probabilities, bins=bins, range=(0, 1), density=True)
-    return distribution
-
 
 def _select_k(elements, order, k):
     elements_k = [elements[idx] for idx in order[:k]]
@@ -184,19 +188,20 @@ def _select_k(elements, order, k):
 def _delayed_new_sample(args):
     X, y, base_quantifier, prev, posteriors, verbose, sample_size = args
     if verbose:
-        print(f'\tfit-start for prev {str(prev)}, sample_size={sample_size}')
+        print(f'\tfit-start for prev {str(np.round(prev, 3))}, sample_size={sample_size}')
     model = deepcopy(base_quantifier)
 
-    sample_index = generate_indexes(y, prev, sample_size, np.unique(y))
-    X_sample = X[sample_index]
-    y_sample = y[sample_index]
+    sample_index = generate_artificial_indexes(y, prev, sample_size, np.unique(y))
+    X_sample = np.take(X, sample_index, axis=0)
+    y_sample = np.take(y, sample_index, axis=0)
+    #print(X_sample)
 
     model.fit(X_sample, y_sample)
 
     tr_prevalence = prev
-    tr_distribution = get_probability_distribution(posteriors[sample_index]) if (posteriors is not None) else None
+    tr_distribution = getHist(posteriors[sample_index], 8) if (posteriors is not None) else None
     if verbose:
-        print(f'\t \\--fit-ended for prev {str(prev)}')
+        print(f'\t \\--fit-ended for prev {str(np.round(prev, 3))}')
     return (model, tr_prevalence, tr_distribution, X, y)
 
 

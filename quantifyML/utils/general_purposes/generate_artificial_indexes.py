@@ -1,6 +1,6 @@
 import numpy as np
 
-def generate_indexes(y, prevalence: list, sample_size:int, classes:list):        
+def generate_artificial_indexes(y, prevalence: list, sample_size:int, classes:list):        
     # Ensure the sum of prevalences is 1
     assert np.isclose(sum(prevalence), 1), "The sum of prevalences must be 1"
     # Ensure the number of prevalences matches the number of classes

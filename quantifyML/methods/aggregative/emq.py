@@ -42,7 +42,7 @@ class EMQ(AggregativeQuantifier):
     
     
     @classmethod
-    def EM(cls, priors, posteriors, epsilon, max_iter):
+    def EM(cls, priors, posteriors, epsilon=EPSILON, max_iter=MAX_ITER):
         """Expectaion Maximization function, it iterates several times
         and At each iteration step, both the a posteriori and the a 
         priori probabilities are reestimated sequentially for each new 

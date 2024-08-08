@@ -1,12 +1,16 @@
-import numpy as np
 import pandas as pd
-from sklearn.base import BaseEstimator
+import numpy as np
 
 from ...base import NonAggregativeQuantifier
 from ...utils import getHist, hellinger
 
 class HDx(NonAggregativeQuantifier):
-    # Implementation of Hellinger Distance-based Quantifier (HDy)
+    """Hellinger Distance Minimization. The method is similar 
+    to the HDy method, but istead of computing the hellinger 
+    distance of the scores (generated via classifier), HDx 
+    computes the distance of each one of the features of the 
+    dataset
+    """
 
     def __init__(self, bins_size:np.ndarray=None):
         if not bins_size:
@@ -19,13 +23,23 @@ class HDx(NonAggregativeQuantifier):
         
     def _fit_method(self, X, y):
         
+        
         self.pos_features = X[y == self.classes[1]]
         self.neg_features = X[y == self.classes[0]]
+        
+        
+        if not isinstance(X, np.ndarray):
+            self.pos_features = self.pos_features.to_numpy()
+        if not isinstance(y, np.ndarray):
+            self.neg_features = self.neg_features.to_numpy()
         
         return self
     
     def _predict_method(self, X) -> dict:
         
+        if not isinstance(X, np.ndarray):
+            X = X.to_numpy()
+    
         alpha_values = np.round(np.linspace(0, 1, 101), 2)
         
         best_distances = {}

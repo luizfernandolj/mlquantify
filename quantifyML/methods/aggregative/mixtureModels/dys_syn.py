@@ -2,13 +2,17 @@ import numpy as np
 from sklearn.base import BaseEstimator
 
 from ._MixtureModel import MixtureModel
-from ....utils import getHist, ternary_search, MoSS
+from ....utils import getHist, ternary_search, MoSS, get_real_prev
 
 class DySsyn(MixtureModel):
-    """Synthetic Distribution y-Similarity.
+    """Synthetic Distribution y-Similarity. This method works the
+    same as DyS method, but istead of using the train scores, it 
+    generates them via MoSS (Model for Score Simulation) which 
+    generate a spectrum of score distributions from highly separated
+    scores to fully mixed scores.
     """
     
-    def __init__(self, learner:BaseEstimator, measure:str="topsoe", bins_size:np.ndarray=None, alpha_train:float=0.5, n:int=None):
+    def __init__(self, learner:BaseEstimator, measure:str="topsoe", merge_factor:np.ndarray=None, bins_size:np.ndarray=None, alpha_train:float=0.5, n:int=None):
         assert measure in ["hellinger", "topsoe", "probsymm"], "measure not valid"
         assert isinstance(learner, BaseEstimator), "learner object is not an estimator"
         super().__init__(learner)
@@ -19,12 +23,26 @@ class DySsyn(MixtureModel):
         if isinstance(bins_size, list):
             bins_size = np.asarray(bins_size)
             
+        if not merge_factor:
+            merge_factor = np.linspace(0.1, 0.4, 10)
+            
         self.bins_size = bins_size
+        self.merge_factor = merge_factor
         self.alpha_train = alpha_train
         self.n = n
         self.measure = measure
         self.m = None
+    
+    
+    def _fit_method(self, X, y):
+        if not self.learner_fitted:
+            self.learner.fit(X, y)
+            
+        self.alpha_train = list(get_real_prev(y).values())[1]
         
+        return self
+    
+    
     
     def _compute_prevalence(self, test_scores:np.ndarray) -> float:    #creating bins from 10 to 110 with step size 10
         # Compute prevalence by evaluating the distance metric across various bin sizes
@@ -34,7 +52,7 @@ class DySsyn(MixtureModel):
         distances = {}
         
         # Iterate over each bin size
-        for m in np.linspace(0.1, 0.4, 10):
+        for m in self.merge_factor:
             pos_scores, neg_scores = MoSS(self.n, self.alpha_train, m)
             result  = []
             for bins in self.bins_size:
