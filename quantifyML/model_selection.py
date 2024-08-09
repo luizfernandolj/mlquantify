@@ -150,8 +150,13 @@ class GridSearchQ(Quantifier):
             signal.signal(signal.SIGALRM, handler)
 
         def evaluate_combination(params):
+            model_params = dict(zip(self.param_grid.keys(), params))
+            
+            if self.verbose:
+                print(f"\tEvaluate Combination for {str(params)}")
+            
             model = deepcopy(self.model)
-            model.set_params(**dict(zip(self.param_grid.keys(), params)))
+            model.set_params(**model_params)
             protocol_instance = self.__get_protocol(model, len(y_train))
             scores = []
             
@@ -169,6 +174,9 @@ class GridSearchQ(Quantifier):
             except TimeoutError:
                 self.sout(f'Timeout reached for combination {params}.')
                 some_timeouts = True
+            
+            if self.verbose:
+                print(f"\t\\--ended evaluation of {str(params)}")
             
             return np.mean(scores) if scores else None
 

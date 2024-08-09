@@ -129,8 +129,19 @@ class AggregativeQuantifier(Quantifier, ABC):
     def get_params(self, deep=True):
         return self.learner.get_params()
 
-    def set_params(self, **parameters):
-        self.learner.set_params(**parameters)
+    def set_params(self, **params):
+        # Model Params
+        for key, value in params.items():
+            if hasattr(self, key):
+                setattr(self, key, value)
+
+        # Learner Params
+        if self.learner:
+            learner_params = {k.replace('learner__', ''): v for k, v in params.items() if 'learner__' in k}
+            if learner_params:
+                self.learner.set_params(**learner_params)
+        
+        return self
     
         
     # MULTICLASS METHODS

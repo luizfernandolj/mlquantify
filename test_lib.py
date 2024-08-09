@@ -22,7 +22,7 @@ X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.3, random_
 clf = RandomForestClassifier(random_state=69, n_jobs=-1)
 
 # Define the quantifier without grid search
-quantifier = PCC(clf)
+quantifier = DyS(clf)
 
 # Start timing for quantifier without grid search
 start_no_gs = time.time()
@@ -42,10 +42,11 @@ real_prevalences = get_real_prev(y_test)
 
 # Initialize the parameter grid for GridSearchQ
 param_grid = {
-    'n_estimators': [100, 200],
-    'max_depth': [None, 10, 20],
-    'min_samples_split': [2, 5, 10],
-    'min_samples_leaf': [1, 2, 4],
+    'learner__n_estimators': [100, 200],
+    'learner__max_depth': [None, 10, 20],
+    'learner__min_samples_split': [2, 5, 10],
+    'learner__min_samples_leaf': [1, 2, 4],
+    'measure': ["topsoe", "probsymm"]
 }
 
 # Initialize GridSearchQ
