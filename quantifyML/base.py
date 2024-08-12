@@ -2,6 +2,7 @@ from abc import abstractmethod, ABC
 from sklearn.base import BaseEstimator
 from copy import deepcopy
 import numpy as np
+import joblib
 
 
 from .utils import parallel, normalize_prevalence
@@ -34,6 +35,13 @@ class Quantifier(ABC, BaseEstimator):
     @property
     def binary_data(self) -> bool:
         return len(self._classes) == 2
+    
+    
+    def save_quantifier(self, path: str=None) -> None:
+        if not path:
+            path = f"{self.__class__.__name__}.joblib"
+        joblib.dump(self, path)
+        
 
 
 class AggregativeQuantifier(Quantifier, ABC):

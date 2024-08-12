@@ -21,10 +21,29 @@ clf = RandomForestClassifier(random_state=69, n_jobs=-1)
 
 
 quantifier = DyS(clf)
-quantifier2 = CC(clf)
+cc = CC(clf)
+
+cc.fit(X_train, y_train)
+
+cc.save_quantifier()
 
 
-app = APP(models="all",
+prediction1 = cc.predict(X_test)
+
+qtf = load_quantifier("CC.joblib")
+
+predictions = qtf.predict(X_test)
+
+print(prediction1)
+print(predictions)
+
+
+
+
+
+
+
+""" app = APP(models="all",
           learner=clf, 
           batch_size=list(range(10, 120, 20)),
           n_prevs=10,
@@ -37,35 +56,9 @@ app = APP(models="all",
 app.fit(X_train, y_train)
 
 table = app.predict(X_test, y_test)
+print(table)
 
-table.to_csv("app_table.csv", index=False)
-
-
-protocol_plot_line(table_protocol=table, 
-                  methods="all",  # ou None
-                  x="BATCH_SIZE", 
-                  y="ae",
-                  title="Predicted Prevalence vs Batch Size",
-                  legend=True,
-                  save_path="line_plot.png",
-                  plot_params={"figure.figsize": (10, 6)})
-
-protocol_plot_box(table_protocol=table,
-                  methods=None,  # ou "all"
-                  x="QUANTIFIER",
-                  y="ae",
-                  title="Absolute Error Distribution",
-                  save_path="box_plot.png",
-                  plot_params={"figure.figsize": (8, 5)})
-
-
-
-
-
-
-
-
-
+table.to_csv("app_table.csv", index=False) """
 
 
 
