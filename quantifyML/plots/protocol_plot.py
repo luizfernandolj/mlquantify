@@ -1,79 +1,20 @@
 import matplotlib.pyplot as plt
+import matplotlib.patches as mpatches
 import pandas as pd
-import numpy as np
-from typing import List, Union, Dict, Any, Optional
+from typing import List, Optional, Dict, Any, Union
 
-def protocol_lineplot(
-    table_protocol: pd.DataFrame,
-    methods: Union[List[str], str, None],
-    x: str,
-    y: str,
-    title: str = None,
-    legend: bool = True,
-    save_path: str = None,
-    group_by: str = "mean",
-    plot_params: Dict[str, Any] = None
-):
-    """
-    Plots a line graph from the provided DataFrame.
+plt.style.use("quantifyML/plots/style.mplstyle")
 
-    Parameters:
-    - table_protocol (pd.DataFrame): DataFrame containing the data to plot.
-    - methods (Union[List[str], str, None]): Methods to plot; if None or 'all', all methods are used.
-    - x (str): Column name for x-axis.
-    - y (str): Column name for y-axis.
-    - title (str, optional): Title of the plot.
-    - legend (bool, optional): Whether to display the legend.
-    - save_path (str, optional): Path to save the plot.
-    - group_by (str, optional): Aggregation method for y-axis values ('mean', 'sum', etc.).
-    - plot_params (Dict[str, Any], optional): Additional plotting parameters.
-    """
-    # Determine methods to plot
-    if methods is None or methods == "all":
-        methods = table_protocol["QUANTIFIER"].unique()
-    elif isinstance(methods, str):
-        methods = [methods]
+# Colors and markers
+COLORS = [
+    '#FFAB91', '#FFE082', '#A5D6A7', '#4DD0E1', '#FF6F61', '#FF8C94', '#D4A5A5',
+    '#FF677D', '#B9FBC0', '#C2C2F0', '#E3F9A6', '#E2A8F7', '#F7B7A3', '#F7C6C7',
+    '#8D9BFC', '#B4E6FF', '#FF8A65', '#FFC3A0', '#FFCCBC', '#F8BBD0', '#FF9AA2',
+    '#FFB3B3', '#FFDDC1', '#FFE0B2', '#E2A8F7', '#F7C6C7', '#E57373', '#BA68C8',
+    '#4FC3F7', '#FFB3B3', '#FF6F61'
+]
 
-    fig, ax = plt.subplots()
-    ax.set_aspect('equal')
-    ax.grid()
-
-    NUM_COLORS = len(methods)
-    # Use colormap for more than 10 methods
-    if NUM_COLORS > 10:
-        cm = plt.get_cmap('tab20')
-        ax.set_prop_cycle(color=[cm(i / NUM_COLORS) for i in range(NUM_COLORS)])
-    else:
-        # Default color cycle
-        ax.set_prop_cycle(plt.cycler(color=plt.cm.tab10.colors))
-
-    # Filter data for specified methods
-    filtered_data = table_protocol[table_protocol["QUANTIFIER"].isin(methods)]
-
-    # Apply additional plot parameters
-    if plot_params:
-        plt.rcParams.update(plot_params)
-
-    # Group data and aggregate
-    grouped_data = filtered_data.groupby([x, "QUANTIFIER"]).agg({y: group_by}).reset_index()
-
-    # Plot lines for each method
-    for method in methods:
-        method_data = grouped_data[grouped_data["QUANTIFIER"] == method]
-        ax.plot(method_data[x], method_data[y], label=method)
-    
-    # Set title and legend
-    if title:
-        ax.set_title(title)
-    if legend:
-        ax.legend()
-    
-    # Save plot if path is specified
-    if save_path:
-        plt.savefig(save_path)
-
-    # Show plot
-    plt.show()
+MARKERS = ["o", "s", "^", "D", "p", "*", "+", "x", "H", "1", "2", "3", "4", "|", "_"]
 
 
 
@@ -82,66 +23,107 @@ def protocol_boxplot(
     x: str,
     y: str,
     methods: Optional[List[str]] = None,
-    title: str = None,
+    title: Optional[str] = None,
     legend: bool = True,
-    save_path: str = None,
-    plot_params: Dict[str, Any] = None
-):
+    save_path: Optional[str] = None,
+    order: Optional[str] = None,
+    plot_params: Optional[Dict[str, Any]] = None):
     """
     Plots a boxplot based on the provided DataFrame and selected methods.
-
-    Parameters:
-    - table_protocol (pd.DataFrame): DataFrame containing the data to plot.
-    - methods (Optional[List[str]], optional): Methods to plot; if None, all methods are used.
-    - x (str): Column name for x-axis (categorical).
-    - y (str): Column name for y-axis (numeric).
-    - title (str, optional): Title of the plot.
-    - legend (bool, optional): Whether to display the legend (dummy for boxplots).
-    - save_path (str, optional): Path to save the plot.
-    - plot_params (Dict[str, Any], optional): Additional plotting parameters.
     """
-    # Determine methods to plot
-    if methods is None:
-        methods = table_protocol["QUANTIFIER"].unique()
-    elif not methods:
-        methods = table_protocol["QUANTIFIER"].unique()
-
-    # Filter data for specified methods
-    filtered_data = table_protocol[table_protocol["QUANTIFIER"].isin(methods)]
-
-    fig, ax = plt.subplots()
-    ax.set_aspect('equal')
-    ax.grid()
-
-    # Apply additional plot parameters
-    if plot_params:
-        plt.rcParams.update(plot_params)
-
-    # Define a colormap
-    cm = plt.get_cmap('tab20')
-    colors = [cm(i / len(methods)) for i in range(len(methods))]
-
-    # Create the boxplot
-    boxplot_data = [filtered_data[filtered_data["QUANTIFIER"] == method][y] for method in methods]
-    boxprops = [dict(facecolor=colors[i], color=colors[i]) for i in range(len(methods))]
-    ax.boxplot(boxplot_data, labels=methods, patch_artist=True,
-               boxprops=boxprops)
+    # Handle plot_params
+    plot_params = plot_params or {}
+    figsize = plot_params.pop('figsize', (10, 6))  # Default figsize if not provided
     
-    # Set title and labels
+    # Prepare data
+    table = table_protocol.drop(["PRED_PREVS", "REAL_PREVS"], axis=1).copy()
+    methods = methods or table['QUANTIFIER'].unique()
+    table = table[table['QUANTIFIER'].isin(methods)]
+
+    # Order methods by ranking if specified
+    if order == 'rank':
+        methods = table.groupby('QUANTIFIER')[y].median().sort_values().index.tolist()
+
+    # Create plot with custom figsize
+    fig, ax = plt.subplots(figsize=figsize)
+    ax.grid(False)
+    
+    box = ax.boxplot([table[table['QUANTIFIER'] == method][y] for method in methods],
+                     patch_artist=True, widths=0.8, labels=methods, **plot_params)
+
+    # Apply colors
+    for patch, color in zip(box['boxes'], COLORS[:len(methods)]):
+        patch.set_facecolor(color)
+
+    # Add legend
+    if legend:
+        handles = [mpatches.Patch(color=COLORS[i], label=method) for i, method in enumerate(methods)]
+        ax.legend(handles=handles, title="Quantifiers", loc='upper left', bbox_to_anchor=(1, 1), fontsize=10, title_fontsize='11')
+
+    # Customize plot
+    ax.set_xticklabels(methods, rotation=45, fontstyle='italic')
+    ax.set_xlabel(x.capitalize())
+    ax.set_ylabel(f"{y.capitalize()}")
     if title:
         ax.set_title(title)
-    ax.set_xlabel(x)
-    ax.set_ylabel(f"Error: {y}")
-    
-    # Add legend if necessary (dummy legend for boxplot)
-    if legend:
-        handles = [plt.Line2D([0], [0], color=colors[i], lw=2) for i in range(len(methods))]
-        labels = methods
-        ax.legend(handles, labels, title="Methods")
 
-    # Save plot if path is specified
+    # Adjust layout and save plot
+    plt.tight_layout(rect=[0, 0, 0.9, 1])
     if save_path:
-        plt.savefig(save_path)
+        plt.savefig(save_path, bbox_inches='tight')
+    plt.show()
 
-    # Show plot
+
+
+def protocol_lineplot(
+    table_protocol: pd.DataFrame,
+    methods: Union[List[str], str, None],
+    x: str,
+    y: str,
+    title: Optional[str] = None,
+    legend: bool = True,
+    save_path: Optional[str] = None,
+    group_by: str = "mean",
+    pos_alpha: int = 1,
+    plot_params: Optional[Dict[str, Any]] = None):
+    """
+    Plots a line plot based on the provided DataFrame and selected methods.
+    """
+    # Handle plot_params
+    plot_params = plot_params or {}
+    figsize = plot_params.pop('figsize', (10, 6))  # Default figsize if not provided
+
+    # Filter data
+    methods = methods or table_protocol['QUANTIFIER'].unique()
+    table_protocol = table_protocol[table_protocol['QUANTIFIER'].isin(methods)]
+    
+    real = table_protocol["REAL_PREVS"].apply(lambda x: x[pos_alpha])
+    table = table_protocol.drop(["PRED_PREVS", "REAL_PREVS"], axis=1).copy()
+    table["ALPHA"] = real
+    
+    # Aggregate data
+    if group_by:
+        table = table.groupby(['QUANTIFIER', x])[y].agg(group_by).reset_index()
+
+    # Create plot with custom figsize
+    fig, ax = plt.subplots(figsize=figsize)
+    for i, (method, marker) in enumerate(zip(methods, MARKERS[:len(methods)])):
+        method_data = table[table['QUANTIFIER'] == method]
+        y_data = real if y == "ALPHA" else method_data[y]
+        ax.plot(method_data[x], y_data, color=COLORS[i % len(COLORS)], marker=marker, label=method, **plot_params)
+
+    # Add legend
+    if legend:
+        ax.legend(title="Quantifiers", loc='upper left', bbox_to_anchor=(1, 1), fontsize=10, title_fontsize='11')
+
+    # Customize plot
+    ax.set_xlabel(x.capitalize())
+    ax.set_ylabel(y.capitalize())
+    if title:
+        ax.set_title(title)
+
+    # Adjust layout and save plot
+    plt.tight_layout(rect=[0, 0, 0.9, 1])
+    if save_path:
+        plt.savefig(save_path, bbox_inches='tight')
     plt.show()

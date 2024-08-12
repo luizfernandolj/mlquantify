@@ -1,0 +1,44 @@
+# Background color of axes and figure
+axes.facecolor : "#F8F8F8"
+figure.facecolor : "#F8F8F8"
+
+# Font settings
+font.family         : sans-serif
+font.sans-serif     : Arial
+font.size           : 12
+font.weight         : light
+
+# Title and label sizes
+axes.labelsize      : 14
+axes.labelweight    : light
+axes.titlesize      : 16
+axes.titleweight    : normal
+
+# Boxplot settings
+boxplot.boxprops.linewidth      : 0.3  # Width of the box edges
+boxplot.whiskerprops.linewidth  : 0.3  # Width of the whiskers
+boxplot.capprops.linewidth      : 0.3  # Width of the whisker caps
+boxplot.medianprops.linewidth   : 0.6  # Width of the median line
+boxplot.flierprops.linewidth    : 0.3  # Width of the outliers
+boxplot.flierprops.markersize   : 0.9
+
+boxplot.medianprops.color       : black
+
+# Custom pastel colors
+axes.prop_cycle    : cycler('color', [
+    'E57373', 'F06292', 'BA68C8', '9575CD', '64B5F6', '4FC3F7', '4DB6AC',
+    '4CAF50', '81C784', 'AED581', 'DCE775', 'FFF176', 'FFD54F', 'FFB74D',
+    'FF8A65', 'FF7043', 'BF360C', 'D32F2F', 'C2185B', '7B1FA2', '512DA8',
+    '303F9F', '1976D2', '0288D1', '0097A7', '00796B', '388E3C', '689F38',
+    'AFB42B', 'FBC02D', 'F57F17', 'F9A825', 'F57C00'
+])
+
+# Plot margins
+figure.subplot.bottom : 0.2
+
+# Grid settings with low opacity
+axes.grid          : True
+grid.color         : black
+grid.alpha         : 0.1  # Grid opacity
+grid.linewidth     : 0.5  # Grid line width
+grid.linestyle     : --    # Grid line style
