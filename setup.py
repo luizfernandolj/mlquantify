@@ -1,6 +1,12 @@
 from setuptools import setup, find_packages
 
-VERSION = '0.0.1'
+import pathlib
+
+here = pathlib.Path(__file__).parent.resolve()
+
+long_description = (here / 'README.md').read_text(encoding='utf-8')
+
+VERSION = '0.0.11'
 DESCRIPTION = 'Quantification Library'
 
 # Setting up
@@ -10,6 +16,7 @@ setup(
     url="https://github.com/luizfernandolj/QuantifyML/tree/master",
     maintainer="Luiz Fernando Luth Junior",    
     description=DESCRIPTION,
+    long_description=long_description,
     long_description_content_type="text/markdown",
     packages=find_packages(),
     include_package_data=True,

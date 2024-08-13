@@ -166,3 +166,5 @@ cython_debug/
 .dist/
 
 .mlquantify.egg-info
+
+.MANIFEST.in
