@@ -1,10 +1,12 @@
 import matplotlib.pyplot as plt
+import matplotlib.colors as mcolors
 import matplotlib.patches as mpatches
 import pandas as pd
 from typing import List, Optional, Dict, Any, Union
 from pathlib import Path
 
 plt.rcParams.update({
+    'lines.markersize': 6,
     'axes.facecolor': "#F8F8F8",
     'figure.facecolor': "#F8F8F8",
     'font.family': 'sans-serif',
@@ -40,6 +42,28 @@ COLORS = [
 ]
 
 MARKERS = ["o", "s", "^", "D", "p", "*", "+", "x", "H", "1", "2", "3", "4", "|", "_"]
+
+def adjust_color_saturation(color: str, saturation_factor: float = 5) -> str:
+    """
+    Adjusts the saturation of a given color.
+    
+    Parameters:
+    - color (str): The original color in hexadecimal format.
+    - saturation_factor (float): The factor by which to adjust the saturation. 
+                                 Values > 1 will increase saturation, 
+                                 values < 1 will decrease it. Default is 1.5.
+    
+    Returns:
+    - str: The color with adjusted saturation in hexadecimal format.
+    """
+    # Convert color to HSV (Hue, Saturation, Value)
+    h, s, v = mcolors.rgb_to_hsv(mcolors.to_rgb(color))
+    
+    # Adjust saturation
+    s = min(1, s * saturation_factor)
+    
+    # Convert back to RGB and then to hex
+    return mcolors.to_hex(mcolors.hsv_to_rgb((h, s, v)))
 
 
 
@@ -100,6 +124,10 @@ def protocol_boxplot(
 
 
 
+
+
+
+
 def protocol_lineplot(
     table_protocol: pd.DataFrame,
     methods: Union[List[str], str, None],
@@ -135,10 +163,16 @@ def protocol_lineplot(
 
     # Create plot with custom figsize
     fig, ax = plt.subplots(figsize=figsize)
-    for i, (method, marker) in enumerate(zip(methods, MARKERS[:len(methods)])):
+    for i, (method, marker) in enumerate(zip(methods, MARKERS[:len(methods)+1])):
         method_data = table[table['QUANTIFIER'] == method]
         y_data = real if y == "ALPHA" else method_data[y]
-        ax.plot(method_data[x], y_data, color=COLORS[i % len(COLORS)], marker=marker, label=method, **plot_params)
+        color = adjust_color_saturation(COLORS[i % len(COLORS)])  # Aumenta a saturação das cores
+        ax.plot(method_data[x], 
+                y_data, color=color, 
+                marker=marker, 
+                label=method,
+                alpha=1.0, 
+                **plot_params)
 
     # Add legend
     if legend:
@@ -155,3 +189,5 @@ def protocol_lineplot(
     if save_path:
         plt.savefig(save_path, bbox_inches='tight')
     plt.show()
+
+    

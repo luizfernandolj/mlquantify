@@ -40,6 +40,7 @@ COLORS = [
     '#4FC3F7', '#FFB3B3', '#FF6F61'
 ]
 
+
 def class_distribution_plot(values: Union[List, np.ndarray],
                             labels: Union[List, np.ndarray],
                             bins: int = 30,
@@ -47,7 +48,6 @@ def class_distribution_plot(values: Union[List, np.ndarray],
                             legend: bool = True,
                             save_path: Optional[str] = None,
                             plot_params: Optional[Dict[str, Any]] = None):
-    
     """Plot overlaid histograms of class distributions.
 
     This function creates a plot with overlaid histograms, each representing the distribution
@@ -76,17 +76,23 @@ def class_distribution_plot(values: Union[List, np.ndarray],
             If the number of labels does not match the number of value sets.
 
     """
-
-
+    
+    if isinstance(values, list):
+        values = np.asarray(values)
+    if isinstance(labels, list):
+        labels = np.asarray(labels)
+    
+    
     # Apply custom plotting parameters if provided
     if plot_params:
         plt.rcParams.update(plot_params)
 
     # Ensure the number of labels matches the number of value sets
     assert len(values) == len(labels), "The number of value sets must match the number of labels."
-
+    
     # Create the overlaid histogram
-    for i, (value_set, label) in enumerate(zip(values, labels)):
+    for i, label in enumerate(np.unique(labels)):
+        value_set = values[label == labels]
         plt.hist(value_set, bins=bins, color=COLORS[i % len(COLORS)], edgecolor='black', alpha=0.5, label=label)
 
     # Add title to the plot if provided
@@ -107,3 +113,4 @@ def class_distribution_plot(values: Union[List, np.ndarray],
 
     # Show the plot
     plt.show()
+
