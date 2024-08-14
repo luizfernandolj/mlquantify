@@ -91,13 +91,9 @@ ___
 ##### API is avaliable [here](#)
 
 - [Methods](https://github.com/luizfernandolj/mlquantify/wiki/Methods)
-- [Model Selection](#)
-- [Evaluation](#)
-- [Plotting](#)
+- [Model Selection](https://github.com/luizfernandolj/mlquantify/wiki/Model-Selection)
+- [Evaluation](https://github.com/luizfernandolj/mlquantify/wiki/Evaluation)
+- [Plotting](https://github.com/luizfernandolj/mlquantify/wiki/Plotting)
 
 
 ___
-
-### See the References in the pdf below
-
-...
