@@ -30,7 +30,7 @@ ___
 
 | Section | Description |
 |---|---|
-| **Quantification Methods** | Methods for quantification, such as classify & Count Correct methods, Threshold Optimization, Mixture Models and more.|
+| **21 Quantification Methods** | Methods for quantification, such as classify & Count Correct methods, Threshold Optimization, Mixture Models and more.|
 | **Dynamic class management** | All methods are dynamic, and handles multiclass and binary problems, in case of binary it makes One-Vs-All (OVA) automatically. |
 | **Model Selection** | Criteria and processes used to select the best model, such as grid-search for the case of quantification|
 | **Evaluation Metrics** | Specific metrics used to evaluate quantification performance, (e.g., AE, BIAS, NAE, SE, KLD, etc.). |
