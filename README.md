@@ -94,6 +94,7 @@ ___
 - [Model Selection](https://github.com/luizfernandolj/mlquantify/wiki/Model-Selection)
 - [Evaluation](https://github.com/luizfernandolj/mlquantify/wiki/Evaluation)
 - [Plotting](https://github.com/luizfernandolj/mlquantify/wiki/Plotting)
+- [Utilities](https://github.com/luizfernandolj/mlquantify/wiki/Utilities)
 
 
 ___
