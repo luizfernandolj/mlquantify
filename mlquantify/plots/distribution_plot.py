@@ -30,8 +30,6 @@ plt.rcParams.update({
 })
 
 
-
-
 COLORS = [
     '#FFAB91', '#FFE082', '#A5D6A7', '#4DD0E1', '#FF6F61', '#FF8C94', '#D4A5A5',
     '#FF677D', '#B9FBC0', '#C2C2F0', '#E3F9A6', '#E2A8F7', '#F7B7A3', '#F7C6C7',
@@ -77,6 +75,9 @@ def class_distribution_plot(values: Union[List, np.ndarray],
 
     """
     
+    # Ensure the number of labels matches the number of value sets
+    assert len(values) == len(labels), "The number of value sets must match the number of labels."
+    
     if isinstance(values, list):
         values = np.asarray(values)
     if isinstance(labels, list):
@@ -87,25 +88,58 @@ def class_distribution_plot(values: Union[List, np.ndarray],
     if plot_params:
         plt.rcParams.update(plot_params)
 
-    # Ensure the number of labels matches the number of value sets
-    assert len(values) == len(labels), "The number of value sets must match the number of labels."
+    if values.shape[1] > 1:
+        num_plots = values.shape[1]  # Number of columns in `values`
+        cols = int(np.ceil(np.sqrt(num_plots)))
+        rows = int(np.ceil(num_plots / cols))
+
+        fig, axs = plt.subplots(rows, cols, figsize=(cols * 5, rows * 4))
+        axs = axs.flatten()
     
     # Create the overlaid histogram
     for i, label in enumerate(np.unique(labels)):
-        value_set = values[label == labels]
-        plt.hist(value_set, bins=bins, color=COLORS[i % len(COLORS)], edgecolor='black', alpha=0.5, label=label)
+        if values.shape[1] > 1:
+            for j, lab in enumerate(np.unique(labels)):
+                value_set = values[:, j][label == labels]
+                axs[i].hist(value_set, bins=bins, color=COLORS[j % len(COLORS)], edgecolor='black', alpha=0.5, label=lab)
+                axs[i].set_xlim([0, 1])  # Fix x-axis range between 0 and 1
+        else:
+            value_set = values[label == labels]
+            plt.hist(value_set, bins=bins, color=COLORS[i % len(COLORS)], edgecolor='black', alpha=0.5, label=label)
+            plt.xlim([0, 1])  # Fix x-axis range between 0 and 1
 
+    if values.shape[1] > 1:
+        for i in range(i + 1, len(axs)):
+            fig.delaxes(axs[i])
+    
     # Add title to the plot if provided
     if title:
-        plt.title(title)
+        if values.shape[1] > 1:
+            for i in range(values.shape[1]):
+                axs[i].set_title(f'{title} for class {i+1}')
+        else:
+            plt.title(title)
 
     # Add legend to the plot if enabled
     if legend:
-        plt.legend(loc='upper right')
+        if values.shape[1] > 1:
+            for i in range(values.shape[1]):
+                axs[i].legend(loc='upper right')
+        else:
+            plt.legend(loc='upper right')
 
     # Set axis labels
-    plt.xlabel('Values')
-    plt.ylabel('Frequency')
+    if values.shape[1] > 1:
+        for i in range(values.shape[1]):
+            axs[i].set_xlabel('Values')
+            axs[i].set_ylabel('Frequency')
+    else:
+        plt.xlabel('Values')
+        plt.ylabel('Frequency')
+
+    # Adjust layout to prevent overlapping
+    plt.subplots_adjust(hspace=0.9, wspace=0.4)
+    plt.tight_layout()
 
     # Save the figure if a path is specified
     if save_path:
@@ -113,4 +147,3 @@ def class_distribution_plot(values: Union[List, np.ndarray],
 
     # Show the plot
     plt.show()
-
