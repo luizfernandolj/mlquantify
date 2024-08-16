@@ -11,6 +11,6 @@ def bias(prev_real:np.any, prev_pred:np.any):
     abs_errors = abs(prev_pred - prev_real)
     
     if classes:
-        return {class_:abs_error for class_, abs_error in zip(classes, abs_errors)}
+        return {class_:float(abs_error) for class_, abs_error in zip(classes, abs_errors)}
 
     return abs_errors
