@@ -1,7 +1,7 @@
 import numpy as np
 import pandas as pd
 from sklearn.base import BaseEstimator
-from sklearn.model_selection import StratifiedKFold
+from sklearn.model_selection import train_test_split
 
 from .gac import GAC
 from ...base import AggregativeQuantifier
@@ -14,10 +14,12 @@ class GPAC(AggregativeQuantifier):
     """
     
     
-    def __init__(self, learner: BaseEstimator):
+    def __init__(self, learner: BaseEstimator, train_size:float=0.6, random_state:int=None):
         assert isinstance(learner, BaseEstimator), "learner object is not an estimator"
         self.learner = learner
         self.cond_prob_matrix = None
+        self.train_size = train_size
+        self.random_state = random_state
     
     def _fit_method(self, X, y):
         # Convert X and y to DataFrames if they are numpy arrays
@@ -28,31 +30,20 @@ class GPAC(AggregativeQuantifier):
             
         if self.learner_fitted:
             # Use existing model to predict
-            predictions = self.learner.predict(X)
-            true_labels = y
+            y_pred = self.learner.predict(X)
+            y_labels = y
         else:
-            # Perform cross-validation to generate predictions
-            skf = StratifiedKFold(n_splits=self.cv_folds)
-            predictions = []
-            true_labels = []
+            X_train, X_val, y_train, y_val = train_test_split(
+                X, y, train_size=self.train_size, stratify=y, random_state=self.random_state
+            )
             
-            for train_index, valid_index in skf.split(X, y):
-                # Split data into training and validation sets
-                train_data = pd.DataFrame(X.iloc[train_index])
-                train_labels = y.iloc[train_index]
-                
-                valid_data = pd.DataFrame(X.iloc[valid_index])
-                valid_labels = y.iloc[valid_index]
-                
-                # Train the learner
-                self.learner.fit(train_data, train_labels)
-                
-                # Predict and collect results
-                predictions.extend(self.learner.predict(valid_data))
-                true_labels.extend(valid_labels)
+            self.learner.fit(X_train, y_train)
+            
+            y_labels = y_val
+            y_pred = self.learner.predict(X_val)
         
         # Compute conditional probability matrix using GAC
-        self.cond_prob_matrix = GAC.get_cond_prob_matrix(self.classes, true_labels, predictions)
+        self.cond_prob_matrix = GAC.get_cond_prob_matrix(self.classes, y_labels, y_pred)
         
         return self
     
@@ -73,15 +64,15 @@ class GPAC(AggregativeQuantifier):
         return adjusted_prevalences
     
     @classmethod
-    def get_cond_prob_matrix(cls, classes:list, true_labels:np.ndarray, predictions:np.ndarray) -> np.ndarray:
+    def get_cond_prob_matrix(cls, classes:list, y_labels:np.ndarray, y_pred:np.ndarray) -> np.ndarray:
         """Estimate the matrix where entry (i,j) is the estimate of P(yi|yj)"""
         
         n_classes = len(classes)
         cond_prob_matrix = np.eye(n_classes)
         
         for i, class_ in enumerate(classes):
-            class_indices = true_labels == class_
+            class_indices = y_labels == class_
             if class_indices.any():
-                cond_prob_matrix[i] = predictions[class_indices].mean(axis=0)
+                cond_prob_matrix[i] = y_pred[class_indices].mean(axis=0)
         
         return cond_prob_matrix.T
