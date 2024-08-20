@@ -34,6 +34,7 @@ class DySsyn(MixtureModel):
         self.m = None
     
     
+    
     def _fit_method(self, X, y):
         if not self.learner_fitted:
             self.learner.fit(X, y)
@@ -45,16 +46,41 @@ class DySsyn(MixtureModel):
     
     
     def _compute_prevalence(self, test_scores:np.ndarray) -> float:    #creating bins from 10 to 110 with step size 10
+        
+        distances = self.GetMinDistancesDySsyn(test_scores)
+        
+        # Use the median of the prevss as the final prevalence estimate
+        index = min(distances, key=lambda d: distances[d][0])
+        prevalence = distances[index][1]
+            
+        return prevalence
+    
+    
+    def best_distance(self, X_test):
+        
+        test_scores = self.learner.predict_proba(X_test)
+        
+        distances = self.GetMinDistancesDySsyn(test_scores)
+        
+        index = min(distances, key=lambda d: distances[d][0])
+        
+        distance = distances[index][0]
+        
+        return distance
+    
+    
+
+    def GetMinDistancesDySsyn(self, test_scores) -> list:
         # Compute prevalence by evaluating the distance metric across various bin sizes
         if self.n is None:
             self.n = len(test_scores)
             
-        distances = {}
+        values = {}
         
         # Iterate over each bin size
         for m in self.merge_factor:
             pos_scores, neg_scores = MoSS(self.n, self.alpha_train, m)
-            result  = []
+            prevs  = []
             for bins in self.bins_size:
                 # Compute histogram densities for positive, negative, and test scores
                 pos_bin_density = getHist(pos_scores, bins)
@@ -69,21 +95,42 @@ class DySsyn(MixtureModel):
                     return self.get_distance(train_combined_density, test_bin_density, measure=self.measure)
             
                 # Use ternary search to find the best x that minimizes the distance
-                result.append(ternary_search(0, 1, f))
-            prevalence = np.median(result)
+                prevs.append(ternary_search(0, 1, f))
+                
+            size = len(prevs)
+            best_prev = np.median(prevs)
+
+            if size % 2 != 0:  # ODD
+                index = np.argmax(prevs == best_prev)
+                bin_size = self.bins_size[index]
+            else:  # EVEN
+                # Sort the values in self.prevs
+                ordered_prevs = np.sort(prevs)
+
+                # Find the two middle indices
+                middle1 = np.floor(size / 2).astype(int)
+                middle2 = np.ceil(size / 2).astype(int)
+
+                # Get the values corresponding to the median positions
+                median1 = ordered_prevs[middle1]
+                median2 = ordered_prevs[middle2]
+
+                # Find the indices of median1 and median2 in prevs
+                index1 = np.argmax(prevs == median1)
+                index2 = np.argmax(prevs == median2)
+
+                # Calculate the average of the corresponding bin sizes
+                bin_size = np.mean([self.bins_size[index1], self.bins_size[index2]])
+                
             
-            bins_size = self.bins_size[result == prevalence][0]
+            pos_bin_density = getHist(pos_scores, bin_size)
+            neg_bin_density = getHist(neg_scores, bin_size)
+            test_bin_density = getHist(test_scores, bin_size)
             
-            pos_bin_density = getHist(pos_scores, bins_size)
-            neg_bin_density = getHist(neg_scores, bins_size)
-            test_bin_density = getHist(test_scores, bins_size)
+            train_combined_density = (pos_bin_density * best_prev) + (neg_bin_density * (1 - best_prev))
             
-            train_combined_density = (pos_bin_density * prevalence) + (neg_bin_density * (1 - prevalence))
-            d = self.get_distance(train_combined_density, test_bin_density, measure=self.measure)
-            distances[m] = (d, prevalence)
-        # Use the median of the results as the final prevalence estimate
-        index = min(distances, key=lambda d: distances[d][0])
-        prevalence = distances[index][1]
+            distance = self.get_distance(train_combined_density, test_bin_density, measure=self.measure)
             
-        return prevalence
-        
+            values[m] = (distance, best_prev)
+            
+        return values

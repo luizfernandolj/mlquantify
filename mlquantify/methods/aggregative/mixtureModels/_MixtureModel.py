@@ -16,7 +16,6 @@ class MixtureModel(AggregativeQuantifier):
         self.learner = learner
         self.pos_scores = None
         self.neg_scores = None
-        self.distance = None
 
     @property
     def multiclass_method(self) -> bool:

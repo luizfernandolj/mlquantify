@@ -9,7 +9,7 @@ ___
 
 ## Latest Release
 
-- **Version 0.0.1**: Inicial beta version. For a detailed list of changes, check the [changelog](#).
+- **Version 0.0.11.6**: Inicial beta version. For a detailed list of changes, check the [changelog](#).
 - In case you need any help, refer to the [wiki](https://github.com/luizfernandolj/mlquantify/wiki).
 - Explore the [API documentation](#) for detailed developer information.
 - See also the library in the pypi site in [pypi mlquantify](https://pypi.org/project/mlquantify/)
