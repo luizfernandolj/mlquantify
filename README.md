@@ -24,6 +24,12 @@ To install mlquantify, run the following command:
 pip install mlquantify
 ```
 
+If you only want to update, run the code below:
+
+```bash
+pip install --update mlquantify
+```
+
 ___
 
 ## Contents
