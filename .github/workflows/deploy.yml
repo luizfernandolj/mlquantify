@@ -23,6 +23,7 @@ jobs:
         python -m pip install --upgrade pip
         pip install mlquantify
         pip install mkdocs mkdocs-material mkdocstrings
+        pip install mkdocstrings-python
 
     - name: Build MkDocs site
       run: |

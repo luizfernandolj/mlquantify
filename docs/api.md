@@ -7,4 +7,4 @@
 
 ## Módulos
 
-::: mkquantify
+::: mlquantify
