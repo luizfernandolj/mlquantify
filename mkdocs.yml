@@ -1,0 +1,16 @@
+site_name: mlquantify
+
+theme:
+  name: material
+
+nav:
+  - Home: index.md
+  - API Reference: api.md
+
+plugins:
+  - search
+  - mkdocstrings
+
+markdown_extensions:
+  - toc:
+      permalink: true
