@@ -1,7 +1,72 @@
 site_name: mlquantify
 
+
+repo_name: mlquantify
+repo_url: https://github.com/luizfernandolj/mlquantify
+
+
 theme:
   name: material
+  features:
+    - navigation.tabs
+    - navigation.tabs.sticky
+    - navigation.sections
+    - navigation.expand
+    - navigation.path
+    - navigation.prune
+    - navigation.indexes
+    - navigation.top
+    - toc.follow
+    - toc.integrate
+    - navigation.instant
+    - navigation.instant.prefetch
+    - navigation.instant.progress
+    - content.tabs.link
+    - content.code.copy
+    - content.code.select
+    - header.autohide
+    - announce.dismiss
+    - search.suggest
+    - search.highlight
+    - search.share
+  
+  palette:
+    - scheme: default
+      toggle:
+        primary: deep-purple
+        accent: deep-orange
+        icon: material/brightness-7 
+        name: Switch to dark mode
+
+    # Palette toggle for dark mode
+    - scheme: slate
+      toggle:
+        primary: deep-purple
+        accent: deep-orange
+        icon: material/brightness-4
+        name: Switch to light mode
+
+  
+  font:
+    text: Roboto
+
+
+extra:
+  version:
+    provider: mike
+    default: stable
+
+
+
+markdown_extensions:
+  - pymdownx.highlight:
+      anchor_linenums: true
+      line_spans: __span
+      pygments_lang_class: true
+  - pymdownx.inlinehilite
+  - pymdownx.snippets
+  - pymdownx.superfences
+
 
 nav:
   - Home: index.md
