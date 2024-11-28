@@ -1,0 +1,51 @@
+mlquantify.methods.aggregative.mixtureModels.dys
+================================================
+
+.. py:module:: mlquantify.methods.aggregative.mixtureModels.dys
+
+
+Classes
+-------
+
+.. autoapisummary::
+
+   mlquantify.methods.aggregative.mixtureModels.dys.DyS
+
+
+Module Contents
+---------------
+
+.. py:class:: DyS(learner: sklearn.base.BaseEstimator, measure: str = 'topsoe', bins_size: numpy.ndarray = None)
+
+   Bases: :py:obj:`mlquantify.methods.aggregative.mixtureModels._MixtureModel.MixtureModel`
+
+
+   Distribution y-Similarity framework. Is a 
+   method that generalises the HDy approach by 
+   considering the dissimilarity function DS as 
+   a parameter of the model
+
+
+   .. py:attribute:: bins_size
+
+
+   .. py:attribute:: measure
+
+
+   .. py:attribute:: prevs
+      :value: None
+
+
+
+   .. py:method:: _compute_prevalence(test_scores: numpy.ndarray) -> float
+
+      Abstract method for computing the prevalence using the test scores 
+
+
+
+   .. py:method:: best_distance(X_test) -> float
+
+
+   .. py:method:: GetMinDistancesDyS(test_scores) -> list
+
+

@@ -1,0 +1,19 @@
+mlquantify.utils.general_purposes.load_quantifier
+=================================================
+
+.. py:module:: mlquantify.utils.general_purposes.load_quantifier
+
+
+Functions
+---------
+
+.. autoapisummary::
+
+   mlquantify.utils.general_purposes.load_quantifier.load_quantifier
+
+
+Module Contents
+---------------
+
+.. py:function:: load_quantifier(path: str)
+

@@ -1,0 +1,54 @@
+mlquantify.methods.aggregative.pcc
+==================================
+
+.. py:module:: mlquantify.methods.aggregative.pcc
+
+
+Classes
+-------
+
+.. autoapisummary::
+
+   mlquantify.methods.aggregative.pcc.PCC
+
+
+Module Contents
+---------------
+
+.. py:class:: PCC(learner: sklearn.base.BaseEstimator)
+
+   Bases: :py:obj:`mlquantify.base.AggregativeQuantifier`
+
+
+   Probabilistic Classify and Count. This method
+   takes the probabilistic predictions and takes the 
+   mean of them for each class.
+
+
+   .. py:attribute:: learner
+
+
+   .. py:method:: _fit_method(X, y)
+
+      Abstract fit method that each quantification method must implement.
+
+      Args:
+          X (array-like): Training features.
+          y (array-like): Training labels.
+          learner_fitted (bool): Whether the learner is already fitted.
+          cv_folds (int): Number of cross-validation folds.
+
+
+
+   .. py:method:: _predict_method(X) -> dict
+
+      Abstract predict method that each quantification method must implement.
+
+      Args:
+          X (array-like): Test data to generate class prevalences.
+
+      Returns:
+          dict: Dictionary with class:prevalence for each class.
+
+
+

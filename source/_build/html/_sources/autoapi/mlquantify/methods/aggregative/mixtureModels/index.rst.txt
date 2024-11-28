@@ -1,0 +1,194 @@
+mlquantify.methods.aggregative.mixtureModels
+============================================
+
+.. py:module:: mlquantify.methods.aggregative.mixtureModels
+
+
+Submodules
+----------
+
+.. toctree::
+   :maxdepth: 1
+
+   /autoapi/mlquantify/methods/aggregative/mixtureModels/_MixtureModel/index
+   /autoapi/mlquantify/methods/aggregative/mixtureModels/dys/index
+   /autoapi/mlquantify/methods/aggregative/mixtureModels/dys_syn/index
+   /autoapi/mlquantify/methods/aggregative/mixtureModels/hdy/index
+   /autoapi/mlquantify/methods/aggregative/mixtureModels/smm/index
+   /autoapi/mlquantify/methods/aggregative/mixtureModels/sord/index
+
+
+Classes
+-------
+
+.. autoapisummary::
+
+   mlquantify.methods.aggregative.mixtureModels.HDy
+   mlquantify.methods.aggregative.mixtureModels.DyS
+   mlquantify.methods.aggregative.mixtureModels.SORD
+   mlquantify.methods.aggregative.mixtureModels.SMM
+   mlquantify.methods.aggregative.mixtureModels.DySsyn
+
+
+Package Contents
+----------------
+
+.. py:class:: HDy(learner: sklearn.base.BaseEstimator)
+
+   Bases: :py:obj:`mlquantify.methods.aggregative.mixtureModels._MixtureModel.MixtureModel`
+
+
+   Hellinger Distance Minimization. The method
+   is based on computing the hellinger distance of 
+   two distributions, test distribution and the mixture
+   of the positive and negative distribution of the train.
+
+
+   .. py:method:: _compute_prevalence(test_scores: numpy.ndarray) -> float
+
+      Abstract method for computing the prevalence using the test scores 
+
+
+
+   .. py:method:: best_distance(X_test) -> float
+
+
+   .. py:method:: GetMinDistancesHDy(test_scores: numpy.ndarray) -> tuple
+
+
+.. py:class:: DyS(learner: sklearn.base.BaseEstimator, measure: str = 'topsoe', bins_size: numpy.ndarray = None)
+
+   Bases: :py:obj:`mlquantify.methods.aggregative.mixtureModels._MixtureModel.MixtureModel`
+
+
+   Distribution y-Similarity framework. Is a 
+   method that generalises the HDy approach by 
+   considering the dissimilarity function DS as 
+   a parameter of the model
+
+
+   .. py:attribute:: bins_size
+
+
+   .. py:attribute:: measure
+
+
+   .. py:attribute:: prevs
+      :value: None
+
+
+
+   .. py:method:: _compute_prevalence(test_scores: numpy.ndarray) -> float
+
+      Abstract method for computing the prevalence using the test scores 
+
+
+
+   .. py:method:: best_distance(X_test) -> float
+
+
+   .. py:method:: GetMinDistancesDyS(test_scores) -> list
+
+
+.. py:class:: SORD(learner: sklearn.base.BaseEstimator)
+
+   Bases: :py:obj:`mlquantify.methods.aggregative.mixtureModels._MixtureModel.MixtureModel`
+
+
+   Sample Ordinal Distance. Is a method 
+   that does not rely on distributions, but 
+   estimates the prevalence of the positive 
+   class in a test dataset by calculating and 
+   minimizing a sample ordinal distance measure 
+   between the test scores and known positive 
+   and negative scores.
+
+
+   .. py:attribute:: best_distance_index
+      :value: None
+
+
+
+   .. py:method:: _compute_prevalence(test_scores: numpy.ndarray) -> float
+
+      Abstract method for computing the prevalence using the test scores 
+
+
+
+   .. py:method:: _calculate_distances(test_scores: numpy.ndarray)
+
+
+.. py:class:: SMM(learner: sklearn.base.BaseEstimator)
+
+   Bases: :py:obj:`mlquantify.methods.aggregative.mixtureModels._MixtureModel.MixtureModel`
+
+
+   Sample Mean Matching. The method is 
+   a member of the DyS framework that uses 
+   simple means to represent the score 
+   distribution for positive, negative 
+   and unlabelled scores.
+
+
+   .. py:method:: _compute_prevalence(test_scores: numpy.ndarray) -> float
+
+      Abstract method for computing the prevalence using the test scores 
+
+
+
+.. py:class:: DySsyn(learner: sklearn.base.BaseEstimator, measure: str = 'topsoe', merge_factor: numpy.ndarray = None, bins_size: numpy.ndarray = None, alpha_train: float = 0.5, n: int = None)
+
+   Bases: :py:obj:`mlquantify.methods.aggregative.mixtureModels._MixtureModel.MixtureModel`
+
+
+   Synthetic Distribution y-Similarity. This method works the
+   same as DyS method, but istead of using the train scores, it 
+   generates them via MoSS (Model for Score Simulation) which 
+   generate a spectrum of score distributions from highly separated
+   scores to fully mixed scores.
+
+
+   .. py:attribute:: bins_size
+
+
+   .. py:attribute:: merge_factor
+
+
+   .. py:attribute:: alpha_train
+
+
+   .. py:attribute:: n
+
+
+   .. py:attribute:: measure
+
+
+   .. py:attribute:: m
+      :value: None
+
+
+
+   .. py:method:: _fit_method(X, y)
+
+      Abstract fit method that each quantification method must implement.
+
+      Args:
+          X (array-like): Training features.
+          y (array-like): Training labels.
+          learner_fitted (bool): Whether the learner is already fitted.
+          cv_folds (int): Number of cross-validation folds.
+
+
+
+   .. py:method:: _compute_prevalence(test_scores: numpy.ndarray) -> float
+
+      Abstract method for computing the prevalence using the test scores 
+
+
+
+   .. py:method:: best_distance(X_test)
+
+
+   .. py:method:: GetMinDistancesDySsyn(test_scores) -> list
+
+

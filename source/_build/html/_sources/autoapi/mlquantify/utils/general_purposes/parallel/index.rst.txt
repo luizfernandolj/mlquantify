@@ -1,0 +1,19 @@
+mlquantify.utils.general_purposes.parallel
+==========================================
+
+.. py:module:: mlquantify.utils.general_purposes.parallel
+
+
+Functions
+---------
+
+.. autoapisummary::
+
+   mlquantify.utils.general_purposes.parallel.parallel
+
+
+Module Contents
+---------------
+
+.. py:function:: parallel(func, elements, n_jobs: int = 1, *args)
+

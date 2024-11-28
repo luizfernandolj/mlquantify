@@ -1,0 +1,84 @@
+mlquantify.methods.aggregative.mixtureModels._MixtureModel
+==========================================================
+
+.. py:module:: mlquantify.methods.aggregative.mixtureModels._MixtureModel
+
+
+Classes
+-------
+
+.. autoapisummary::
+
+   mlquantify.methods.aggregative.mixtureModels._MixtureModel.MixtureModel
+
+
+Module Contents
+---------------
+
+.. py:class:: MixtureModel(learner: sklearn.base.BaseEstimator)
+
+   Bases: :py:obj:`mlquantify.base.AggregativeQuantifier`
+
+
+   Generic Class for the Mixture Models methods, which
+   are based oon the assumption that the cumulative 
+   distribution of the scores assigned to data points in the test
+   is a mixture of the scores in train data
+
+
+   .. py:attribute:: learner
+
+
+   .. py:attribute:: pos_scores
+      :value: None
+
+
+
+   .. py:attribute:: neg_scores
+      :value: None
+
+
+
+   .. py:property:: multiclass_method
+      :type: bool
+
+
+
+   .. py:method:: _fit_method(X, y)
+
+      Abstract fit method that each quantification method must implement.
+
+      Args:
+          X (array-like): Training features.
+          y (array-like): Training labels.
+          learner_fitted (bool): Whether the learner is already fitted.
+          cv_folds (int): Number of cross-validation folds.
+
+
+
+   .. py:method:: _predict_method(X) -> dict
+
+      Abstract predict method that each quantification method must implement.
+
+      Args:
+          X (array-like): Test data to generate class prevalences.
+
+      Returns:
+          dict: Dictionary with class:prevalence for each class.
+
+
+
+   .. py:method:: _compute_prevalence(test_scores: numpy.ndarray) -> float
+      :abstractmethod:
+
+
+      Abstract method for computing the prevalence using the test scores 
+
+
+
+   .. py:method:: get_distance(dist_train, dist_test, measure: str) -> float
+
+      Compute the distance between training and test distributions using the specified metric
+
+
+

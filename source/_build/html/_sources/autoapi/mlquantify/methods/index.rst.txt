@@ -1,0 +1,880 @@
+mlquantify.methods
+==================
+
+.. py:module:: mlquantify.methods
+
+
+Submodules
+----------
+
+.. toctree::
+   :maxdepth: 1
+
+   /autoapi/mlquantify/methods/aggregative/index
+   /autoapi/mlquantify/methods/meta/index
+   /autoapi/mlquantify/methods/non_aggregative/index
+
+
+Attributes
+----------
+
+.. autoapisummary::
+
+   mlquantify.methods.AGGREGATIVE
+   mlquantify.methods.NON_AGGREGATIVE
+   mlquantify.methods.META
+   mlquantify.methods.METHODS
+
+
+Classes
+-------
+
+.. autoapisummary::
+
+   mlquantify.methods.CC
+   mlquantify.methods.PCC
+   mlquantify.methods.GAC
+   mlquantify.methods.GPAC
+   mlquantify.methods.FM
+   mlquantify.methods.EMQ
+   mlquantify.methods.PWK
+   mlquantify.methods.ACC
+   mlquantify.methods.MAX
+   mlquantify.methods.X_method
+   mlquantify.methods.T50
+   mlquantify.methods.MS
+   mlquantify.methods.MS2
+   mlquantify.methods.PACC
+   mlquantify.methods.HDy
+   mlquantify.methods.DyS
+   mlquantify.methods.SORD
+   mlquantify.methods.SMM
+   mlquantify.methods.DySsyn
+   mlquantify.methods.HDx
+   mlquantify.methods.Ensemble
+
+
+Functions
+---------
+
+.. autoapisummary::
+
+   mlquantify.methods.get_method
+
+
+Package Contents
+----------------
+
+.. py:class:: CC(learner: sklearn.base.BaseEstimator)
+
+   Bases: :py:obj:`mlquantify.base.AggregativeQuantifier`
+
+
+   Classify and Count. The simplest quantification method
+   involves classifying each instance and then counting the 
+   number of instances assigned to each class to estimate 
+   the class prevalence.
+
+
+   .. py:attribute:: learner
+
+
+   .. py:method:: _fit_method(X, y)
+
+      Abstract fit method that each quantification method must implement.
+
+      Args:
+          X (array-like): Training features.
+          y (array-like): Training labels.
+          learner_fitted (bool): Whether the learner is already fitted.
+          cv_folds (int): Number of cross-validation folds.
+
+
+
+   .. py:method:: _predict_method(X) -> dict
+
+      Abstract predict method that each quantification method must implement.
+
+      Args:
+          X (array-like): Test data to generate class prevalences.
+
+      Returns:
+          dict: Dictionary with class:prevalence for each class.
+
+
+
+.. py:class:: PCC(learner: sklearn.base.BaseEstimator)
+
+   Bases: :py:obj:`mlquantify.base.AggregativeQuantifier`
+
+
+   Probabilistic Classify and Count. This method
+   takes the probabilistic predictions and takes the 
+   mean of them for each class.
+
+
+   .. py:attribute:: learner
+
+
+   .. py:method:: _fit_method(X, y)
+
+      Abstract fit method that each quantification method must implement.
+
+      Args:
+          X (array-like): Training features.
+          y (array-like): Training labels.
+          learner_fitted (bool): Whether the learner is already fitted.
+          cv_folds (int): Number of cross-validation folds.
+
+
+
+   .. py:method:: _predict_method(X) -> dict
+
+      Abstract predict method that each quantification method must implement.
+
+      Args:
+          X (array-like): Test data to generate class prevalences.
+
+      Returns:
+          dict: Dictionary with class:prevalence for each class.
+
+
+
+.. py:class:: GAC(learner: sklearn.base.BaseEstimator, train_size: float = 0.6, random_state: int = None)
+
+   Bases: :py:obj:`mlquantify.base.AggregativeQuantifier`
+
+
+   Generalized Adjusted Count. It applies a 
+   classifier to build a system of linear equations, 
+   and solve it via constrained least-squares regression.
+
+
+   .. py:attribute:: learner
+
+
+   .. py:attribute:: cond_prob_matrix
+      :value: None
+
+
+
+   .. py:attribute:: train_size
+
+
+   .. py:attribute:: random_state
+
+
+   .. py:method:: _fit_method(X, y)
+
+      Abstract fit method that each quantification method must implement.
+
+      Args:
+          X (array-like): Training features.
+          y (array-like): Training labels.
+          learner_fitted (bool): Whether the learner is already fitted.
+          cv_folds (int): Number of cross-validation folds.
+
+
+
+   .. py:method:: _predict_method(X) -> dict
+
+      Abstract predict method that each quantification method must implement.
+
+      Args:
+          X (array-like): Test data to generate class prevalences.
+
+      Returns:
+          dict: Dictionary with class:prevalence for each class.
+
+
+
+   .. py:method:: get_cond_prob_matrix(classes: list, y_labels: numpy.ndarray, predictions: numpy.ndarray) -> numpy.ndarray
+      :classmethod:
+
+
+      Estimate the conditional probability matrix P(yi|yj)
+
+
+
+   .. py:method:: solve_adjustment(cond_prob_matrix, predicted_prevalences)
+      :classmethod:
+
+
+      Solve the linear system Ax = B with A=cond_prob_matrix and B=predicted_prevalences
+              
+
+
+
+.. py:class:: GPAC(learner: sklearn.base.BaseEstimator, train_size: float = 0.6, random_state: int = None)
+
+   Bases: :py:obj:`mlquantify.base.AggregativeQuantifier`
+
+
+   Generalized Probabilistic Adjusted Count. Like 
+   GAC, it also build a system of linear equations, but 
+   utilize the confidence scores from probabilistic 
+   classifiers as in the PAC method.
+
+
+   .. py:attribute:: learner
+
+
+   .. py:attribute:: cond_prob_matrix
+      :value: None
+
+
+
+   .. py:attribute:: train_size
+
+
+   .. py:attribute:: random_state
+
+
+   .. py:method:: _fit_method(X, y)
+
+      Abstract fit method that each quantification method must implement.
+
+      Args:
+          X (array-like): Training features.
+          y (array-like): Training labels.
+          learner_fitted (bool): Whether the learner is already fitted.
+          cv_folds (int): Number of cross-validation folds.
+
+
+
+   .. py:method:: _predict_method(X) -> dict
+
+      Abstract predict method that each quantification method must implement.
+
+      Args:
+          X (array-like): Test data to generate class prevalences.
+
+      Returns:
+          dict: Dictionary with class:prevalence for each class.
+
+
+
+   .. py:method:: get_cond_prob_matrix(classes: list, y_labels: numpy.ndarray, y_pred: numpy.ndarray) -> numpy.ndarray
+      :classmethod:
+
+
+      Estimate the matrix where entry (i,j) is the estimate of P(yi|yj)
+
+
+
+.. py:class:: FM(learner: sklearn.base.BaseEstimator)
+
+   Bases: :py:obj:`mlquantify.base.AggregativeQuantifier`
+
+
+   The Friedman Method. Similar to GPAC, 
+   but instead of averaging the confidence scores
+   from probabilistic classifiers, it uses the proportion
+   of confidence scores that are higher or lower than the
+   expected class frequencies found in the training data.
+
+
+   .. py:attribute:: learner
+
+
+   .. py:attribute:: CM
+      :value: None
+
+
+
+   .. py:method:: _fit_method(X, y)
+
+      Abstract fit method that each quantification method must implement.
+
+      Args:
+          X (array-like): Training features.
+          y (array-like): Training labels.
+          learner_fitted (bool): Whether the learner is already fitted.
+          cv_folds (int): Number of cross-validation folds.
+
+
+
+   .. py:method:: _predict_method(X) -> dict
+
+      Abstract predict method that each quantification method must implement.
+
+      Args:
+          X (array-like): Test data to generate class prevalences.
+
+      Returns:
+          dict: Dictionary with class:prevalence for each class.
+
+
+
+.. py:class:: EMQ(learner: sklearn.base.BaseEstimator)
+
+   Bases: :py:obj:`mlquantify.base.AggregativeQuantifier`
+
+
+   Expectation Maximisation Quantifier. It is a method that
+   ajust the priors and posteriors probabilities of a learner
+
+
+   .. py:attribute:: MAX_ITER
+      :value: 1000
+
+
+
+   .. py:attribute:: EPSILON
+      :value: 1e-06
+
+
+
+   .. py:attribute:: learner
+
+
+   .. py:attribute:: priors
+      :value: None
+
+
+
+   .. py:method:: _fit_method(X, y)
+
+      Abstract fit method that each quantification method must implement.
+
+      Args:
+          X (array-like): Training features.
+          y (array-like): Training labels.
+          learner_fitted (bool): Whether the learner is already fitted.
+          cv_folds (int): Number of cross-validation folds.
+
+
+
+   .. py:method:: _predict_method(X) -> dict
+
+      Abstract predict method that each quantification method must implement.
+
+      Args:
+          X (array-like): Test data to generate class prevalences.
+
+      Returns:
+          dict: Dictionary with class:prevalence for each class.
+
+
+
+   .. py:method:: predict_proba(X, epsilon: float = EPSILON, max_iter: int = MAX_ITER) -> numpy.ndarray
+
+
+   .. py:method:: EM(priors, posteriors, epsilon=EPSILON, max_iter=MAX_ITER)
+      :classmethod:
+
+
+      Expectaion Maximization function, it iterates several times
+      and At each iteration step, both the a posteriori and the a 
+      priori probabilities are reestimated sequentially for each new 
+      observation and each class. The iterative procedure proceeds 
+      until the convergence of the estimated probabilities.
+
+      Args:
+          priors (array-like): priors probabilites of the train.
+          posteriors (array-like): posteriors probabiblities of the test.
+          epsilon (float): value that helps to indify the convergence.
+          max_iter (int): max number of iterations.
+
+      Returns:
+          the predicted prevalence and the ajusted posteriors.
+
+
+
+.. py:class:: PWK(learner: sklearn.base.BaseEstimator)
+
+   Bases: :py:obj:`mlquantify.base.AggregativeQuantifier`
+
+
+   Nearest-Neighbor based Quantification. This method 
+   is based on nearest-neighbor based classification to the
+   setting of quantification. In this k-NN approach, it applies
+   a weighting scheme which applies less weight on neighbors 
+   from the majority class.
+   Must be used with PWKCLF to work as expected.
+
+
+   .. py:attribute:: learner
+
+
+   .. py:method:: _fit_method(X, y)
+
+      Abstract fit method that each quantification method must implement.
+
+      Args:
+          X (array-like): Training features.
+          y (array-like): Training labels.
+          learner_fitted (bool): Whether the learner is already fitted.
+          cv_folds (int): Number of cross-validation folds.
+
+
+
+   .. py:method:: _predict_method(X) -> dict
+
+      Abstract predict method that each quantification method must implement.
+
+      Args:
+          X (array-like): Test data to generate class prevalences.
+
+      Returns:
+          dict: Dictionary with class:prevalence for each class.
+
+
+
+.. py:class:: ACC(learner: sklearn.base.BaseEstimator, threshold: float = 0.5)
+
+   Bases: :py:obj:`mlquantify.methods.aggregative.ThreholdOptm._ThreholdOptimization.ThresholdOptimization`
+
+
+   Adjusted Classify and Count or Adjusted Count. Is a 
+   base method for the threhold methods.
+       As described on the Threshold base class, this method 
+   estimate the true positive and false positive rates from
+   the training data and utilize them to adjust the output 
+   of the CC method.
+
+
+   .. py:attribute:: threshold
+
+
+   .. py:method:: best_tprfpr(thresholds: numpy.ndarray, tprs: numpy.ndarray, fprs: numpy.ndarray) -> tuple
+
+      Abstract method for determining the best TPR and FPR to use in the equation
+
+
+
+.. py:class:: MAX(learner: sklearn.base.BaseEstimator)
+
+   Bases: :py:obj:`mlquantify.methods.aggregative.ThreholdOptm._ThreholdOptimization.ThresholdOptimization`
+
+
+   Threshold MAX. This method tries to use the
+   threshold where it maximizes the difference between
+   tpr and fpr to use in the denominator of the equation.
+
+
+   .. py:method:: best_tprfpr(thresholds: numpy.ndarray, tprs: numpy.ndarray, fprs: numpy.ndarray) -> tuple
+
+      Abstract method for determining the best TPR and FPR to use in the equation
+
+
+
+.. py:class:: X_method(learner: sklearn.base.BaseEstimator)
+
+   Bases: :py:obj:`mlquantify.methods.aggregative.ThreholdOptm._ThreholdOptimization.ThresholdOptimization`
+
+
+   Threshold X. This method tries to
+   use the threshold where fpr = 1 - tpr
+
+
+   .. py:method:: best_tprfpr(thresholds: numpy.ndarray, tprs: numpy.ndarray, fprs: numpy.ndarray) -> tuple
+
+      Abstract method for determining the best TPR and FPR to use in the equation
+
+
+
+.. py:class:: T50(learner: sklearn.base.BaseEstimator)
+
+   Bases: :py:obj:`mlquantify.methods.aggregative.ThreholdOptm._ThreholdOptimization.ThresholdOptimization`
+
+
+   Threshold 50. This method tries to
+   use the threshold where tpr = 0.5.
+
+
+   .. py:method:: best_tprfpr(thresholds: numpy.ndarray, tprs: numpy.ndarray, fprs: numpy.ndarray) -> tuple
+
+      Abstract method for determining the best TPR and FPR to use in the equation
+
+
+
+.. py:class:: MS(learner: sklearn.base.BaseEstimator, threshold: float = 0.5)
+
+   Bases: :py:obj:`mlquantify.methods.aggregative.ThreholdOptm._ThreholdOptimization.ThresholdOptimization`
+
+
+   Median Sweep. This method uses an
+   ensemble of such threshold-based methods and 
+   takes the median prediction.
+
+
+   .. py:attribute:: threshold
+
+
+   .. py:method:: best_tprfpr(thresholds: numpy.ndarray, tprs: numpy.ndarray, fprs: numpy.ndarray) -> tuple
+
+      Abstract method for determining the best TPR and FPR to use in the equation
+
+
+
+.. py:class:: MS2(learner: sklearn.base.BaseEstimator)
+
+   Bases: :py:obj:`mlquantify.methods.aggregative.ThreholdOptm._ThreholdOptimization.ThresholdOptimization`
+
+
+   Median Sweep 2. It relies on the same
+   strategy of the Median Sweep, but compute 
+   the median only for cases in which 
+   tpr -fpr > 0.25
+
+
+   .. py:method:: best_tprfpr(thresholds: numpy.ndarray, tprs: numpy.ndarray, fprs: numpy.ndarray) -> tuple
+
+      Abstract method for determining the best TPR and FPR to use in the equation
+
+
+
+.. py:class:: PACC(learner: sklearn.base.BaseEstimator, threshold: float = 0.5)
+
+   Bases: :py:obj:`mlquantify.methods.aggregative.ThreholdOptm._ThreholdOptimization.ThresholdOptimization`
+
+
+   Probabilistic Adjusted Classify and Count. 
+   This method adapts the AC approach by using average
+   classconditional confidences from a probabilistic 
+   classifier instead of true positive and false positive rates.
+
+
+   .. py:attribute:: threshold
+
+
+   .. py:method:: _predict_method(X)
+
+      Abstract predict method that each quantification method must implement.
+
+      Args:
+          X (array-like): Test data to generate class prevalences.
+
+      Returns:
+          dict: Dictionary with class:prevalence for each class.
+
+
+
+   .. py:method:: best_tprfpr(thresholds: numpy.ndarray, tprs: numpy.ndarray, fprs: numpy.ndarray) -> tuple
+
+      Abstract method for determining the best TPR and FPR to use in the equation
+
+
+
+.. py:class:: HDy(learner: sklearn.base.BaseEstimator)
+
+   Bases: :py:obj:`mlquantify.methods.aggregative.mixtureModels._MixtureModel.MixtureModel`
+
+
+   Hellinger Distance Minimization. The method
+   is based on computing the hellinger distance of 
+   two distributions, test distribution and the mixture
+   of the positive and negative distribution of the train.
+
+
+   .. py:method:: _compute_prevalence(test_scores: numpy.ndarray) -> float
+
+      Abstract method for computing the prevalence using the test scores 
+
+
+
+   .. py:method:: best_distance(X_test) -> float
+
+
+   .. py:method:: GetMinDistancesHDy(test_scores: numpy.ndarray) -> tuple
+
+
+.. py:class:: DyS(learner: sklearn.base.BaseEstimator, measure: str = 'topsoe', bins_size: numpy.ndarray = None)
+
+   Bases: :py:obj:`mlquantify.methods.aggregative.mixtureModels._MixtureModel.MixtureModel`
+
+
+   Distribution y-Similarity framework. Is a 
+   method that generalises the HDy approach by 
+   considering the dissimilarity function DS as 
+   a parameter of the model
+
+
+   .. py:attribute:: bins_size
+
+
+   .. py:attribute:: measure
+
+
+   .. py:attribute:: prevs
+      :value: None
+
+
+
+   .. py:method:: _compute_prevalence(test_scores: numpy.ndarray) -> float
+
+      Abstract method for computing the prevalence using the test scores 
+
+
+
+   .. py:method:: best_distance(X_test) -> float
+
+
+   .. py:method:: GetMinDistancesDyS(test_scores) -> list
+
+
+.. py:class:: SORD(learner: sklearn.base.BaseEstimator)
+
+   Bases: :py:obj:`mlquantify.methods.aggregative.mixtureModels._MixtureModel.MixtureModel`
+
+
+   Sample Ordinal Distance. Is a method 
+   that does not rely on distributions, but 
+   estimates the prevalence of the positive 
+   class in a test dataset by calculating and 
+   minimizing a sample ordinal distance measure 
+   between the test scores and known positive 
+   and negative scores.
+
+
+   .. py:attribute:: best_distance_index
+      :value: None
+
+
+
+   .. py:method:: _compute_prevalence(test_scores: numpy.ndarray) -> float
+
+      Abstract method for computing the prevalence using the test scores 
+
+
+
+   .. py:method:: _calculate_distances(test_scores: numpy.ndarray)
+
+
+.. py:class:: SMM(learner: sklearn.base.BaseEstimator)
+
+   Bases: :py:obj:`mlquantify.methods.aggregative.mixtureModels._MixtureModel.MixtureModel`
+
+
+   Sample Mean Matching. The method is 
+   a member of the DyS framework that uses 
+   simple means to represent the score 
+   distribution for positive, negative 
+   and unlabelled scores.
+
+
+   .. py:method:: _compute_prevalence(test_scores: numpy.ndarray) -> float
+
+      Abstract method for computing the prevalence using the test scores 
+
+
+
+.. py:class:: DySsyn(learner: sklearn.base.BaseEstimator, measure: str = 'topsoe', merge_factor: numpy.ndarray = None, bins_size: numpy.ndarray = None, alpha_train: float = 0.5, n: int = None)
+
+   Bases: :py:obj:`mlquantify.methods.aggregative.mixtureModels._MixtureModel.MixtureModel`
+
+
+   Synthetic Distribution y-Similarity. This method works the
+   same as DyS method, but istead of using the train scores, it 
+   generates them via MoSS (Model for Score Simulation) which 
+   generate a spectrum of score distributions from highly separated
+   scores to fully mixed scores.
+
+
+   .. py:attribute:: bins_size
+
+
+   .. py:attribute:: merge_factor
+
+
+   .. py:attribute:: alpha_train
+
+
+   .. py:attribute:: n
+
+
+   .. py:attribute:: measure
+
+
+   .. py:attribute:: m
+      :value: None
+
+
+
+   .. py:method:: _fit_method(X, y)
+
+      Abstract fit method that each quantification method must implement.
+
+      Args:
+          X (array-like): Training features.
+          y (array-like): Training labels.
+          learner_fitted (bool): Whether the learner is already fitted.
+          cv_folds (int): Number of cross-validation folds.
+
+
+
+   .. py:method:: _compute_prevalence(test_scores: numpy.ndarray) -> float
+
+      Abstract method for computing the prevalence using the test scores 
+
+
+
+   .. py:method:: best_distance(X_test)
+
+
+   .. py:method:: GetMinDistancesDySsyn(test_scores) -> list
+
+
+.. py:class:: HDx(bins_size: numpy.ndarray = None)
+
+   Bases: :py:obj:`mlquantify.base.NonAggregativeQuantifier`
+
+
+   Hellinger Distance Minimization. The method is similar 
+   to the HDy method, but istead of computing the hellinger 
+   distance of the scores (generated via classifier), HDx 
+   computes the distance of each one of the features of the 
+   dataset
+
+
+   .. py:attribute:: bins_size
+
+
+   .. py:attribute:: neg_features
+      :value: None
+
+
+
+   .. py:attribute:: pos_features
+      :value: None
+
+
+
+   .. py:method:: _fit_method(X, y)
+
+      Abstract fit method that each quantification method must implement.
+
+      Args:
+          X (array-like): Training features.
+          y (array-like): Training labels.
+          learner_fitted (bool): Whether the learner is already fitted.
+          cv_folds (int): Number of cross-validation folds.
+
+
+
+   .. py:method:: _predict_method(X) -> dict
+
+      Abstract predict method that each quantification method must implement.
+
+      Args:
+          X (array-like): Test data to generate class prevalences.
+
+      Returns:
+          dict: Dictionary with class:prevalence for each class.
+
+
+
+.. py:class:: Ensemble(quantifier: mlquantify.base.Quantifier, size: int = 50, min_prop: float = 0.1, selection_metric: str = 'all', p_metric: float = 0.25, return_type: str = 'mean', max_sample_size: int = None, max_trials: int = 100, n_jobs: int = 1, verbose: bool = False)
+
+   Bases: :py:obj:`mlquantify.base.Quantifier`
+
+
+   Abstract Class for quantifiers.
+
+
+   .. py:attribute:: SELECTION_METRICS
+
+      Ensemble method, based on the articles:
+      Pérez-Gállego, P., Quevedo, J. R., & del Coz, J. J. (2017).
+      Using ensembles for problems with characterizable changes in data distribution: A case study on quantification.
+      Information Fusion, 34, 87-100.
+      and
+      Pérez-Gállego, P., Castano, A., Quevedo, J. R., & del Coz, J. J. (2019). 
+      Dynamic ensemble selection for quantification tasks. 
+      Information Fusion, 45, 1-15.
+
+          This approach of Ensemble is made of taking multiple
+      samples varying class proportions on each, and for the 
+      predictions, it takes the k models which as the minimum
+      seletion metric, which are:
+       - all -> return all the predictions
+       - ptr -> computes the selected error measure
+       - ds -> computes the hellinger distance of the train and test
+       distributions for each model
+
+
+
+
+   .. py:attribute:: base_quantifier
+
+
+   .. py:attribute:: size
+
+
+   .. py:attribute:: min_prop
+
+
+   .. py:attribute:: p_metric
+
+
+   .. py:attribute:: selection_metric
+
+
+   .. py:attribute:: return_type
+
+
+   .. py:attribute:: n_jobs
+
+
+   .. py:attribute:: proba_generator
+      :value: None
+
+
+
+   .. py:attribute:: verbose
+
+
+   .. py:attribute:: max_sample_size
+
+
+   .. py:attribute:: max_trials
+
+
+   .. py:method:: sout(msg)
+
+
+   .. py:method:: fit(X, y)
+
+
+   .. py:method:: predict(X)
+
+
+   .. py:method:: ptr_selection_metric(prevalences)
+
+      Selects the prevalences made by models that have been trained on samples with a prevalence that is most similar
+      to a first approximation of the test prevalence as made by all models in the ensemble.
+
+
+
+   .. py:method:: ds_get_posteriors(X, y)
+
+      In the original article, this procedure is not described in a sufficient level of detail. The paper only says
+      that the distribution of posterior probabilities from training and test examples is compared by means of the
+      Hellinger Distance. However, how these posterior probabilities are generated is not specified. In the article,
+      a Logistic Regressor (LR) is used as the classifier device and that could be used for this purpose. However, in
+      general, a Quantifier is not necessarily an instance of Aggreggative Probabilistic Quantifiers, and so, that the
+      quantifier builds on top of a probabilistic classifier cannot be given for granted. Additionally, it would not
+      be correct to generate the posterior probabilities for training documents that have concurred in training the
+      classifier that generates them.
+      This function thus generates the posterior probabilities for all training documents in a cross-validation way,
+      using a LR with hyperparameters that have previously been optimized via grid search in 5FCV.
+      :return P,f, where P is a ndarray containing the posterior probabilities of the training data, generated via
+      cross-validation and using an optimized LR, and the function to be used in order to generate posterior
+      probabilities for test X.
+
+
+
+   .. py:method:: ds_selection_metric(prevalences, test)
+
+
+.. py:data:: AGGREGATIVE
+
+.. py:data:: NON_AGGREGATIVE
+
+.. py:data:: META
+
+.. py:data:: METHODS
+
+.. py:function:: get_method(method: str)
+

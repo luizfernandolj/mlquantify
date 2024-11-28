@@ -1,0 +1,19 @@
+mlquantify.utils.method_purposes.getHist
+========================================
+
+.. py:module:: mlquantify.utils.method_purposes.getHist
+
+
+Functions
+---------
+
+.. autoapisummary::
+
+   mlquantify.utils.method_purposes.getHist.getHist
+
+
+Module Contents
+---------------
+
+.. py:function:: getHist(scores, nbins)
+

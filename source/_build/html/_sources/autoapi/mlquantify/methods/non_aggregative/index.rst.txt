@@ -1,0 +1,75 @@
+mlquantify.methods.non_aggregative
+==================================
+
+.. py:module:: mlquantify.methods.non_aggregative
+
+
+Submodules
+----------
+
+.. toctree::
+   :maxdepth: 1
+
+   /autoapi/mlquantify/methods/non_aggregative/hdx/index
+
+
+Classes
+-------
+
+.. autoapisummary::
+
+   mlquantify.methods.non_aggregative.HDx
+
+
+Package Contents
+----------------
+
+.. py:class:: HDx(bins_size: numpy.ndarray = None)
+
+   Bases: :py:obj:`mlquantify.base.NonAggregativeQuantifier`
+
+
+   Hellinger Distance Minimization. The method is similar 
+   to the HDy method, but istead of computing the hellinger 
+   distance of the scores (generated via classifier), HDx 
+   computes the distance of each one of the features of the 
+   dataset
+
+
+   .. py:attribute:: bins_size
+
+
+   .. py:attribute:: neg_features
+      :value: None
+
+
+
+   .. py:attribute:: pos_features
+      :value: None
+
+
+
+   .. py:method:: _fit_method(X, y)
+
+      Abstract fit method that each quantification method must implement.
+
+      Args:
+          X (array-like): Training features.
+          y (array-like): Training labels.
+          learner_fitted (bool): Whether the learner is already fitted.
+          cv_folds (int): Number of cross-validation folds.
+
+
+
+   .. py:method:: _predict_method(X) -> dict
+
+      Abstract predict method that each quantification method must implement.
+
+      Args:
+          X (array-like): Test data to generate class prevalences.
+
+      Returns:
+          dict: Dictionary with class:prevalence for each class.
+
+
+

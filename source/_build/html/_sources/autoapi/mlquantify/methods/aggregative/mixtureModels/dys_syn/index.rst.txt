@@ -1,0 +1,73 @@
+mlquantify.methods.aggregative.mixtureModels.dys_syn
+====================================================
+
+.. py:module:: mlquantify.methods.aggregative.mixtureModels.dys_syn
+
+
+Classes
+-------
+
+.. autoapisummary::
+
+   mlquantify.methods.aggregative.mixtureModels.dys_syn.DySsyn
+
+
+Module Contents
+---------------
+
+.. py:class:: DySsyn(learner: sklearn.base.BaseEstimator, measure: str = 'topsoe', merge_factor: numpy.ndarray = None, bins_size: numpy.ndarray = None, alpha_train: float = 0.5, n: int = None)
+
+   Bases: :py:obj:`mlquantify.methods.aggregative.mixtureModels._MixtureModel.MixtureModel`
+
+
+   Synthetic Distribution y-Similarity. This method works the
+   same as DyS method, but istead of using the train scores, it 
+   generates them via MoSS (Model for Score Simulation) which 
+   generate a spectrum of score distributions from highly separated
+   scores to fully mixed scores.
+
+
+   .. py:attribute:: bins_size
+
+
+   .. py:attribute:: merge_factor
+
+
+   .. py:attribute:: alpha_train
+
+
+   .. py:attribute:: n
+
+
+   .. py:attribute:: measure
+
+
+   .. py:attribute:: m
+      :value: None
+
+
+
+   .. py:method:: _fit_method(X, y)
+
+      Abstract fit method that each quantification method must implement.
+
+      Args:
+          X (array-like): Training features.
+          y (array-like): Training labels.
+          learner_fitted (bool): Whether the learner is already fitted.
+          cv_folds (int): Number of cross-validation folds.
+
+
+
+   .. py:method:: _compute_prevalence(test_scores: numpy.ndarray) -> float
+
+      Abstract method for computing the prevalence using the test scores 
+
+
+
+   .. py:method:: best_distance(X_test)
+
+
+   .. py:method:: GetMinDistancesDySsyn(test_scores) -> list
+
+

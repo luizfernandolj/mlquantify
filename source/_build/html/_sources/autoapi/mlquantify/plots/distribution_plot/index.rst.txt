@@ -1,0 +1,60 @@
+mlquantify.plots.distribution_plot
+==================================
+
+.. py:module:: mlquantify.plots.distribution_plot
+
+
+Attributes
+----------
+
+.. autoapisummary::
+
+   mlquantify.plots.distribution_plot.COLORS
+
+
+Functions
+---------
+
+.. autoapisummary::
+
+   mlquantify.plots.distribution_plot.class_distribution_plot
+
+
+Module Contents
+---------------
+
+.. py:data:: COLORS
+   :value: ['#FFAB91', '#FFE082', '#A5D6A7', '#4DD0E1', '#FF6F61', '#FF8C94', '#D4A5A5', '#FF677D',...
+
+
+.. py:function:: class_distribution_plot(values: Union[List, numpy.ndarray], labels: Union[List, numpy.ndarray], bins: int = 30, title: Optional[str] = None, legend: bool = True, save_path: Optional[str] = None, plot_params: Optional[Dict[str, Any]] = None)
+
+   Plot overlaid histograms of class distributions.
+
+   This function creates a plot with overlaid histograms, each representing the distribution
+   of a different class or category. Custom colors, titles, legends, and other plot parameters 
+   can be applied to enhance visualization.
+
+   Args:
+       values (Union[List, np.ndarray]): 
+           A list of arrays or a single array containing values for specific classes or categories.
+       labels (Union[List, np.ndarray]): 
+           A list or an array of labels corresponding to each value set in `values`. 
+           Must be the same length as `values`.
+       bins (int, optional): 
+           Number of bins to use in the histograms. Default is 30.
+       title (Optional[str], optional): 
+           Title of the plot. If not provided, no title will be displayed.
+       legend (bool, optional): 
+           Whether to display a legend. Default is True.
+       save_path (Optional[str], optional): 
+           File path to save the plot image. If not provided, the plot will not be saved.
+       plot_params (Optional[Dict[str, Any]], optional): 
+           Dictionary of custom plotting parameters to apply. Default is None.
+
+   Raises:
+       AssertionError: 
+           If the number of labels does not match the number of value sets.
+
+
+

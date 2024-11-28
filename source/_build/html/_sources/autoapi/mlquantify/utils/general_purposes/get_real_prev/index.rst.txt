@@ -1,0 +1,19 @@
+mlquantify.utils.general_purposes.get_real_prev
+===============================================
+
+.. py:module:: mlquantify.utils.general_purposes.get_real_prev
+
+
+Functions
+---------
+
+.. autoapisummary::
+
+   mlquantify.utils.general_purposes.get_real_prev.get_real_prev
+
+
+Module Contents
+---------------
+
+.. py:function:: get_real_prev(y) -> dict
+

@@ -1,0 +1,19 @@
+mlquantify.evaluation.measures.bias
+===================================
+
+.. py:module:: mlquantify.evaluation.measures.bias
+
+
+Functions
+---------
+
+.. autoapisummary::
+
+   mlquantify.evaluation.measures.bias.bias
+
+
+Module Contents
+---------------
+
+.. py:function:: bias(prev_real: numpy.any, prev_pred: numpy.any)
+

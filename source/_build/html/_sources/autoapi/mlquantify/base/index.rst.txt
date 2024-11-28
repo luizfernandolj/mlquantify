@@ -1,0 +1,274 @@
+mlquantify.base
+===============
+
+.. py:module:: mlquantify.base
+
+
+Classes
+-------
+
+.. autoapisummary::
+
+   mlquantify.base.Quantifier
+   mlquantify.base.AggregativeQuantifier
+   mlquantify.base.NonAggregativeQuantifier
+
+
+Module Contents
+---------------
+
+.. py:class:: Quantifier
+
+   Bases: :py:obj:`abc.ABC`, :py:obj:`sklearn.base.BaseEstimator`
+
+
+   Abstract Class for quantifiers.
+
+
+   .. py:method:: fit(X, y) -> object
+      :abstractmethod:
+
+
+
+   .. py:method:: predict(X) -> dict
+      :abstractmethod:
+
+
+
+   .. py:property:: classes
+      :type: list
+
+
+
+   .. py:property:: n_class
+      :type: list
+
+
+
+   .. py:property:: multiclass_method
+      :type: bool
+
+
+
+   .. py:property:: binary_data
+      :type: bool
+
+
+
+   .. py:method:: save_quantifier(path: str = None) -> None
+
+
+.. py:class:: AggregativeQuantifier
+
+   Bases: :py:obj:`Quantifier`, :py:obj:`abc.ABC`
+
+
+   Abstract class for all Aggregative quantifiers, it means that each one of the quantifiers,
+   uses a learner or possibly a classifier to generate predictions.
+   This class is mostly used to detect whether or not its a binary or multiclass problem, and doing 
+   One-Vs-All in case of multiclass dataset and not multiclass quantifier method. 
+
+
+   .. py:attribute:: binary_quantifiers
+
+
+   .. py:attribute:: learner_fitted
+      :value: False
+
+
+
+   .. py:attribute:: cv_folds
+      :value: 10
+
+
+
+   .. py:method:: fit(X, y, learner_fitted=False, cv_folds: int = 10, n_jobs: int = 1)
+
+      Fit the quantifier model.
+
+      Args:
+          X (array-like): Training features.
+          y (array-like): Training labels.
+          learner_fitted (bool, optional): Whether the learner is already fitted. Defaults to False.
+          cv_folds (int, optional): Number of cross-validation folds. Defaults to 10.
+
+      Returns:
+          self: Fitted quantifier.
+
+
+
+   .. py:method:: predict(X) -> dict
+
+      Predict class prevalences for the given data.
+
+      Args:
+          X (array-like): Test features.
+
+      Returns:
+          dict: Dictionary with class prevalences.
+
+
+
+   .. py:method:: _fit_method(X, y)
+      :abstractmethod:
+
+
+      Abstract fit method that each quantification method must implement.
+
+      Args:
+          X (array-like): Training features.
+          y (array-like): Training labels.
+          learner_fitted (bool): Whether the learner is already fitted.
+          cv_folds (int): Number of cross-validation folds.
+
+
+
+   .. py:method:: _predict_method(X) -> dict
+      :abstractmethod:
+
+
+      Abstract predict method that each quantification method must implement.
+
+      Args:
+          X (array-like): Test data to generate class prevalences.
+
+      Returns:
+          dict: Dictionary with class:prevalence for each class.
+
+
+
+   .. py:property:: learner
+
+
+   .. py:method:: get_params(deep=True)
+
+      Get parameters for this estimator.
+
+      Parameters
+      ----------
+      deep : bool, default=True
+          If True, will return the parameters for this estimator and
+          contained subobjects that are estimators.
+
+      Returns
+      -------
+      params : dict
+          Parameter names mapped to their values.
+
+
+
+   .. py:method:: set_params(**params)
+
+      Set the parameters of this estimator.
+
+      The method works on simple estimators as well as on nested objects
+      (such as :class:`~sklearn.pipeline.Pipeline`). The latter have
+      parameters of the form ``<component>__<parameter>`` so that it's
+      possible to update each component of a nested object.
+
+      Parameters
+      ----------
+      **params : dict
+          Estimator parameters.
+
+      Returns
+      -------
+      self : estimator instance
+          Estimator instance.
+
+
+
+   .. py:method:: delayed_fit(class_, X, y)
+
+      Delayed fit method for one-vs-all strategy, with parallel running.
+
+      Args:
+          class_ (Any): The class for which the model is being fitted.
+          X (array-like): Training features.
+          y (array-like): Training labels.
+          learner_fitted (bool): Whether the learner is already fitted.
+          cv_folds (int): Number of cross-validation folds.
+
+      Returns:
+          self: Fitted binary quantifier for the given class.
+
+
+
+   .. py:method:: delayed_predict(class_, X)
+
+      Delayed predict method for one-vs-all strategy, with parallel running.
+
+      Args:
+          class_ (Any): The class for which the model is making predictions.
+          X (array-like): Test features.
+
+      Returns:
+          float: Predicted prevalence for the given class.
+
+
+
+.. py:class:: NonAggregativeQuantifier
+
+   Bases: :py:obj:`Quantifier`
+
+
+   Abstract class for Non Aggregative quantifiers, it means that 
+   theses methods does not use a classifier or specift learner on it's 
+   predictions.
+
+
+   .. py:method:: fit(X, y, n_jobs: int = 1)
+
+      Fit the quantifier model.
+
+      Args:
+          X (array-like): Training features.
+          y (array-like): Training labels.
+          learner_fitted (bool, optional): Whether the learner is already fitted. Defaults to False.
+          cv_folds (int, optional): Number of cross-validation folds. Defaults to 10.
+
+      Returns:
+          self: Fitted quantifier.
+
+
+
+   .. py:method:: predict(X) -> dict
+
+      Predict class prevalences for the given data.
+
+      Args:
+          X (array-like): Test features.
+
+      Returns:
+          dict: Dictionary with class prevalences.
+
+
+
+   .. py:method:: _fit_method(X, y)
+      :abstractmethod:
+
+
+      Abstract fit method that each quantification method must implement.
+
+      Args:
+          X (array-like): Training features.
+          y (array-like): Training labels.
+          learner_fitted (bool): Whether the learner is already fitted.
+          cv_folds (int): Number of cross-validation folds.
+
+
+
+   .. py:method:: _predict_method(X) -> dict
+      :abstractmethod:
+
+
+      Abstract predict method that each quantification method must implement.
+
+      Args:
+          X (array-like): Test data to generate class prevalences.
+
+      Returns:
+          dict: Dictionary with class:prevalence for each class.
+
+
+

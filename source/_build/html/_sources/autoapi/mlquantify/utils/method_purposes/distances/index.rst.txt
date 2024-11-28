@@ -1,0 +1,28 @@
+mlquantify.utils.method_purposes.distances
+==========================================
+
+.. py:module:: mlquantify.utils.method_purposes.distances
+
+
+Functions
+---------
+
+.. autoapisummary::
+
+   mlquantify.utils.method_purposes.distances.sqEuclidean
+   mlquantify.utils.method_purposes.distances.probsymm
+   mlquantify.utils.method_purposes.distances.topsoe
+   mlquantify.utils.method_purposes.distances.hellinger
+
+
+Module Contents
+---------------
+
+.. py:function:: sqEuclidean(dist1, dist2)
+
+.. py:function:: probsymm(dist1, dist2)
+
+.. py:function:: topsoe(dist1, dist2)
+
+.. py:function:: hellinger(dist1, dist2)
+

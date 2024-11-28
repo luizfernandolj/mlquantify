@@ -1,0 +1,330 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../../../../../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>mlquantify.methods.meta.ensemble &mdash; mlquantify 0.0.11.6 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../../../../_static/pygments.css?v=80d5e7a1" />
+      <link rel="stylesheet" type="text/css" href="../../../../../_static/css/theme.css?v=e59714d7" />
+      <link rel="stylesheet" type="text/css" href="../../../../../_static/graphviz.css?v=4ae1632d" />
+      <link rel="stylesheet" type="text/css" href="../../../../../_static/sg_gallery.css?v=d2d258e8" />
+      <link rel="stylesheet" type="text/css" href="../../../../../_static/sg_gallery-binder.css?v=f4aeca0c" />
+      <link rel="stylesheet" type="text/css" href="../../../../../_static/sg_gallery-dataframe.css?v=2082cf3c" />
+      <link rel="stylesheet" type="text/css" href="../../../../../_static/sg_gallery-rendered-html.css?v=1277b6f3" />
+
+  
+      <script src="../../../../../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../../../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../../../../../_static/documentation_options.js?v=bad190ef"></script>
+      <script src="../../../../../_static/doctools.js?v=9bcbadda"></script>
+      <script src="../../../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../../../../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../../../search.html" />
+    <link rel="next" title="mlquantify.methods.non_aggregative" href="../../non_aggregative/index.html" />
+    <link rel="prev" title="mlquantify.methods.meta" href="../index.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../../../../index.html" class="icon icon-home">
+            mlquantify
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="../../../../index.html">API Reference</a><ul class="current">
+<li class="toctree-l2 current"><a class="reference internal" href="../../../index.html">mlquantify</a><ul class="current">
+<li class="toctree-l3 current"><a class="reference internal" href="../../../index.html#submodules">Submodules</a><ul class="current">
+<li class="toctree-l4"><a class="reference internal" href="../../../base/index.html">mlquantify.base</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../classification/index.html">mlquantify.classification</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../evaluation/index.html">mlquantify.evaluation</a></li>
+<li class="toctree-l4 current"><a class="reference internal" href="../../index.html">mlquantify.methods</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../model_selection/index.html">mlquantify.model_selection</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../plots/index.html">mlquantify.plots</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../utils/index.html">mlquantify.utils</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../../../index.html#attributes">Attributes</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../index.html#classes">Classes</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../index.html#functions">Functions</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../index.html#package-contents">Package Contents</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../../../index.html">mlquantify</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../../../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../../../../index.html">API Reference</a></li>
+          <li class="breadcrumb-item"><a href="../../../index.html">mlquantify</a></li>
+          <li class="breadcrumb-item"><a href="../../index.html">mlquantify.methods</a></li>
+          <li class="breadcrumb-item"><a href="../index.html">mlquantify.methods.meta</a></li>
+      <li class="breadcrumb-item active">mlquantify.methods.meta.ensemble</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../../../../../_sources/autoapi/mlquantify/methods/meta/ensemble/index.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="module-mlquantify.methods.meta.ensemble">
+<span id="mlquantify-methods-meta-ensemble"></span><h1>mlquantify.methods.meta.ensemble<a class="headerlink" href="#module-mlquantify.methods.meta.ensemble" title="Link to this heading"></a></h1>
+<section id="classes">
+<h2>Classes<a class="headerlink" href="#classes" title="Link to this heading"></a></h2>
+<table class="autosummary longtable docutils align-default">
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="#mlquantify.methods.meta.ensemble.Ensemble" title="mlquantify.methods.meta.ensemble.Ensemble"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Ensemble</span></code></a></p></td>
+<td><p>Abstract Class for quantifiers.</p></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="functions">
+<h2>Functions<a class="headerlink" href="#functions" title="Link to this heading"></a></h2>
+<table class="autosummary longtable docutils align-default">
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="#mlquantify.methods.meta.ensemble._select_k" title="mlquantify.methods.meta.ensemble._select_k"><code class="xref py py-obj docutils literal notranslate"><span class="pre">_select_k</span></code></a>(elements, order, k)</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#mlquantify.methods.meta.ensemble._delayed_new_sample" title="mlquantify.methods.meta.ensemble._delayed_new_sample"><code class="xref py py-obj docutils literal notranslate"><span class="pre">_delayed_new_sample</span></code></a>(args)</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#mlquantify.methods.meta.ensemble._delayed_predict" title="mlquantify.methods.meta.ensemble._delayed_predict"><code class="xref py py-obj docutils literal notranslate"><span class="pre">_delayed_predict</span></code></a>(args)</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#mlquantify.methods.meta.ensemble._draw_simplex" title="mlquantify.methods.meta.ensemble._draw_simplex"><code class="xref py py-obj docutils literal notranslate"><span class="pre">_draw_simplex</span></code></a>(ndim, min_val[, max_trials])</p></td>
+<td><p>returns a uniform sampling from the ndim-dimensional simplex but guarantees that all dimensions</p></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="module-contents">
+<h2>Module Contents<a class="headerlink" href="#module-contents" title="Link to this heading"></a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="mlquantify.methods.meta.ensemble.Ensemble">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">mlquantify.methods.meta.ensemble.</span></span><span class="sig-name descname"><span class="pre">Ensemble</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">quantifier</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="../../../base/index.html#mlquantify.base.Quantifier" title="mlquantify.base.Quantifier"><span class="pre">mlquantify.base.Quantifier</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">size</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">50</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">min_prop</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0.1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">selection_metric</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'all'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">p_metric</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0.25</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">return_type</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'mean'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_sample_size</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_trials</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">100</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_jobs</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">verbose</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#mlquantify.methods.meta.ensemble.Ensemble" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="../../../base/index.html#mlquantify.base.Quantifier" title="mlquantify.base.Quantifier"><code class="xref py py-obj docutils literal notranslate"><span class="pre">mlquantify.base.Quantifier</span></code></a></p>
+<p>Abstract Class for quantifiers.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="mlquantify.methods.meta.ensemble.Ensemble.SELECTION_METRICS">
+<span class="sig-name descname"><span class="pre">SELECTION_METRICS</span></span><a class="headerlink" href="#mlquantify.methods.meta.ensemble.Ensemble.SELECTION_METRICS" title="Link to this definition"></a></dt>
+<dd><p>Ensemble method, based on the articles:
+Pérez-Gállego, P., Quevedo, J. R., &amp; del Coz, J. J. (2017).
+Using ensembles for problems with characterizable changes in data distribution: A case study on quantification.
+Information Fusion, 34, 87-100.
+and
+Pérez-Gállego, P., Castano, A., Quevedo, J. R., &amp; del Coz, J. J. (2019).
+Dynamic ensemble selection for quantification tasks.
+Information Fusion, 45, 1-15.</p>
+<blockquote>
+<div><p>This approach of Ensemble is made of taking multiple</p>
+</div></blockquote>
+<p>samples varying class proportions on each, and for the
+predictions, it takes the k models which as the minimum
+seletion metric, which are:</p>
+<blockquote>
+<div><ul class="simple">
+<li><p>all -&gt; return all the predictions</p></li>
+<li><p>ptr -&gt; computes the selected error measure</p></li>
+<li><p>ds -&gt; computes the hellinger distance of the train and test</p></li>
+</ul>
+<p>distributions for each model</p>
+</div></blockquote>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="mlquantify.methods.meta.ensemble.Ensemble.base_quantifier">
+<span class="sig-name descname"><span class="pre">base_quantifier</span></span><a class="headerlink" href="#mlquantify.methods.meta.ensemble.Ensemble.base_quantifier" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="mlquantify.methods.meta.ensemble.Ensemble.size">
+<span class="sig-name descname"><span class="pre">size</span></span><a class="headerlink" href="#mlquantify.methods.meta.ensemble.Ensemble.size" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="mlquantify.methods.meta.ensemble.Ensemble.min_prop">
+<span class="sig-name descname"><span class="pre">min_prop</span></span><a class="headerlink" href="#mlquantify.methods.meta.ensemble.Ensemble.min_prop" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="mlquantify.methods.meta.ensemble.Ensemble.p_metric">
+<span class="sig-name descname"><span class="pre">p_metric</span></span><a class="headerlink" href="#mlquantify.methods.meta.ensemble.Ensemble.p_metric" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="mlquantify.methods.meta.ensemble.Ensemble.selection_metric">
+<span class="sig-name descname"><span class="pre">selection_metric</span></span><a class="headerlink" href="#mlquantify.methods.meta.ensemble.Ensemble.selection_metric" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="mlquantify.methods.meta.ensemble.Ensemble.return_type">
+<span class="sig-name descname"><span class="pre">return_type</span></span><a class="headerlink" href="#mlquantify.methods.meta.ensemble.Ensemble.return_type" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="mlquantify.methods.meta.ensemble.Ensemble.n_jobs">
+<span class="sig-name descname"><span class="pre">n_jobs</span></span><a class="headerlink" href="#mlquantify.methods.meta.ensemble.Ensemble.n_jobs" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="mlquantify.methods.meta.ensemble.Ensemble.proba_generator">
+<span class="sig-name descname"><span class="pre">proba_generator</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">None</span></em><a class="headerlink" href="#mlquantify.methods.meta.ensemble.Ensemble.proba_generator" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="mlquantify.methods.meta.ensemble.Ensemble.verbose">
+<span class="sig-name descname"><span class="pre">verbose</span></span><a class="headerlink" href="#mlquantify.methods.meta.ensemble.Ensemble.verbose" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="mlquantify.methods.meta.ensemble.Ensemble.max_sample_size">
+<span class="sig-name descname"><span class="pre">max_sample_size</span></span><a class="headerlink" href="#mlquantify.methods.meta.ensemble.Ensemble.max_sample_size" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="mlquantify.methods.meta.ensemble.Ensemble.max_trials">
+<span class="sig-name descname"><span class="pre">max_trials</span></span><a class="headerlink" href="#mlquantify.methods.meta.ensemble.Ensemble.max_trials" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="mlquantify.methods.meta.ensemble.Ensemble.sout">
+<span class="sig-name descname"><span class="pre">sout</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">msg</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#mlquantify.methods.meta.ensemble.Ensemble.sout" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="mlquantify.methods.meta.ensemble.Ensemble.fit">
+<span class="sig-name descname"><span class="pre">fit</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#mlquantify.methods.meta.ensemble.Ensemble.fit" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="mlquantify.methods.meta.ensemble.Ensemble.predict">
+<span class="sig-name descname"><span class="pre">predict</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#mlquantify.methods.meta.ensemble.Ensemble.predict" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="mlquantify.methods.meta.ensemble.Ensemble.ptr_selection_metric">
+<span class="sig-name descname"><span class="pre">ptr_selection_metric</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">prevalences</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#mlquantify.methods.meta.ensemble.Ensemble.ptr_selection_metric" title="Link to this definition"></a></dt>
+<dd><p>Selects the prevalences made by models that have been trained on samples with a prevalence that is most similar
+to a first approximation of the test prevalence as made by all models in the ensemble.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="mlquantify.methods.meta.ensemble.Ensemble.ds_get_posteriors">
+<span class="sig-name descname"><span class="pre">ds_get_posteriors</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#mlquantify.methods.meta.ensemble.Ensemble.ds_get_posteriors" title="Link to this definition"></a></dt>
+<dd><p>In the original article, this procedure is not described in a sufficient level of detail. The paper only says
+that the distribution of posterior probabilities from training and test examples is compared by means of the
+Hellinger Distance. However, how these posterior probabilities are generated is not specified. In the article,
+a Logistic Regressor (LR) is used as the classifier device and that could be used for this purpose. However, in
+general, a Quantifier is not necessarily an instance of Aggreggative Probabilistic Quantifiers, and so, that the
+quantifier builds on top of a probabilistic classifier cannot be given for granted. Additionally, it would not
+be correct to generate the posterior probabilities for training documents that have concurred in training the
+classifier that generates them.
+This function thus generates the posterior probabilities for all training documents in a cross-validation way,
+using a LR with hyperparameters that have previously been optimized via grid search in 5FCV.
+:return P,f, where P is a ndarray containing the posterior probabilities of the training data, generated via
+cross-validation and using an optimized LR, and the function to be used in order to generate posterior
+probabilities for test X.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="mlquantify.methods.meta.ensemble.Ensemble.ds_selection_metric">
+<span class="sig-name descname"><span class="pre">ds_selection_metric</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">prevalences</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">test</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#mlquantify.methods.meta.ensemble.Ensemble.ds_selection_metric" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="mlquantify.methods.meta.ensemble._select_k">
+<span class="sig-prename descclassname"><span class="pre">mlquantify.methods.meta.ensemble.</span></span><span class="sig-name descname"><span class="pre">_select_k</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">elements</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">order</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">k</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#mlquantify.methods.meta.ensemble._select_k" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="mlquantify.methods.meta.ensemble._delayed_new_sample">
+<span class="sig-prename descclassname"><span class="pre">mlquantify.methods.meta.ensemble.</span></span><span class="sig-name descname"><span class="pre">_delayed_new_sample</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">args</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#mlquantify.methods.meta.ensemble._delayed_new_sample" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="mlquantify.methods.meta.ensemble._delayed_predict">
+<span class="sig-prename descclassname"><span class="pre">mlquantify.methods.meta.ensemble.</span></span><span class="sig-name descname"><span class="pre">_delayed_predict</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">args</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#mlquantify.methods.meta.ensemble._delayed_predict" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="mlquantify.methods.meta.ensemble._draw_simplex">
+<span class="sig-prename descclassname"><span class="pre">mlquantify.methods.meta.ensemble.</span></span><span class="sig-name descname"><span class="pre">_draw_simplex</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ndim</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">min_val</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_trials</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">100</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#mlquantify.methods.meta.ensemble._draw_simplex" title="Link to this definition"></a></dt>
+<dd><p>returns a uniform sampling from the ndim-dimensional simplex but guarantees that all dimensions
+are &gt;= min_class_prev (for min_val&gt;0, this makes the sampling not truly uniform)
+:param ndim: number of dimensions of the simplex
+:param min_val: minimum class prevalence allowed. If less than 1/ndim a ValueError will be throw since
+there is no possible solution.
+:return: a sample from the ndim-dimensional simplex that is uniform in S(ndim)-R where S(ndim) is the simplex
+and R is the simplex subset containing dimensions lower than min_val</p>
+</dd></dl>
+
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="../index.html" class="btn btn-neutral float-left" title="mlquantify.methods.meta" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="../../non_aggregative/index.html" class="btn btn-neutral float-right" title="mlquantify.methods.non_aggregative" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2024, Luiz Fernando Luth Junior.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

@@ -1,0 +1,19 @@
+mlquantify.evaluation.measures.kld
+==================================
+
+.. py:module:: mlquantify.evaluation.measures.kld
+
+
+Functions
+---------
+
+.. autoapisummary::
+
+   mlquantify.evaluation.measures.kld.kullback_leibler_divergence
+
+
+Module Contents
+---------------
+
+.. py:function:: kullback_leibler_divergence(prev_real: numpy.any, prev_pred: numpy.any)
+

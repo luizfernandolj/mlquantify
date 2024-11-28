@@ -1,0 +1,82 @@
+mlquantify.methods.aggregative.gac
+==================================
+
+.. py:module:: mlquantify.methods.aggregative.gac
+
+
+Classes
+-------
+
+.. autoapisummary::
+
+   mlquantify.methods.aggregative.gac.GAC
+
+
+Module Contents
+---------------
+
+.. py:class:: GAC(learner: sklearn.base.BaseEstimator, train_size: float = 0.6, random_state: int = None)
+
+   Bases: :py:obj:`mlquantify.base.AggregativeQuantifier`
+
+
+   Generalized Adjusted Count. It applies a 
+   classifier to build a system of linear equations, 
+   and solve it via constrained least-squares regression.
+
+
+   .. py:attribute:: learner
+
+
+   .. py:attribute:: cond_prob_matrix
+      :value: None
+
+
+
+   .. py:attribute:: train_size
+
+
+   .. py:attribute:: random_state
+
+
+   .. py:method:: _fit_method(X, y)
+
+      Abstract fit method that each quantification method must implement.
+
+      Args:
+          X (array-like): Training features.
+          y (array-like): Training labels.
+          learner_fitted (bool): Whether the learner is already fitted.
+          cv_folds (int): Number of cross-validation folds.
+
+
+
+   .. py:method:: _predict_method(X) -> dict
+
+      Abstract predict method that each quantification method must implement.
+
+      Args:
+          X (array-like): Test data to generate class prevalences.
+
+      Returns:
+          dict: Dictionary with class:prevalence for each class.
+
+
+
+   .. py:method:: get_cond_prob_matrix(classes: list, y_labels: numpy.ndarray, predictions: numpy.ndarray) -> numpy.ndarray
+      :classmethod:
+
+
+      Estimate the conditional probability matrix P(yi|yj)
+
+
+
+   .. py:method:: solve_adjustment(cond_prob_matrix, predicted_prevalences)
+      :classmethod:
+
+
+      Solve the linear system Ax = B with A=cond_prob_matrix and B=predicted_prevalences
+              
+
+
+

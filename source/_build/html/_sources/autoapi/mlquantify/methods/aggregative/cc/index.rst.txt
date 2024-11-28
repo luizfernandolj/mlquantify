@@ -1,0 +1,55 @@
+mlquantify.methods.aggregative.cc
+=================================
+
+.. py:module:: mlquantify.methods.aggregative.cc
+
+
+Classes
+-------
+
+.. autoapisummary::
+
+   mlquantify.methods.aggregative.cc.CC
+
+
+Module Contents
+---------------
+
+.. py:class:: CC(learner: sklearn.base.BaseEstimator)
+
+   Bases: :py:obj:`mlquantify.base.AggregativeQuantifier`
+
+
+   Classify and Count. The simplest quantification method
+   involves classifying each instance and then counting the 
+   number of instances assigned to each class to estimate 
+   the class prevalence.
+
+
+   .. py:attribute:: learner
+
+
+   .. py:method:: _fit_method(X, y)
+
+      Abstract fit method that each quantification method must implement.
+
+      Args:
+          X (array-like): Training features.
+          y (array-like): Training labels.
+          learner_fitted (bool): Whether the learner is already fitted.
+          cv_folds (int): Number of cross-validation folds.
+
+
+
+   .. py:method:: _predict_method(X) -> dict
+
+      Abstract predict method that each quantification method must implement.
+
+      Args:
+          X (array-like): Test data to generate class prevalences.
+
+      Returns:
+          dict: Dictionary with class:prevalence for each class.
+
+
+

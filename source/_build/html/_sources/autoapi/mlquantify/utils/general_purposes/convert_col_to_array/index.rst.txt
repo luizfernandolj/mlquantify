@@ -1,0 +1,27 @@
+mlquantify.utils.general_purposes.convert_col_to_array
+======================================================
+
+.. py:module:: mlquantify.utils.general_purposes.convert_col_to_array
+
+
+Functions
+---------
+
+.. autoapisummary::
+
+   mlquantify.utils.general_purposes.convert_col_to_array.convert_columns_to_arrays
+
+
+Module Contents
+---------------
+
+.. py:function:: convert_columns_to_arrays(df, columns: list = ['PRED_PREVS', 'REAL_PREVS'])
+
+   Converts the specified columns from string of arrays to numpy arrays
+
+   Args:
+       df (array-like): the dataframe from which to change convert the coluns
+       columns (list, optional): the coluns with string of arrays, default is the options for
+       the protocol dataframes
+
+
