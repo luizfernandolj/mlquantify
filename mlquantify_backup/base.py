@@ -5,7 +5,7 @@ import numpy as np
 import joblib
 
 
-from .utils.general import parallel, normalize_prevalence
+from .utils import parallel, normalize_prevalence
 
 class Quantifier(ABC, BaseEstimator):
     """ Abstract Class for quantifiers."""

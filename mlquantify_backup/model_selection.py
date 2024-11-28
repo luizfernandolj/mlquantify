@@ -6,8 +6,8 @@ import signal
 from copy import deepcopy
 import numpy as np
 from sklearn.model_selection import train_test_split
-from .utils.general import parallel, get_measure
-from .evaluation.protocol import APP, NPP
+from .utils import parallel
+from .evaluation import get_measure, APP, NPP
 
 class GridSearchQ(Quantifier):
     """

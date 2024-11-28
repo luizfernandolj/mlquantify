@@ -1,2 +1,2 @@
-from .general_purposes import *
-from .method_purposes import *
+from . import general
+from . import method

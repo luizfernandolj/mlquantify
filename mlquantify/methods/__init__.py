@@ -1,40 +1,37 @@
-from .aggregative import *
-from .non_aggregative import *
-from .meta import *
+from . import aggregative
+from . import meta
+from . import non_aggregative
 
 
 AGGREGATIVE = {
-    "CC": CC,
-    "PCC": PCC,
-    "EMQ": EMQ,
-    "FM": FM,
-    "GAC": GAC,
-    "GPAC": GPAC,
-    "PWK": PWK,
-    "ACC": ACC,
-    "MAX": MAX,
-    "MS": MS,
-    "MS2": MS2,
-    "PACC": PACC,
-    "T50": T50,
-    "X": X_method,
-    "DyS": DyS,
-    "DySsyn": DySsyn,
-    "HDy": HDy,
-    "SMM": SMM,
-    "SORD": SORD,
+    "CC": aggregative.CC,
+    "PCC": aggregative.PCC,
+    "EMQ": aggregative.EMQ,
+    "FM": aggregative.FM,
+    "GAC": aggregative.GAC,
+    "GPAC": aggregative.GPAC,
+    "PWK": aggregative.PWK,
+    "ACC": aggregative.ACC,
+    "MAX": aggregative.MAX,
+    "MS": aggregative.MS,
+    "MS2": aggregative.MS2,
+    "PACC": aggregative.PACC,
+    "T50": aggregative.T50,
+    "X": aggregative.X_method,
+    "DyS": aggregative.DyS,
+    "DySsyn": aggregative.DySsyn,
+    "HDy": aggregative.HDy,
+    "SMM": aggregative.SMM,
+    "SORD": aggregative.SORD,
 }
 
 NON_AGGREGATIVE = {
-    "HDx": HDx,
+    "HDx": non_aggregative.HDx
 }
 
 META = {
-    "ENSEMBLE": Ensemble
+    "ENSEMBLE": meta.Ensemble
 }
 
 
-METHODS = AGGREGATIVE | NON_AGGREGATIVE
-
-def get_method(method:str):
-    return METHODS.get(method)
+METHODS = AGGREGATIVE | NON_AGGREGATIVE | META
