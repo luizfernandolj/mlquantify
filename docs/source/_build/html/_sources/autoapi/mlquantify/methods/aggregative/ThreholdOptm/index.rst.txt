@@ -1,0 +1,175 @@
+mlquantify.methods.aggregative.ThreholdOptm
+===========================================
+
+.. py:module:: mlquantify.methods.aggregative.ThreholdOptm
+
+
+Submodules
+----------
+
+.. toctree::
+   :maxdepth: 1
+
+   /autoapi/mlquantify/methods/aggregative/ThreholdOptm/_ThreholdOptimization/index
+   /autoapi/mlquantify/methods/aggregative/ThreholdOptm/acc/index
+   /autoapi/mlquantify/methods/aggregative/ThreholdOptm/max/index
+   /autoapi/mlquantify/methods/aggregative/ThreholdOptm/ms/index
+   /autoapi/mlquantify/methods/aggregative/ThreholdOptm/ms2/index
+   /autoapi/mlquantify/methods/aggregative/ThreholdOptm/pacc/index
+   /autoapi/mlquantify/methods/aggregative/ThreholdOptm/t50/index
+   /autoapi/mlquantify/methods/aggregative/ThreholdOptm/x/index
+
+
+Classes
+-------
+
+.. autoapisummary::
+
+   mlquantify.methods.aggregative.ThreholdOptm.ACC
+   mlquantify.methods.aggregative.ThreholdOptm.MAX
+   mlquantify.methods.aggregative.ThreholdOptm.X_method
+   mlquantify.methods.aggregative.ThreholdOptm.T50
+   mlquantify.methods.aggregative.ThreholdOptm.MS
+   mlquantify.methods.aggregative.ThreholdOptm.MS2
+   mlquantify.methods.aggregative.ThreholdOptm.PACC
+
+
+Package Contents
+----------------
+
+.. py:class:: ACC(learner: sklearn.base.BaseEstimator, threshold: float = 0.5)
+
+   Bases: :py:obj:`mlquantify.methods.aggregative.ThreholdOptm._ThreholdOptimization.ThresholdOptimization`
+
+
+   Adjusted Classify and Count or Adjusted Count. Is a 
+   base method for the threhold methods.
+       As described on the Threshold base class, this method 
+   estimate the true positive and false positive rates from
+   the training data and utilize them to adjust the output 
+   of the CC method.
+
+
+   .. py:attribute:: threshold
+
+
+   .. py:method:: best_tprfpr(thresholds: numpy.ndarray, tprs: numpy.ndarray, fprs: numpy.ndarray) -> tuple
+
+      Abstract method for determining the best TPR and FPR to use in the equation
+
+
+
+.. py:class:: MAX(learner: sklearn.base.BaseEstimator)
+
+   Bases: :py:obj:`mlquantify.methods.aggregative.ThreholdOptm._ThreholdOptimization.ThresholdOptimization`
+
+
+   Threshold MAX. This method tries to use the
+   threshold where it maximizes the difference between
+   tpr and fpr to use in the denominator of the equation.
+
+
+   .. py:method:: best_tprfpr(thresholds: numpy.ndarray, tprs: numpy.ndarray, fprs: numpy.ndarray) -> tuple
+
+      Abstract method for determining the best TPR and FPR to use in the equation
+
+
+
+.. py:class:: X_method(learner: sklearn.base.BaseEstimator)
+
+   Bases: :py:obj:`mlquantify.methods.aggregative.ThreholdOptm._ThreholdOptimization.ThresholdOptimization`
+
+
+   Threshold X. This method tries to
+   use the threshold where fpr = 1 - tpr
+
+
+   .. py:method:: best_tprfpr(thresholds: numpy.ndarray, tprs: numpy.ndarray, fprs: numpy.ndarray) -> tuple
+
+      Abstract method for determining the best TPR and FPR to use in the equation
+
+
+
+.. py:class:: T50(learner: sklearn.base.BaseEstimator)
+
+   Bases: :py:obj:`mlquantify.methods.aggregative.ThreholdOptm._ThreholdOptimization.ThresholdOptimization`
+
+
+   Threshold 50. This method tries to
+   use the threshold where tpr = 0.5.
+
+
+   .. py:method:: best_tprfpr(thresholds: numpy.ndarray, tprs: numpy.ndarray, fprs: numpy.ndarray) -> tuple
+
+      Abstract method for determining the best TPR and FPR to use in the equation
+
+
+
+.. py:class:: MS(learner: sklearn.base.BaseEstimator, threshold: float = 0.5)
+
+   Bases: :py:obj:`mlquantify.methods.aggregative.ThreholdOptm._ThreholdOptimization.ThresholdOptimization`
+
+
+   Median Sweep. This method uses an
+   ensemble of such threshold-based methods and 
+   takes the median prediction.
+
+
+   .. py:attribute:: threshold
+
+
+   .. py:method:: best_tprfpr(thresholds: numpy.ndarray, tprs: numpy.ndarray, fprs: numpy.ndarray) -> tuple
+
+      Abstract method for determining the best TPR and FPR to use in the equation
+
+
+
+.. py:class:: MS2(learner: sklearn.base.BaseEstimator)
+
+   Bases: :py:obj:`mlquantify.methods.aggregative.ThreholdOptm._ThreholdOptimization.ThresholdOptimization`
+
+
+   Median Sweep 2. It relies on the same
+   strategy of the Median Sweep, but compute 
+   the median only for cases in which 
+   tpr -fpr > 0.25
+
+
+   .. py:method:: best_tprfpr(thresholds: numpy.ndarray, tprs: numpy.ndarray, fprs: numpy.ndarray) -> tuple
+
+      Abstract method for determining the best TPR and FPR to use in the equation
+
+
+
+.. py:class:: PACC(learner: sklearn.base.BaseEstimator, threshold: float = 0.5)
+
+   Bases: :py:obj:`mlquantify.methods.aggregative.ThreholdOptm._ThreholdOptimization.ThresholdOptimization`
+
+
+   Probabilistic Adjusted Classify and Count. 
+   This method adapts the AC approach by using average
+   classconditional confidences from a probabilistic 
+   classifier instead of true positive and false positive rates.
+
+
+   .. py:attribute:: threshold
+
+
+   .. py:method:: _predict_method(X)
+
+      Abstract predict method that each quantification method must implement.
+
+      Args:
+          X (array-like): Test data to generate class prevalences.
+
+      Returns:
+          dict: Dictionary with class:prevalence for each class.
+
+
+
+   .. py:method:: best_tprfpr(thresholds: numpy.ndarray, tprs: numpy.ndarray, fprs: numpy.ndarray) -> tuple
+
+      Abstract method for determining the best TPR and FPR to use in the equation
+
+
+

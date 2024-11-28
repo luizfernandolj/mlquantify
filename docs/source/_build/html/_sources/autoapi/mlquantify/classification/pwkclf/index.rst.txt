@@ -1,0 +1,61 @@
+mlquantify.classification.pwkclf
+================================
+
+.. py:module:: mlquantify.classification.pwkclf
+
+
+Classes
+-------
+
+.. autoapisummary::
+
+   mlquantify.classification.pwkclf.PWKCLF
+
+
+Module Contents
+---------------
+
+.. py:class:: PWKCLF(alpha=1, n_neighbors=10, algorithm='auto', metric='euclidean', leaf_size=30, p=2, metric_params=None, n_jobs=None)
+
+   Bases: :py:obj:`sklearn.base.BaseEstimator`
+
+
+   Learner based on k-Nearest Neighborst (KNN) to use on the method PWK, 
+   that also is based on KNN.
+
+
+   .. py:attribute:: alpha
+
+
+   .. py:attribute:: n_neighbors
+
+
+   .. py:attribute:: nbrs
+
+
+   .. py:attribute:: Y
+      :value: None
+
+
+
+   .. py:attribute:: Y_map
+      :value: None
+
+
+
+   .. py:attribute:: w
+      :value: None
+
+
+
+   .. py:attribute:: y
+      :value: None
+
+
+
+   .. py:method:: fit(X, y)
+
+
+   .. py:method:: predict(X)
+
+

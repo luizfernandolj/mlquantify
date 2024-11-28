@@ -1,0 +1,39 @@
+mlquantify.methods.aggregative.ThreholdOptm.acc
+===============================================
+
+.. py:module:: mlquantify.methods.aggregative.ThreholdOptm.acc
+
+
+Classes
+-------
+
+.. autoapisummary::
+
+   mlquantify.methods.aggregative.ThreholdOptm.acc.ACC
+
+
+Module Contents
+---------------
+
+.. py:class:: ACC(learner: sklearn.base.BaseEstimator, threshold: float = 0.5)
+
+   Bases: :py:obj:`mlquantify.methods.aggregative.ThreholdOptm._ThreholdOptimization.ThresholdOptimization`
+
+
+   Adjusted Classify and Count or Adjusted Count. Is a 
+   base method for the threhold methods.
+       As described on the Threshold base class, this method 
+   estimate the true positive and false positive rates from
+   the training data and utilize them to adjust the output 
+   of the CC method.
+
+
+   .. py:attribute:: threshold
+
+
+   .. py:method:: best_tprfpr(thresholds: numpy.ndarray, tprs: numpy.ndarray, fprs: numpy.ndarray) -> tuple
+
+      Abstract method for determining the best TPR and FPR to use in the equation
+
+
+

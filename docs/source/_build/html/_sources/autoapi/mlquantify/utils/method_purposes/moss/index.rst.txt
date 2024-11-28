@@ -1,0 +1,19 @@
+mlquantify.utils.method_purposes.moss
+=====================================
+
+.. py:module:: mlquantify.utils.method_purposes.moss
+
+
+Functions
+---------
+
+.. autoapisummary::
+
+   mlquantify.utils.method_purposes.moss.MoSS
+
+
+Module Contents
+---------------
+
+.. py:function:: MoSS(n: int, alpha: float, m: float)
+

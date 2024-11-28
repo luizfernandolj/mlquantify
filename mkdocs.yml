@@ -69,7 +69,8 @@ markdown_extensions:
 
 nav:
   - Home: index.md
-  - API Reference: api.md
+  - API Documentation:
+      - Sphinx Docs: source/_build/html/index.html
 
 plugins:
   - search

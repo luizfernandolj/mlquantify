@@ -1,0 +1,70 @@
+mlquantify.plots
+================
+
+.. py:module:: mlquantify.plots
+
+
+Submodules
+----------
+
+.. toctree::
+   :maxdepth: 1
+
+   /autoapi/mlquantify/plots/distribution_plot/index
+   /autoapi/mlquantify/plots/protocol_plot/index
+
+
+Functions
+---------
+
+.. autoapisummary::
+
+   mlquantify.plots.protocol_boxplot
+   mlquantify.plots.protocol_lineplot
+   mlquantify.plots.class_distribution_plot
+
+
+Package Contents
+----------------
+
+.. py:function:: protocol_boxplot(table_protocol: pandas.DataFrame, x: str, y: str, methods: Optional[List[str]] = None, title: Optional[str] = None, legend: bool = True, save_path: Optional[str] = None, order: Optional[str] = None, plot_params: Optional[Dict[str, Any]] = None)
+
+   Plots a boxplot based on the provided DataFrame and selected methods.
+
+
+.. py:function:: protocol_lineplot(table_protocol: pandas.DataFrame, methods: Union[List[str], str, None], x: str, y: str, title: Optional[str] = None, legend: bool = True, save_path: Optional[str] = None, group_by: str = 'mean', pos_alpha: int = 1, plot_params: Optional[Dict[str, Any]] = None)
+
+   Plots a line plot based on the provided DataFrame of the protocol and selected methods.
+
+
+.. py:function:: class_distribution_plot(values: Union[List, numpy.ndarray], labels: Union[List, numpy.ndarray], bins: int = 30, title: Optional[str] = None, legend: bool = True, save_path: Optional[str] = None, plot_params: Optional[Dict[str, Any]] = None)
+
+   Plot overlaid histograms of class distributions.
+
+   This function creates a plot with overlaid histograms, each representing the distribution
+   of a different class or category. Custom colors, titles, legends, and other plot parameters 
+   can be applied to enhance visualization.
+
+   Args:
+       values (Union[List, np.ndarray]): 
+           A list of arrays or a single array containing values for specific classes or categories.
+       labels (Union[List, np.ndarray]): 
+           A list or an array of labels corresponding to each value set in `values`. 
+           Must be the same length as `values`.
+       bins (int, optional): 
+           Number of bins to use in the histograms. Default is 30.
+       title (Optional[str], optional): 
+           Title of the plot. If not provided, no title will be displayed.
+       legend (bool, optional): 
+           Whether to display a legend. Default is True.
+       save_path (Optional[str], optional): 
+           File path to save the plot image. If not provided, the plot will not be saved.
+       plot_params (Optional[Dict[str, Any]], optional): 
+           Dictionary of custom plotting parameters to apply. Default is None.
+
+   Raises:
+       AssertionError: 
+           If the number of labels does not match the number of value sets.
+
+
+

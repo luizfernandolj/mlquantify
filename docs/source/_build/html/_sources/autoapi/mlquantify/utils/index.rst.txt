@@ -1,0 +1,106 @@
+mlquantify.utils
+================
+
+.. py:module:: mlquantify.utils
+
+
+Submodules
+----------
+
+.. toctree::
+   :maxdepth: 1
+
+   /autoapi/mlquantify/utils/general_purposes/index
+   /autoapi/mlquantify/utils/method_purposes/index
+
+
+Functions
+---------
+
+.. autoapisummary::
+
+   mlquantify.utils.normalize_prevalence
+   mlquantify.utils.parallel
+   mlquantify.utils.get_real_prev
+   mlquantify.utils.make_prevs
+   mlquantify.utils.generate_artificial_indexes
+   mlquantify.utils.round_protocol_df
+   mlquantify.utils.convert_columns_to_arrays
+   mlquantify.utils.load_quantifier
+   mlquantify.utils.getHist
+   mlquantify.utils.sqEuclidean
+   mlquantify.utils.probsymm
+   mlquantify.utils.hellinger
+   mlquantify.utils.topsoe
+   mlquantify.utils.ternary_search
+   mlquantify.utils.compute_table
+   mlquantify.utils.compute_tpr
+   mlquantify.utils.compute_fpr
+   mlquantify.utils.adjust_threshold
+   mlquantify.utils.get_scores
+   mlquantify.utils.MoSS
+
+
+Package Contents
+----------------
+
+.. py:function:: normalize_prevalence(prevalences: numpy.ndarray, classes: list)
+
+.. py:function:: parallel(func, elements, n_jobs: int = 1, *args)
+
+.. py:function:: get_real_prev(y) -> dict
+
+.. py:function:: make_prevs(ndim: int) -> list
+
+   Generate a list of n_dim values uniformly distributed between 0 and 1 that sum exactly to 1.
+
+   Args:
+   n_dim (int): Number of values in the list.
+
+   Returns:
+   list: List of n_dim values that sum to 1.
+
+
+.. py:function:: generate_artificial_indexes(y, prevalence: list, sample_size: int, classes: list)
+
+.. py:function:: round_protocol_df(dataframe: pandas.DataFrame, frac: int = 3)
+
+.. py:function:: convert_columns_to_arrays(df, columns: list = ['PRED_PREVS', 'REAL_PREVS'])
+
+   Converts the specified columns from string of arrays to numpy arrays
+
+   Args:
+       df (array-like): the dataframe from which to change convert the coluns
+       columns (list, optional): the coluns with string of arrays, default is the options for
+       the protocol dataframes
+
+
+.. py:function:: load_quantifier(path: str)
+
+.. py:function:: getHist(scores, nbins)
+
+.. py:function:: sqEuclidean(dist1, dist2)
+
+.. py:function:: probsymm(dist1, dist2)
+
+.. py:function:: hellinger(dist1, dist2)
+
+.. py:function:: topsoe(dist1, dist2)
+
+.. py:function:: ternary_search(left, right, f, eps=0.0001)
+
+   This function applies Ternary search
+
+
+.. py:function:: compute_table(y, y_pred, classes)
+
+.. py:function:: compute_tpr(TP, FN)
+
+.. py:function:: compute_fpr(FP, TN)
+
+.. py:function:: adjust_threshold(y, probabilities: numpy.ndarray, classes: numpy.ndarray) -> tuple
+
+.. py:function:: get_scores(X, y, learner, folds: int = 10, learner_fitted: bool = False) -> tuple
+
+.. py:function:: MoSS(n: int, alpha: float, m: float)
+

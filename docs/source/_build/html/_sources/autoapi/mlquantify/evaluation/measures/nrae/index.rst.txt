@@ -1,0 +1,19 @@
+mlquantify.evaluation.measures.nrae
+===================================
+
+.. py:module:: mlquantify.evaluation.measures.nrae
+
+
+Functions
+---------
+
+.. autoapisummary::
+
+   mlquantify.evaluation.measures.nrae.normalized_relative_absolute_error
+
+
+Module Contents
+---------------
+
+.. py:function:: normalized_relative_absolute_error(prev_real: numpy.any, prev_pred: numpy.any)
+

@@ -1,0 +1,78 @@
+mlquantify.evaluation.protocol.npp
+==================================
+
+.. py:module:: mlquantify.evaluation.protocol.npp
+
+
+Classes
+-------
+
+.. autoapisummary::
+
+   mlquantify.evaluation.protocol.npp.NPP
+
+
+Module Contents
+---------------
+
+.. py:class:: NPP(models: Union[List[Union[str, mlquantify.base.Quantifier]], str, mlquantify.base.Quantifier], batch_size: Union[List[int], int], learner: sklearn.base.BaseEstimator = None, n_iterations: int = 1, n_jobs: int = 1, random_state: int = 32, verbose: bool = False, return_type: str = 'predictions', measures: List[str] = None)
+
+   Bases: :py:obj:`mlquantify.evaluation.protocol._Protocol.Protocol`
+
+
+   Base class for implementing different quantification protocols.
+
+   This abstract class provides a structure for creating protocols that involve
+   fitting quantification models to training data and generating predictions on test data.
+   It supports parallel processing, multiple iterations, and different output formats.
+
+   Args:
+       models (Union[List[Union[str, Quantifier]], str, Quantifier]): 
+           List of quantification models, a single model name, or 'all' for all models.
+       batch_size (Union[List[int], int]): 
+           Size of the batches to be processed, or a list of sizes.
+       learner (BaseEstimator, optional): 
+           Machine learning model to be used with the quantifiers. Required for model methods.
+       n_iterations (int, optional): 
+           Number of iterations for the protocol. Default is 1.
+       n_jobs (int, optional): 
+           Number of jobs to run in parallel. Default is 1.
+       random_state (int, optional): 
+           Seed for random number generation. Default is 32.
+       verbose (bool, optional): 
+           Whether to print progress messages. Default is False.
+       return_type (str, optional): 
+           Type of return value ('predictions' or 'table'). Default is 'predictions'.
+       measures (List[str], optional): 
+           List of error measures to calculate. Must be in MEASURES or None. Default is None.
+
+
+   .. py:method:: predict_protocol(X_test, y_test) -> tuple
+      :abstractmethod:
+
+
+      Abstract method that every protocol has to implement 
+
+
+
+   .. py:method:: _new_sample(X, y, prev: List[float], batch_size: int) -> tuple
+      :abstractmethod:
+
+
+      Abstract method of sample extraction for each protocol
+
+      Returns:
+          tuple: tuple containing the X_sample and the y_sample
+
+
+
+   .. py:method:: _delayed_predict(args) -> tuple
+      :abstractmethod:
+
+
+      abstract method for predicting in the extracted
+      samples, is delayed for running in parallel for 
+      eficciency purposes.
+
+
+

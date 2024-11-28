@@ -1,0 +1,34 @@
+mlquantify.methods.aggregative.ThreholdOptm.ms2
+===============================================
+
+.. py:module:: mlquantify.methods.aggregative.ThreholdOptm.ms2
+
+
+Classes
+-------
+
+.. autoapisummary::
+
+   mlquantify.methods.aggregative.ThreholdOptm.ms2.MS2
+
+
+Module Contents
+---------------
+
+.. py:class:: MS2(learner: sklearn.base.BaseEstimator)
+
+   Bases: :py:obj:`mlquantify.methods.aggregative.ThreholdOptm._ThreholdOptimization.ThresholdOptimization`
+
+
+   Median Sweep 2. It relies on the same
+   strategy of the Median Sweep, but compute 
+   the median only for cases in which 
+   tpr -fpr > 0.25
+
+
+   .. py:method:: best_tprfpr(thresholds: numpy.ndarray, tprs: numpy.ndarray, fprs: numpy.ndarray) -> tuple
+
+      Abstract method for determining the best TPR and FPR to use in the equation
+
+
+
