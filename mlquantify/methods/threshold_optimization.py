@@ -25,7 +25,7 @@ class ThresholdOptimization(AggregativeQuantifier):
         self.fpr = None
     
     @property
-    def multiclass_method(self) -> bool:
+    def is_multiclass(self) -> bool:
         """ All threshold Methods are binary or non multiclass """
         return False
     

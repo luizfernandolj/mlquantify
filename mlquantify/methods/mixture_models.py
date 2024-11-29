@@ -23,7 +23,7 @@ class MixtureModel(AggregativeQuantifier):
         self.neg_scores = None
 
     @property
-    def multiclass_method(self) -> bool:
+    def is_multiclass(self) -> bool:
         return False
 
     def _fit_method(self, X, y):
