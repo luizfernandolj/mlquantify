@@ -1,2 +1,2 @@
-from . import general
-from . import method
+from .general import *
+from .method import *

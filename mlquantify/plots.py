@@ -3,16 +3,7 @@ import matplotlib.pyplot as plt
 import matplotlib.colors as mcolors
 import matplotlib.patches as mpatches
 import pandas as pd
-from pathlib import Path
 from typing import List, Optional, Dict, Any, Union
-
-
-
-
-
-
-
-
 
 
 
@@ -59,14 +50,17 @@ def adjust_color_saturation(color: str, saturation_factor: float = 5) -> str:
     """
     Adjusts the saturation of a given color.
     
-    Parameters:
-    - color (str): The original color in hexadecimal format.
-    - saturation_factor (float): The factor by which to adjust the saturation. 
-                                 Values > 1 will increase saturation, 
-                                 values < 1 will decrease it. Default is 1.5.
+    Parameters
+    ----------
+    color : str
+        Color in hexadecimal format.
+    saturation_factor : float, optional
+        Factor to adjust the saturation. Default is 5.
     
-    Returns:
-    - str: The color with adjusted saturation in hexadecimal format.
+    Returns
+    -------
+    str
+        Color in hexadecimal format with adjusted saturation.
     """
     # Convert color to HSV (Hue, Saturation, Value)
     h, s, v = mcolors.rgb_to_hsv(mcolors.to_rgb(color))
@@ -91,6 +85,27 @@ def protocol_boxplot(
     plot_params: Optional[Dict[str, Any]] = None):
     """
     Plots a boxplot based on the provided DataFrame and selected methods.
+    
+    Parameters
+    ----------
+    table_protocol : pd.DataFrame
+        DataFrame containing the protocol results.
+    x : str
+        Column name to use as the x-axis.
+    y : str
+        Column name to use as the y-axis.
+    methods : List[str], optional
+        List of quantifiers to plot. If not provided, all quantifiers will be plotted.
+    title : str, optional
+        Title of the plot. Default is None.
+    legend : bool, optional
+        Whether to display a legend. Default is True.
+    save_path : str, optional
+        File path to save the plot image. If not provided, the plot will not be saved.
+    order : str, optional
+        Order to plot the methods. If 'rank', methods will be ordered by median value.
+    plot_params : Dict[str, Any], optional
+        Dictionary of custom plotting parameters to apply. Default is None
     """
     # Handle plot_params
     plot_params = plot_params or {}
@@ -153,6 +168,31 @@ def protocol_lineplot(
     plot_params: Optional[Dict[str, Any]] = None):
     """
     Plots a line plot based on the provided DataFrame of the protocol and selected methods.
+    
+    Parameters
+    ----------
+    table_protocol : pd.DataFrame
+        DataFrame containing the protocol results.
+    methods : Union[List[str], str, None]
+        List of quantifiers to plot. If not provided, all quantifiers will be plotted.
+    x : str
+        Column name to use as the x-axis.
+        - If 'ALPHA', the real prevalence of the positive class will be used.
+        - You can also use any other column name, as long as the x has the same name.
+    y : str
+        Column name to use as the y-axis.
+    title : str, optional
+        Title of the plot. Default is None.
+    legend : bool, optional
+        Whether to display a legend. Default is True.
+    save_path : str, optional
+        File path to save the plot image. If not provided, the plot will not be saved.
+    group_by : str, optional
+        Column to group the data. Default is 'mean'.
+    pos_alpha : int, optional
+        Position of the positive class in the 'PREVS' column, this attribute only works for binary problems. Default is 1.
+    plot_params : Dict[str, Any], optional
+        Dictionary of custom plotting parameters to apply. Default is None.
     """
     # Handle plot_params
     plot_params = plot_params or {}
@@ -228,27 +268,27 @@ def class_distribution_plot(values: Union[List, np.ndarray],
     of a different class or category. Custom colors, titles, legends, and other plot parameters 
     can be applied to enhance visualization.
 
-    Args:
-        values (Union[List, np.ndarray]): 
-            A list of arrays or a single array containing values for specific classes or categories.
-        labels (Union[List, np.ndarray]): 
-            A list or an array of labels corresponding to each value set in `values`. 
-            Must be the same length as `values`.
-        bins (int, optional): 
-            Number of bins to use in the histograms. Default is 30.
-        title (Optional[str], optional): 
-            Title of the plot. If not provided, no title will be displayed.
-        legend (bool, optional): 
-            Whether to display a legend. Default is True.
-        save_path (Optional[str], optional): 
-            File path to save the plot image. If not provided, the plot will not be saved.
-        plot_params (Optional[Dict[str, Any]], optional): 
-            Dictionary of custom plotting parameters to apply. Default is None.
-
-    Raises:
-        AssertionError: 
-            If the number of labels does not match the number of value sets.
-
+    Parameters
+    ----------
+    values : Union[List, np.ndarray]
+        List or array of values to plot.
+    labels : Union[List, np.ndarray]
+        List or array of labels corresponding to the values.
+    bins : int, optional
+        Number of bins to use for the histogram. Default is 30.
+    title : str, optional
+        Title of the plot. Default is None.
+    legend : bool, optional
+        Whether to display a legend. Default is True.
+    save_path : str, optional
+        File path to save the plot image. If not provided, the plot will not be saved.
+    plot_params : Dict[str, Any], optional
+        Dictionary of custom plotting parameters to apply. Default is None.
+    
+    Raises
+    ------
+    AssertionError
+        If the number of value sets does not match the number of labels.
     """
     
     # Ensure the number of labels matches the number of value sets

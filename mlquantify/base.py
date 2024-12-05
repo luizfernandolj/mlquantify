@@ -132,16 +132,26 @@ class AggregativeQuantifier(Quantifier, ABC):
     ...         return class_counts / len(predicted_labels)
     >>> binary_quantifier = BinaryQuantifier(learner=SVC(probability=True))
     >>> # Sample multiclass data
-    >>> X_ternary = np.random.rand(30, 2)  # 30 amostras, 2 features
-    >>> y_ternary = np.random.choice([0, 1, 2], size=30, p=[0.4, 0.3, 0.3])  # 40% classe 0, 30% classe 1, 30% classe 2
+    >>> X = np.array([
+    ...     [0.1, 0.2], [0.2, 0.1], [0.3, 0.4], [0.4, 0.3], 
+    ...     [0.5, 0.6], [0.6, 0.5], [0.7, 0.8], [0.8, 0.7], 
+    ...     [0.9, 1.0], [1.0, 0.9], [1.1, 1.2], [1.2, 1.1], 
+    ...     [1.3, 1.4], [1.4, 1.3], [1.5, 1.6], [1.6, 1.5], 
+    ...     [1.7, 1.8], [1.8, 1.7], [1.9, 2.0], [2.0, 1.9]
+    ... ])
+    >>> # Update the labels to include a third class
+    >>> y = np.array([0, 0, 0, 1, 0, 1, 0, 1, 2, 2, 0, 1, 0, 1, 0, 1, 2, 2, 0, 1])
     >>> # Split the data into training and testing sets
-    >>> X_train_bin, X_test_bin, y_train_bin, y_test_bin = train_test_split(X_binary, y_binary, test_size=0.4, random_state=42)
+    >>> X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.4, random_state=42)
     >>> # Fit the binary quantifier
-    >>> binary_quantifier.fit(X_train_bin, y_train_bin)
+    >>> binary_quantifier.fit(X_train, y_train)
     None
     >>> # Real prevalence in the training set
-    >>> get_real_prev(y_train_bin)
-    
+    >>> get_real_prev(y_test)
+    {0: 0.25, 1: 0.5, 2: 0.25}
+    >>> preds = binary_quantifier.predict(X_test)
+    >>> preds
+    {0: 1.0, 1: 0.0, 2: 0.0}
     """
     
     
@@ -254,8 +264,9 @@ class AggregativeQuantifier(Quantifier, ABC):
 
         Returns
         -------
-        dict
-            A dictionary where keys are class labels and values are their predicted prevalences.
+        dict, list, or numpy array
+            The predicted prevalences, which can be a dictionary where keys are class labels 
+            and values are their predicted prevalences, a list, or a numpy array.
         """
 
         ...
@@ -481,8 +492,9 @@ class NonAggregativeQuantifier(Quantifier):
 
         Returns
         -------
-        dict
-            A dictionary where keys are class labels and values are their predicted prevalences.
+        dict, list, or numpy array
+            The predicted prevalences, which can be a dictionary where keys are class labels 
+            and values are their predicted prevalences, a list, or a numpy array.
 
         Notes
         -----

@@ -2,15 +2,24 @@ import numpy as np
 import pandas as pd
 from joblib import Parallel, delayed, load
 from collections import defaultdict
+import itertools
 
 
 def convert_columns_to_arrays(df, columns:list = ['PRED_PREVS', 'REAL_PREVS']):
-    """Converts the specified columns from string of arrays to numpy arrays
-
-    Args:
-        df (array-like): the dataframe from which to change convert the coluns
-        columns (list, optional): the coluns with string of arrays, default is the options for
-        the protocol dataframes
+    """
+    Converts specified columns in a DataFrame from strings of arrays to NumPy arrays.
+    
+    Parameters
+    ----------
+    df : pd.DataFrame
+        DataFrame to convert.
+    columns : list
+        List of columns to convert.
+    
+    Returns
+    -------
+    pd.DataFrame
+        DataFrame with the specified columns converted to NumPy arrays.
     """
     for col in columns:
         df[col] = df[col].apply(lambda x: np.fromstring(x.strip('[]'), sep=' ') if isinstance(x, str) else x)
@@ -20,7 +29,26 @@ def convert_columns_to_arrays(df, columns:list = ['PRED_PREVS', 'REAL_PREVS']):
 
 
 
-def generate_artificial_indexes(y, prevalence: list, sample_size:int, classes:list):        
+def generate_artificial_indexes(y, prevalence: list, sample_size:int, classes:list):
+    """
+    Generate indexes for a stratified sample based on the prevalence of each class.
+    
+    Parameters
+    ----------
+    y : np.ndarray
+        Array of class labels.
+    prevalence : list
+        List of prevalences for each class.
+    sample_size : int
+        Number of samples to generate.
+    classes : list
+        List of unique classes.
+        
+    Returns
+    -------
+    list
+        List of indexes for the stratified sample.
+    """        
     # Ensure the sum of prevalences is 1
     assert np.isclose(sum(prevalence), 1), "The sum of prevalences must be 1"
     # Ensure the number of prevalences matches the number of classes
@@ -51,11 +79,50 @@ def generate_artificial_indexes(y, prevalence: list, sample_size:int, classes:li
 
 
 
+def generate_artificial_prevalences(n_dim: int, n_prev: int, n_iter: int) -> np.ndarray:
+    """Generates n artificial prevalences with n dimensions.
+
+    Parameters
+    ----------
+    n_dim : int
+        Number of dimensions.
+    n_prev : int
+        Number of prevalences to generate.
+    n_iter : int
+        Number of iterations.
+    
+    Returns
+    -------
+    np.ndarray
+        Array of artificial prevalences.
+    
+    """
+    s = np.linspace(0., 1., n_prev, endpoint=True)
+    prevs = np.array([p + (1 - sum(p),) for p in itertools.product(*(s,) * (n_dim - 1)) if sum(p) <= 1])
+    
+    return np.repeat(prevs, n_iter, axis=0) if n_iter > 1 else prevs
+
+
+
+
 
 
 
 
 def get_real_prev(y) -> dict:
+    """
+    Get the real prevalence of each class in the target array.
+    
+    Parameters
+    ----------
+    y : np.ndarray or pd.Series
+        Array of class labels.
+        
+    Returns
+    -------
+    dict
+        Dictionary of class labels and their corresponding prevalence.
+    """
     if isinstance(y, np.ndarray):
         y = pd.Series(y)
     real_prevs = y.value_counts(normalize=True).to_dict()
@@ -71,6 +138,19 @@ def get_real_prev(y) -> dict:
 
 
 def load_quantifier(path:str):
+    """
+    Load a quantifier from a file.
+    
+    Parameters
+    ----------
+    path : str
+        Path to the file containing the quantifier.
+    
+    Returns
+    -------
+    Quantifier
+        Loaded quantifier.
+    """
     return load(path)
 
 
@@ -85,11 +165,15 @@ def make_prevs(ndim:int) -> list:
     """
     Generate a list of n_dim values uniformly distributed between 0 and 1 that sum exactly to 1.
     
-    Args:
-    n_dim (int): Number of values in the list.
+    Parameters
+    ----------
+    ndim : int
+        Number of dimensions.
     
-    Returns:
-    list: List of n_dim values that sum to 1.
+    Returns
+    -------
+    list
+        List of n_dim values uniformly distributed between 0 and 1 that sum exactly to 1.
     """
     # Generate n_dim-1 random u_dist uniformly distributed between 0 and 1
     u_dist = np.random.uniform(0, 1, ndim - 1)
@@ -115,7 +199,21 @@ def make_prevs(ndim:int) -> list:
 
 
 def normalize_prevalence(prevalences: np.ndarray, classes:list):
+    """
+    Normalize the prevalence of each class to sum to 1.
     
+    Parameters
+    ----------
+    prevalences : np.ndarray
+        Array of prevalences.
+    classes : list
+        List of unique classes.
+    
+    Returns
+    -------
+    dict
+        Dictionary of class labels and their corresponding prevalence.
+    """
     if isinstance(prevalences, dict):
         summ = sum(prevalences.values())
         prevalences = {int(_class):float(value/summ) for _class, value in prevalences.items()}
@@ -139,6 +237,25 @@ def normalize_prevalence(prevalences: np.ndarray, classes:list):
 
 
 def parallel(func, elements, n_jobs: int = 1, *args):
+    """
+    Run a function in parallel on a list of elements.
+    
+    Parameters
+    ----------
+    func : function
+        Function to run in parallel.
+    elements : list
+        List of elements to run the function on.
+    n_jobs : int
+        Number of jobs to run in parallel.
+    args : tuple
+        Additional arguments to pass to the function.
+    
+    Returns
+    -------
+    list
+        List of results from running the function on each element.
+    """
     return Parallel(n_jobs=n_jobs)(
         delayed(func)(e, *args) for e in elements
     )
@@ -153,6 +270,21 @@ def parallel(func, elements, n_jobs: int = 1, *args):
 
 
 def round_protocol_df(dataframe: pd.DataFrame, frac: int = 3):
+    """
+    Round the columns of a protocol dataframe to a specified number of decimal places.
+    
+    Parameters
+    ----------
+    dataframe : pd.DataFrame
+        Protocol dataframe to round.
+    frac : int
+        Number of decimal places to round to.
+    
+    Returns
+    -------
+    pd.DataFrame
+        Protocol dataFrame with the columns rounded to the specified number of decimal places.
+    """
     def round_column(col):
         if col.name in ['PRED_PREVS', 'REAL_PREVS']:
             return col.apply(lambda x: np.round(x, frac) if isinstance(x, (np.ndarray, float, int)) else x)
@@ -167,10 +299,36 @@ def round_protocol_df(dataframe: pd.DataFrame, frac: int = 3):
 
 
 def get_measure(measure:str):
+    """
+    Get the measure from the evaluation module.
+    
+    Parameters
+    ----------
+    measure : str
+        Measure to get.
+    
+    Returns
+    -------
+    Measure
+        Measure function from the evaluation module.
+    """
     from ..evaluation import MEASURES
     return MEASURES.get(measure)
 
 
 def get_method(method: str):
+    """
+    Get the method from the methods module.
+    
+    Parameters
+    ----------
+    method : str
+        Method to get.
+    
+    Returns
+    -------
+    Method
+        Method class from the methods module.
+    """
     from ..methods import METHODS
     return METHODS.get(method)

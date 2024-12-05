@@ -10,23 +10,122 @@ from .utils.general import parallel, get_measure
 from .evaluation.protocol import APP, NPP
 
 class GridSearchQ(Quantifier):
-    """
-    Hyperparameter optimization for quantification models using grid search.
+    """Hyperparameter optimization for quantification models using grid search.
 
-    Args:
-        model (Quantifier): The base quantification model.
-        param_grid (dict): Hyperparameters to search over.
-        protocol (str, optional): Quantification protocol ('app' or 'npp'). Defaults to 'app'.
-        n_prevs (int, optional): Number of prevalence points for APP. Defaults to None.
-        n_repetitions (int, optional): Number of repetitions for NPP. Defaults to 1.
-        scoring (Union[List[str], str], optional): Metric(s) for evaluation. Defaults to "mae".
-        refit (bool, optional): Refit model on best parameters. Defaults to True.
-        val_split (float, optional): Proportion of data for validation. Defaults to 0.4.
-        n_jobs (int, optional): Number of parallel jobs. Defaults to 1.
-        random_seed (int, optional): Seed for reproducibility. Defaults to 42.
-        timeout (int, optional): Max time per parameter combination (seconds). Defaults to -1.
-        verbose (bool, optional): Verbosity of output. Defaults to False.
+    GridSearchQ allows hyperparameter tuning for quantification models 
+    by minimizing a quantification-oriented loss over a parameter grid. 
+    This method evaluates hyperparameter configurations using quantification 
+    metrics rather than standard classification metrics, ensuring better 
+    approximation of class distributions.
+
+    Parameters
+    ----------
+    model : Quantifier
+        The base quantification model to optimize.
+
+    param_grid : dict
+        Dictionary where keys are parameter names (str) and values are 
+        lists of parameter settings to try.
+
+    protocol : str, default='app'
+        The quantification protocol to use. Supported options are:
+        - 'app': Artificial Prevalence Protocol.
+        - 'npp': Natural Prevalence Protocol.
+
+    n_prevs : int, default=None
+        Number of prevalence points to generate for APP.
+
+    n_repetitions : int, default=1
+        Number of repetitions to perform for NPP.
+
+    scoring : Union[List[str], str], default='mae'
+        Metric or metrics to evaluate the model's performance. Can be 
+        a string (e.g., 'mae') or a list of metrics.
+
+    refit : bool, default=True
+        If True, refit the model using the best found hyperparameters 
+        on the entire dataset.
+
+    val_split : float, default=0.4
+        Proportion of the training data to use for validation. Only 
+        applicable if cross-validation is not used.
+
+    n_jobs : int, default=1
+        The number of jobs to run in parallel. -1 means using all processors.
+
+    random_seed : int, default=42
+        Random seed for reproducibility.
+
+    timeout : int, default=-1
+        Maximum time (in seconds) allowed for a single parameter combination.
+        A value of -1 disables the timeout.
+
+    verbose : bool, default=False
+        If True, print progress messages during grid search.
+
+    Attributes
+    ----------
+    best_params : dict
+        The parameter setting that gave the best results on the validation set.
+
+    best_score : float
+        The best score achieved during the grid search.
+
+    results : pandas.DataFrame
+        A DataFrame containing details of all evaluations, including parameters, 
+        scores, and execution times.
+
+    References
+    ----------
+    The idea of using grid search for hyperparameter optimization in 
+    quantification models was discussed in:
+    Moreo, Alejandro; Sebastiani, Fabrizio. "Re-assessing the 'Classify and Count' 
+    Quantification Method". In: Advances in Information Retrieval: 
+    43rd European Conference on IR Research, ECIR 2021, Virtual Event, 
+    March 28–April 1, 2021, Proceedings, Part II. Springer International Publishing, 
+    2021, pp. 75–91. [Link](https://link.springer.com/chapter/10.1007/978-3-030-72240-1_6).
+
+    Examples
+    --------
+    >>> from mlquantify.methods.aggregative import DyS
+    >>> from mlquantify.model_selection import GridSearchQ
+    >>> from sklearn.ensemble import RandomForestClassifier
+    >>> from sklearn.datasets import load_breast_cancer
+    >>> from sklearn.model_selection import train_test_split
+    >>> 
+    >>> # Loading dataset from sklearn
+    >>> features, target = load_breast_cancer(return_X_y=True)
+    >>> 
+    >>> # Splitting into train and test
+    >>> X_train, X_test, y_train, y_test = train_test_split(features, target, test_size=0.3)
+    >>> 
+    >>> model = DyS(RandomForestClassifier())
+    >>> 
+    >>> # Creating the hyperparameter grid
+    >>> param_grid = {
+    >>>     'learner__n_estimators': [100, 500, 1000],
+    >>>     'learner__criterion': ["gini", "entropy"],
+    >>>     'measure': ["topsoe", "hellinger"]
+    >>> }
+    >>> 
+    >>> gs = GridSearchQ(
+    ...                 model=model,
+    ...                 param_grid=param_grid,
+    ...                 protocol='app', # Default
+    ...                 n_prevs=100,    # Default
+    ...                 scoring='nae',
+    ...                 refit=True,     # Default
+    ...                 val_split=0.3,
+    ...                 n_jobs=-1,
+    ...                 verbose=True)
+    >>> 
+    >>> gs.fit(X_train, y_train)
+    [GridSearchQ]: Optimization complete. Best score: 0.0060630241297973545, with parameters: {'learner__n_estimators': 500, 'learner__criterion': 'entropy', 'measure': 'topsoe'}.
+    >>> predictions = gs.predict(X_test)
+    >>> predictions
+    {0: 0.4182508973311534, 1: 0.5817491026688466}
     """
+
 
     def __init__(self,
                  model: Quantifier,
@@ -68,12 +167,18 @@ class GridSearchQ(Quantifier):
     def __get_protocol(self, model, sample_size):
         """Get the appropriate protocol instance.
 
-        Args:
-            model (Quantifier): The quantification model.
-            sample_size (int): The sample size for batch processing.
+        Parameters
+        ----------
+        model : Quantifier
+            The quantification model.
 
-        Returns:
-            object: Instance of APP or NPP protocol.
+        sample_size : int
+            The sample size for batch processing.
+
+        Returns
+        -------
+        object
+            Instance of APP or NPP protocol, depending on the configured protocol.
         """
         protocol_params = {
             'models': model,
@@ -89,34 +194,43 @@ class GridSearchQ(Quantifier):
     def fit(self, X, y):
         """Fit the quantifier model and perform grid search.
 
-        Args:
-            X (array-like): Training features.
-            y (array-like): Training labels.
+        Parameters
+        ----------
+        X : array-like of shape (n_samples, n_features)
+            Training features, where `n_samples` is the number of samples
+            and `n_features` is the number of features.
 
-        Returns:
-            self: Fitted GridSearchQ instance.
+        y : array-like of shape (n_samples,)
+            Training labels.
+
+        Returns
+        -------
+        self : GridSearchQ
+            Returns the fitted instance of GridSearchQ.
         """
         X_train, X_val, y_train, y_val = train_test_split(X, y, test_size=self.val_split, random_state=self.random_seed)
         param_combinations = list(itertools.product(*self.param_grid.values()))
         best_score, best_params = None, None
-        
+
         if self.timeout > 0:
             signal.signal(signal.SIGALRM, self._timeout_handler)
 
         def evaluate_combination(params):
             """Evaluate a single combination of hyperparameters.
 
-            Args:
-                params (tuple): A tuple of hyperparameter values.
+            Parameters
+            ----------
+            params : tuple
+                A tuple of hyperparameter values.
 
-            Returns:
-                float or None: The evaluation score, or None if timeout occurred.
+            Returns
+            -------
+            float or None
+                The evaluation score, or None if a timeout occurred.
             """
-            
             if self.verbose:
-                print(f"\tEvaluate Combination for {str(params)}")
-            
-            
+                print(f"\tEvaluating combination: {str(params)}")
+
             model = deepcopy(self.model)
             model.set_params(**dict(zip(self.param_grid.keys(), params)))
             protocol_instance = self.__get_protocol(model, len(y_train))
@@ -131,102 +245,133 @@ class GridSearchQ(Quantifier):
 
                 if self.timeout > 0:
                     signal.alarm(0)
-                    
-                    
-                    
+
                 if self.verbose:
-                    print(f"\t\\--ended evaluation of {str(params)}")
+                    print(f"\t\\--Finished evaluation: {str(params)}")
 
                 return np.mean(scores) if scores else None
             except TimeoutError:
-                self.sout(f'Timeout reached for combination {params}.')
+                self.sout(f'Timeout reached for combination: {params}.')
                 return None
 
         results = parallel(
             evaluate_combination,
-            tqdm(param_combinations, desc="Evaluating combination", total=len(param_combinations)) if self.verbose else param_combinations,
+            tqdm(param_combinations, desc="Evaluating combinations", total=len(param_combinations)) if self.verbose else param_combinations,
             n_jobs=self.n_jobs
         )
-        
+
         for score, params in zip(results, param_combinations):
             if score is not None and (best_score is None or score < best_score):
                 best_score, best_params = score, params
 
-        self.best_score_ = best_score
-        self.best_params_ = dict(zip(self.param_grid.keys(), best_params))
-        self.sout(f'Optimization complete. Best score: {self.best_score_}, with parameters: {self.best_params_}.')
+        self.best_score = best_score
+        self.best_params = dict(zip(self.param_grid.keys(), best_params))
+        self.sout(f'Optimization complete. Best score: {self.best_score}, with parameters: {self.best_params}.')
 
-        if self.refit and self.best_params_:
-            self.model.set_params(**self.best_params_)
+        if self.refit and self.best_params:
+            self.model.set_params(**self.best_params)
             self.model.fit(X, y)
             self.best_model_ = self.model
 
         return self
-    
+
     def predict(self, X):
         """Make predictions using the best found model.
 
-        Args:
-            X (array-like): Data to predict on.
+        Parameters
+        ----------
+        X : array-like of shape (n_samples, n_features)
+            Data to predict on.
 
-        Returns:
-            array-like: Predictions.
+        Returns
+        -------
+        array-like
+            Predictions for the input data.
+        
+        Raises
+        ------
+        RuntimeError
+            If the model has not been fitted yet.
         """
         if not hasattr(self, 'best_model_'):
             raise RuntimeError("The model has not been fitted yet.")
         return self.best_model_.predict(X)
-    
+
     @property
     def classes_(self):
         """Get the classes of the best model.
 
-        Returns:
-            array-like: The classes.
+        Returns
+        -------
+        array-like
+            The classes learned by the best model.
         """
         return self.best_model_.classes_
 
     def set_params(self, **parameters):
         """Set the hyperparameters for grid search.
 
-        Args:
-            parameters (dict): Hyperparameters to set.
+        Parameters
+        ----------
+        parameters : dict
+            Dictionary of hyperparameters to set.
         """
         self.param_grid = parameters
 
     def get_params(self, deep=True):
         """Get the parameters of the best model.
 
-        Args:
-            deep (bool, optional): If True, will return the parameters for this estimator and contained subobjects. Defaults to True.
+        Parameters
+        ----------
+        deep : bool, optional, default=True
+            If True, will return the parameters for this estimator and 
+            contained subobjects.
 
-        Returns:
-            dict: Parameters of the best model.
+        Returns
+        -------
+        dict
+            Parameters of the best model.
+
+        Raises
+        ------
+        ValueError
+            If called before the model has been fitted.
         """
         if hasattr(self, 'best_model_'):
             return self.best_model_.get_params()
-        raise ValueError('get_params called before fit')
+        raise ValueError('get_params called before fit.')
 
     def best_model(self):
         """Return the best model after fitting.
 
-        Returns:
-            Quantifier: The best model.
+        Returns
+        -------
+        Quantifier
+            The best fitted model.
 
-        Raises:
-            ValueError: If called before fitting.
+        Raises
+        ------
+        ValueError
+            If called before fitting.
         """
         if hasattr(self, 'best_model_'):
             return self.best_model_
-        raise ValueError('best_model called before fit')
+        raise ValueError('best_model called before fit.')
 
     def _timeout_handler(self, signum, frame):
         """Handle timeouts during evaluation.
 
-        Args:
-            signum (int): Signal number.
-            frame (object): Current stack frame.
-        
-        Raises:
-            TimeoutError: When the timeout is reached.
+        Parameters
+        ----------
+        signum : int
+            Signal number.
+
+        frame : object
+            Current stack frame.
+
+        Raises
+        ------
+        TimeoutError
+            Raised when the timeout is reached.
         """
-        raise TimeoutError()
+        raise TimeoutError
