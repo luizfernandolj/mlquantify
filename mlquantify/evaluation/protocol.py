@@ -12,6 +12,8 @@ from ..utils.method import *
 from . import MEASURES
 from ..base import Quantifier
 
+import mlquantify as mq
+
 class Protocol(ABC):
     """Base class for evaluation protocols.
     
@@ -198,7 +200,6 @@ class Protocol(ABC):
         if isinstance(models, list):
             if all(isinstance(model, Quantifier) for model in models):
                 return models
-            assert learner is not None, "Learner is required for model methods."
             return [get_method(model)(learner) for model in models]
         
         if isinstance(models, Quantifier):
@@ -214,7 +215,6 @@ class Protocol(ABC):
 
         if models in model_dict:
             return [model(learner) if hasattr(model, "learner") else model() for model in model_dict[models]()]
-        
         return [get_method(models)(learner)]
     
     def sout(self, msg):
@@ -242,10 +242,9 @@ class Protocol(ABC):
         args = ((model, X_train, y_train) for model in self.models)
         wrapper = tqdm if self.verbose else lambda x, **kwargs: x
 
-        self.models = Parallel(n_jobs=self.n_jobs)(  # Parallel processing of models
+        self.models = Parallel(n_jobs=self.n_jobs, backend='threading')(  # Parallel processing of models
             delayed(self._delayed_fit)(*arg) for arg in wrapper(args, desc="Fitting models", total=len(self.models))
         )
-
         self.sout("Fit [Done]")
         return self
     

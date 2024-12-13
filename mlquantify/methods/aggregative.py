@@ -7,6 +7,7 @@ from ..utils.method import *
 from sklearn.base import BaseEstimator
 from sklearn.metrics import confusion_matrix
 from sklearn.model_selection import train_test_split
+import mlquantify as mq
 
 
 
@@ -75,8 +76,7 @@ class CC(AggregativeQuantifier):
     {0: 0.4166666666666667, 1: 0.3194444444444444, 2: 0.2638888888888889}
     """
     
-    def __init__(self, learner: BaseEstimator):
-        assert isinstance(learner, BaseEstimator), "learner object is not an estimator"
+    def __init__(self, learner: BaseEstimator=None):
         self.learner = learner
     
     def _fit_method(self, X, y):
@@ -95,8 +95,7 @@ class CC(AggregativeQuantifier):
         self : CC
             The instance of the CC class.
         """
-        if not self.learner_fitted:
-            self.learner.fit(X, y)
+        self.fit_learner(X, y)
         return self
     
     def _predict_method(self, X) -> np.ndarray:
@@ -114,7 +113,7 @@ class CC(AggregativeQuantifier):
         array-like
             An array containing the prevalence of each class.
         """
-        predicted_labels = self.learner.predict(X)
+        predicted_labels = self.predict_learner(X)
         
         # Count occurrences of each class in the predictions
         class_counts = np.array([np.count_nonzero(predicted_labels == _class) for _class in self.classes])
@@ -147,13 +146,6 @@ class EMQ(AggregativeQuantifier):
     priors : array-like
         Prior probabilities of the classes, estimated from the training data.
     
-    Constants
-    ---------
-    MAX_ITER : int
-        The maximum number of iterations allowed for the EM algorithm (default: 1000).
-    EPSILON : float
-        Convergence threshold for the EM algorithm (default: 1e-6).
-    
     References
     ----------
     SAERENS, Marco; LATINNE, Patrice; DECAESTECKER, Christine. Adjusting the outputs of a classifier 
@@ -184,8 +176,11 @@ class EMQ(AggregativeQuantifier):
     MAX_ITER = 1000
     EPSILON = 1e-6
     
-    def __init__(self, learner: BaseEstimator):
-        assert isinstance(learner, BaseEstimator), "learner object is not an estimator"
+    @property
+    def is_probabilistic(self) -> bool:
+        return True
+    
+    def __init__(self, learner: BaseEstimator=None):
         self.learner = learner
         self.priors = None
     
@@ -205,9 +200,8 @@ class EMQ(AggregativeQuantifier):
         self : EMQ
             The fitted instance of EMQ.
         """
-        if not self.learner_fitted:
-            self.learner.fit(X, y)
-        
+        self.fit_learner(X, y)
+         
         counts = np.array([np.count_nonzero(y == _class) for _class in self.classes])
         self.priors = counts / len(y)
         
@@ -227,7 +221,7 @@ class EMQ(AggregativeQuantifier):
         dict
             A dictionary with class labels as keys and their prevalence as values.
         """
-        posteriors = self.learner.predict_proba(X)
+        posteriors = self.predict_learner(X)
         prevalences, _ = self.EM(self.priors, posteriors)
         
         return prevalences
@@ -250,7 +244,7 @@ class EMQ(AggregativeQuantifier):
         np.ndarray
             Adjusted posterior probabilities.
         """
-        posteriors = self.learner.predict_proba(X)
+        posteriors = self.predict_learner(X)
         _, posteriors = self.EM(self.priors, posteriors, epsilon, max_iter)
         return posteriors
     
@@ -360,8 +354,13 @@ class FM(AggregativeQuantifier):
     >>> get_real_prev(y_test)
     {0: 0.4166666666666667, 1: 0.3194444444444444, 2: 0.2638888888888889}
     """
-    def __init__(self, learner: BaseEstimator):
-        assert isinstance(learner, BaseEstimator), "learner object is not an estimator"
+    
+    @property
+    def is_probabilistic(self) -> bool:
+        return True
+    
+    
+    def __init__(self, learner: BaseEstimator=None):
         self.learner = learner
         self.CM = None
     
@@ -386,11 +385,14 @@ class FM(AggregativeQuantifier):
             The fitted instance of FM.
         """
         # Get predicted labels and probabilities using cross-validation
-        y_labels, probabilities = get_scores(X, y, self.learner, self.cv_folds, self.learner_fitted)
+        if mq.arguments["y_labels"] is not None and mq.arguments["posteriors"] is not None:
+            y_labels = mq.arguments["y_labels"]
+            probabilities = mq.arguments["posteriors"]
+        else:
+            y_labels, probabilities = get_scores(X, y, self.learner, self.cv_folds, self.learner_fitted)
         
         # Fit the learner if it hasn't been fitted already
-        if not self.learner_fitted:
-            self.learner.fit(X, y)
+        self.fit_learner(X, y)
         
         # Initialize the confusion matrix
         CM = np.zeros((self.n_class, self.n_class))
@@ -426,7 +428,7 @@ class FM(AggregativeQuantifier):
         dict
             A dictionary with class labels as keys and their prevalence as values.
         """
-        posteriors = self.learner.predict_proba(X)
+        posteriors = self.predict_learner(X)
         
         # Calculate the estimated prevalences in the test set
         prevs_estim = np.sum(posteriors > self.priors, axis=0) / posteriors.shape[0]
@@ -518,8 +520,7 @@ class GAC(AggregativeQuantifier):
     """
 
     
-    def __init__(self, learner: BaseEstimator, train_size:float=0.6, random_state:int=None):
-        assert isinstance(learner, BaseEstimator), "learner object is not an estimator"
+    def __init__(self, learner: BaseEstimator=None, train_size:float=0.6, random_state:int=None):
         self.learner = learner
         self.cond_prob_matrix = None
         self.train_size = train_size
@@ -546,14 +547,14 @@ class GAC(AggregativeQuantifier):
         if isinstance(y, np.ndarray):
             y = pd.Series(y)
 
-        if self.learner_fitted:
-            y_pred = self.learner.predict(X)
+        if self.learner_fitted or self.learner is None:
+            y_pred = mq.arguments["y_train_pred"] if mq.arguments["y_train_pred"] is not None else self.predict_learner(X)
             y_label = y
         else:
             X_train, X_val, y_train, y_val = train_test_split(
                 X, y, train_size=self.train_size, stratify=y, random_state=self.random_state
             )
-            self.learner.fit(X_train, y_train)
+            self.fit_learner(X_train, y_train)
             y_label = y_val
             y_pred = self.learner.predict(X_val)
 
@@ -574,7 +575,7 @@ class GAC(AggregativeQuantifier):
         dict
             Adjusted class prevalences.
         """
-        y_pred = self.learner.predict(X)
+        y_pred = self.predict_learner(X)
         _, counts = np.unique(y_pred, return_counts=True)
         predicted_prevalences = counts / counts.sum()
         adjusted_prevalences = self.solve_adjustment(self.cond_prob_matrix, predicted_prevalences)
@@ -702,8 +703,7 @@ class GPAC(AggregativeQuantifier):
     {0: 0.4166666666666667, 1: 0.3194444444444444, 2: 0.2638888888888889}
     """
 
-    def __init__(self, learner: BaseEstimator, train_size: float = 0.6, random_state: int = None):
-        assert isinstance(learner, BaseEstimator), "learner object is not an estimator"
+    def __init__(self, learner: BaseEstimator=None, train_size: float = 0.6, random_state: int = None):
         self.learner = learner
         self.cond_prob_matrix = None
         self.train_size = train_size
@@ -730,16 +730,16 @@ class GPAC(AggregativeQuantifier):
         if isinstance(y, np.ndarray):
             y = pd.Series(y)
 
-        if self.learner_fitted:
-            y_pred = self.learner.predict(X)
+        if self.learner_fitted or self.learner is None:
+            y_pred = mq.arguments["y_train_pred"] if mq.arguments["y_train_pred"] is not None else self.predict_learner(X)
             y_labels = y
         else:
             X_train, X_val, y_train, y_val = train_test_split(
                 X, y, train_size=self.train_size, stratify=y, random_state=self.random_state
             )
-            self.learner.fit(X_train, y_train)
+            self.fit_learner(X_train, y_train)
             y_labels = y_val
-            y_pred = self.learner.predict(X_val)
+            y_pred = self.predict_learner(X_val)
 
         # Compute the conditional probability matrix
         self.cond_prob_matrix = GAC.get_cond_prob_matrix(self.classes, y_labels, y_pred)
@@ -759,7 +759,7 @@ class GPAC(AggregativeQuantifier):
         dict
             Adjusted class prevalences.
         """
-        predictions = self.learner.predict(X)
+        predictions = self.predict_learner(X)
 
         # Compute the distribution of predictions
         predicted_prevalences = np.zeros(self.n_class)
@@ -851,9 +851,11 @@ class PCC(AggregativeQuantifier):
     >>> get_real_prev(y_test)
     {0: 0.4166666666666667, 1: 0.3194444444444444, 2: 0.2638888888888889}
     """
+    @property
+    def is_probabilistic(self) -> bool:
+        return True
 
-    def __init__(self, learner: BaseEstimator):
-        assert isinstance(learner, BaseEstimator), "learner object is not an estimator"
+    def __init__(self, learner: BaseEstimator=None):
         self.learner = learner
 
     def _fit_method(self, X, y):
@@ -872,8 +874,7 @@ class PCC(AggregativeQuantifier):
         self : PCC
             Fitted quantifier object.
         """
-        if not self.learner_fitted:
-            self.learner.fit(X, y)
+        self.fit_learner(X, y)
         return self
 
     def _predict_method(self, X) -> np.ndarray:
@@ -896,7 +897,7 @@ class PCC(AggregativeQuantifier):
         # Calculate the prevalence for each class
         for class_index in range(self.n_class):
             # Get the predicted probabilities for the current class
-            class_probabilities = self.learner.predict_proba(X)[:, class_index]
+            class_probabilities = self.predict_learner(X)[:, class_index]
 
             # Compute the average probability (prevalence) for the current class
             mean_prev = np.mean(class_probabilities)
@@ -954,8 +955,7 @@ class PWK(AggregativeQuantifier):
     {0: 0.4166666666666667, 1: 0.3194444444444444, 2: 0.2638888888888889}
     """
 
-    def __init__(self, learner: BaseEstimator):
-        assert isinstance(learner, BaseEstimator), "learner object is not an estimator"
+    def __init__(self, learner: BaseEstimator=None):
         self.learner = learner
 
     def _fit_method(self, X, y):
@@ -974,8 +974,7 @@ class PWK(AggregativeQuantifier):
         self : PWK
             Fitted quantifier object.
         """
-        if not self.learner_fitted:
-            self.learner.fit(X, y)
+        self.fit_learner(X, y)
         return self
 
     def _predict_method(self, X) -> dict:
@@ -993,7 +992,7 @@ class PWK(AggregativeQuantifier):
             A dictionary mapping each class label to its estimated prevalence.
         """
         # Predict class labels for the given data
-        predicted_labels = self.learner.predict(X)
+        predicted_labels = self.predict_learner(X)
 
         # Compute the distribution of predicted labels
         unique_labels, label_counts = np.unique(predicted_labels, return_counts=True)

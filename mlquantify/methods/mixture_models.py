@@ -6,6 +6,7 @@ from ..base import AggregativeQuantifier
 
 from ..utils.general import get_real_prev
 from ..utils.method import *
+import mlquantify as mq
 
 
 
@@ -69,7 +70,7 @@ class MixtureModel(AggregativeQuantifier):
     {0: 0.37719298245614036, 1: 0.6228070175438597}
     """
 
-    def __init__(self, learner: BaseEstimator):
+    def __init__(self, learner: BaseEstimator=None):
         self.learner = learner
         self.pos_scores = None
         self.neg_scores = None
@@ -85,6 +86,10 @@ class MixtureModel(AggregativeQuantifier):
             Always returns False, as MixtureModel supports only binary classification.
         """
         return False
+    
+    @property
+    def is_probabilistic(self) -> bool:
+        return True
 
     def _fit_method(self, X, y):
         """
@@ -102,11 +107,15 @@ class MixtureModel(AggregativeQuantifier):
         self : MixtureModel
             The fitted MixtureModel instance.
         """
-        y_label, probabilities = get_scores(X, y, self.learner, self.cv_folds, self.learner_fitted)
+        if mq.arguments["y_labels"] is not None and mq.arguments["posteriors"] is not None:
+            y_labels = mq.arguments["y_labels"]
+            probabilities = mq.arguments["posteriors"]
+        else:
+            y_labels, probabilities = get_scores(X, y, self.learner, self.cv_folds, self.learner_fitted)
 
         # Separate positive and negative scores based on labels
-        self.pos_scores = probabilities[y_label == self.classes[1]][:, 1]
-        self.neg_scores = probabilities[y_label == self.classes[0]][:, 1]
+        self.pos_scores = probabilities[y_labels == self.classes[1]][:, 1]
+        self.neg_scores = probabilities[y_labels == self.classes[0]][:, 1]
 
         return self
 
@@ -125,7 +134,7 @@ class MixtureModel(AggregativeQuantifier):
             An array containing the prevalence for each class.
         """
         # Get the predicted probabilities for the positive class
-        test_scores = self.learner.predict_proba(X)[:, 1]
+        test_scores = self.predict_learner(X)[:, 1]
 
         # Compute the prevalence using the mixture model
         prevalence = np.clip(self._compute_prevalence(test_scores), 0, 1)
@@ -256,9 +265,8 @@ class DyS(MixtureModel):
     {0: 0.37719298245614036, 1: 0.6228070175438597}
     """
 
-    def __init__(self, learner: BaseEstimator, measure: str = "topsoe", bins_size: np.ndarray = None):
+    def __init__(self, learner: BaseEstimator=None, measure: str = "topsoe", bins_size: np.ndarray = None):
         assert measure in ["hellinger", "topsoe", "probsymm"], "Invalid measure."
-        assert isinstance(learner, BaseEstimator), "Learner must be a valid estimator."
         super().__init__(learner)
 
         # Set up bins_size
@@ -305,7 +313,7 @@ class DyS(MixtureModel):
         distance : float
             The minimum distance value.
         """
-        test_scores = self.learner.predict_proba(X_test)
+        test_scores = self.predict_learner(X_test)
         prevs = self.GetMinDistancesDyS(test_scores)
 
         size = len(prevs)
@@ -455,9 +463,8 @@ class DySsyn(MixtureModel):
     """
 
     
-    def __init__(self, learner:BaseEstimator, measure:str="topsoe", merge_factor:np.ndarray=None, bins_size:np.ndarray=None, alpha_train:float=0.5, n:int=None):
+    def __init__(self, learner:BaseEstimator=None, measure:str="topsoe", merge_factor:np.ndarray=None, bins_size:np.ndarray=None, alpha_train:float=0.5, n:int=None):
         assert measure in ["hellinger", "topsoe", "probsymm"], "measure not valid"
-        assert isinstance(learner, BaseEstimator), "learner object is not an estimator"
         super().__init__(learner)
         
         # Set up bins_size
@@ -494,8 +501,7 @@ class DySsyn(MixtureModel):
         self : DySsyn
             The fitted DySsyn instance.
         """
-        if not self.learner_fitted:
-            self.learner.fit(X, y)
+        self.fit_learner(X, y)
 
         self.alpha_train = list(get_real_prev(y).values())[1]
 
@@ -538,7 +544,7 @@ class DySsyn(MixtureModel):
         distance : float
             Minimum distance value for the test data.
         """
-        test_scores = self.learner.predict_proba(X_test)
+        test_scores = self.predict_learner(X_test)
 
         distances = self.GetMinDistancesDySsyn(test_scores)
 
@@ -679,8 +685,7 @@ class HDy(MixtureModel):
     {0: 0.37719298245614036, 1: 0.6228070175438597}
     """
 
-    def __init__(self, learner: BaseEstimator):
-        assert isinstance(learner, BaseEstimator), "Learner must be a valid estimator."
+    def __init__(self, learner: BaseEstimator=None):
         super().__init__(learner)
 
     def _compute_prevalence(self, test_scores: np.ndarray) -> float:
@@ -717,7 +722,7 @@ class HDy(MixtureModel):
         distance : float
             The minimum distance value.
         """
-        test_scores = self.learner.predict_proba(X_test)
+        test_scores = self.predict_learner(X_test)
         _, distances = self.GetMinDistancesHDy(test_scores)
 
         size = len(distances)
@@ -833,8 +838,7 @@ class SMM(MixtureModel):
     {0: 0.37719298245614036, 1: 0.6228070175438597}
     """
 
-    def __init__(self, learner: BaseEstimator):
-        assert isinstance(learner, BaseEstimator), "Learner must be a valid estimator."
+    def __init__(self, learner: BaseEstimator=None):
         super().__init__(learner)
 
     def _compute_prevalence(self, test_scores: np.ndarray) -> float:
@@ -909,8 +913,7 @@ class SORD(MixtureModel):
     {0: 0.37719298245614036, 1: 0.6228070175438597}
     """
 
-    def __init__(self, learner: BaseEstimator):
-        assert isinstance(learner, BaseEstimator), "Learner must be a valid estimator."
+    def __init__(self, learner: BaseEstimator=None):
         super().__init__(learner)
 
         self.best_distance_index = None  # Stores the index of the best alpha value

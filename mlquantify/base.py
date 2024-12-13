@@ -4,7 +4,7 @@ from copy import deepcopy
 import numpy as np
 import joblib
 
-
+import mlquantify as mq
 from .utils.general import parallel, normalize_prevalence
 
 class Quantifier(ABC, BaseEstimator):
@@ -272,6 +272,18 @@ class AggregativeQuantifier(Quantifier, ABC):
         ...
     
     @property
+    def is_probabilistic(self) -> bool:
+        """Check if the learner is probabilistic or not.
+        
+        Returns
+        -------
+        bool
+            True if the learner is probabilistic, False otherwise.
+        """
+        return False
+    
+    
+    @property
     def learner(self):
         """Returns the learner_ object.
         Returns
@@ -289,9 +301,52 @@ class AggregativeQuantifier(Quantifier, ABC):
         value : any
             The value to be assigned to the learner_ attribute.
         """
-        
+        assert isinstance(value, BaseEstimator) or mq.ARGUMENTS_SETTED, "learner object is not an estimator, or you may change ARGUMENTS_SETTED to True"
         self.learner_ = value
+    
+    def fit_learner(self, X, y):
+        """Fit the learner to the training data.
         
+        Parameters
+        ----------
+        X : array-like
+            Training features.
+        y : array-like
+            Training labels.
+        """
+        if mq.ARGUMENTS_SETTED:
+            if self.is_probabilistic and mq.arguments["posteriors"] is not None:
+                return
+            elif not self.is_probabilistic and mq.arguments["y_pred"] is not None:
+                return
+        else:
+            if not self.learner_fitted:
+                self.learner_.fit(X, y)
+
+    def predict_learner(self, X):
+        """Predict the class labels or probabilities for the given data.
+        
+        Parameters
+        ----------
+        X : array-like
+            Test features.
+        
+        Returns
+        -------
+        array-like
+            The predicted class labels or probabilities.
+        """
+        if self.learner is not None:
+            if self.is_probabilistic:
+                return self.learner_.predict_proba(X)
+            return self.learner_.predict(X)
+        else:
+            if mq.ARGUMENTS_SETTED:
+                if self.is_probabilistic:
+                    return mq.arguments["posteriors"]
+                return mq.arguments["y_pred"]
+            else:
+                raise ValueError("No learner object was set and no arguments were setted")
 
     def set_params(self, **params):
         """

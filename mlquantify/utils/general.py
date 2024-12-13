@@ -256,7 +256,7 @@ def parallel(func, elements, n_jobs: int = 1, *args):
     list
         List of results from running the function on each element.
     """
-    return Parallel(n_jobs=n_jobs)(
+    return Parallel(n_jobs=n_jobs, backend="threading")(
         delayed(func)(e, *args) for e in elements
     )
     

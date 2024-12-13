@@ -4,6 +4,7 @@ from sklearn.base import BaseEstimator
 
 from ..base import AggregativeQuantifier
 from ..utils.method import adjust_threshold, get_scores
+import mlquantify as mq
 
 
 
@@ -67,12 +68,27 @@ class ThresholdOptimization(AggregativeQuantifier):
     >>> y_pred = mtm.predict(X_test)
     """
 
-    def __init__(self, learner: BaseEstimator):
+    def __init__(self, learner: BaseEstimator=None):
         self.learner = learner
         self.threshold = None
         self.cc_output = None
         self.tpr = None
         self.fpr = None
+    
+    @property
+    def is_probabilistic(self) -> bool:
+        """
+        Returns whether the method is probabilistic.
+
+        This method is used to determine whether the quantification method is probabilistic, 
+        meaning it uses class-conditional probabilities to estimate class prevalences.
+        
+        Returns
+        -------
+        bool
+            True, indicating that this method is probabilistic.
+        """
+        return True
     
     @property
     def is_multiclass(self) -> bool:
@@ -106,7 +122,11 @@ class ThresholdOptimization(AggregativeQuantifier):
             The fitted quantifier object with the best threshold, TPR, and FPR.
         """
         # Get predicted labels and probabilities
-        y_labels, probabilities = get_scores(X, y, self.learner, self.cv_folds, self.learner_fitted)
+        if mq.arguments["y_labels"] is not None and mq.arguments["posteriors"] is not None:
+            y_labels = mq.arguments["y_labels"]
+            probabilities = mq.arguments["posteriors"]
+        else:
+            y_labels, probabilities = get_scores(X, y, self.learner, self.cv_folds, self.learner_fitted)
         
         # Adjust thresholds and compute true and false positive rates
         thresholds, tprs, fprs = adjust_threshold(y_labels, probabilities[:, 1], self.classes)
@@ -131,7 +151,7 @@ class ThresholdOptimization(AggregativeQuantifier):
             An array of predicted prevalences for the classes.
         """
         # Get predicted probabilities for the positive class
-        probabilities = self.learner.predict_proba(X)[:, 1]
+        probabilities = self.predict_learner(X)[:, 1]
         
         # Compute the classification count output based on the threshold
         self.cc_output = len(probabilities[probabilities >= self.threshold]) / len(probabilities)
@@ -231,8 +251,7 @@ class ACC(ThresholdOptimization):
     {0: 0.3991228070175439, 1: 0.6008771929824561}
     """
 
-    def __init__(self, learner: BaseEstimator, threshold: float = 0.5):
-        assert isinstance(learner, BaseEstimator), "learner object is not an estimator"
+    def __init__(self, learner: BaseEstimator=None, threshold: float = 0.5):
         super().__init__(learner)
         self.threshold = threshold
 
@@ -325,8 +344,7 @@ class MAX(ThresholdOptimization):
     {0: 0.3991228070175439, 1: 0.6008771929824561}
     """
 
-    def __init__(self, learner: BaseEstimator):
-        assert isinstance(learner, BaseEstimator), "learner object is not an estimator"
+    def __init__(self, learner: BaseEstimator=None):
         super().__init__(learner)
 
     def best_tprfpr(self, thresholds: np.ndarray, tprs: np.ndarray, fprs: np.ndarray) -> tuple:
@@ -428,8 +446,7 @@ class MS(ThresholdOptimization):
     {0: 0.3991228070175439, 1: 0.6008771929824561}
     """
 
-    def __init__(self, learner: BaseEstimator, threshold: float = 0.5):
-        assert isinstance(learner, BaseEstimator), "learner object is not an estimator"
+    def __init__(self, learner: BaseEstimator=None, threshold: float = 0.5):
         super().__init__(learner)
         self.threshold = threshold
 
@@ -528,8 +545,7 @@ class MS2(ThresholdOptimization):
     {0: 0.3991228070175439, 1: 0.6008771929824561}
     """
 
-    def __init__(self, learner: BaseEstimator):
-        assert isinstance(learner, BaseEstimator), "learner object is not an estimator"
+    def __init__(self, learner: BaseEstimator=None):
         super().__init__(learner)
 
     def best_tprfpr(self, thresholds: np.ndarray, tprs: np.ndarray, fprs: np.ndarray) -> tuple:
@@ -639,8 +655,7 @@ class PACC(ThresholdOptimization):
     {0: 0.3991228070175439, 1: 0.6008771929824561}
     """
 
-    def __init__(self, learner: BaseEstimator, threshold: float = 0.5):
-        assert isinstance(learner, BaseEstimator), "learner object is not an estimator"
+    def __init__(self, learner: BaseEstimator=None, threshold: float = 0.5):
         super().__init__(learner)
         self.threshold = threshold
 
@@ -675,7 +690,7 @@ class PACC(ThresholdOptimization):
         prevalences = {}
 
         # Calculate probabilities for the positive class
-        probabilities = self.learner.predict_proba(X)[:, 1]
+        probabilities = self.predict_learner(X)[:, 1]
 
         # Compute the mean score for the positive class
         mean_scores = np.mean(probabilities)
@@ -721,13 +736,6 @@ class PACC(ThresholdOptimization):
         fpr = fprs[thresholds == self.threshold][0]
         return (self.threshold, tpr, fpr)
 
-    
-    
-    
-    def best_tprfpr(self, thresholds:np.ndarray, tprs: np.ndarray, fprs: np.ndarray) -> tuple:
-        tpr = tprs[thresholds == self.threshold][0]
-        fpr = fprs[thresholds == self.threshold][0]
-        return (self.threshold, tpr, fpr)
     
     
     
@@ -797,8 +805,7 @@ class T50(ThresholdOptimization):
     {0: 0.3991228070175439, 1: 0.6008771929824561}
     """
 
-    def __init__(self, learner: BaseEstimator):
-        assert isinstance(learner, BaseEstimator), "learner object is not an estimator"
+    def __init__(self, learner: BaseEstimator=None):
         super().__init__(learner)
 
     def best_tprfpr(self, thresholds: np.ndarray, tprs: np.ndarray, fprs: np.ndarray) -> tuple:
@@ -906,8 +913,7 @@ class X_method(ThresholdOptimization):
     {0: 0.3991228070175439, 1: 0.6008771929824561}
     """
 
-    def __init__(self, learner: BaseEstimator):
-        assert isinstance(learner, BaseEstimator), "learner object is not an estimator"
+    def __init__(self, learner: BaseEstimator=None):
         super().__init__(learner)
 
     def best_tprfpr(self, thresholds: np.ndarray, tprs: np.ndarray, fprs: np.ndarray) -> tuple:
