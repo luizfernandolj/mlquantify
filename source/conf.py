@@ -1,63 +1,92 @@
+import os
+import sys
+from datetime import datetime
+
+# Adicione o diretório do projeto ao sys.path
+sys.path.insert(0, os.path.abspath('../../'))
+
 # Configuration file for the Sphinx documentation builder.
 #
-# This file only contains a selection of the most common options. For a full
-# list see the documentation:
+# For the full list of built-in configuration values, see the documentation:
 # https://www.sphinx-doc.org/en/master/usage/configuration.html
 
-# -- Path setup --------------------------------------------------------------
-
-# If extensions (or modules to document with autodoc) are in another directory,
-# add these directories to sys.path here. If the directory is relative to the
-# documentation root, use os.path.abspath to make it absolute, like shown here.
-#
-# import os
-# import sys
-# sys.path.insert(0, os.path.abspath('.'))
-
-
 # -- Project information -----------------------------------------------------
+# https://www.sphinx-doc.org/en/master/usage/configuration.html#project-information
 
 project = 'mlquantify'
-copyright = '2024, Luiz Fernando Luth Junior'
-author = 'Luiz Fernando Luth Junior'
-
-# The full version, including alpha/beta/rc tags
-release = '0.0.11.6'
-
+copyright = f"{datetime.now().year}, Luiz Fernando"
+author = 'Luiz Fernando'
+version = '0.0.11.8'
+release = '0.0.11.8'
 
 # -- General configuration ---------------------------------------------------
+# https://www.sphinx-doc.org/en/master/usage/configuration.html#general-configuration
 
-# Add any Sphinx extension module names here, as strings. They can be
-# extensions coming with Sphinx (named 'sphinx.ext.*') or your custom
-# ones.
 extensions = [
-    'sphinx.ext.autosummary',
-    'sphinx.ext.napoleon',
-    'sphinx.ext.viewcode',
-    'sphinx.ext.autodoc',
-    'sphinx_gallery.gen_gallery',
+    "sphinx.ext.autodoc",
+    "sphinx.ext.napoleon",  # Suporte ao estilo Google/Numpy docstring
+    "sphinx.ext.viewcode",  # Adiciona links para o código fonte
+    "sphinx.ext.githubpages",  # Para hospedar no GitHub Pages
+    "sphinx.ext.todo",  # Suporte para TODOs no código
+    "sphinx.ext.mathjax",  # Renderização de fórmulas matemáticas
+    "sphinx_copybutton",  # Botão para copiar snippets de código
 ]
 
-autoapi_type = "python"
-autoapi_dirs = ["../../mlquantify/"]
-
-# Add any paths that contain templates here, relative to this directory.
 templates_path = ['_templates']
-
-# List of patterns, relative to source directory, that match files and
-# directories to ignore when looking for source files.
-# This pattern also affects html_static_path and html_extra_path.
 exclude_patterns = []
 
 
+
 # -- Options for HTML output -------------------------------------------------
+# https://www.sphinx-doc.org/en/master/usage/configuration.html#options-for-html-output
 
-# The theme to use for HTML and HTML Help pages.  See the documentation for
-# a list of builtin themes.
-html_search = True
-html_theme = 'sphinx_rtd_theme'
+# Configuração para autodoc
+autodoc_typehints = "description"
 
-# Add any paths that contain custom static files (such as style sheets) here,
-# relative to this directory. They are copied after the builtin static files,
-# so a file named "default.css" will overwrite the builtin "default.css".
-html_static_path = ['_static']
+# Caminho para templates customizados
+templates_path = ["_templates"]
+
+# Arquivos e diretórios a ignorar
+exclude_patterns = ["_build", "Thumbs.db", ".DS_Store"]
+
+# Configuração para renderizar matemáticas
+mathjax_path = "https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"
+
+# -- Configurações para HTML -------------------------------------------------
+html_theme = "pydata_sphinx_theme"
+
+# Opções do tema
+html_theme_options = {
+    "navigation_depth": 2,
+    "collapse_navigation": False,
+    "show_prev_next": True,
+    "icon_links": [
+        {
+            "name": "GitHub",
+            "url": "https://github.com/luizfernandolj/mlquantify",
+            "icon": "fa-brands fa-github",
+        },
+    ],
+}
+
+# Caminho para arquivos estáticos
+html_static_path = ["_static"]
+
+# Configurações para o botão copiar código
+copybutton_prompt_text = r">>> |\.\.\. "
+copybutton_prompt_is_regexp = True
+
+# -- Extensões adicionais ---------------------------------------------------
+# Suporte a docstrings no estilo Google/Numpy
+napoleon_google_docstring = True
+napoleon_numpy_docstring = True
+
+# Configuração para tarefas TODO
+todo_include_todos = True
+
+# -- Versões de documentação ------------------------------------------------
+# Se sua biblioteca tiver versões, configure o menu de troca aqui:
+html_theme_options["switcher"] = {
+    "json_url": "https://seu-site/_static/versions.json",
+    "version_match": version,
+}
