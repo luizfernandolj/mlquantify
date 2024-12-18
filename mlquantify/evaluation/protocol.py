@@ -240,6 +240,7 @@ class Protocol(ABC):
         self.sout("Fitting models")
 
         args = ((model, X_train, y_train) for model in self.models)
+        
         wrapper = tqdm if self.verbose else lambda x, **kwargs: x
 
         self.models = Parallel(n_jobs=self.n_jobs, backend='threading')(  # Parallel processing of models
@@ -335,10 +336,14 @@ class Protocol(ABC):
         Quantifier
             Fitted quantification model
         """
+        model_name = model.__class__.__name__
+        if model_name == "Ensemble" and isinstance(model.base_quantifier, Quantifier):
+            model_name = f"{model.__class__.__name__}_{model.base_quantifier.__class__.__name__}_{model.size}"
+        
         start = time()
         model = model.fit(X=X_train, y=y_train)
         duration = time() - start
-        print(f"\tFitted {model.__class__.__name__} in {duration:.3f} seconds")
+        print(f"\tFitted {model_name} in {duration:.3f} seconds")
         return model
 
 
@@ -519,6 +524,8 @@ class APP(Protocol):
             Tuple containing the iteration, model name, prev, prev_pred, and batch size.
         """
         model_name = model.__class__.__name__
+        if model_name == "Ensemble" and isinstance(model.base_quantifier, Quantifier):
+            model_name = f"{model.__class__.__name__}_{model.base_quantifier.__class__.__name__}_{model.size}"
         
         if verbose:
             print(f'\t {model_name} with {batch_size} instances and prev {prev}')
