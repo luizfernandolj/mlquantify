@@ -315,7 +315,7 @@ class AggregativeQuantifier(Quantifier, ABC):
             Training labels.
         """
         if mq.ARGUMENTS_SETTED:
-            if self.is_probabilistic and mq.arguments["posteriors"] is not None:
+            if self.is_probabilistic and mq.arguments["posteriors_test"] is not None:
                 return
             elif not self.is_probabilistic and mq.arguments["y_pred"] is not None:
                 return
@@ -343,7 +343,7 @@ class AggregativeQuantifier(Quantifier, ABC):
         else:
             if mq.ARGUMENTS_SETTED:
                 if self.is_probabilistic:
-                    return mq.arguments["posteriors"]
+                    return mq.arguments["posteriors_test"]
                 return mq.arguments["y_pred"]
             else:
                 raise ValueError("No learner object was set and no arguments were setted")

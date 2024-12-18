@@ -385,9 +385,9 @@ class FM(AggregativeQuantifier):
             The fitted instance of FM.
         """
         # Get predicted labels and probabilities using cross-validation
-        if mq.arguments["y_labels"] is not None and mq.arguments["posteriors"] is not None:
+        if mq.arguments["y_labels"] is not None and mq.arguments["posteriors_train"] is not None:
             y_labels = mq.arguments["y_labels"]
-            probabilities = mq.arguments["posteriors"]
+            probabilities = mq.arguments["posteriors_train"]
         else:
             y_labels, probabilities = get_scores(X, y, self.learner, self.cv_folds, self.learner_fitted)
         
@@ -548,7 +548,7 @@ class GAC(AggregativeQuantifier):
             y = pd.Series(y)
 
         if self.learner_fitted or self.learner is None:
-            y_pred = mq.arguments["y_train_pred"] if mq.arguments["y_train_pred"] is not None else self.predict_learner(X)
+            y_pred = mq.arguments["y_pred_train"] if mq.arguments["y_pred_train"] is not None else self.predict_learner(X)
             y_label = y
         else:
             X_train, X_val, y_train, y_val = train_test_split(
@@ -731,7 +731,7 @@ class GPAC(AggregativeQuantifier):
             y = pd.Series(y)
 
         if self.learner_fitted or self.learner is None:
-            y_pred = mq.arguments["y_train_pred"] if mq.arguments["y_train_pred"] is not None else self.predict_learner(X)
+            y_pred = mq.arguments["y_pred_train"] if mq.arguments["y_pred_train"] is not None else self.predict_learner(X)
             y_labels = y
         else:
             X_train, X_val, y_train, y_val = train_test_split(

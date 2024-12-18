@@ -107,9 +107,9 @@ class MixtureModel(AggregativeQuantifier):
         self : MixtureModel
             The fitted MixtureModel instance.
         """
-        if mq.arguments["y_labels"] is not None and mq.arguments["posteriors"] is not None:
+        if mq.arguments["y_labels"] is not None and mq.arguments["posteriors_train"] is not None:
             y_labels = mq.arguments["y_labels"]
-            probabilities = mq.arguments["posteriors"]
+            probabilities = mq.arguments["posteriors_train"]
         else:
             y_labels, probabilities = get_scores(X, y, self.learner, self.cv_folds, self.learner_fitted)
 

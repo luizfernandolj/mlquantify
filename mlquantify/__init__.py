@@ -12,16 +12,19 @@ ARGUMENTS_SETTED = False
 
 arguments = {
     "y_pred": None,
-    "posteriors": None,
+    "posteriors_train": None,
+    "posteriors_test": None,
     "y_labels": None,
-    "y_train_pred": None,
+    "y_pred_train": None,
 }
 
-def set_arguments(y_pred=None, posteriors=None, y_labels=None, y_train_pred=None):
+def set_arguments(y_pred=None, posteriors_train=None, posteriors_test=None,  y_labels=None, y_pred_train=None):
     global ARGUMENTS_SETTED
     global arguments
     arguments["y_pred"] = y_pred
-    arguments["posteriors"] = posteriors
+    arguments["posteriors_train"] = posteriors_train
+    arguments["posteriors_test"] = posteriors_test
     arguments["y_labels"] = y_labels
-    arguments["y_train_pred"] = y_train_pred
+    arguments["y_pred_train"] = y_pred_train
+    
     ARGUMENTS_SETTED = True
