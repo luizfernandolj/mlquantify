@@ -242,8 +242,8 @@ class Protocol(ABC):
         args = ((model, X_train, y_train) for model in self.models)
         
         wrapper = tqdm if self.verbose else lambda x, **kwargs: x
-
-        self.models = Parallel(n_jobs=self.n_jobs, backend='threading')(  # Parallel processing of models
+    
+        self.models = Parallel(n_jobs=self.n_jobs)(  # Parallel processing of models
             delayed(self._delayed_fit)(*arg) for arg in wrapper(args, desc="Fitting models", total=len(self.models))
         )
         self.sout("Fit [Done]")

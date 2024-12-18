@@ -6,7 +6,7 @@ here = pathlib.Path(__file__).parent.resolve()
 
 long_description = (here / 'README.md').read_text(encoding='utf-8')
 
-VERSION = '0.0.11.9'
+VERSION = '0.0.11.10'
 DESCRIPTION = 'Quantification Library'
 
 # Setting up
