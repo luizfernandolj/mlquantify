@@ -27,7 +27,7 @@ pip install mlquantify
 If you only want to update, run the code below:
 
 ```bash
-pip install --update mlquantify
+pip install --upgrade mlquantify
 ```
 
 ___
