@@ -1,5 +1,6 @@
 from abc import abstractmethod
 import numpy as np
+import warnings
 from sklearn.base import BaseEstimator
 
 from ..base import AggregativeQuantifier
@@ -570,13 +571,18 @@ class MS2(ThresholdOptimization):
             - The median threshold value for cases meeting the condition (float).
             - The median true positive rate for cases meeting the condition (float).
             - The median false positive rate for cases meeting the condition (float).
-
+        
         Raises
         ------
         ValueError
-            If no cases satisfy the condition `|TPR - FPR| > 0.25` or if the 
-            input arrays are empty or have mismatched lengths.
+            If no cases satisfy the condition `|TPR - FPR| > 0.25`.
+        Warning
+            If all TPR or FPR values are zero.
         """
+        # Check if all TPR or FPR values are zero
+        if np.all(tprs == 0) or np.all(fprs == 0):
+            warnings.warn("All TPR or FPR values are zero.")
+        
         # Identify indices where the condition is satisfied
         indices = np.where(np.abs(tprs - fprs) > 0.25)[0]
         if len(indices) == 0:
@@ -588,14 +594,6 @@ class MS2(ThresholdOptimization):
         fpr = np.median(fprs[indices])
 
         return (threshold, tpr, fpr)
-
-    
-    
-    
-    
-
-
-
 
 
 class PACC(ThresholdOptimization):
