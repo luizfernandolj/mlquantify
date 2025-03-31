@@ -1,0 +1,26 @@
+{% extends "layout.html" %}
+{% set title = 'scikit-learn: machine learning in Python' %}
+
+{% if is_devrelease|tobool %}
+    {% set contributing_link = pathto("developers/contributing") %}
+    {% set contributing_attrs = "" %}
+{% else %}
+    {% set contributing_link = "https://scikit-learn.org/dev/developers/contributing.html" %}
+    {% set contributing_attrs = 'target="_blank" rel="noopener noreferrer"' %}
+{% endif %}
+
+{% import "static/webpack-macros.html" as _webpack with context %}
+
+{% block docs_navbar %}
+    {{ super() }}
+{% endblock docs_navbar %}
+
+{% block docs_main %}
+{% endblock docs_main %}
+
+{% block footer %}
+{% endblock footer %}
+
+{% block scripts_end %}
+    {{ _webpack.body_post() }}
+{% endblock scripts_end %}
