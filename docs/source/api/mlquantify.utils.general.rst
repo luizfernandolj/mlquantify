@@ -1,15 +1,11 @@
 :html_theme.sidebar_secondary.remove:
 
 
-
-
 .. _utils.general_ref:
 
 
 mlquantify.utils.general
 ========================
-
-
 
 .. automodule:: mlquantify.utils.general
 
@@ -25,6 +21,8 @@ mlquantify.utils.general
 .. autosummary::
   :nosignatures:
   :toctree: ../modules/generated/
+  :template: base.rst
+
 
   convert_columns_to_arrays
   generate_artificial_indexes
@@ -37,5 +35,3 @@ mlquantify.utils.general
   round_protocol_df
   get_measure
   get_method
-
-

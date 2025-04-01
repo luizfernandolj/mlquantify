@@ -1,6 +1,7 @@
-mlquantify.evaluation.measures.mean\_absolute\_error
-====================================================
-
+mean\_absolute\_error
+=====================
 .. currentmodule:: mlquantify.evaluation.measures
-
 .. autofunction:: mean_absolute_error
+.. minigallery:: mlquantify.evaluation.measures.mean_absolute_error
+    :add-heading: Gallery examples
+    :heading-level: -

@@ -1,40 +1,10 @@
-mlquantify.model\_selection.GridSearchQ
-=======================================
-
+GridSearchQ
+===========
 .. currentmodule:: mlquantify.model_selection
-
 .. autoclass:: GridSearchQ
-
-   
-   .. automethod:: __init__
-
-   
-   .. rubric:: Methods
-
-   .. autosummary::
-   
-      ~GridSearchQ.__init__
-      ~GridSearchQ.best_model
-      ~GridSearchQ.fit
-      ~GridSearchQ.get_metadata_routing
-      ~GridSearchQ.get_params
-      ~GridSearchQ.predict
-      ~GridSearchQ.save_quantifier
-      ~GridSearchQ.set_params
-      ~GridSearchQ.sout
-   
-   
-
-   
-   
-   .. rubric:: Attributes
-
-   .. autosummary::
-   
-      ~GridSearchQ.binary_data
-      ~GridSearchQ.classes
-      ~GridSearchQ.classes_
-      ~GridSearchQ.is_multiclass
-      ~GridSearchQ.n_class
-   
-   
+    :members:
+    :inherited-members:
+    :special-members: __call__
+.. minigallery:: mlquantify.model_selection.GridSearchQ mlquantify.model_selection.GridSearchQ.__init__ mlquantify.model_selection.GridSearchQ.best_model mlquantify.model_selection.GridSearchQ.fit mlquantify.model_selection.GridSearchQ.get_metadata_routing mlquantify.model_selection.GridSearchQ.get_params mlquantify.model_selection.GridSearchQ.predict mlquantify.model_selection.GridSearchQ.save_quantifier mlquantify.model_selection.GridSearchQ.set_params mlquantify.model_selection.GridSearchQ.sout 
+   :add-heading: Gallery examples
+   :heading-level: -

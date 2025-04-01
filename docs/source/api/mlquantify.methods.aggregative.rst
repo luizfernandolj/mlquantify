@@ -1,7 +1,7 @@
 :html_theme.sidebar_secondary.remove:
 
 
-.. _aggregative_ref:
+.. _methods.aggregative_ref:
 
 
 mlquantify.methods.aggregative
@@ -13,7 +13,7 @@ mlquantify.methods.aggregative
 
 
 
-.. _aggregative_ref-aggregative-methods:
+.. _methods.aggregative_ref-aggregative-methods:
 
 
 

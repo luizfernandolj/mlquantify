@@ -1,7 +1,7 @@
 :html_theme.sidebar_secondary.remove:
 
 
-.. _non_aggregative_ref:
+.. _methods.non_aggregative_ref:
 
 
 mlquantify.methods.non_aggregative
@@ -13,7 +13,7 @@ mlquantify.methods.non_aggregative
 
 
 
-.. _non_aggregative_ref-non-aggregative-methods:
+.. _methods.non_aggregative_ref-non-aggregative-methods:
 
 
 

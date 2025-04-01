@@ -1,7 +1,7 @@
 :html_theme.sidebar_secondary.remove:
 
 
-.. _meta_ref:
+.. _methods.meta_ref:
 
 
 mlquantify.methods.meta
@@ -13,7 +13,7 @@ mlquantify.methods.meta
 
 
 
-.. _meta_ref-meta-methods:
+.. _methods.meta_ref-meta-methods:
 
 
 

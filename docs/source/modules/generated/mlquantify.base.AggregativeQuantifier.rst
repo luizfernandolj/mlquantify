@@ -1,44 +1,10 @@
-mlquantify.base.AggregativeQuantifier
-=====================================
-
+AggregativeQuantifier
+=====================
 .. currentmodule:: mlquantify.base
-
 .. autoclass:: AggregativeQuantifier
-
-   
-   .. automethod:: __init__
-
-   
-   .. rubric:: Methods
-
-   .. autosummary::
-   
-      ~AggregativeQuantifier.__init__
-      ~AggregativeQuantifier.delayed_fit
-      ~AggregativeQuantifier.delayed_predict
-      ~AggregativeQuantifier.fit
-      ~AggregativeQuantifier.fit_learner
-      ~AggregativeQuantifier.get_metadata_routing
-      ~AggregativeQuantifier.get_params
-      ~AggregativeQuantifier.predict
-      ~AggregativeQuantifier.predict_learner
-      ~AggregativeQuantifier.save_quantifier
-      ~AggregativeQuantifier.set_fit_request
-      ~AggregativeQuantifier.set_params
-   
-   
-
-   
-   
-   .. rubric:: Attributes
-
-   .. autosummary::
-   
-      ~AggregativeQuantifier.binary_data
-      ~AggregativeQuantifier.classes
-      ~AggregativeQuantifier.is_multiclass
-      ~AggregativeQuantifier.is_probabilistic
-      ~AggregativeQuantifier.learner
-      ~AggregativeQuantifier.n_class
-   
-   
+    :members:
+    :inherited-members:
+    :special-members: __call__
+.. minigallery:: mlquantify.base.AggregativeQuantifier mlquantify.base.AggregativeQuantifier.__init__ mlquantify.base.AggregativeQuantifier.delayed_fit mlquantify.base.AggregativeQuantifier.delayed_predict mlquantify.base.AggregativeQuantifier.fit mlquantify.base.AggregativeQuantifier.fit_learner mlquantify.base.AggregativeQuantifier.get_metadata_routing mlquantify.base.AggregativeQuantifier.get_params mlquantify.base.AggregativeQuantifier.predict mlquantify.base.AggregativeQuantifier.predict_learner mlquantify.base.AggregativeQuantifier.save_quantifier mlquantify.base.AggregativeQuantifier.set_fit_request mlquantify.base.AggregativeQuantifier.set_params 
+   :add-heading: Gallery examples
+   :heading-level: -

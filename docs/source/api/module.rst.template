@@ -2,8 +2,6 @@
 
 {% if module == "mlquantify" -%}
 {%- set module_hook = "mlquantify" -%}
-{%- elif module.startswith("mlquantify.methods.") -%}
-{%- set module_hook = module[19:] -%}
 {%- elif module.startswith("mlquantify.") -%}
 {%- set module_hook = module[11:] -%}
 {%- else -%}

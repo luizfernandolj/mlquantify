@@ -1,38 +1,10 @@
-mlquantify.base.NonAggregativeQuantifier
-========================================
-
+NonAggregativeQuantifier
+========================
 .. currentmodule:: mlquantify.base
-
 .. autoclass:: NonAggregativeQuantifier
-
-   
-   .. automethod:: __init__
-
-   
-   .. rubric:: Methods
-
-   .. autosummary::
-   
-      ~NonAggregativeQuantifier.__init__
-      ~NonAggregativeQuantifier.fit
-      ~NonAggregativeQuantifier.get_metadata_routing
-      ~NonAggregativeQuantifier.get_params
-      ~NonAggregativeQuantifier.predict
-      ~NonAggregativeQuantifier.save_quantifier
-      ~NonAggregativeQuantifier.set_fit_request
-      ~NonAggregativeQuantifier.set_params
-   
-   
-
-   
-   
-   .. rubric:: Attributes
-
-   .. autosummary::
-   
-      ~NonAggregativeQuantifier.binary_data
-      ~NonAggregativeQuantifier.classes
-      ~NonAggregativeQuantifier.is_multiclass
-      ~NonAggregativeQuantifier.n_class
-   
-   
+    :members:
+    :inherited-members:
+    :special-members: __call__
+.. minigallery:: mlquantify.base.NonAggregativeQuantifier mlquantify.base.NonAggregativeQuantifier.__init__ mlquantify.base.NonAggregativeQuantifier.fit mlquantify.base.NonAggregativeQuantifier.get_metadata_routing mlquantify.base.NonAggregativeQuantifier.get_params mlquantify.base.NonAggregativeQuantifier.predict mlquantify.base.NonAggregativeQuantifier.save_quantifier mlquantify.base.NonAggregativeQuantifier.set_fit_request mlquantify.base.NonAggregativeQuantifier.set_params 
+   :add-heading: Gallery examples
+   :heading-level: -

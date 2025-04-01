@@ -176,7 +176,9 @@ rst_templates = [
     (
         "api/index",
         "api/index",
-        {"API_REFERENCE": sorted(API_REFERENCE.items(), key=lambda x: (x[0].count('.'), x[0]))}
+        {
+            "API_REFERENCE": sorted(API_REFERENCE.items(), key=lambda x: x[0]),
+        },
     )
 ]
 

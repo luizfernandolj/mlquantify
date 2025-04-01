@@ -40,45 +40,43 @@ API_REFERENCE = {
             }
         ],
     },
-    "mlquantify.methods": {
-        "aggregative": {
-            "short_summary": "Aggregative quantification methods.",
-            "description": None,
-            "section": [
-                {
-                    "title": "Aggregative methods",
-                    "autosummary": [
-                        "CC", "EMQ", "FM", "GAC", "GPAC", "PCC", "PWK",
-                        "ACC", "MAX", "MS", "MS2", "PACC", "T50", "X_method",
-                        "DyS", "DySsyn", "HDy", "SMM", "SORD"
-                    ],
-                }
-            ],
-        },
-        "non_aggregative": {
-            "short_summary": "Non-aggregative quantification methods.",
-            "description": None,
-            "section": [
-                {
-                    "title": "Non-aggregative methods",
-                    "autosummary": [
-                        "HDx"
-                    ],
-                }
-            ],
-        },
-        "meta": {
-            "short_summary": "Meta quantification methods.",
-            "description": None,
-            "section": [
-                {
-                    "title": "Meta methods",
-                    "autosummary": [
-                        "Ensemble"
-                    ],
-                }
-            ],
-        },
+    "mlquantify.methods.aggregative": {
+        "short_summary": "Aggregative quantification methods.",
+        "description": None,
+        "section": [
+            {
+                "title": "Aggregative methods",
+                "autosummary": [
+                    "CC", "EMQ", "FM", "GAC", "GPAC", "PCC", "PWK",
+                    "ACC", "MAX", "MS", "MS2", "PACC", "T50", "X_method",
+                    "DyS", "DySsyn", "HDy", "SMM", "SORD"
+                ],
+            }
+        ],
+    },
+    "mlquantify.methods.non_aggregative": {
+        "short_summary": "Non-aggregative quantification methods.",
+        "description": None,
+        "section": [
+            {
+                "title": "Non-aggregative methods",
+                "autosummary": [
+                    "HDx"
+                ],
+            }
+        ],
+    },
+    "mlquantify.methods.meta": {
+        "short_summary": "Meta quantification methods.",
+        "description": None,
+        "section": [
+            {
+                "title": "Meta methods",
+                "autosummary": [
+                    "Ensemble"
+                ],
+            }
+        ],
     },
     "mlquantify.classification.methods": {
         "short_summary": "Classification methods for quantification algorithms.",
@@ -108,7 +106,7 @@ API_REFERENCE = {
                     "normalized_absolute_error",
                     "normalized_kullback_leibler_divergence",
                     "relative_absolute_error",
-                    "normalized_relative_absolut"
+                    "normalized_relative_absolute"
                 ],
             }
         ],

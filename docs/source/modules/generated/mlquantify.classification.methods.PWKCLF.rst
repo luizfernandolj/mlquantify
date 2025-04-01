@@ -1,27 +1,10 @@
-mlquantify.classification.methods.PWKCLF
-========================================
-
+PWKCLF
+======
 .. currentmodule:: mlquantify.classification.methods
-
 .. autoclass:: PWKCLF
-
-   
-   .. automethod:: __init__
-
-   
-   .. rubric:: Methods
-
-   .. autosummary::
-   
-      ~PWKCLF.__init__
-      ~PWKCLF.fit
-      ~PWKCLF.get_metadata_routing
-      ~PWKCLF.get_params
-      ~PWKCLF.predict
-      ~PWKCLF.set_params
-   
-   
-
-   
-   
-   
+    :members:
+    :inherited-members:
+    :special-members: __call__
+.. minigallery:: mlquantify.classification.methods.PWKCLF mlquantify.classification.methods.PWKCLF.__init__ mlquantify.classification.methods.PWKCLF.fit mlquantify.classification.methods.PWKCLF.get_metadata_routing mlquantify.classification.methods.PWKCLF.get_params mlquantify.classification.methods.PWKCLF.predict mlquantify.classification.methods.PWKCLF.set_params 
+   :add-heading: Gallery examples
+   :heading-level: -

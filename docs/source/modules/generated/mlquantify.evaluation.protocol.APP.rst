@@ -1,26 +1,10 @@
-mlquantify.evaluation.protocol.APP
-==================================
-
+APP
+===
 .. currentmodule:: mlquantify.evaluation.protocol
-
 .. autoclass:: APP
-
-   
-   .. automethod:: __init__
-
-   
-   .. rubric:: Methods
-
-   .. autosummary::
-   
-      ~APP.__init__
-      ~APP.fit
-      ~APP.predict
-      ~APP.predict_protocol
-      ~APP.sout
-   
-   
-
-   
-   
-   
+    :members:
+    :inherited-members:
+    :special-members: __call__
+.. minigallery:: mlquantify.evaluation.protocol.APP mlquantify.evaluation.protocol.APP.__init__ mlquantify.evaluation.protocol.APP.fit mlquantify.evaluation.protocol.APP.predict mlquantify.evaluation.protocol.APP.predict_protocol mlquantify.evaluation.protocol.APP.sout 
+   :add-heading: Gallery examples
+   :heading-level: -
