@@ -278,13 +278,13 @@ reference on concepts repeated across the API, see :ref:`glossary`.
 
 
 
-  * - :obj:`~mlquantify.evaluation.measures.normalized_relative_absolute`
+  * - :obj:`~mlquantify.evaluation.measures.normalized_relative_absolute_error`
 
     - .. div:: sk-apisearch-desc
 
         .. currentmodule:: mlquantify.evaluation.measures
 
-        .. autoshortsummary:: mlquantify.evaluation.measures.normalized_relative_absolute
+        .. autoshortsummary:: mlquantify.evaluation.measures.normalized_relative_absolute_error
 
         .. div:: caption
 

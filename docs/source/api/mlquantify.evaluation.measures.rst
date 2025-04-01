@@ -33,4 +33,4 @@ mlquantify.evaluation.measures
   normalized_absolute_error
   normalized_kullback_leibler_divergence
   relative_absolute_error
-  normalized_relative_absolute
+  normalized_relative_absolute_error

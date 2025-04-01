@@ -7,8 +7,8 @@
    :hidden:
    :maxdepth: 2
 
-   Install <install>
-   User Guide <user_guide>
-   API <api/index>
-   Getting Started <getting_started>
-   About <about>
+   Install <install.rst>
+   User Guide <user_guide.rst>
+   API <api/index.rst>
+   Getting Started <getting_started.rst>
+   About <about.rst>

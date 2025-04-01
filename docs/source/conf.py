@@ -161,7 +161,7 @@ def linkcode_resolve(domain, info):
 
     filename = info['module'].replace('.', '/')
     # Adjust branch and repository as needed
-    return f"https://github.com/luizfernandolj/mlquantify/tree/master/mlquantify/{filename}.py"
+    return f"https://github.com/luizfernandolj/mlquantify/tree/master/{filename}.py"
 
 
 
