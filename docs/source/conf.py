@@ -168,9 +168,6 @@ def linkcode_resolve(domain, info):
 
 from api_reference import API_REFERENCE
 
-print(API_REFERENCE.items())
-
-
 rst_templates = [
     ("index", "index", {}),
     (

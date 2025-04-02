@@ -37,7 +37,7 @@ This types of quantifiers can be separated into two main groups: the mixture mod
 
 An important note is that all these listed methods are **multiclass** quantifiers, but the mixture models and threshold methods are **binary** quantifiers.
 
-
+.. include:: cc.rst
 .. include:: mixture_models.rst
 .. include:: threshold_methods.rst
 .. include:: emq.rst

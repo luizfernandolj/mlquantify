@@ -1,7 +1,9 @@
 .. _expectation_maximisation_for_quantification:
 
 Expectation Maximisation for Quantification
--------------------------------------------
+===========================================
+
+.. currentmodule:: mlquantify.methods.aggregative.EMQ
 
 The Expectation Maximisation (EM) is an iterative algorithm that is used to find the maximum likelihood estimates of parameters (our case is the class distribution)for models that depend on unobserved latent variables. The algorithm consists by incrementally updating the posterior probabiblites by using the class prevalence values computed in the last step of the iteration, and updates the class prevalence values by using the posterior probabilities computed in the last step of the iteration, in a mutually recursive fashion.
 

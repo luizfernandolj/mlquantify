@@ -1,7 +1,9 @@
 .. _threshold_methods:
 
 Threshold Methods
------------------
+=================
+
+.. currentmodule:: mlquantify.methods.threshold_optimisation
 
 The threshold methods are also binary quantifiers (i.e., multiclass problems have not been implemented yet). Proposed by Forman (`2005`_, `2008`_), these algorithms work by adjusting the outputs of a classifier to obtain the class distribution of a test set. Most methods uses a table of thresholds (i.e. 0.0, 0.1, 0.2, ..., 1.0) along with the TPR (True Positive Rate) and FPR (False Positive Rate) to estimate the class distribution of the test set. Each different quantifier uses these values in a different way.
 

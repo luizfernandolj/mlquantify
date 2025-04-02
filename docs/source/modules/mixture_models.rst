@@ -1,7 +1,9 @@
 .. _mixture_models:
 
 Mixture Models
---------------
+==============
+
+.. currentmodule:: mlquantify.methods.mixture_models
 
 Mixture models are binary quantification methods that assume the cumulative distribution of an unknown dataset, or test set, is a mixture of two or more distributions. This concept was first introduced by Forman (`2005`_, `2008`_).
 
