@@ -12,7 +12,5 @@ User Guide
     Label Scheme <label_scheme.rst>
     Building a Quantifier <building_a_quantifier.rst>
     Non Parameters Scenarios <non_parameters_scenarios.rst>
-    <model_selection.rst>
-    <hyperparameter_optimization.rst>
-    <ensemble_of_quantifiers.rst>
-    <experiment_management.rst>
+    Model Selection and Evaluation <model_selection_evaluation.rst>
+    Experiment Management <experiment_management.rst>

@@ -1,7 +1,7 @@
 .. _non_parameters_scenarios:
 
 Non Parameters Scenarios
-========================
+------------------------
 
 When dealing with new reasearch problems, it is common to have new scenarios that are not covered by the current quantifiers. In this case, there are problems when:
 

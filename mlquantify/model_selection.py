@@ -131,7 +131,7 @@ class GridSearchQ(Quantifier):
                  model: Quantifier,
                  param_grid: dict,
                  protocol: str = 'app',
-                 n_prevs: int = None,
+                 n_prevs: int = 100,
                  n_repetitions: int = 1,
                  scoring: Union[List[str], str] = "ae",
                  refit: bool = True,

@@ -84,6 +84,15 @@ html_domain_indices = False
 # If false, no index is generated.
 html_use_index = False
 
+html_css_files = ["custom.css"]
+
+html_sidebars = {
+    "install": [],
+    "getting_started": [],
+}
+
+
+
 
 html_theme_options = {
     # -- General configuration ------------------------------------------------
