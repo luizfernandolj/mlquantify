@@ -18,7 +18,6 @@ sys.path.insert(0, os.path.abspath("sphinxext"))
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#project-information
 
 project = 'mlquantify'
-copyright = '2025, Luiz Fernando'
 author = 'Luiz Fernando'
 release = '0.1.3'
 
