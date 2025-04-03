@@ -46,8 +46,30 @@ jobs:
       - name: Remover hard links
         run: cp -r --no-preserve=links docs/build/ docs/build_cleaned/ && mv docs/build_cleaned/ docs/build/
 
-      - name: Deploy GitHub Pages
-        id: deployment
-        uses: actions/deploy-pages@v4
+      - name: Upload documentation artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: github-pages
+          path: docs/build/
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+
+    steps:
+      - name: Baixar artifact da documentação
+        uses: actions/download-artifact@v4
+        with:
+          name: github-pages
+          path: docs/build/
+
+      - name: Verificar arquivos baixados
+        run: ls -la docs/build/
+
+      - name: Verificar tamanho da documentação
+        run: du -sh docs/build/
 
       
