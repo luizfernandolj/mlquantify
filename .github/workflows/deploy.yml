@@ -35,7 +35,7 @@ jobs:
           sphinx-build -b html docs/source docs/build/
 
       - name: Upload documentation artifact
-        uses: actions/upload-artifact@v4  # Atualizado para v4
+        uses: actions/upload-pages-artifact@v4  # Atualizado para v4
         with:
           name: github-pages
           path: docs/build/
@@ -48,11 +48,6 @@ jobs:
       url: ${{ steps.deployment.outputs.page_url }}
 
     steps:
-      - name: Download documentation artifact
-        uses: actions/download-artifact@v4  # Atualizado para v4
-        with:
-          name: github-pages
-
       - name: Deploy GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v4
