@@ -19,7 +19,7 @@ sys.path.insert(0, os.path.abspath("sphinxext"))
 
 project = 'mlquantify'
 author = 'Luiz Fernando'
-release = '0.1.3'
+release = '0.1.1'
 
 html_baseurl = "https://luizfernandolj.github.io/mlquantify/"
 
