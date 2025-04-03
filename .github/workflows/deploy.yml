@@ -31,8 +31,7 @@ jobs:
           python -m pip install --upgrade pip
           pip install sphinx sphinx-autobuild sphinx-rtd-theme sphinxcontrib-sass \
                       sphinx-remove-toctrees sphinx_design matplotlib numpydoc \
-                      sphinx_copybutton sphinxext-opengraph sphinx-prompt \
-                      sphinx.ext.imgconverter
+                      sphinx_copybutton sphinxext-opengraph sphinx-prompt
 
       - name: Build documentation
         run: |

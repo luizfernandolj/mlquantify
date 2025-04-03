@@ -20,7 +20,7 @@ sys.path.insert(0, os.path.abspath("sphinxext"))
 project = 'mlquantify'
 copyright = '2025, Luiz Fernando'
 author = 'Luiz Fernando'
-release = '0.1.0'
+release = '0.1.3'
 
 html_baseurl = "https://luizfernandolj.github.io/mlquantify/"
 
@@ -34,7 +34,6 @@ extensions = [
     "sphinx.ext.linkcode",
     "sphinx.ext.doctest",
     "sphinx.ext.intersphinx",
-    "sphinx.ext.imgconverter",
     "sphinx-prompt",
     "sphinx_copybutton",
     "sphinxext.opengraph",
