@@ -34,8 +34,11 @@ jobs:
         run: |
           sphinx-build -b html docs/source docs/build/
 
+      - name: Verificar arquivos gerados
+        run: ls -la docs/build/
+
       - name: Upload documentation artifact
-        uses: actions/upload-artifact@v4  # Atualizado para v4
+        uses: actions/upload-artifact@v4
         with:
           name: github-pages
           path: docs/build/
@@ -48,9 +51,19 @@ jobs:
       url: ${{ steps.deployment.outputs.page_url }}
 
     steps:
-      - name: Remove links to avoid broken links
+      - name: Baixar artifact da documentação
+        uses: actions/download-artifact@v4
+        with:
+          name: github-pages
+          path: docs/build/
+
+      - name: Remover links simbólicos para evitar erros
         run: find docs/build/ -type l -delete
-      - name: Verify documentation size
+
+      - name: Verificar arquivos baixados
+        run: ls -la docs/build/
+
+      - name: Verificar tamanho da documentação
         run: du -sh docs/build/
 
       - name: Deploy GitHub Pages
