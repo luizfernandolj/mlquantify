@@ -1,9 +1,8 @@
 name: Deploy Sphinx Docs to GitHub Pages
 
 on:
-  push:
-    branches:
-      - main  # Ou a branch onde você mantém a documentação
+  release:
+    types: [published]
 
 permissions:
   contents: read
