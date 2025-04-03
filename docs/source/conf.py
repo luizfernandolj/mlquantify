@@ -22,6 +22,8 @@ copyright = '2025, Luiz Fernando'
 author = 'Luiz Fernando'
 release = '0.1.0'
 
+html_baseurl = "https://luizfernandolj.github.io/mlquantify/"
+
 # -- General configuration ---------------------------------------------------
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#general-configuration
 
