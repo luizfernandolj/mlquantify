@@ -37,6 +37,15 @@ jobs:
       - name: Verificar arquivos gerados
         run: ls -la docs/build/
 
+      - name: Verificar tamanho da documentação
+        run: du -sh docs/build/
+
+      - name: Remover links simbólicos
+        run: find docs/build/ -type l -delete
+
+      - name: Remover hard links
+        run: cp -r --no-preserve=links docs/build/ docs/build_cleaned/ && mv docs/build_cleaned/ docs/build/
+
       - name: Upload documentation artifact
         uses: actions/upload-artifact@v4
         with:
@@ -56,9 +65,6 @@ jobs:
         with:
           name: github-pages
           path: docs/build/
-
-      - name: Remover links simbólicos para evitar erros
-        run: find docs/build/ -type l -delete
 
       - name: Verificar arquivos baixados
         run: ls -la docs/build/
