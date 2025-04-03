@@ -72,4 +72,6 @@ jobs:
       - name: Verificar tamanho da documentação
         run: du -sh docs/build/
 
-      
+      - name: Deploy GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
