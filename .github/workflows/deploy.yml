@@ -48,6 +48,11 @@ jobs:
       url: ${{ steps.deployment.outputs.page_url }}
 
     steps:
+      - name: Remove links to avoid broken links
+        run: find docs/build/ -type l -delete
+      - name: Verify documentation size
+        run: du -sh docs/build/
+
       - name: Deploy GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v4
