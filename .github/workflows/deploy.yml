@@ -4,9 +4,6 @@ on:
   push:
     branches:
       - main  # Ou a branch onde você mantém a documentação
-  release:
-    types:
-      - published  # Roda quando um release é publicado
 
 permissions:
   contents: read
