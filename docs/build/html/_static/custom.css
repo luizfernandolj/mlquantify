@@ -1,9 +1,0 @@
-.toctree-wrapper > ul > li > a {
-    font-size: 1.4em !important;
-    font-weight: bold !important;
-}
-
-.toctree-wrapper ul ul li a {
-    font-size: 1em !important;
-    font-weight: normal !important;
-}
