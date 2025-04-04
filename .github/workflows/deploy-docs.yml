@@ -1,0 +1,39 @@
+name: Deploy Sphinx Docs
+
+on:
+  push:
+    branches:
+      - master  # Executa quando houver push na branch principal
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout do código
+        uses: actions/checkout@v4
+
+      - name: Configurar Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: "3.9"
+
+      - name: Instalar dependências
+        run: |
+          python -m pip install --upgrade pip
+          pip install .  
+          pip install sphinx pydata_sphinx_theme sphinx-rtd-theme \
+                      sphinx-prompt sphinx_copybutton sphinxext-opengraph \
+                      matplotlib sphinxcontrib-sass sphinx_remove_toctrees \
+                      sphinx_design numpydoc
+
+      - name: Construir documentação
+        run: |
+          sphinx-build docs/source docs/build/html
+
+      - name: Publicar no GitHub Pages
+        uses: JamesIves/github-pages-deploy-action@v4
+        with:
+          branch: gh-pages  # Faz deploy na branch gh-pages
+          folder: docs/build/html  # Envia apenas os arquivos HTML gerados
+          clean: true  # Remove arquivos antigos para evitar conflitos
