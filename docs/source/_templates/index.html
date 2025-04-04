@@ -1,13 +1,5 @@
 {% extends "layout.html" %}
-{% set title = 'scikit-learn: machine learning in Python' %}
-
-{% if is_devrelease|tobool %}
-    {% set contributing_link = pathto("developers/contributing") %}
-    {% set contributing_attrs = "" %}
-{% else %}
-    {% set contributing_link = "https://scikit-learn.org/dev/developers/contributing.html" %}
-    {% set contributing_attrs = 'target="_blank" rel="noopener noreferrer"' %}
-{% endif %}
+{% set title = 'mlquantify: python for quantification' %}
 
 {% import "static/webpack-macros.html" as _webpack with context %}
 

@@ -447,9 +447,8 @@ class MS(ThresholdOptimization):
     {0: 0.3991228070175439, 1: 0.6008771929824561}
     """
 
-    def __init__(self, learner: BaseEstimator=None, threshold: float = 0.5):
+    def __init__(self, learner: BaseEstimator=None):
         super().__init__(learner)
-        self.threshold = threshold
 
     def best_tprfpr(self, thresholds: np.ndarray, tprs: np.ndarray, fprs: np.ndarray) -> tuple:
         """
@@ -482,11 +481,42 @@ class MS(ThresholdOptimization):
         ValueError
             If `thresholds`, `tprs`, or `fprs` are empty or have mismatched lengths.
         """
-        # Compute median TPR and FPR
-        tpr = np.median(tprs)
-        fpr = np.median(fprs)
 
-        return (self.threshold, tpr, fpr)
+        return (thresholds, tprs, fprs)
+
+    def _predict_method(self, X) -> dict:
+        """
+        Predicts class prevalences using the adjusted threshold.
+
+        Parameters
+        ----------
+        X : pd.DataFrame or np.ndarray
+            The input features for prediction.
+
+        Returns
+        -------
+        np.ndarray
+            An array of predicted prevalences for the classes.
+        """
+        # Get predicted probabilities for the positive class
+        probabilities = self.predict_learner(X)[:, 1]
+        
+        prevs = []
+        
+        for thr, tpr, fpr in zip(self.threshold, self.tpr, self.fpr):
+            cc_output = len(probabilities[probabilities >= thr]) / len(probabilities)
+            
+            if tpr - fpr == 0:
+                prevalence = cc_output
+            else:
+                prev = np.clip((cc_output - fpr) / (tpr - fpr), 0, 1)
+                prevs.append(prev)
+        
+        prevalence = np.median(prevs)
+        
+        prevalences = [1 - prevalence, prevalence]
+
+        return np.asarray(prevalences)
 
     
 
@@ -586,15 +616,48 @@ class MS2(ThresholdOptimization):
         # Identify indices where the condition is satisfied
         indices = np.where(np.abs(tprs - fprs) > 0.25)[0]
         if len(indices) == 0:
-            raise ValueError("No cases meet the condition |TPR - FPR| > 0.25.")
+            warnings.warn("No cases satisfy the condition |TPR - FPR| > 0.25.")
+            indices = np.where(np.abs(tprs - fprs) >= 0)[0]
+            
+        thresholds_ = thresholds[indices]
+        tprs_ = tprs[indices]
+        fprs_ = fprs[indices]
 
-        # Compute medians for the selected cases
-        threshold = np.median(thresholds[indices])
-        tpr = np.median(tprs[indices])
-        fpr = np.median(fprs[indices])
+        return (thresholds_, tprs_, fprs_)
 
-        return (threshold, tpr, fpr)
+    def _predict_method(self, X) -> dict:
+        """
+        Predicts class prevalences using the adjusted threshold.
 
+        Parameters
+        ----------
+        X : pd.DataFrame or np.ndarray
+            The input features for prediction.
+
+        Returns
+        -------
+        np.ndarray
+            An array of predicted prevalences for the classes.
+        """
+        # Get predicted probabilities for the positive class
+        probabilities = self.predict_learner(X)[:, 1]
+        
+        prevs = []
+        
+        for thr, tpr, fpr in zip(self.threshold, self.tpr, self.fpr):
+            cc_output = len(probabilities[probabilities >= thr]) / len(probabilities)
+            
+            if tpr - fpr == 0:
+                prevalence = cc_output
+            else:
+                prev = np.clip((cc_output - fpr) / (tpr - fpr), 0, 1)
+                prevs.append(prev)
+        
+        prevalence = np.median(prevs)
+        
+        prevalences = [1 - prevalence, prevalence]
+
+        return np.asarray(prevalences)
 
 class PACC(ThresholdOptimization):
     """
