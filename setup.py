@@ -1,20 +1,20 @@
 from setuptools import setup, find_packages
-
 import pathlib
 
 here = pathlib.Path(__file__).parent.resolve()
-
 long_description = (here / 'README.md').read_text(encoding='utf-8')
 
-VERSION = '0.1.2'
+# Lê a versão do arquivo VERSION.txt
+version_file = here / 'VERSION.txt'
+VERSION = version_file.read_text(encoding='utf-8').strip()
+
 DESCRIPTION = 'Quantification Library'
 
-# Setting up
 setup(
     name="mlquantify",
     version=VERSION,
     url="https://github.com/luizfernandolj/QuantifyML/tree/master",
-    maintainer="Luiz Fernando Luth Junior",    
+    maintainer="Luiz Fernando Luth Junior",
     description=DESCRIPTION,
     long_description=long_description,
     long_description_content_type="text/markdown",
