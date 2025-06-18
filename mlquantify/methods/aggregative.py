@@ -907,10 +907,140 @@ class PCC(AggregativeQuantifier):
 
     
     
+class PACC(AggregativeQuantifier):
+    """
+    Probabilistic Adjusted Classify and Count (PACC). 
+    This method extends the Adjusted Classify and Count (AC) approach 
+    by leveraging the average class-conditional confidences obtained 
+    from a probabilistic classifier instead of relying solely on true 
+    positive and false positive rates.
+
+    Parameters
+    ----------
+    learner : BaseEstimator
+        A scikit-learn compatible classifier to be used for quantification.
+    threshold : float, optional
+        The decision threshold for classification. Default is 0.5.
+
+    Attributes
+    ----------
+    learner : BaseEstimator
+        A scikit-learn compatible classifier.
+    threshold : float
+        Decision threshold for classification. Default is 0.5.
+    tpr : float
+        True positive rate computed during the fitting process.
+    fpr : float
+        False positive rate computed during the fitting process.
+        
+    See Also
+    --------
+    ThresholdOptimization : Base class for threshold-based quantification methods.
+    ACC : Adjusted Classify and Count quantification method.
+    CC : Classify and Count quantification method.
     
+    References
+    ----------
+    A. Bella, C. Ferri, J. Hernández-Orallo and M. J. Ramírez-Quintana, "Quantification via Probability Estimators," 2010 IEEE International Conference on Data Mining, Sydney, NSW, Australia, 2010, pp. 737-742, doi: 10.1109/ICDM.2010.75. Available at: https://ieeexplore.ieee.org/abstract/document/5694031
+    
+    Examples
+    --------
+    >>> from mlquantify.methods.aggregative import PACC
+    >>> from mlquantify.utils.general import get_real_prev
+    >>> from sklearn.datasets import load_breast_cancer
+    >>> from sklearn.svm import SVC
+    >>> from sklearn.model_selection import train_test_split
+    >>>
+    >>> features, target = load_breast_cancer(return_X_y=True)
+    >>>
+    >>> X_train, X_test, y_train, y_test = train_test_split(features, target, test_size=0.2, random_state=42)
+    >>>
+    >>> pacc = PACC(learner=SVC(probability=True))
+    >>> pacc.fit(X_train, y_train)
+    >>> y_pred = pacc.predict(X_test)
+    >>> y_pred
+    {0: 0.4664886119311328, 1: 0.5335113880688672}
+    >>> get_real_prev(y_test)
+    {0: 0.3991228070175439, 1: 0.6008771929824561}
+    """
+
+    def __init__(self, learner: BaseEstimator=None, threshold: float = 0.5):
+        self.learner = learner
+        self.threshold = threshold
+        self.mean_pos = None
+        self.mean_neg = None
+    
+    @property
+    def is_probabilistic(self) -> bool:
+        return True
+    
+    @property
+    def is_multiclass(self) -> bool:
+        return False
+
+    def _fit_method(self, X, y):
+        # Get predicted labels and probabilities
+        if mq.arguments["y_labels"] is not None and mq.arguments["posteriors_train"] is not None:
+            y_labels = mq.arguments["y_labels"]
+            probabilities = mq.arguments["posteriors_train"]
+        else:
+            y_labels, probabilities = get_scores(X, y, self.learner, self.cv_folds, self.learner_fitted)
+        
+        # Adjust thresholds and compute true and false positive rates
+        
+        self.mean_pos = np.mean(probabilities[y_labels == self.classes[1], 1])
+        self.mean_neg = np.mean(probabilities[y_labels != self.classes[1], 1])
+        
+        return self
 
 
+    def _predict_method(self, X):
+        """
+        Predicts the class prevalence using the mean class-conditional 
+        probabilities from a probabilistic classifier.
 
+        Parameters
+        ----------
+        X : array-like or sparse matrix of shape (n_samples, n_features)
+            The input data for prediction.
+
+        Returns
+        -------
+        dict
+            A dictionary with class labels as keys and their respective 
+            prevalence estimates as values.
+
+        Notes
+        -----
+        The prevalence is adjusted using the formula:
+            prevalence = |mean_score - FPR| / (TPR - FPR), 
+        where mean_score is the average probability for the positive class.
+
+        Raises
+        ------
+        ZeroDivisionError
+            If `TPR - FPR` equals zero, indicating that the classifier's 
+            performance does not vary across the threshold range.
+        """
+        prevalences = {}
+
+        # Calculate probabilities for the positive class
+        probabilities = self.predict_learner(X)[:, 1]
+
+        # Compute the mean score for the positive class
+        mean_scores = np.mean(probabilities)
+
+        # Adjust prevalence based on TPR and FPR
+        if self.mean_pos - self.mean_neg == 0:
+            prevalence = mean_scores
+        else:
+            prevalence = np.clip(abs(mean_scores - self.mean_neg) / (self.mean_pos - self.mean_neg), 0, 1)
+
+        # Map the computed prevalence to the class labels
+        prevalences[self.classes[0]] = 1 - prevalence
+        prevalences[self.classes[1]] = prevalence
+
+        return prevalences
 
 
 class PWK(AggregativeQuantifier):
@@ -1012,7 +1142,6 @@ class PWK(AggregativeQuantifier):
 from . import threshold_optimization
 
 ACC = threshold_optimization.ACC
-PACC = threshold_optimization.PACC
 T50 = threshold_optimization.T50
 MAX = threshold_optimization.MAX
 X_method  = threshold_optimization.X_method
