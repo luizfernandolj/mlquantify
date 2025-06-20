@@ -9,9 +9,9 @@ ___
 
 ## Latest Release
 
-- **Version 0.0.11.6**: Inicial beta version. For a detailed list of changes, check the [changelog](#).
-- In case you need any help, refer to the [wiki](https://github.com/luizfernandolj/mlquantify/wiki).
-- Explore the [API documentation](#) for detailed developer information.
+- **Version {{VERSION}}**: Inicial beta version. For a detailed list of changes, check the [changelog](#).
+- In case you need any help, refer to the [User Guide](https://luizfernandolj.github.io/mlquantify/user_guide.html).
+- Explore the [API documentation](https://luizfernandolj.github.io/mlquantify/api/index.html) for detailed developer information.
 - See also the library in the pypi site in [pypi mlquantify](https://pypi.org/project/mlquantify/)
 
 ___
@@ -39,7 +39,7 @@ ___
 | **21 Quantification Methods** | Methods for quantification, such as classify & Count Correct methods, Threshold Optimization, Mixture Models and more.|
 | **Dynamic class management** | All methods are dynamic, and handles multiclass and binary problems, in case of binary it makes One-Vs-All (OVA) automatically. |
 | **Model Selection** | Criteria and processes used to select the best model, such as grid-search for the case of quantification|
-| **Evaluation Metrics** | Specific metrics used to evaluate quantification performance, (e.g., AE, BIAS, NAE, SE, KLD, etc.). |
+| **Evaluation Metrics** | Specific metrics used to evaluate quantification performance, (e.g., AE, MAE, NAE, SE, KLD, etc.). |
 | **Evaluation Protocols** | Evaluation protocols used, based on sampling generation (e.g., APP, NPP, etc.).. |
 | **Plotting Results** | Tools and techniques used to visualize results, such as the protocol results.|
 | **Comprehensive Documentation** | Complete documentation of the project, including code, data, and results. |
@@ -51,7 +51,10 @@ ___
 This code first loads the breast cancer dataset from _sklearn_, which is then split into training and testing sets. It uses the _Expectation Maximisation Quantifier (EMQ)_ with a RandomForest classifier to predict class prevalence. After training the model, it evaluates performance by calculating and printing the absolute error and bias between the real and predicted prevalences.
 
 ```python
-import mlquantify as mq
+from mlquantify.methods import EMQ
+from mlquantify.evaluation.measures import absolute_error, mean_absolute_error
+from mlquantify.utils import get_real_prev
+
 from sklearn.ensemble import RandomForestClassifier
 from sklearn.datasets import load_breast_cancer
 from sklearn.model_selection import train_test_split
@@ -63,19 +66,19 @@ features, target = load_breast_cancer(return_X_y=True)
 X_train, X_test, y_train, y_test = train_test_split(features, target, test_size=0.3)
 
 #Create the model, here it is the Expectation Maximisation Quantifier (EMQ) with a classifier
-model = mq.methods.EMQ(RandomForestClassifier())
+model = EMQ(RandomForestClassifier())
 model.fit(X_train, y_train)
 
 #Predict the class prevalence for X_test
 pred_prevalence = model.predict(X_test)
-real_prevalence = mq.utils.get_real_prev(y_test)
+real_prevalence = get_real_prev(y_test)
 
 #Get the error for the prediction
-ae = mq.evaluation.absolute_error(real_prevalence, pred_prevalence)
-bias = mq.evaluation.bias(real_prevalence, pred_prevalence)
+ae = absolute_error(real_prevalence, pred_prevalence)
+mae = mean_absolute_error(real_prevalence, pred_prevalence)
 
-print(f"Mean Squared Error (MSE) -> {ae:.4f}")
-print(f"Bias -> {bias}")
+print(f"Absolute Error -> {ae}")
+print(f"Mean Absolute Error -> {mae}")
 ```
 
 ___
@@ -94,7 +97,7 @@ ___
 
 ## Documentation
 
-##### API is avaliable [here](#)
+##### API is avaliable [here](https://luizfernandolj.github.io/mlquantify/api/index.html)
 
 - [Methods](https://github.com/luizfernandolj/mlquantify/wiki/Methods)
 - [Model Selection](https://github.com/luizfernandolj/mlquantify/wiki/Model-Selection)
