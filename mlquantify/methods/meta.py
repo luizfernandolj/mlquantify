@@ -7,7 +7,7 @@ from sklearn.model_selection import GridSearchCV, cross_val_predict
 from ..evaluation import measures
 from ..base import Quantifier
 from ..utils.method import getHist, hellinger
-from ..utils.general import make_prevs, normalize_prevalence, parallel, generate_artificial_indexes
+from ..utils.general import make_prevs, normalize_prevalence, parallel, get_indexes_with_prevalence
 
 class Ensemble(Quantifier):
     """Ensemble of Quantification Models.
@@ -401,7 +401,7 @@ def _delayed_new_sample(args):
         print(f'\tfit-start for prev {str(np.round(prev, 3))}, sample_size={sample_size}')
     model = deepcopy(base_quantifier)
 
-    sample_index = generate_artificial_indexes(y, prev, sample_size, np.unique(y))
+    sample_index = get_indexes_with_prevalence(y, prev, sample_size)
     X_sample = np.take(X, sample_index, axis=0)
     y_sample = np.take(y, sample_index, axis=0)
     #print(X_sample)
