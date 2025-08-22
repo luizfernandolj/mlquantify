@@ -7,7 +7,44 @@ import joblib
 import mlquantify as mq
 from .utils.general import parallel, normalize_prevalence
 
-class Quantifier(ABC, BaseEstimator):
+
+class DynamicDomainHandler:
+
+    def __init__(self, *args, **kwargs):
+        assert isinstance(self, Quantifier), "DynamicDomainHandler can only be used with Quantifier instances"
+        if hasattr(self, 'fit'):
+            self._original_fit = self.fit
+        if hasattr(self, 'predict'):
+            self._original_predict = self.predict
+
+        self.fit = self._handle_fit
+        self.predict = self._handle_predict
+        self.binary_models = {}
+
+    def _handle_fit(self, X, y, *args, **kwargs):
+        self.classes = np.unique(y)
+        if len(self.classes) > 2:
+            self._fit_ova(X, y, *args, **kwargs)
+        self._original_fit(X, y, *args, **kwargs)
+
+    def _fit_ova(self, X, y, *args, **kwargs):
+        for _class in self.classes:
+            self.binary_models[_class] = deepcopy(self)
+            parallel(self.binary_models[_class]._original_fit(X, (y == _class).astype(int), *args, **kwargs))
+        
+    def _handle_predict(self, X, *args, **kwargs):
+        if len(self.classes) > 2:
+            return self._predict_ova(X, *args, **kwargs)
+        return self._original_predict(X, *args, **kwargs)
+
+    def _predict_ova(self, X, *args, **kwargs):
+        predictions = {}
+        for _class in self.classes:
+            predictions[_class] = self.binary_models[_class]._original_predict(X, *args, **kwargs)
+        return predictions
+
+
+class Quantifier(ABC, BaseEstimator, DynamicDomainHandler):
     """Base class for all quantifiers, it defines the basic structure of a quantifier.
     
     Warning: Inheriting from this class does not provide dynamic use of multiclass or binary methods, it is necessary to implement the logic in the quantifier itself. If you want to use this feature, inherit from AggregativeQuantifier or NonAggregativeQuantifier.
@@ -26,31 +63,12 @@ class Quantifier(ABC, BaseEstimator):
     """
     
     @abstractmethod
+    @handle_domain_fit
     def fit(self, X, y) -> object: ...
     
     @abstractmethod
+    @handle_domain_predict
     def predict(self, X) -> dict: ...
-    
-    @property
-    def classes(self) -> list:
-        return self._classes
-    
-    @classes.setter
-    def classes(self, classes):
-        self._classes = sorted(list(classes))
-    
-    @property
-    def n_class(self) -> list:
-        return len(self._classes)
-    
-    @property
-    def is_multiclass(self) -> bool:
-        return True
-
-    @property
-    def binary_data(self) -> bool:
-        return len(self._classes) == 2
-    
     
     def save_quantifier(self, path: str=None) -> None:
         if not path:
@@ -155,198 +173,11 @@ class AggregativeQuantifier(Quantifier, ABC):
     """
     
     
-    def __init__(self):
-        # Dictionary to hold binary quantifiers for each class.
-        self.binary_quantifiers = {}
-        self.learner_fitted = False
-        self.cv_folds = 10
+    def __init__(self, learner):
+        self.learner = learner
 
-    def fit(self, X, y, learner_fitted=False, cv_folds: int = 10, n_jobs:int=1):
-        """Fit the quantifier model.
-
-        Parameters
-        ----------
-        X : array-like
-            Training features.
-        y : array-like
-            Training labels.
-        learner_fitted : bool, default=False
-            Whether the learner is already fitted.
-        cv_folds : int, default=10
-            Number of cross-validation folds.
-        n_jobs : int, default=1
-            Number of parallel jobs to run.
-
-
-        Returns
-        -------
-        self : object
-            The fitted quantifier instance.
-
-
-        Notes
-        -----
-        The model dynamically determines whether to perform one-vs-all classification or 
-        to directly fit the data based on the type of the problem:
-        - If the data is binary or inherently multiclass, the model fits directly using 
-          `_fit_method` without creating binary quantifiers.
-        - For other cases, the model creates one binary quantifier per class using the 
-          one-vs-all approach, allowing for dynamic prediction based on the provided dataset.
-        """
-
-        self.n_jobs = n_jobs
-        self.learner_fitted = learner_fitted
-        self.cv_folds = cv_folds
-        
-        self.classes = np.unique(y)
-        
-        if self.binary_data or self.is_multiclass:
-            return self._fit_method(X, y)
-        
-        # Making one vs all
-        self.binary_quantifiers = {class_: deepcopy(self) for class_ in self.classes}
-        parallel(self.delayed_fit, self.classes, self.n_jobs, X, y)
-        
-        return self
-
-    def predict(self, X) -> dict:
-        """Predict class prevalences for the given data.
-
-        Parameters
-        ----------
-        X : array-like
-            Test features.
-
-        Returns
-        -------
-        dict
-            A dictionary where keys are class labels and values are their predicted prevalences.
-
-        Notes
-        -----
-        The prediction approach is dynamically chosen based on the data type:
-        - For binary or inherently multiclass data, the model uses `_predict_method` to directly 
-          estimate class prevalences.
-        - For other cases, the model performs one-vs-all prediction, where each binary quantifier 
-          estimates the prevalence of its respective class. The results are then normalized to 
-          ensure they form valid proportions.
-        """
-
-        if self.binary_data or self.is_multiclass:
-            prevalences = self._predict_method(X)
-            return normalize_prevalence(prevalences, self.classes)
-        
-        # Making one vs all 
-        prevalences = np.asarray(parallel(self.delayed_predict, self.classes, self.n_jobs, X))
-        return normalize_prevalence(prevalences, self.classes)
-    
-    @abstractmethod
-    def _fit_method(self, X, y):
-        """Abstract fit method that each aggregative quantification method must implement.
-
-        Parameters
-        ----------
-        X : array-like
-            Training features.
-        y : array-like
-            Training labels.
-        """
-        ...
-
-    @abstractmethod
-    def _predict_method(self, X) -> dict:
-        """Abstract predict method that each aggregative quantification method must implement.
-
-        Parameters
-        ----------
-        X : array-like
-            Test data to generate class prevalences.
-
-        Returns
-        -------
-        dict, list, or numpy array
-            The predicted prevalences, which can be a dictionary where keys are class labels 
-            and values are their predicted prevalences, a list, or a numpy array.
-        """
-
-        ...
-    
-    @property
-    def is_probabilistic(self) -> bool:
-        """Check if the learner is probabilistic or not.
-        
-        Returns
-        -------
-        bool
-            True if the learner is probabilistic, False otherwise.
-        """
-        return False
-    
-    
-    @property
-    def learner(self):
-        """Returns the learner_ object.
-        Returns
-        -------
-        learner_ : object
-            The learner_ object stored in the class instance.
-        """
-        return self.learner_
-
-    @learner.setter
-    def learner(self, value):
-        """
-        Sets the learner attribute.
-        Parameters:
-        value : any
-            The value to be assigned to the learner_ attribute.
-        """
-        assert isinstance(value, BaseEstimator) or mq.ARGUMENTS_SETTED, "learner object is not an estimator, or you may change ARGUMENTS_SETTED to True"
-        self.learner_ = value
-    
-    def fit_learner(self, X, y):
-        """Fit the learner to the training data.
-        
-        Parameters
-        ----------
-        X : array-like
-            Training features.
-        y : array-like
-            Training labels.
-        """
-        if self.learner is not None:
-            if not self.learner_fitted:
-                self.learner_.fit(X, y)
-        elif mq.ARGUMENTS_SETTED:
-            if self.is_probabilistic and mq.arguments["posteriors_test"] is not None:
-                return
-            elif not self.is_probabilistic and mq.arguments["y_pred"] is not None:
-                return
-
-    def predict_learner(self, X):
-        """Predict the class labels or probabilities for the given data.
-        
-        Parameters
-        ----------
-        X : array-like
-            Test features.
-        
-        Returns
-        -------
-        array-like
-            The predicted class labels or probabilities.
-        """
-        if self.learner is not None:
-            if self.is_probabilistic:
-                return self.learner_.predict_proba(X)
-            return self.learner_.predict(X)
-        else:
-            if mq.ARGUMENTS_SETTED:
-                if self.is_probabilistic:
-                    return mq.arguments["posteriors_test"]
-                return mq.arguments["y_pred"]
-            else:
-                raise ValueError("No learner object was set and no arguments were setted")
+    def aggregation_type(self):
+        return "soft"
 
     def set_params(self, **params):
         """
@@ -378,182 +209,3 @@ class AggregativeQuantifier(Quantifier, ABC):
                 self.learner.set_params(**learner_params)
         
         return self
-    
-        
-    # MULTICLASS METHODS
-    
-    def delayed_fit(self, class_, X, y):
-        """Delayed fit method for one-vs-all strategy, with parallel execution.
-
-        Parameters
-        ----------
-        class_ : Any
-            The class for which the model is being fitted.
-        X : array-like
-            Training features.
-        y : array-like
-            Training labels.
-
-        Returns
-        -------
-        self : object
-            Fitted binary quantifier for the given class.
-        """
-
-        y_class = (y == class_).astype(int)
-        return self.binary_quantifiers[class_].fit(X, y_class)
-    
-    def delayed_predict(self, class_, X):
-        """Delayed predict method for one-vs-all strategy, with parallel execution.
-
-        Parameters
-        ----------
-        class_ : Any
-            The class for which the model is making predictions.
-        X : array-like
-            Test features.
-
-        Returns
-        -------
-        float
-            Predicted prevalence for the given class.
-        """
-
-        return self.binary_quantifiers[class_].predict(X)[1]
-
-
-class NonAggregativeQuantifier(Quantifier):
-    """Abstract base class for non-aggregative quantifiers.
-    
-    Non-aggregative quantifiers differ from aggregative quantifiers as they do not use 
-    an underlying classifier or specific learner for their predictions.
-    
-    This class defines the general structure and behavior for non-aggregative quantifiers, 
-    including support for multiclass data and dynamic handling of binary and multiclass problems.
-
-    Notes
-    -----
-    This class requires implementing the `_fit_method` and `_predict_method` in subclasses 
-    to define how the quantification is performed. These methods handle the core logic for 
-    fitting and predicting class prevalences.
-
-    Examples
-    --------
-    >>> from myquantify.base import NonAggregativeQuantifier
-    >>> import numpy as np
-    >>> class MyNonAggregativeQuantifier(NonAggregativeQuantifier):
-    ...     def _fit_method(self, X, y):
-    ...         # Custom logic for fitting
-    ...         pass
-    ...     def _predict_method(self, X):
-    ...         # Custom logic for predicting
-    ...         return {0: 0.5, 1: 0.5}
-    >>> quantifier = MyNonAggregativeQuantifier()
-    >>> X = np.random.rand(10, 2)
-    >>> y = np.array([0, 1, 0, 1, 0, 1, 0, 1, 0, 1])
-    >>> quantifier.fit(X, y)
-    <MyNonAggregativeQuantifier>
-    >>> quantifier.predict(X)
-    {0: 0.5, 1: 0.5}
-    """
-
-    def fit(self, X, y, n_jobs: int = 1):
-        """Fit the quantifier model to the training data.
-
-        Parameters
-        ----------
-        X : array-like
-            Training features.
-        y : array-like
-            Training labels.
-        n_jobs : int, default=1
-            Number of parallel jobs to run.
-
-        Returns
-        -------
-        self : NonAggregativeQuantifier
-            The fitted quantifier instance.
-
-        Notes
-        -----
-        - For binary or inherently multiclass data, the model directly calls `_fit_method` 
-          to process the data.
-        - For other cases, it creates one quantifier per class using a one-vs-all strategy 
-          and fits each quantifier independently in parallel.
-        """
-        self.n_jobs = n_jobs
-        self.classes = np.unique(y)
-        if self.binary_data or self.is_multiclass:
-            return self._fit_method(X, y)
-
-        # One-vs-all approach
-        self.binary_quantifiers = {class_: deepcopy(self) for class_ in self.classes}
-        parallel(self.delayed_fit, self.classes, self.n_jobs, X, y)
-        return self
-
-    def predict(self, X) -> dict:
-        """Predict class prevalences for the given data.
-
-        Parameters
-        ----------
-        X : array-like
-            Test features.
-
-        Returns
-        -------
-        dict
-            A dictionary where keys are class labels and values are their predicted prevalences.
-
-        Notes
-        -----
-        - For binary or inherently multiclass data, the model directly calls `_predict_method`.
-        - For other cases, it performs one-vs-all prediction, combining the results into a normalized 
-          dictionary of class prevalences.
-        """
-        if self.binary_data or self.is_multiclass:
-            prevalences = self._predict_method(X)
-            return normalize_prevalence(prevalences, self.classes)
-
-        # One-vs-all approach
-        prevalences = np.asarray(parallel(self.delayed_predict, self.classes, self.n_jobs, X))
-        return normalize_prevalence(prevalences, self.classes)
-
-    @abstractmethod
-    def _fit_method(self, X, y):
-        """Abstract method for fitting the quantifier.
-
-        Parameters
-        ----------
-        X : array-like
-            Training features.
-        y : array-like
-            Training labels.
-
-        Notes
-        -----
-        This method must be implemented in subclasses to define the fitting logic for 
-        the non-aggregative quantifier.
-        """
-        ...
-
-    @abstractmethod
-    def _predict_method(self, X) -> dict:
-        """Abstract method for predicting class prevalences.
-
-        Parameters
-        ----------
-        X : array-like
-            Test features.
-
-        Returns
-        -------
-        dict, list, or numpy array
-            The predicted prevalences, which can be a dictionary where keys are class labels 
-            and values are their predicted prevalences, a list, or a numpy array.
-
-        Notes
-        -----
-        This method must be implemented in subclasses to define the prediction logic for 
-        the non-aggregative quantifier.
-        """
-        ...
