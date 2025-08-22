@@ -1,4 +1,5 @@
 from abc import ABC, abstractmethod
+from logging import warning
 import numpy as np
 from typing import Generator, Tuple
 from tqdm import tqdm
@@ -77,18 +78,11 @@ class Protocol(ABC):
         Generator[np.ndarray, np.ndarray]
             A generator that yields the indices for each split.
         """
-        indices = np.arange(X.shape[0])
-        for idx in self._split_indices_masks(X, y):
-            indexes = indices[idx]
-            yield indexes
-
-    def _split_indices_masks(self, X: np.ndarray, y: np.ndarray) -> Generator[Tuple[np.ndarray, np.ndarray]]:
         for idx in self._iter_indices(X, y):
+            if len(idx) > len(X):
+                warning(f"Batch size {len(idx)} exceeds dataset size {len(X)}. Replacement sampling will be used.")
+            yield idx
 
-            mask = np.zeros(X.shape[0], dtype=bool)
-            mask[idx] = True 
-
-            yield mask
 
     @abstractmethod
     def _iter_indices(self, X, y):
