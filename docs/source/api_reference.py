@@ -118,7 +118,7 @@ API_REFERENCE = {
             {
                 "title": None,
                 "autosummary": [
-                    "Protocol", "APP", "NPP"
+                    "Protocol", "APP", "NPP", "UPP", "PPP"
                 ],
             }
         ],
