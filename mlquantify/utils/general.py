@@ -26,12 +26,9 @@ def convert_columns_to_arrays(df, columns:list = ['PRED_PREVS', 'REAL_PREVS']):
     return df
 
 
-
-
-
-def generate_artificial_indexes(y, prevalence: list, sample_size:int, classes:list):
+def get_indexes_with_prevalence(y, prevalence: list, sample_size:int):
     """
-    Generate indexes for a stratified sample based on the prevalence of each class.
+    Get indexes for a stratified sample based on the prevalence of each class.
     
     Parameters
     ----------
@@ -48,10 +45,13 @@ def generate_artificial_indexes(y, prevalence: list, sample_size:int, classes:li
     -------
     list
         List of indexes for the stratified sample.
-    """        
+    """      
+    classes = np.unique(y)
+        
     # Ensure the sum of prevalences is 1
     assert np.isclose(sum(prevalence), 1), "The sum of prevalences must be 1"
     # Ensure the number of prevalences matches the number of classes
+    assert len(prevalence) == len(classes), "The number of prevalences must match the number of classes"
 
     sampled_indexes = []
     total_sampled = 0
@@ -78,6 +78,43 @@ def generate_artificial_indexes(y, prevalence: list, sample_size:int, classes:li
 
 
 
+def kraemer_sampling(n_dim: int, n_prev: int, n_iter: int = 1) -> np.ndarray:
+    """
+    Uniform sampling from the unit simplex using Kraemer's algorithm.
+
+    Parameters
+    ----------
+    n_dim : int
+        Number of dimensions.
+    n_prev : int
+        Size of the sample.
+    n_iter : int
+        Number of iterations.
+
+    Returns
+    -------
+    np.ndarray
+        Array of sampled prevalences.
+    """
+
+    def _sampling(n_dim: int, n_prev: int) -> np.ndarray:
+        if n_dim == 2:
+            u = np.random.rand(n_prev)
+            return np.vstack([1 - u, u]).T
+        else:
+            u = np.random.rand(n_prev, n_dim - 1)
+            u.sort(axis=-1)   # sort each row
+            _0s = np.zeros((n_prev, 1))
+            _1s = np.ones((n_prev, 1))
+            a = np.hstack([_0s, u])
+            b = np.hstack([u, _1s])
+            return b - a
+
+    # repeat n_iter times
+    prevs = _sampling(n_dim, n_prev)
+
+    return np.repeat(prevs, n_iter, axis=0) if n_iter > 1 else prevs
+ 
 
 def generate_artificial_prevalences(n_dim: int, n_prev: int, n_iter: int) -> np.ndarray:
     """Generates n artificial prevalences with n dimensions.

@@ -1,45 +1,37 @@
-# Considerando um problema de 3 classes
+from mlquantify.evaluation.protocol import APP, UPP, PPP, NPP
+from mlquantify.evaluation.measures import mean_absolute_error
+from mlquantify.methods import DyS
+from mlquantify.utils import get_real_prev
+from sklearn.ensemble import RandomForestClassifier
+import mlquantify as mq
+import numpy as np
 
-app1 = APP(
-    n_prev=20,
-    tr_sample_size=[100, 200],
-    ts_sample_size=[50, 100],
-    train_prev=None, # sem necessidade de usar
-    test_prev=None # sem necessidade de usar
-)
-
-
-app1 = APP(
-    n_prev=None, # sem necessidade de usar
-    tr_sample_size=[100, 200],
-    ts_sample_size=[50, 100],
-    train_prev=[
-        [0.2, 0.3, 0.5],   # configuração 1 treino
-        [0.1, 0.4, 0.5]    # configuração 2 treino
-    ],
-    test_prev=[
-        [0.3, 0.3, 0.4],   # configuração 1 teste
-        [0.2, 0.4, 0.4]    # configuração 2 teste
-    ]
-)
+X_train = np.random.rand(1000, 20)  # training data
+y_train = np.random.randint(0, 2, size=1000)  # training labels
+X_test = np.random.rand(1000, 20)  # test data
+y_test = np.random.randint(0, 2, size=1000)  # test labels
 
 
-app2 = APP(
-    n_prev = 20,
-    batch_size = ([100, 200], [50, 100])
-)
+classificador = None
 
-app2 = APP(
-    n_prev = (
-        [
-            [0.2, 0.3, 0.5],   # configuração 1 treino
-            [0.1, 0.4, 0.5]    # configuração 2 treino
-        ],
-        [
-            [0.3, 0.3, 0.4],   # configuração 1 teste
-            [0.2, 0.4, 0.4]    # configuração 2 teste
-        ]
-    ),
-    batch_size = ([100, 200], [50, 100]),
-)
+dys = DyS(classificador)
 
+if classificador is None:
+    dys.fit(scores, classe)
+else:
+    dys.fit(X_train, y)
+    
+
+protocol = PPP(batch_size=200, prevalences=[0.1, 0.5, 0.2, 0.3])
+
+print(len(list(protocol.split(X_test, y_test))))
+
+for idx in protocol.split(X_test, y_test):
+    X_batch = X_test[idx]
+    y_batch = y_test[idx]
+    
+    y_pred = dys.predict(scores=scores)
+
+    y_real = get_real_prev(y_batch)
+
+    print(y_real)
