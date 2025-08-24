@@ -3,7 +3,7 @@
 import pandas
 
 from . import base
-from . import model_selection
+#from . import model_selection
 from . import plots
 from . import classification
 from . import evaluation
