@@ -3,48 +3,132 @@ from sklearn.base import BaseEstimator
 from copy import deepcopy
 import numpy as np
 import joblib
+from functools import wraps
 
 import mlquantify as mq
 from .utils.general import parallel, normalize_prevalence
 
 
-class DynamicDomainHandler:
+from abc import ABC, abstractmethod
 
-    def __init__(self, *args, **kwargs):
-        assert isinstance(self, Quantifier), "DynamicDomainHandler can only be used with Quantifier instances"
-        if hasattr(self, 'fit'):
-            self._original_fit = self.fit
-        if hasattr(self, 'predict'):
-            self._original_predict = self.predict
+class BaseWrapper(ABC):
 
-        self.fit = self._handle_fit
-        self.predict = self._handle_predict
-        self.binary_models = {}
+    def fit(self, X, y, *args, **kwargs):
+        self.quantifier.classes = np.unique(y)
+        self.quantifier.binary_models = {}
+        self._fit_strategy(X, y, *args, **kwargs)
+        self.quantifier._original_fit(X, y, *args, **kwargs)
 
-    def _handle_fit(self, X, y, *args, **kwargs):
-        self.classes = np.unique(y)
-        if len(self.classes) > 2:
-            self._fit_ova(X, y, *args, **kwargs)
-        self._original_fit(X, y, *args, **kwargs)
+    @abstractmethod
+    def _fit_strategy(self, X, y, *args, **kwargs):
+        pass
 
-    def _fit_ova(self, X, y, *args, **kwargs):
-        for _class in self.classes:
-            self.binary_models[_class] = deepcopy(self)
-            parallel(self.binary_models[_class]._original_fit(X, (y == _class).astype(int), *args, **kwargs))
-        
-    def _handle_predict(self, X, *args, **kwargs):
-        if len(self.classes) > 2:
-            return self._predict_ova(X, *args, **kwargs)
-        return self._original_predict(X, *args, **kwargs)
+    @abstractmethod
+    def predict(self, X, *args, **kwargs):
+        pass
 
-    def _predict_ova(self, X, *args, **kwargs):
+
+class OvaWrapper(BaseWrapper):
+    def _fit_strategy(self, X, y, *args, **kwargs):
+        classes = self.quantifier.classes
+
+        def fit_class(_class):
+            model = deepcopy(self.quantifier)
+            binary_y = (y == _class).astype(int)
+            model._original_fit(X, binary_y, *args, **kwargs)
+            self.quantifier.binary_models[_class] = model
+
+        parallel(fit_class, classes, n_jobs=-1)
+
+    def predict(self, X, *args, **kwargs):
         predictions = {}
-        for _class in self.classes:
-            predictions[_class] = self.binary_models[_class]._original_predict(X, *args, **kwargs)
+        for _class in self.quantifier.classes:
+            predictions[_class] = self.quantifier.binary_models[_class]._original_predict(X, *args, **kwargs)
         return predictions
 
 
-class Quantifier(ABC, BaseEstimator, DynamicDomainHandler):
+class OvoWrapper(BaseWrapper):
+    def _fit_strategy(self, X, y, *args, **kwargs):
+        from itertools import combinations
+
+        classes = self.quantifier.classes
+        pairs = list(combinations(classes, 2))
+
+        def fit_pair(pair):
+            cls_a, cls_b = pair
+            idx = np.where((y == cls_a) | (y == cls_b))[0]
+            X_pair = X[idx]
+            y_pair = y[idx]
+            y_binary = (y_pair == cls_a).astype(int)
+            model = deepcopy(self.quantifier)
+            model._original_fit(X_pair, y_binary, *args, **kwargs)
+            self.quantifier.binary_models[pair] = model
+
+        parallel(fit_pair, pairs, n_jobs=-1)
+
+    def predict(self, X, *args, **kwargs):
+        from collections import defaultdict
+        from itertools import combinations
+
+        classes = self.quantifier.classes
+        pairs = list(combinations(classes, 2))
+        votes = defaultdict(lambda: np.zeros(X.shape[0]))
+
+        def predict_pair(pair):
+            return pair, self.quantifier.binary_models[pair]._original_predict(X, *args, **kwargs)
+
+        results = parallel(predict_pair, pairs, n_jobs=-1)
+
+        for (cls_a, cls_b), pred in results:
+            for i, p in enumerate(pred):
+                if p == 1:
+                    votes[cls_a][i] += 1
+                else:
+                    votes[cls_b][i] += 1
+
+        final_predictions = []
+        for i in range(X.shape[0]):
+            pred_class = max(classes, key=lambda c: votes[c][i])
+            final_predictions.append(pred_class)
+
+        return np.array(final_predictions)
+
+
+def handle_domain_fit(func):
+    @wraps(func)
+    def wrapper(self, X, y, *args, **kwargs):
+        if getattr(self, 'is_binary_method', False):
+            domain_mode = getattr(self, 'domain_mode', 'ova').lower()
+            if domain_mode == 'ova':
+                wrapper_obj = OvaWrapper(self)
+            elif domain_mode == 'ovo':
+                wrapper_obj = OvoWrapper(self)
+            else:
+                raise ValueError(f"Unsupported domain_mode: {domain_mode}")
+            return wrapper_obj.fit(X, y, *args, **kwargs)
+        else:
+            return func(self, X, y, *args, **kwargs)
+    return wrapper
+
+
+def handle_domain_predict(func):
+    @wraps(func)
+    def wrapper(self, X, *args, **kwargs):
+        if getattr(self, 'is_binary_method', False):
+            domain_mode = getattr(self, 'domain_mode', 'ova').lower()
+            if domain_mode == 'ova':
+                wrapper_obj = OvaWrapper(self)
+            elif domain_mode == 'ovo':
+                wrapper_obj = OvoWrapper(self)
+            else:
+                raise ValueError(f"Unsupported domain_mode: {domain_mode}")
+            return wrapper_obj.predict(X, *args, **kwargs)
+        else:
+            return func(self, X, *args, **kwargs)
+    return wrapper
+
+
+class Quantifier(ABC, BaseEstimator):
     """Base class for all quantifiers, it defines the basic structure of a quantifier.
     
     Warning: Inheriting from this class does not provide dynamic use of multiclass or binary methods, it is necessary to implement the logic in the quantifier itself. If you want to use this feature, inherit from AggregativeQuantifier or NonAggregativeQuantifier.
@@ -62,12 +146,15 @@ class Quantifier(ABC, BaseEstimator, DynamicDomainHandler):
     It's recommended to inherit from AggregativeQuantifier or NonAggregativeQuantifier, as they provide more functionality and flexibility for quantifiers.
     """
     
-    @abstractmethod
+    is_binary_method = False
+    domain_mode = 'ova'       
+    
     @handle_domain_fit
+    @abstractmethod
     def fit(self, X, y) -> object: ...
     
-    @abstractmethod
     @handle_domain_predict
+    @abstractmethod
     def predict(self, X) -> dict: ...
     
     def save_quantifier(self, path: str=None) -> None:
@@ -184,7 +271,7 @@ class AggregativeQuantifier(Quantifier, ABC):
         Set the parameters of this estimator.
         The method allows setting parameters for both the model and the learner.
         Parameters that match the model's attributes will be set directly on the model.
-        Parameters prefixed with 'learner__' will be set on the learner if it exists.
+        Parameters prefixed wit h 'learner__' will be set on the learner if it exists.
         Parameters:
         -----------
         **params : dict
