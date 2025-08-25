@@ -5,9 +5,11 @@ import numpy as np
 import joblib
 from functools import wraps
 
-import mlquantify as mq
-from .utils.general import parallel, normalize_prevalence
-
+from mlquantify.utils.general import parallel
+from mlquantify.utils._tags import (
+    Tags,
+    TargetInputTags
+)
 
 from abc import ABC, abstractmethod
 
@@ -97,7 +99,7 @@ class OvoWrapper(BaseWrapper):
 def handle_domain_fit(func):
     @wraps(func)
     def wrapper(self, X, y, *args, **kwargs):
-        if getattr(self, 'is_binary_method', False):
+        if isinstance(self, BinaryQuantifier):
             domain_mode = getattr(self, 'domain_mode', 'ova').lower()
             if domain_mode == 'ova':
                 wrapper_obj = OvaWrapper(self)
@@ -114,21 +116,21 @@ def handle_domain_fit(func):
 def handle_domain_predict(func):
     @wraps(func)
     def wrapper(self, X, *args, **kwargs):
-        if getattr(self, 'is_binary_method', False):
-            domain_mode = getattr(self, 'domain_mode', 'ova').lower()
-            if domain_mode == 'ova':
+        if isinstance(self, BinaryQuantifier):
+            strategy = getattr(self, 'strategy').lower()
+            if strategy == 'ova':
                 wrapper_obj = OvaWrapper(self)
-            elif domain_mode == 'ovo':
+            elif strategy == 'ovo':   
                 wrapper_obj = OvoWrapper(self)
             else:
-                raise ValueError(f"Unsupported domain_mode: {domain_mode}")
+                raise ValueError(f"Unsupported domain_mode: {strategy}")
             return wrapper_obj.predict(X, *args, **kwargs)
         else:
             return func(self, X, *args, **kwargs)
     return wrapper
 
 
-class Quantifier(ABC, BaseEstimator):
+class BaseQuantifier(ABC, BaseEstimator):
     """Base class for all quantifiers, it defines the basic structure of a quantifier.
     
     Warning: Inheriting from this class does not provide dynamic use of multiclass or binary methods, it is necessary to implement the logic in the quantifier itself. If you want to use this feature, inherit from AggregativeQuantifier or NonAggregativeQuantifier.
@@ -144,10 +146,7 @@ class Quantifier(ABC, BaseEstimator):
     Notes
     -----
     It's recommended to inherit from AggregativeQuantifier or NonAggregativeQuantifier, as they provide more functionality and flexibility for quantifiers.
-    """
-    
-    is_binary_method = False
-    domain_mode = 'ova'       
+    """    
     
     @handle_domain_fit
     @abstractmethod
@@ -162,8 +161,43 @@ class Quantifier(ABC, BaseEstimator):
             path = f"{self.__class__.__name__}.joblib"
         joblib.dump(self, path)
         
+    def __mlquantify_tags__(self):
+        return Tags(
+            estimator=None,
+            estimation_type=None,
+            estimator_type=None,
+            target_input_tags=TargetInputTags()
+        )
+    
+class BinaryMixin:
+    
+
+    def __mlquantify_tags__(self):
+        return Tags(
+            target_input_tags=TargetInputTags(multi_class=False)
+        )
 
 
+
+
+
+
+        
+
+
+
+
+
+
+class BinaryQuantifier(Quantifier):
+
+    _strategies = ["ova", "ovo"]
+
+    def __init__(self, strategy="ova"):
+        assert strategy in self._strategies, f"Invalid strategy: {strategy}. Choose from {self._strategies}."
+        self.strategy = strategy
+
+  
 class AggregativeQuantifier(Quantifier, ABC):
     """A base class for aggregative quantifiers.
     
