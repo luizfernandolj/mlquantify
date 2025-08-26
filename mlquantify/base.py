@@ -8,7 +8,8 @@ from functools import wraps
 from mlquantify.utils.general import parallel
 from mlquantify.utils._tags import (
     Tags,
-    TargetInputTags
+    TargetInputTags,
+    get_tags
 )
 
 from abc import ABC, abstractmethod
@@ -96,40 +97,6 @@ class OvoWrapper(BaseWrapper):
         return np.array(final_predictions)
 
 
-def handle_domain_fit(func):
-    @wraps(func)
-    def wrapper(self, X, y, *args, **kwargs):
-        if isinstance(self, BinaryQuantifier):
-            domain_mode = getattr(self, 'domain_mode', 'ova').lower()
-            if domain_mode == 'ova':
-                wrapper_obj = OvaWrapper(self)
-            elif domain_mode == 'ovo':
-                wrapper_obj = OvoWrapper(self)
-            else:
-                raise ValueError(f"Unsupported domain_mode: {domain_mode}")
-            return wrapper_obj.fit(X, y, *args, **kwargs)
-        else:
-            return func(self, X, y, *args, **kwargs)
-    return wrapper
-
-
-def handle_domain_predict(func):
-    @wraps(func)
-    def wrapper(self, X, *args, **kwargs):
-        if isinstance(self, BinaryQuantifier):
-            strategy = getattr(self, 'strategy').lower()
-            if strategy == 'ova':
-                wrapper_obj = OvaWrapper(self)
-            elif strategy == 'ovo':   
-                wrapper_obj = OvoWrapper(self)
-            else:
-                raise ValueError(f"Unsupported domain_mode: {strategy}")
-            return wrapper_obj.predict(X, *args, **kwargs)
-        else:
-            return func(self, X, *args, **kwargs)
-    return wrapper
-
-
 class BaseQuantifier(ABC, BaseEstimator):
     """Base class for all quantifiers, it defines the basic structure of a quantifier.
     
@@ -148,11 +115,9 @@ class BaseQuantifier(ABC, BaseEstimator):
     It's recommended to inherit from AggregativeQuantifier or NonAggregativeQuantifier, as they provide more functionality and flexibility for quantifiers.
     """    
     
-    @handle_domain_fit
     @abstractmethod
     def fit(self, X, y) -> object: ...
     
-    @handle_domain_predict
     @abstractmethod
     def predict(self, X) -> dict: ...
     
@@ -168,28 +133,42 @@ class BaseQuantifier(ABC, BaseEstimator):
             estimator_type=None,
             target_input_tags=TargetInputTags()
         )
-    
-class BinaryMixin:
-    
-
-    def __mlquantify_tags__(self):
-        return Tags(
-            target_input_tags=TargetInputTags(multi_class=False)
-        )
 
 
+def handle_domain_fit(func):
+    @wraps(func)
+    def wrapper(self, X, y, *args, **kwargs):
+        if isinstance(self, BinaryQMixin):
+            domain_mode = getattr(self, 'domain_mode', 'ova').lower()
+            if domain_mode == 'ova':
+                wrapper_obj = OvaWrapper(self)
+            elif domain_mode == 'ovo':
+                wrapper_obj = OvoWrapper(self)
+            else:
+                raise ValueError(f"Unsupported domain_mode: {domain_mode}")
+            return wrapper_obj.fit(X, y, *args, **kwargs)
+        else:
+            return func(self, X, y, *args, **kwargs)
+    return wrapper
 
 
+def handle_domain_predict(func):
+    @wraps(func)
+    def wrapper(self, X, *args, **kwargs):
+        if isinstance(self, BinaryQMixin):
+            strategy = getattr(self, 'strategy').lower()
+            if strategy == 'ova':
+                wrapper_obj = OvaWrapper(self)
+            elif strategy == 'ovo':   
+                wrapper_obj = OvoWrapper(self)
+            else:
+                raise ValueError(f"Unsupported domain_mode: {strategy}")
+            return wrapper_obj.predict(X, *args, **kwargs)
+        else:
+            return func(self, X, *args, **kwargs)
+    return wrapper
 
-
-        
-
-
-
-
-
-
-class BinaryQuantifier(Quantifier):
+class BinaryQMixin:
 
     _strategies = ["ova", "ovo"]
 
@@ -197,126 +176,93 @@ class BinaryQuantifier(Quantifier):
         assert strategy in self._strategies, f"Invalid strategy: {strategy}. Choose from {self._strategies}."
         self.strategy = strategy
 
-  
+    def __mlquantify_tags__(self):
+        tags = super()._mlquantify_tags__()
+        tags.target_input_tags = TargetInputTags(multi_class=False)
+        return tags
+
+    @handle_domain_fit
+    def fit(self, X, y, *args, **kwargs):
+        ...
+
+    @handle_domain_predict
+    def predict(self, X, *args, **kwargs):
+        ...
+
+class SoftLearnerQMixin:
+    
+    def __mlquantify_tags__(self):
+        tags = super()._mlquantify_tags__()
+        tags.estimator = True
+        tags.estimator_type = "soft"
+        return tags
+
+class CrispLearnerQMixin:
+
+    def __mlquantify_tags__(self):
+        tags = super()._mlquantify_tags__()
+        tags.estimator = True
+        tags.estimator_type = "crisp"
+        return tags
+
+class RegressorQMixin:
+    
+    def __mlquantify_tags__(self):
+        tags = super()._mlquantify_tags__() 
+        tags.estimator = True
+        tags.estimator_type = "regressor"
+        return tags
+
+class DistributionMixtureMixin:
+
+    def __mlquantify_tags__(self):
+        tags = super()._mlquantify_tags__()
+        tags.estimator = True
+        tags.estimation_type = "mixture"
+        return tags
+
+class MaximumLikelihoodMixin:
+
+    def __mlquantify_tags__(self):
+        tags = super()._mlquantify_tags__()
+        tags.estimator = True
+        tags.estimation_type = "likelihood"
+        return tags
+
+class ThresholdAdjustmentMixin:
+
+    def __mlquantify_tags__(self):
+        tags = super()._mlquantify_tags__()
+        tags.estimator = True
+        tags.estimation_type = "adjusting"
+        return tags
+
+class ProtocolMixin:
+
+    def __mlquantify_tags__(self):
+        tags = super()._mlquantify_tags__()
+        tags.sampler = "protocol"
+        return tags 
+
+
+
+
+
+
+
+def is_aggregative(quantifier):
+    
+    return get_tags(quantifier).learner == True
+
+
+
 class AggregativeQuantifier(Quantifier, ABC):
-    """A base class for aggregative quantifiers.
-    
-    This class provides the basic structure for aggregative quantifiers, which are quantifiers that aggregates a classifier or learner inside to generate predictions.
-    
-    Inheriting from this class, it provides dynamic prediction for multiclass and binary data, making one-vs-all strategy for multiclass data with binary quantifiers.
-    
-    Read more in the :ref:`User Guide <creating_your_own_quantifier>`.
-    
-    
-    Notes
-    -----
-    All quantifiers should specify at least the learner attribute. Wich should inherit from BaseEstimator of scikit-learn.
-    
-    All quantifiers can return a dictionary with class:prevalence, a list or a numpy array.
-
-    
-    Examples
-    --------
-    Example 1: Multiclass Quantifier
-    >>> from mlquantify.base import AggregativeQuantifier
-    >>> from mlquantify.utils.general import get_real_prev
-    >>> from sklearn.ensemble import RandomForestClassifier
-    >>> from sklearn.model_selection import train_test_split
-    >>> import numpy as np
-    >>> class MyQuantifier(AggregativeQuantifier):
-    ...     def __init__(self, learner, *, param):
-    ...         self.learner = learner
-    ...         self.param = param
-    ...     def _fit_method(self, X, y):
-    ...         self.learner.fit(X, y)
-    ...         return self
-    ...     def _predict_method(self, X):
-    ...         predicted_labels = self.learner.predict(X)
-    ...         class_counts = np.array([np.count_nonzero(predicted_labels == _class) for _class in self.classes])
-    ...         return class_counts / len(predicted_labels)
-    >>> quantifier = MyQuantifier(learner=RandomForestClassifier(), param=1)
-    >>> quantifier.get_params(deep=False)
-    {'learner': RandomForestClassifier(), 'param': 1}
-    >>> # Sample data
-    >>> X = np.array([[0.1, 0.2], [0.2, 0.1], [0.3, 0.4], [0.4, 0.3], 
-    ...               [0.5, 0.6], [0.6, 0.5], [0.7, 0.8], [0.8, 0.7], 
-    ...               [0.9, 1.0], [1.0, 0.9]])
-    >>> y = np.array([0, 0, 0, 1, 0, 1, 0, 1, 0, 1])  # 40% positive (4 out of 10)
-    >>> # Split the data into training and testing sets
-    >>> X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.3, random_state=42)
-    >>> # Fit the quantifier
-    >>> quantifier.fit(X_train, y_train)
-    None
-    >>> # Real prevalence in the training set
-    >>> get_real_prev(y_train)
-    {0: 0.5714285714285714, 1: 0.42857142857142855}
-    >>> # Predicted prevalence in the test set
-    >>> quantifier.predict(X_test)
-    {0: 0.6666666666666666, 1: 0.3333333333333333}
-
-    Example 2: Binary Quantifier
-    >>> from sklearn.svm import SVC
-    >>> class BinaryQuantifier(AggregativeQuantifier):
-    ...     @property
-    ...     def is_multiclass(self):
-    ...         return False
-    ...     def __init__(self, learner):
-    ...         self.learner = learner
-    ...     def _fit_method(self, X, y):
-    ...         self.learner.fit(X, y)
-    ...         return self
-    ...     def _predict_method(self, X):
-    ...         predicted_labels = self.learner.predict(X)
-    ...         class_counts = np.array([np.count_nonzero(predicted_labels == _class) for _class in self.classes])
-    ...         return class_counts / len(predicted_labels)
-    >>> binary_quantifier = BinaryQuantifier(learner=SVC(probability=True))
-    >>> # Sample multiclass data
-    >>> X = np.array([
-    ...     [0.1, 0.2], [0.2, 0.1], [0.3, 0.4], [0.4, 0.3], 
-    ...     [0.5, 0.6], [0.6, 0.5], [0.7, 0.8], [0.8, 0.7], 
-    ...     [0.9, 1.0], [1.0, 0.9], [1.1, 1.2], [1.2, 1.1], 
-    ...     [1.3, 1.4], [1.4, 1.3], [1.5, 1.6], [1.6, 1.5], 
-    ...     [1.7, 1.8], [1.8, 1.7], [1.9, 2.0], [2.0, 1.9]
-    ... ])
-    >>> # Update the labels to include a third class
-    >>> y = np.array([0, 0, 0, 1, 0, 1, 0, 1, 2, 2, 0, 1, 0, 1, 0, 1, 2, 2, 0, 1])
-    >>> # Split the data into training and testing sets
-    >>> X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.4, random_state=42)
-    >>> # Fit the binary quantifier
-    >>> binary_quantifier.fit(X_train, y_train)
-    None
-    >>> # Real prevalence in the training set
-    >>> get_real_prev(y_test)
-    {0: 0.25, 1: 0.5, 2: 0.25}
-    >>> preds = binary_quantifier.predict(X_test)
-    >>> preds
-    {0: 1.0, 1: 0.0, 2: 0.0}
-    """
     
     
     def __init__(self, learner):
         self.learner = learner
 
-    def aggregation_type(self):
-        return "soft"
-
     def set_params(self, **params):
-        """
-        Set the parameters of this estimator.
-        The method allows setting parameters for both the model and the learner.
-        Parameters that match the model's attributes will be set directly on the model.
-        Parameters prefixed wit h 'learner__' will be set on the learner if it exists.
-        Parameters:
-        -----------
-        **params : dict
-            Dictionary of parameters to set. Keys can be model attribute names or 
-            'learner__' prefixed names for learner parameters.
-        Returns:
-        --------
-        self : Quantifier
-            Returns the instance of the quantifier with updated parameters itself.
-        """
-        
         
         # Model Params
         for key, value in params.items():
