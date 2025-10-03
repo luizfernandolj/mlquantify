@@ -130,7 +130,9 @@ class BaseQuantifier(ABC, BaseEstimator):
         return Tags(
             estimator=None,
             estimation_type=None,
+            estimator_function=None,
             estimator_type=None,
+            aggregation_type=None,
             target_input_tags=TargetInputTags()
         )
 
@@ -172,12 +174,15 @@ class BinaryQMixin:
 
     _strategies = ["ova", "ovo"]
 
-    def __init__(self, strategy="ova"):
+    @abstractmethod
+    def __init__(self, strategy="ova", *args, **kwargs):
         assert strategy in self._strategies, f"Invalid strategy: {strategy}. Choose from {self._strategies}."
+        print("Initializing BinaryQMixin with strategy:", strategy)
+        super().__init__(*args, **kwargs)
         self.strategy = strategy
 
     def __mlquantify_tags__(self):
-        tags = super()._mlquantify_tags__()
+        tags = super().__mlquantify_tags__()
         tags.target_input_tags = TargetInputTags(multi_class=False)
         return tags
 
@@ -192,39 +197,43 @@ class BinaryQMixin:
 class SoftLearnerQMixin:
     
     def __mlquantify_tags__(self):
-        tags = super()._mlquantify_tags__()
+        tags = super().__mlquantify_tags__()
         tags.estimator = True
+        tags.estimator_function = "predict_proba"
         tags.estimator_type = "soft"
         return tags
 
 class CrispLearnerQMixin:
 
     def __mlquantify_tags__(self):
-        tags = super()._mlquantify_tags__()
+        tags = super().__mlquantify_tags__()
         tags.estimator = True
-        tags.estimator_type = "crisp"
+        tags.estimator_function = "predict"
+        tags.estimator_type= "crisp"
         return tags
+    
 
 class RegressorQMixin:
     
     def __mlquantify_tags__(self):
-        tags = super()._mlquantify_tags__() 
+        tags = super().__mlquantify_tags__() 
         tags.estimator = True
-        tags.estimator_type = "regressor"
+        tags.estimator_function = "predict"
+        tags.estimator_type= "regression"
         return tags
 
-class DistributionMixtureMixin:
+class DistributionMixin:
 
     def __mlquantify_tags__(self):
-        tags = super()._mlquantify_tags__()
+        tags = super().__mlquantify_tags__()
         tags.estimator = True
-        tags.estimation_type = "mixture"
+        tags.estimation_type = "distribution"
         return tags
 
 class MaximumLikelihoodMixin:
 
     def __mlquantify_tags__(self):
-        tags = super()._mlquantify_tags__()
+        tags = super().__mlquantify_tags__()
         tags.estimator = True
         tags.estimation_type = "likelihood"
         return tags
@@ -232,47 +241,19 @@ class MaximumLikelihoodMixin:
 class ThresholdAdjustmentMixin:
 
     def __mlquantify_tags__(self):
-        tags = super()._mlquantify_tags__()
+        tags = super().__mlquantify_tags__()
         tags.estimator = True
         tags.estimation_type = "adjusting"
         return tags
 
-class ProtocolMixin:
-
-    def __mlquantify_tags__(self):
-        tags = super()._mlquantify_tags__()
-        tags.sampler = "protocol"
-        return tags 
 
 
 
+def uses_soft_predictions(quantifier):
+    return get_tags(quantifier).estimator_type == "soft"
 
-
-
+def uses_crisp_predictions(quantifier):
+    return get_tags(quantifier).estimator_type == "crisp"
 
 def is_aggregative(quantifier):
-    
     return get_tags(quantifier).learner == True
-
-
-
-class AggregativeQuantifier(Quantifier, ABC):
-    
-    
-    def __init__(self, learner):
-        self.learner = learner
-
-    def set_params(self, **params):
-        
-        # Model Params
-        for key, value in params.items():
-            if hasattr(self, key):
-                setattr(self, key, value)
-
-        # Learner Params
-        if self.learner is not None:
-            learner_params = {k.replace('learner__', ''): v for k, v in params.items() if 'learner__' in k}
-            if learner_params:
-                self.learner.set_params(**learner_params)
-        
-        return self

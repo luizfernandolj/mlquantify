@@ -14,12 +14,12 @@ class TargetInputTags:
 @dataclass
 class Tags:
     
-    estimator: bool = False
     estimation_type: str | None
+    estimator_function: str | None
     estimator_type: str | None
-    sampler: str | None
     aggregation_type: str | None
     target_input_tags: TargetInputTags
+    estimator: bool = False
 
 
 

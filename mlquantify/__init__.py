@@ -4,11 +4,12 @@ import pandas
 
 from . import base
 #from . import model_selection
-from . import plots
+#from . import plots
 from . import classification
-from . import evaluation
-from . import methods
-from . import utils
+# from . import evaluation
+# from . import methods
+# from . import utils
+
 
 ARGUMENTS_SETTED = False
 
