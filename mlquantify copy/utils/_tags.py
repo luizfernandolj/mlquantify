@@ -19,8 +19,7 @@ class Tags:
     estimator_type: str | None
     aggregation_type: str | None
     target_input_tags: TargetInputTags
-    has_estimator: bool = False
-    requires_fit: bool = True
+    estimator: bool = False
 
 
 
