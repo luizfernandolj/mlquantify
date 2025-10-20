@@ -27,3 +27,5 @@ mlquantify.evaluation.protocol
   Protocol
   APP
   NPP
+  UPP
+  PPP

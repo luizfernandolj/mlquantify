@@ -1,0 +1,10 @@
+PPP
+===
+.. currentmodule:: mlquantify.evaluation.protocol
+.. autoclass:: PPP
+    :members:
+    :inherited-members:
+    :special-members: __call__
+.. minigallery:: mlquantify.evaluation.protocol.PPP mlquantify.evaluation.protocol.PPP.__init__ mlquantify.evaluation.protocol.PPP.get_n_combinations mlquantify.evaluation.protocol.PPP.split 
+   :add-heading: Gallery examples
+   :heading-level: -

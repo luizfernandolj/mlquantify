@@ -346,6 +346,38 @@ reference on concepts repeated across the API, see :ref:`glossary`.
 
 
 
+  * - :obj:`~mlquantify.evaluation.protocol.UPP`
+
+    - .. div:: sk-apisearch-desc
+
+        .. currentmodule:: mlquantify.evaluation.protocol
+
+        .. autoshortsummary:: mlquantify.evaluation.protocol.UPP
+
+        .. div:: caption
+
+          :mod:`mlquantify.evaluation.protocol`
+
+
+
+
+
+  * - :obj:`~mlquantify.evaluation.protocol.PPP`
+
+    - .. div:: sk-apisearch-desc
+
+        .. currentmodule:: mlquantify.evaluation.protocol
+
+        .. autoshortsummary:: mlquantify.evaluation.protocol.PPP
+
+        .. div:: caption
+
+          :mod:`mlquantify.evaluation.protocol`
+
+
+
+
+
 
 
 

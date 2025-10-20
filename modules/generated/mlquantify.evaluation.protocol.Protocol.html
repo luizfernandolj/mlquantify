@@ -342,6 +342,8 @@
 <li class="toctree-l2 current active"><a class="current reference internal" href="#">Protocol</a></li>
 <li class="toctree-l2"><a class="reference internal" href="mlquantify.evaluation.protocol.APP.html">APP</a></li>
 <li class="toctree-l2"><a class="reference internal" href="mlquantify.evaluation.protocol.NPP.html">NPP</a></li>
+<li class="toctree-l2"><a class="reference internal" href="mlquantify.evaluation.protocol.UPP.html">UPP</a></li>
+<li class="toctree-l2"><a class="reference internal" href="mlquantify.evaluation.protocol.PPP.html">PPP</a></li>
 </ul>
 </details></li>
 <li class="toctree-l1 has-children"><a class="reference internal" href="../../api/mlquantify.methods.aggregative.html">mlquantify.methods.aggregative</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
@@ -380,7 +382,6 @@
 </details></li>
 <li class="toctree-l1 has-children"><a class="reference internal" href="../../api/mlquantify.utils.general.html">mlquantify.utils.general</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
 <li class="toctree-l2"><a class="reference internal" href="mlquantify.utils.general.convert_columns_to_arrays.html">convert_columns_to_arrays</a></li>
-<li class="toctree-l2"><a class="reference internal" href="mlquantify.utils.general.generate_artificial_indexes.html">generate_artificial_indexes</a></li>
 <li class="toctree-l2"><a class="reference internal" href="mlquantify.utils.general.generate_artificial_prevalences.html">generate_artificial_prevalences</a></li>
 <li class="toctree-l2"><a class="reference internal" href="mlquantify.utils.general.get_real_prev.html">get_real_prev</a></li>
 <li class="toctree-l2"><a class="reference internal" href="mlquantify.utils.general.load_quantifier.html">load_quantifier</a></li>
@@ -467,222 +468,69 @@
 <h1>Protocol<a class="headerlink" href="#protocol" title="Link to this heading">#</a></h1>
 <dl class="py class">
 <dt class="sig sig-object py" id="mlquantify.evaluation.protocol.Protocol">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">mlquantify.evaluation.protocol.</span></span><span class="sig-name descname"><span class="pre">Protocol</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">models</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference internal" href="mlquantify.base.Quantifier.html#mlquantify.base.Quantifier" title="mlquantify.base.Quantifier"><span class="pre">Quantifier</span></a><span class="p"><span class="pre">]</span></span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference internal" href="mlquantify.base.Quantifier.html#mlquantify.base.Quantifier" title="mlquantify.base.Quantifier"><span class="pre">Quantifier</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">learner</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">BaseEstimator</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_jobs</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">random_state</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">32</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">verbose</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">return_type</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'predictions'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">measures</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">columns</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">['ITERATION',</span> <span class="pre">'QUANTIFIER',</span> <span class="pre">'REAL_PREVS',</span> <span class="pre">'PRED_PREVS',</span> <span class="pre">'BATCH_SIZE']</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/luizfernandolj/mlquantify/tree/master/mlquantify/evaluation/protocol.py"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mlquantify.evaluation.protocol.Protocol" title="Link to this definition">#</a></dt>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">mlquantify.evaluation.protocol.</span></span><span class="sig-name descname"><span class="pre">Protocol</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">batch_size</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">random_state</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/luizfernandolj/mlquantify/tree/master/mlquantify/evaluation/protocol.py"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mlquantify.evaluation.protocol.Protocol" title="Link to this definition">#</a></dt>
 <dd><p>Base class for evaluation protocols.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><dl class="simple">
-<dt><strong>models</strong><span class="classifier">Union[List[Union[str, Quantifier]], str, Quantifier]</span></dt><dd><p>List of quantification models, a single model name, or ‘all’ for all models.</p>
+<dt><strong>batch_size</strong><span class="classifier">int or list of int</span></dt><dd><p>The size of the batches to be used in the evaluation.</p>
 </dd>
-<dt><strong>learner</strong><span class="classifier">BaseEstimator, optional</span></dt><dd><p>Machine learning model to be used with the quantifiers. Required for model methods.</p>
-</dd>
-<dt><strong>n_jobs</strong><span class="classifier">int, optional</span></dt><dd><p>Number of jobs to run in parallel. Default is 1.</p>
-</dd>
-<dt><strong>random_state</strong><span class="classifier">int, optional</span></dt><dd><p>Seed for random number generation. Default is 32.</p>
-</dd>
-<dt><strong>verbose</strong><span class="classifier">bool, optional</span></dt><dd><p>Whether to print progress messages. Default is False.</p>
-</dd>
-<dt><strong>return_type</strong><span class="classifier">str, optional</span></dt><dd><p>Type of return value (‘predictions’ or ‘table’). Default is ‘predictions’.</p>
-</dd>
-<dt><strong>measures</strong><span class="classifier">List[str], optional</span></dt><dd><p>List of error measures to calculate. Must be in MEASURES or None. Default is None.</p>
-</dd>
-<dt><strong>columns</strong><span class="classifier">List[str], optional</span></dt><dd><p>Columns to be included in the table. Default is [‘ITERATION’, ‘QUANTIFIER’, ‘REAL_PREVS’, ‘PRED_PREVS’, ‘BATCH_SIZE’].</p>
+<dt><strong>random_state</strong><span class="classifier">int, optional</span></dt><dd><p>The random seed for reproducibility.</p>
 </dd>
 </dl>
 </dd>
 <dt class="field-even">Attributes<span class="colon">:</span></dt>
 <dd class="field-even"><dl class="simple">
-<dt><strong>models</strong><span class="classifier">List[Quantifier]</span></dt><dd><p>List of quantification models.</p>
-</dd>
-<dt><strong>learner</strong><span class="classifier">BaseEstimator</span></dt><dd><p>Machine learning model to be used with the quantifiers.</p>
-</dd>
-<dt><strong>n_jobs</strong><span class="classifier">int</span></dt><dd><p>Number of jobs to run in parallel.</p>
-</dd>
-<dt><strong>random_state</strong><span class="classifier">int</span></dt><dd><p>Seed for random number generation.</p>
-</dd>
-<dt><strong>verbose</strong><span class="classifier">bool</span></dt><dd><p>Whether to print progress messages.</p>
-</dd>
-<dt><strong>return_type</strong><span class="classifier">str</span></dt><dd><p>Type of return value (‘predictions’ or ‘table’).</p>
-</dd>
-<dt><strong>measures</strong><span class="classifier">List[str]</span></dt><dd><p>List of error measures to calculate.</p>
-</dd>
-<dt><strong>columns</strong><span class="classifier">List[str]</span></dt><dd><p>Columns to be included in the table.</p>
-</dd>
+<dt><strong>n_combinations</strong><span class="classifier">int</span></dt><dd></dd>
 </dl>
 </dd>
 <dt class="field-odd">Raises<span class="colon">:</span></dt>
 <dd class="field-odd"><dl class="simple">
-<dt>AssertionError</dt><dd><p>If measures contain invalid error measures.
-If return_type is invalid.
-If columns does not contain [‘QUANTIFIER’, ‘REAL_PREVS’, ‘PRED_PREVS’].</p>
+<dt>ValueError</dt><dd><p>If the batch size is not a positive integer or list of positive integers.</p>
 </dd>
 </dl>
 </dd>
 </dl>
-<div class="admonition seealso">
-<p class="admonition-title">See also</p>
-<dl class="simple">
-<dt><a class="reference internal" href="mlquantify.evaluation.protocol.APP.html#mlquantify.evaluation.protocol.APP" title="mlquantify.evaluation.protocol.APP"><code class="xref py py-obj docutils literal notranslate"><span class="pre">APP</span></code></a></dt><dd><p>Artificial Prevalence Protocol.</p>
-</dd>
-<dt><a class="reference internal" href="mlquantify.evaluation.protocol.NPP.html#mlquantify.evaluation.protocol.NPP" title="mlquantify.evaluation.protocol.NPP"><code class="xref py py-obj docutils literal notranslate"><span class="pre">NPP</span></code></a></dt><dd><p>Natural Prevalence Protocol.</p>
-</dd>
-<dt><code class="xref py py-obj docutils literal notranslate"><span class="pre">Quantifier</span></code></dt><dd><p>Base class for quantification methods.</p>
-</dd>
-</dl>
-</div>
 <p class="rubric">Notes</p>
-<ul class="simple">
-<li><p>The ‘models’ parameter can be a list of Quantifiers, a single Quantifier, a list of model names, a single model name, or ‘all’.</p></li>
-<li><p>If ‘models’ is a list of model names or ‘all’, ‘learner’ must be provided.</p></li>
-<li><p>The ‘all’ option for ‘models’ will use all quantification models available in the library.</p></li>
-<li><p>If ‘models’ is a Quantifier or list of Quantifier, ‘learner’ is not required. But the models must be initializated</p></li>
-<li><p>You can pass your own model by passing a Quantifier object.</p></li>
-<li><p>Columns must contain [‘QUANTIFIER’, ‘REAL_PREVS’, ‘PRED_PREVS’].</p></li>
-<li><p>If ‘return_type’ is ‘table’, the table will contain the columns specified in ‘columns’ and the error measures in ‘measures’.</p></li>
-<li><p>For creating your own protocol, you must have the attributes ‘models’, ‘learner’, ‘n_jobs’, ‘random_state’, ‘verbose’, ‘return_type’, ‘measures’, and ‘columns’., but columns can be changed, as long as it contains [‘QUANTIFIER’, ‘REAL_PREVS’, ‘PRED_PREVS’].</p></li>
-</ul>
+<p>This class serves as a base class for different evaluation protocols, each with its own strategy for splitting the data into batches.</p>
 <p class="rubric">Examples</p>
-<p>import numpy as np
-&gt;&gt;&gt; from mlquantify.evaluation.protocol import Protocol
-&gt;&gt;&gt; from mlquantify.utils import get_real_prev
-&gt;&gt;&gt; from sklearn.ensemble import RandomForestClassifier
-&gt;&gt;&gt; from sklearn.datasets import load_breast_cancer
-&gt;&gt;&gt; from sklearn.model_selection import train_test_split
-&gt;&gt;&gt; import time as t
-&gt;&gt;&gt; 
-&gt;&gt;&gt; class MyProtocol(Protocol):
-…    def __init__(self, 
-…                models, 
-…                learner, 
-…                n_jobs, 
-…                random_state, 
-…                verbose, 
-…                return_type, 
-…                measures,
-…                sample_size,
-…                iterations=10):
-…        super().__init__(models, 
-…                         learner, 
-…                         n_jobs, 
-…                         random_state, 
-…                         verbose, 
-…                         return_type, 
-…                         measures, 
-…                         columns=[‘QUANTIFIER’, ‘REAL_PREVS’, ‘PRED_PREVS’, ‘TIME’])
-…        self.sample_size = sample_size
-…        self.iterations = iterations
-…        
-…    def predict_protocol(self, X_test, y_test):
-…        predictions = []
-…        
-…        X_sample, y_sample = self._new_sample(X_test, y_test)
-…        
-…        for _ in range(self.iterations):
-…            for model in self.models:
-…                quantifier = model.__class__.__name__
-…
-…                real_prev = get_real_prev(y_sample)
-…
-…                start_time = t.time()
-…                pred_prev = model.predict(X_sample)
-…                end_time = t.time()
-…                time = end_time - start_time
-…                
-…                predictions.append([quantifier, real_prev, pred_prev, time])
-…        
-…        return predictions
-…    
-…    def _new_sample(self, X_test, y_test):
-…        indexes = np.random.choice(len(X_test), size=self.sample_size, replace=False)
-…        return X_test[indexes], y_test[indexes]
-&gt;&gt;&gt;     
-&gt;&gt;&gt; 
-&gt;&gt;&gt; features, target = load_breast_cancer(return_X_y=True)
-&gt;&gt;&gt; 
-&gt;&gt;&gt; X_train, X_test, y_train, y_test = train_test_split(features, target, test_size=0.5, random_state=42)
-&gt;&gt;&gt; 
-&gt;&gt;&gt; protocol = MyProtocol(models=[“CC”, “EMQ”, “DyS”], # or [CC(learner), EMQ(learner), DyS(learner)]
-…                    learner=RandomForestClassifier(),
-…                    n_jobs=1,
-…                    random_state=42,
-…                    verbose=True,
-…                    return_type=”table”,
-…                    measures=None,
-…                    sample_size=100)
-&gt;&gt;&gt;
-&gt;&gt;&gt; protocol.fit(X_train, y_train)
-&gt;&gt;&gt; table = protocol.predict(X_test, y_test)
-&gt;&gt;&gt; print(table)</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="k">class</span><span class="w"> </span><span class="nc">MyCustomProtocol</span><span class="p">(</span><span class="n">Protocol</span><span class="p">):</span>
+<span class="gp">... </span>    <span class="k">def</span><span class="w"> </span><span class="nf">_iter_indices</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">X</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">y</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Generator</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">]:</span>
+<span class="gp">... </span>        <span class="k">for</span> <span class="n">batch_size</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">batch_size</span><span class="p">:</span>
+<span class="gp">... </span>            <span class="k">yield</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">choice</span><span class="p">(</span><span class="n">X</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">batch_size</span><span class="p">,</span> <span class="n">replace</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="gp">...</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">protocol</span> <span class="o">=</span> <span class="n">MyCustomProtocol</span><span class="p">(</span><span class="n">batch_size</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> <span class="n">random_state</span><span class="o">=</span><span class="mi">42</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">for</span> <span class="n">train_idx</span><span class="p">,</span> <span class="n">test_idx</span> <span class="ow">in</span> <span class="n">protocol</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">y</span><span class="p">):</span>
+<span class="gp">... </span>    <span class="c1"># Train and evaluate model</span>
+<span class="gp">... </span>    <span class="k">pass</span>
+</pre></div>
+</div>
 <dl class="py method">
-<dt class="sig sig-object py" id="mlquantify.evaluation.protocol.Protocol.fit">
-<span class="sig-name descname"><span class="pre">fit</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X_train</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y_train</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/luizfernandolj/mlquantify/tree/master/mlquantify/evaluation/protocol.py"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mlquantify.evaluation.protocol.Protocol.fit" title="Link to this definition">#</a></dt>
-<dd><p>Fits the models with the training data.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><dl class="simple">
-<dt><strong>X_train</strong><span class="classifier">np.ndarray</span></dt><dd><p>Features of the training set.</p>
-</dd>
-<dt><strong>y_train</strong><span class="classifier">np.ndarray</span></dt><dd><p>Labels of the training set.</p>
-</dd>
-</dl>
-</dd>
-<dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><dl class="simple">
-<dt>Protocol</dt><dd><p>Fitted protocol.</p>
-</dd>
-</dl>
-</dd>
-</dl>
+<dt class="sig sig-object py" id="mlquantify.evaluation.protocol.Protocol.get_n_combinations">
+<span class="sig-name descname"><span class="pre">get_n_combinations</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">int</span></span></span><a class="reference external" href="https://github.com/luizfernandolj/mlquantify/tree/master/mlquantify/evaluation/protocol.py"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mlquantify.evaluation.protocol.Protocol.get_n_combinations" title="Link to this definition">#</a></dt>
+<dd><p>Get the number of combinations for the current protocol.</p>
 </dd></dl>
 
 <dl class="py method">
-<dt class="sig sig-object py" id="mlquantify.evaluation.protocol.Protocol.predict">
-<span class="sig-name descname"><span class="pre">predict</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X_test</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">ndarray</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y_test</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">ndarray</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Any</span></span></span><a class="reference external" href="https://github.com/luizfernandolj/mlquantify/tree/master/mlquantify/evaluation/protocol.py"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mlquantify.evaluation.protocol.Protocol.predict" title="Link to this definition">#</a></dt>
-<dd><p>Predicts the prevalence for the test set.</p>
+<dt class="sig sig-object py" id="mlquantify.evaluation.protocol.Protocol.split">
+<span class="sig-name descname"><span class="pre">split</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">ndarray</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">ndarray</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/luizfernandolj/mlquantify/tree/master/mlquantify/evaluation/protocol.py"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mlquantify.evaluation.protocol.Protocol.split" title="Link to this definition">#</a></dt>
+<dd><p>Split the data into samples for evaluation.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><dl class="simple">
-<dt><strong>X_test</strong><span class="classifier">np.ndarray</span></dt><dd><p>Features of the test set.</p>
+<dt><strong>X</strong><span class="classifier">np.ndarray</span></dt><dd><p>The input features.</p>
 </dd>
-<dt><strong>y_test</strong><span class="classifier">np.ndarray</span></dt><dd><p>Labels of the test set.</p>
+<dt><strong>y</strong><span class="classifier">np.ndarray</span></dt><dd><p>The target labels.</p>
 </dd>
 </dl>
 </dd>
-<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dt class="field-even">Yields<span class="colon">:</span></dt>
 <dd class="field-even"><dl class="simple">
-<dt>Any</dt><dd><p>Predictions for the test set. Can be a table or a tuple with the quantifier names, real prevalence, and predicted prevalence.</p>
+<dt>Generator[np.ndarray, np.ndarray]</dt><dd><p>A generator that yields the indices for each split.</p>
 </dd>
 </dl>
 </dd>
 </dl>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="mlquantify.evaluation.protocol.Protocol.predict_protocol">
-<em class="property"><span class="pre">abstract</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">predict_protocol</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X_test</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">ndarray</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y_test</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">ndarray</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">ndarray</span></span></span><a class="reference external" href="https://github.com/luizfernandolj/mlquantify/tree/master/mlquantify/evaluation/protocol.py"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mlquantify.evaluation.protocol.Protocol.predict_protocol" title="Link to this definition">#</a></dt>
-<dd><p>Abstract method that every protocol must implement</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><dl class="simple">
-<dt><strong>X_test</strong><span class="classifier">np.ndarray</span></dt><dd><p>Features of the test set.</p>
-</dd>
-<dt><strong>y_test</strong><span class="classifier">np.ndarray</span></dt><dd><p>Labels of the test set.</p>
-</dd>
-</dl>
-</dd>
-<dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><dl class="simple">
-<dt>np.ndarray</dt><dd><p>Predictions for the test set. With the same format as the column names attribute.</p>
-</dd>
-</dl>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="mlquantify.evaluation.protocol.Protocol.sout">
-<span class="sig-name descname"><span class="pre">sout</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">msg</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/luizfernandolj/mlquantify/tree/master/mlquantify/evaluation/protocol.py"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mlquantify.evaluation.protocol.Protocol.sout" title="Link to this definition">#</a></dt>
-<dd><p>Prints a message if verbose is True.</p>
 </dd></dl>
 
 </dd></dl>
@@ -742,10 +590,8 @@ If columns does not contain [‘QUANTIFIER’, ‘REAL_PREVS’, ‘PRED_PREVS�
     
 <ul class="visible nav section-nav flex-column">
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#mlquantify.evaluation.protocol.Protocol"><code class="docutils literal notranslate"><span class="pre">Protocol</span></code></a><ul class="nav section-nav flex-column visible">
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#mlquantify.evaluation.protocol.Protocol.fit"><code class="docutils literal notranslate"><span class="pre">fit</span></code></a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#mlquantify.evaluation.protocol.Protocol.predict"><code class="docutils literal notranslate"><span class="pre">predict</span></code></a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#mlquantify.evaluation.protocol.Protocol.predict_protocol"><code class="docutils literal notranslate"><span class="pre">predict_protocol</span></code></a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#mlquantify.evaluation.protocol.Protocol.sout"><code class="docutils literal notranslate"><span class="pre">sout</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#mlquantify.evaluation.protocol.Protocol.get_n_combinations"><code class="docutils literal notranslate"><span class="pre">get_n_combinations</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#mlquantify.evaluation.protocol.Protocol.split"><code class="docutils literal notranslate"><span class="pre">split</span></code></a></li>
 </ul>
 </li>
 </ul>

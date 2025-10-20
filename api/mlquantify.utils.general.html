@@ -338,6 +338,8 @@
 <li class="toctree-l2"><a class="reference internal" href="../modules/generated/mlquantify.evaluation.protocol.Protocol.html">Protocol</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../modules/generated/mlquantify.evaluation.protocol.APP.html">APP</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../modules/generated/mlquantify.evaluation.protocol.NPP.html">NPP</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../modules/generated/mlquantify.evaluation.protocol.UPP.html">UPP</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../modules/generated/mlquantify.evaluation.protocol.PPP.html">PPP</a></li>
 </ul>
 </details></li>
 <li class="toctree-l1 has-children"><a class="reference internal" href="mlquantify.methods.aggregative.html">mlquantify.methods.aggregative</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
@@ -376,7 +378,6 @@
 </details></li>
 <li class="toctree-l1 current active has-children"><a class="current reference internal" href="#">mlquantify.utils.general</a><details open="open"><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
 <li class="toctree-l2"><a class="reference internal" href="../modules/generated/mlquantify.utils.general.convert_columns_to_arrays.html">convert_columns_to_arrays</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../modules/generated/mlquantify.utils.general.generate_artificial_indexes.html">generate_artificial_indexes</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../modules/generated/mlquantify.utils.general.generate_artificial_prevalences.html">generate_artificial_prevalences</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../modules/generated/mlquantify.utils.general.get_real_prev.html">get_real_prev</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../modules/generated/mlquantify.utils.general.load_quantifier.html">load_quantifier</a></li>
@@ -463,34 +464,31 @@
 <tr class="row-odd"><td><p><a class="reference internal" href="../modules/generated/mlquantify.utils.general.convert_columns_to_arrays.html#mlquantify.utils.general.convert_columns_to_arrays" title="mlquantify.utils.general.convert_columns_to_arrays"><code class="xref py py-obj docutils literal notranslate"><span class="pre">convert_columns_to_arrays</span></code></a></p></td>
 <td><p>Converts specified columns in a DataFrame from strings of arrays to NumPy arrays.</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="../modules/generated/mlquantify.utils.general.generate_artificial_indexes.html#mlquantify.utils.general.generate_artificial_indexes" title="mlquantify.utils.general.generate_artificial_indexes"><code class="xref py py-obj docutils literal notranslate"><span class="pre">generate_artificial_indexes</span></code></a></p></td>
-<td><p>Generate indexes for a stratified sample based on the prevalence of each class.</p></td>
-</tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="../modules/generated/mlquantify.utils.general.generate_artificial_prevalences.html#mlquantify.utils.general.generate_artificial_prevalences" title="mlquantify.utils.general.generate_artificial_prevalences"><code class="xref py py-obj docutils literal notranslate"><span class="pre">generate_artificial_prevalences</span></code></a></p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="../modules/generated/mlquantify.utils.general.generate_artificial_prevalences.html#mlquantify.utils.general.generate_artificial_prevalences" title="mlquantify.utils.general.generate_artificial_prevalences"><code class="xref py py-obj docutils literal notranslate"><span class="pre">generate_artificial_prevalences</span></code></a></p></td>
 <td><p>Generates n artificial prevalences with n dimensions.</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="../modules/generated/mlquantify.utils.general.get_real_prev.html#mlquantify.utils.general.get_real_prev" title="mlquantify.utils.general.get_real_prev"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_real_prev</span></code></a></p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="../modules/generated/mlquantify.utils.general.get_real_prev.html#mlquantify.utils.general.get_real_prev" title="mlquantify.utils.general.get_real_prev"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_real_prev</span></code></a></p></td>
 <td><p>Get the real prevalence of each class in the target array.</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="../modules/generated/mlquantify.utils.general.load_quantifier.html#mlquantify.utils.general.load_quantifier" title="mlquantify.utils.general.load_quantifier"><code class="xref py py-obj docutils literal notranslate"><span class="pre">load_quantifier</span></code></a></p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="../modules/generated/mlquantify.utils.general.load_quantifier.html#mlquantify.utils.general.load_quantifier" title="mlquantify.utils.general.load_quantifier"><code class="xref py py-obj docutils literal notranslate"><span class="pre">load_quantifier</span></code></a></p></td>
 <td><p>Load a quantifier from a file.</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="../modules/generated/mlquantify.utils.general.make_prevs.html#mlquantify.utils.general.make_prevs" title="mlquantify.utils.general.make_prevs"><code class="xref py py-obj docutils literal notranslate"><span class="pre">make_prevs</span></code></a></p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="../modules/generated/mlquantify.utils.general.make_prevs.html#mlquantify.utils.general.make_prevs" title="mlquantify.utils.general.make_prevs"><code class="xref py py-obj docutils literal notranslate"><span class="pre">make_prevs</span></code></a></p></td>
 <td><p>Generate a list of n_dim values uniformly distributed between 0 and 1 that sum exactly to 1.</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="../modules/generated/mlquantify.utils.general.normalize_prevalence.html#mlquantify.utils.general.normalize_prevalence" title="mlquantify.utils.general.normalize_prevalence"><code class="xref py py-obj docutils literal notranslate"><span class="pre">normalize_prevalence</span></code></a></p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="../modules/generated/mlquantify.utils.general.normalize_prevalence.html#mlquantify.utils.general.normalize_prevalence" title="mlquantify.utils.general.normalize_prevalence"><code class="xref py py-obj docutils literal notranslate"><span class="pre">normalize_prevalence</span></code></a></p></td>
 <td><p>Normalize the prevalence of each class to sum to 1.</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="../modules/generated/mlquantify.utils.general.parallel.html#mlquantify.utils.general.parallel" title="mlquantify.utils.general.parallel"><code class="xref py py-obj docutils literal notranslate"><span class="pre">parallel</span></code></a></p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="../modules/generated/mlquantify.utils.general.parallel.html#mlquantify.utils.general.parallel" title="mlquantify.utils.general.parallel"><code class="xref py py-obj docutils literal notranslate"><span class="pre">parallel</span></code></a></p></td>
 <td><p>Run a function in parallel on a list of elements.</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="../modules/generated/mlquantify.utils.general.round_protocol_df.html#mlquantify.utils.general.round_protocol_df" title="mlquantify.utils.general.round_protocol_df"><code class="xref py py-obj docutils literal notranslate"><span class="pre">round_protocol_df</span></code></a></p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="../modules/generated/mlquantify.utils.general.round_protocol_df.html#mlquantify.utils.general.round_protocol_df" title="mlquantify.utils.general.round_protocol_df"><code class="xref py py-obj docutils literal notranslate"><span class="pre">round_protocol_df</span></code></a></p></td>
 <td><p>Round the columns of a protocol dataframe to a specified number of decimal places.</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="../modules/generated/mlquantify.utils.general.get_measure.html#mlquantify.utils.general.get_measure" title="mlquantify.utils.general.get_measure"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_measure</span></code></a></p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="../modules/generated/mlquantify.utils.general.get_measure.html#mlquantify.utils.general.get_measure" title="mlquantify.utils.general.get_measure"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_measure</span></code></a></p></td>
 <td><p>Get the measure from the evaluation module.</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="../modules/generated/mlquantify.utils.general.get_method.html#mlquantify.utils.general.get_method" title="mlquantify.utils.general.get_method"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_method</span></code></a></p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="../modules/generated/mlquantify.utils.general.get_method.html#mlquantify.utils.general.get_method" title="mlquantify.utils.general.get_method"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_method</span></code></a></p></td>
 <td><p>Get the method from the methods module.</p></td>
 </tr>
 </tbody>
