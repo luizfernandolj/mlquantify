@@ -1,8 +1,6 @@
 from abc import ABC, abstractmethod
 from logging import warning
 import numpy as np
-from typing import Generator, Tuple
-from tqdm import tqdm
 
 from ..utils.general import *
 
@@ -62,7 +60,7 @@ class Protocol(ABC):
                 raise ValueError(f"Invalid argument {name}={value}: must be int/float or list of int/float.")
                  
 
-    def split(self, X: np.ndarray, y: np.ndarray) -> Generator[np.ndarray, np.ndarray]:
+    def split(self, X: np.ndarray, y: np.ndarray):
         """
         Split the data into samples for evaluation.
 
@@ -139,7 +137,7 @@ class APP(Protocol):
                             n_prevalences=n_prevalences, 
                             repeats=repeats)
 
-    def _iter_indices(self, X: np.ndarray, y: np.ndarray) -> Generator[np.ndarray]:
+    def _iter_indices(self, X: np.ndarray, y: np.ndarray):
         
         n_dim = len(np.unique(y))
         
@@ -182,7 +180,7 @@ class NPP(Protocol):
     ...     pass
     """
 
-    def _iter_indices(self, X: np.ndarray, y: np.ndarray) -> Generator[np.ndarray]:
+    def _iter_indices(self, X: np.ndarray, y: np.ndarray):
         
         for batch_size in self.batch_size:
             yield np.random.choice(X.shape[0], batch_size, replace=True)
@@ -226,7 +224,7 @@ class UPP(Protocol):
                             n_prevalences=n_prevalences, 
                             repeats=repeats)
 
-    def _iter_indices(self, X: np.ndarray, y: np.ndarray) -> Generator[np.ndarray]:
+    def _iter_indices(self, X: np.ndarray, y: np.ndarray):
         
         n_dim = len(np.unique(y))
         
@@ -279,7 +277,7 @@ class PPP(Protocol):
                         prevalences=prevalences, 
                         repeats=repeats)
     
-    def _iter_indices(self, X: np.ndarray, y: np.ndarray) -> Generator[np.ndarray]:
+    def _iter_indices(self, X: np.ndarray, y: np.ndarray):
         
         for batch_size in self.batch_size:    
             for prev in self.prevalences:
