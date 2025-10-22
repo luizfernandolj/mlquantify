@@ -1,8 +1,10 @@
 import numpy as np
+from abc import abstractmethod
 
-from mlquantify.base import (
-    BaseQuantifier,
-    AggregativeQuantifierMixin,
+from mlquantify.base import BaseQuantifier
+
+from mlquantify.base_aggregative import (
+    AggregationMixin,
     _get_learner_function
 )
 from mlquantify.utils._decorators import _fit_context
@@ -11,7 +13,7 @@ from mlquantify.utils._validation import validate_y
 
 
 
-class BaseCount(AggregativeQuantifierMixin, BaseQuantifier):
+class BaseCount(AggregationMixin, BaseQuantifier):
     """Base class for count-based quantifiers."""
 
     def __init__(self, learner=None):
@@ -28,7 +30,8 @@ class BaseCount(AggregativeQuantifierMixin, BaseQuantifier):
     
     def predict(self, X):
         """Predict class prevalences for the given data."""
-        predictions = _get_learner_function(self)(X)
+        estimator_function = _get_learner_function(self)
+        predictions = getattr(self.learner, estimator_function)(X)
         prevalences = self.aggregate(predictions)
         return prevalences
     

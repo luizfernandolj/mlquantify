@@ -24,7 +24,15 @@ def _validate_1d_predictions(quantifier: Any, y: np.ndarray, target_tags: Target
     if target_tags.continuous:
         return  # continuous allows any numeric vector
 
-    if target_tags.one_d and not target_tags.multi_class:
+    n_class = len(np.unique(y))
+
+    if target_tags.one_d:
+        
+        if n_class > 2 and not target_tags.multi_class:
+            raise InputValidationError(
+                f"1D predictions for {quantifier.__class__.__name__} must be binary "
+                f"with 2 unique values, got {n_class} unique values."
+            )
         if not np.issubdtype(y.dtype, np.number):
             raise InputValidationError(
                 f"1D predictions for {quantifier.__class__.__name__} must be numeric (int or float), "
@@ -52,7 +60,7 @@ def _validate_2d_predictions(quantifier: Any, y: np.ndarray, target_tags: Target
         )
 
     # Efficient normalization check for soft probabilities
-    if target_tags.multi_class:
+    if target_tags.two_d:
         row_sums = y.sum(axis=1)
         if np.abs(row_sums - 1).max() > 1e-3:
             raise InputValidationError(
@@ -71,12 +79,10 @@ def validate_y(quantifier: Any, y: np.ndarray) -> None:
     try:
         tags = get_tags(quantifier)
         target_tags = tags.target_input_tags
-        estimator_type = tags.estimator_type
     except AttributeError as e:
         raise InputValidationError(
             f"Quantifier {quantifier.__class__.__name__} does not implement __mlquantify_tags__()."
         ) from e
-    
     if y.ndim == 1:
         _validate_1d_predictions(quantifier, y, target_tags)
     elif y.ndim == 2:

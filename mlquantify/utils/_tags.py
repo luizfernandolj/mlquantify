@@ -8,7 +8,6 @@ class TargetInputTags:
     two_d: bool = False
     continuous: bool = False
     multi_class: bool = True
-    multi_label: bool = False
 
 
 @dataclass

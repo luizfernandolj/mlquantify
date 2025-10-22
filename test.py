@@ -5,7 +5,7 @@ from sklearn.model_selection import train_test_split
 import numpy as np
 
 # Carregar o dataset Iris
-data = load_breast_cancer()
+data = load_iris()
 X, y = data.data, data.target
 
 # Dividir o dataset em treino e teste
@@ -15,17 +15,17 @@ X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.5, random_
 dt = KNeighborsClassifier(n_neighbors=3)
 
 dt.fit(X_train, y_train)
-dt_pred = dt.predict_proba(X_test)
+dt_pred = dt.predict(X_test)
 
 #dt_pred = dt_pred[:, 1]
 
 # Usar o quantificador CC sem learner
-cc1 = PCC()
+cc1 = CC()
 predictions1 = cc1.aggregate(dt_pred)
 print("Predicted class prevalences 1:", predictions1)
 
 # Usar o quantificador CC com learner
-cc2 = PCC(learner=dt)
+cc2 = CC(learner=dt)
 cc2.fit(X_train, y_train)
 predictions2 = cc2.predict(X_test)
 print("Predicted class prevalences 2:", predictions2)
