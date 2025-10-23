@@ -68,9 +68,9 @@ def apply_cross_validation(
         if type(function) is str:
             if not hasattr(model, function):
                 raise AttributeError(f"The model does not have the method '{function}'.")
-            predictions = getattr(model, function)
+            predictions = getattr(model, function)(X_test)
         elif callable(function):
-            predictions = function
+            predictions = function(X_test)
         else:
             raise ValueError("The 'function' parameter must be a string or a callable.")
         

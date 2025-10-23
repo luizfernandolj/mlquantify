@@ -6,11 +6,6 @@ from mlquantify.utils._tags import (
     TargetInputTags,
     get_tags
 )
-from mlquantify.utils._decorators import (
-    set_binary_method
-)
-from mlquantify.utils._validation import validate_parameter_constraints, validate_learner_contraints
-from mlquantify.utils._constraints import Options
 
 
 
@@ -60,22 +55,26 @@ class BaseQuantifier(ABC, BaseEstimator):
 # ====================== Mixins ====================== #
 # ==================================================== #
 
-class BinaryQMixin:
+ 
 
-    _parameter_constraints = {
-        "strategy": [Options(["ova", "ovo"])],
-    }
 
-    @abstractmethod
-    def __init__(self, strategy="ova", *args, **kwargs):
-        super().__init__(*args, **kwargs)
-        self.strategy = strategy
+class SoftLearnerQMixin:
+    
+    def __mlquantify_tags__(self):
+        tags = super().__mlquantify_tags__()
+        tags.estimator_function = "predict_proba"
+        tags.estimator_type = "soft"
+        return tags
+
+
+class CrispLearnerQMixin:
 
     def __mlquantify_tags__(self):
         tags = super().__mlquantify_tags__()
-        tags.target_input_tags = TargetInputTags(multi_class=False)
+        tags.estimator_function = "predict"
+        tags.estimator_type= "crisp"
         return tags
-
+    
 
 class RegressorQMixin:
     

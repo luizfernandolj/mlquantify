@@ -1,11 +1,6 @@
 import numpy as np
 from sklearn.naive_bayes import abstractmethod
 
-
-from mlquantify.base import (
-    BinaryQMixin
-)
-
 from mlquantify.base_aggregative import (
     SoftLearnerQMixin,
     CrispLearnerQMixin
@@ -13,12 +8,11 @@ from mlquantify.base_aggregative import (
 
 from mlquantify.adjust_counting._base import BaseCount
 from mlquantify.utils._validation import validate_y, validate_predictions
-from mlquantify.utils._decorators import _fit_context
 from mlquantify.utils._constraints import Interval
         
 
 
-class CC(BinaryQMixin, CrispLearnerQMixin, BaseCount):
+class CC(CrispLearnerQMixin, BaseCount):
     
     
     _parameters_constraints = {
@@ -61,6 +55,9 @@ class CC(BinaryQMixin, CrispLearnerQMixin, BaseCount):
 
 
 class PCC(SoftLearnerQMixin, BaseCount):
+
+    def __init__(self, learner=None):
+        super().__init__(learner=learner)
 
     def aggregate(self, predictions):
         validate_predictions(self, predictions)
