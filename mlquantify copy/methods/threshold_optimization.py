@@ -617,7 +617,7 @@ class MS2(ThresholdOptimization):
         indices = np.where(np.abs(tprs - fprs) > 0.25)[0]
         if len(indices) == 0:
             warnings.warn("No cases satisfy the condition |TPR - FPR| > 0.25.")
-            indices = np.where(np.abs(tprs - fprs) >= 0)[0]
+            indices =  np.where(np.abs(tprs - fprs) >= 0)[0]
             
         thresholds_ = thresholds[indices]
         tprs_ = tprs[indices]

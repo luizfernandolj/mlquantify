@@ -1,7 +1,7 @@
 import numpy as np
 
 
-def compute_table(y, y_pred):
+def compute_table(y, y_pred, classes):
     """
     Compute the confusion matrix table for a binary classification task.
     
@@ -19,10 +19,10 @@ def compute_table(y, y_pred):
     tuple
         A tuple containing the True Positives, False Positives, False Negatives, and True Negatives.
     """
-    TP = np.logical_and(y == y_pred, y == 1).sum()
-    FP = np.logical_and(y != y_pred, y == 0).sum()
-    FN = np.logical_and(y != y_pred, y == 1).sum()
-    TN = np.logical_and(y == y_pred, y == 0).sum()
+    TP = np.logical_and(y == y_pred, y == classes[1]).sum()
+    FP = np.logical_and(y != y_pred, y == classes[0]).sum()
+    FN = np.logical_and(y != y_pred, y == classes[1]).sum()
+    TN = np.logical_and(y == y_pred, y == classes[0]).sum()
     return TP, FP, FN, TN
 
 
@@ -68,7 +68,7 @@ def compute_fpr(FP, TN):
     return FP / (FP + TN)
 
 
-def evaluate_thresholds (y, probabilities:np.ndarray) -> tuple:
+def evaluate_thresholds (y, probabilities:np.ndarray, classes) -> tuple:
     """
     Adjust the threshold for a binary quantification task to maximize the True Positive Rate.
     

@@ -54,26 +54,6 @@ class BaseQuantifier(ABC, BaseEstimator):
 # ==================================================== #
 # ====================== Mixins ====================== #
 # ==================================================== #
-
- 
-
-
-class SoftLearnerQMixin:
-    
-    def __mlquantify_tags__(self):
-        tags = super().__mlquantify_tags__()
-        tags.estimator_function = "predict_proba"
-        tags.estimator_type = "soft"
-        return tags
-
-
-class CrispLearnerQMixin:
-
-    def __mlquantify_tags__(self):
-        tags = super().__mlquantify_tags__()
-        tags.estimator_function = "predict"
-        tags.estimator_type= "crisp"
-        return tags
     
 
 class RegressorQMixin:

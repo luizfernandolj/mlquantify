@@ -4,5 +4,11 @@ from ._adjustment import (
     MatrixAdjustment,
     FM,
     GAC,
-    GPAC
+    GPAC,
+    ACC,
+    X_method,
+    MAX,
+    T50,
+    MS,
+    MS2,
 )
