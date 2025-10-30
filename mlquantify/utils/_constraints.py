@@ -1,6 +1,7 @@
 from dataclasses import dataclass
 import numbers
 import numpy as np
+from mlquantify.utils._validation import _is_arraylike_not_scalar
 
 
 @dataclass
@@ -45,6 +46,16 @@ class Options:
 
     def __str__(self):
         return f"one of {self.options}"
+    
+@dataclass
+class _ArrayLikes(_Constraint):
+    """Constraint representing array-likes"""
+
+    def is_satisfied_by(self, val):
+        return _is_arraylike_not_scalar(val)
+
+    def __str__(self):
+        return "an array-like"
 
 @dataclass
 class HasMethods:
@@ -76,6 +87,8 @@ class Hidden:
 
 def make_constraint(obj):
     """Normalize strings and simple types into constraint objects."""
+    if isinstance(obj, str) and obj == "array-like":
+        return _ArrayLikes()
     if isinstance(obj, (Interval, Options, HasMethods, Hidden)):
         return obj
     if isinstance(obj, type):

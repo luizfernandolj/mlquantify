@@ -1,6 +1,7 @@
 from __future__ import annotations
 from typing import Any
 import numpy as np
+import scipy.sparse as sp
 
 from mlquantify.utils._tags import TargetInputTags, get_tags
 from mlquantify.utils._exceptions import InputValidationError, InvalidParameterError, NotFittedError
@@ -203,3 +204,16 @@ def check_is_fitted(quantifier, attributes=None, *, msg=None, all_or_any=all):
     
     if not _is_fitted(quantifier, attributes, all_or_any):
         raise NotFittedError(msg % {"name": type(quantifier).__name__})
+
+
+def _is_arraylike_not_scalar(array):
+    """Return True if array is array-like and not a scalar"""
+    return _is_arraylike(array) and not np.isscalar(array)
+
+
+def _is_arraylike(x):
+    """Returns whether the input is array-like."""
+    if sp.issparse(x):
+        return False
+
+    return hasattr(x, "__len__") or hasattr(x, "shape") or hasattr(x, "__array__")
