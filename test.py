@@ -30,6 +30,15 @@ from mlquantify.neighbors import (
     PWK
 )
 
+
+from mlquantify.evaluation import (
+    BaseProtocol,
+    APP,
+    NPP,
+    UPP,
+    PPP
+)
+
 from sklearn.neighbors import KNeighborsClassifier
 from sklearn.datasets import load_breast_cancer, load_iris
 from sklearn.model_selection import train_test_split

@@ -1,10 +1,16 @@
+import numpy as np
+
+from mlquantify.utils._sampling import (
+    get_indexes_with_prevalence, 
+    artificial_sampling,
+    kraemer_sampling
+)
 from abc import ABC, abstractmethod
 from logging import warning
 import numpy as np
 
-from ..utils.general import *
 
-class Protocol(ABC):
+class BaseProtocol(ABC):
     """Base class for evaluation protocols.
     
     Parameters
@@ -30,12 +36,12 @@ class Protocol(ABC):
     Examples
     --------
     >>> class MyCustomProtocol(Protocol):
-    ...     def _iter_indices(self, X: np.ndarray, y: np.ndarray) -> Generator[np.ndarray]:
+    ...     def _iter_indices(self, X: np.ndarray, y: np.ndarray):
     ...         for batch_size in self.batch_size:
     ...             yield np.random.choice(X.shape[0], batch_size, replace=True)
     ...
     >>> protocol = MyCustomProtocol(batch_size=100, random_state=42)
-    >>> for train_idx, test_idx in protocol.split(X, y):
+    >>> for idx in protocol.split(X, y):
     ...     # Train and evaluate model
     ...     pass
 
@@ -94,7 +100,13 @@ class Protocol(ABC):
         return self.n_combinations
 
 
-class APP(Protocol):
+
+# ===========================================
+# Protocol Implementations
+# ===========================================
+
+
+class APP(BaseProtocol):
     """Artificial Prevalence Protocol (APP) for evaluation.
     This protocol generates artificial prevalence distributions for the evaluation in an exhaustive manner, testing all possible combinations of prevalences.
     
@@ -142,9 +154,9 @@ class APP(Protocol):
         n_dim = len(np.unique(y))
         
         for batch_size in self.batch_size:
-            prevalences = generate_artificial_prevalences(n_dim=n_dim,
-                                                           n_prev=self.n_prevalences,
-                                                           n_iter=self.repeats)
+            prevalences = artificial_sampling(n_dim=n_dim,
+                                              n_prev=self.n_prevalences,
+                                              n_iter=self.repeats)
             for prev in prevalences:
                 indexes = get_indexes_with_prevalence(y, prev, batch_size)
                 yield indexes
@@ -152,7 +164,7 @@ class APP(Protocol):
 
             
 
-class NPP(Protocol):
+class NPP(BaseProtocol):
     """No Prevalence Protocol (NPP) for evaluation.
     This protocol just samples the data without any consideration for prevalence, with all instances having equal probability of being selected.
 
@@ -186,7 +198,7 @@ class NPP(Protocol):
             yield np.random.choice(X.shape[0], batch_size, replace=True)
             
 
-class UPP(Protocol):
+class UPP(BaseProtocol):
     """Uniform Prevalence Protocol (UPP) for evaluation.
     An extension of the APP that generates artificial prevalence distributions uniformly across all classes utilizing the kraemer sampling method.
 
@@ -239,7 +251,7 @@ class UPP(Protocol):
                 yield indexes
 
 
-class PPP(Protocol):
+class PPP(BaseProtocol):
     """ Personalized Prevalence Protocol (PPP) for evaluation.
     This protocol generates artificial prevalence distributions personalized for each class.
 
