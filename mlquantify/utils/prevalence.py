@@ -2,7 +2,7 @@ import numpy as np
 import pandas as pd
 
 
-def get_real_prev(y) -> dict:
+def get_prev_from_labels(y) -> dict:
     """
     Get the real prevalence of each class in the target array.
     

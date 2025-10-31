@@ -469,4 +469,14 @@ def _draw_simplex(ndim, min_val, max_trials=100):
         if trials >= max_trials:
             raise ValueError(f'it looks like finding a random simplex with all its dimensions being'
                              f'>= {min_val} is unlikely (it failed after {max_trials} trials)')
-            
+
+
+
+
+
+
+
+
+class QuaDapt(BaseQuantifier):
+    """Placeholder for QuaDapt class."""
+    pass

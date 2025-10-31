@@ -9,7 +9,7 @@ from mlquantify.utils._constraints import (
     CallableConstraint
 )
 from mlquantify.utils.prevalence import (
-    get_real_prev,
+    get_prev_from_labels,
     normalize_prevalence
 )
 from mlquantify.utils._load import load_quantifier
@@ -21,7 +21,7 @@ from mlquantify.utils._exceptions import (
     InvalidParameterError,
     NotFittedError
 )
-from mlquantify.utils._get_scores import get_scores
+from mlquantify.utils._get_scores import apply_cross_validation
 from mlquantify.utils._parallel import resolve_n_jobs
 from mlquantify.utils._random import check_random_state
 from mlquantify.utils._sampling import (

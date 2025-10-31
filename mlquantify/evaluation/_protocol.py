@@ -191,11 +191,20 @@ class NPP(BaseProtocol):
     ...     # Train and evaluate model
     ...     pass
     """
+    
+    def __init__(self, batch_size, n_samples=1, repeats=1, random_state=None):
+        super().__init__(batch_size=batch_size, 
+                        random_state=random_state)
+        self.n_samples = n_samples
+        self.repeats = repeats
 
     def _iter_indices(self, X: np.ndarray, y: np.ndarray):
         
-        for batch_size in self.batch_size:
-            yield np.random.choice(X.shape[0], batch_size, replace=True)
+        for _ in range(self.n_samples):
+            for batch_size in self.batch_size:
+                idx = np.random.choice(X.shape[0], batch_size, replace=True)
+                for _ in range(self.repeats):
+                    yield idx
             
 
 class UPP(BaseProtocol):
