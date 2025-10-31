@@ -63,34 +63,5 @@ class BaseQuantifier(ABC, BaseEstimator):
 # ==================================================== #
     
 
-class RegressorQMixin:
-    
-    def __mlquantify_tags__(self):
-        tags = super().__mlquantify_tags__() 
-        tags.estimator_function = "predict"
-        tags.estimator_type= "regression"
-        return tags
-
-
-class DistributionMixin:
-
-    def __mlquantify_tags__(self):
-        tags = super().__mlquantify_tags__()
-        tags.estimation_type = "distribution"
-        return tags
-
-
-class MaximumLikelihoodMixin:
-
-    def __mlquantify_tags__(self):
-        tags = super().__mlquantify_tags__()
-        tags.estimation_type = "likelihood"
-        return tags
-
-
-class ThresholdAdjustmentMixin:
-
-    def __mlquantify_tags__(self):
-        tags = super().__mlquantify_tags__()
-        tags.estimation_type = "adjusting"
-        return tags
+class MetaquantifierMixin:
+    ...
