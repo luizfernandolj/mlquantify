@@ -8,6 +8,7 @@ from mlquantify.base_aggregative import (
     SoftLearnerQMixin,
     _get_learner_function
 )
+from mlquantify.mixture._utils import sqEuclidean
 from mlquantify.utils._decorators import _fit_context
 from mlquantify.utils._validation import validate_y
 from mlquantify.utils._get_scores import apply_cross_validation
@@ -17,13 +18,18 @@ from mlquantify.utils._constraints import (
     CallableConstraint
 )
 from sklearn.neighbors import KernelDensity
+from mlquantify.mixture._utils import (
+    hellinger,
+    topsoe,
+    probsymm,
+    sqEuclidean
+)
 
 
 class BaseMixture(BaseQuantifier):
     """Base class for mixture-based quantifiers."""
     
-    def __init__(self, learner=None):
-        super().__init__(learner)
+    def __init__(self):
         self._precomputed = False
         self.distances = None
 
@@ -33,35 +39,44 @@ class BaseMixture(BaseQuantifier):
         validate_y(self, y)
         self.classes = np.unique(y)
         
-        self._precompute_training(X, y, *args, **kwargs)
-        self._precomputed = True
-        
+        self._fit(X, y, *args, **kwargs)
         return self
     
-
-    def predict(self, X):
+    def predict(self, X, *args, **kwargs):
         """Predict class prevalences for the given data."""
-        predictions = getattr(self.learner, _get_learner_function(self))(X)
-
-        prevalences = self.aggregate(predictions, self.train_predictions, self.train_y_values)
-        return prevalences
+        return self._predict(X, *args, **kwargs)
     
-    def aggregate(self, predictions, train_predictions, train_y_values):
-        
-        self.classes = self.classes if hasattr(self, 'classes') else np.unique(train_y_values)
-        
-        if not self._precomputed:
-            self._precompute_training(train_predictions, train_y_values)
-            self._precomputed = True
-        
-        prevalence, _ = self._best_mixture(predictions, train_predictions, train_y_values)
+    def get_best_distance(self, *args, **kwargs):
+        _, best_distance = self.best_mixture(*args, **kwargs)
+        return best_distance
 
-        return prevalence
+    @abstractmethod
+    def best_mixture(self, X):
+        """Determine the best mixture parameters for the given data."""
+        pass
     
-    @abstractmethod
-    def _mixture(self, predictions, models):
-        ...
+    @classmethod
+    def get_distance(cls, dist_train, dist_test, measure="hellinger"):
+        """
+        Compute distance between two distributions.
+        """
         
-    @abstractmethod
-    def _precompute_training(self, train_predictions, train_y_values):
-        ...
+        if np.sum(dist_train) < 1e-20 or np.sum(dist_test) < 1e-20:
+            raise ValueError("One or both vectors are zero (empty)...")
+        if len(dist_train) != len(dist_test):
+            raise ValueError("Arrays must have the same length.")
+
+        dist_train = np.maximum(dist_train, 1e-20)
+        dist_test = np.maximum(dist_test, 1e-20)
+
+        if measure == "topsoe":
+            return topsoe(dist_train, dist_test)
+        elif measure == "probsymm":
+            return probsymm(dist_train, dist_test)
+        elif measure == "hellinger":
+            return hellinger(dist_train, dist_test)
+        elif measure == "euclidean":
+            return sqEuclidean(dist_train, dist_test)
+        else:
+            raise ValueError(f"Invalid measure: {measure}")
+    

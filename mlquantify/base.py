@@ -6,6 +6,7 @@ from mlquantify.utils._tags import (
     TargetInputTags,
     get_tags
 )
+from mlquantify.utils._validation import validate_parameter_constraints
 
 
 

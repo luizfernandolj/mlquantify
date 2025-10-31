@@ -1,12 +1,7 @@
-from ._kde import (
-    KDEyCS,
-    KDEyHD,
-    KDEyML,
-)
-
-from ._histogram import (
+from ._classes import (
     HDy,
     DyS,
     SMM,
-    SORD
+    SORD,
+    HDx
 )

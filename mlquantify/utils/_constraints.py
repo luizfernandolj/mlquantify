@@ -1,7 +1,6 @@
 from dataclasses import dataclass
 import numbers
 import numpy as np
-from mlquantify.utils._validation import _is_arraylike_not_scalar
 
 
 @dataclass
@@ -48,10 +47,11 @@ class Options:
         return f"one of {self.options}"
     
 @dataclass
-class _ArrayLikes(_Constraint):
+class _ArrayLikes:
     """Constraint representing array-likes"""
 
     def is_satisfied_by(self, val):
+        from mlquantify.utils._validation import _is_arraylike_not_scalar
         return _is_arraylike_not_scalar(val)
 
     def __str__(self):
