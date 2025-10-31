@@ -49,6 +49,12 @@ class BaseQuantifier(ABC, BaseEstimator):
             target_input_tags=TargetInputTags(),
             requires_fit= True
         )
+        
+    def save_quantifier(self, path: str=None) -> None:
+        if not path:
+            path = f"{self.__class__.__name__}.joblib"
+        import joblib
+        joblib.dump(self, path)
 
 
 
