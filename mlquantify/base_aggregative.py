@@ -65,6 +65,9 @@ def uses_soft_predictions(quantifier):
 def uses_crisp_predictions(quantifier):
     return get_tags(quantifier).estimator_type == "crisp"
 
+def is_aggregative_quantifier(quantifier):
+    return get_tags(quantifier).has_estimator
+
 
 def _get_learner_function(quantifier):
     tags = get_tags(quantifier)

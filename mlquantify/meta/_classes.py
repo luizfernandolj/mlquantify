@@ -10,6 +10,13 @@ from mlquantify.metrics._slq import MSE
 from mlquantify.mixture._utils import getHist, hellinger
 from mlquantify.utils import Options, Interval, CallableConstraint
 from mlquantify.utils import _fit_context
+from mlquantify.confidence import (
+    ConfidenceInterval,
+    ConfidenceEllipseSimplex,
+    ConfidenceEllipseCLR,
+    construct_confidence_region
+)
+from mlquantify.base_aggregative import is_aggregative_quantifier
 from mlquantify.utils._sampling import (
     simplex_grid_sampling, 
     simplex_uniform_sampling, 
@@ -18,6 +25,58 @@ from mlquantify.utils._sampling import (
 from mlquantify.model_selection import APP, NPP, UPP
 from mlquantify.utils._validation import validate_data, validate_prevalences
 from mlquantify.utils.prevalence import get_prev_from_labels
+
+
+
+def get_protocol_sampler(protocol_name, batch_size, n_prevalences, min_prev, max_prev, n_classes):
+    """ Returns a prevalence sampler function based on the specified protocol name.
+    
+    Parameters
+    ----------
+    protocol_name : str
+        The name of the protocol ('app', 'npp', 'upp', 'upp-k').
+    batch_size : int
+        The size of each batch.
+    n_prevalences : int
+        The number of prevalences to sample.
+    min_prev : float
+        The minimum prevalence value.
+    max_prev : float
+        The maximum prevalence value.
+    n_classes : int
+        The number of classes.
+        
+    Returns
+    -------
+    callable
+        A function that generates prevalence samples according to the specified protocol.
+    """
+    
+    if protocol_name == 'artificial':
+        protocol = APP(batch_size=batch_size,
+                           n_prevalences=n_prevalences,
+                           min_prev=min_prev,
+                           max_prev=max_prev)
+
+    elif protocol_name == 'natural':
+        protocol = NPP(batch_size=batch_size,
+                           n_samples=n_prevalences)
+
+    elif protocol_name == 'uniform':
+            protocol = UPP(batch_size=batch_size,
+                           n_prevalences=n_prevalences,
+                           algorithm='uniform',
+                           min_prev=min_prev,
+                           max_prev=max_prev)
+    elif protocol_name == 'kraemer':
+        protocol = UPP(batch_size=batch_size,
+                           n_prevalences=n_prevalences,
+                           algorithm='kraemer',
+                           min_prev=min_prev,
+                           max_prev=max_prev)
+    else:
+        raise ValueError(f"Unknown protocol: {protocol_name}")
+    return protocol
 
 class EnsembleQ(MetaquantifierMixin, BaseQuantifier):
         
@@ -28,7 +87,7 @@ class EnsembleQ(MetaquantifierMixin, BaseQuantifier):
         "max_prop": [Interval(left=0.0, right=1.0, inclusive_left=True, inclusive_right=True)],
         "selection_metric": [Options(['all', 'ptr', 'ds'])],
         "p_metric": [Interval(left=0.0, right=1.0, inclusive_left=True, inclusive_right=True)],
-        "protocol": [Options(['app', 'npp', 'upp', 'upp-k'])],
+        "protocol": [Options(['artificial', 'natural', 'uniform', 'kraemer'])],
         "return_type": [Options(['mean', 'median'])],
         "max_sample_size": [Options([Interval(left=1, right=None, discrete=True), None])],
         "max_trials": [Interval(left=1, right=None, discrete=True)],
@@ -42,7 +101,7 @@ class EnsembleQ(MetaquantifierMixin, BaseQuantifier):
                  min_prop=0.1,
                  max_prop=1,
                  selection_metric='all',
-                 protocol="upp",
+                 protocol="uniform",
                  p_metric=0.25,
                  return_type="mean",
                  max_sample_size=None,
@@ -100,28 +159,13 @@ class EnsembleQ(MetaquantifierMixin, BaseQuantifier):
         # min_pos positive examples)
         sample_size = len(y) if self.max_sample_size is None else min(self.max_sample_size, len(y))
         
-        if self.protocol == 'app':
-            protocol = APP(batch_size=sample_size,
-                           n_prevalences=self.size,
-                           min_prev=self.min_prop,
-                           max_prev=self.max_prop)
-
-        elif self.protocol == 'npp':
-            protocol = NPP(batch_size=sample_size,
-                           n_samples=self.size)
-
-        elif self.protocol == 'upp':
-            protocol = UPP(batch_size=sample_size,
-                           n_prevalences=self.size,
-                           algorithm='uniform',
-                           min_prev=self.min_prop,
-                           max_prev=self.max_prop)
-        elif self.protocol == 'upp-k':
-            protocol = UPP(batch_size=sample_size,
-                           n_prevalences=self.size,
-                           algorithm='kraemer',
-                           min_prev=self.min_prop,
-                           max_prev=self.max_prop)
+        protocol = get_protocol_sampler(
+            batch_size=sample_size, 
+            n_prevalences=self.size, 
+            min_prev=self.min_prop, 
+            max_prev=self.max_prop,
+            n_classes=len(self.classes)
+        )()
 
         posteriors = None
         if self.selection_metric == 'ds':
@@ -298,6 +342,66 @@ def _select_k(elements, order, k):
         return elements_k
     print(f"Unable to take {k} for elements with size {len(elements)}")
     return elements
+
+
+
+
+
+class AggregativeBootstrap(MetaquantifierMixin, BaseQuantifier):
+
+
+    _parameter_constraints = {
+        "quantifier": [BaseQuantifier],
+        "n_train_bootstraps": [Interval(left=1, right=None, discrete=True)],
+        "n_test_bootstraps": [Interval(left=1, right=None, discrete=True)],
+        "random_state": [Options([None, int])],
+        "region_type": [Options(['ellipse-simplex', 'ellipse', 'simplex'])],
+        "bootstrap_method": [Options(['uniform', 'artificial', 'kraemer'])],
+    }
+
+    def __init__(self, 
+                 quantifier, 
+                 n_train_bootstraps=100, 
+                 n_test_bootstraps=100,
+                 random_state=None,
+                 bootstrap_method='uniform',
+                 region_type='ellipse-simplex',):
+        self.quantifier = quantifier
+        self.n_train_bootstraps = n_train_bootstraps
+        self.n_test_bootstraps = n_test_bootstraps
+        self.random_state = random_state
+        
+    def fit(self, X, y):
+        """ Fits the aggregative bootstrap model to the given training data.
+        
+        Parameters
+        ----------
+        X : array-like of shape (n_samples, n_features)
+            The input data.
+        y : array-like of shape (n_samples,)
+            The target values.
+            
+        Returns
+        -------
+        self : AggregativeBootstrap
+            The fitted aggregative bootstrap model.
+        """
+        X, y = validate_data(self, X, y)
+        self.classes = np.unique(y)
+        
+        if not is_aggregative_quantifier(self.quantifier):
+            raise ValueError(f"The quantifier {self.quantifier.__class__.__name__} is not an aggregative quantifier.")
+        
+        protocol = get_protocol_sampler(
+            protocol_name=self.bootstrap_method,
+            batch_size=len(y),
+            random_state=self.random_state
+            
+        
+        
+
+
+
 
 
 class QuaDapt(MetaquantifierMixin, BaseQuantifier):
