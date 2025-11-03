@@ -25,8 +25,9 @@ from mlquantify.utils._get_scores import apply_cross_validation
 from mlquantify.utils._parallel import resolve_n_jobs
 from mlquantify.utils._random import check_random_state
 from mlquantify.utils._sampling import (
-    artificial_sampling,
-    kraemer_sampling,
+    simplex_uniform_kraemer,
+    simplex_grid_sampling,
+    simplex_uniform_sampling,
     get_indexes_with_prevalence
 )
 from mlquantify.utils._validation import (
@@ -40,7 +41,8 @@ from mlquantify.utils._validation import (
     _is_fitted,
     check_is_fitted,
     _is_arraylike_not_scalar,
-    _is_arraylike
+    _is_arraylike,
+    validate_data
 )
 from mlquantify.utils._wrappers import (
     OvaWrapper, 

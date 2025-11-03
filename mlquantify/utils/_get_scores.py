@@ -53,7 +53,6 @@ def apply_cross_validation(
         )
     
     # Pre-allocate arrays
-    n_samples = len(y)
     all_predictions = []
     all_true_labels = []
     

@@ -3,21 +3,10 @@ from abc import abstractmethod
 
 from mlquantify.base import BaseQuantifier
 
-from mlquantify.base_aggregative import (
-    AggregationMixin,
-    SoftLearnerQMixin,
-    _get_learner_function
-)
 from mlquantify.mixture._utils import sqEuclidean
 from mlquantify.utils._decorators import _fit_context
-from mlquantify.utils._validation import validate_y
-from mlquantify.utils._get_scores import apply_cross_validation
-from mlquantify.utils._constraints import (
-    Options,
-    Interval,
-    CallableConstraint
-)
-from sklearn.neighbors import KernelDensity
+from mlquantify.utils._validation import validate_y, validate_data
+
 from mlquantify.mixture._utils import (
     hellinger,
     topsoe,
@@ -36,6 +25,8 @@ class BaseMixture(BaseQuantifier):
     @_fit_context(prefer_skip_nested_validation=True)
     def fit(self, X, y, *args, **kwargs):
         """Fit the quantifier using the provided data and learner."""
+        X, y = validate_data(self, 
+                             X, y)
         validate_y(self, y)
         self.classes = np.unique(y)
         

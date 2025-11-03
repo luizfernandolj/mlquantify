@@ -4,9 +4,11 @@ from sklearn.neighbors import KernelDensity
 
 from mlquantify.utils._decorators import _fit_context
 from mlquantify.base import BaseQuantifier
+from mlquantify.utils import validate_y, validate_predictions, validate_data
 from mlquantify.base_aggregative import AggregationMixin, SoftLearnerQMixin, _get_learner_function
 from mlquantify.utils._constraints import Interval, Options
 from mlquantify.utils._get_scores import apply_cross_validation
+from mlquantify.utils._validation import validate_prevalences
 
 EPS = 1e-12
 
@@ -31,6 +33,11 @@ class BaseKDE(SoftLearnerQMixin, AggregationMixin, BaseQuantifier):
     @_fit_context(prefer_skip_nested_validation=True)
     def fit(self, X, y, learner_fitted=False):
         """Treina o quantificador com validação cruzada interna."""
+        X, y = validate_data(self, X, y, ensure_2d=True, ensure_min_samples=2)
+        validate_y(self, y)
+        
+        self.classes = np.unique(y)
+        
         learner_function = _get_learner_function(self)
 
         if learner_fitted:
@@ -53,7 +60,6 @@ class BaseKDE(SoftLearnerQMixin, AggregationMixin, BaseQuantifier):
         P = np.atleast_2d(train_predictions)
         y = np.asarray(train_y_values)
         classes = np.unique(y)
-        self._classes = classes
         self._class_kdes = []
 
         for c in classes:
@@ -72,13 +78,17 @@ class BaseKDE(SoftLearnerQMixin, AggregationMixin, BaseQuantifier):
     
     def aggregate(self, predictions, train_predictions, train_y_values):
         """Agrega as previsões em estimativas de prevalência."""
+        predictions = validate_predictions(self, predictions)
+        
+        self.classes = np.unique(train_y_values) if not hasattr(self, 'classes') else self.classes
+        
         if not self._precomputed:
             self._precompute_training(train_predictions, train_y_values)
             self._precomputed = True
 
         prevalence, _ = self._solve_prevalences(predictions)
         prevalence = np.clip(prevalence, EPS, None)
-        prevalence /= np.sum(prevalence) if np.sum(prevalence) > 0 else 1
+        prevalence = validate_prevalences(self, prevalence, self.classes)
         return prevalence
 
     def best_distance(self):

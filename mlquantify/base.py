@@ -65,3 +65,11 @@ class BaseQuantifier(ABC, BaseEstimator):
 
 class MetaquantifierMixin:
     ...
+
+class ProtocolMixin:
+    
+    def __mlquantify_tags__(self):
+        tags = super().__mlquantify_tags__()
+        tags.estimation_type = "sample"
+        tags.requires_fit = False
+        return tags

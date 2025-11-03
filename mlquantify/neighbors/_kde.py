@@ -7,6 +7,7 @@ from mlquantify.neighbors._utils import (
     negative_log_likelihood,
     EPS,
 )
+from mlquantify.utils import check_random_state
 from scipy.optimize import minimize
 
 
@@ -74,7 +75,7 @@ class KDEyHD(BaseKDE):
         super()._fit_kde_models(train_predictions, train_y_values)
         n_class = len(self._class_kdes)
         trials = int(self.montecarlo_trials)
-        rng = np.random.RandomState(self.random_state)
+        rng = check_random_state(self.random_state)
 
         samples = np.vstack([
             kde.sample(max(1, trials // n_class), random_state=rng)
@@ -118,13 +119,11 @@ class KDEyCS(BaseKDE):
     def _precompute_training(self, train_predictions, train_y_values):
         P = np.atleast_2d(train_predictions)
         y = np.asarray(train_y_values)
-        classes = np.unique(y)
-        self._classes = classes
-        centers = [P[y == c] for c in classes]
+        centers = [P[y == c] for c in self.classes]
         counts = np.array([len(x) if len(x) > 0 else 1 for x in centers])
         h_eff = np.sqrt(2) * self.bandwidth
 
-        B_bar = np.zeros((len(classes), len(classes)))
+        B_bar = np.zeros((len(self.classes), len(self.classes)))
         for i, Xi in enumerate(centers):
             for j, Xj in enumerate(centers[i:], start=i):
                 val = np.sum(gaussian_kernel(Xi, Xj, h_eff))
@@ -137,7 +136,7 @@ class KDEyCS(BaseKDE):
 
     def _solve_prevalences(self, predictions):
         Pte = np.atleast_2d(predictions)
-        n = len(self._classes)
+        n = len(self.classes)
         a_bar = np.array([np.sum(gaussian_kernel(Xi, Pte, self._h_eff)) for Xi in self._centers])
         counts = self._counts + EPS
         B_bar = self._B_bar + EPS

@@ -1,16 +1,20 @@
 import numpy as np
 
+from mlquantify.base import BaseQuantifier, ProtocolMixin
+from mlquantify.utils._constraints import Interval, Options
 from mlquantify.utils._sampling import (
     get_indexes_with_prevalence, 
-    artificial_sampling,
-    kraemer_sampling
+    simplex_grid_sampling,
+    simplex_uniform_kraemer,
+    simplex_uniform_sampling,
 )
+from mlquantify.utils._validation import validate_data
 from abc import ABC, abstractmethod
 from logging import warning
 import numpy as np
 
-
-class BaseProtocol(ABC):
+    
+class BaseProtocol(ProtocolMixin, BaseQuantifier):
     """Base class for evaluation protocols.
     
     Parameters
@@ -46,6 +50,11 @@ class BaseProtocol(ABC):
     ...     pass
 
     """
+    
+    _parameter_constraints = {
+        "batch_size": [Interval(left=1, right=None, discrete=True)],
+        "random_state": [Interval(left=0, right=None, discrete=True)]
+    }
 
     def __init__(self, batch_size, random_state=None, **kwargs):
         if isinstance(batch_size, int):
@@ -82,6 +91,7 @@ class BaseProtocol(ABC):
         Generator[np.ndarray, np.ndarray]
             A generator that yields the indices for each split.
         """
+        X, y = validate_data(self, X, y)
         for idx in self._iter_indices(X, y):
             if len(idx) > len(X):
                 warning(f"Batch size {len(idx)} exceeds dataset size {len(X)}. Replacement sampling will be used.")
@@ -142,21 +152,32 @@ class APP(BaseProtocol):
     ...     pass
 
     """
+    
+    _parameter_constraints = {
+        "n_prevalences": [Interval(left=1, right=None, discrete=True)],
+        "repeats": [Interval(left=1, right=None, discrete=True)],
+        "min_prev": [Interval(left=0.0, right=1.0)],
+        "max_prev": [Interval(left=0.0, right=1.0)]
+    }
 
-    def __init__(self, batch_size, n_prevalences, repeats=1, random_state=None):
+    def __init__(self, batch_size, n_prevalences, repeats=1, random_state=None, min_prev=0.0, max_prev=1.0):
         super().__init__(batch_size=batch_size, 
                             random_state=random_state,
                             n_prevalences=n_prevalences, 
                             repeats=repeats)
+        self.min_prev = min_prev
+        self.max_prev = max_prev
 
     def _iter_indices(self, X: np.ndarray, y: np.ndarray):
         
         n_dim = len(np.unique(y))
         
         for batch_size in self.batch_size:
-            prevalences = artificial_sampling(n_dim=n_dim,
+            prevalences = simplex_grid_sampling(n_dim=n_dim,
                                               n_prev=self.n_prevalences,
-                                              n_iter=self.repeats)
+                                              n_iter=self.repeats,
+                                              min_val=self.min_prev,
+                                              max_val=self.max_prev)
             for prev in prevalences:
                 indexes = get_indexes_with_prevalence(y, prev, batch_size)
                 yield indexes
@@ -191,6 +212,10 @@ class NPP(BaseProtocol):
     ...     # Train and evaluate model
     ...     pass
     """
+    
+    _parameter_constraints = {
+        "repeats": [Interval(left=1, right=None, discrete=True)]
+    }
     
     def __init__(self, batch_size, n_samples=1, repeats=1, random_state=None):
         super().__init__(batch_size=batch_size, 
@@ -238,23 +263,49 @@ class UPP(BaseProtocol):
     ...     # Train and evaluate model
     ...     pass
     """
+    
+    _parameter_constraints = {
+        "n_prevalences": [Interval(left=1, right=None, discrete=True)],
+        "repeats": [Interval(left=1, right=None, discrete=True)],
+        "min_prev": [Interval(left=0.0, right=1.0)],
+        "max_prev": [Interval(left=0.0, right=1.0)],
+        "algorithm": [Options(['kraemer', 'uniform'])]
+    }
 
-    def __init__(self, batch_size, n_prevalences, repeats=1, random_state=None):
+    def __init__(self, 
+                 batch_size, 
+                 n_prevalences, 
+                 repeats=1, 
+                 random_state=None, 
+                 min_prev=0.0, 
+                 max_prev=1.0,
+                 algorithm='kraemer'):
         super().__init__(batch_size=batch_size, 
                             random_state=random_state,
                             n_prevalences=n_prevalences, 
                             repeats=repeats)
+        self.min_prev = min_prev
+        self.max_prev = max_prev
+        self.algorithm = algorithm
 
     def _iter_indices(self, X: np.ndarray, y: np.ndarray):
         
         n_dim = len(np.unique(y))
         
         for batch_size in self.batch_size:
-            
-            prevalences = kraemer_sampling(n_dim=n_dim,
+            if self.algorithm == 'kraemer':
+                prevalences = simplex_uniform_kraemer(n_dim=n_dim,
                                            n_prev=self.n_prevalences,
-                                           n_iter=self.repeats)
-            
+                                           n_iter=self.repeats,
+                                           min_val=self.min_prev,
+                                           max_val=self.max_prev)
+            elif self.algorithm == 'uniform':
+                prevalences = simplex_uniform_sampling(n_dim=n_dim,
+                                              n_prev=self.n_prevalences,
+                                              n_iter=self.repeats,
+                                              min_val=self.min_prev,
+                                              max_val=self.max_prev)
+
             for prev in prevalences:
                 indexes = get_indexes_with_prevalence(y, prev, batch_size)
                 yield indexes
@@ -291,6 +342,11 @@ class PPP(BaseProtocol):
     ...     # Train and evaluate model
     ...     pass
     """
+    
+    _parameter_constraints = {
+        "repeats": [Interval(left=1, right=None, discrete=True)],
+        "prevalences": ["array-like"]
+    }
     
     def __init__(self, batch_size, prevalences, repeats=1, random_state=None):
         super().__init__(batch_size=batch_size, 

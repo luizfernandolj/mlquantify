@@ -8,7 +8,7 @@ from mlquantify.base_aggregative import (
     _get_learner_function
 )
 from mlquantify.utils._decorators import _fit_context
-from mlquantify.utils._validation import validate_y
+from mlquantify.utils._validation import validate_y, validate_data, validate_prevalences
 from mlquantify.utils._get_scores import apply_cross_validation
 
 
@@ -24,7 +24,16 @@ class BaseCount(AggregationMixin, BaseQuantifier):
     @_fit_context(prefer_skip_nested_validation=True)
     def fit(self, X, y, learner_fitted=False, *args, **kwargs):
         """Fit the quantifier using the provided data and learner."""
+        X, y = validate_data(self, 
+                             X, 
+                             y, 
+                             dtype=np.float64, 
+                             order="C", 
+                             accept_sparse=True, 
+                             accept_large_sparse=True)
+        
         validate_y(self, y)
+        
         self.classes = np.unique(y)
         if not learner_fitted:
             self.learner.fit(X, y, *args, **kwargs)
@@ -53,6 +62,14 @@ class BaseAdjustCount(AggregationMixin, BaseQuantifier):
     @_fit_context(prefer_skip_nested_validation=True)
     def fit(self, X, y, learner_fitted=False, *args, **kwargs):
         """Fit the quantifier using the provided data and learner."""
+        X, y = validate_data(self, 
+                             X, 
+                             y, 
+                             dtype=np.float64, 
+                             order="C", 
+                             accept_sparse=True, 
+                             accept_large_sparse=True)
+        
         validate_y(self, y)
         self.classes = np.unique(y)
         
@@ -85,5 +102,7 @@ class BaseAdjustCount(AggregationMixin, BaseQuantifier):
         prevalences = self.aggregate(predictions, self.train_predictions, self.train_y_values)
         return prevalences
 
-    def aggregate(self, predictions, *args):
-        return self._adjust(predictions, *args)
+    def aggregate(self, predictions, train_predictions, y_train_values):
+        prevalences = self._adjust(predictions, train_predictions, y_train_values)
+        prevalences = validate_prevalences(self, prevalences, self.classes)
+        return prevalences

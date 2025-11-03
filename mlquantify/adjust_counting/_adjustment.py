@@ -1,7 +1,7 @@
 import numpy as np     
 from abc import abstractmethod
 from scipy.optimize import minimize
-from yaml import warnings
+import warnings
 
 
 from mlquantify.adjust_counting._base import BaseAdjustCount
@@ -74,7 +74,7 @@ class MatrixAdjustment(BaseAdjustCount): # FM, GAC, GPAC
         self.classes = np.unique(train_y_values) if not hasattr(self, 'classes') else self.classes
 
         if self.solver == 'optim':
-            priors = CC().aggregate(train_y_pred)
+            priors = np.array(list(CC().aggregate(train_y_pred).values()))
             self.CM = self._compute_confusion_matrix(train_y_pred, train_y_values, priors)
             
             prevs_estim = self._get_estimations(predictions > priors)
@@ -117,9 +117,9 @@ class MatrixAdjustment(BaseAdjustCount): # FM, GAC, GPAC
 
     def _get_estimations(self, predictions):
         if uses_soft_predictions(self):
-            prevalences = PCC().aggregate(predictions)
+            prevalences = np.array(list(PCC().aggregate(predictions).values()))
         else:
-            prevalences = CC().aggregate(predictions)
+            prevalences = np.array(list(CC().aggregate(predictions).values()))
         return prevalences
 
     @abstractmethod

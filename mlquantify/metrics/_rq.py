@@ -37,7 +37,8 @@ def VSE(prev_pred, prev_real, train_values):
         Variance-normalised squared error.
     """
     prev_real, prev_pred = process_inputs(prev_pred, prev_real)
-    train_values = np.asarray(train_values, dtype=float)
+    if isinstance(train_values, dict):
+        train_values = np.asarray(list(train_values.values()))
     var_train = np.var(train_values, ddof=1)
     if var_train == 0:
         return np.nan

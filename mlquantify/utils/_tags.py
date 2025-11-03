@@ -7,7 +7,9 @@ class TargetInputTags:
     one_d: bool = True
     two_d: bool = False
     continuous: bool = False
+    categorical: bool = True
     multi_class: bool = True
+    required: bool = False
 
 
 @dataclass

@@ -7,7 +7,7 @@ from mlquantify.mixture._base import BaseMixture
 from mlquantify.utils._constraints import Interval, Options
 from mlquantify.utils._decorators import _fit_context
 from mlquantify.utils._get_scores import apply_cross_validation
-from mlquantify.utils._validation import validate_y
+from mlquantify.utils._validation import validate_predictions, validate_prevalences, validate_y
 from mlquantify.mixture._utils import (
     getHist,
     ternary_search,
@@ -77,7 +77,7 @@ class AggregativeMixture(SoftLearnerQMixin, AggregationMixin, BaseMixture):
         return prevalences
     
     def aggregate(self, predictions, train_predictions, train_y_values):
-        
+        predictions = validate_predictions(self, predictions)
         self.classes = self.classes if hasattr(self, 'classes') else np.unique(train_y_values)
         
         if not self._precomputed:
@@ -88,6 +88,7 @@ class AggregativeMixture(SoftLearnerQMixin, AggregationMixin, BaseMixture):
         
         best_alpha, _ = self.best_mixture(pos_test_scores, self.pos_scores, self.neg_scores)
         prevalence = np.array([1 - best_alpha, best_alpha])
+        prevalence = validate_prevalences(self, prevalence, self.classes)
         return prevalence
     
     @abstractmethod
@@ -269,6 +270,7 @@ class HDx(BaseMixture):
     def _predict(self, X) -> np.ndarray:
         alpha, _ = self.best_mixture(X, self.pos_features, self.neg_features)
         prevalence = np.array([1 - alpha, alpha])
+        prevalence = validate_prevalences(self, prevalence, self.classes)
         return prevalence
     
     def best_mixture(self, X, pos, neg):

@@ -1,6 +1,7 @@
 from dataclasses import dataclass
 import numbers
 import numpy as np
+from abc import ABC, abstractmethod
 
 
 @dataclass
@@ -83,6 +84,67 @@ class Hidden:
 
     def __str__(self):
         return "<hidden constraint>"
+    
+    
+def _type_name(t):
+    """Convert type into human readable string."""
+    module = t.__module__
+    qualname = t.__qualname__
+    if module == "builtins":
+        return qualname
+    elif t == numbers.Real:
+        return "float"
+    elif t == numbers.Integral:
+        return "int"
+    return f"{module}.{qualname}"
+    
+
+
+class _Constraint(ABC):
+    """Base class for the constraint objects."""
+
+    def __init__(self):
+        self.hidden = False
+
+    @abstractmethod
+    def is_satisfied_by(self, val):
+        """Whether or not a value satisfies the constraint.
+
+        Parameters
+        ----------
+        val : object
+            The value to check.
+
+        Returns
+        -------
+        is_satisfied : bool
+            Whether or not the constraint is satisfied by this value.
+        """
+
+    @abstractmethod
+    def __str__(self):
+        """A human readable representational string of the constraint."""
+
+
+    
+class _InstancesOf(_Constraint):
+    """Constraint representing instances of a given type.
+
+    Parameters
+    ----------
+    type : type
+        The valid type.
+    """
+
+    def __init__(self, type):
+        super().__init__()
+        self.type = type
+
+    def is_satisfied_by(self, val):
+        return isinstance(val, self.type)
+
+    def __str__(self):
+        return f"an instance of {_type_name(self.type)!r}"
 
 
 def make_constraint(obj):
@@ -92,7 +154,7 @@ def make_constraint(obj):
     if isinstance(obj, (Interval, Options, HasMethods, Hidden)):
         return obj
     if isinstance(obj, type):
-        return TypeConstraint(obj)
+        return _InstancesOf(obj)
     if callable(obj):
         return CallableConstraint(obj)
     if isinstance(obj, str):

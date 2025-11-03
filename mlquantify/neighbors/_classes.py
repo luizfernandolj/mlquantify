@@ -4,6 +4,8 @@ from mlquantify.base_aggregative import AggregationMixin, CrispLearnerQMixin
 from mlquantify.base import BaseQuantifier
 from mlquantify.utils._decorators import _fit_context
 from mlquantify.adjust_counting import CC
+from mlquantify.utils import validate_y, validate_data
+from mlquantify.utils._validation import validate_prevalences
 
 
 class PWK(BaseQuantifier):
@@ -63,6 +65,8 @@ class PWK(BaseQuantifier):
         self : object
             The fitted instance.
         """
+        X, y = validate_data(self, X, y, ensure_2d=True, ensure_min_samples=2)
+        validate_y(self, y)
         self.cc = CC(self.learner)
         return self.cc.fit(X, y)
     
@@ -79,7 +83,9 @@ class PWK(BaseQuantifier):
         prevalences : array of shape (n_classes,)
             Predicted class prevalences.
         """
-        return self.cc.predict(X)
+        prevalences = self.cc.predict(X)
+        prevalences = validate_prevalences(self, prevalences)
+        return prevalences
     
     def classify(self, X):
         """Classify samples using the underlying learner.

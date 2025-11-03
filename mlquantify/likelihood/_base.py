@@ -9,7 +9,7 @@ from mlquantify.base_aggregative import (
 )
 from mlquantify.adjust_counting import CC
 from mlquantify.utils._decorators import _fit_context
-from mlquantify.utils._validation import validate_y
+from mlquantify.utils._validation import validate_predictions, validate_y, validate_data, validate_prevalences
 
 
 
@@ -29,6 +29,8 @@ class BaseIterativeLikelihood(AggregationMixin, BaseQuantifier):
     @_fit_context(prefer_skip_nested_validation=True)
     def fit(self, X, y, learner_fitted=False, *args, **kwargs):
         """Fit the quantifier using the provided data and learner."""
+        X, y = validate_data(self, 
+                             X, y)
         validate_y(self, y)
         self.classes = np.unique(y)
 
@@ -45,11 +47,15 @@ class BaseIterativeLikelihood(AggregationMixin, BaseQuantifier):
         return prevalences
 
     def aggregate(self, predictions, y_train=None):
+        predictions = validate_predictions(self, predictions)
         if not hasattr(self, 'priors'):
             self.classes = np.unique(y_train)
             counts = np.array([np.count_nonzero(y_train == _class) for _class in self.classes])
             self.priors = counts / len(y_train)
-        return self._iterate(predictions, self.priors)
+        
+        prevalences = self._iterate(predictions, self.priors)
+        prevalences = validate_prevalences(self, prevalences, self.classes)
+        return prevalences
     
     
     def _iterate(self, predictions, priors):

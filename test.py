@@ -36,9 +36,13 @@ from mlquantify.neighbors import (
     KDEyML,
     PWK
 )
+from mlquantify.meta import (
+    EnsembleQ,
+    QuaDapt
+)
 
 
-from mlquantify.evaluation import (
+from mlquantify.model_selection import (
     BaseProtocol,
     APP,
     NPP,
@@ -70,6 +74,23 @@ X, y = data.data, data.target
 # Dividir o dataset em treino e teste
 X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.3, random_state=42)
 
+X_train = pd.DataFrame(X_train)
+X_test = pd.DataFrame(X_test)
+y_train = pd.Series(y_train)
+y_test = pd.Series(y_test)
+
+# Handle both numpy arrays and pandas Series/DataFrames
+if isinstance(y_train, pd.Series):
+    y_train = y_train.replace({0: 'malignant', 1: 'benign'})
+else:
+    y_train = np.where(y_train == 0, 'malignant', np.where(y_train == 1, 'benign', y_train))
+
+if isinstance(y_test, pd.Series):
+    y_test = y_test.replace({0: 'malignant', 1: 'benign'})
+else:
+    y_test = np.where(y_test == 0, 'malignant', np.where(y_test == 1, 'benign', y_test))
+
+
 # Criar e treinar o modelo
 rf = RandomForestClassifier(n_estimators=100, random_state=42)
 
@@ -77,7 +98,7 @@ rf.fit(X_train, y_train)
 rf_train_pred = rf.predict_proba(X_train)
 rf_pred = rf.predict_proba(X_test)
 
-quantifier = DyS
+quantifier = KDEyCS
 
 #Usar o quantificador sem learner
 quantifier1 = quantifier()
@@ -93,9 +114,7 @@ print("Predicted class prevalences 2:", predictions2)
 
 # Obter a prevalência real das classes no conjunto de teste
 real_prevs = get_prev_from_labels(y_test)
-real_prevs = np.asarray(list(real_prevs.values()))
 real_train_prevs = get_prev_from_labels(y_train)
-real_train_prevs = np.asarray(list(real_train_prevs.values()))
 
 print("\n--- Metrics for Quantifier ---")
 print("MAE 2: ", MAE(real_prevs, predictions2))
@@ -128,27 +147,27 @@ ppp = PPP(batch_size=10,
           prevalences=[0.5, 0.6],
           repeats=1,
           random_state=42)
+
 print("\n--- Batches Prevalence ---\n")
 
 print("====== APP ======")
 for idx in app.split(X_test, y_test):
-    X_batch, y_batch = X_test[idx], y_test[idx]
+    X_batch, y_batch = X_test.iloc[idx], y_test.iloc[idx]
     print(get_prev_from_labels(y_batch))
     
 print("\n====== NPP ======")
 
 for idx in npp.split(X_test, y_test):
-    X_batch, y_batch = X_test[idx], y_test[idx]
+    X_batch, y_batch = X_test.iloc[idx], y_test.iloc[idx]
     print(get_prev_from_labels(y_batch))
     
 print("\n====== UPP ======")
     
 for idx in upp.split(X_test, y_test):
-    X_batch, y_batch = X_test[idx], y_test[idx]
+    X_batch, y_batch = X_test.iloc[idx], y_test.iloc[idx]
     print(get_prev_from_labels(y_batch))
     
 print("\n====== PPP ======")
 for idx in ppp.split(X_test, y_test):
-    X_batch, y_batch = X_test[idx], y_test[idx]
+    X_batch, y_batch = X_test.iloc[idx], y_test.iloc[idx]
     print(get_prev_from_labels(y_batch))
-    
