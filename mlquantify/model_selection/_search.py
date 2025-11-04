@@ -6,7 +6,7 @@ import signal
 from copy import deepcopy
 import numpy as np
 from sklearn.model_selection import train_test_split
-from mlquantify.evaluation import (
+from mlquantify.model_selection import (
     APP, NPP, UPP, PPP
 )
 

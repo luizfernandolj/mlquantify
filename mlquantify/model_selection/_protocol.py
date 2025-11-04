@@ -103,7 +103,7 @@ class BaseProtocol(ProtocolMixin, BaseQuantifier):
         """Abstract method to be implemented by subclasses to yield indices for each batch."""
         pass
     
-    def get_n_combinations(self) -> int:
+    def get_n_combinations(self):
         """
         Get the number of combinations for the current protocol.
         """

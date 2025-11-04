@@ -16,6 +16,10 @@ class BaseConfidenceRegion:
         """Retorna os parâmetros da região de confiança."""
         raise NotImplementedError
 
+    def get_point_estimate(self):
+        """Retorna a estimativa pontual da prevalência."""
+        raise NotImplementedError
+
     def contains(self, point):
         """Verifica se um ponto pertence à região."""
         raise NotImplementedError
@@ -34,6 +38,9 @@ class ConfidenceInterval(BaseConfidenceRegion):
 
     def get_region(self):
         return self.I_low, self.I_high
+    
+    def get_point_estimate(self):
+        return np.mean(self.prev_estims, axis=0)
 
     def contains(self, point):
         point = np.asarray(point)
@@ -61,6 +68,9 @@ class ConfidenceEllipseSimplex(BaseConfidenceRegion):
 
     def get_region(self):
         return self.mean_, self.precision_matrix, self.chi2_val
+    
+    def get_point_estimate(self):
+        return self.mean_
 
     def contains(self, point):
         if self.precision_matrix is None:
@@ -101,6 +111,15 @@ class ConfidenceEllipseCLR(ConfidenceEllipseSimplex):
         ddof = dim - 1
         self.chi2_val = chi2.ppf(self.confidence_level, ddof)
         self.mean_ = np.mean(x_clr, axis=0)
+        
+    def get_region(self):
+        return self.mean_, self.precision_matrix, self.chi2_val
+    
+    def get_point_estimate(self):
+        Gp = np.exp(np.mean(np.log(self.prev_estims + 1e-6), axis=1, keepdims=True))
+        x_clr = np.log((self.prev_estims + 1e-6) / (Gp + 1e-6))
+        mean_clr = np.mean(x_clr, axis=0)
+        return mean_clr
 
     def contains(self, point, eps=1e-6):
         if self.precision_matrix is None:

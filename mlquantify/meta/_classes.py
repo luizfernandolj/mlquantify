@@ -370,6 +370,8 @@ class AggregativeBootstrap(MetaquantifierMixin, BaseQuantifier):
         self.n_train_bootstraps = n_train_bootstraps
         self.n_test_bootstraps = n_test_bootstraps
         self.random_state = random_state
+        self.bootstrap_method = bootstrap_method
+        self.region_type = region_type
         
     def fit(self, X, y):
         """ Fits the aggregative bootstrap model to the given training data.
@@ -395,10 +397,65 @@ class AggregativeBootstrap(MetaquantifierMixin, BaseQuantifier):
         protocol = get_protocol_sampler(
             protocol_name=self.bootstrap_method,
             batch_size=len(y),
-            random_state=self.random_state
+            n_prevalences=self.n_train_bootstraps,
+            min_prev=0.0,
+            max_prev=1.0,
+            n_classes=len(self.classes)
+        )
+        
+        self.train_bootstraps = []
+        for idx in protocol.split(X, y):
+            X_batch, y_batch = X[idx], y[idx]
+            model = deepcopy(self.quantifier)
+            model.fit(X_batch, y_batch)
+            self.train_bootstraps.append(model)
             
+        return self
+    
+    def predict(self, X):
+        """ Predicts the class prevalences for the given test data.
         
+        Parameters
+        ----------
+        X : array-like of shape (n_samples, n_features)
+            The input data.
         
+        Returns
+        -------
+        prevalences : array-like of shape (n_samples, n_classes)
+            The predicted class prevalences.
+        """
+        
+        test_prevalences = []
+        protocol = get_protocol_sampler(
+            protocol_name=self.bootstrap_method,
+            batch_size=len(X),
+            n_prevalences=self.n_test_bootstraps,
+            min_prev=0.0,
+            max_prev=1.0,
+            n_classes=len(self.classes)
+        )
+        
+        for idx in protocol.split(X):
+            X_batch = X[idx]
+            
+            for model in self.train_bootstraps:
+                pred = np.asarray(list(model.predict(X_batch).values()))
+                test_prevalences.append(pred)
+        prevalences = np.asarray(test_prevalences)
+        confidence_region = construct_confidence_region(
+            prevalences=prevalences,
+            region_type=self.region_type,
+            random_state=self.random_state
+        )
+
+        prevalence = confidence_region.get_point_estimate()
+        
+        prevalence = validate_prevalences(self, prevalence, self.classes)
+
+        return prevalence
+
+
 
 
 

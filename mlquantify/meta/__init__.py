@@ -1,1 +1,1 @@
-from ._classes import EnsembleQ, QuaDapt
+from ._classes import EnsembleQ, QuaDapt, AggregativeBootstrap
