@@ -3,10 +3,12 @@ import pandas as pd
 from copy import deepcopy
 from tqdm import tqdm
 from sklearn.linear_model import LogisticRegression
-from sklearn.model_selection import GridSearchCV, cross_val_predict
+from sklearn.model_selection import GridSearchCV, cross_val_predict, train_test_split
+from sklearn.utils import resample
 
 from mlquantify.base import BaseQuantifier, MetaquantifierMixin
 from mlquantify.metrics._slq import MSE
+from mlquantify.mixture._classes import SORD, DyS
 from mlquantify.mixture._utils import getHist, hellinger
 from mlquantify.utils import Options, Interval, CallableConstraint
 from mlquantify.utils import _fit_context
@@ -16,11 +18,13 @@ from mlquantify.confidence import (
     ConfidenceEllipseCLR,
     construct_confidence_region
 )
-from mlquantify.base_aggregative import is_aggregative_quantifier
+from mlquantify.utils._get_scores import apply_cross_validation, apply_bootstrap
+from mlquantify.base_aggregative import _get_learner_function, is_aggregative_quantifier, uses_soft_predictions
 from mlquantify.utils._sampling import (
     simplex_grid_sampling, 
     simplex_uniform_sampling, 
-    simplex_uniform_kraemer
+    simplex_uniform_kraemer,
+    bootstrap_sample_indices
 )
 from mlquantify.model_selection import APP, NPP, UPP
 from mlquantify.utils._validation import validate_data, validate_prevalences
@@ -355,25 +359,25 @@ class AggregativeBootstrap(MetaquantifierMixin, BaseQuantifier):
         "n_train_bootstraps": [Interval(left=1, right=None, discrete=True)],
         "n_test_bootstraps": [Interval(left=1, right=None, discrete=True)],
         "random_state": [Options([None, int])],
-        "region_type": [Options(['ellipse-simplex', 'ellipse', 'simplex'])],
-        "bootstrap_method": [Options(['uniform', 'artificial', 'kraemer'])],
+        "region_type": [Options(['intervals', 'ellipse', 'ellipse-clr'])],
+        "confidence_level": [Interval(left=0.0, right=1.0)],
     }
 
     def __init__(self, 
                  quantifier, 
-                 n_train_bootstraps=100, 
-                 n_test_bootstraps=100,
+                 n_train_bootstraps=1, 
+                 n_test_bootstraps=1,
                  random_state=None,
-                 bootstrap_method='uniform',
-                 region_type='ellipse-simplex',):
+                 region_type='intervals',
+                 confidence_level=0.95):
         self.quantifier = quantifier
         self.n_train_bootstraps = n_train_bootstraps
         self.n_test_bootstraps = n_test_bootstraps
         self.random_state = random_state
-        self.bootstrap_method = bootstrap_method
         self.region_type = region_type
+        self.confidence_level = confidence_level
         
-    def fit(self, X, y):
+    def fit(self, X, y, val_split=None):
         """ Fits the aggregative bootstrap model to the given training data.
         
         Parameters
@@ -394,22 +398,22 @@ class AggregativeBootstrap(MetaquantifierMixin, BaseQuantifier):
         if not is_aggregative_quantifier(self.quantifier):
             raise ValueError(f"The quantifier {self.quantifier.__class__.__name__} is not an aggregative quantifier.")
         
-        protocol = get_protocol_sampler(
-            protocol_name=self.bootstrap_method,
-            batch_size=len(y),
-            n_prevalences=self.n_train_bootstraps,
-            min_prev=0.0,
-            max_prev=1.0,
-            n_classes=len(self.classes)
-        )
+        learner_function = _get_learner_function(self.quantifier)
+        model = self.quantifier.learner
         
-        self.train_bootstraps = []
-        for idx in protocol.split(X, y):
-            X_batch, y_batch = X[idx], y[idx]
-            model = deepcopy(self.quantifier)
-            model.fit(X_batch, y_batch)
-            self.train_bootstraps.append(model)
-            
+        if val_split is None:
+            model.fit(X, y)
+            train_y_values = y
+            train_predictions = getattr(model, learner_function)(X)
+        else:
+            X_fit, y_fit, X_val, y_val = train_test_split(X, y, test_size=val_split, random_state=self.random_state)
+            model.fit(X_fit, y_fit)
+            train_y_values = y_val
+            train_predictions = getattr(model, learner_function)(X_val)
+        
+        self.train_predictions = train_predictions
+        self.train_y_values = train_y_values
+        
         return self
     
     def predict(self, X):
@@ -425,28 +429,80 @@ class AggregativeBootstrap(MetaquantifierMixin, BaseQuantifier):
         prevalences : array-like of shape (n_samples, n_classes)
             The predicted class prevalences.
         """
+        X = validate_data(self, X, None)
+        learner_function = _get_learner_function(self.quantifier)
+        model = self.quantifier.learner
         
-        test_prevalences = []
-        protocol = get_protocol_sampler(
-            protocol_name=self.bootstrap_method,
-            batch_size=len(X),
-            n_prevalences=self.n_test_bootstraps,
-            min_prev=0.0,
-            max_prev=1.0,
-            n_classes=len(self.classes)
-        )
+        predictions = getattr(model, learner_function)(X)
+
+        return self.aggregate(predictions, self.train_predictions, self.train_y_values)
+
+
+    def aggregate(self, predictions, train_predictions, train_y_values):
+        """ Aggregates the predictions using bootstrap resampling.
         
-        for idx in protocol.split(X):
-            X_batch = X[idx]
+        Parameters
+        ----------
+        predictions : array-like of shape (n_samples, n_classes)
+            The input data.
+        train_predictions : array-like of shape (n_samples, n_classes)
+            The training predictions.
+        train_y_values : array-like of shape (n_samples,)
+            The training target values.
             
-            for model in self.train_bootstraps:
-                pred = np.asarray(list(model.predict(X_batch).values()))
-                test_prevalences.append(pred)
-        prevalences = np.asarray(test_prevalences)
-        confidence_region = construct_confidence_region(
-            prevalences=prevalences,
-            region_type=self.region_type,
+        Returns
+        -------
+        prevalences : array-like of shape (n_samples, n_classes)
+            The predicted class prevalences.
+        """
+        prevalences = []
+        
+        
+        for train_idx in bootstrap_sample_indices(
+            n_samples=len(train_predictions),
+            n_bootstraps=self.n_train_bootstraps,
+            batch_size=len(train_predictions),
             random_state=self.random_state
+        ):
+            train_pred_boot = train_predictions[train_idx]
+            train_y_boot = train_y_values[train_idx]
+            
+            for test_idx in bootstrap_sample_indices(
+                n_samples=len(predictions),
+                n_bootstraps=self.n_test_bootstraps,
+                batch_size=len(predictions),
+                random_state=self.random_state
+            ):
+                test_pred_boot = predictions[test_idx]
+
+
+                # TODO: TAKE OUT THIS TRY EXCEPT
+
+                # Try different parameter combinations for aggregate
+                try:
+                    # First try: all three parameters
+                    prevalences_boot = self.quantifier.aggregate(test_pred_boot, 
+                                                                 train_pred_boot, 
+                                                                 train_y_boot)
+                except TypeError:
+                    try:
+                        # Second try: only test predictions
+                        prevalences_boot = self.quantifier.aggregate(test_pred_boot)
+                    except TypeError:
+                        # Third try: test predictions and train labels
+                        prevalences_boot = self.quantifier.aggregate(test_pred_boot, 
+                                                                     train_y_boot)
+                        
+                        
+                    
+                prevalences_boot = np.asarray(list(prevalences_boot.values()))
+                prevalences.append(prevalences_boot)
+
+        prevalences = np.asarray(prevalences)
+        confidence_region = construct_confidence_region(
+            prev_estims=prevalences,
+            method=self.region_type,
+            confidence_level=self.confidence_level,
         )
 
         prevalence = confidence_region.get_point_estimate()
@@ -458,9 +514,104 @@ class AggregativeBootstrap(MetaquantifierMixin, BaseQuantifier):
 
 
 
-
-
-
 class QuaDapt(MetaquantifierMixin, BaseQuantifier):
-    """Placeholder for QuaDapt class."""
-    pass
+    
+    _parameter_constraints = {
+        "quantifier": [BaseQuantifier],
+        "merging_factor": "array-like",
+        "measure": [Options(["hellinger", "topsoe", "probsymm", "sord"])],
+        "random_state": [Options([None, int])],
+    }
+    
+    def __init__(self, 
+                 quantifier,
+                 measure="topsoe", 
+                 merging_factor=(0.1, 1.0, 0.2)):
+        self.quantifier = quantifier
+        self.measure = measure
+        self.merging_factor = merging_factor
+        
+    
+    def fit(self, X, y):
+        X, y = validate_data(self, X, y)
+        self.classes = np.unique(y)
+        
+        self.quantifier.learner.fit(X, y)
+        self.train_y_values = y
+        
+        return self
+        
+    def predict(self, X):
+
+        X = validate_data(self, X, None)
+        
+        learner_function = _get_learner_function(self.quantifier)
+        model = self.quantifier.learner
+        
+        predictions = getattr(model, learner_function)(X)
+
+        return self.aggregate(predictions, self.train_y_values)
+    
+    
+    def aggregate(self, predictions, train_y_values):
+
+        pos_predictions = predictions[:, 1]
+        m = self._get_best_merging_factor(pos_predictions)
+        
+        self.classes = self.classes if hasattr(self, 'classes') else np.unique(train_y_values)
+
+        moss = QuaDapt.MoSS(1000, 0.5, m)
+
+        moss_scores = moss[:, :2]
+        moss_labels = moss[:, 2]
+
+        prevalences = self.quantifier.aggregate(predictions,
+                                                moss_scores,
+                                                moss_labels)
+        
+        prevalences = {self.classes[i]: v for i, v in enumerate(prevalences.values())}
+        return prevalences
+
+        
+    def _get_best_merging_factor(self, predictions):
+        
+        MF = np.atleast_1d(np.round(self.merging_factor, 2)).astype(float)
+        
+        distances = []
+        
+        for mf in MF:
+            scores = QuaDapt.MoSS(1000, 0.5, mf)
+            pos_scores = scores[scores[:, 2] == 1][:, :2]
+            neg_scores = scores[scores[:, 2] == 0][:, :2]
+            
+            best_distance = self._get_best_distance(predictions, pos_scores, neg_scores)
+            
+            distances.append(best_distance)
+        
+        best_m = MF[np.argmin(distances)]
+        return best_m
+    
+    def _get_best_distance(self, predictions, pos_scores, neg_scores):
+        
+        if self.measure in ["hellinger", "topsoe", "probsymm"]:
+            method = DyS(measure=self.measure)
+        elif self.measure == "sord":
+            method = SORD()
+        
+        best_distance = method.get_best_distance(predictions, pos_scores, neg_scores)
+        return best_distance
+        
+
+    @classmethod
+    def MoSS(cls, n, alpha, m):
+        p_score = np.random.uniform(size=int(n * alpha)) ** m
+        n_score = 1 - (np.random.uniform(size=int(round(n * (1 - alpha), 0))) ** m)
+        scores = np.column_stack(
+            (np.concatenate((p_score, n_score)), 
+             np.concatenate((p_score, n_score)), 
+             np.concatenate((
+                 np.ones(len(p_score)), 
+                 np.full(len(n_score), 0))))
+        )
+        return scores
+        

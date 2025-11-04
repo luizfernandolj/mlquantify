@@ -44,6 +44,7 @@ class PCC(SoftLearnerQMixin, BaseCount):
 
     def aggregate(self, predictions):
         predictions = validate_predictions(self, predictions)
+        self.classes = self.classes if hasattr(self, 'classes') else np.arange(predictions.shape[1])
         class_sums = np.sum(predictions, axis=0)
         prevalences = class_sums / len(predictions)
         if predictions.ndim == 1:

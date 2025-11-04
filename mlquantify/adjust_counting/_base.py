@@ -24,13 +24,7 @@ class BaseCount(AggregationMixin, BaseQuantifier):
     @_fit_context(prefer_skip_nested_validation=True)
     def fit(self, X, y, learner_fitted=False, *args, **kwargs):
         """Fit the quantifier using the provided data and learner."""
-        X, y = validate_data(self, 
-                             X, 
-                             y, 
-                             dtype=np.float64, 
-                             order="C", 
-                             accept_sparse=True, 
-                             accept_large_sparse=True)
+        X, y = validate_data(self, X, y)
         
         validate_y(self, y)
         
@@ -62,13 +56,7 @@ class BaseAdjustCount(AggregationMixin, BaseQuantifier):
     @_fit_context(prefer_skip_nested_validation=True)
     def fit(self, X, y, learner_fitted=False, *args, **kwargs):
         """Fit the quantifier using the provided data and learner."""
-        X, y = validate_data(self, 
-                             X, 
-                             y, 
-                             dtype=np.float64, 
-                             order="C", 
-                             accept_sparse=True, 
-                             accept_large_sparse=True)
+        X, y = validate_data(self, X, y)
         
         validate_y(self, y)
         self.classes = np.unique(y)

@@ -99,7 +99,7 @@ rf.fit(X_train, y_train)
 rf_train_pred = rf.predict_proba(X_train)
 rf_pred = rf.predict_proba(X_test)
 
-quantifier = AggregativeBootstrap
+quantifier = QuaDapt
 
 #Usar o quantificador sem learner
 # quantifier1 = quantifier()
@@ -107,7 +107,7 @@ quantifier = AggregativeBootstrap
 # print("Predicted class prevalences 1:", predictions1)
 
 # Usar o quantificador com learner
-quantifier2 = quantifier(quantifier=PCC(rf))
+quantifier2 = quantifier(quantifier=ACC(rf))
 quantifier2.fit(X_train, y_train)
 predictions2 = quantifier2.predict(X_test)
 print("Predicted class prevalences 2:", predictions2)

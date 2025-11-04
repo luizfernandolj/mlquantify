@@ -234,3 +234,36 @@ def simplex_uniform_sampling(
         samples = np.concatenate(samples, axis=0)
 
     return samples[:total_samples]
+
+
+def bootstrap_sample_indices(
+    n_samples: int,
+    batch_size: int,
+    n_bootstraps: int,
+    random_state: int = None
+):
+    """
+    Generate bootstrap sample indices for a dataset.
+
+    Parameters
+    ----------
+    n_samples : int
+        Total number of samples in the dataset.
+    batch_size : int
+        Number of samples in each bootstrap sample.
+    n_bootstraps : int
+        Number of bootstrap samples to generate.
+    random_state : int, optional
+        Random seed for reproducibility.
+
+    Yields
+    ------
+    np.ndarray
+        Array containing indices for a bootstrap sample.
+    """
+    if random_state is not None:
+        np.random.seed(random_state)
+
+    for _ in range(n_bootstraps):
+        indices = np.random.choice(n_samples, size=batch_size, replace=True)
+        yield indices
