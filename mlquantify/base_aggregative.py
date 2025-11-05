@@ -39,7 +39,6 @@ class AggregationMixin:
         
         return self
     
-    
 
 class SoftLearnerQMixin:
     

@@ -65,6 +65,7 @@ class BaseQuantifier(ABC, BaseEstimator):
 
 class MetaquantifierMixin:
     ...
+    
 
 class ProtocolMixin:
     
@@ -73,3 +74,4 @@ class ProtocolMixin:
         tags.estimation_type = "sample"
         tags.requires_fit = False
         return tags
+    

@@ -5,3 +5,5 @@ from ._protocol import (
     UPP,
     PPP
 )
+
+from ._search import GridSearchQ

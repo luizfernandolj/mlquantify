@@ -10,6 +10,16 @@ def process_inputs(prev_pred, prev_real):
         prev_real = np.asarray(list(prev_real.values()))
     if isinstance(prev_pred, dict):
         prev_pred = np.asarray(list(prev_pred.values()))
+    
+    # Pad with zeros if lengths differ
+    len_real = len(prev_real)
+    len_pred = len(prev_pred)
+    
+    if len_real > len_pred:
+        prev_pred = np.pad(prev_pred, (0, len_real - len_pred), constant_values=0)
+    elif len_pred > len_real:
+        prev_real = np.pad(prev_real, (0, len_pred - len_real), constant_values=0)
+        
     return prev_real, prev_pred
 
 

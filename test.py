@@ -1,4 +1,5 @@
 from sklearn.ensemble import RandomForestClassifier
+from sklearn.tree import DecisionTreeClassifier
 from sklearn.datasets import load_breast_cancer, load_iris
 from sklearn.model_selection import train_test_split
 import numpy as np
@@ -68,6 +69,9 @@ from mlquantify.metrics import (
     NKLD,
 )
 
+from mlquantify.model_selection import GridSearchQ
+
+
 # Carregar o dataset Iris
 data = load_breast_cancer()
 X, y = data.data, data.target
@@ -99,15 +103,15 @@ rf.fit(X_train, y_train)
 rf_train_pred = rf.predict_proba(X_train)
 rf_pred = rf.predict_proba(X_test)
 
-quantifier = QuaDapt
+quantifier = DyS
 
 #Usar o quantificador sem learner
-# quantifier1 = quantifier()
-# predictions1 = quantifier1.aggregate(rf_pred, rf_train_pred, y_train)
-# print("Predicted class prevalences 1:", predictions1)
+quantifier1 = quantifier()
+predictions1 = quantifier1.aggregate(rf_pred, rf_train_pred, y_train)
+print("Predicted class prevalences 1:", predictions1)
 
 # Usar o quantificador com learner
-quantifier2 = quantifier(quantifier=ACC(rf))
+quantifier2 = quantifier(learner=rf)
 quantifier2.fit(X_train, y_train)
 predictions2 = quantifier2.predict(X_test)
 print("Predicted class prevalences 2:", predictions2)
@@ -172,3 +176,20 @@ print("\n====== PPP ======")
 for idx in ppp.split(X_test, y_test):
     X_batch, y_batch = X_test.iloc[idx], y_test.iloc[idx]
     print(get_prev_from_labels(y_batch))
+
+
+grid = {
+    "learner": [RandomForestClassifier(), DecisionTreeClassifier()],
+    "measure": ["hellinger", "topsoe"],
+    "__learner_min_samples_split": [3, 8]
+}
+
+grid_search = GridSearchQ(
+    quantifier=DyS,
+    param_grid=grid
+)
+
+grid_search.fit(X_train, y_train)
+
+print("\nBest Parameters:", grid_search.best_params)
+print("Best Score:", grid_search.best_score)
