@@ -8,7 +8,7 @@ from mlquantify.base_aggregative import (
     _get_learner_function
 )
 from mlquantify.utils._decorators import _fit_context
-from mlquantify.utils._validation import validate_y, validate_data, validate_prevalences
+from mlquantify.utils._validation import validate_predictions, validate_y, validate_data, validate_prevalences
 from mlquantify.utils._get_scores import apply_cross_validation
 
 
@@ -20,6 +20,12 @@ class BaseCount(AggregationMixin, BaseQuantifier):
     @abstractmethod
     def __init__(self, learner=None):
         self.learner = learner
+        
+    def __mlquantify_tags__(self):
+        tags = super().__mlquantify_tags__()
+        tags.prediction_requirements.requires_train_proba = False
+        tags.prediction_requirements.requires_train_labels = False
+        return tags
 
     @_fit_context(prefer_skip_nested_validation=True)
     def fit(self, X, y, learner_fitted=False, *args, **kwargs):
@@ -54,7 +60,7 @@ class BaseAdjustCount(AggregationMixin, BaseQuantifier):
         self.learner = learner
 
     @_fit_context(prefer_skip_nested_validation=True)
-    def fit(self, X, y, learner_fitted=False, *args, **kwargs):
+    def fit(self, X, y, learner_fitted=False):
         """Fit the quantifier using the provided data and learner."""
         X, y = validate_data(self, X, y)
         
@@ -91,6 +97,7 @@ class BaseAdjustCount(AggregationMixin, BaseQuantifier):
         return prevalences
 
     def aggregate(self, predictions, train_predictions, y_train_values):
+        predictions = validate_predictions(self, train_predictions)
         prevalences = self._adjust(predictions, train_predictions, y_train_values)
         prevalences = validate_prevalences(self, prevalences, self.classes)
         return prevalences

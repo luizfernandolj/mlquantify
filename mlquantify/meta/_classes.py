@@ -18,8 +18,11 @@ from mlquantify.confidence import (
     ConfidenceEllipseCLR,
     construct_confidence_region
 )
-from mlquantify.utils._get_scores import apply_cross_validation, apply_bootstrap
-from mlquantify.base_aggregative import _get_learner_function, is_aggregative_quantifier, uses_soft_predictions
+from mlquantify.base_aggregative import (
+    _get_learner_function, 
+    is_aggregative_quantifier,
+    uses_soft_predictions, 
+    get_aggregation_requirements)
 from mlquantify.utils._sampling import (
     simplex_grid_sampling, 
     simplex_uniform_sampling, 
@@ -27,7 +30,7 @@ from mlquantify.utils._sampling import (
     bootstrap_sample_indices
 )
 from mlquantify.model_selection import APP, NPP, UPP
-from mlquantify.utils._validation import validate_data, validate_prevalences
+from mlquantify.utils._validation import validate_data, validate_predictions, validate_prevalences
 from mlquantify.utils.prevalence import get_prev_from_labels
 
 
@@ -457,6 +460,7 @@ class AggregativeBootstrap(MetaquantifierMixin, BaseQuantifier):
         """
         prevalences = []
         
+        self.classes = self.classes if hasattr(self, 'classes') else np.unique(train_y_values)
         
         for train_idx in bootstrap_sample_indices(
             n_samples=len(train_predictions),
@@ -475,26 +479,15 @@ class AggregativeBootstrap(MetaquantifierMixin, BaseQuantifier):
             ):
                 test_pred_boot = predictions[test_idx]
 
+                requirements = get_aggregation_requirements(self.quantifier)
+                
+                if requirements.requires_train_proba and requirements.requires_train_labels:
+                    prevalences_boot = self.quantifier.aggregate(test_pred_boot, train_pred_boot, train_y_boot)
+                elif requirements.requires_train_labels:
+                    prevalences_boot = self.quantifier.aggregate(test_pred_boot, train_y_boot)
+                else:
+                    prevalences_boot = self.quantifier.aggregate(test_pred_boot)
 
-                # TODO: TAKE OUT THIS TRY EXCEPT
-
-                # Try different parameter combinations for aggregate
-                try:
-                    # First try: all three parameters
-                    prevalences_boot = self.quantifier.aggregate(test_pred_boot, 
-                                                                 train_pred_boot, 
-                                                                 train_y_boot)
-                except TypeError:
-                    try:
-                        # Second try: only test predictions
-                        prevalences_boot = self.quantifier.aggregate(test_pred_boot)
-                    except TypeError:
-                        # Third try: test predictions and train labels
-                        prevalences_boot = self.quantifier.aggregate(test_pred_boot, 
-                                                                     train_y_boot)
-                        
-                        
-                    
                 prevalences_boot = np.asarray(list(prevalences_boot.values()))
                 prevalences.append(prevalences_boot)
 

@@ -79,21 +79,21 @@ X, y = data.data, data.target
 # Dividir o dataset em treino e teste
 X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.3, random_state=42)
 
-X_train = pd.DataFrame(X_train)
-X_test = pd.DataFrame(X_test)
-y_train = pd.Series(y_train)
-y_test = pd.Series(y_test)
+# X_train = pd.DataFrame(X_train)
+# X_test = pd.DataFrame(X_test)
+# y_train = pd.Series(y_train)
+# y_test = pd.Series(y_test)
 
-# Handle both numpy arrays and pandas Series/DataFrames
-if isinstance(y_train, pd.Series):
-    y_train = y_train.replace({0: 'malignant', 1: 'benign'})
-else:
-    y_train = np.where(y_train == 0, 'malignant', np.where(y_train == 1, 'benign', y_train))
+# # Handle both numpy arrays and pandas Series/DataFrames
+# if isinstance(y_train, pd.Series):
+#     y_train = y_train.replace({0: 'malignant', 1: 'benign'})
+# else:
+#     y_train = np.where(y_train == 0, 'malignant', np.where(y_train == 1, 'benign', y_train))
 
-if isinstance(y_test, pd.Series):
-    y_test = y_test.replace({0: 'malignant', 1: 'benign'})
-else:
-    y_test = np.where(y_test == 0, 'malignant', np.where(y_test == 1, 'benign', y_test))
+# if isinstance(y_test, pd.Series):
+#     y_test = y_test.replace({0: 'malignant', 1: 'benign'})
+# else:
+#     y_test = np.where(y_test == 0, 'malignant', np.where(y_test == 1, 'benign', y_test))
 
 
 # Criar e treinar o modelo
@@ -103,15 +103,15 @@ rf.fit(X_train, y_train)
 rf_train_pred = rf.predict_proba(X_train)
 rf_pred = rf.predict_proba(X_test)
 
-quantifier = DyS
+quantifier = AggregativeBootstrap
 
 #Usar o quantificador sem learner
-quantifier1 = quantifier()
-predictions1 = quantifier1.aggregate(rf_pred, rf_train_pred, y_train)
+quantifier1 = EMQ(rf)
+predictions1 = quantifier1.aggregate(rf_pred, y_train)
 print("Predicted class prevalences 1:", predictions1)
 
 # Usar o quantificador com learner
-quantifier2 = quantifier(learner=rf)
+quantifier2 = quantifier(EMQ(rf))
 quantifier2.fit(X_train, y_train)
 predictions2 = quantifier2.predict(X_test)
 print("Predicted class prevalences 2:", predictions2)
@@ -157,36 +157,36 @@ print("\n--- Batches Prevalence ---\n")
 
 print("====== APP ======")
 for idx in app.split(X_test, y_test):
-    X_batch, y_batch = X_test.iloc[idx], y_test.iloc[idx]
+    X_batch, y_batch = X_test[idx], y_test[idx]
     print(get_prev_from_labels(y_batch))
     
 print("\n====== NPP ======")
 
 for idx in npp.split(X_test, y_test):
-    X_batch, y_batch = X_test.iloc[idx], y_test.iloc[idx]
+    X_batch, y_batch = X_test[idx], y_test[idx]
     print(get_prev_from_labels(y_batch))
     
 print("\n====== UPP ======")
     
 for idx in upp.split(X_test, y_test):
-    X_batch, y_batch = X_test.iloc[idx], y_test.iloc[idx]
+    X_batch, y_batch = X_test[idx], y_test[idx]
     print(get_prev_from_labels(y_batch))
     
 print("\n====== PPP ======")
 for idx in ppp.split(X_test, y_test):
-    X_batch, y_batch = X_test.iloc[idx], y_test.iloc[idx]
+    X_batch, y_batch = X_test[idx], y_test[idx]
     print(get_prev_from_labels(y_batch))
 
 
 grid = {
+    "__learner_min_samples_split": [3, 8],
     "learner": [RandomForestClassifier(), DecisionTreeClassifier()],
     "measure": ["hellinger", "topsoe"],
-    "__learner_min_samples_split": [3, 8]
 }
 
 grid_search = GridSearchQ(
     quantifier=DyS,
-    param_grid=grid
+    param_grid=grid,
 )
 
 grid_search.fit(X_train, y_train)

@@ -151,12 +151,10 @@ def make_constraint(obj):
     """Normalize strings and simple types into constraint objects."""
     if isinstance(obj, str) and obj == "array-like":
         return _ArrayLikes()
-    if isinstance(obj, (Interval, Options, HasMethods, Hidden)):
+    if isinstance(obj, (Interval, Options, HasMethods, Hidden, CallableConstraint)):
         return obj
     if isinstance(obj, type):
         return _InstancesOf(obj)
-    if callable(obj):
-        return CallableConstraint(obj)
     if isinstance(obj, str):
         return StringConstraint(obj)
     if obj is None:
@@ -177,16 +175,12 @@ class TypeConstraint:
 
 @dataclass
 class CallableConstraint:
-    func: callable
 
     def is_satisfied_by(self, value):
-        try:
-            return bool(self.func(value))
-        except Exception:
-            return False
+        return callable(value)
 
     def __str__(self):
-        return f"value satisfying {self.func.__name__}()"
+        return f"a callable"
 
 
 @dataclass

@@ -10,6 +10,13 @@ class TargetInputTags:
     categorical: bool = True
     multi_class: bool = True
     required: bool = False
+    
+@dataclass
+class PredictionRequirements:
+    
+    requires_train_proba: bool = True
+    requires_train_labels: bool = True
+    requires_test_predictions: bool = True
 
 
 @dataclass
@@ -20,6 +27,7 @@ class Tags:
     estimator_type: str | None
     aggregation_type: str | None
     target_input_tags: TargetInputTags
+    prediction_requirements: PredictionRequirements
     has_estimator: bool = False
     requires_fit: bool = True
 

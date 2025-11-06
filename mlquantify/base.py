@@ -2,6 +2,7 @@ from abc import abstractmethod, ABC
 from sklearn.base import BaseEstimator
 
 from mlquantify.utils._tags import (
+    PredictionRequirements,
     Tags,
     TargetInputTags,
     get_tags
@@ -47,6 +48,7 @@ class BaseQuantifier(ABC, BaseEstimator):
             estimator_type=None,
             aggregation_type=None,
             target_input_tags=TargetInputTags(),
+            prediction_requirements=PredictionRequirements(),
             requires_fit= True
         )
         

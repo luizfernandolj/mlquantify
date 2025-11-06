@@ -67,6 +67,10 @@ def uses_crisp_predictions(quantifier):
 def is_aggregative_quantifier(quantifier):
     return get_tags(quantifier).has_estimator
 
+def get_aggregation_requirements(quantifier):
+    tags = get_tags(quantifier)
+    return tags.prediction_requirements
+
 
 def _get_learner_function(quantifier):
     tags = get_tags(quantifier)

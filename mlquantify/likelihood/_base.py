@@ -24,13 +24,17 @@ class BaseIterativeLikelihood(AggregationMixin, BaseQuantifier):
         self.learner = learner
         self.tol = tol
         self.max_iter = max_iter
-        super().__init__()
+        
+    def __mlquantify_tags__(self):
+        tags = super().__mlquantify_tags__()
+        tags.prediction_requirements.requires_train_proba = False
+        return tags
+    
     
     @_fit_context(prefer_skip_nested_validation=True)
-    def fit(self, X, y, learner_fitted=False, *args, **kwargs):
+    def fit(self, X, y):
         """Fit the quantifier using the provided data and learner."""
-        X, y = validate_data(self, 
-                             X, y)
+        X, y = validate_data(self, X, y)
         validate_y(self, y)
         self.classes = np.unique(y)
 
@@ -43,12 +47,14 @@ class BaseIterativeLikelihood(AggregationMixin, BaseQuantifier):
         """Predict class prevalences for the given data."""
         estimator_function = _get_learner_function(self)
         predictions = getattr(self.learner, estimator_function)(X)
-        prevalences = self.aggregate(predictions)
+        prevalences = self.aggregate(predictions, y_train=None)
         return prevalences
 
     def aggregate(self, predictions, y_train=None):
         predictions = validate_predictions(self, predictions)
         if not hasattr(self, 'priors'):
+            if y_train is None:
+                raise ValueError("y_train must be provided if the quantifier is not fitted.")
             self.classes = np.unique(y_train)
             counts = np.array([np.count_nonzero(y_train == _class) for _class in self.classes])
             self.priors = counts / len(y_train)

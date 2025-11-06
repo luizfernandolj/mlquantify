@@ -1,15 +1,12 @@
 import numpy as np
 from mlquantify.base_aggregative import SoftLearnerQMixin
 from mlquantify.likelihood._base import BaseIterativeLikelihood
+from mlquantify.metrics._slq import MAE
 from mlquantify.utils._constraints import (
     Interval,
     CallableConstraint,
     Options
 )
-
-def mae(a, b):
-    return np.mean(np.abs(a - b))
-
 
 class EMQ(SoftLearnerQMixin, BaseIterativeLikelihood):
 
@@ -19,16 +16,15 @@ class EMQ(SoftLearnerQMixin, BaseIterativeLikelihood):
         "calib_function": [
             Options(["bcts", "ts", "vs", "nbvs", None]),
         ],
-        "criteria": [
-            Options(["mae", "mse"]),
-        ]
+        "criteria": [CallableConstraint()],
     }
 
-    def __init__(self, learner=None, 
+    def __init__(self, 
+                 learner=None, 
                  tol=1e-4, 
                  max_iter=100, 
                  calib_function=None,
-                 criteria= 'mae'):
+                 criteria=MAE):
         super().__init__(learner=learner, tol=tol, max_iter=max_iter)
         self.calib_function = calib_function
         self.criteria = criteria
@@ -46,15 +42,8 @@ class EMQ(SoftLearnerQMixin, BaseIterativeLikelihood):
 
 
     @classmethod
-    def EM(cls, posteriors, priors, tolerance=1e-6, max_iter=100, criteria='mae'):
-        """
-        Expectation-Maximization routine for quantification.
+    def EM(cls, posteriors, priors, tolerance=1e-6, max_iter=100, criteria=MAE):
 
-        :param tr_prev: array-like, the training prevalence
-        :param posterior_probabilities: np.ndarray, shape (n_instances, n_classes)
-        :param epsilon: float, threshold for convergence
-        :return: estimated prevalence (shape (n_classes,)), corrected posteriors (shape (n_instances, n_classes))
-        """
         Px = np.array(posteriors, dtype=np.float64)
         Ptr = np.array(priors, dtype=np.float64)
 
@@ -74,8 +63,7 @@ class EMQ(SoftLearnerQMixin, BaseIterativeLikelihood):
             # M-step:
             qs = ps.mean(axis=0)
 
-            # Critério de convergência próximo a MAE (< epsilon) ou máximo de iterações
-            if qs_prev_ is not None and mae(qs, qs_prev_) < tolerance and s > 10:
+            if qs_prev_ is not None and criteria(qs_prev_, qs) < tolerance and s > 10:
                 converged = True
 
             qs_prev_ = qs

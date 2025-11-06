@@ -7,9 +7,11 @@ from sklearn.model_selection import train_test_split
 from mlquantify.metrics._slq import MAE
 from mlquantify.utils._constraints import (
     Interval,
-    Options
+    Options,
+    CallableConstraint
 )
 from mlquantify.utils._validation import validate_data
+from mlquantify.utils._decorators import _fit_context
 from mlquantify.utils.prevalence import get_prev_from_labels
 from mlquantify.model_selection import (
     APP, NPP, UPP
@@ -23,7 +25,7 @@ class GridSearchQ(MetaquantifierMixin, BaseQuantifier):
         "protocol": [Options({'app', 'npp', 'upp'})],
         "n_samples": [Interval(1, None)],
         "n_repetitions": [Interval(1, None)],
-        "scoring": [Options({'ae', 'mrae', 'rae', 'se', 'me'})],
+        "scoring": [CallableConstraint()],
         "refit": [bool],
         "val_split": [Interval(0.0, 1.0, inclusive_left=False, inclusive_right=False)],
         "n_jobs": [Interval(1, None), None],
@@ -39,7 +41,7 @@ class GridSearchQ(MetaquantifierMixin, BaseQuantifier):
                  protocol="app",
                  samples_sizes=100,
                  n_repetitions=10,
-                 scoring="ae", # TODO: allow multiple metrics
+                 scoring=MAE,
                  refit=True,
                  val_split=0.4,
                  n_jobs=1,
@@ -56,7 +58,7 @@ class GridSearchQ(MetaquantifierMixin, BaseQuantifier):
         self.n_jobs = n_jobs
         self.random_seed = random_seed
         self.verbose = verbose
-        self.scoring = scoring if isinstance(scoring, list) else [scoring]
+        self.scoring = scoring
         
     
     def sout(self, msg):
@@ -88,7 +90,7 @@ class GridSearchQ(MetaquantifierMixin, BaseQuantifier):
         else:  
             raise ValueError(f'Unknown protocol: {self.protocol}')
         
-    
+    @_fit_context(prefer_skip_nested_validation=True)
     def fit(self, X, y):
         X, y = validate_data(self, X, y)
         
@@ -121,7 +123,7 @@ class GridSearchQ(MetaquantifierMixin, BaseQuantifier):
                 y_pred = model.predict(X_batch)
 
                 
-                errors.append(MAE(y_real, y_pred))
+                errors.append(self.scoring(y_real, y_pred))
 
             avg_score = np.mean(errors)
             
@@ -178,43 +180,25 @@ class GridSearchQ(MetaquantifierMixin, BaseQuantifier):
     
     
     
-    def set_params(self, **parameters):
-        """Set the hyperparameters for grid search.
-
-        Parameters
-        ----------
-        parameters : dict
-            Dictionary of hyperparameters to set.
-        """
-        self.param_grid = parameters
-    def get_params(self, deep=True):
-        """Get the parameters of the best model.
-
-        Parameters
-        ----------
-        deep : bool, optional, default=True
-            If True, will return the parameters for this estimator and 
-            contained subobjects.
+    def best_params(self):
+        """Return the best parameters found during fitting.
 
         Returns
         -------
         dict
-            Parameters of the best model.
+            The best parameters.
 
         Raises
         ------
         ValueError
-            If called before the model has been fitted.
+            If called before fitting.
         """
-        if hasattr(self, 'best_model_'):
-            try:
-                return self.best_model_.get_params(deep=deep)
-            except TypeError:
-                # fallback if underlying model's get_params does not accept deep
-                return self.best_model_.get_params()
-        raise ValueError('get_params called before fit.')
-    
-    
+        if hasattr(self, 'best_params'):
+            return self.best_params
+        raise ValueError('best_params called before fit.')
+        
+        
+        
     def best_model(self):
         """Return the best model after fitting.
 
