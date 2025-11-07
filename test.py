@@ -70,6 +70,7 @@ from mlquantify.metrics import (
 )
 
 from mlquantify.model_selection import GridSearchQ
+from mlquantify.multiclass import BinaryQuantifier
 
 
 # Carregar o dataset Iris
@@ -103,38 +104,40 @@ rf.fit(X_train, y_train)
 rf_train_pred = rf.predict_proba(X_train)
 rf_pred = rf.predict_proba(X_test)
 
-quantifier = AggregativeBootstrap
+quantifier = BinaryQuantifier(strategy='ovo')
+quantifier.fit(X_train, y_train)
+pred = quantifier.predict(X_test)
 
 #Usar o quantificador sem learner
-quantifier1 = EMQ(rf)
-predictions1 = quantifier1.aggregate(rf_pred, y_train)
-print("Predicted class prevalences 1:", predictions1)
+# quantifier1 = EMQ(rf)
+# predictions1 = quantifier1.aggregate(rf_pred, y_train)
+# print("Predicted class prevalences 1:", predictions1)
 
-# Usar o quantificador com learner
-quantifier2 = quantifier(EMQ(rf))
-quantifier2.fit(X_train, y_train)
-predictions2 = quantifier2.predict(X_test)
-print("Predicted class prevalences 2:", predictions2)
+# # Usar o quantificador com learner
+# quantifier2 = quantifier(EMQ(rf))
+# quantifier2.fit(X_train, y_train)
+# predictions2 = quantifier2.predict(X_test)
+# print("Predicted class prevalences 2:", predictions2)
 
 
-# Obter a prevalência real das classes no conjunto de teste
-real_prevs = get_prev_from_labels(y_test)
-real_train_prevs = get_prev_from_labels(y_train)
+# # Obter a prevalência real das classes no conjunto de teste
+# real_prevs = get_prev_from_labels(y_test)
+# real_train_prevs = get_prev_from_labels(y_train)
 
-print("\n--- Metrics for Quantifier ---")
-print("MAE 2: ", MAE(real_prevs, predictions2))
-print("MSE 2: ", MSE(real_prevs, predictions2))
-print("KLD 2: ", KLD(real_prevs, predictions2))
-print("AE 2: ", AE(real_prevs, predictions2))
-print("SE 2: ", SE(real_prevs, predictions2))
-print("RAE 2: ", RAE(real_prevs, predictions2))
-print("NAE 2: ", NAE(real_prevs, predictions2))
-print("NRAE 2: ", NRAE(real_prevs, predictions2))
-print("NKLD 2: ", NKLD(real_prevs, predictions2))
-print("NMD 2: ", NMD(real_prevs, predictions2))
-print("RNOD 2: ", RNOD(real_prevs, predictions2))
-print("VSE 2: ", VSE(real_prevs, predictions2, real_train_prevs))
-print("CvM_L1 2: ", CvM_L1(real_prevs, predictions2))
+# print("\n--- Metrics for Quantifier ---")
+# print("MAE 2: ", MAE(real_prevs, predictions2))
+# print("MSE 2: ", MSE(real_prevs, predictions2))
+# print("KLD 2: ", KLD(real_prevs, predictions2))
+# print("AE 2: ", AE(real_prevs, predictions2))
+# print("SE 2: ", SE(real_prevs, predictions2))
+# print("RAE 2: ", RAE(real_prevs, predictions2))
+# print("NAE 2: ", NAE(real_prevs, predictions2))
+# print("NRAE 2: ", NRAE(real_prevs, predictions2))
+# print("NKLD 2: ", NKLD(real_prevs, predictions2))
+# print("NMD 2: ", NMD(real_prevs, predictions2))
+# print("RNOD 2: ", RNOD(real_prevs, predictions2))
+# print("VSE 2: ", VSE(real_prevs, predictions2, real_train_prevs))
+# print("CvM_L1 2: ", CvM_L1(real_prevs, predictions2))
 
 
 app = APP(batch_size=10,

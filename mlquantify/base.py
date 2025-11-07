@@ -12,22 +12,7 @@ from mlquantify.utils._validation import validate_parameter_constraints
 
 
 class BaseQuantifier(ABC, BaseEstimator):
-    """Base class for all quantifiers, it defines the basic structure of a quantifier.
-    
-    Warning: Inheriting from this class does not provide dynamic use of multiclass or binary methods, it is necessary to implement the logic in the quantifier itself. If you want to use this feature, inherit from AggregativeQuantifier or NonAggregativeQuantifier.
-    
-    Inheriting from this class, it provides the following implementations:
-    
-    - properties for classes, n_class, is_multiclass and binary_data.
-    - save_quantifier method to save the quantifier
-    
-    Read more in the :ref:`User Guide <creating_your_own_quantifier>`.
-    
-    
-    Notes
-    -----
-    It's recommended to inherit from AggregativeQuantifier or NonAggregativeQuantifier, as they provide more functionality and flexibility for quantifiers.
-    """    
+   
     
     _parameter_constraints: dict[str, list] = {}
     skip_validation: bool = False
