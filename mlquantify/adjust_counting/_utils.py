@@ -5,6 +5,7 @@ def compute_table(y, y_pred, classes):
     """
     Compute the confusion matrix table for a binary classification task.
     
+    
     Parameters
     ----------
     y : np.ndarray
@@ -13,6 +14,7 @@ def compute_table(y, y_pred, classes):
         The predicted labels.
     classes : np.ndarray
         The unique classes in the dataset.
+    
     
     Returns
     -------
@@ -30,12 +32,14 @@ def compute_tpr(TP, FN):
     """
     Compute the True Positive Rate (Recall) for a binary classification task.
     
+    
     Parameters
     ----------
     TP : int
         The number of True Positives.
     FN : int
         The number of False Negatives.
+    
     
     Returns
     -------
@@ -51,12 +55,14 @@ def compute_fpr(FP, TN):
     """
     Compute the False Positive Rate for a binary classification task.
     
+    
     Parameters
     ----------
     FP : int
         The number of False Positives.
     TN : int
         The number of True Negatives.
+    
     
     Returns
     -------
@@ -72,6 +78,7 @@ def evaluate_thresholds (y, probabilities:np.ndarray, classes) -> tuple:
     """
     Adjust the threshold for a binary quantification task to maximize the True Positive Rate.
     
+    
     Parameters
     ----------
     y : np.ndarray
@@ -80,6 +87,7 @@ def evaluate_thresholds (y, probabilities:np.ndarray, classes) -> tuple:
         The predicted probabilities.
     classes : np.ndarray
         The unique classes in the dataset.
+    
     
     Returns
     -------
