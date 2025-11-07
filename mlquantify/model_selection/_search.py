@@ -18,6 +18,85 @@ from mlquantify.model_selection import (
 )
 
 class GridSearchQ(MetaquantifierMixin, BaseQuantifier):
+    """
+    Grid Search for Quantifiers with evaluation protocols.
+
+    This class automates the hyperparameter search over a grid of parameter
+    combinations for a given quantifier. It evaluates each combination using
+    a specified evaluation protocol (e.g., APP, NPP, UPP), over multiple splits
+    of the validation data, and selects the best-performing parameters based on
+    a chosen scoring metric such as Mean Absolute Error (MAE).
+
+    Parameters
+    ----------
+    quantifier : BaseQuantifier
+        Quantifier class (not instance). It must implement fit and predict.
+    param_grid : dict
+        Dictionary where keys are parameter names and values are lists of parameter
+        values to try.
+    protocol : {'app', 'npp', 'upp'}, default='app'
+        Evaluation protocol to use for splitting the validation data.
+    samples_sizes : int or list of int, default=100
+        Batch size(s) for evaluation splits.
+    n_repetitions : int, default=10
+        Number of random repetitions per evaluation.
+    scoring : callable, default=MAE
+        Scoring function to evaluate prevalence prediction quality.
+        Must accept (true_prevalences, predicted_prevalences) arrays.
+    refit : bool, default=True
+        If True, refits the quantifier on the whole data using best parameters.
+    val_split : float, default=0.4
+        Fraction of data reserved for validation during parameter search.
+    n_jobs : int or None, default=1
+        Number of parallel jobs for evaluation.
+    random_seed : int, default=42
+        Random seed for reproducibility.
+    verbose : bool, default=False
+        Enable verbose output during evaluation.
+
+    Attributes
+    ----------
+    best_score : float
+        Best score (lowest loss) found during grid search.
+    best_params : dict
+        Parameter combination corresponding to best_score.
+    best_model_ : BaseQuantifier
+        Refitted quantifier instance with best parameters after search.
+
+    Methods
+    -------
+    fit(X, y)
+        Runs grid search over param_grid, evaluates with the selected protocol,
+        and stores best found parameters and model.
+    predict(X)
+        Predicts prevalences using the best fitted model after search.
+    best_params()
+        Returns the best parameter dictionary after fitting.
+    best_model()
+        Returns the best refitted quantifier after fitting.
+    sout(msg)
+        Utility method to print messages if verbose is enabled.
+
+    Examples
+    --------
+    >>> from mlquantify.quantifiers import SomeQuantifier
+    >>> param_grid = {'alpha': [0.1, 1.0], 'beta': [10, 20]}
+    >>> grid_search = GridSearchQ(quantifier=SomeQuantifier,
+    ...                          param_grid=param_grid,
+    ...                          protocol='app',
+    ...                          samples_sizes=100,
+    ...                          n_repetitions=5,
+    ...                          scoring=MAE,
+    ...                          refit=True,
+    ...                          val_split=0.3,
+    ...                          n_jobs=2,
+    ...                          random_seed=123,
+    ...                          verbose=True)
+    >>> grid_search.fit(X_train, y_train)
+    >>> y_pred = grid_search.predict(X_test)
+    >>> best_params = grid_search.best_params()
+    >>> best_model = grid_search.best_model()
+    """
     
     _parameter_constraints = {
         "quantifier": [BaseQuantifier],
@@ -92,6 +171,24 @@ class GridSearchQ(MetaquantifierMixin, BaseQuantifier):
         
     @_fit_context(prefer_skip_nested_validation=True)
     def fit(self, X, y):
+        """
+        Fit quantifiers over grid parameter combinations with evaluation protocol.
+
+        Splits data into training and validation by val_split, and evaluates
+        each parameter combination multiple times with protocol-generated batches.
+
+        Parameters
+        ----------
+        X : array-like
+            Feature matrix for training.
+        y : array-like
+            Target labels for training.
+
+        Returns
+        -------
+        self : object
+            Returns self for chaining.
+        """
         X, y = validate_data(self, X, y)
         
         
@@ -157,22 +254,23 @@ class GridSearchQ(MetaquantifierMixin, BaseQuantifier):
     
     
     def predict(self, X):
-        """Make predictions using the best found model.
+        """
+        Predict using the best found model.
 
         Parameters
         ----------
-        X : array-like of shape (n_samples, n_features)
-            Data to predict on.
+        X : array-like
+            Data for prediction.
 
         Returns
         -------
-        array-like
-            Predictions for the input data.
-        
+        predictions : array-like
+            Prevalence predictions.
+
         Raises
         ------
         RuntimeError
-            If the model has not been fitted yet.
+            If called before fitting.
         """
         if not hasattr(self, 'best_model_'):
             raise RuntimeError("The model has not been fitted yet.")

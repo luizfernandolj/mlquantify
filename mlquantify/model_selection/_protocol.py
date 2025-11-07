@@ -117,40 +117,39 @@ class BaseProtocol(ProtocolMixin, BaseQuantifier):
 
 
 class APP(BaseProtocol):
-    """Artificial Prevalence Protocol (APP) for evaluation.
-    This protocol generates artificial prevalence distributions for the evaluation in an exhaustive manner, testing all possible combinations of prevalences.
+    """
+    Artificial Prevalence Protocol (APP) for exhaustive prevalent batch evaluation.
     
+    Generates batches with artificially imposed prevalences across all possible 
+    combinations within specified bounds. This allows comprehensive evaluation
+    over a range of prevalence scenarios.
+
     Parameters
     ----------
     batch_size : int or list of int
-        The size of the batches to be used in the evaluation.
+        Size(s) of the evaluation batches.
     n_prevalences : int
-        The number of artificial prevalences to generate.
-    repeats : int, optional
-        The number of times to repeat the evaluation with different random seeds.
+        Number of artificial prevalence levels to sample per class dimension.
+    repeats : int, optional (default=1)
+        Number of repetitions for each prevalence sampling.
     random_state : int, optional
-        The random seed for reproducibility.
-        
-    Attributes
-    ----------
-    n_prevalences : int
-        The number of artificial prevalences to generate.
-    repeats : int
-        The number of times to repeat the evaluation with different random seeds.
-    random_state : int
-        The random seed for reproducibility.
-        
+        Random seed for reproducibility.
+    min_prev : float, optional (default=0.0)
+        Minimum possible prevalence for any class.
+    max_prev : float, optional (default=1.0)
+        Maximum possible prevalence for any class.
+
     Notes
     -----
-    It is important to note that in case of multiclass problems, the time complexity of this protocol can be significantly higher due to the increased number of combinations to evaluate.
+    For multiclass problems, this protocol may have high computational complexity
+    due to combinatorial explosion in prevalence combinations.
 
     Examples
     --------
     >>> protocol = APP(batch_size=[100, 200], n_prevalences=5, repeats=3, random_state=42)
-    >>> for train_idx, test_idx in protocol.split(X, y):
-    ...     # Train and evaluate model
+    >>> for idx in protocol.split(X, y):
+    ...     # Train and evaluate
     ...     pass
-
     """
     
     _parameter_constraints = {
@@ -186,30 +185,28 @@ class APP(BaseProtocol):
             
 
 class NPP(BaseProtocol):
-    """No Prevalence Protocol (NPP) for evaluation.
-    This protocol just samples the data without any consideration for prevalence, with all instances having equal probability of being selected.
+    """
+    Natural Prevalence Protocol (NPP) that samples data without imposing prevalence constraints.
+    
+    This protocol simply samples batches randomly with replacement, 
+    ignoring prevalence distributions.
 
     Parameters
     ----------
     batch_size : int or list of int
-        The size of the batches to be used in the evaluation.
+        Size(s) of the evaluation batches.
+    n_samples : int, optional (default=1)
+        Number of distinct batch samples per batch size.
+    repeats : int, optional (default=1)
+        Number of repetitions for each batch sample.
     random_state : int, optional
-        The random seed for reproducibility.
-
-    Attributes
-    ----------
-    n_prevalences : int
-        The number of artificial prevalences to generate.
-    repeats : int
-        The number of times to repeat the evaluation with different random seeds.
-    random_state : int
-        The random seed for reproducibility.
+        Random seed for reproducibility.
 
     Examples
     --------
     >>> protocol = NPP(batch_size=100, random_state=42)
-    >>> for train_idx, test_idx in protocol.split(X, y):
-    ...     # Train and evaluate model
+    >>> for idx in protocol.split(X, y):
+    ...     # Train and evaluate
     ...     pass
     """
     
@@ -233,34 +230,35 @@ class NPP(BaseProtocol):
             
 
 class UPP(BaseProtocol):
-    """Uniform Prevalence Protocol (UPP) for evaluation.
-    An extension of the APP that generates artificial prevalence distributions uniformly across all classes utilizing the kraemer sampling method.
+    """
+    Uniform Prevalence Protocol (UPP) for uniform sampling of artificial prevalences.
+    
+    Similar to APP, but uses uniform prevalence distribution generation
+    methods such as Kraemer or uniform simplex sampling to generate batches
+    with uniformly sampled class prevalences.
 
     Parameters
     ----------
     batch_size : int or list of int
-        The size of the batches to be used in the evaluation.
+        Batch size(s) for evaluation.
     n_prevalences : int
-        The number of artificial prevalences to generate.
+        Number of prevalence samples per class.
     repeats : int
-        The number of times to repeat the evaluation with different random seeds.
+        Number of evaluation repeats with different samples.
     random_state : int, optional
-        The random seed for reproducibility.
-
-    Attributes
-    ----------
-    n_prevalences : int
-        The number of artificial prevalences to generate.
-    repeats : int
-        The number of times to repeat the evaluation with different random seeds.
-    random_state : int
-        The random seed for reproducibility.
+        Random seed for reproducibility.
+    min_prev : float, optional (default=0.0)
+        Minimum prevalence limit.
+    max_prev : float, optional (default=1.0)
+        Maximum prevalence limit.
+    algorithm : {'kraemer', 'uniform'}, optional (default='kraemer')
+        Sampling algorithm used to generate artificial prevalences.
 
     Examples
     --------
     >>> protocol = UPP(batch_size=100, n_prevalences=5, repeats=3, random_state=42)
-    >>> for train_idx, test_idx in protocol.split(X, y):
-    ...     # Train and evaluate model
+    >>> for idx in protocol.split(X, y):
+    ...     # Train and evaluate
     ...     pass
     """
     
@@ -312,34 +310,28 @@ class UPP(BaseProtocol):
 
 
 class PPP(BaseProtocol):
-    """ Personalized Prevalence Protocol (PPP) for evaluation.
-    This protocol generates artificial prevalence distributions personalized for each class.
+    """
+    Personalized Prevalence Protocol (PPP) for targeted prevalence batch generation.
+    
+    Generates batches with user-specified prevalence distributions, allowing for
+    controlled evaluation on specific scenarios.
 
     Parameters
     ----------
     batch_size : int or list of int
-        The size of the batches to be used in the evaluation.
-    prevalences : list of float
-        The list of artificial prevalences to generate for each class.
-    repeats : int
-        The number of times to repeat the evaluation with different random seeds.
+        Batch sizes to generate.
+    prevalences : list of floats or array-like
+        Custom target prevalences per class to generate evaluation batches.
+    repeats : int, optional (default=1)
+        Number of evaluation repetitions with different batches.
     random_state : int, optional
-        The random seed for reproducibility.
-
-    Attributes
-    ----------
-    prevalences : list of float
-        The list of artificial prevalences to generate for each class.
-    repeats : int
-        The number of times to repeat the evaluation with different random seeds.
-    random_state : int
-        The random seed for reproducibility.
+        Random seed for reproducibility.
 
     Examples
     --------
     >>> protocol = PPP(batch_size=100, prevalences=[0.1, 0.9], repeats=3, random_state=42)
-    >>> for train_idx, test_idx in protocol.split(X, y):
-    ...     # Train and evaluate model
+    >>> for idx in protocol.split(X, y):
+    ...     # Train and evaluate
     ...     pass
     """
     

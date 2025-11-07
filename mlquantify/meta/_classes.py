@@ -4,33 +4,25 @@ from copy import deepcopy
 from tqdm import tqdm
 from sklearn.linear_model import LogisticRegression
 from sklearn.model_selection import GridSearchCV, cross_val_predict, train_test_split
-from sklearn.utils import resample
 
 from mlquantify.base import BaseQuantifier, MetaquantifierMixin
 from mlquantify.metrics._slq import MSE
 from mlquantify.mixture._classes import SORD, DyS
 from mlquantify.mixture._utils import getHist, hellinger
-from mlquantify.utils import Options, Interval, CallableConstraint
+from mlquantify.utils import Options, Interval
 from mlquantify.utils import _fit_context
 from mlquantify.confidence import (
-    ConfidenceInterval,
-    ConfidenceEllipseSimplex,
-    ConfidenceEllipseCLR,
     construct_confidence_region
 )
 from mlquantify.base_aggregative import (
     _get_learner_function, 
     is_aggregative_quantifier,
-    uses_soft_predictions, 
     get_aggregation_requirements)
 from mlquantify.utils._sampling import (
-    simplex_grid_sampling, 
-    simplex_uniform_sampling, 
-    simplex_uniform_kraemer,
     bootstrap_sample_indices
 )
 from mlquantify.model_selection import APP, NPP, UPP
-from mlquantify.utils._validation import validate_data, validate_predictions, validate_prevalences
+from mlquantify.utils._validation import validate_data, validate_prevalences
 from mlquantify.utils.prevalence import get_prev_from_labels
 
 
@@ -86,7 +78,80 @@ def get_protocol_sampler(protocol_name, batch_size, n_prevalences, min_prev, max
     return protocol
 
 class EnsembleQ(MetaquantifierMixin, BaseQuantifier):
-        
+    """
+    Ensemble-based Quantifier combining multiple models trained on varied data samples 
+    with controlled prevalence distributions to improve robustness and accuracy.
+
+    This quantifier constructs an ensemble of quantification models using batches of training 
+    data sampled according to an evaluation protocol (e.g. 'artificial', 'natural', 'uniform', 'kraemer') 
+    with specified prevalence constraints. Diverse models are trained on these subsamples, 
+    and their prevalence estimates aggregated using various selection metrics and aggregation methods.
+
+    Parameters
+    ----------
+    quantifier : BaseQuantifier
+        The quantifier model class to be used for ensemble members.
+    size : int, default=50
+        Number of ensemble members (sub-models) to train.
+    min_prop, max_prop : float, default=(0.1, 1.0)
+        Minimum and maximum class prevalence proportions for generating training batches.
+    selection_metric : {'all', 'ptr', 'ds'}, default='all'
+        Metric used to select or weight ensemble members during aggregation:
+        - 'all': uses all models equally,
+        - 'ptr': selects models with prevalences closest to initial test prevalence estimates,
+        - 'ds': selects models with score distributions similar to test data.
+    p_metric : float, default=0.25
+        Proportion of ensemble members to select according to the selection metric.
+    protocol : {'artificial', 'natural', 'uniform', 'kraemer'}, default='uniform'
+        Sampling protocol used to generate training data for ensemble models.
+    return_type : {'mean', 'median'}, default='mean'
+        Aggregation method for ensemble predictions.
+    max_sample_size : int or None, optional
+        Maximum number of samples per training batch; defaults to dataset size if None.
+    max_trials : int, default=100
+        Maximum number of trials for sampling.
+    n_jobs : int, default=1
+        Number of parallel jobs for training ensemble members.
+    verbose : bool, default=False
+        Enable verbose output.
+
+    Attributes
+    ----------
+    models : list
+        List of fitted quantifier ensemble members.
+    train_prevalences : list
+        List of training prevalences corresponding to ensemble members.
+    train_distributions : list
+        List of historical training posterior histograms (used when selection_metric='ds').
+    posteriors_generator : callable or None
+        Function to generate posterior probabilities for new samples.
+
+    Methods
+    -------
+    fit(X, y)
+        Fits all ensemble member quantifiers on sampled training batches.
+    predict(X)
+        Aggregates ensemble member predictions into final prevalence estimates.
+    ptr_selection_metric(prevalences, train_prevalences)
+        Implements PTR-based selection metric on prevalence estimates.
+    ds_get_posteriors(X, y)
+        Computes posterior probabilities for training data with cross-validated logistic regression.
+    ds_selection_metric(X, prevalences, train_distributions, posteriors_generator)
+        Implements DS-based selection metric comparing posterior distributions.
+
+    Notes
+    -----
+    - Ensemble diversity is controlled by sampling prevalences from the specified protocol.
+    - The 'ds' selection metric requires probabilistic quantifiers and computes distribution similarity.
+    - Uses sklearn's LogisticRegression and GridSearchCV internally for posterior computation within 'ds'.
+
+    Examples
+    --------
+    >>> ensemble = EnsembleQ(quantifier=SomeQuantifier(), size=30, protocol='kraemer', selection_metric='ptr')
+    >>> ensemble.fit(X_train, y_train)
+    >>> prevalence_estimates = ensemble.predict(X_test)
+    """  
+      
     _parameter_constraints = {
         "quantifier": [BaseQuantifier],
         "size": [Interval(left=1, right=None, discrete=True)],
@@ -355,7 +420,44 @@ def _select_k(elements, order, k):
 
 
 class AggregativeBootstrap(MetaquantifierMixin, BaseQuantifier):
+    """
+    Aggregative Bootstrap Quantifier to compute prevalence confidence regions.
 
+    This metaquantifier applies bootstrapping to both training and test data predictions 
+    to generate multiple bootstrap prevalence estimates. These bootstrapped estimates 
+    are used to construct confidence intervals or elliptical confidence regions for 
+    prevalence predictions, improving uncertainty quantification.
+
+    Parameters
+    ----------
+    quantifier : BaseQuantifier
+        The base quantifier model, which must be aggregative.
+    n_train_bootstraps : int, default=1
+        Number of bootstrap samples to generate from training predictions.
+    n_test_bootstraps : int, default=1
+        Number of bootstrap samples to generate from test predictions.
+    random_state : int or None, optional
+        Random seed for reproducibility.
+    region_type : {'intervals', 'ellipse', 'ellipse-clr'}, default='intervals'
+        Type of confidence region to construct.
+    confidence_level : float between 0 and 1, default=0.95
+        Confidence level for intervals or regions.
+
+    Methods
+    -------
+    fit(X, y, val_split=None)
+        Fits base quantifier and generates training predictions (optionally splitting data).
+    predict(X)
+        Returns prevalence estimates and confidence regions aggregated from bootstrap samples.
+    aggregate(predictions, train_predictions, train_y_values)
+        Performs bootstrap resampling aggregation to obtain prevalence confidence regions.
+
+    Examples
+    --------
+    >>> agg_boot = AggregativeBootstrap(quantifier=SomeQuantifier, n_train_bootstraps=100, n_test_bootstraps=100)
+    >>> agg_boot.fit(X_train, y_train)
+    >>> prevalence, conf_region = agg_boot.predict(X_test)
+    """
 
     _parameter_constraints = {
         "quantifier": [BaseQuantifier],
@@ -508,6 +610,48 @@ class AggregativeBootstrap(MetaquantifierMixin, BaseQuantifier):
 
 
 class QuaDapt(MetaquantifierMixin, BaseQuantifier):
+    """
+    QuaDapt Metaquantifier: Adaptive quantification using score merging and distance measures.
+
+    This metaquantifier improves prevalence estimation by merging training samples 
+    with different score distributions using a merging factor \( m \). It evaluates 
+    candidate merging factors, chooses the best by minimizing a distribution distance 
+    metric (Hellinger, Topsoe, ProbSymm, or SORD), and aggregates quantification accordingly.
+
+    Parameters
+    ----------
+    quantifier : BaseQuantifier
+        The base quantifier model to adapt.
+    measure : {'hellinger', 'topsoe', 'probsymm', 'sord'}, default='topsoe'
+        The distribution distance metric used to select the best merging factor.
+    merging_factor : array-like
+        Candidate merging factor values to evaluate.
+
+    Methods
+    -------
+    fit(X, y)
+        Fits the base learner on training data.
+    predict(X)
+        Predicts prevalence aggregating via the best merging factor.
+    aggregate(predictions, train_y_values)
+        Performs adaptation and aggregation based on merged score distributions.
+    _get_best_merging_factor(predictions)
+        Evaluates merging factors and selects the best based on minimum distance.
+    _get_best_distance(predictions, pos_scores, neg_scores)
+        Computes the distance metric between predicted and class score distributions.
+
+    Class Methods
+    -------------
+    MoSS(n, alpha, m)
+        Generates merged score samples modeling class conditional distributions 
+        parameterized by mixing proportion alpha and merging factor m.
+
+    Examples
+    --------
+    >>> quadapt = QuaDapt(quantifier=SomeQuantifier, merging_factor=[0.1, 0.5, 1.0], measure='sord')
+    >>> quadapt.fit(X_train, y_train)
+    >>> prevalence = quadapt.predict(X_test)
+    """
     
     _parameter_constraints = {
         "quantifier": [BaseQuantifier],

@@ -105,8 +105,32 @@ class AggregativeMixture(SoftLearnerQMixin, AggregationMixin, BaseMixture):
 # =====================================================
 
 class DyS(AggregativeMixture):
-    """
-    Distribution y-Similarity (DyS).
+    """Distribution y-Similarity (DyS) quantification method.
+
+    Uses mixture modeling with a dissimilarity measure between distributions
+    computed on histograms of classifier scores. This method optimizes mixture 
+    weights by minimizing a chosen distance measure: Hellinger, Topsoe, or ProbSymm.
+
+    Parameters
+    ----------
+    learner : estimator, optional
+        Base probabilistic classifier.
+    measure : {'hellinger', 'topsoe', 'probsymm'}, default='topsoe'
+        Distance function to minimize.
+    bins_size : array-like or None
+        Histogram bin sizes to try for score representation. Defaults to a set of 
+        bin sizes between 2 and 30.
+
+    References
+    ----------
+    [1] Maletzke et al. (2019). DyS: A Framework for Mixture Models in Quantification. AAAI 2019.
+    [2] Esuli et al. (2023). Learning to Quantify. Springer.
+
+    Examples
+    --------
+    >>> q = DyS(learner=my_learner, measure="hellinger")
+    >>> q.fit(X_train, y_train)
+    >>> prevalences = q.predict(X_test)
     """
     
     _parameter_constraints = {
@@ -151,8 +175,21 @@ class DyS(AggregativeMixture):
 # =====================================================
 
 class HDy(AggregativeMixture):
-    """
-    Hellinger Distance Minimization (HDy).
+    """Hellinger Distance Minimization (HDy) quantification method.
+
+    Estimates class prevalences by finding mixture weights that minimize
+    the Hellinger distance between the histogram of test scores and the mixture
+    of positive and negative class score histograms, evaluated over multiple bin sizes.
+
+    Parameters
+    ----------
+    learner : estimator, optional
+        Base probabilistic classifier.
+
+    References
+    ----------
+    [2] Esuli et al. (2023). Learning to Quantify. Springer.
+
     """
     
     def best_mixture(self, predictions, pos_scores, neg_scores):
@@ -188,7 +225,26 @@ class HDy(AggregativeMixture):
 
 class SMM(AggregativeMixture):
     """
-    Sample Mean Matching (SMM).
+    Sample Mean Matching (SMM) quantification method.
+
+    Estimates class prevalence by matching the mean score of the test samples 
+    to a convex combination of positive and negative training scores. The mixture 
+    weight \( \alpha \) is computed as:
+
+    \[
+    \alpha = \frac{\bar{s}_{test} - \bar{s}_{neg}}{\bar{s}_{pos} - \bar{s}_{neg}}
+    \]
+
+    where \( \bar{s} \) denotes the sample mean.
+
+    Parameters
+    ----------
+    learner : estimator, optional
+        Base probabilistic classifier.
+
+    References
+    ----------
+    [2] Esuli et al. (2023). Learning to Quantify. Springer.
     """
     
     def best_mixture(self, predictions, pos_scores, neg_scores):
@@ -205,10 +261,22 @@ class SMM(AggregativeMixture):
 # =====================================================
 
 class SORD(AggregativeMixture):
-    """
-    Sample Ordinal Distance (SORD).
-    """
+    """Sample Ordinal Distance (SORD) quantification method.
 
+    Estimates prevalence by minimizing the weighted sum of absolute score differences
+    between test data and training classes. The method creates weighted score 
+    vectors for positive, negative, and test samples, sorts them, and computes
+    a cumulative absolute difference as the distance measure.
+
+    Parameters
+    ----------
+    learner : estimator, optional
+        Base probabilistic classifier.
+
+    References
+    ----------
+    [2] Esuli et al. (2023). Learning to Quantify. Springer.
+    """
 
     def best_mixture(self, predictions, pos_scores, neg_scores):
         alphas = np.linspace(0, 1, 101)
@@ -249,6 +317,29 @@ class SORD(AggregativeMixture):
 class HDx(BaseMixture):
     """
     Hellinger Distance-based Quantifier (HDx).
+
+    A non-aggregative mixture quantifier that estimates class prevalences by 
+    minimizing the average Hellinger distance between class-wise feature histograms 
+    of training data and test data. It iterates over mixture weights and histogram bin sizes,
+    evaluating distance per feature and aggregates the results.
+
+    Parameters
+    ----------
+    bins_size : array-like, optional
+        Histogram bin sizes to consider for discretizing features.
+    strategy : {'ovr', 'ovo'}, default='ovr'
+        Multiclass quantification strategy.
+
+    Attributes
+    ----------
+    pos_features : ndarray
+        Training samples of the positive class.
+    neg_features : ndarray
+        Training samples of the negative class.
+
+    References
+    ----------
+    [2] Esuli et al. (2023). Learning to Quantify. Springer.
     """
     
     _parameter_constraints = {

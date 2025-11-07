@@ -316,25 +316,24 @@ class CDE(SoftLearnerQMixin, BaseIterativeLikelihood):
     }
 
     def __init__(self, learner=None, tol=1e-4, max_iter=100, init_cfp=1.0):
-        """
-        :param learner: (optional) wrapped learner object (not strictly used here;
-                        CDE-Iterate original retrains a cost-sensitive classifier,
-                        but here we implement a transductive thresholding variant).
-        :param tol: convergence tolerance on prevalence change
-        :param max_iter: maximal number of iterations
-        :param init_cfp: initial false-positive cost (cFP); cFN is kept = 1
-        """
         super().__init__(learner=learner, tol=tol, max_iter=max_iter)
         self.init_cfp = float(init_cfp)
 
     def _iterate(self, predictions, priors):
         """
-        :param predictions: np.ndarray shape (n_samples, 2) of posterior probabilities
-                            for classes [neg, pos] or [class0, class1]. We will assume
-                            column 1 is the positive class.
-        :param priors: array-like length 2 with pL(y) (training priors) OR initial priors;
-                       CDE uses pL in cost update. We expect priors to be training priors.
-        :return: prevalences estimate for U: array length 2
+        Iteratively estimate prevalences via cost-sensitive thresholding.
+
+        Parameters
+        ----------
+        predictions : ndarray, shape (n_samples, 2)
+            Posterior probabilities for binary classes [neg, pos].
+        priors : ndarray, shape (2,)
+            Training priors [p(neg), p(pos)].
+
+        Returns
+        -------
+        prevalences : ndarray, shape (2,)
+            Estimated prevalences for classes [neg, pos].
         """
         P = np.asarray(predictions, dtype=np.float64)
         Ptr = np.asarray(priors, dtype=np.float64)

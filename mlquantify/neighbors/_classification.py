@@ -5,6 +5,56 @@ from sklearn.neighbors import NearestNeighbors
 
 
 class PWKCLF:
+    """
+    Probabilistic Weighted k-Nearest Neighbor Classifier (PWKCLF).
+
+    A weighted k-nearest neighbor classifier that assigns class probabilities to 
+    instances based on neighbor counts weighted by class-specific inverse frequency 
+    factors adjusted by a hyperparameter alpha controlling imbalance compensation. 
+
+    Attributes
+    ----------
+    alpha : float
+        Exponent controlling the degree of imbalance compensation.
+    n_neighbors : int
+        Number of nearest neighbors considered.
+    nbrs : sklearn.neighbors.NearestNeighbors
+        The underlying k-NN structure used for neighbor queries.
+    classes_ : ndarray
+        Unique classes observed during training.
+    class_to_index : dict
+        Mapping from class label to index used in internal arrays.
+    class_weights : ndarray
+        Per-class weights computed based on class frequency and alpha.
+    y_train : ndarray
+        Labels of training samples.
+
+    Methods
+    -------
+    fit(X, y)
+        Fits the k-NN structure and computes class weights.
+    predict(X)
+        Predicts class labels by weighted voting among neighbors.
+
+    Notes
+    -----
+    The class weights are defined as:
+
+    \[
+    w_c = \left( \frac{N_c}{\min_{c'} N_{c'}} \right)^{-\frac{1}{\alpha}},
+    \]
+
+    where \( N_c \) is the count of class \( c \) in the training set.
+
+    This weighting scheme reduces bias towards majority classes by downweighting them
+    in the voting process.
+
+    Examples
+    --------
+    >>> clf = PWKCLF(alpha=2.0, n_neighbors=7)
+    >>> clf.fit(X_train, y_train)
+    >>> labels = clf.predict(X_test)
+    """
     
     def __init__(self,
                  alpha=1,

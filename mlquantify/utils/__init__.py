@@ -44,8 +44,3 @@ from mlquantify.utils._validation import (
     _is_arraylike,
     validate_data
 )
-from mlquantify.utils._wrappers import (
-    OvaWrapper, 
-    OvoWrapper, 
-    BaseWrapper
-)

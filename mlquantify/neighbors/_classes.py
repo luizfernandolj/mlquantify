@@ -9,6 +9,59 @@ from mlquantify.utils._validation import validate_prevalences
 
 
 class PWK(BaseQuantifier):
+    """
+    Probabilistic Weighted k-Nearest Neighbor (PWK) Quantifier.
+
+    This quantifier leverages the PWKCLF classifier to perform quantification by estimating 
+    class prevalences through a probabilistically weighted k-nearest neighbor approach.
+
+    The method internally uses a weighted k-NN classifier where neighbors' contributions 
+    are adjusted by class-specific weights designed to correct for class imbalance,
+    controlled by the hyperparameter alpha.
+
+    Parameters
+    ----------
+    alpha : float, default=1
+        Imbalance correction exponent for class weights. Higher values increase 
+        the influence of minority classes.
+    n_neighbors : int, default=10
+        Number of nearest neighbors considered.
+    algorithm : {'auto', 'ball_tree', 'kd_tree', 'brute'}, default='auto'
+        Algorithm used to compute nearest neighbors.
+    metric : str, default='euclidean'
+        Distance metric for nearest neighbor search.
+    leaf_size : int, default=30
+        Leaf size for tree-based neighbors algorithms.
+    p : int, default=2
+        Power parameter for the Minkowski metric (when metric='minkowski').
+    metric_params : dict or None, default=None
+        Additional parameters for the metric function.
+    n_jobs : int or None, default=None
+        Number of parallel jobs for neighbors search.
+
+    Attributes
+    ----------
+    cc : object
+        Internally used Classify & Count quantifier wrapping PWKCLF.
+    learner : PWKCLF
+        Underlying probabilistic weighted k-NN classifier.
+
+    Methods
+    -------
+    fit(X, y)
+        Fits the quantifier by training the internal PWKCLF and wrapping it with 
+        Classify & Count quantification.
+    predict(X)
+        Predicts class prevalences for input data using the trained model.
+    classify(X)
+        Returns label predictions by applying the trained PWKCLF classifier.
+
+    Examples
+    --------
+    >>> q = PWK(alpha=1.5, n_neighbors=5)
+    >>> q.fit(X_train, y_train)
+    >>> prevalences = q.predict(X_test)
+    """
     
     _parameter_constraints = {
         "alpha": [Interval(1, None, inclusive_right=False)],

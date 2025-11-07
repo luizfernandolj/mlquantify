@@ -1,14 +1,17 @@
 from functools import wraps
 
-from mlquantify.utils._wrappers import OvaWrapper, OvoWrapper
 from mlquantify.utils._validation import _is_fitted
 from mlquantify.utils._context import validation_context, is_validation_skipped
 
 
 def _fit_context(prefer_skip_nested_validation: bool = False):
     """
-    Decorator que define o contexto de validação durante o fit().
-    Similar a sklearn.utils._fit_context.
+    Decorator to manage validation context during the fit process.
+    
+    Parameters
+    ----------
+    prefer_skip_nested_validation : bool, optional
+        If True, prefer to skip nested validation during fitting, by default False.
     """
     def decorator(fit_method):
         @wraps(fit_method)

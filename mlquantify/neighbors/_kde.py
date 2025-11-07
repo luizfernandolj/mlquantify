@@ -12,11 +12,37 @@ from scipy.optimize import minimize
 
 
 # ============================================================
-# Função auxiliar: otimização no simplex com retorno do valor mínimo
+# Auxiliary functions
 # ============================================================
 
 def _optimize_on_simplex(objective, n_classes, x0=None):
-    """Otimiza uma função no simplex e retorna (alpha*, loss_min)."""
+    """
+    Optimize an objective function over the probability simplex.
+    
+    This function performs constrained optimization to find the mixture weights
+    \( \alpha \) on the simplex \( \Delta^{n-1} = \{ \alpha \in \mathbb{R}^n : \alpha_i \geq 0, \sum_i \alpha_i = 1 \} \)
+    that minimize the given objective function.
+
+    Parameters
+    ----------
+    objective : callable
+        Function from \( \mathbb{R}^n \to \mathbb{R} \) to minimize.
+    n_classes : int
+        Dimensionality of the simplex (number of classes).
+    x0 : array-like, optional
+        Initial guess for the optimization, defaults to uniform vector.
+
+    Returns
+    -------
+    alpha_opt : ndarray of shape (n_classes,)
+        Optimized weights summing to 1.
+    min_loss : float
+        Objective function value at optimum.
+
+    Notes
+    -----
+    The optimization uses scipy's `minimize` with bounds and equality constraint.
+    """
     if x0 is None:
         x0 = np.ones(n_classes) / n_classes
 
@@ -33,12 +59,52 @@ def _optimize_on_simplex(objective, n_classes, x0=None):
 # ============================================================
 
 class KDEyML(BaseKDE):
-    """KDEy baseado em máxima verossimilhança."""
+    """KDEy Maximum Likelihood quantifier.
+    
+    Models class-conditional densities of posterior probabilities via Kernel Density
+    Estimation (KDE) and estimates class prevalences by maximizing the likelihood of 
+    test data under a mixture model of these KDEs.
+    
+    The mixture weights correspond to class prevalences, optimized under the simplex 
+    constraint. The optimization minimizes the negative log-likelihood of the mixture
+    density evaluated at test posteriors.
+
+    This approach generalizes EM-based quantification methods by using KDE instead 
+    of discrete histograms, allowing smooth multivariate density estimation over 
+    the probability simplex.
+
+    References
+    ----------
+    The method is based on ideas presented by Moreo et al. (2023), extending KDE-based 
+    approaches for distribution matching and maximum likelihood estimation.
+    """
 
     def _precompute_training(self, train_predictions, train_y_values):
+        """
+        Fit KDE models on class-specific training posterior predictions.
+        """
         super()._fit_kde_models(train_predictions, train_y_values)
 
     def _solve_prevalences(self, predictions):
+        """
+        Estimate class prevalences by maximizing log-likelihood under KDE mixture.
+        
+        Parameters
+        ----------
+        predictions : ndarray, shape (n_samples, n_features)
+            Posterior probabilities of test set instances.
+
+        Returns
+        -------
+        alpha_opt : ndarray, shape (n_classes,)
+            Estimated class prevalences.
+        min_loss : float
+            Minimum negative log-likelihood achieved.
+
+        Notes
+        -----
+        The optimization is solved over the probability simplex.
+        """
         n_classes = len(self._class_kdes)
         class_likelihoods = np.array([
             np.exp(kde.score_samples(predictions)) + EPS for kde in self._class_kdes
@@ -60,7 +126,28 @@ class KDEyML(BaseKDE):
 # ============================================================
 
 class KDEyHD(BaseKDE):
-    """KDEy minimizando a distância de Hellinger via Monte Carlo."""
+    """
+    KDEy Hellinger Distance Minimization quantifier.
+    
+    Estimates class prevalences by minimizing the Hellinger distance \( HD \) between
+    the KDE mixture of class-conditional densities and the KDE of test data, estimated
+    via Monte Carlo sampling and importance weighting.
+    
+    This stochastic approximation enables practical optimization of complex divergence
+    measures otherwise lacking closed-form expressions for Gaussian Mixture Models.
+
+    Parameters
+    ----------
+    montecarlo_trials : int
+        Number of Monte Carlo samples used in approximation.
+    random_state : int or None
+        Seed or random state for reproducibility.
+
+    References
+    ----------
+    Builds on f-divergence Monte Carlo approximations for KDE mixtures as detailed 
+    by Moreo et al. (2023) and importance sampling techniques.
+    """
 
     _parameter_constraints = {
         "montecarlo_trials": [Interval(1, None)],
@@ -72,6 +159,9 @@ class KDEyHD(BaseKDE):
         self.random_state = random_state
 
     def _precompute_training(self, train_predictions, train_y_values):
+        """
+        Precompute reference samples from class KDEs and their densities.
+        """
         super()._fit_kde_models(train_predictions, train_y_values)
         n_class = len(self._class_kdes)
         trials = int(self.montecarlo_trials)
@@ -90,6 +180,9 @@ class KDEyHD(BaseKDE):
         self._ref_density = ref_density
 
     def _solve_prevalences(self, predictions):
+        """
+        Minimize Hellinger distance between test KDE and mixture KDE via importance sampling.
+        """
         test_kde = KernelDensity(bandwidth=self.bandwidth).fit(predictions)
         qs = np.exp(test_kde.score_samples(self._ref_samples)) + EPS
         iw = qs / self._ref_density
@@ -114,9 +207,26 @@ class KDEyHD(BaseKDE):
 # ============================================================
 
 class KDEyCS(BaseKDE):
-    """KDEy usando divergência de Cauchy–Schwarz (forma fechada)."""
+    """
+    KDEy Cauchy–Schwarz Divergence quantifier.
+    
+    Uses a closed-form solution for minimizing the Cauchy–Schwarz (CS) divergence between
+    Gaussian Mixture Models representing class-conditional densities fitted via KDE.
+    
+    This mathematically efficient approach leverages precomputed kernel Gram matrices
+    of train-train, train-test, and test-test instances for fast divergence evaluation,
+    enabling scalable multiclass quantification.
+
+    References
+    ----------
+    Based on closed-form CS divergence derivations by Kampa et al. (2011) and KDEy 
+    density representations, as discussed by Moreo et al. (2023).
+    """
 
     def _precompute_training(self, train_predictions, train_y_values):
+        """
+        Precompute kernel sums and Gram matrices needed for CS divergence evaluation.
+        """
         P = np.atleast_2d(train_predictions)
         y = np.asarray(train_y_values)
         centers = [P[y == c] for c in self.classes]
@@ -135,6 +245,9 @@ class KDEyCS(BaseKDE):
         self._h_eff = h_eff
 
     def _solve_prevalences(self, predictions):
+        """
+        Minimize Cauchy-Schwarz divergence over class mixture weights on the probability simplex.
+        """
         Pte = np.atleast_2d(predictions)
         n = len(self.classes)
         a_bar = np.array([np.sum(gaussian_kernel(Xi, Pte, self._h_eff)) for Xi in self._centers])
