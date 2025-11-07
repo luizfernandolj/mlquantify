@@ -40,6 +40,7 @@ class BaseIterativeLikelihood(AggregationMixin, BaseQuantifier):
 
         counts = np.array([np.count_nonzero(y == _class) for _class in self.classes])
         self.priors = counts / len(y)
+        self.y_train = y
                 
         return self
     
@@ -47,7 +48,7 @@ class BaseIterativeLikelihood(AggregationMixin, BaseQuantifier):
         """Predict class prevalences for the given data."""
         estimator_function = _get_learner_function(self)
         predictions = getattr(self.learner, estimator_function)(X)
-        prevalences = self.aggregate(predictions, y_train=None)
+        prevalences = self.aggregate(predictions, y_train=self.y_train)
         return prevalences
 
     def aggregate(self, predictions, y_train=None):

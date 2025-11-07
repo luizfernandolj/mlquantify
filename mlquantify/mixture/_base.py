@@ -6,14 +6,13 @@ from mlquantify.base import BaseQuantifier
 from mlquantify.mixture._utils import sqEuclidean
 from mlquantify.utils._decorators import _fit_context
 from mlquantify.utils._validation import validate_y, validate_data
-
+from mlquantify.multiclass import define_binary
 from mlquantify.mixture._utils import (
     hellinger,
     topsoe,
     probsymm,
     sqEuclidean
 )
-
 
 class BaseMixture(BaseQuantifier):
     """Base class for mixture-based quantifiers."""
@@ -25,8 +24,7 @@ class BaseMixture(BaseQuantifier):
     @_fit_context(prefer_skip_nested_validation=True)
     def fit(self, X, y, *args, **kwargs):
         """Fit the quantifier using the provided data and learner."""
-        X, y = validate_data(self, 
-                             X, y)
+        X, y = validate_data(self, X, y)
         validate_y(self, y)
         self.classes = np.unique(y)
         

@@ -4,6 +4,7 @@ from abc import abstractmethod
 from mlquantify.base import BaseQuantifier
 from mlquantify.base_aggregative import AggregationMixin, SoftLearnerQMixin, _get_learner_function
 from mlquantify.mixture._base import BaseMixture
+from mlquantify.multiclass import define_binary
 from mlquantify.utils._constraints import Interval, Options
 from mlquantify.utils._decorators import _fit_context
 from mlquantify.utils._get_scores import apply_cross_validation
@@ -18,7 +19,7 @@ from mlquantify.mixture._utils import (
 # =====================================================
 # Base class
 # =====================================================
-
+@define_binary
 class AggregativeMixture(SoftLearnerQMixin, AggregationMixin, BaseMixture):
     """
     Base class for Mixture-based Quantification Methods.
@@ -26,13 +27,18 @@ class AggregativeMixture(SoftLearnerQMixin, AggregationMixin, BaseMixture):
     These methods assume that the test score distribution is a mixture
     of the positive and negative score distributions from the training data.
     """
+    
+    _parameter_constraints = {
+        "strategy": [Options(["ovr", "ovo"])]
+    }
 
-    def __init__(self, learner = None):
+    def __init__(self, learner = None, strategy="ovr"):
         super().__init__()
         self.learner = learner
         self.pos_scores = None
         self.neg_scores = None
         self.distances = None
+        self.strategy = strategy
     
     def _fit(self, X, y, learner_fitted=False, *args, **kwargs):
         learner_function = _get_learner_function(self)
@@ -51,7 +57,7 @@ class AggregativeMixture(SoftLearnerQMixin, AggregationMixin, BaseMixture):
                 random_state= None,
                 shuffle= True
             )
-        
+            
         self.train_predictions = train_predictions
         self.train_y_values = train_y_values
 
@@ -71,7 +77,6 @@ class AggregativeMixture(SoftLearnerQMixin, AggregationMixin, BaseMixture):
     def _predict(self, X):
         """Predict class prevalences for the given data."""
         predictions = getattr(self.learner, _get_learner_function(self))(X)
-
         prevalences = self.aggregate(predictions, self.train_predictions, self.train_y_values)
 
         return prevalences
@@ -79,7 +84,7 @@ class AggregativeMixture(SoftLearnerQMixin, AggregationMixin, BaseMixture):
     def aggregate(self, predictions, train_predictions, train_y_values):
         predictions = validate_predictions(self, predictions)
         self.classes = self.classes if hasattr(self, 'classes') else np.unique(train_y_values)
-        
+
         if not self._precomputed:
             self._precompute_training(train_predictions, train_y_values)
             self._precomputed = True
@@ -241,17 +246,17 @@ class SORD(AggregativeMixture):
 # Non aggregative Mixture-based Quantifiers
 # =====================================================
 
-
 class HDx(BaseMixture):
     """
     Hellinger Distance-based Quantifier (HDx).
     """
     
     _parameter_constraints = {
-        "bins_size": ["array-like", None]
+        "bins_size": ["array-like", None],
+        "strategy": [Options(["ovr", "ovo"])]
     }
 
-    def __init__(self, bins_size=None):
+    def __init__(self, bins_size=None, strategy="ovr"):
         super().__init__()
         if bins_size is None:
             bins_size = np.append(np.linspace(2, 20, 10), 30)
@@ -259,6 +264,7 @@ class HDx(BaseMixture):
         self.bins_size = bins_size
         self.neg_features = None
         self.pos_features = None
+        self.strategy = strategy
         
     
     def _fit(self, X, y, *args, **kwargs):

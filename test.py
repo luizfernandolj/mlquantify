@@ -74,7 +74,8 @@ from mlquantify.multiclass import BinaryQuantifier
 
 
 # Carregar o dataset Iris
-data = load_breast_cancer()
+#data = load_breast_cancer()
+data = load_iris()
 X, y = data.data, data.target
 
 # Dividir o dataset em treino e teste
@@ -104,12 +105,13 @@ rf.fit(X_train, y_train)
 rf_train_pred = rf.predict_proba(X_train)
 rf_pred = rf.predict_proba(X_test)
 
-quantifier = BinaryQuantifier(strategy='ovo')
+quantifier = DyS(rf)
 quantifier.fit(X_train, y_train)
-pred = quantifier.predict(X_test)
+predictions = quantifier.predict(X_test)
+print("Predicted class prevalences:", predictions)
 
 #Usar o quantificador sem learner
-# quantifier1 = EMQ(rf)
+# quantifier1 = E MQ(rf)
 # predictions1 = quantifier1.aggregate(rf_pred, y_train)
 # print("Predicted class prevalences 1:", predictions1)
 
@@ -152,7 +154,7 @@ upp = UPP(batch_size=10,
           repeats=1,
           random_state=42)
 ppp = PPP(batch_size=10,
-          prevalences=[0.5, 0.6],
+          prevalences=[[0.2, 0.5, 0.3], [0.5, 0.3, 0.2], [0.3, 0.4, 0.3]],
           repeats=1,
           random_state=42)
 
@@ -181,6 +183,8 @@ for idx in ppp.split(X_test, y_test):
     print(get_prev_from_labels(y_batch))
 
 
+print("\n--- Grid Search for DyS Quantifier ---\n")
+
 grid = {
     "__learner_min_samples_split": [3, 8],
     "learner": [RandomForestClassifier(), DecisionTreeClassifier()],
@@ -190,6 +194,8 @@ grid = {
 grid_search = GridSearchQ(
     quantifier=DyS,
     param_grid=grid,
+    samples_sizes=42,
+    verbose=True
 )
 
 grid_search.fit(X_train, y_train)

@@ -404,3 +404,8 @@ def normalize_prevalences(prevalences: np.ndarray | list | dict, classes: np.nda
         raise InputValidationError(
             f"prevalences must be a numpy array, list, or dict, got {type(prevalences).__name__}."
         )
+        
+        
+def check_has_method(obj: Any, method_name: str) -> bool:
+    """Check if the object has a callable method with the given name."""
+    return callable(getattr(obj, method_name, None))

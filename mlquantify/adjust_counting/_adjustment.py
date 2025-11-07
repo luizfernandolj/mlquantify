@@ -11,10 +11,11 @@ from mlquantify.base_aggregative import (
     SoftLearnerQMixin,
     uses_soft_predictions,
 )
+from mlquantify.multiclass import define_binary
 from mlquantify.adjust_counting._utils import evaluate_thresholds
 from mlquantify.utils._constraints import Interval, Options
 
-
+@define_binary
 class ThresholdAdjustment(SoftLearnerQMixin, BaseAdjustCount): # ACC, X, MAX, T50, MS, MS2
 
     _parameter_constraints = {
