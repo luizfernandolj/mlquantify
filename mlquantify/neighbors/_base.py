@@ -4,7 +4,7 @@ from sklearn.neighbors import KernelDensity
 
 from mlquantify.utils._decorators import _fit_context
 from mlquantify.base import BaseQuantifier
-from mlquantify.utils import validate_y, validate_predictions, validate_data
+from mlquantify.utils import validate_y, validate_predictions, validate_data, check_classes_attribute
 from mlquantify.base_aggregative import AggregationMixin, SoftLearnerQMixin, _get_learner_function
 from mlquantify.utils._constraints import Interval, Options
 from mlquantify.utils._get_scores import apply_cross_validation
@@ -120,7 +120,7 @@ class BaseKDE(SoftLearnerQMixin, AggregationMixin, BaseQuantifier):
         X, y = validate_data(self, X, y, ensure_2d=True, ensure_min_samples=2)
         validate_y(self, y)
         
-        self.classes = np.unique(y)
+        self.classes_ = np.unique(y)
         
         learner_function = _get_learner_function(self)
 
@@ -142,17 +142,16 @@ class BaseKDE(SoftLearnerQMixin, AggregationMixin, BaseQuantifier):
     def _fit_kde_models(self, train_predictions, train_y_values):
         P = np.atleast_2d(train_predictions)
         y = np.asarray(train_y_values)
-        classes = np.unique(y)
         self._class_kdes = []
 
-        for c in classes:
+        for c in self.classes_:
             Xi = P[y == c]
             if Xi.shape[0] == 0:
                 Xi = np.ones((1, P.shape[1])) / P.shape[1]  # fallback
             kde = KernelDensity(bandwidth=self.bandwidth, kernel=self.kernel)
             kde.fit(Xi)
             self._class_kdes.append(kde)
-
+            
         self._precomputed = True
 
     def predict(self, X):
@@ -162,22 +161,32 @@ class BaseKDE(SoftLearnerQMixin, AggregationMixin, BaseQuantifier):
     def aggregate(self, predictions, train_predictions, train_y_values):
         predictions = validate_predictions(self, predictions)
         
-        self.classes = np.unique(train_y_values) if not hasattr(self, 'classes') else self.classes
+        if hasattr(self, "classes_") and len(np.unique(train_y_values)) != len(self.classes_):
+            self._precomputed = False
+        
+        self.classes_ = check_classes_attribute(self, np.unique(train_y_values))
         
         if not self._precomputed:
             self._precompute_training(train_predictions, train_y_values)
             self._precomputed = True
-
+            
         prevalence, _ = self._solve_prevalences(predictions)
         prevalence = np.clip(prevalence, EPS, None)
-        prevalence = validate_prevalences(self, prevalence, self.classes)
+        prevalence = validate_prevalences(self, prevalence, self.classes_)
         return prevalence
 
-    def best_distance(self):
+    def best_distance(self, predictions, train_predictions, train_y_values):
         """Retorna a melhor distância encontrada durante o ajuste."""
         if self.best_distance is not None:
             return self.best_distance
-        _, best_distance = self._solve_prevalences(self.train_predictions)
+        
+        self.classes_ = check_classes_attribute(self, np.unique(train_y_values))
+        
+        if not self._precomputed:
+            self._precompute_training(train_predictions, train_y_values)
+            self._precomputed = True    
+    
+        _, best_distance = self._solve_prevalences(predictions)
         return best_distance
 
     @abstractmethod
@@ -185,5 +194,5 @@ class BaseKDE(SoftLearnerQMixin, AggregationMixin, BaseQuantifier):
         raise NotImplementedError
 
     @abstractmethod
-    def _solve_prevalences(self, predictions, train_predictions, train_y_values):
+    def _solve_prevalences(self, predictions):
         raise NotImplementedError

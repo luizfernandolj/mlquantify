@@ -107,13 +107,14 @@ class BaseMixture(BaseQuantifier):
         """Fit the quantifier using the provided data and learner."""
         X, y = validate_data(self, X, y)
         validate_y(self, y)
-        self.classes = np.unique(y)
+        self.classes_ = np.unique(y)
         
         self._fit(X, y, *args, **kwargs)
         return self
     
     def predict(self, X, *args, **kwargs):
         """Predict class prevalences for the given data."""
+        X = validate_data(self, X)
         return self._predict(X, *args, **kwargs)
     
     def get_best_distance(self, *args, **kwargs):

@@ -126,8 +126,7 @@ class KDEyML(BaseKDE):
 # ============================================================
 
 class KDEyHD(BaseKDE):
-    """
-    KDEy Hellinger Distance Minimization quantifier.
+    r"""KDEy Hellinger Distance Minimization quantifier.
     
     Estimates class prevalences by minimizing the Hellinger distance \( HD \) between
     the KDE mixture of class-conditional densities and the KDE of test data, estimated
@@ -166,9 +165,11 @@ class KDEyHD(BaseKDE):
         n_class = len(self._class_kdes)
         trials = int(self.montecarlo_trials)
         rng = check_random_state(self.random_state)
+        # Convert to integer seed for sklearn compatibility
+        seed = rng.integers(0, 2**31 - 1) if hasattr(rng, 'integers') else self.random_state
 
         samples = np.vstack([
-            kde.sample(max(1, trials // n_class), random_state=rng)
+            kde.sample(max(1, trials // n_class), random_state=seed)
             for kde in self._class_kdes
         ])
 
@@ -208,9 +209,9 @@ class KDEyHD(BaseKDE):
 
 class KDEyCS(BaseKDE):
     """
-    KDEy Cauchy–Schwarz Divergence quantifier.
+    KDEy Cauchy-Schwarz Divergence quantifier.
     
-    Uses a closed-form solution for minimizing the Cauchy–Schwarz (CS) divergence between
+    Uses a closed-form solution for minimizing the Cauchy-Schwarz (CS) divergence between
     Gaussian Mixture Models representing class-conditional densities fitted via KDE.
     
     This mathematically efficient approach leverages precomputed kernel Gram matrices
@@ -229,16 +230,15 @@ class KDEyCS(BaseKDE):
         """
         P = np.atleast_2d(train_predictions)
         y = np.asarray(train_y_values)
-        centers = [P[y == c] for c in self.classes]
+        centers = [P[y == c] for c in self.classes_]
         counts = np.array([len(x) if len(x) > 0 else 1 for x in centers])
         h_eff = np.sqrt(2) * self.bandwidth
 
-        B_bar = np.zeros((len(self.classes), len(self.classes)))
+        B_bar = np.zeros((len(self.classes_), len(self.classes_)))
         for i, Xi in enumerate(centers):
             for j, Xj in enumerate(centers[i:], start=i):
                 val = np.sum(gaussian_kernel(Xi, Xj, h_eff))
                 B_bar[i, j] = B_bar[j, i] = val
-
         self._centers = centers
         self._counts = counts
         self._B_bar = B_bar
@@ -249,7 +249,7 @@ class KDEyCS(BaseKDE):
         Minimize Cauchy-Schwarz divergence over class mixture weights on the probability simplex.
         """
         Pte = np.atleast_2d(predictions)
-        n = len(self.classes)
+        n = len(self.classes_)
         a_bar = np.array([np.sum(gaussian_kernel(Xi, Pte, self._h_eff)) for Xi in self._centers])
         counts = self._counts + EPS
         B_bar = self._B_bar + EPS

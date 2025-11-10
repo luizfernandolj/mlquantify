@@ -1,3 +1,4 @@
+import numpy as np
 from mlquantify.utils._constraints import Interval, Options
 from mlquantify.neighbors._classification import PWKCLF
 from mlquantify.base_aggregative import AggregationMixin, CrispLearnerQMixin
@@ -120,6 +121,7 @@ class PWK(BaseQuantifier):
         """
         X, y = validate_data(self, X, y, ensure_2d=True, ensure_min_samples=2)
         validate_y(self, y)
+        self.classes_ = np.unique(y)
         self.cc = CC(self.learner)
         return self.cc.fit(X, y)
     
@@ -137,7 +139,7 @@ class PWK(BaseQuantifier):
             Predicted class prevalences.
         """
         prevalences = self.cc.predict(X)
-        prevalences = validate_prevalences(self, prevalences)
+        prevalences = validate_prevalences(self, prevalences, self.classes_)
         return prevalences
     
     def classify(self, X):

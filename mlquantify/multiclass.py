@@ -170,7 +170,7 @@ def _predict_ovr(quantifier, X):
         Predicted prevalences for each class.
     """
     preds = np.zeros(len(quantifier.qtfs_))
-    for i, qtf in quantifier.qtfs_.items():
+    for i, qtf in enumerate(quantifier.qtfs_.values()):
         preds[i] = qtf._original_predict(X)[1]
     return preds
 
@@ -222,17 +222,17 @@ def _aggregate_ovr(quantifier, preds, y_train, train_preds=None):
         Class-wise prevalence estimates.
     """
     prevalences = {}
-    for cls in np.unique(y_train):
-        bin_preds = np.column_stack([1 - preds[:, int(cls)], preds[:, int(cls)]])
+    for i, cls in enumerate(np.unique(y_train)):
+        bin_preds = np.column_stack([1 - preds[:, i], preds[:, i]])
         y_bin = (y_train == cls).astype(int)
         args = [bin_preds]
 
         if train_preds is not None:
-            bin_train_preds = np.column_stack([1 - train_preds[:, int(cls)], train_preds[:, int(cls)]])
+            bin_train_preds = np.column_stack([1 - train_preds[:, i], train_preds[:, i]])
             args.append(bin_train_preds)
 
         args.append(y_bin)
-        prevalences[int(cls)] = quantifier._original_aggregate(*args)[1]
+        prevalences[cls] = quantifier._original_aggregate(*args)[1]
     return prevalences
 
 
@@ -293,7 +293,8 @@ class BinaryQuantifier(MetaquantifierMixin, BaseQuantifier):
     def fit(qtf, X, y):
         """Fit the quantifier under a binary decomposition strategy."""
         if len(np.unique(y)) <= 2:
-            return qtf.fit(X, y)
+            qtf.binary = True
+            return qtf._original_fit(X, y)
 
         qtf.strategy = getattr(qtf, "strategy", "ovr")
 
@@ -308,8 +309,8 @@ class BinaryQuantifier(MetaquantifierMixin, BaseQuantifier):
 
     def predict(qtf, X):
         """Predict class prevalences using the trained binary quantifiers."""
-        if hasattr(qtf, "qtfs_") and len(qtf.qtfs_) <= 2:
-            preds = qtf._original_predict(X)
+        if hasattr(qtf, "binary") and qtf.binary:
+            return qtf._original_predict(X)
         else:
             if qtf.strategy == "ovr":
                 preds = _predict_ovr(qtf, X)
@@ -336,7 +337,7 @@ class BinaryQuantifier(MetaquantifierMixin, BaseQuantifier):
         classes = np.unique(args_dict["y_train"])
         qtf.strategy = getattr(qtf, "strategy", "ovr")
 
-        if len(classes) <= 2:
+        if hasattr(qtf, "binary") and qtf.binary:
             return qtf._original_aggregate(*args_dict.values())
 
         if qtf.strategy == "ovr":

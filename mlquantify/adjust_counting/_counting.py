@@ -6,7 +6,7 @@ from mlquantify.base_aggregative import (
 )
 
 from mlquantify.adjust_counting._base import BaseCount
-from mlquantify.utils._validation import validate_predictions, validate_prevalences
+from mlquantify.utils._validation import validate_predictions, validate_prevalences, check_classes_attribute
 from mlquantify.utils._constraints import Interval
         
 
@@ -70,11 +70,11 @@ class CC(CrispLearnerQMixin, BaseCount):
     def aggregate(self, predictions):
         predictions = validate_predictions(self, predictions)
         
-        self.classes = self.classes if hasattr(self, 'classes') else np.unique(predictions)
-        
-        class_counts = np.array([np.count_nonzero(predictions == _class) for _class in self.classes])
+        self.classes_ = check_classes_attribute(self, np.unique(predictions))
+        class_counts = np.array([np.count_nonzero(predictions == _class) for _class in self.classes_])
         prevalences = class_counts / len(predictions)
-        prevalences = validate_prevalences(self, prevalences, self.classes)
+        
+        prevalences = validate_prevalences(self, prevalences, self.classes_)
         return prevalences
 
 
@@ -125,10 +125,21 @@ class PCC(SoftLearnerQMixin, BaseCount):
 
     def aggregate(self, predictions):
         predictions = validate_predictions(self, predictions)
-        self.classes = self.classes if hasattr(self, 'classes') else np.arange(predictions.shape[1])
-        class_sums = np.sum(predictions, axis=0)
-        prevalences = class_sums / len(predictions)
-        if predictions.ndim == 1:
-            prevalences = np.array([1-prevalences, prevalences])
-        prevalences = validate_prevalences(self, prevalences, self.classes)
+        
+        # Handle categorical predictions (1D array with class labels)
+        if predictions.ndim == 1 and not np.issubdtype(predictions.dtype, (np.floating, np.integer)):
+            self.classes_ = check_classes_attribute(self, np.unique(predictions))
+            class_counts = np.array([np.count_nonzero(predictions == _class) for _class in self.classes_])
+            prevalences = class_counts / len(predictions)
+        else:
+            # Handle probability predictions (2D array or 1D probabilities)
+            if predictions.ndim == 2:
+                self.classes_ = check_classes_attribute(self, np.arange(predictions.shape[1]))
+            else:
+                self.classes_ = check_classes_attribute(self, np.arange(2))
+            prevalences = np.mean(predictions, axis=0) if predictions.ndim == 2 else predictions.mean()
+            if predictions.ndim == 1:
+                prevalences = np.array([1-prevalences, prevalences])
+        
+        prevalences = validate_prevalences(self, prevalences, self.classes_)
         return prevalences

@@ -358,14 +358,23 @@ def validate_prevalences(quantifier, prevalences: np.ndarray | list | dict, clas
         prev_dict = {cls: val / total for cls, val in prev_dict.items()}
     
     # Convert numpy types to native Python types for cleaner output
-    prev_dict = {int(cls) if isinstance(cls, np.integer) else float(cls) if isinstance(cls, np.floating) else cls: 
-                 float(val) for cls, val in prev_dict.items()}
+    
+    prev_dict_converted = {}
+    # Convert numpy types to native Python types
+    for cls, val in prev_dict.items():
+        if isinstance(cls, np.integer):
+            cls = int(cls)
+        elif isinstance(cls, np.floating):
+            cls = float(cls)
+        elif isinstance(cls, np.str_):
+            cls = str(cls)
+        prev_dict_converted[cls] = float(val)
     
     # Return in requested format
     if return_type == "dict":
-        return prev_dict
+        return prev_dict_converted
     else:
-        return np.array([prev_dict[cls] for cls in classes])
+        return np.array([prev_dict_converted[cls] for cls in classes])
 
 
 def normalize_prevalences(prevalences: np.ndarray | list | dict, classes: np.ndarray = None) -> np.ndarray | dict:
@@ -389,9 +398,18 @@ def normalize_prevalences(prevalences: np.ndarray | list | dict, classes: np.nda
         if total == 0:
             raise InputValidationError("Cannot normalize prevalences: sum is zero.")
         normalized = {cls: val / total for cls, val in prevalences.items()}
+        
+        normalized_dict = {}
         # Convert numpy types to native Python types
-        return {int(cls) if isinstance(cls, np.integer) else float(cls) if isinstance(cls, np.floating) else cls: 
-                float(val) for cls, val in normalized.items()}
+        for cls, val in normalized.items():
+            if isinstance(cls, np.integer):
+                cls = int(cls)
+            elif isinstance(cls, np.floating):
+                cls = float(cls)
+            elif isinstance(cls, np.str_):
+                cls = str(cls)
+            normalized_dict[cls] = float(val)
+        return normalized_dict
     
     elif isinstance(prevalences, (list, np.ndarray)):
         prevalences = np.asarray(prevalences)
@@ -409,3 +427,21 @@ def normalize_prevalences(prevalences: np.ndarray | list | dict, classes: np.nda
 def check_has_method(obj: Any, method_name: str) -> bool:
     """Check if the object has a callable method with the given name."""
     return callable(getattr(obj, method_name, None))
+
+def check_classes_attribute(quantifier: Any, classes) -> bool:
+    """Check if the quantifier has a 'classes_' attribute and if it matches the type of classes."""
+    
+    if not hasattr(quantifier, "classes_"):
+        return classes
+    
+    quantifier_classes = quantifier.classes_
+    
+    # Check if types match
+    if type(quantifier_classes) != type(classes):
+        return classes
+    
+    # Check if shapes match before comparing elements
+    if len(quantifier_classes) != len(classes) or not np.all(quantifier_classes == classes):
+        return classes
+    return quantifier_classes
+    

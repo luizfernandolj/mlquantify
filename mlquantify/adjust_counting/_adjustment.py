@@ -99,10 +99,9 @@ class ThresholdAdjustment(SoftLearnerQMixin, BaseAdjustCount):
 
     def _adjust(self, predictions, train_y_scores, train_y_values):
         """Internal adjustment computation based on selected ROC threshold."""
-        self.classes = np.unique(train_y_values) if not hasattr(self, 'classes') else self.classes
         positive_scores = train_y_scores[:, 1]
         
-        thresholds, tprs, fprs = evaluate_thresholds(train_y_values, positive_scores, self.classes)
+        thresholds, tprs, fprs = evaluate_thresholds(train_y_values, positive_scores, self.classes_)
         threshold, tpr, fpr = self._get_best_threshold(thresholds, tprs, fprs)
 
         cc_predictions = CC(threshold).aggregate(predictions)[1]
@@ -201,7 +200,6 @@ class MatrixAdjustment(BaseAdjustCount):
     def _adjust(self, predictions, train_y_pred, train_y_values):
         n_class = len(np.unique(train_y_values))
         self.CM = np.zeros((n_class, n_class))
-        self.classes = np.unique(train_y_values) if not hasattr(self, 'classes') else self.classes
 
         if self.solver == 'optim':
             priors = np.array(list(CC().aggregate(train_y_pred).values()))
@@ -264,14 +262,14 @@ class MatrixAdjustment(BaseAdjustCount):
 
 
 class FM(SoftLearnerQMixin, MatrixAdjustment):
-    """Forman’s Matrix Adjustment (FM) — solved via optimization."""
+    """Forman's Matrix Adjustment (FM) — solved via optimization."""
     def __init__(self, learner=None):
         super().__init__(learner=learner, solver='optim')
     
     def _compute_confusion_matrix(self, posteriors, y_true, priors):
-        for _class in self.classes:
+        for i, _class in enumerate(self.classes_):
             indices = (y_true == _class)
-            self.CM[:, _class] = self._get_estimations(posteriors[indices] > priors)
+            self.CM[:, i] = self._get_estimations(posteriors[indices] > priors)
         return self.CM
 
 
@@ -282,7 +280,7 @@ class GAC(CrispLearnerQMixin, MatrixAdjustment):
     
     def _compute_confusion_matrix(self, predictions):
         prev_estim = self._get_estimations(predictions)
-        for i, _ in enumerate(self.classes):
+        for i, _ in enumerate(self.classes_):
             if prev_estim[i] == 0:
                 self.CM[i, i] = 1
             else:
@@ -297,7 +295,7 @@ class GPAC(SoftLearnerQMixin, MatrixAdjustment):
     
     def _compute_confusion_matrix(self, posteriors):
         prev_estim = self._get_estimations(posteriors)
-        for i, _ in enumerate(self.classes):
+        for i, _ in enumerate(self.classes_):
             if prev_estim[i] == 0:
                 self.CM[i, i] = 1
             else:
@@ -321,36 +319,42 @@ class X_method(ThresholdAdjustment):
 
 
 class MAX(ThresholdAdjustment):
-    """MAX method — threshold maximizing \( \text{TPR} - \text{FPR} \)."""
+    r"""MAX method — threshold maximizing \( \text{TPR} - \text{FPR} \)."""
     def _get_best_threshold(self, thresholds, tprs, fprs):
         idx = np.argmax(np.abs(tprs - fprs))
         return thresholds[idx], tprs[idx], fprs[idx]
 
 
 class T50(ThresholdAdjustment):
-    """T50 — selects threshold where \( \text{TPR} = 0.5 \)."""
+    r"""T50 — selects threshold where \( \text{TPR} = 0.5 \)."""
     def _get_best_threshold(self, thresholds, tprs, fprs):
         idx = np.argmin(np.abs(tprs - 0.5))
         return thresholds[idx], tprs[idx], fprs[idx]
 
 
 class MS(ThresholdAdjustment):
-    """Median Sweep (MS) — median prevalence across all thresholds."""
+    r"""Median Sweep (MS) — median prevalence across all thresholds."""
     def _adjust(self, predictions, train_y_scores, train_y_values):
-        self.classes = np.unique(train_y_values) if not hasattr(self, 'classes') else self.classes
         positive_scores = train_y_scores[:, 1]
-        thresholds, tprs, fprs = evaluate_thresholds(train_y_values, positive_scores, self.classes)
+        
+        thresholds, tprs, fprs = evaluate_thresholds(train_y_values, positive_scores, self.classes_)
+        thresholds, tprs, fprs = self._get_best_threshold(thresholds, tprs, fprs)
+        
         prevs = []
         for thr, tpr, fpr in zip(thresholds, tprs, fprs):
             cc_predictions = CC(thr).aggregate(predictions)
+            cc_predictions = cc_predictions[1]
             prevalence = cc_predictions if tpr - fpr == 0 else (cc_predictions - fpr) / (tpr - fpr)
             prevs.append(prevalence)
         prevalence = np.median(prevs)
         return np.asarray([1 - prevalence, prevalence])
+    
+    def _get_best_threshold(self, thresholds, tprs, fprs):
+        return thresholds, tprs, fprs
 
 
 class MS2(MS):
-    """MS2 — Median Sweep variant with constraint \( |\text{TPR} - \text{FPR}| > 0.25 \)."""
+    r"""MS2 — Median Sweep variant with constraint \( |\text{TPR} - \text{FPR}| > 0.25 \)."""
     def _get_best_threshold(self, thresholds, tprs, fprs):
         if np.all(tprs == 0) or np.all(fprs == 0):
             warnings.warn("All TPR or FPR values are zero.")

@@ -229,11 +229,15 @@ def simplex_uniform_sampling(
         # Filtra os que respeitam os limites
         mask = np.all((x >= min_val) & (x <= max_val), axis=1)
         valid = x[mask]
-        samples.append(valid)
-        samples = [s for s in samples if len(s) > 0]  # remove vazios
-        samples = np.concatenate(samples, axis=0)
+        if len(valid) > 0:
+            samples.append(valid)
+        
+        if len(samples) > 0:
+            all_samples = np.concatenate(samples, axis=0)
+            if len(all_samples) >= total_samples:
+                return all_samples[:total_samples]
 
-    return samples[:total_samples]
+    return np.concatenate(samples, axis=0)[:total_samples]
 
 
 def bootstrap_sample_indices(

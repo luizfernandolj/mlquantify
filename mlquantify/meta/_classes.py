@@ -17,7 +17,9 @@ from mlquantify.confidence import (
 from mlquantify.base_aggregative import (
     _get_learner_function, 
     is_aggregative_quantifier,
-    get_aggregation_requirements)
+    get_aggregation_requirements,
+    uses_soft_predictions
+)
 from mlquantify.utils._sampling import (
     bootstrap_sample_indices
 )
@@ -232,12 +234,13 @@ class EnsembleQ(MetaquantifierMixin, BaseQuantifier):
         sample_size = len(y) if self.max_sample_size is None else min(self.max_sample_size, len(y))
         
         protocol = get_protocol_sampler(
+            protocol_name=self.protocol,
             batch_size=sample_size, 
             n_prevalences=self.size, 
             min_prev=self.min_prop, 
             max_prev=self.max_prop,
             n_classes=len(self.classes)
-        )()
+        )
 
         posteriors = None
         if self.selection_metric == 'ds':
@@ -282,7 +285,6 @@ class EnsembleQ(MetaquantifierMixin, BaseQuantifier):
             test_prevalences.append(pred)
         
         test_prevalences = np.asarray(test_prevalences)
-        self.p_metric = int(len(test_prevalences) * self.p_metric)
 
         if self.selection_metric == 'ptr':
             test_prevalences = self.ptr_selection_metric(test_prevalences, self.train_prevalences)
@@ -502,9 +504,10 @@ class AggregativeBootstrap(MetaquantifierMixin, BaseQuantifier):
         
         if not is_aggregative_quantifier(self.quantifier):
             raise ValueError(f"The quantifier {self.quantifier.__class__.__name__} is not an aggregative quantifier.")
+        self.quantifier_learner = deepcopy(self.quantifier)
         
-        learner_function = _get_learner_function(self.quantifier)
-        model = self.quantifier.learner
+        learner_function = _get_learner_function(self.quantifier_learner)
+        model = self.quantifier_learner.learner
         
         if val_split is None:
             model.fit(X, y)
@@ -515,7 +518,6 @@ class AggregativeBootstrap(MetaquantifierMixin, BaseQuantifier):
             model.fit(X_fit, y_fit)
             train_y_values = y_val
             train_predictions = getattr(model, learner_function)(X_val)
-        
         self.train_predictions = train_predictions
         self.train_y_values = train_y_values
         
@@ -535,8 +537,8 @@ class AggregativeBootstrap(MetaquantifierMixin, BaseQuantifier):
             The predicted class prevalences.
         """
         X = validate_data(self, X, None)
-        learner_function = _get_learner_function(self.quantifier)
-        model = self.quantifier.learner
+        learner_function = _get_learner_function(self.quantifier_learner)
+        model = self.quantifier_learner.learner
         
         predictions = getattr(model, learner_function)(X)
 
@@ -562,7 +564,7 @@ class AggregativeBootstrap(MetaquantifierMixin, BaseQuantifier):
         """
         prevalences = []
         
-        self.classes = self.classes if hasattr(self, 'classes') else np.unique(train_y_values)
+        self.classes = np.unique(train_y_values)
         
         for train_idx in bootstrap_sample_indices(
             n_samples=len(train_predictions),
@@ -610,8 +612,7 @@ class AggregativeBootstrap(MetaquantifierMixin, BaseQuantifier):
 
 
 class QuaDapt(MetaquantifierMixin, BaseQuantifier):
-    """
-    QuaDapt Metaquantifier: Adaptive quantification using score merging and distance measures.
+    r"""QuaDapt Metaquantifier: Adaptive quantification using score merging and distance measures.
 
     This metaquantifier improves prevalence estimation by merging training samples 
     with different score distributions using a merging factor \( m \). It evaluates 
@@ -673,6 +674,13 @@ class QuaDapt(MetaquantifierMixin, BaseQuantifier):
         X, y = validate_data(self, X, y)
         self.classes = np.unique(y)
         
+        if not uses_soft_predictions(self.quantifier):
+            raise ValueError(f"The quantifier {self.quantifier.__class__.__name__} is not a soft (probabilistic) quantifier.")
+        
+        requirements = get_aggregation_requirements(self.quantifier)
+        if not requirements.requires_train_proba:
+            raise ValueError(f"The quantifier {self.quantifier.__class__.__name__} does not use training probabilities, which are required for QuaDapt.")
+        
         self.quantifier.learner.fit(X, y)
         self.train_y_values = y
         
@@ -682,10 +690,9 @@ class QuaDapt(MetaquantifierMixin, BaseQuantifier):
 
         X = validate_data(self, X, None)
         
-        learner_function = _get_learner_function(self.quantifier)
         model = self.quantifier.learner
         
-        predictions = getattr(model, learner_function)(X)
+        predictions = getattr(model, "predict_proba")(X)
 
         return self.aggregate(predictions, self.train_y_values)
     

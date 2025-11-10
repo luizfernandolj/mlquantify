@@ -2,6 +2,7 @@ import numpy as np
 from mlquantify.base_aggregative import SoftLearnerQMixin
 from mlquantify.likelihood._base import BaseIterativeLikelihood
 from mlquantify.metrics._slq import MAE
+from mlquantify.multiclass import define_binary
 from mlquantify.utils._constraints import (
     Interval,
     CallableConstraint,
@@ -129,6 +130,8 @@ class EMQ(SoftLearnerQMixin, BaseIterativeLikelihood):
         
         Px = np.array(posteriors, dtype=np.float64)
         Ptr = np.array(priors, dtype=np.float64)
+        
+        
 
         if np.prod(Ptr) == 0:
             Ptr += tolerance
@@ -137,7 +140,7 @@ class EMQ(SoftLearnerQMixin, BaseIterativeLikelihood):
         qs = np.copy(Ptr)
         s, converged = 0, False
         qs_prev_ = None
-
+        
         while not converged and s < max_iter:
             # E-step:
             ps_unnormalized = (qs / Ptr) * Px
@@ -273,7 +276,7 @@ class MLPE(SoftLearnerQMixin, BaseIterativeLikelihood):
         """
         return priors
     
-
+@define_binary
 class CDE(SoftLearnerQMixin, BaseIterativeLikelihood):
     """
     CDE-Iterate (Class Distribution Estimation Iterate) for binary classification.

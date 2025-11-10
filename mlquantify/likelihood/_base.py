@@ -9,7 +9,7 @@ from mlquantify.base_aggregative import (
 )
 from mlquantify.adjust_counting import CC
 from mlquantify.utils._decorators import _fit_context
-from mlquantify.utils._validation import validate_predictions, validate_y, validate_data, validate_prevalences
+from mlquantify.utils._validation import check_classes_attribute, validate_predictions, validate_y, validate_data, validate_prevalences
 
 
 
@@ -129,9 +129,9 @@ class BaseIterativeLikelihood(AggregationMixin, BaseQuantifier):
         """Fit the quantifier using the provided data and learner."""
         X, y = validate_data(self, X, y)
         validate_y(self, y)
-        self.classes = np.unique(y)
-
-        counts = np.array([np.count_nonzero(y == _class) for _class in self.classes])
+        self.classes_ = np.unique(y)
+        self.learner.fit(X, y)
+        counts = np.array([np.count_nonzero(y == _class) for _class in self.classes_])
         self.priors = counts / len(y)
         self.y_train = y
                 
@@ -141,22 +141,21 @@ class BaseIterativeLikelihood(AggregationMixin, BaseQuantifier):
         """Predict class prevalences for the given data."""
         estimator_function = _get_learner_function(self)
         predictions = getattr(self.learner, estimator_function)(X)
-        prevalences = self.aggregate(predictions, y_train=self.y_train)
+        prevalences = self.aggregate(predictions, self.y_train)
         return prevalences
 
-    def aggregate(self, predictions, y_train=None):
+    def aggregate(self, predictions, y_train):
         predictions = validate_predictions(self, predictions)
-        if not hasattr(self, 'priors'):
-            if y_train is None:
-                raise ValueError("y_train must be provided if the quantifier is not fitted.")
-            self.classes = np.unique(y_train)
-            counts = np.array([np.count_nonzero(y_train == _class) for _class in self.classes])
-            self.priors = counts / len(y_train)
+        self.classes_ = check_classes_attribute(self, np.unique(y_train))
         
+        if not hasattr(self, 'priors') or len(self.priors) != len(self.classes_):
+            counts = np.array([np.count_nonzero(y_train == _class) for _class in self.classes_])
+            self.priors = counts / len(y_train)
+            
         prevalences = self._iterate(predictions, self.priors)
-        prevalences = validate_prevalences(self, prevalences, self.classes)
+        prevalences = validate_prevalences(self, prevalences, self.classes_)
         return prevalences
     
-    
+    @abstractmethod
     def _iterate(self, predictions, priors):
         ...

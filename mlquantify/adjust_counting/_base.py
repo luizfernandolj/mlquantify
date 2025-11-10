@@ -8,7 +8,7 @@ from mlquantify.base_aggregative import (
     _get_learner_function
 )
 from mlquantify.utils._decorators import _fit_context
-from mlquantify.utils._validation import validate_predictions, validate_y, validate_data, validate_prevalences
+from mlquantify.utils._validation import check_classes_attribute, validate_predictions, validate_y, validate_data, validate_prevalences
 from mlquantify.utils._get_scores import apply_cross_validation
 
 
@@ -101,7 +101,7 @@ class BaseCount(AggregationMixin, BaseQuantifier):
         """Fit the quantifier using the provided data and learner."""
         X, y = validate_data(self, X, y)
         validate_y(self, y)
-        self.classes = np.unique(y)
+        self.classes_ = np.unique(y)
         if not learner_fitted:
             self.learner.fit(X, y, *args, **kwargs)
         return self
@@ -210,7 +210,7 @@ class BaseAdjustCount(AggregationMixin, BaseQuantifier):
         """Fit the quantifier using the provided data and learner."""
         X, y = validate_data(self, X, y)
         validate_y(self, y)
-        self.classes = np.unique(y)
+        self.classes_ = np.unique(y)
         learner_function = _get_learner_function(self)
         
         if learner_fitted:
@@ -240,7 +240,8 @@ class BaseAdjustCount(AggregationMixin, BaseQuantifier):
 
     def aggregate(self, predictions, train_predictions, y_train_values):
         """Aggregate predictions and apply matrix- or rate-based bias correction."""
+        self.classes_ = check_classes_attribute(self, np.unique(y_train_values))
         predictions = validate_predictions(self, train_predictions)
         prevalences = self._adjust(predictions, train_predictions, y_train_values)
-        prevalences = validate_prevalences(self, prevalences, self.classes)
+        prevalences = validate_prevalences(self, prevalences, self.classes_)
         return prevalences

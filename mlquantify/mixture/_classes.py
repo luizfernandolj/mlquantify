@@ -8,7 +8,7 @@ from mlquantify.multiclass import define_binary
 from mlquantify.utils._constraints import Interval, Options
 from mlquantify.utils._decorators import _fit_context
 from mlquantify.utils._get_scores import apply_cross_validation
-from mlquantify.utils._validation import validate_predictions, validate_prevalences, validate_y
+from mlquantify.utils._validation import check_classes_attribute, validate_predictions, validate_prevalences, validate_y
 from mlquantify.mixture._utils import (
     getHist,
     ternary_search,
@@ -69,8 +69,8 @@ class AggregativeMixture(SoftLearnerQMixin, AggregationMixin, BaseMixture):
         Fit learner and store score distributions for positive and negative classes.
         """ 
         # Store scores for positive and negative classes
-        self.pos_scores = train_predictions[train_y_values == self.classes[1], 1]
-        self.neg_scores = train_predictions[train_y_values == self.classes[0], 1]
+        self.pos_scores = train_predictions[train_y_values == self.classes_[1], 1]
+        self.neg_scores = train_predictions[train_y_values == self.classes_[0], 1]
         self._precomputed = True
         return self
     
@@ -83,7 +83,7 @@ class AggregativeMixture(SoftLearnerQMixin, AggregationMixin, BaseMixture):
     
     def aggregate(self, predictions, train_predictions, train_y_values):
         predictions = validate_predictions(self, predictions)
-        self.classes = self.classes if hasattr(self, 'classes') else np.unique(train_y_values)
+        self.classes_ = check_classes_attribute(self, np.unique(train_y_values))
 
         if not self._precomputed:
             self._precompute_training(train_predictions, train_y_values)
@@ -93,7 +93,7 @@ class AggregativeMixture(SoftLearnerQMixin, AggregationMixin, BaseMixture):
         
         best_alpha, _ = self.best_mixture(pos_test_scores, self.pos_scores, self.neg_scores)
         prevalence = np.array([1 - best_alpha, best_alpha])
-        prevalence = validate_prevalences(self, prevalence, self.classes)
+        prevalence = validate_prevalences(self, prevalence, self.classes_)
         return prevalence
     
     @abstractmethod
@@ -224,8 +224,7 @@ class HDy(AggregativeMixture):
 # =====================================================
 
 class SMM(AggregativeMixture):
-    """
-    Sample Mean Matching (SMM) quantification method.
+    r"""Sample Mean Matching (SMM) quantification method.
 
     Estimates class prevalence by matching the mean score of the test samples 
     to a convex combination of positive and negative training scores. The mixture 
@@ -359,15 +358,14 @@ class HDx(BaseMixture):
         
     
     def _fit(self, X, y, *args, **kwargs):
-        self.pos_features = X[y == self.classes[1]]
-        self.neg_features = X[y == self.classes[0]]
-
+        self.pos_features = X[y == self.classes_[1]]
+        self.neg_features = X[y == self.classes_[0]]
         return self
     
     def _predict(self, X) -> np.ndarray:
         alpha, _ = self.best_mixture(X, self.pos_features, self.neg_features)
         prevalence = np.array([1 - alpha, alpha])
-        prevalence = validate_prevalences(self, prevalence, self.classes)
+        prevalence = validate_prevalences(self, prevalence, self.classes_)
         return prevalence
     
     def best_mixture(self, X, pos, neg):
