@@ -1,73 +1,61 @@
-from sklearn.neighbors import NearestNeighbors
-from sklearn.base import BaseEstimator
+
 import numpy as np
-import pandas as pd
+from sklearn.neighbors import NearestNeighbors
 
-class PWKCLF(BaseEstimator):
+
+
+class PWKCLF:
     """
-    Learner based on k-Nearest Neighbors (KNN) to use in the PWK method.
-    
-    This classifier adjusts the influence of neighbors using class weights 
-    derived from the `alpha` parameter. The `alpha` parameter controls the 
-    influence of class imbalance.
+    Probabilistic Weighted k-Nearest Neighbor Classifier (PWKCLF).
 
-    Parameters
+    A weighted k-nearest neighbor classifier that assigns class probabilities to 
+    instances based on neighbor counts weighted by class-specific inverse frequency 
+    factors adjusted by a hyperparameter alpha controlling imbalance compensation. 
+
+    Attributes
     ----------
-    alpha : float, default=1
-        Controls the influence of class imbalance. Must be >= 1.
+    alpha : float
+        Exponent controlling the degree of imbalance compensation.
+    n_neighbors : int
+        Number of nearest neighbors considered.
+    nbrs : sklearn.neighbors.NearestNeighbors
+        The underlying k-NN structure used for neighbor queries.
+    classes_ : ndarray
+        Unique classes observed during training.
+    class_to_index : dict
+        Mapping from class label to index used in internal arrays.
+    class_weights : ndarray
+        Per-class weights computed based on class frequency and alpha.
+    y_train : ndarray
+        Labels of training samples.
 
-    n_neighbors : int, default=10
-        Number of neighbors to use.
+    Methods
+    -------
+    fit(X, y)
+        Fits the k-NN structure and computes class weights.
+    predict(X)
+        Predicts class labels by weighted voting among neighbors.
 
-    algorithm : {'auto', 'ball_tree', 'kd_tree', 'brute'}, default='auto'
-        Algorithm to compute nearest neighbors.
+    Notes
+    -----
+    The class weights are defined as:
 
-    metric : str, default='euclidean'
-        Distance metric to use.
+    \[
+    w_c = \left( \frac{N_c}{\min_{c'} N_{c'}} \right)^{-\frac{1}{\alpha}},
+    \]
 
-    leaf_size : int, default=30
-        Leaf size passed to the tree-based algorithms.
+    where \( N_c \) is the count of class \( c \) in the training set.
 
-    p : int, default=2
-        Power parameter for the Minkowski metric.
-
-    metric_params : dict, optional
-        Additional keyword arguments for the metric function.
-
-    n_jobs : int, optional
-        Number of parallel jobs to run for neighbors search.
+    This weighting scheme reduces bias towards majority classes by downweighting them
+    in the voting process.
 
     Examples
     --------
-    >>> from sklearn.datasets import load_breast_cancer
-    >>> from sklearn.model_selection import train_test_split
-    >>> from mlquantify.methods.aggregative import PWK
-    >>> from mlquantify.utils.general import get_real_prev
-    >>> from mlquantify.classification import PWKCLF
-    >>> 
-    >>> # Load dataset
-    >>> features, target = load_breast_cancer(return_X_y=True)
-    >>> 
-    >>> # Split into training and testing sets
-    >>> X_train, X_test, y_train, y_test = train_test_split(features, target, test_size=0.3, random_state=32)
-    >>> 
-    >>> # Create and configure the PWKCLF learner
-    >>> learner = PWKCLF(alpha=1, n_neighbors=10)
-    >>> 
-    >>> # Create the PWK quantifier
-    >>> model = PWK(learner=learner)
-    >>> 
-    >>> # Train the model
-    >>> model.fit(X_train, y_train)
-    >>> 
-    >>> # Predict prevalences
-    >>> y_pred = model.predict(X_test)
-    >>> 
-    >>> # Display results
-    >>> print("Real:", get_real_prev(y_test))
-    >>> print("PWK:", y_pred)
+    >>> clf = PWKCLF(alpha=2.0, n_neighbors=7)
+    >>> clf.fit(X_train, y_train)
+    >>> labels = clf.predict(X_test)
     """
-
+    
     def __init__(self,
                  alpha=1,
                  n_neighbors=10,
@@ -77,9 +65,6 @@ class PWKCLF(BaseEstimator):
                  p=2,
                  metric_params=None,
                  n_jobs=None):
-        if alpha < 1:
-            raise ValueError("alpha must not be smaller than 1")
-        
         self.alpha = alpha
         self.n_neighbors = n_neighbors
 
@@ -119,9 +104,6 @@ class PWKCLF(BaseEstimator):
             
         self.y_train = y
         
-        if isinstance(y, pd.DataFrame):
-            self.y_train = y.reset_index(drop=True)
-            
         unique_classes, class_counts = np.unique(y, return_counts=True)
         self.classes_ = unique_classes
         self.class_to_index = dict(zip(self.classes_, range(len(self.classes_))))
