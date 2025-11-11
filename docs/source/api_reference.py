@@ -21,7 +21,6 @@ API_REFERENCE = {
             {
                 "title": None,
                 "autosummary": [
-                    "set_arguments",
                 ],
             }
         ],
@@ -33,137 +32,163 @@ API_REFERENCE = {
             {
                 "title": None,
                 "autosummary": [
-                    "Quantifier",
-                    "AggregativeQuantifier",
-                    "NonAggregativeQuantifier",
+                    "BaseQuantifier",
+                    "MetaquantifierMixin",
+                    "ProtocolMixin",
                 ],
             }
         ],
     },
-    "mlquantify.methods.aggregative": {
-        "short_summary": "Aggregative quantification methods.",
+    "mlquantify.base_aggregative": {
+        "short_summary": "Aggregative quantifiers base classes.",
+        "description": None,
+        "section": [
+            {
+                "title": None,
+                "autosummary": [
+                    "AggregationMixin",
+                    "SoftLearnerQMixin",
+                    "CrispLearnerQMixin"
+                ],
+            }
+        ],
+    },
+    "mlquantify.multiclass": {
+        "short_summary": "Multiclass definitions and utilities.",
         "description": None,
         "section": [
             {
                 "title": "Aggregative methods",
                 "autosummary": [
-                    "CC", "EMQ", "FM", "GAC", "GPAC", "PCC", "PWK",
-                    "ACC", "MAX", "MS", "MS2", "PACC", "T50", "X_method",
-                    "DyS", "DySsyn", "HDy", "SMM", "SORD"
+                    "define_binary",
+                    "_fit_ovr",
+                    "_fit_ovo",
+                    "_predict_ovr",
+                    "_predict_ovo",
+                    "_aggregate_ovr",
+                    "_aggregate_ovo",
+                    "BinaryQuantifier"
                 ],
             }
         ],
     },
-    "mlquantify.methods.non_aggregative": {
-        "short_summary": "Non-aggregative quantification methods.",
+    "mlquantify.confidence": {
+        "short_summary": "Confidence Regions for quantification.",
         "description": None,
         "section": [
             {
-                "title": "Non-aggregative methods",
+                "title": "Confidence Regions",
                 "autosummary": [
+                    "BaseConfidenceRegion",
+                    "ConfidenceInterval",
+                    "ConfidenceEllipseSimplex",
+                    "ConfidenceEllipseCLR",
+                    "construct_confidence_region"
+                ],
+            }
+        ],
+    },
+    "mlquantify.adjust_counting": {
+        "short_summary": "Adjusted Counting methods for quantification.",
+        "description": None,
+        "section": [
+            {
+                "title": "Adjusted Counting Methods",
+                "autosummary": [
+                    "ThresholdAdjustment",
+                    "MatrixAdjustment",
+                    "FM",
+                    "GAC",
+                    "GPAC",
+                    "ACC",
+                    "X_method",
+                    "MAX",
+                    "T50",
+                    "MS",
+                    "MS2",
+                ],
+            }
+        ],
+    },
+    "mlquantify.likelihood": {
+        "short_summary": "Likelihood methods for quantification.",
+        "description": None,
+        "section": [
+            {
+                "title": "Likelihood Methods",
+                "autosummary": [
+                    "EMQ", 
+                    "MLPE",
+                    "CDE"
+                ],
+            }
+        ],
+    },
+    "mlquantify.mixture": {
+        "short_summary": "Mixture Models for quantification.",
+        "description": None,
+        "section": [
+            {
+                "title": "Mixture Models",
+                "autosummary": [
+                    "HDy",
+                    "DyS",
+                    "SMM",
+                    "SORD",
                     "HDx"
                 ],
             }
         ],
     },
-    "mlquantify.methods.meta": {
-        "short_summary": "Meta quantification methods.",
+    "mlquantify.neighbors": {
+        "short_summary": "Neighbor-based methods for quantification.",
         "description": None,
         "section": [
             {
-                "title": "Meta methods",
+                "title": "Neighbor-based Methods",
                 "autosummary": [
-                    "Ensemble"
+                    "KDEyCS",
+                    "KDEyHD",
+                    "KDEyML",
+                    "PWK"
                 ],
             }
         ],
     },
-    "mlquantify.classification.methods": {
-        "short_summary": "Classification methods for quantification algorithms.",
+    "mlquantify.meta": {
+        "short_summary": "Meta methods for quantification.",
+        "description": None,
+        "section": [
+            {
+                "title": "Meta Methods",
+                "autosummary": [
+                    "EnsembleQ", 
+                    "QuaDapt", 
+                    "AggregativeBootstrap"
+                ],
+            }
+        ],
+    },
+    "mlquantify.metrics": {
+        "short_summary": "Metrics for quantification.",
         "description": None,
         "section": [
             {
                 "title": None,
                 "autosummary": [
-                    "PWKCLF"
-                ],
-            }
-        ],
-    },
-    "mlquantify.evaluation.measures": {
-        "short_summary": "Evaluation metrics for quantification.",
-        "description": None,
-        "section": [
-            {
-                "title": None,
-                "autosummary": [
-                    "process_inputs",
-                    "absolute_error",
-                    "mean_absolute_error",
-                    "kullback_leibler_divergence",
-                    "squared_error",
-                    "mean_squared_error",
-                    "normalized_absolute_error",
-                    "normalized_kullback_leibler_divergence",
-                    "relative_absolute_error",
-                    "normalized_relative_absolute_error"
-                ],
-            }
-        ],
-    },
-    "mlquantify.evaluation.protocol": {
-        "short_summary": "Evaluation metrics for quantification.",
-        "description": None,
-        "section": [
-            {
-                "title": None,
-                "autosummary": [
-                    "Protocol", "APP", "NPP", "UPP", "PPP"
-                ],
-            }
-        ],
-    },
-    "mlquantify.utils.general": {
-        "short_summary": "Utility functions for quantification.",
-        "description": None,
-        "section": [
-            {
-                "title": None,
-                "autosummary": [
-                    "convert_columns_to_arrays",
-                    "generate_artificial_indexes",
-                    "generate_artificial_prevalences",
-                    "get_real_prev",
-                    "load_quantifier",
-                    "make_prevs",
-                    "normalize_prevalence",
-                    "parallel",
-                    "round_protocol_df",
-                    "get_measure",
-                    "get_method"
-                ],
-            }
-        ],
-    },
-    "mlquantify.utils.method": {
-        "short_summary": "Utility functions for quantification.",
-        "description": None,
-        "section": [
-            {
-                "title": None,
-                "autosummary": [
-                    "sqEuclidean",
-                    "probsymm",
-                    "topsoe",
-                    "hellinger",
-                    "get_scores",
-                    "getHist",
-                    "MoSS",
-                    "ternary_search",
-                    "compute_table",
-                    "compute_tpr",
-                    "compute_fpr",
-                    "adjust_threshold"
+                    "AE",
+                    "SE",
+                    "MAE",
+                    "MSE",
+                    "KLD",
+                    "RAE",
+                    "NAE",
+                    "NRAE",
+                    "NKLD",
+                    "NMD",
+                    "RNOD",
+                    "VSE",
+                    "CvM_L1",
                 ],
             }
         ],
@@ -175,9 +200,16 @@ API_REFERENCE = {
             {
                 "title": None,
                 "autosummary": [
+                    "BaseProtocol",
+                    "APP",
+                    "NPP",
+                    "UPP",
+                    "PPP",
                     "GridSearchQ"
                 ],
             }
         ],
-    }
+    },
 }
+
+
