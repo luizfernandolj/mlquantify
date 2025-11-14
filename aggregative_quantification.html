@@ -59,11 +59,12 @@
     <script src="_static/clipboard.min.js?v=a7894cd8"></script>
     <script src="_static/copybutton.js?v=f281be69"></script>
     <script src="_static/design-tabs.js?v=f930bc37"></script>
+    <script async="async" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
     <script>DOCUMENTATION_OPTIONS.pagename = 'aggregative_quantification';</script>
     <link rel="canonical" href="https://luizfernandolj.github.io/mlquantify/aggregative_quantification.html" />
     <link rel="author" title="About these documents" href="about.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="next" title="1. Likelihood-Based Quantification" href="modules/likelihood.html" />
+    <link rel="next" title="1. Adjust Counting" href="adjust_counting.html" />
     <link rel="prev" title="User Guide" href="user_guide.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
@@ -313,9 +314,10 @@
   <p class="bd-links__title" role="heading" aria-level="1">Section Navigation</p>
   <div class="bd-toc-item navbar-nav"><ul class="current nav bd-sidenav">
 <li class="toctree-l1 current active has-children"><a class="current reference internal" href="#"> Aggregative Quantification</a><details open="open"><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
-<li class="toctree-l2"><a class="reference internal" href="modules/likelihood.html">1. Likelihood-Based Quantification</a></li>
-<li class="toctree-l2"><a class="reference internal" href="modules/mixture_models.html">2. Mixture Models</a></li>
-<li class="toctree-l2"><a class="reference internal" href="modules/neighbors.html">3. Neighbors-Based Quantification</a></li>
+<li class="toctree-l2"><a class="reference internal" href="adjust_counting.html">1. Adjust Counting</a></li>
+<li class="toctree-l2"><a class="reference internal" href="likelihood.html">2. Likelihood-Based Quantification</a></li>
+<li class="toctree-l2"><a class="reference internal" href="mixture_models.html">3. Mixture Models</a></li>
+<li class="toctree-l2"><a class="reference internal" href="neighbors.html">4. Neighbors-Based Quantification</a></li>
 </ul>
 </details></li>
 <li class="toctree-l1"><a class="reference internal" href="building_a_quantifier.html">1.  Building a Quantifier</a></li>
@@ -387,9 +389,14 @@
 <p>[translate:The main aggregative quantification methods will be defined next, with details about their specific approaches and differences.]</p>
 <div class="toctree-wrapper compound">
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="modules/likelihood.html">1. Likelihood-Based Quantification</a></li>
-<li class="toctree-l1"><a class="reference internal" href="modules/mixture_models.html">2. Mixture Models</a></li>
-<li class="toctree-l1"><a class="reference internal" href="modules/neighbors.html">3. Neighbors-Based Quantification</a></li>
+<li class="toctree-l1"><a class="reference internal" href="adjust_counting.html">1. Adjust Counting</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="modules/threshold_adjustment.html">1.1. Threshold Adjustment</a></li>
+<li class="toctree-l2"><a class="reference internal" href="modules/matrix_adjustment.html">1.2. Matrix Adjustment</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="likelihood.html">2. Likelihood-Based Quantification</a></li>
+<li class="toctree-l1"><a class="reference internal" href="mixture_models.html">3. Mixture Models</a></li>
+<li class="toctree-l1"><a class="reference internal" href="neighbors.html">4. Neighbors-Based Quantification</a></li>
 </ul>
 </div>
 </section>
@@ -414,11 +421,11 @@
       </div>
     </a>
     <a class="right-next"
-       href="modules/likelihood.html"
+       href="adjust_counting.html"
        title="next page">
       <div class="prev-next-info">
         <p class="prev-next-subtitle">next</p>
-        <p class="prev-next-title"><span class="section-number">1. </span>Likelihood-Based Quantification</p>
+        <p class="prev-next-title"><span class="section-number">1. </span>Adjust Counting</p>
       </div>
       <i class="fa-solid fa-angle-right"></i>
     </a>
