@@ -24,4 +24,3 @@ mlquantify
   :template: base.rst
 
 
-  set_arguments

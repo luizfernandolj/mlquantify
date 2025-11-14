@@ -24,6 +24,6 @@ mlquantify.base
   :template: base.rst
 
 
-  Quantifier
-  AggregativeQuantifier
-  NonAggregativeQuantifier
+  BaseQuantifier
+  MetaquantifierMixin
+  ProtocolMixin

@@ -274,7 +274,7 @@ class FM(SoftLearnerQMixin, MatrixAdjustment):
 
 
 class GAC(CrispLearnerQMixin, MatrixAdjustment):
-    """Gonzalez-Castro’s Generalized Adjusted Count (GAC) method."""
+    r"""Gonzalez-Castro’s Generalized Adjusted Count (GAC) method."""
     def __init__(self, learner=None):
         super().__init__(learner=learner, solver='linear')
     
@@ -289,7 +289,7 @@ class GAC(CrispLearnerQMixin, MatrixAdjustment):
 
 
 class GPAC(SoftLearnerQMixin, MatrixAdjustment):
-    """Probabilistic GAC (GPAC) — soft version using posterior probabilities."""
+    r"""Probabilistic GAC (GPAC) — soft version using posterior probabilities."""
     def __init__(self, learner=None):
         super().__init__(learner=learner, solver='linear')
     
@@ -304,7 +304,7 @@ class GPAC(SoftLearnerQMixin, MatrixAdjustment):
 
 
 class ACC(ThresholdAdjustment):
-    """Adjusted Count (ACC) — baseline threshold correction."""
+    r"""Adjusted Count (ACC) — baseline threshold correction."""
     def _get_best_threshold(self, thresholds, tprs, fprs):
         tpr = tprs[thresholds == self.threshold][0]
         fpr = fprs[thresholds == self.threshold][0]
@@ -312,7 +312,7 @@ class ACC(ThresholdAdjustment):
 
 
 class X_method(ThresholdAdjustment):
-    """X method — threshold where \( \text{TPR} + \text{FPR} = 1 \)."""
+    r"""X method — threshold where \( \text{TPR} + \text{FPR} = 1 \)."""
     def _get_best_threshold(self, thresholds, tprs, fprs):
         idx = np.argmin(np.abs(1 - (tprs + fprs)))
         return thresholds[idx], tprs[idx], fprs[idx]

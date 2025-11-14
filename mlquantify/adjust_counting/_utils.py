@@ -2,8 +2,7 @@ import numpy as np
 
 
 def compute_table(y, y_pred, classes):
-    """
-    Compute the confusion matrix table for a binary classification task.
+    r"""Compute the confusion matrix table for a binary classification task.
     
     
     Parameters
@@ -29,8 +28,7 @@ def compute_table(y, y_pred, classes):
 
 
 def compute_tpr(TP, FN):
-    """
-    Compute the True Positive Rate (Recall) for a binary classification task.
+    r"""Compute the True Positive Rate (Recall) for a binary classification task.
     
     
     Parameters
@@ -52,8 +50,7 @@ def compute_tpr(TP, FN):
 
 
 def compute_fpr(FP, TN):
-    """
-    Compute the False Positive Rate for a binary classification task.
+    r"""Compute the False Positive Rate for a binary classification task.
     
     
     Parameters
@@ -75,8 +72,7 @@ def compute_fpr(FP, TN):
 
 
 def evaluate_thresholds (y, probabilities:np.ndarray, classes) -> tuple:
-    """
-    Adjust the threshold for a binary quantification task to maximize the True Positive Rate.
+    r"""Adjust the threshold for a binary quantification task to maximize the True Positive Rate.
     
     
     Parameters

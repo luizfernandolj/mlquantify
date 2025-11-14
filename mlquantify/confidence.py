@@ -11,22 +11,23 @@ from scipy.stats import chi2
 
 
 class BaseConfidenceRegion:
-    """Base class for confidence regions of prevalence estimates.
+    r"""
+    Base class for confidence regions of prevalence estimates.
 
     This class defines the interface and core structure for constructing 
     confidence regions around class prevalence estimates obtained from 
     quantification models.
 
     Confidence regions capture the uncertainty associated with prevalence 
-    estimates, typically derived from bootstrap resampling as proposed by [1].
-    Subclasses define specific types of regions (e.g., intervals, ellipses).
+    estimates, typically derived from bootstrap resampling as proposed in
+    [1]_.
 
     Parameters
     ----------
     prev_estims : array-like of shape (m, n)
-        Collection of `m` bootstrap prevalence estimates for `n` classes.
+        Collection of ``m`` bootstrap prevalence estimates for ``n`` classes.
     confidence_level : float, default=0.95
-        Desired confidence level (1 - α) of the region.
+        Desired confidence level :math:`1 - \alpha` of the region.
 
     Attributes
     ----------
@@ -37,12 +38,13 @@ class BaseConfidenceRegion:
 
     Notes
     -----
-    The general goal is to construct a confidence region :math:`CR_α` such that:
-
+    The confidence region :math:`CR_{\alpha}` is defined such that
+    
     .. math::
-        P(π^* \\in CR_α) = 1 - α
 
-    where :math:`π^*` is the true (unknown) class prevalence vector.
+        \mathbb{P}\left(\pi^{\ast} \in CR_{\alpha}\right) = 1 - \alpha
+    
+    where :math:`\pi^{\ast}` is the unknown true class-prevalence vector.
 
     Examples
     --------
@@ -63,9 +65,9 @@ class BaseConfidenceRegion:
 
     References
     ----------
-    [1] Moreo, A., & Salvati, N. (2025). 
-        *An Efficient Method for Deriving Confidence Intervals in Aggregative Quantification*.
-        Istituto di Scienza e Tecnologie dell’Informazione, CNR, Pisa.
+    .. [1] Moreo, A., & Salvati, N. (2025).
+       *An Efficient Method for Deriving Confidence Intervals in Aggregative Quantification.*
+       Istituto di Scienza e Tecnologie dell’Informazione, CNR, Pisa.
     """
 
     def __init__(self, prev_estims, confidence_level=0.95):
@@ -94,7 +96,7 @@ class BaseConfidenceRegion:
 # ==========================================================
 
 class ConfidenceInterval(BaseConfidenceRegion):
-    """Bootstrap confidence intervals for each class prevalence.
+    r"""Bootstrap confidence intervals for each class prevalence.
 
     Constructs independent percentile-based confidence intervals 
     for each class dimension from bootstrap samples.
@@ -164,7 +166,7 @@ class ConfidenceInterval(BaseConfidenceRegion):
 # ==========================================================
 
 class ConfidenceEllipseSimplex(BaseConfidenceRegion):
-    """Confidence ellipse for prevalence estimates in the simplex.
+    r"""Confidence ellipse for prevalence estimates in the simplex.
 
     Defines a multivariate confidence region based on a chi-squared threshold:
 

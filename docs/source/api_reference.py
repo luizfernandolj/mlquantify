@@ -17,7 +17,7 @@ API_REFERENCE = {
     "mlquantify": {
         "short_summary": "A library for quantifying machine learning models.",
         "description": None,
-        "section": [
+        "sections": [
             {
                 "title": None,
                 "autosummary": [
@@ -28,7 +28,7 @@ API_REFERENCE = {
     "mlquantify.base": {
         "short_summary": "Base classes functions for quantifiers.",
         "description": None,
-        "section": [
+        "sections": [
             {
                 "title": None,
                 "autosummary": [
@@ -42,7 +42,7 @@ API_REFERENCE = {
     "mlquantify.base_aggregative": {
         "short_summary": "Aggregative quantifiers base classes.",
         "description": None,
-        "section": [
+        "sections": [
             {
                 "title": None,
                 "autosummary": [
@@ -56,9 +56,9 @@ API_REFERENCE = {
     "mlquantify.multiclass": {
         "short_summary": "Multiclass definitions and utilities.",
         "description": None,
-        "section": [
+        "sections": [
             {
-                "title": "Aggregative methods",
+                "title": None,
                 "autosummary": [
                     "define_binary",
                     "_fit_ovr",
@@ -75,7 +75,7 @@ API_REFERENCE = {
     "mlquantify.confidence": {
         "short_summary": "Confidence Regions for quantification.",
         "description": None,
-        "section": [
+        "sections": [
             {
                 "title": "Confidence Regions",
                 "autosummary": [
@@ -91,7 +91,7 @@ API_REFERENCE = {
     "mlquantify.adjust_counting": {
         "short_summary": "Adjusted Counting methods for quantification.",
         "description": None,
-        "section": [
+        "sections": [
             {
                 "title": "Adjusted Counting Methods",
                 "autosummary": [
@@ -113,7 +113,7 @@ API_REFERENCE = {
     "mlquantify.likelihood": {
         "short_summary": "Likelihood methods for quantification.",
         "description": None,
-        "section": [
+        "sections": [
             {
                 "title": "Likelihood Methods",
                 "autosummary": [
@@ -127,7 +127,7 @@ API_REFERENCE = {
     "mlquantify.mixture": {
         "short_summary": "Mixture Models for quantification.",
         "description": None,
-        "section": [
+        "sections": [
             {
                 "title": "Mixture Models",
                 "autosummary": [
@@ -143,7 +143,7 @@ API_REFERENCE = {
     "mlquantify.neighbors": {
         "short_summary": "Neighbor-based methods for quantification.",
         "description": None,
-        "section": [
+        "sections": [
             {
                 "title": "Neighbor-based Methods",
                 "autosummary": [
@@ -158,7 +158,7 @@ API_REFERENCE = {
     "mlquantify.meta": {
         "short_summary": "Meta methods for quantification.",
         "description": None,
-        "section": [
+        "sections": [
             {
                 "title": "Meta Methods",
                 "autosummary": [
@@ -172,7 +172,7 @@ API_REFERENCE = {
     "mlquantify.metrics": {
         "short_summary": "Metrics for quantification.",
         "description": None,
-        "section": [
+        "sections": [
             {
                 "title": None,
                 "autosummary": [
@@ -196,7 +196,7 @@ API_REFERENCE = {
     "mlquantify.model_selection": {
         "short_summary": "Model selection methods for quantification.",
         "description": None,
-        "section": [
+        "sections": [
             {
                 "title": None,
                 "autosummary": [

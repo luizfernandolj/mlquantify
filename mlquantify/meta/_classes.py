@@ -30,7 +30,7 @@ from mlquantify.utils.prevalence import get_prev_from_labels
 
 
 def get_protocol_sampler(protocol_name, batch_size, n_prevalences, min_prev, max_prev, n_classes):
-    """ Returns a prevalence sampler function based on the specified protocol name.
+    r""" Returns a prevalence sampler function based on the specified protocol name.
     
     Parameters
     ----------
@@ -80,8 +80,7 @@ def get_protocol_sampler(protocol_name, batch_size, n_prevalences, min_prev, max
     return protocol
 
 class EnsembleQ(MetaquantifierMixin, BaseQuantifier):
-    """
-    Ensemble-based Quantifier combining multiple models trained on varied data samples 
+    r"""Ensemble-based Quantifier combining multiple models trained on varied data samples 
     with controlled prevalence distributions to improve robustness and accuracy.
 
     This quantifier constructs an ensemble of quantification models using batches of training 

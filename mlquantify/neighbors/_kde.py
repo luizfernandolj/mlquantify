@@ -16,8 +16,7 @@ from scipy.optimize import minimize
 # ============================================================
 
 def _optimize_on_simplex(objective, n_classes, x0=None):
-    """
-    Optimize an objective function over the probability simplex.
+    r"""Optimize an objective function over the probability simplex.
     
     This function performs constrained optimization to find the mixture weights
     \( \alpha \) on the simplex \( \Delta^{n-1} = \{ \alpha \in \mathbb{R}^n : \alpha_i \geq 0, \sum_i \alpha_i = 1 \} \)

@@ -1,0 +1,10 @@
+HDx
+===
+.. currentmodule:: mlquantify.mixture
+.. autoclass:: HDx
+    :members:
+    :inherited-members:
+    :special-members: __call__
+.. minigallery:: mlquantify.mixture.HDx mlquantify.mixture.HDx.__init__ mlquantify.mixture.HDx.best_mixture mlquantify.mixture.HDx.fit mlquantify.mixture.HDx.get_best_distance mlquantify.mixture.HDx.get_distance mlquantify.mixture.HDx.get_metadata_routing mlquantify.mixture.HDx.get_params mlquantify.mixture.HDx.predict mlquantify.mixture.HDx.save_quantifier mlquantify.mixture.HDx.set_params 
+   :add-heading: Gallery examples
+   :heading-level: -

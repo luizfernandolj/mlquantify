@@ -1,0 +1,10 @@
+SORD
+====
+.. currentmodule:: mlquantify.mixture
+.. autoclass:: SORD
+    :members:
+    :inherited-members:
+    :special-members: __call__
+.. minigallery:: mlquantify.mixture.SORD mlquantify.mixture.SORD.__init__ mlquantify.mixture.SORD.aggregate mlquantify.mixture.SORD.best_mixture mlquantify.mixture.SORD.fit mlquantify.mixture.SORD.get_best_distance mlquantify.mixture.SORD.get_distance mlquantify.mixture.SORD.get_metadata_routing mlquantify.mixture.SORD.get_params mlquantify.mixture.SORD.predict mlquantify.mixture.SORD.save_quantifier mlquantify.mixture.SORD.set_params 
+   :add-heading: Gallery examples
+   :heading-level: -

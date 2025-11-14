@@ -12,7 +12,7 @@ from mlquantify.utils._constraints import Interval
 
 
 class CC(CrispLearnerQMixin, BaseCount):
-    """Classify and Count (CC) quantifier.
+    r"""Classify and Count (CC) quantifier.
     
     Implements the Classify and Count method for quantification as described in:
     [1] Forman, G. (2005). *Counting Positives Accurately Despite Inaccurate Classification.*
@@ -79,7 +79,7 @@ class CC(CrispLearnerQMixin, BaseCount):
 
 
 class PCC(SoftLearnerQMixin, BaseCount):
-    """Probabilistic Classify and Count (PCC) quantifier.
+    r"""Probabilistic Classify and Count (PCC) quantifier.
     
     Implements the Probabilistic Classify and Count method for quantification as described in:
     [1] Forman, G. (2005). *Counting Positives Accurately Despite Inaccurate Classification.*

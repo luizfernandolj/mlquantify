@@ -3,7 +3,8 @@ import sys
 import jinja2
 
 # Add the project directory to the sys.path
-sys.path.insert(0, os.path.abspath('.'))
+sys.path.insert(0, os.path.abspath('../..'))  # adiciona /docs
+sys.path.insert(0, os.path.abspath('.'))  # adiciona / (raiz do projeto)
 sys.path.insert(0, os.path.abspath("sphinxext"))
 
 
@@ -19,7 +20,7 @@ sys.path.insert(0, os.path.abspath("sphinxext"))
 
 project = 'mlquantify'
 author = 'Luiz Fernando'
-release = '0.1.1'
+release = '0.1.8'
 
 html_baseurl = "https://luizfernandolj.github.io/mlquantify/"
 
@@ -43,6 +44,9 @@ extensions = [
     # See sphinxext/
     "override_pst_pagetoc",
 ]
+
+
+autosummary_generate = True
 
 templates_path = ['_templates']
 exclude_patterns = [
@@ -108,10 +112,6 @@ html_theme_options = {
             "type": "fontawesome",
         },
     ],
-    "analytics": {
-        "plausible_analytics_domain": "scikit-learn.org",
-        "plausible_analytics_url": "https://views.scientific-python.org/js/script.js",
-    },
     # If "prev-next" is included in article_footer_items, then setting show_prev_next
     # to True would repeat prev and next links. See
     # https://github.com/pydata/pydata-sphinx-theme/blob/b731dc230bc26a3d1d1bb039c56c977a9b3d25d8/src/pydata_sphinx_theme/theme/pydata_sphinx_theme/layout.html#L118-L129

@@ -11,8 +11,7 @@ EPS = 1e-12
 # ============================================================
 
 def gaussian_kernel(X, Y, bandwidth):
-    """
-    Compute the Gaussian kernel matrix K(x, y) with specified bandwidth.
+    r"""Compute the Gaussian kernel matrix K(x, y) with specified bandwidth.
 
     This kernel matrix represents the similarity between each pair of points in X and Y,
     computed using the Gaussian (RBF) kernel function:
@@ -50,8 +49,7 @@ def gaussian_kernel(X, Y, bandwidth):
 
 
 def negative_log_likelihood(mixture_likelihoods):
-    """
-    Compute the negative log-likelihood of given mixture likelihoods in a numerically stable way.
+    r"""Compute the negative log-likelihood of given mixture likelihoods in a numerically stable way.
 
     Given mixture likelihood values \( p_i \) for samples, the negative log-likelihood is:
 
@@ -76,8 +74,7 @@ def negative_log_likelihood(mixture_likelihoods):
 
 
 def _simplex_constraints(n):
-    """
-    Define constraints and bounds for optimization over the probability simplex.
+    r"""Define constraints and bounds for optimization over the probability simplex.
 
     The simplex is defined as all vectors \( \alpha \in \mathbb{R}^n \) such that:
 
@@ -103,8 +100,7 @@ def _simplex_constraints(n):
 
 
 def _optimize_on_simplex(objective, n, x0=None):
-    """
-    Minimize an objective function over the probability simplex.
+    r"""Minimize an objective function over the probability simplex.
 
     This function solves for mixture weights \( \boldsymbol{\alpha} \) that minimize the 
     objective function under the constraints \(\alpha_i \geq 0\) and \(\sum_i \alpha_i = 1\).

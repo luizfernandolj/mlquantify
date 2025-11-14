@@ -5,8 +5,7 @@ from sklearn.neighbors import NearestNeighbors
 
 
 class PWKCLF:
-    """
-    Probabilistic Weighted k-Nearest Neighbor Classifier (PWKCLF).
+    r"""Probabilistic Weighted k-Nearest Neighbor Classifier (PWKCLF).
 
     A weighted k-nearest neighbor classifier that assigns class probabilities to 
     instances based on neighbor counts weighted by class-specific inverse frequency 
