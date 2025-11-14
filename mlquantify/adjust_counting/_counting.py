@@ -12,33 +12,35 @@ from mlquantify.utils._constraints import Interval
 
 
 class CC(CrispLearnerQMixin, BaseCount):
-    r"""Classify and Count (CC) quantifier.
-    
-    Implements the Classify and Count method for quantification as described in:
-    [1] Forman, G. (2005). *Counting Positives Accurately Despite Inaccurate Classification.*
-        ECML, pp. 564-575.
-    [2] Forman, G. (2008). *Quantifying Counts and Costs via Classification.*
-        Data Mining and Knowledge Discovery, 17(2), 164-206.
-        
-        
+    r"""
+    Classify and Count (CC) quantifier.
+
+    Implements the Classify and Count method for quantification, describe as a
+    baseline approach in the literature [1][2].
+
     Parameters
     ----------
     learner : estimator, optional
-        A supervised learning estimator with fit and predict methods.
-        If None, it is expected that will be used the aggregate method directly.
+        A supervised learning estimator with `fit` and `predict` methods.
+        If None, it is expected that the aggregate method is used directly.
     threshold : float, default=0.5
         Decision threshold for converting predicted probabilities into class labels.
         Must be in the interval [0.0, 1.0].
-        
-        
+
     Attributes
     ----------
     learner : estimator
         Underlying classification model.
-    classes : ndarray of shape (n_classes,)
-        Unique class labels observed during training.
-        
-        
+
+    Notes
+    -----
+    The Classify and Count approach performs quantification by classifying each instance 
+    using the classifier's predicted labels at a given threshold, then counting the 
+    prevalence of each class.
+
+    This method can be biased when class distributions differ between training and test sets,
+    motivating further adjustment methods.
+
     Examples
     --------
     >>> from mlquantify.adjust_counting import CC
@@ -50,10 +52,17 @@ class CC(CrispLearnerQMixin, BaseCount):
     >>> q.fit(X, y)
     >>> q.predict(X)
     {0: 0.47, 1: 0.53}
-    >> q2 = CC()
+    >>> q2 = CC()
     >>> predictions = np.random.rand(200)
     >>> q2.aggregate(predictions)
     {0: 0.51, 1: 0.49}
+
+    References
+    ----------
+    .. [1] Forman, G. (2005). "Counting Positives Accurately Despite Inaccurate Classification",
+           *ECML*, pp. 564-575.
+    .. [2] Forman, G. (2008). "Quantifying Counts and Costs via Classification",
+           *Data Mining and Knowledge Discovery*, 17(2), 164-206.
     """
     
     _parameters_constraints = {

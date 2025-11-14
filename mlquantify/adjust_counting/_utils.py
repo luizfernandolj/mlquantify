@@ -3,8 +3,7 @@ import numpy as np
 
 def compute_table(y, y_pred, classes):
     r"""Compute the confusion matrix table for a binary classification task.
-    
-    
+
     Parameters
     ----------
     y : np.ndarray
@@ -13,12 +12,12 @@ def compute_table(y, y_pred, classes):
         The predicted labels.
     classes : np.ndarray
         The unique classes in the dataset.
-    
-    
+
     Returns
     -------
     tuple
-        A tuple containing the True Positives, False Positives, False Negatives, and True Negatives.
+        A tuple containing the counts of True Positives, False Positives,
+        False Negatives, and True Negatives respectively.
     """
     TP = np.logical_and(y == y_pred, y == classes[1]).sum()
     FP = np.logical_and(y != y_pred, y == classes[0]).sum()
@@ -29,16 +28,14 @@ def compute_table(y, y_pred, classes):
 
 def compute_tpr(TP, FN):
     r"""Compute the True Positive Rate (Recall) for a binary classification task.
-    
-    
+
     Parameters
     ----------
     TP : int
         The number of True Positives.
     FN : int
         The number of False Negatives.
-    
-    
+
     Returns
     -------
     float
@@ -51,16 +48,14 @@ def compute_tpr(TP, FN):
 
 def compute_fpr(FP, TN):
     r"""Compute the False Positive Rate for a binary classification task.
-    
-    
+
     Parameters
     ----------
     FP : int
         The number of False Positives.
     TN : int
         The number of True Negatives.
-    
-    
+
     Returns
     -------
     float
@@ -72,23 +67,25 @@ def compute_fpr(FP, TN):
 
 
 def evaluate_thresholds (y, probabilities:np.ndarray, classes) -> tuple:
-    r"""Adjust the threshold for a binary quantification task to maximize the True Positive Rate.
-    
-    
+    r"""Evaluate a range of classification thresholds to compute the corresponding
+    True Positive Rate (TPR) and False Positive Rate (FPR) for a binary quantification task.
+
     Parameters
     ----------
     y : np.ndarray
         The true labels.
     probabilities : np.ndarray
-        The predicted probabilities.
+        The predicted probabilities (scores) for the positive class.
     classes : np.ndarray
         The unique classes in the dataset.
-    
-    
+
     Returns
     -------
     tuple
-        The best True Positive Rate and False Positive Rate.
+        A tuple of (thresholds, tprs, fprs), where:
+        - thresholds is a numpy array of evaluated thresholds,
+        - tprs is a numpy array of corresponding True Positive Rates,
+        - fprs is a numpy array of corresponding False Positive Rates.
     """
     unique_scores = np.linspace(0, 1, 101)
     

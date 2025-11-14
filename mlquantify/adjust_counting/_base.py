@@ -174,7 +174,7 @@ class BaseAdjustCount(AggregationMixin, BaseQuantifier):
     --------
     >>> from mlquantify.base_count import BaseAdjustCount
     >>> import numpy as np
-
+    >>> from sklearn.linear_model import LogisticRegression
     >>> class ACC(CrispLearnerQMixin, BaseAdjustCount):
     ...     def _adjust(self, preds, train_preds, y_train):
     ...         tpr = np.mean(train_preds[y_train == 1])
@@ -182,8 +182,6 @@ class BaseAdjustCount(AggregationMixin, BaseQuantifier):
     ...         p_obs = np.mean(preds)
     ...         p_adj = (p_obs - fpr) / (tpr - fpr)
     ...         return np.clip([1 - p_adj, p_adj], 0, 1)
-
-    >>> from sklearn.linear_model import LogisticRegression
     >>> X = np.random.randn(100, 5)
     >>> y = np.random.randint(0, 2, 100)
     >>> q = ACC(learner=LogisticRegression())
