@@ -25,6 +25,18 @@ class ThresholdAdjustment(SoftLearnerQMixin, BaseAdjustCount):
 
     These methods correct the bias in *Classify & Count (CC)* estimates caused 
     by differences in class distributions between the training and test datasets.
+    
+    The adjusted prevalence is calculated using the following formula:
+
+    .. math::
+
+        \hat{p} = \frac{p' - \text{FPR}}{\text{TPR} - \text{FPR}}
+
+    where:
+        - :math:`p'` is the observed positive proportion from CC,
+        - :math:`\text{TPR} = P(\hat{y}=1|y=1)` is the True Positive Rate,
+        - :math:`\text{FPR} = P(\hat{y}=1|y=0)` is the False Positive Rate.
+    
 
     Parameters
     ----------
@@ -47,17 +59,7 @@ class ThresholdAdjustment(SoftLearnerQMixin, BaseAdjustCount):
     - Defined only for binary quantification tasks.
     - When applied to multiclass problems, the one-vs-rest strategy (`ovr`) 
     is used automatically.
-
-    The adjusted prevalence is calculated using the following formula:
-
-    .. math::
-
-        \hat{p} = \frac{p' - \text{FPR}}{\text{TPR} - \text{FPR}}
-
-    where:
-        - :math:`p'` is the observed positive proportion from CC,
-        - :math:`\text{TPR} = P(\hat{y}=1|y=1)` is the True Positive Rate,
-        - :math:`\text{FPR} = P(\hat{y}=1|y=0)` is the False Positive Rate.
+    
 
     Examples
     --------
@@ -124,25 +126,6 @@ class MatrixAdjustment(BaseAdjustCount):
     as formulated in Firat (2016) [1]_, which expresses the observed prevalences 
     as a linear combination of true prevalences through the confusion matrix.
 
-    Parameters
-    ----------
-    learner : estimator, optional
-        Classifier with `fit` and `predict` methods.
-    solver : {'optim', 'linear'}, optional
-        Solver for the adjustment system:
-        
-        - `'linear'`: uses matrix inversion (e.g., GAC, GPAC)
-        - `'optim'`: uses optimization (e.g., FM)
-
-    Attributes
-    ----------
-    CM : ndarray of shape (n_classes, n_classes)
-        Confusion matrix used for correction.
-    classes : ndarray
-        Class labels observed in training.
-
-    Notes
-    -----
     The system is modeled as:
 
     .. math::
@@ -165,6 +148,25 @@ class MatrixAdjustment(BaseAdjustCount):
 
     - **Linear algebraic solution**: uses matrix inversion
     - **Constrained optimization**: quadratic or least-squares approach
+
+
+    Parameters
+    ----------
+    learner : estimator, optional
+        Classifier with `fit` and `predict` methods.
+    solver : {'optim', 'linear'}, optional
+        Solver for the adjustment system:
+        
+        - `'linear'`: uses matrix inversion (e.g., GAC, GPAC)
+        - `'optim'`: uses optimization (e.g., FM)
+
+    Attributes
+    ----------
+    CM : ndarray of shape (n_classes, n_classes)
+        Confusion matrix used for correction.
+    classes : ndarray
+        Class labels observed in training.
+
 
     Examples
     --------
@@ -214,11 +216,7 @@ class MatrixAdjustment(BaseAdjustCount):
 
     def _solve_linear(self, prevs_estim):
         r"""
-        Solve the system linearly:
-
-        \[
-        \hat{\pi}_F = \mathbf{C}^{-1} \mathbf{p}
-        \]
+        Solve the system using matrix inversion.
         """
         try:
             adjusted = np.linalg.solve(self.CM, prevs_estim)
@@ -281,23 +279,7 @@ class FM(SoftLearnerQMixin, MatrixAdjustment):
     The confusion matrix is computed by applying estimated posterior probabilities
     over true labels, enabling accurate correction of prevalence estimates under
     concept drift.
-
-    Parameters
-    ----------
-    learner : estimator, optional
-        Base classifier with `fit` and `predict_proba` methods.
-        If None, a default estimator will be used.
-    solver : {'optim'}, optional
-
-    Attributes
-    ----------
-    CM : ndarray of shape (n_classes, n_classes)
-        Confusion matrix used for correction.
-    classes_ : ndarray
-        Array of class labels observed during training.
-
-    Notes
-    -----
+    
     The confusion matrix is estimated for each class :math:`k` by:
     applying thresholding on posterior probabilities against prior prevalence,
     as described in the FM algorithm. This enables the correction using
@@ -317,6 +299,19 @@ class FM(SoftLearnerQMixin, MatrixAdjustment):
 
     where :math:`\mathbf{C}` is the confusion matrix, :math:`\mathbf{p}` is the
     vector of predicted prevalences.
+    
+
+    Parameters
+    ----------
+    learner : estimator, optional
+        Base classifier with `fit` and `predict_proba` methods.
+        If None, a default estimator will be used.
+
+    Attributes
+    ----------
+    CM : ndarray of shape (n_classes, n_classes)
+        Confusion matrix used for correction.
+
 
     Examples
     --------
@@ -334,8 +329,8 @@ class FM(SoftLearnerQMixin, MatrixAdjustment):
     .. [1] Friedman, J. H., et al. (2015). "Detecting and Dealing with Concept Drift",
            *Proceedings of the IEEE*, 103(11), 1522-1541.
     """
-    def __init__(self, learner=None, solver='optim'):
-        super().__init__(learner=learner, solver=solver)
+    def __init__(self, learner=None):
+        super().__init__(learner=learner, solver='optim')
     
     def _compute_confusion_matrix(self, posteriors, y_true, priors):
         for i, _class in enumerate(self.classes_):
@@ -352,6 +347,14 @@ class GAC(CrispLearnerQMixin, MatrixAdjustment):
     adjusts the estimated class prevalences by normalizing the confusion matrix
     based on prevalence estimates, providing a correction for bias caused by 
     distribution differences between training and test data.
+    
+    The confusion matrix is normalized by dividing each column by the prevalence 
+    estimate of the corresponding class. For classes with zero estimated prevalence, 
+    the diagonal element is set to 1 to avoid division by zero.
+
+    This normalization ensures that the matrix best reflects the classifier's
+    behavior relative to the estimated class distributions, improving quantification
+    accuracy.
 
     Parameters
     ----------
@@ -365,15 +368,6 @@ class GAC(CrispLearnerQMixin, MatrixAdjustment):
     classes_ : ndarray
         Array of class labels observed during training.
 
-    Notes
-    -----
-    The confusion matrix is normalized by dividing each column by the prevalence 
-    estimate of the corresponding class. For classes with zero estimated prevalence, 
-    the diagonal element is set to 1 to avoid division by zero.
-
-    This normalization ensures that the matrix best reflects the classifier's
-    behavior relative to the estimated class distributions, improving quantification
-    accuracy.
 
     Examples
     --------
@@ -392,8 +386,8 @@ class GAC(CrispLearnerQMixin, MatrixAdjustment):
     .. [1] Firat, A. (2016). "Unified Framework for Quantification", 
            *Proceedings of AAAI Conference on Artificial Intelligence*, pp. 1-8.
     """
-    def __init__(self, learner=None, solver='linear'):
-        super().__init__(learner=learner, solver=solver)
+    def __init__(self, learner=None):
+        super().__init__(learner=learner, solver='linear')
     
     def _compute_confusion_matrix(self, predictions):
         prev_estim = self._get_estimations(predictions)
@@ -416,6 +410,10 @@ class GPAC(SoftLearnerQMixin, MatrixAdjustment):
     The normalization divides each column of the confusion matrix by the estimated prevalence
     of the corresponding class. If a class has zero estimated prevalence, the diagonal element
     for that class is set to 1 to maintain matrix validity.
+    
+    GPAC extends the GAC approach by using soft probabilistic predictions (posterior probabilities)
+    rather than crisp class labels, potentially improving quantification accuracy when 
+    posterior probabilities are well calibrated.
 
     Parameters
     ----------
@@ -429,11 +427,6 @@ class GPAC(SoftLearnerQMixin, MatrixAdjustment):
     classes_ : ndarray
         Array of class labels observed during training.
 
-    Notes
-    -----
-    GPAC extends the GAC approach by using soft probabilistic predictions (posterior probabilities)
-    rather than crisp class labels, potentially improving quantification accuracy when 
-    posterior probabilities are well calibrated.
 
     Examples
     --------
@@ -478,7 +471,15 @@ class ACC(ThresholdAdjustment):
 
         p = \frac{p' - \text{FPR}}{\text{TPR} - \text{FPR}}
 
-    where :math:`p'` is the observed positive proportion from the classifier.
+    where :math:`p'` is the observed positive proportion from :class:`CC`,
+    
+    
+    Parameters
+    ----------
+    learner : estimator, optional
+        A supervised learning model with `fit` and `predict_proba` methods.
+    threshold : float, default=0.5
+        Classification threshold in [0, 1] for applying in the :class:`CC` output.
 
     References
     ----------
@@ -499,6 +500,14 @@ class X_method(ThresholdAdjustment):
     rate (TPR) and false positive rate (FPR) equals one. This threshold choice balances 
     errors in a specific way improving quantification.
 
+
+    Parameters
+    ----------
+    learner : estimator, optional
+        A supervised learning model with `fit` and `predict_proba` methods.
+    threshold : float, default=0.5
+        Classification threshold in [0, 1] for applying in the :class:`CC` output.
+
     References
     ----------
     .. [1] Forman, G. (2005). "Counting Positives Accurately Despite Inaccurate Classification",
@@ -516,6 +525,15 @@ class MAX(ThresholdAdjustment):
     rate (TPR) and the false positive rate (FPR), effectively optimizing classification
     performance for quantification.
 
+
+    Parameters
+    ----------
+    learner : estimator, optional
+        A supervised learning model with `fit` and `predict_proba` methods.
+    threshold : float, default=0.5
+        Classification threshold in [0, 1] for applying in the :class:`CC` output.
+
+
     References
     ----------
     .. [1] Forman, G. (2005). "Counting Positives Accurately Despite Inaccurate Classification",
@@ -531,6 +549,15 @@ class T50(ThresholdAdjustment):
 
     This method chooses the classification threshold such that the true positive rate (TPR)
     equals 0.5, avoiding regions with unreliable estimates at extreme thresholds.
+
+
+    Parameters
+    ----------
+    learner : estimator, optional
+        A supervised learning model with `fit` and `predict_proba` methods.
+    threshold : float, default=0.5
+        Classification threshold in [0, 1] for applying in the :class:`CC` output.
+
 
     References
     ----------
@@ -551,6 +578,15 @@ class MS(ThresholdAdjustment):
 
     It thus leverages the strengths of bootstrap-like variance reduction without heavy
     computation.
+    
+    
+    Parameters
+    ----------
+    learner : estimator, optional
+        A supervised learning model with `fit` and `predict_proba` methods.
+    threshold : float, default=0.5
+        Classification threshold in [0, 1] for applying in the :class:`CC` output.
+    
 
     References
     ----------
@@ -582,6 +618,15 @@ class MS2(MS):
     This variant of Median Sweep excludes thresholds where the absolute difference
     between true positive rate (TPR) and false positive rate (FPR) is below 0.25,
     improving stability by avoiding ambiguous threshold regions.
+
+
+    Parameters
+    ----------
+    learner : estimator, optional
+        A supervised learning model with `fit` and `predict_proba` methods.
+    threshold : float, default=0.5
+        Classification threshold in [0, 1] for applying in the :class:`CC` output.
+
 
     Warnings
     --------

@@ -61,12 +61,6 @@ API_REFERENCE = {
                 "title": None,
                 "autosummary": [
                     "define_binary",
-                    "_fit_ovr",
-                    "_fit_ovo",
-                    "_predict_ovr",
-                    "_predict_ovo",
-                    "_aggregate_ovr",
-                    "_aggregate_ovo",
                     "BinaryQuantifier"
                 ],
             }
@@ -95,8 +89,6 @@ API_REFERENCE = {
             {
                 "title": "Adjusted Counting Methods",
                 "autosummary": [
-                    "ThresholdAdjustment",
-                    "MatrixAdjustment",
                     "FM",
                     "GAC",
                     "GPAC",
@@ -200,12 +192,12 @@ API_REFERENCE = {
             {
                 "title": None,
                 "autosummary": [
+                    "GridSearchQ",
                     "BaseProtocol",
                     "APP",
                     "NPP",
                     "UPP",
                     "PPP",
-                    "GridSearchQ"
                 ],
             }
         ],

@@ -148,9 +148,25 @@ class EnsembleQ(MetaquantifierMixin, BaseQuantifier):
 
     Examples
     --------
-    >>> ensemble = EnsembleQ(quantifier=SomeQuantifier(), size=30, protocol='kraemer', selection_metric='ptr')
+    >>> from mlquantify.ensemble import EnsembleQ
+    >>> from mlquantify.mixture import DyS
+    >>> from sklearn.ensemble import RandomForestClassifier
+    >>>
+    >>> ensemble = EnsembleQ(
+    ...     quantifier=DyS(RandomForestClassifier()), 
+    ...     size=30, 
+    ...     protocol='artificial', # APP protocol 
+    ...     selection_metric='ptr'
+    ... )
     >>> ensemble.fit(X_train, y_train)
     >>> prevalence_estimates = ensemble.predict(X_test)
+    
+    References
+    ----------
+    .. [1] Pérez-Gállego, P., Castaño, A., Ramón Quevedo, J., & José del Coz, J. (2019). Dynamic ensemble selection for quantification tasks. Information Fusion, 45, 1-15. https://doi.org/10.1016/j.inffus.2018.01.001
+
+    .. [2] Pérez-Gállego, P., Quevedo, J. R., & del Coz, J. J. (2017). Using ensembles for problems with characterizable changes in data distribution: A case study on quantification. Information Fusion, 34, 87-100. https://doi.org/10.1016/j.inffus.2016.07.001
+
     """  
       
     _parameter_constraints = {
@@ -305,7 +321,7 @@ class EnsembleQ(MetaquantifierMixin, BaseQuantifier):
 
 
     def ptr_selection_metric(self, prevalences, train_prevalences):
-        """
+        r"""
         Selects the prevalence estimates from models trained on samples whose prevalence is most similar
         to an initial approximation of the test prevalence as estimated by all models in the ensemble.
 
@@ -325,7 +341,7 @@ class EnsembleQ(MetaquantifierMixin, BaseQuantifier):
         return _select_k(prevalences, order, k=self.p_metric)
 
     def ds_get_posteriors(self, X, y):
-        """ 
+        r""" 
         Generate posterior probabilities using cross-validated logistic regression.
         This method computes posterior probabilities for the training data via cross-validation,
         using a logistic regression classifier with hyperparameters optimized through grid search.
@@ -369,7 +385,7 @@ class EnsembleQ(MetaquantifierMixin, BaseQuantifier):
 
 
     def ds_selection_metric(self, X, prevalences, train_distributions, posteriors_generator):
-        """
+        r"""
         Selects the prevalence estimates from models trained on samples whose distribution of posterior
         probabilities is most similar to the distribution of posterior probabilities for the test data.
         
@@ -392,7 +408,7 @@ class EnsembleQ(MetaquantifierMixin, BaseQuantifier):
         return _select_k(prevalences, order, k=self.p_metric)
 
 def _select_k(elements, order, k):
-    """
+    r"""
     Selects the k elements from the list of elements based on the order.
     If the list is empty, it returns the original list.
     
@@ -421,7 +437,7 @@ def _select_k(elements, order, k):
 
 
 class AggregativeBootstrap(MetaquantifierMixin, BaseQuantifier):
-    """
+    r"""
     Aggregative Bootstrap Quantifier to compute prevalence confidence regions.
 
     This metaquantifier applies bootstrapping to both training and test data predictions 
@@ -455,7 +471,14 @@ class AggregativeBootstrap(MetaquantifierMixin, BaseQuantifier):
 
     Examples
     --------
-    >>> agg_boot = AggregativeBootstrap(quantifier=SomeQuantifier, n_train_bootstraps=100, n_test_bootstraps=100)
+    >>> from mlquantify.ensemble import AggregativeBootstrap
+    >>> from mlquantify.neighbors import EMQ
+    >>> from sklearn.ensemble import RandomForestClassifier
+    >>> agg_boot = AggregativeBootstrap(
+    ...     quantifier=EMQ(RandomForestClassifier()), 
+    ...     n_train_bootstraps=100, 
+    ...     n_test_bootstraps=100
+    ... )
     >>> agg_boot.fit(X_train, y_train)
     >>> prevalence, conf_region = agg_boot.predict(X_test)
     """
@@ -484,7 +507,7 @@ class AggregativeBootstrap(MetaquantifierMixin, BaseQuantifier):
         self.confidence_level = confidence_level
         
     def fit(self, X, y, val_split=None):
-        """ Fits the aggregative bootstrap model to the given training data.
+        r""" Fits the aggregative bootstrap model to the given training data.
         
         Parameters
         ----------
@@ -497,6 +520,11 @@ class AggregativeBootstrap(MetaquantifierMixin, BaseQuantifier):
         -------
         self : AggregativeBootstrap
             The fitted aggregative bootstrap model.
+            
+        Raises
+        ------
+        ValueError
+            If the provided quantifier is not an aggregative quantifier.
         """
         X, y = validate_data(self, X, y)
         self.classes = np.unique(y)
@@ -523,7 +551,7 @@ class AggregativeBootstrap(MetaquantifierMixin, BaseQuantifier):
         return self
     
     def predict(self, X):
-        """ Predicts the class prevalences for the given test data.
+        r""" Predicts the class prevalences for the given test data.
         
         Parameters
         ----------
@@ -545,7 +573,7 @@ class AggregativeBootstrap(MetaquantifierMixin, BaseQuantifier):
 
 
     def aggregate(self, predictions, train_predictions, train_y_values):
-        """ Aggregates the predictions using bootstrap resampling.
+        r""" Aggregates the predictions using bootstrap resampling.
         
         Parameters
         ----------
@@ -611,10 +639,10 @@ class AggregativeBootstrap(MetaquantifierMixin, BaseQuantifier):
 
 
 class QuaDapt(MetaquantifierMixin, BaseQuantifier):
-    r"""QuaDapt Metaquantifier: Adaptive quantification using score merging and distance measures.
+    r"""QuaDapt Metaquantifier: Adaptive quantification using synthetic scores.
 
     This metaquantifier improves prevalence estimation by merging training samples 
-    with different score distributions using a merging factor \( m \). It evaluates 
+    with different score distributions using a merging factor :math: \( m \). It evaluates 
     candidate merging factors, chooses the best by minimizing a distribution distance 
     metric (Hellinger, Topsoe, ProbSymm, or SORD), and aggregates quantification accordingly.
 
@@ -624,7 +652,7 @@ class QuaDapt(MetaquantifierMixin, BaseQuantifier):
         The base quantifier model to adapt.
     measure : {'hellinger', 'topsoe', 'probsymm', 'sord'}, default='topsoe'
         The distribution distance metric used to select the best merging factor.
-    merging_factor : array-like
+    merging_factors : array-like
         Candidate merging factor values to evaluate.
 
     Methods
@@ -635,27 +663,28 @@ class QuaDapt(MetaquantifierMixin, BaseQuantifier):
         Predicts prevalence aggregating via the best merging factor.
     aggregate(predictions, train_y_values)
         Performs adaptation and aggregation based on merged score distributions.
-    _get_best_merging_factor(predictions)
-        Evaluates merging factors and selects the best based on minimum distance.
-    _get_best_distance(predictions, pos_scores, neg_scores)
-        Computes the distance metric between predicted and class score distributions.
-
-    Class Methods
-    -------------
     MoSS(n, alpha, m)
         Generates merged score samples modeling class conditional distributions 
         parameterized by mixing proportion alpha and merging factor m.
 
+
     Examples
     --------
-    >>> quadapt = QuaDapt(quantifier=SomeQuantifier, merging_factor=[0.1, 0.5, 1.0], measure='sord')
-    >>> quadapt.fit(X_train, y_train)
-    >>> prevalence = quadapt.predict(X_test)
+    >>> from mlquantify.meta import QuaDapt
+    >>> from mlquantify.adjust_counting import ACC
+    >>> from sklearn.ensemble import RandomForestClassifier
+    >>> quadapt_acc = QuaDapt(
+    ...     quantifier=ACC(RandomForestClassifier()), 
+    ...     merging_factor=[0.1, 0.5, 1.0], 
+    ...     measure='sord'
+    ... )
+    >>> quadapt_acc.fit(X_train, y_train)
+    >>> prevalence = quadapt_acc.predict(X_test)
     """
     
     _parameter_constraints = {
         "quantifier": [BaseQuantifier],
-        "merging_factor": "array-like",
+        "merging_factors": "array-like",
         "measure": [Options(["hellinger", "topsoe", "probsymm", "sord"])],
         "random_state": [Options([None, int])],
     }
@@ -663,10 +692,10 @@ class QuaDapt(MetaquantifierMixin, BaseQuantifier):
     def __init__(self, 
                  quantifier,
                  measure="topsoe", 
-                 merging_factor=(0.1, 1.0, 0.2)):
+                 merging_factors=(0.1, 1.0, 0.2)):
         self.quantifier = quantifier
         self.measure = measure
-        self.merging_factor = merging_factor
+        self.merging_factors = merging_factors
         
     
     def fit(self, X, y):
@@ -718,7 +747,7 @@ class QuaDapt(MetaquantifierMixin, BaseQuantifier):
         
     def _get_best_merging_factor(self, predictions):
         
-        MF = np.atleast_1d(np.round(self.merging_factor, 2)).astype(float)
+        MF = np.atleast_1d(np.round(self.merging_factors, 2)).astype(float)
         
         distances = []
         
@@ -747,6 +776,34 @@ class QuaDapt(MetaquantifierMixin, BaseQuantifier):
 
     @classmethod
     def MoSS(cls, n, alpha, m):
+        r"""Model for Score Simulation
+
+        MoSS has three key parameters:
+        (I) the number of observations `n`;
+        (II) the class proportion `\alpha`, which defines the prevalence of the positive class;
+        (III) the merging factor `\mathfrak{m}`, which controls the overlap between positive and negative score distributions 
+        (where `\mathfrak{m}=0` represents easily separable classes and `\mathfrak{m}=1` represents highly overlapping ones).
+
+        .. math::
+            
+            \mathrm{moss}(n, \alpha, \mathfrak{m}) = \mathrm{syn}(\oplus, \lfloor \alpha n \rfloor, \mathfrak{m}) \cup \mathrm{syn}(\ominus , \lfloor (1 - \alpha) n \rfloor, \mathfrak{m})
+
+        Notes
+        -----
+        The MoSS generates only binary scores, simulating positive and negative class scores.
+
+        Examples
+        --------
+        >>> scores = QuaDapt.MoSS(n=1000, alpha=0.3, m=0.5)
+        >>> print(scores.shape)
+        (1000, 3)
+
+        References
+        ----------
+        .. [1] Maletzke, A., Reis, D. dos, Hassan, W., & Batista, G. (2021).
+        Accurately Quantifying under Score Variability. 2021 IEEE International Conference on Data Mining (ICDM), 1228-1233.
+        https://doi.org/10.1109/ICDM51629.2021.00149
+        """
         p_score = np.random.uniform(size=int(n * alpha)) ** m
         n_score = 1 - (np.random.uniform(size=int(round(n * (1 - alpha), 0))) ** m)
         scores = np.column_stack(

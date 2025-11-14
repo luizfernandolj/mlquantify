@@ -15,8 +15,7 @@ from mlquantify.mixture._utils import (
 )
 
 class BaseMixture(BaseQuantifier):
-    """
-    Base class for mixture-model quantifiers.
+    r"""Base class for mixture-model quantifiers.
 
     Mixture Models (MM) for quantification estimate class prevalences by modeling 
     the test set score distribution as a mixture of the individual class score 
@@ -39,7 +38,7 @@ class BaseMixture(BaseQuantifier):
     scores or histograms, and the choice of distance can affect quantification accuracy 
     and robustness.
 
-    The DyS framework (Maletzke et al. 2019) generalizes mixture models by introducing 
+    The DyS framework [3]_ generalizes mixture models by introducing 
     a variety of distribution dissimilarity measures, enabling flexible and effective 
     quantification methods.
     
@@ -49,10 +48,12 @@ class BaseMixture(BaseQuantifier):
     Mixture models are defined for only binary quantification problems. For multi-class
     problems, a one-vs-rest strategy is applied, training a binary mixture model for
     each class against the rest.
+    
 
     Parameters
     ----------
     None directly; subclasses implement fitting and prediction logic.
+
 
     Attributes
     ----------
@@ -62,6 +63,7 @@ class BaseMixture(BaseQuantifier):
         Stores intermediate or final distance computations used in model selection.
     classes : ndarray of shape (n_classes,)
         Unique class labels seen during training.
+
 
     Methods
     -------
@@ -128,9 +130,7 @@ class BaseMixture(BaseQuantifier):
     
     @classmethod
     def get_distance(cls, dist_train, dist_test, measure="hellinger"):
-        """
-        Compute distance between two distributions.
-        """
+        r"""Compute distance between two distributions."""
         
         if np.sum(dist_train) < 1e-20 or np.sum(dist_test) < 1e-20:
             raise ValueError("One or both vectors are zero (empty)...")
