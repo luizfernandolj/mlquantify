@@ -750,8 +750,8 @@ class QuaDapt(MetaquantifierMixin, BaseQuantifier):
         MoSS has three key parameters:
         (I) the number of observations `n`;
         (II) the class proportion `\alpha`, which defines the prevalence of the positive class;
-        (III) the merging factor `\mathfrak{m}`, which controls the overlap between positive and negative score distributions 
-        (where `\mathfrak{m}=0` represents easily separable classes and `\mathfrak{m}=1` represents highly overlapping ones).
+        (III) the merging factor :math:`m`, which controls the overlap between positive and negative score distributions 
+        (where :math:`m=0` represents easily separable classes and :math:`m=1` represents highly overlapping ones).
 
         .. math::
             
