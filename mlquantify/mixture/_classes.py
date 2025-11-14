@@ -21,8 +21,7 @@ from mlquantify.mixture._utils import (
 # =====================================================
 @define_binary
 class AggregativeMixture(SoftLearnerQMixin, AggregationMixin, BaseMixture):
-    """
-    Base class for Mixture-based Quantification Methods.
+    r"""Base class for Mixture-based Quantification Methods.
 
     These methods assume that the test score distribution is a mixture
     of the positive and negative score distributions from the training data.
@@ -105,7 +104,7 @@ class AggregativeMixture(SoftLearnerQMixin, AggregationMixin, BaseMixture):
 # =====================================================
 
 class DyS(AggregativeMixture):
-    """Distribution y-Similarity (DyS) quantification method.
+    r"""Distribution y-Similarity (DyS) quantification method.
 
     Uses mixture modeling with a dissimilarity measure between distributions
     computed on histograms of classifier scores. This method optimizes mixture 
@@ -128,7 +127,9 @@ class DyS(AggregativeMixture):
 
     Examples
     --------
-    >>> q = DyS(learner=my_learner, measure="hellinger")
+    >>> from mlquantify.mixture import DyS
+    >>> from sklearn.linear_model import LogisticRegression
+    >>> q = DyS(learner=LogisticRegression(), measure="hellinger")
     >>> q.fit(X_train, y_train)
     >>> prevalences = q.predict(X_test)
     """
@@ -147,6 +148,35 @@ class DyS(AggregativeMixture):
         self.bins_size = np.asarray(bins_size, dtype=int)
 
     def best_mixture(self, predictions, pos_scores, neg_scores):
+        r"""Determine the best mixture parameters for the given data.
+        
+        Applies ternary search to find the mixture weight minimizing the distance
+        between the test score histogram and the mixture of positive and negative
+        
+        The mixture weight :math:`\alpha` is estimated as:
+        .. math::
+            \alpha = \arg \min_{\alpha \in [0, 1]} D \left( H_{test}, \alpha H_{pos} + (1 - \alpha) H_{neg} \right)
+            
+        where :math:`D` is the selected distance measure and :math:`H` denotes histograms.
+        
+        
+        Parameters
+        ----------
+        predictions : ndarray
+            Classifier scores for the test data.
+        pos_scores : ndarray
+            Classifier scores for the positive class from training data.
+        neg_scores : ndarray
+            Classifier scores for the negative class from training data.
+            
+            
+        Returns
+        -------
+        alpha : float
+            Estimated mixture weight.
+        best_distance : float
+            Distance corresponding to the best mixture weight.
+        """
         
         prevs = []
         self.distances = []
@@ -175,7 +205,7 @@ class DyS(AggregativeMixture):
 # =====================================================
 
 class HDy(AggregativeMixture):
-    """Hellinger Distance Minimization (HDy) quantification method.
+    r"""Hellinger Distance Minimization (HDy) quantification method.
 
     Estimates class prevalences by finding mixture weights that minimize
     the Hellinger distance between the histogram of test scores and the mixture
@@ -193,6 +223,35 @@ class HDy(AggregativeMixture):
     """
     
     def best_mixture(self, predictions, pos_scores, neg_scores):
+        r"""Determine the best mixture parameters for the given data.
+
+        Compute the mixture weight :math:`\alpha` that minimizes the Hellinger distance between the test score histogram and the mixture of positive and negative class score histograms.
+
+        The mixture weight :math:`\alpha` is estimated as:
+        .. math::
+            \alpha = \arg \min_{\alpha \in [0, 1]} Hellinger \left( H_{test}, \alpha H_{pos} + (1 - \alpha) H_{neg} \right)
+            
+        where :math:`H` denotes histograms.
+        
+        
+        Parameters
+        ----------
+        predictions : ndarray
+            Classifier scores for the test data.
+        pos_scores : ndarray
+            Classifier scores for the positive class from training data.
+        neg_scores : ndarray
+            Classifier scores for the negative class from training data.
+            
+            
+        Returns
+        -------
+        alpha : float
+            Estimated mixture weight.
+        best_distance : float
+            Distance corresponding to the best mixture weight.
+        """
+        
         bins_size = np.arange(10, 110, 11)
         alpha_values = np.round(np.linspace(0, 1, 101), 2)
         
@@ -228,13 +287,12 @@ class SMM(AggregativeMixture):
 
     Estimates class prevalence by matching the mean score of the test samples 
     to a convex combination of positive and negative training scores. The mixture 
-    weight \( \alpha \) is computed as:
+    weight :math:`\alpha` is computed as:
 
-    \[
-    \alpha = \frac{\bar{s}_{test} - \bar{s}_{neg}}{\bar{s}_{pos} - \bar{s}_{neg}}
-    \]
+    .. math::
+        \alpha = \frac{\bar{s}_{test} - \bar{s}_{neg}}{\bar{s}_{pos} - \bar{s}_{neg}}
 
-    where \( \bar{s} \) denotes the sample mean.
+    where :math:`\bar{s}` denotes the sample mean.
 
     Parameters
     ----------

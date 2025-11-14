@@ -28,22 +28,16 @@ class PWKCLF:
     y_train : ndarray
         Labels of training samples.
 
-    Methods
-    -------
-    fit(X, y)
-        Fits the k-NN structure and computes class weights.
-    predict(X)
-        Predicts class labels by weighted voting among neighbors.
 
     Notes
     -----
     The class weights are defined as:
 
-    \[
-    w_c = \left( \frac{N_c}{\min_{c'} N_{c'}} \right)^{-\frac{1}{\alpha}},
-    \]
+    .. math::
 
-    where \( N_c \) is the count of class \( c \) in the training set.
+        w_c = \left( \frac{N_c}{\min_{c'} N_{c'}} \right)^{-\frac{1}{\alpha}},
+
+    where :math:`N_c` is the count of class :math:`c` in the training set.
 
     This weighting scheme reduces bias towards majority classes by downweighting them
     in the voting process.

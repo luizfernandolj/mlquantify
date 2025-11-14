@@ -28,7 +28,7 @@ def process_inputs(prev_pred, prev_real):
 
 
 def NMD(prev_pred, prev_real, distances=None):
-    """
+    r"""
     Compute the Normalized Match Distance (NMD), also known as Earth Mover’s Distance (EMD),
     for ordinal quantification evaluation.
 
@@ -66,7 +66,7 @@ def NMD(prev_pred, prev_real, distances=None):
 
 
 def RNOD(prev_pred, prev_real, distances=None):
-    """
+    r"""
     Compute the Root Normalised Order-aware Divergence (RNOD) for ordinal quantification evaluation.
 
     Parameters

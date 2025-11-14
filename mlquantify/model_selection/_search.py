@@ -18,7 +18,7 @@ from mlquantify.model_selection import (
 )
 
 class GridSearchQ(MetaquantifierMixin, BaseQuantifier):
-    """
+    r"""
     Grid Search for Quantifiers with evaluation protocols.
 
     This class automates the hyperparameter search over a grid of parameter

@@ -10,7 +10,7 @@ from mlquantify.utils._validation import validate_prevalences
 
 
 class PWK(BaseQuantifier):
-    """
+    r"""
     Probabilistic Weighted k-Nearest Neighbor (PWK) Quantifier.
 
     This quantifier leverages the PWKCLF classifier to perform quantification by estimating 
@@ -47,15 +47,6 @@ class PWK(BaseQuantifier):
     learner : PWKCLF
         Underlying probabilistic weighted k-NN classifier.
 
-    Methods
-    -------
-    fit(X, y)
-        Fits the quantifier by training the internal PWKCLF and wrapping it with 
-        Classify & Count quantification.
-    predict(X)
-        Predicts class prevalences for input data using the trained model.
-    classify(X)
-        Returns label predictions by applying the trained PWKCLF classifier.
 
     Examples
     --------

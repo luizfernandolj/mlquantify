@@ -16,11 +16,11 @@ def gaussian_kernel(X, Y, bandwidth):
     This kernel matrix represents the similarity between each pair of points in X and Y,
     computed using the Gaussian (RBF) kernel function:
 
-    \[
-    K(x, y) = \frac{1}{(2 \pi)^{D/2} h^D} \exp\left(- \frac{\|x - y\|^2}{2 h^2}\right)
-    \]
+    .. math::
 
-    where \( h \) is the bandwidth (smoothing parameter), and \( D \) is the dimensionality
+        K(x, y) = \frac{1}{(2 \pi)^{D/2} h^D} \exp\left(- \frac{\|x - y\|^2}{2 h^2}\right)
+
+    where :math:`h` is the bandwidth (smoothing parameter), and :math:`D` is the dimensionality
     of the input feature space.
 
     Parameters
@@ -30,7 +30,7 @@ def gaussian_kernel(X, Y, bandwidth):
     Y : array-like of shape (n_samples_Y, n_features) or None
         Input data points for kernel computation. If None, defaults to X.
     bandwidth : float
-        Kernel bandwidth parameter \( h \).
+        Kernel bandwidth parameter :math:`h`.
 
     Returns
     -------
@@ -51,11 +51,11 @@ def gaussian_kernel(X, Y, bandwidth):
 def negative_log_likelihood(mixture_likelihoods):
     r"""Compute the negative log-likelihood of given mixture likelihoods in a numerically stable way.
 
-    Given mixture likelihood values \( p_i \) for samples, the negative log-likelihood is:
+    Given mixture likelihood values :math:`p_i` for samples, the negative log-likelihood is:
 
-    \[
-    - \sum_i \log(p_i)
-    \]
+    .. math::
+
+        - \sum_i \log(p_i)
 
     Numerical stability is achieved by clipping likelihoods below a small epsilon.
 
@@ -76,11 +76,11 @@ def negative_log_likelihood(mixture_likelihoods):
 def _simplex_constraints(n):
     r"""Define constraints and bounds for optimization over the probability simplex.
 
-    The simplex is defined as all vectors \( \alpha \in \mathbb{R}^n \) such that:
+    The simplex is defined as all vectors :math:`\alpha \in \mathbb{R}^n` such that:
 
-    \[
-    \alpha_i \geq 0, \quad \sum_{i=1}^n \alpha_i = 1
-    \]
+    .. math::
+
+        \alpha_i \geq 0, \quad \sum_{i=1}^n \alpha_i = 1
 
     Parameters
     ----------

@@ -127,18 +127,6 @@ class EnsembleQ(MetaquantifierMixin, BaseQuantifier):
     posteriors_generator : callable or None
         Function to generate posterior probabilities for new samples.
 
-    Methods
-    -------
-    fit(X, y)
-        Fits all ensemble member quantifiers on sampled training batches.
-    predict(X)
-        Aggregates ensemble member predictions into final prevalence estimates.
-    ptr_selection_metric(prevalences, train_prevalences)
-        Implements PTR-based selection metric on prevalence estimates.
-    ds_get_posteriors(X, y)
-        Computes posterior probabilities for training data with cross-validated logistic regression.
-    ds_selection_metric(X, prevalences, train_distributions, posteriors_generator)
-        Implements DS-based selection metric comparing posterior distributions.
 
     Notes
     -----
@@ -460,14 +448,6 @@ class AggregativeBootstrap(MetaquantifierMixin, BaseQuantifier):
     confidence_level : float between 0 and 1, default=0.95
         Confidence level for intervals or regions.
 
-    Methods
-    -------
-    fit(X, y, val_split=None)
-        Fits base quantifier and generates training predictions (optionally splitting data).
-    predict(X)
-        Returns prevalence estimates and confidence regions aggregated from bootstrap samples.
-    aggregate(predictions, train_predictions, train_y_values)
-        Performs bootstrap resampling aggregation to obtain prevalence confidence regions.
 
     Examples
     --------
@@ -655,19 +635,6 @@ class QuaDapt(MetaquantifierMixin, BaseQuantifier):
     merging_factors : array-like
         Candidate merging factor values to evaluate.
 
-    Methods
-    -------
-    fit(X, y)
-        Fits the base learner on training data.
-    predict(X)
-        Predicts prevalence aggregating via the best merging factor.
-    aggregate(predictions, train_y_values)
-        Performs adaptation and aggregation based on merged score distributions.
-    MoSS(n, alpha, m)
-        Generates merged score samples modeling class conditional distributions 
-        parameterized by mixing proportion alpha and merging factor m.
-
-
     Examples
     --------
     >>> from mlquantify.meta import QuaDapt
@@ -680,6 +647,8 @@ class QuaDapt(MetaquantifierMixin, BaseQuantifier):
     ... )
     >>> quadapt_acc.fit(X_train, y_train)
     >>> prevalence = quadapt_acc.predict(X_test)
+    
+    
     """
     
     _parameter_constraints = {
@@ -801,8 +770,7 @@ class QuaDapt(MetaquantifierMixin, BaseQuantifier):
         References
         ----------
         .. [1] Maletzke, A., Reis, D. dos, Hassan, W., & Batista, G. (2021).
-        Accurately Quantifying under Score Variability. 2021 IEEE International Conference on Data Mining (ICDM), 1228-1233.
-        https://doi.org/10.1109/ICDM51629.2021.00149
+        Accurately Quantifying under Score Variability. 2021 IEEE International Conference on Data Mining (ICDM), 1228-1233. https://doi.org/10.1109/ICDM51629.2021.00149
         """
         p_score = np.random.uniform(size=int(n * alpha)) ** m
         n_score = 1 - (np.random.uniform(size=int(round(n * (1 - alpha), 0))) ** m)

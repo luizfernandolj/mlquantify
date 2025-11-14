@@ -15,7 +15,7 @@ import numpy as np
 
     
 class BaseProtocol(ProtocolMixin, BaseQuantifier):
-    """Base class for evaluation protocols.
+    r"""Base class for evaluation protocols.
     
     Parameters
     ----------
@@ -76,7 +76,7 @@ class BaseProtocol(ProtocolMixin, BaseQuantifier):
                  
 
     def split(self, X: np.ndarray, y: np.ndarray):
-        """
+        r"""
         Split the data into samples for evaluation.
 
         Parameters
@@ -117,7 +117,7 @@ class BaseProtocol(ProtocolMixin, BaseQuantifier):
 
 
 class APP(BaseProtocol):
-    """
+    r"""
     Artificial Prevalence Protocol (APP) for exhaustive prevalent batch evaluation.
     
     Generates batches with artificially imposed prevalences across all possible 
@@ -185,7 +185,7 @@ class APP(BaseProtocol):
             
 
 class NPP(BaseProtocol):
-    """
+    r"""
     Natural Prevalence Protocol (NPP) that samples data without imposing prevalence constraints.
     
     This protocol simply samples batches randomly with replacement, 
@@ -230,7 +230,7 @@ class NPP(BaseProtocol):
             
 
 class UPP(BaseProtocol):
-    """
+    r"""
     Uniform Prevalence Protocol (UPP) for uniform sampling of artificial prevalences.
     
     Similar to APP, but uses uniform prevalence distribution generation
@@ -310,7 +310,7 @@ class UPP(BaseProtocol):
 
 
 class PPP(BaseProtocol):
-    """
+    r"""
     Personalized Prevalence Protocol (PPP) for targeted prevalence batch generation.
     
     Generates batches with user-specified prevalence distributions, allowing for

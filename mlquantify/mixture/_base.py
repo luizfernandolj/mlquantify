@@ -65,20 +65,6 @@ class BaseMixture(BaseQuantifier):
         Unique class labels seen during training.
 
 
-    Methods
-    -------
-    fit(X, y, *args, **kwargs):
-        Fit the mixture quantifier with training data. Validates input and 
-        calls internal fitting procedure.
-    predict(X, *args, **kwargs):
-        Predict class prevalences for input data by leveraging best mixture parameters.
-    get_best_distance(*args, **kwargs):
-        Return the best distance measure and associated mixture parameters found.
-    best_mixture(X):
-        Abstract method to determine optimal mixture parameters on input data.
-    get_distance(dist_train, dist_test, measure="hellinger"):
-        Compute a specified distance between two distributions.
-
     References
     ----------
     [1] Forman, G. (2005). *Counting Positives Accurately Despite Inaccurate Classification.* ECML, pp. 564-575.
@@ -120,6 +106,14 @@ class BaseMixture(BaseQuantifier):
         return self._predict(X, *args, **kwargs)
     
     def get_best_distance(self, *args, **kwargs):
+        r""" Get the best distance value from the mixture fitting process.
+        
+        Notes
+        -----
+        If the quantifier has not been fitted yet, it will fit the model for getting the
+        best distance.
+        
+        """
         _, best_distance = self.best_mixture(*args, **kwargs)
         return best_distance
 

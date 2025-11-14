@@ -13,94 +13,64 @@ from mlquantify.utils._validation import validate_prevalences
 EPS = 1e-12
 
 class BaseKDE(SoftLearnerQMixin, AggregationMixin, BaseQuantifier):
-    r"""
-    Base class for KDEy quantification methods.
-    
-    KDEy methods model the class-conditional densities of posterior probabilities
-    using Kernel Density Estimation (KDE) in the probability simplex space.
-    Given a probabilistic classifier's posterior outputs, each class distribution
-    is approximated as a smooth density function via KDE. Class prevalences in
-    the test set are estimated as the mixture weights of these densities that best 
-    explain the test posterior distribution.
-    
-    Formally, KDEy approximates the test posterior distribution as:
+    r"""Base class for KDEy quantification methods.
 
-    \[
-    p_{test}(x) \approx \sum_{k=1}^K \alpha_k p_k(x),
-    \]
+    KDEy models the class-conditional densities of posterior probabilities using Kernel Density Estimation (KDE)
+    on the probability simplex. Given posterior outputs from a probabilistic classifier, each class distribution
+    is approximated as a smooth KDE. Test set class prevalences correspond to mixture weights that best explain 
+    the overall test posterior distribution.
 
-    where \( p_k(x) \) is the KDE of the posterior scores of class \( k \) on training data,
-    and \( \alpha_k \) are the unknown class prevalences to be estimated under:
+    Mathematically, the test posterior distribution is approximated as:
 
-    \[
-    \alpha_k \geq 0, \quad \sum_{k=1}^K \alpha_k = 1.
-    \]
-    
-    The quantification task is then to find the vector \( \boldsymbol{\alpha} = (\alpha_1,\dots,\alpha_K) \)
-    minimizing an objective function defined on the mixture density and the test posteriors,
-    subject to the simplex constraints on \( \boldsymbol{\alpha} \).
+    .. math::
+
+        p_{\mathrm{test}}(x) \approx \sum_{k=1}^K \alpha_k p_k(x),
+
+    where \(p_k(x)\) is the KDE of class \(k\) posteriors from training data, and \(\alpha_k\) are the unknown class 
+    prevalences subject to:
+
+    .. math::
+
+        \alpha_k \geq 0, \quad \sum_{k=1}^K \alpha_k = 1.
+
+    The quantification minimizes an objective \(\mathcal{L}\) over \(\boldsymbol{\alpha} = (\alpha_1, \dots, \alpha_K)\) in the simplex:
+
+    .. math::
+
+        \min_{\boldsymbol{\alpha} \in \Delta^{K-1}} \mathcal{L} \left( \sum_{k=1}^K \alpha_k p_k(x), \hat{p}(x) \right),
+
+    where \(\hat{p}(x)\) is the test posterior distribution (empirical KDE or direct predictions).
+
+    This problem is typically solved using numerical constrained optimization methods.
 
     Attributes
     ----------
     learner : estimator
-        The underlying probabilistic classifier yielding posterior predictions.
+        Probabilistic classifier generating posterior predictions.
     bandwidth : float
-        Bandwidth (smoothing parameter) for the KDE models.
+        KDE bandwidth (smoothing parameter).
     kernel : str
-        Kernel type used in KDE (e.g., 'gaussian').
+        KDE kernel type (e.g., 'gaussian').
     _precomputed : bool
-        Indicates whether KDE models have been fitted on training data.
+        Indicates if KDE models have been fitted.
     best_distance : float or None
-        Stores the best value of the objective (distance or loss) achieved.
-
-    Methods
-    -------
-    fit(X, y, learner_fitted=False)
-        Fits KDE models for each class using posterior predictions of the learner.
-    predict(X)
-        Aggregates learner’s posterior predictions on X to estimate class prevalences.
-    aggregate(predictions, train_predictions, train_y_values)
-        Core estimation method that validates inputs, ensures KDE precomputation,
-        and calls `_solve_prevalences` implemented by subclasses.
-    _fit_kde_models(train_predictions, train_y_values)
-        Fits KDE model per class on training data posteriors.
-    _solve_prevalences(predictions)
-        Abstract method to estimate prevalence vector \( \boldsymbol{\alpha} \) for given posteriors.
-        Must be implemented by subclasses.
+        Best objective value found during estimation.
 
     Examples
     --------
-    To implement a new KDEy quantifier, subclass BaseKDE and implement the method
-    `_solve_prevalences`, which receives posterior predictions and returns a tuple
-
-    (estimated prevalences \(\boldsymbol{\alpha}\), objective value).
+    Subclasses should implement `_solve_prevalences` method returning estimated prevalences and objective value:
 
     >>> class KDEyExample(BaseKDE):
     ...     def _solve_prevalences(self, predictions):
-    ...         # Example: simple uniform prevalences, replace with actual optimization
     ...         n_classes = len(self._class_kdes)
     ...         alpha = np.ones(n_classes) / n_classes
-    ...         obj_val = 0.0  # Replace with actual objective computation
+    ...         obj_val = 0.0  # Placeholder, replace with actual objective
     ...         return alpha, obj_val
-
-    Mathematical formulation for prevalence estimation typically involves optimizing:
-
-    \[
-    \min_{\boldsymbol{\alpha} \in \Delta^{K-1}} \mathcal{L} \bigg( \sum_{k=1}^K \alpha_k p_k(x), \hat{p}(x) \bigg),
-    \]
-
-    where \(\hat{p}(x)\) is the test posterior distribution (empirical KDE or direct predictions),
-    \(\Delta^{K-1}\) is the probability simplex defined by the constraints on \(\boldsymbol{\alpha}\),
-    and \(\mathcal{L}\) is an appropriate divergence or loss function, e.g., negative log-likelihood,
-    Hellinger distance, or Cauchy–Schwarz divergence.
-
-    This optimization is typically solved numerically with constrained methods such as
-    sequential quadratic programming or projected gradient descent.
 
     References
     ----------
-    [1] Moreo, A., et al. (2023). Kernel Density Quantification methods and applications.
-        In *Learning to Quantify*, Springer.
+    .. [1] Moreo, A., et al. (2023). Kernel Density Quantification methods and applications.
+    In *Learning to Quantify*, Springer.
     """
 
     _parameter_constraints = {

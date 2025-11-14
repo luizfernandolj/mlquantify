@@ -31,7 +31,7 @@ def process_inputs(prev_pred, prev_real):
 
 
 def VSE(prev_pred, prev_real, train_values):
-    """
+    r"""
     Compute the Variance-normalised Squared Error (VSE).
 
     Parameters
@@ -60,7 +60,7 @@ def VSE(prev_pred, prev_real, train_values):
 
 
 def CvM_L1(prev_pred, prev_real, n_bins=100):
-    """
+    r"""
     Compute the L1 version of the Cramér–von Mises statistic (Xiao et al., 2006)
     between two cumulative distributions, as suggested by Bella et al. (2014).
 

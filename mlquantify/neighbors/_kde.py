@@ -19,13 +19,13 @@ def _optimize_on_simplex(objective, n_classes, x0=None):
     r"""Optimize an objective function over the probability simplex.
     
     This function performs constrained optimization to find the mixture weights
-    \( \alpha \) on the simplex \( \Delta^{n-1} = \{ \alpha \in \mathbb{R}^n : \alpha_i \geq 0, \sum_i \alpha_i = 1 \} \)
+    :math:`\alpha` on the simplex :math:`\Delta^{n-1} = \{ \alpha \in \mathbb{R}^n : \alpha_i \geq 0, \sum_i \alpha_i = 1 \}`
     that minimize the given objective function.
 
     Parameters
     ----------
     objective : callable
-        Function from \( \mathbb{R}^n \to \mathbb{R} \) to minimize.
+        Function from :math:`\mathbb{R}^n \to \mathbb{R}` to minimize.
     n_classes : int
         Dimensionality of the simplex (number of classes).
     x0 : array-like, optional
@@ -58,7 +58,7 @@ def _optimize_on_simplex(objective, n_classes, x0=None):
 # ============================================================
 
 class KDEyML(BaseKDE):
-    """KDEy Maximum Likelihood quantifier.
+    r"""KDEy Maximum Likelihood quantifier.
     
     Models class-conditional densities of posterior probabilities via Kernel Density
     Estimation (KDE) and estimates class prevalences by maximizing the likelihood of 
@@ -79,13 +79,13 @@ class KDEyML(BaseKDE):
     """
 
     def _precompute_training(self, train_predictions, train_y_values):
-        """
+        r"""
         Fit KDE models on class-specific training posterior predictions.
         """
         super()._fit_kde_models(train_predictions, train_y_values)
 
     def _solve_prevalences(self, predictions):
-        """
+        r"""
         Estimate class prevalences by maximizing log-likelihood under KDE mixture.
         
         Parameters
@@ -207,8 +207,7 @@ class KDEyHD(BaseKDE):
 # ============================================================
 
 class KDEyCS(BaseKDE):
-    """
-    KDEy Cauchy-Schwarz Divergence quantifier.
+    r"""KDEy Cauchy-Schwarz Divergence quantifier.
     
     Uses a closed-form solution for minimizing the Cauchy-Schwarz (CS) divergence between
     Gaussian Mixture Models representing class-conditional densities fitted via KDE.

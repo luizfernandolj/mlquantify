@@ -30,7 +30,7 @@ def process_inputs(prev_pred, prev_real):
 
 
 def AE(prev_pred, prev_real):
-    """
+    r"""
     Compute the absolute error for each class or a dictionary of errors if input is a dictionary.
 
     Parameters
@@ -57,7 +57,7 @@ def AE(prev_pred, prev_real):
 
 
 def MAE(prev_pred, prev_real):
-    """
+    r"""
     Compute the mean absolute error between the real and predicted prevalences.
 
     Parameters
@@ -78,7 +78,7 @@ def MAE(prev_pred, prev_real):
 
 
 def KLD(prev_pred, prev_real):
-    """
+    r"""
     Compute the Kullback-Leibler divergence between the real and predicted prevalences.
 
     Parameters
@@ -99,7 +99,7 @@ def KLD(prev_pred, prev_real):
 
 
 def SE(prev_pred, prev_real):
-    """
+    r"""
     Compute the mean squared error between the real and predicted prevalences.
 
     Parameters
@@ -120,7 +120,7 @@ def SE(prev_pred, prev_real):
 
 
 def MSE(prev_pred, prev_real):
-    """ Mean Squared Error
+    r""" Mean Squared Error
 
     Parameters
     ----------
@@ -140,7 +140,7 @@ def MSE(prev_pred, prev_real):
 
 
 def NAE(prev_pred, prev_real):
-    """
+    r"""
     Compute the normalized absolute error between the real and predicted prevalences.
 
     Parameters
@@ -163,7 +163,7 @@ def NAE(prev_pred, prev_real):
 
 
 def NKLD(prev_pred, prev_real):
-    """
+    r"""
     Compute the normalized Kullback-Leibler divergence between the real and predicted prevalences.
 
     Parameters
@@ -186,7 +186,7 @@ def NKLD(prev_pred, prev_real):
 
 
 def RAE(prev_pred, prev_real):
-    """
+    r"""
     Compute the relative absolute error between the real and predicted prevalences.
 
     Parameters
@@ -207,7 +207,7 @@ def RAE(prev_pred, prev_real):
 
 
 def NRAE(prev_pred, prev_real):
-    """
+    r"""
     Compute the normalized relative absolute error between the real and predicted prevalences.
 
     Parameters

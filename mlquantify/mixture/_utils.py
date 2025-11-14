@@ -6,7 +6,7 @@ import numpy as np
 # =====================================================
 
 def getHist(scores, nbins):
-    """
+    r"""
     Calculate histogram-like bin probabilities for a given set of scores.
 
     This function divides the score range into equal bins and computes the proportion 
@@ -42,7 +42,7 @@ def getHist(scores, nbins):
 
 
 def ternary_search(left: float, right: float, func, tol: float = 1e-4) -> float:
-    """
+    r"""
     Ternary search to find the minimum of a unimodal function in [left, right].
 
     Parameters
@@ -53,8 +53,8 @@ def ternary_search(left: float, right: float, func, tol: float = 1e-4) -> float:
         Right bound.
     func : callable
         Function to minimize.
-    tol : float
-        Tolerance for termination.
+    tol : float, optional
+        Tolerance for termination. Default is 1e-4.
 
     Returns
     -------
@@ -73,10 +73,23 @@ def ternary_search(left: float, right: float, func, tol: float = 1e-4) -> float:
 
 
 def topsoe(p: np.ndarray, q: np.ndarray) -> float:
-    """
+    r"""
     Topsoe distance between two probability distributions.
 
-    D_T(p, q) = sum( p*log(2p/(p+q)) + q*log(2q/(p+q)) )
+    .. math::
+        D_T(p, q) = \sum \left( p \log \frac{2p}{p + q} + q \log \frac{2q}{p + q} \right)
+
+    Parameters
+    ----------
+    p : np.ndarray
+        First probability distribution.
+    q : np.ndarray
+        Second probability distribution.
+
+    Returns
+    -------
+    float
+        The Topsoe distance.
     """
     p = np.maximum(p, 1e-20)
     q = np.maximum(q, 1e-20)
@@ -84,10 +97,23 @@ def topsoe(p: np.ndarray, q: np.ndarray) -> float:
 
 
 def probsymm(p: np.ndarray, q: np.ndarray) -> float:
-    """
+    r"""
     Probabilistic Symmetric distance.
 
-    D_PS(p, q) = sum( (p - q) * log(p / q) )
+    .. math::
+        D_{PS}(p, q) = \sum (p - q) \log \frac{p}{q}
+
+    Parameters
+    ----------
+    p : np.ndarray
+        First probability distribution.
+    q : np.ndarray
+        Second probability distribution.
+
+    Returns
+    -------
+    float
+        The Probabilistic Symmetric distance.
     """
     p = np.maximum(p, 1e-20)
     q = np.maximum(q, 1e-20)
@@ -95,10 +121,23 @@ def probsymm(p: np.ndarray, q: np.ndarray) -> float:
 
 
 def hellinger(p: np.ndarray, q: np.ndarray) -> float:
-    """
+    r"""
     Hellinger distance between two probability distributions.
 
-    H(p, q) = (1/sqrt(2)) * sqrt( sum( (sqrt(p) - sqrt(q))^2 ) )
+    .. math::
+        H(p, q) = \frac{1}{\sqrt{2}} \sqrt{\sum \left( \sqrt{p} - \sqrt{q} \right)^2}
+
+    Parameters
+    ----------
+    p : np.ndarray
+        First probability distribution.
+    q : np.ndarray
+        Second probability distribution.
+
+    Returns
+    -------
+    float
+        The Hellinger distance.
     """
     p = np.maximum(p, 1e-20)
     q = np.maximum(q, 1e-20)
@@ -106,7 +145,19 @@ def hellinger(p: np.ndarray, q: np.ndarray) -> float:
 
 
 def sqEuclidean(p: np.ndarray, q: np.ndarray) -> float:
-    """
+    r"""
     Squared Euclidean distance between two vectors.
+
+    Parameters
+    ----------
+    p : np.ndarray
+        First vector.
+    q : np.ndarray
+        Second vector.
+
+    Returns
+    -------
+    float
+        The squared Euclidean distance.
     """
     return np.sum((p - q) ** 2)
