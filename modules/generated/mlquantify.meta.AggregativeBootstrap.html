@@ -312,8 +312,6 @@
   <div class="bd-toc-item navbar-nav"><ul class="current nav bd-sidenav">
 <li class="toctree-l1"><a class="reference internal" href="../../api/mlquantify.html">mlquantify</a></li>
 <li class="toctree-l1 has-children"><a class="reference internal" href="../../api/mlquantify.adjust_counting.html">mlquantify.adjust_counting</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
-<li class="toctree-l2"><a class="reference internal" href="mlquantify.adjust_counting.ThresholdAdjustment.html">ThresholdAdjustment</a></li>
-<li class="toctree-l2"><a class="reference internal" href="mlquantify.adjust_counting.MatrixAdjustment.html">MatrixAdjustment</a></li>
 <li class="toctree-l2"><a class="reference internal" href="mlquantify.adjust_counting.FM.html">FM</a></li>
 <li class="toctree-l2"><a class="reference internal" href="mlquantify.adjust_counting.GAC.html">GAC</a></li>
 <li class="toctree-l2"><a class="reference internal" href="mlquantify.adjust_counting.GPAC.html">GPAC</a></li>
@@ -382,22 +380,16 @@
 </ul>
 </details></li>
 <li class="toctree-l1 has-children"><a class="reference internal" href="../../api/mlquantify.model_selection.html">mlquantify.model_selection</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="mlquantify.model_selection.GridSearchQ.html">GridSearchQ</a></li>
 <li class="toctree-l2"><a class="reference internal" href="mlquantify.model_selection.BaseProtocol.html">BaseProtocol</a></li>
 <li class="toctree-l2"><a class="reference internal" href="mlquantify.model_selection.APP.html">APP</a></li>
 <li class="toctree-l2"><a class="reference internal" href="mlquantify.model_selection.NPP.html">NPP</a></li>
 <li class="toctree-l2"><a class="reference internal" href="mlquantify.model_selection.UPP.html">UPP</a></li>
 <li class="toctree-l2"><a class="reference internal" href="mlquantify.model_selection.PPP.html">PPP</a></li>
-<li class="toctree-l2"><a class="reference internal" href="mlquantify.model_selection.GridSearchQ.html">GridSearchQ</a></li>
 </ul>
 </details></li>
 <li class="toctree-l1 has-children"><a class="reference internal" href="../../api/mlquantify.multiclass.html">mlquantify.multiclass</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
 <li class="toctree-l2"><a class="reference internal" href="mlquantify.multiclass.define_binary.html">define_binary</a></li>
-<li class="toctree-l2"><a class="reference internal" href="mlquantify.multiclass._fit_ovr.html">_fit_ovr</a></li>
-<li class="toctree-l2"><a class="reference internal" href="mlquantify.multiclass._fit_ovo.html">_fit_ovo</a></li>
-<li class="toctree-l2"><a class="reference internal" href="mlquantify.multiclass._predict_ovr.html">_predict_ovr</a></li>
-<li class="toctree-l2"><a class="reference internal" href="mlquantify.multiclass._predict_ovo.html">_predict_ovo</a></li>
-<li class="toctree-l2"><a class="reference internal" href="mlquantify.multiclass._aggregate_ovr.html">_aggregate_ovr</a></li>
-<li class="toctree-l2"><a class="reference internal" href="mlquantify.multiclass._aggregate_ovo.html">_aggregate_ovo</a></li>
 <li class="toctree-l2"><a class="reference internal" href="mlquantify.multiclass.BinaryQuantifier.html">BinaryQuantifier</a></li>
 </ul>
 </details></li>
@@ -508,7 +500,14 @@ prevalence predictions, improving uncertainty quantification.</p>
 </table>
 </div>
 <p class="rubric">Examples</p>
-<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">agg_boot</span> <span class="o">=</span> <span class="n">AggregativeBootstrap</span><span class="p">(</span><span class="n">quantifier</span><span class="o">=</span><span class="n">SomeQuantifier</span><span class="p">,</span> <span class="n">n_train_bootstraps</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> <span class="n">n_test_bootstraps</span><span class="o">=</span><span class="mi">100</span><span class="p">)</span>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span><span class="w"> </span><span class="nn">mlquantify.ensemble</span><span class="w"> </span><span class="kn">import</span> <span class="n">AggregativeBootstrap</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span><span class="w"> </span><span class="nn">mlquantify.neighbors</span><span class="w"> </span><span class="kn">import</span> <span class="n">EMQ</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span><span class="w"> </span><span class="nn">sklearn.ensemble</span><span class="w"> </span><span class="kn">import</span> <span class="n">RandomForestClassifier</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">agg_boot</span> <span class="o">=</span> <span class="n">AggregativeBootstrap</span><span class="p">(</span>
+<span class="gp">... </span>    <span class="n">quantifier</span><span class="o">=</span><span class="n">EMQ</span><span class="p">(</span><span class="n">RandomForestClassifier</span><span class="p">()),</span> 
+<span class="gp">... </span>    <span class="n">n_train_bootstraps</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> 
+<span class="gp">... </span>    <span class="n">n_test_bootstraps</span><span class="o">=</span><span class="mi">100</span>
+<span class="gp">... </span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">agg_boot</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">X_train</span><span class="p">,</span> <span class="n">y_train</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">prevalence</span><span class="p">,</span> <span class="n">conf_region</span> <span class="o">=</span> <span class="n">agg_boot</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">X_test</span><span class="p">)</span>
 </pre></div>
@@ -553,6 +552,12 @@ prevalence predictions, improving uncertainty quantification.</p>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><dl class="simple">
 <dt><strong>self</strong><span class="classifier">AggregativeBootstrap</span></dt><dd><p>The fitted aggregative bootstrap model.</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-odd">Raises<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt>ValueError</dt><dd><p>If the provided quantifier is not an aggregative quantifier.</p>
 </dd>
 </dl>
 </dd>

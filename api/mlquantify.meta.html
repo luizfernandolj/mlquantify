@@ -59,6 +59,7 @@
     <script src="../_static/clipboard.min.js?v=a7894cd8"></script>
     <script src="../_static/copybutton.js?v=f281be69"></script>
     <script src="../_static/design-tabs.js?v=f930bc37"></script>
+    <script async="async" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
     <script>DOCUMENTATION_OPTIONS.pagename = 'api/mlquantify.meta';</script>
     <link rel="canonical" href="https://luizfernandolj.github.io/mlquantify/api/mlquantify.meta.html" />
     <link rel="author" title="About these documents" href="../about.html" />
@@ -310,8 +311,6 @@
   <div class="bd-toc-item navbar-nav"><ul class="current nav bd-sidenav">
 <li class="toctree-l1"><a class="reference internal" href="mlquantify.html">mlquantify</a></li>
 <li class="toctree-l1 has-children"><a class="reference internal" href="mlquantify.adjust_counting.html">mlquantify.adjust_counting</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
-<li class="toctree-l2"><a class="reference internal" href="../modules/generated/mlquantify.adjust_counting.ThresholdAdjustment.html">ThresholdAdjustment</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../modules/generated/mlquantify.adjust_counting.MatrixAdjustment.html">MatrixAdjustment</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../modules/generated/mlquantify.adjust_counting.FM.html">FM</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../modules/generated/mlquantify.adjust_counting.GAC.html">GAC</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../modules/generated/mlquantify.adjust_counting.GPAC.html">GPAC</a></li>
@@ -380,22 +379,16 @@
 </ul>
 </details></li>
 <li class="toctree-l1 has-children"><a class="reference internal" href="mlquantify.model_selection.html">mlquantify.model_selection</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../modules/generated/mlquantify.model_selection.GridSearchQ.html">GridSearchQ</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../modules/generated/mlquantify.model_selection.BaseProtocol.html">BaseProtocol</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../modules/generated/mlquantify.model_selection.APP.html">APP</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../modules/generated/mlquantify.model_selection.NPP.html">NPP</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../modules/generated/mlquantify.model_selection.UPP.html">UPP</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../modules/generated/mlquantify.model_selection.PPP.html">PPP</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../modules/generated/mlquantify.model_selection.GridSearchQ.html">GridSearchQ</a></li>
 </ul>
 </details></li>
 <li class="toctree-l1 has-children"><a class="reference internal" href="mlquantify.multiclass.html">mlquantify.multiclass</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
 <li class="toctree-l2"><a class="reference internal" href="../modules/generated/mlquantify.multiclass.define_binary.html">define_binary</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../modules/generated/mlquantify.multiclass._fit_ovr.html">_fit_ovr</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../modules/generated/mlquantify.multiclass._fit_ovo.html">_fit_ovo</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../modules/generated/mlquantify.multiclass._predict_ovr.html">_predict_ovr</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../modules/generated/mlquantify.multiclass._predict_ovo.html">_predict_ovo</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../modules/generated/mlquantify.multiclass._aggregate_ovr.html">_aggregate_ovr</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../modules/generated/mlquantify.multiclass._aggregate_ovo.html">_aggregate_ovo</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../modules/generated/mlquantify.multiclass.BinaryQuantifier.html">BinaryQuantifier</a></li>
 </ul>
 </details></li>
@@ -469,7 +462,7 @@
 <td><p>Ensemble-based Quantifier combining multiple models trained on varied data samples  with controlled prevalence distributions to improve robustness and accuracy.</p></td>
 </tr>
 <tr class="row-even"><td><p><a class="reference internal" href="../modules/generated/mlquantify.meta.QuaDapt.html#mlquantify.meta.QuaDapt" title="mlquantify.meta.QuaDapt"><code class="xref py py-obj docutils literal notranslate"><span class="pre">QuaDapt</span></code></a></p></td>
-<td><p>QuaDapt Metaquantifier: Adaptive quantification using score merging and distance measures.</p></td>
+<td><p>QuaDapt Metaquantifier: Adaptive quantification using synthetic scores.</p></td>
 </tr>
 <tr class="row-odd"><td><p><a class="reference internal" href="../modules/generated/mlquantify.meta.AggregativeBootstrap.html#mlquantify.meta.AggregativeBootstrap" title="mlquantify.meta.AggregativeBootstrap"><code class="xref py py-obj docutils literal notranslate"><span class="pre">AggregativeBootstrap</span></code></a></p></td>
 <td><p>Aggregative Bootstrap Quantifier to compute prevalence confidence regions.</p></td>

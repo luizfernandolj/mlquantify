@@ -312,8 +312,6 @@
   <div class="bd-toc-item navbar-nav"><ul class="current nav bd-sidenav">
 <li class="toctree-l1"><a class="reference internal" href="../../api/mlquantify.html">mlquantify</a></li>
 <li class="toctree-l1 current active has-children"><a class="reference internal" href="../../api/mlquantify.adjust_counting.html">mlquantify.adjust_counting</a><details open="open"><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul class="current">
-<li class="toctree-l2"><a class="reference internal" href="mlquantify.adjust_counting.ThresholdAdjustment.html">ThresholdAdjustment</a></li>
-<li class="toctree-l2"><a class="reference internal" href="mlquantify.adjust_counting.MatrixAdjustment.html">MatrixAdjustment</a></li>
 <li class="toctree-l2"><a class="reference internal" href="mlquantify.adjust_counting.FM.html">FM</a></li>
 <li class="toctree-l2 current active"><a class="current reference internal" href="#">GAC</a></li>
 <li class="toctree-l2"><a class="reference internal" href="mlquantify.adjust_counting.GPAC.html">GPAC</a></li>
@@ -382,22 +380,16 @@
 </ul>
 </details></li>
 <li class="toctree-l1 has-children"><a class="reference internal" href="../../api/mlquantify.model_selection.html">mlquantify.model_selection</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="mlquantify.model_selection.GridSearchQ.html">GridSearchQ</a></li>
 <li class="toctree-l2"><a class="reference internal" href="mlquantify.model_selection.BaseProtocol.html">BaseProtocol</a></li>
 <li class="toctree-l2"><a class="reference internal" href="mlquantify.model_selection.APP.html">APP</a></li>
 <li class="toctree-l2"><a class="reference internal" href="mlquantify.model_selection.NPP.html">NPP</a></li>
 <li class="toctree-l2"><a class="reference internal" href="mlquantify.model_selection.UPP.html">UPP</a></li>
 <li class="toctree-l2"><a class="reference internal" href="mlquantify.model_selection.PPP.html">PPP</a></li>
-<li class="toctree-l2"><a class="reference internal" href="mlquantify.model_selection.GridSearchQ.html">GridSearchQ</a></li>
 </ul>
 </details></li>
 <li class="toctree-l1 has-children"><a class="reference internal" href="../../api/mlquantify.multiclass.html">mlquantify.multiclass</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
 <li class="toctree-l2"><a class="reference internal" href="mlquantify.multiclass.define_binary.html">define_binary</a></li>
-<li class="toctree-l2"><a class="reference internal" href="mlquantify.multiclass._fit_ovr.html">_fit_ovr</a></li>
-<li class="toctree-l2"><a class="reference internal" href="mlquantify.multiclass._fit_ovo.html">_fit_ovo</a></li>
-<li class="toctree-l2"><a class="reference internal" href="mlquantify.multiclass._predict_ovr.html">_predict_ovr</a></li>
-<li class="toctree-l2"><a class="reference internal" href="mlquantify.multiclass._predict_ovo.html">_predict_ovo</a></li>
-<li class="toctree-l2"><a class="reference internal" href="mlquantify.multiclass._aggregate_ovr.html">_aggregate_ovr</a></li>
-<li class="toctree-l2"><a class="reference internal" href="mlquantify.multiclass._aggregate_ovo.html">_aggregate_ovo</a></li>
 <li class="toctree-l2"><a class="reference internal" href="mlquantify.multiclass.BinaryQuantifier.html">BinaryQuantifier</a></li>
 </ul>
 </details></li>
@@ -468,13 +460,19 @@
 <h1>GAC<a class="headerlink" href="#gac" title="Link to this heading">#</a></h1>
 <dl class="py class">
 <dt class="sig sig-object py" id="mlquantify.adjust_counting.GAC">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">mlquantify.adjust_counting.</span></span><span class="sig-name descname"><span class="pre">GAC</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">learner</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">solver</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'linear'</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/luizfernandolj/mlquantify/tree/master/mlquantify/adjust_counting.py"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mlquantify.adjust_counting.GAC" title="Link to this definition">#</a></dt>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">mlquantify.adjust_counting.</span></span><span class="sig-name descname"><span class="pre">GAC</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">learner</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/luizfernandolj/mlquantify/tree/master/mlquantify/adjust_counting.py"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mlquantify.adjust_counting.GAC" title="Link to this definition">#</a></dt>
 <dd><p>Generalized Adjusted Count method.</p>
 <p>This class implements the Generalized Adjusted Count (GAC) algorithm for
 quantification adjustment as described in Firat (2016) <a class="reference internal" href="#rc74f7b7a867b-1" id="id1">[1]</a>. The method
 adjusts the estimated class prevalences by normalizing the confusion matrix
 based on prevalence estimates, providing a correction for bias caused by 
 distribution differences between training and test data.</p>
+<p>The confusion matrix is normalized by dividing each column by the prevalence 
+estimate of the corresponding class. For classes with zero estimated prevalence, 
+the diagonal element is set to 1 to avoid division by zero.</p>
+<p>This normalization ensures that the matrix best reflects the classifier’s
+behavior relative to the estimated class distributions, improving quantification
+accuracy.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><dl class="simple">
@@ -491,13 +489,6 @@ distribution differences between training and test data.</p>
 </dl>
 </dd>
 </dl>
-<p class="rubric">Notes</p>
-<p>The confusion matrix is normalized by dividing each column by the prevalence 
-estimate of the corresponding class. For classes with zero estimated prevalence, 
-the diagonal element is set to 1 to avoid division by zero.</p>
-<p>This normalization ensures that the matrix best reflects the classifier’s
-behavior relative to the estimated class distributions, improving quantification
-accuracy.</p>
 <p class="rubric">References</p>
 <div role="list" class="citation-list">
 <div class="citation" id="rc74f7b7a867b-1" role="doc-biblioentry">

@@ -61,7 +61,7 @@
     <link rel="canonical" href="https://luizfernandolj.github.io/mlquantify/api/mlquantify.model_selection.html" />
     <link rel="author" title="About these documents" href="../about.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="BaseProtocol" href="../modules/generated/mlquantify.model_selection.BaseProtocol.html" />
+    <link rel="next" title="GridSearchQ" href="../modules/generated/mlquantify.model_selection.GridSearchQ.html" />
     <link rel="prev" title="HDx" href="../modules/generated/mlquantify.mixture.HDx.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
@@ -308,8 +308,6 @@
   <div class="bd-toc-item navbar-nav"><ul class="current nav bd-sidenav">
 <li class="toctree-l1"><a class="reference internal" href="mlquantify.html">mlquantify</a></li>
 <li class="toctree-l1 has-children"><a class="reference internal" href="mlquantify.adjust_counting.html">mlquantify.adjust_counting</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
-<li class="toctree-l2"><a class="reference internal" href="../modules/generated/mlquantify.adjust_counting.ThresholdAdjustment.html">ThresholdAdjustment</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../modules/generated/mlquantify.adjust_counting.MatrixAdjustment.html">MatrixAdjustment</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../modules/generated/mlquantify.adjust_counting.FM.html">FM</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../modules/generated/mlquantify.adjust_counting.GAC.html">GAC</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../modules/generated/mlquantify.adjust_counting.GPAC.html">GPAC</a></li>
@@ -378,22 +376,16 @@
 </ul>
 </details></li>
 <li class="toctree-l1 current active has-children"><a class="current reference internal" href="#">mlquantify.model_selection</a><details open="open"><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../modules/generated/mlquantify.model_selection.GridSearchQ.html">GridSearchQ</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../modules/generated/mlquantify.model_selection.BaseProtocol.html">BaseProtocol</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../modules/generated/mlquantify.model_selection.APP.html">APP</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../modules/generated/mlquantify.model_selection.NPP.html">NPP</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../modules/generated/mlquantify.model_selection.UPP.html">UPP</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../modules/generated/mlquantify.model_selection.PPP.html">PPP</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../modules/generated/mlquantify.model_selection.GridSearchQ.html">GridSearchQ</a></li>
 </ul>
 </details></li>
 <li class="toctree-l1 has-children"><a class="reference internal" href="mlquantify.multiclass.html">mlquantify.multiclass</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
 <li class="toctree-l2"><a class="reference internal" href="../modules/generated/mlquantify.multiclass.define_binary.html">define_binary</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../modules/generated/mlquantify.multiclass._fit_ovr.html">_fit_ovr</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../modules/generated/mlquantify.multiclass._fit_ovo.html">_fit_ovo</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../modules/generated/mlquantify.multiclass._predict_ovr.html">_predict_ovr</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../modules/generated/mlquantify.multiclass._predict_ovo.html">_predict_ovo</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../modules/generated/mlquantify.multiclass._aggregate_ovr.html">_aggregate_ovr</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../modules/generated/mlquantify.multiclass._aggregate_ovo.html">_aggregate_ovo</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../modules/generated/mlquantify.multiclass.BinaryQuantifier.html">BinaryQuantifier</a></li>
 </ul>
 </details></li>
@@ -461,23 +453,23 @@
 <span id="mlquantify-model-selection"></span><span id="model-selection-ref"></span><h1>mlquantify.model_selection<a class="headerlink" href="#module-mlquantify.model_selection" title="Link to this heading">#</a></h1>
 <div class="pst-scrollable-table-container"><table class="autosummary longtable table autosummary">
 <tbody>
-<tr class="row-odd"><td><p><a class="reference internal" href="../modules/generated/mlquantify.model_selection.BaseProtocol.html#mlquantify.model_selection.BaseProtocol" title="mlquantify.model_selection.BaseProtocol"><code class="xref py py-obj docutils literal notranslate"><span class="pre">BaseProtocol</span></code></a></p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="../modules/generated/mlquantify.model_selection.GridSearchQ.html#mlquantify.model_selection.GridSearchQ" title="mlquantify.model_selection.GridSearchQ"><code class="xref py py-obj docutils literal notranslate"><span class="pre">GridSearchQ</span></code></a></p></td>
+<td><p>Grid Search for Quantifiers with evaluation protocols.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="../modules/generated/mlquantify.model_selection.BaseProtocol.html#mlquantify.model_selection.BaseProtocol" title="mlquantify.model_selection.BaseProtocol"><code class="xref py py-obj docutils literal notranslate"><span class="pre">BaseProtocol</span></code></a></p></td>
 <td><p>Base class for evaluation protocols.</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="../modules/generated/mlquantify.model_selection.APP.html#mlquantify.model_selection.APP" title="mlquantify.model_selection.APP"><code class="xref py py-obj docutils literal notranslate"><span class="pre">APP</span></code></a></p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="../modules/generated/mlquantify.model_selection.APP.html#mlquantify.model_selection.APP" title="mlquantify.model_selection.APP"><code class="xref py py-obj docutils literal notranslate"><span class="pre">APP</span></code></a></p></td>
 <td><p>Artificial Prevalence Protocol (APP) for exhaustive prevalent batch evaluation.</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="../modules/generated/mlquantify.model_selection.NPP.html#mlquantify.model_selection.NPP" title="mlquantify.model_selection.NPP"><code class="xref py py-obj docutils literal notranslate"><span class="pre">NPP</span></code></a></p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="../modules/generated/mlquantify.model_selection.NPP.html#mlquantify.model_selection.NPP" title="mlquantify.model_selection.NPP"><code class="xref py py-obj docutils literal notranslate"><span class="pre">NPP</span></code></a></p></td>
 <td><p>Natural Prevalence Protocol (NPP) that samples data without imposing prevalence constraints.</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="../modules/generated/mlquantify.model_selection.UPP.html#mlquantify.model_selection.UPP" title="mlquantify.model_selection.UPP"><code class="xref py py-obj docutils literal notranslate"><span class="pre">UPP</span></code></a></p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="../modules/generated/mlquantify.model_selection.UPP.html#mlquantify.model_selection.UPP" title="mlquantify.model_selection.UPP"><code class="xref py py-obj docutils literal notranslate"><span class="pre">UPP</span></code></a></p></td>
 <td><p>Uniform Prevalence Protocol (UPP) for uniform sampling of artificial prevalences.</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="../modules/generated/mlquantify.model_selection.PPP.html#mlquantify.model_selection.PPP" title="mlquantify.model_selection.PPP"><code class="xref py py-obj docutils literal notranslate"><span class="pre">PPP</span></code></a></p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="../modules/generated/mlquantify.model_selection.PPP.html#mlquantify.model_selection.PPP" title="mlquantify.model_selection.PPP"><code class="xref py py-obj docutils literal notranslate"><span class="pre">PPP</span></code></a></p></td>
 <td><p>Personalized Prevalence Protocol (PPP) for targeted prevalence batch generation.</p></td>
-</tr>
-<tr class="row-even"><td><p><a class="reference internal" href="../modules/generated/mlquantify.model_selection.GridSearchQ.html#mlquantify.model_selection.GridSearchQ" title="mlquantify.model_selection.GridSearchQ"><code class="xref py py-obj docutils literal notranslate"><span class="pre">GridSearchQ</span></code></a></p></td>
-<td><p>Grid Search for Quantifiers with evaluation protocols.</p></td>
 </tr>
 </tbody>
 </table>
@@ -504,11 +496,11 @@
       </div>
     </a>
     <a class="right-next"
-       href="../modules/generated/mlquantify.model_selection.BaseProtocol.html"
+       href="../modules/generated/mlquantify.model_selection.GridSearchQ.html"
        title="next page">
       <div class="prev-next-info">
         <p class="prev-next-subtitle">next</p>
-        <p class="prev-next-title">BaseProtocol</p>
+        <p class="prev-next-title">GridSearchQ</p>
       </div>
       <i class="fa-solid fa-angle-right"></i>
     </a>

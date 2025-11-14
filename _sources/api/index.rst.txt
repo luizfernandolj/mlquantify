@@ -47,38 +47,6 @@ reference on concepts repeated across the API, see :ref:`glossary`.
 
 
 
-  * - :obj:`~mlquantify.adjust_counting.ThresholdAdjustment`
-
-    - .. div:: sk-apisearch-desc
-
-        .. currentmodule:: mlquantify.adjust_counting
-
-        .. autoshortsummary:: mlquantify.adjust_counting.ThresholdAdjustment
-
-        .. div:: caption
-
-          :mod:`mlquantify.adjust_counting`
-
-
-
-
-
-  * - :obj:`~mlquantify.adjust_counting.MatrixAdjustment`
-
-    - .. div:: sk-apisearch-desc
-
-        .. currentmodule:: mlquantify.adjust_counting
-
-        .. autoshortsummary:: mlquantify.adjust_counting.MatrixAdjustment
-
-        .. div:: caption
-
-          :mod:`mlquantify.adjust_counting`
-
-
-
-
-
   * - :obj:`~mlquantify.adjust_counting.FM`
 
     - .. div:: sk-apisearch-desc
@@ -815,6 +783,22 @@ reference on concepts repeated across the API, see :ref:`glossary`.
 
 
 
+  * - :obj:`~mlquantify.model_selection.GridSearchQ`
+
+    - .. div:: sk-apisearch-desc
+
+        .. currentmodule:: mlquantify.model_selection
+
+        .. autoshortsummary:: mlquantify.model_selection.GridSearchQ
+
+        .. div:: caption
+
+          :mod:`mlquantify.model_selection`
+
+
+
+
+
   * - :obj:`~mlquantify.model_selection.BaseProtocol`
 
     - .. div:: sk-apisearch-desc
@@ -895,22 +879,6 @@ reference on concepts repeated across the API, see :ref:`glossary`.
 
 
 
-  * - :obj:`~mlquantify.model_selection.GridSearchQ`
-
-    - .. div:: sk-apisearch-desc
-
-        .. currentmodule:: mlquantify.model_selection
-
-        .. autoshortsummary:: mlquantify.model_selection.GridSearchQ
-
-        .. div:: caption
-
-          :mod:`mlquantify.model_selection`
-
-
-
-
-
 
 
 
@@ -922,102 +890,6 @@ reference on concepts repeated across the API, see :ref:`glossary`.
         .. currentmodule:: mlquantify.multiclass
 
         .. autoshortsummary:: mlquantify.multiclass.define_binary
-
-        .. div:: caption
-
-          :mod:`mlquantify.multiclass`
-
-
-
-
-
-  * - :obj:`~mlquantify.multiclass._fit_ovr`
-
-    - .. div:: sk-apisearch-desc
-
-        .. currentmodule:: mlquantify.multiclass
-
-        .. autoshortsummary:: mlquantify.multiclass._fit_ovr
-
-        .. div:: caption
-
-          :mod:`mlquantify.multiclass`
-
-
-
-
-
-  * - :obj:`~mlquantify.multiclass._fit_ovo`
-
-    - .. div:: sk-apisearch-desc
-
-        .. currentmodule:: mlquantify.multiclass
-
-        .. autoshortsummary:: mlquantify.multiclass._fit_ovo
-
-        .. div:: caption
-
-          :mod:`mlquantify.multiclass`
-
-
-
-
-
-  * - :obj:`~mlquantify.multiclass._predict_ovr`
-
-    - .. div:: sk-apisearch-desc
-
-        .. currentmodule:: mlquantify.multiclass
-
-        .. autoshortsummary:: mlquantify.multiclass._predict_ovr
-
-        .. div:: caption
-
-          :mod:`mlquantify.multiclass`
-
-
-
-
-
-  * - :obj:`~mlquantify.multiclass._predict_ovo`
-
-    - .. div:: sk-apisearch-desc
-
-        .. currentmodule:: mlquantify.multiclass
-
-        .. autoshortsummary:: mlquantify.multiclass._predict_ovo
-
-        .. div:: caption
-
-          :mod:`mlquantify.multiclass`
-
-
-
-
-
-  * - :obj:`~mlquantify.multiclass._aggregate_ovr`
-
-    - .. div:: sk-apisearch-desc
-
-        .. currentmodule:: mlquantify.multiclass
-
-        .. autoshortsummary:: mlquantify.multiclass._aggregate_ovr
-
-        .. div:: caption
-
-          :mod:`mlquantify.multiclass`
-
-
-
-
-
-  * - :obj:`~mlquantify.multiclass._aggregate_ovo`
-
-    - .. div:: sk-apisearch-desc
-
-        .. currentmodule:: mlquantify.multiclass
-
-        .. autoshortsummary:: mlquantify.multiclass._aggregate_ovo
 
         .. div:: caption
 
