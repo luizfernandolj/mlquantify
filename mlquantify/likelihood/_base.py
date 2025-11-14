@@ -14,100 +14,86 @@ from mlquantify.utils._validation import check_classes_attribute, validate_predi
 
 
 class BaseIterativeLikelihood(AggregationMixin, BaseQuantifier):
-    """
-    Iterative, likelihood-based quantification via EM adjustment.
-    
-    This is the base class for quantification methods that estimate class prevalences
-    by solving the maximum likelihood problem under prior probability shift, using
-    iterative procedures such as the EM (Expectation-Maximization) algorithm 
-    [1], [2].
-    
-    These methods repeatedly adjust the estimated class prevalences for a test set
-    by maximizing the likelihood of observed classifier outputs (posterior probabilities),
-    under the assumption that the within-class conditional distributions remain fixed
+    r"""Iterative likelihood-based quantification adjustment methods.
+
+    This base class encompasses quantification approaches that estimate class prevalences 
+    by maximizing the likelihood of observed data, adjusting prevalence estimates on test 
+    sets under the assumption of prior probability shift.
+
+    These methods iteratively refine estimates of class prevalences by maximizing the 
+    likelihood of classifier outputs, usually the posterior probabilities provided by 
+    a trained model, assuming that the class-conditional distributions remain fixed 
     between training and test domains.
-    
+
     Mathematical formulation
     ------------------------
     Let:
-    - \( p_k^t \) denote the prior probability for class \( k \) in the training set (\( \sum_k p_k^t = 1 \)),
-    - \( s_k(x) \) be the classifier's posterior probability estimate (for class \( k \), given instance \( x \), fitted on training set),
-    - \( p_k \) be the (unknown) prior for the test set,
-    - \( x_1, \dots, x_N \) the unlabeled test set instances.
 
-    The procedure iteratively estimates \( p_k \) by maximizing the observed data likelihood
+    - :math:`p_k^t` be the prior probabilities for class \(k\) in the training set, satisfying \( \sum_k p_k^t = 1 \),
+    - :math:`s_k(x)` be the posterior probability estimate from the classifier for class \(k\) given instance \(x\),
+    - :math:`p_k` be the unknown prior probabilities for class \(k\) in the test set,
+    - \( x_1, \dots, x_N \) be unlabeled test set instances.
 
-    \[
-    L = \prod_{i=1}^N \sum_{k=1}^K s_k(x_i) \frac{p_k}{p_k^t}
-    \]
-    
-    The E-step updates soft memberships:
+    The likelihood of the observed data is:
 
-    \[
-    w_{ik}^{(t)} = \frac{s_k(x_i) \cdot (p_k^{(t-1)} / p_k^t)}{\sum_{j=1}^K s_j(x_i) \cdot (p_j^{(t-1)} / p_j^t)}
-    \]
-    and the M-step re-estimates prevalences:
+    .. math::
 
-    \[
-    p_k^{(t)} = \frac{1}{N} \sum_{i=1}^N w_{ik}^{(t)}
-    \]
-    See also [1].
+        L = \prod_{i=1}^N \sum_{k=1}^K s_k(x_i) \frac{p_k}{p_k^t}
+
+    Methods in this class seek a solution that maximizes this likelihood via iterative methods.
 
     Notes
     -----
-    - Defined for multiclass and binary quantification (single-label), as long as the classifier provides well-calibrated posterior probabilities.
-    - Assumes prior probability shift only.
-    - Converges to a (local) maximum of the data likelihood.
-    - The algorithm is Fisher-consistent under prior probability shift [2].
-    - Closely related to the Expectation-Maximization (EM) algorithm for mixture models.
+    - Applicable to binary and multiclass problems as long as the classifier provides calibrated posterior probabilities.
+    - Assumes changes only in prior probabilities (prior probability shift).
+    - Algorithms converge to local maxima of the likelihood function.
+    - Includes methods such as Class Distribution Estimation (CDE), Maximum Likelihood Prevalence Estimation (MLPE), and Expectation-Maximization (EM) based quantification.
 
     Parameters
     ----------
     learner : estimator, optional
-        Probabilistic classifier instance with `fit(X, y)` and `predict_proba(X)`.
+        Probabilistic classifier implementing the methods `fit(X, y)` and `predict_proba(X)`.
     tol : float, default=1e-4
-        Convergence tolerance for prevalence update.
+        Convergence tolerance for prevalence update criteria.
     max_iter : int, default=100
-        Maximum number of EM update iterations.
+        Maximum allowed number of iterations.
 
     Attributes
     ----------
     learner : estimator
-        Underlying classifier instance.
+        Underlying classification model.
     tol : float
-        Stopping tolerance for EM prevalence estimation.
+        Tolerance for stopping criterion.
     max_iter : int
-        Maximum updates performed.
+        Maximum number of iterations.
     classes : ndarray of shape (n_classes,)
-        Unique class labels seen in training.
+        Unique classes observed during training.
     priors : ndarray of shape (n_classes,)
-        Class distribution of the training set.
+        Class distribution in the training set.
     y_train : array-like
-        Training labels (used for estimating priors and confusion matrix if needed).
+        Training labels used to estimate priors.
 
     Examples
     --------
     >>> import numpy as np
     >>> from sklearn.linear_model import LogisticRegression
-    >>> class MyEM(BaseIterativeLikelihood):
+    >>> class MyQuantifier(BaseIterativeLikelihood):
     ...     def _iterate(self, predictions, priors):
-    ...         # EM iteration logic here
+    ...         # Implementation of iterative update logic
     ...         pass
     >>> X = np.random.randn(200, 8)
     >>> y = np.random.randint(0, 3, size=(200,))
-    >>> q = MyEM(learner=LogisticRegression(max_iter=200))
+    >>> q = MyQuantifier(learner=LogisticRegression(max_iter=200))
     >>> q.fit(X, y)
     >>> q.predict(X)
     {0: 0.32, 1: 0.40, 2: 0.28}
 
     References
     ----------
-    [1] Saerens, M., Latinne, P., & Decaestecker, C. (2002). *Adjusting the Outputs of a Classifier to New a Priori Probabilities: A Simple Procedure.* Neural Computation, 14(1), 2141-2156.
-    
-    [2] Esuli, A., Moreo, A., & Sebastiani, F. (2023). *Learning to Quantify.* The Information Retrieval Series 47, Springer. https://doi.org/10.1007/978-3-031-20467-8
+    .. [1] Saerens, M., Latinne, P., & Decaestecker, C. (2002). "Adjusting the Outputs of a Classifier to New a Priori Probabilities: A Simple Procedure." Neural Computation, 14(1), 2141-2156.
+
+    .. [2] Esuli, A., Moreo, A., & Sebastiani, F. (2023). "Learning to Quantify." The Information Retrieval Series 47, Springer. https://doi.org/10.1007/978-3-031-20467-8
     """
-
-
 
     @abstractmethod
     def __init__(self, 

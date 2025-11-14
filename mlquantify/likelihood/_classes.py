@@ -10,46 +10,61 @@ from mlquantify.utils._constraints import (
 )
 
 class EMQ(SoftLearnerQMixin, BaseIterativeLikelihood):
-    """Expectation-Maximization Quantifier.
-    
-    Implements iterative quantification using an EM algorithm to adjust class
-    prevalences under prior probability shift, assimilating posterior probabilities
-    (soft predictions) from a probabilistic classifier.
-    
-    The EM procedure alternates between estimating posterior memberships of test
-    instances (E-step) and re-estimating class prevalences (M-step), iterating until
-    convergence (tolerance or max iterations) on prevalence change measured by a
-    user-defined criteria (default: Mean Absolute Error, MAE).
-    
-    Supports optional calibration of predicted posteriors before iteration.
-    
+    r"""Expectation-Maximization Quantifier (EMQ).
+
+    Estimates class prevalences under prior probability shift by alternating 
+    between expectation (E) and maximization (M) steps on posterior probabilities. 
+
+    E-step:
+    ::
+        p_i^{(s+1)}(x) = \frac{q_i^{(s)} p_i(x)}{\sum_j q_j^{(s)} p_j(x)}
+
+    M-step:
+    ::
+        q_i^{(s+1)} = \frac{1}{N} \sum_{n=1}^N p_i^{(s+1)}(x_n)
+
+    where 
+    - \(p_i(x)\) are posterior probabilities predicted by the classifier
+    - \(q_i^{(s)}\) are class prevalence estimates at iteration \(s\)
+    - \(N\) is the number of test instances.
+
+    Calibrations supported on posterior probabilities before EM iteration:
+
+    Temperature Scaling (TS):
+    ::
+        \hat{p} = \text{softmax}\left(\frac{\log(p)}{T}\right)
+
+    Bias-Corrected Temperature Scaling (BCTS):
+    ::
+        \hat{p} = \text{softmax}\left(\frac{\log(p)}{T} + b\right)
+
+    Vector Scaling (VS):
+    ::
+        \hat{p}_i = \text{softmax}(W_i \cdot \log(p_i) + b_i)
+
+    No-Bias Vector Scaling (NBVS):
+    ::
+        \hat{p}_i = \text{softmax}(W_i \cdot \log(p_i))
+
     Parameters
     ----------
     learner : estimator, optional
-        Probabilistic classifier fit on training data with `predict_proba`.
+        Probabilistic classifier supporting predict_proba.
     tol : float, default=1e-4
-        Convergence threshold for EM iterative updates.
+        Convergence threshold.
     max_iter : int, default=100
-        Maximum number of EM iterations.
+        Maximum EM iterations.
     calib_function : str or callable, optional
-        Calibration method applied to posterior probabilities.
-        Supported strings: 'bcts', 'ts', 'vs', 'nbvs'.
+        Calibration method: 'bcts', 'ts', 'vs', 'nbvs'.
     criteria : callable, default=MAE
-        Function to measure convergence between prevalence estimates.
-        
-    Methods
-    -------
-    _iterate(predictions, priors)
-        Executes EM iterations to estimate prevalences from posterior probabilities.
-    EM(posteriors, priors, tolerance, max_iter, criteria)
-        Static method implementing the EM loop with E-step and M-step.
-    _apply_calibration(predictions)
-        Applies optional calibration method to posterior predictions.
-    
+        Convergence metric.
+
     References
     ----------
-    [1] Saerens et al. (2002). Adjusting the Outputs of a Classifier to New a Priori Probabilities. Neural Computation, 14(1), 2141-2156.
-    [2] Esuli et al. (2023). Learning to Quantify. Springer.
+    .. [1] Saerens, M., Latinne, P., & Decaestecker, C. (2002).
+        Adjusting the Outputs of a Classifier to New a Priori Probabilities.
+        Neural Computation, 14(1), 2141-2156.
+    .. [2] Esuli, A., Moreo, A., & Sebastiani, F. (2023). Learning to Quantify. Springer.
     """
 
     _parameter_constraints = {
@@ -72,8 +87,7 @@ class EMQ(SoftLearnerQMixin, BaseIterativeLikelihood):
         self.criteria = criteria
         
     def _iterate(self, predictions, priors):
-        """
-        Perform EM quantification iteration.
+        r"""Perform EM quantification iteration.
         
         Steps:
         - Calibrate posterior predictions if calibration function specified.
@@ -104,8 +118,7 @@ class EMQ(SoftLearnerQMixin, BaseIterativeLikelihood):
 
     @classmethod
     def EM(cls, posteriors, priors, tolerance=1e-6, max_iter=100, criteria=MAE):
-        """
-        Static method implementing the EM algorithm for quantification.
+        r"""Static method implementing the EM algorithm for quantification.
 
         Parameters
         ----------
@@ -162,8 +175,7 @@ class EMQ(SoftLearnerQMixin, BaseIterativeLikelihood):
 
 
     def _apply_calibration(self, predictions):
-        """
-        Calibrate posterior predictions with specified calibration method.
+        r"""Calibrate posterior predictions with specified calibration method.
         
         Parameters
         ----------
@@ -242,18 +254,18 @@ class EMQ(SoftLearnerQMixin, BaseIterativeLikelihood):
 
 
 class MLPE(SoftLearnerQMixin, BaseIterativeLikelihood):
-    """
-    Maximum Likelihood Prevalence Estimation (MLPE) quantifier.
-    
-    A simple iterative likelihood quantification method that returns the
-    training priors as the estimated prevalences, effectively skipping iteration.
-    
-    This method assumes no prior probability shift between training and test.
-    
+    r"""Maximum Likelihood Prevalence Estimation (MLPE).
+
+    Returns training priors as prevalence estimates without adaptations.
+
     Parameters
     ----------
     learner : estimator, optional
-        Base classifier for possible extension/fitting.
+        Base classifier.
+
+    References
+    ----------
+    .. [2] Esuli, A., Moreo, A., & Sebastiani, F. (2023). Learning to Quantify. Springer.
     """
 
     def __init__(self, learner=None):
@@ -278,38 +290,38 @@ class MLPE(SoftLearnerQMixin, BaseIterativeLikelihood):
     
 @define_binary
 class CDE(SoftLearnerQMixin, BaseIterativeLikelihood):
-    """
-    CDE-Iterate (Class Distribution Estimation Iterate) for binary classification.
-    
-    This method iteratively estimates class prevalences under prior probability shift
-    by updating the false positive cost in a cost-sensitive classification framework,
-    using a thresholding strategy based on posterior probabilities.
-    
-    The procedure:
-    - Calculates a threshold from false-positive (cFP) and false-negative (cFN) costs.
-    - Assigns hard positive predictions where posterior probability exceeds threshold.
-    - Estimates the prevalence via classify-and-count on thresholded predictions.
-    - Updates false positive cost according to prevalence estimates and training priors.
-    - Iterates until prevalence estimates converge or max iterations reached.
-    
-    This implementation adopts the transductive thresholding variant described in 
-    Esuli et al. (2023), rather than retraining a cost-sensitive classifier as in 
-    Xue & Weiss (2009).
-    
+    r"""CDE-Iterate for binary classification prevalence estimation.
+
+    Threshold \(\tau\) from false positive and false negative costs:
+    ::
+        \tau = \frac{c_{FP}}{c_{FP} + c_{FN}}
+
+    Hard classification by thresholding posterior probability \(p(+|x)\) at \(\tau\):
+    ::
+        \hat{y}(x) = \mathbf{1}_{p(+|x) > \tau}
+
+    Prevalence estimation via classify-and-count:
+    ::
+        \hat{p}_U(+) = \frac{1}{N} \sum_{n=1}^N \hat{y}(x_n)
+
+    False positive cost update:
+    ::
+        c_{FP}^{new} = \frac{p_L(+)}{p_L(-)} \times \frac{\hat{p}_U(-)}{\hat{p}_U(+)} \times c_{FN}
+
     Parameters
     ----------
     learner : estimator, optional
-        Wrapped classifier (unused here but part of base interface).
+        Wrapped classifier (unused).
     tol : float, default=1e-4
-        Absolute tolerance for convergence of estimated prevalences.
+        Convergence tolerance.
     max_iter : int, default=100
-        Max number of iterations allowed.
+        Max iterations.
     init_cfp : float, default=1.0
-        Initial false positive cost coefficient.
-    
+        Initial false positive cost.
+
     References
     ----------
-    [2] Esuli, A., Moreo, A., & Sebastiani, F. (2023). Learning to Quantify. Springer.
+    .. [1] Esuli, A., Moreo, A., & Sebastiani, F. (2023). Learning to Quantify. Springer.
     """
 
     _parameter_constraints = {
@@ -323,8 +335,7 @@ class CDE(SoftLearnerQMixin, BaseIterativeLikelihood):
         self.init_cfp = float(init_cfp)
 
     def _iterate(self, predictions, priors):
-        """
-        Iteratively estimate prevalences via cost-sensitive thresholding.
+        r"""Iteratively estimate prevalences via cost-sensitive thresholding.
 
         Parameters
         ----------
