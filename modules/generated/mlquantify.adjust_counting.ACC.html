@@ -57,6 +57,7 @@
     <script src="../../_static/clipboard.min.js?v=a7894cd8"></script>
     <script src="../../_static/copybutton.js?v=f281be69"></script>
     <script src="../../_static/design-tabs.js?v=f930bc37"></script>
+    <script async="async" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
     <script>DOCUMENTATION_OPTIONS.pagename = 'modules/generated/mlquantify.adjust_counting.ACC';</script>
     <link rel="canonical" href="https://luizfernandolj.github.io/mlquantify/modules/generated/mlquantify.adjust_counting.ACC.html" />
     <link rel="author" title="About these documents" href="../../about.html" />
@@ -470,6 +471,21 @@
 <dt class="sig sig-object py" id="mlquantify.adjust_counting.ACC">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">mlquantify.adjust_counting.</span></span><span class="sig-name descname"><span class="pre">ACC</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">learner</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">threshold</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.5</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">strategy</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'ovr'</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/luizfernandolj/mlquantify/tree/master/mlquantify/adjust_counting.py"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mlquantify.adjust_counting.ACC" title="Link to this definition">#</a></dt>
 <dd><p>Adjusted Count (ACC) — baseline threshold correction.</p>
+<p>This method corrects the bias in class prevalence estimates caused by imperfect 
+classification accuracy, by adjusting the observed positive count using estimates 
+of the classifier’s true positive rate (TPR) and false positive rate (FPR).</p>
+<p>It uses a fixed classification threshold and applies the formula:</p>
+<div class="math notranslate nohighlight">
+\[p = \frac{p' - \text{FPR}}{\text{TPR} - \text{FPR}}\]</div>
+<p>where <span class="math notranslate nohighlight">\(p'\)</span> is the observed positive proportion from the classifier.</p>
+<p class="rubric">References</p>
+<div role="list" class="citation-list">
+<div class="citation" id="r620d00c613d7-1" role="doc-biblioentry">
+<span class="label"><span class="fn-bracket">[</span>1<span class="fn-bracket">]</span></span>
+<p>Forman, G. (2005). “Counting Positives Accurately Despite Inaccurate Classification”,
+<em>ECML</em>, pp. 564-575.</p>
+</div>
+</div>
 <dl class="py method">
 <dt class="sig sig-object py" id="mlquantify.adjust_counting.ACC.aggregate">
 <span class="sig-name descname"><span class="pre">aggregate</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/luizfernandolj/mlquantify/tree/master/mlquantify/adjust_counting.py"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mlquantify.adjust_counting.ACC.aggregate" title="Link to this definition">#</a></dt>

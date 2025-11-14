@@ -59,6 +59,7 @@
     <script src="../_static/clipboard.min.js?v=a7894cd8"></script>
     <script src="../_static/copybutton.js?v=f281be69"></script>
     <script src="../_static/design-tabs.js?v=f930bc37"></script>
+    <script async="async" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
     <script>DOCUMENTATION_OPTIONS.pagename = 'api/mlquantify.adjust_counting';</script>
     <link rel="canonical" href="https://luizfernandolj.github.io/mlquantify/api/mlquantify.adjust_counting.html" />
     <link rel="author" title="About these documents" href="../about.html" />
@@ -466,37 +467,37 @@
 <div class="pst-scrollable-table-container"><table class="autosummary longtable table autosummary">
 <tbody>
 <tr class="row-odd"><td><p><a class="reference internal" href="../modules/generated/mlquantify.adjust_counting.ThresholdAdjustment.html#mlquantify.adjust_counting.ThresholdAdjustment" title="mlquantify.adjust_counting.ThresholdAdjustment"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ThresholdAdjustment</span></code></a></p></td>
-<td><p>Applies threshold-based adjustment methods for quantification.</p></td>
+<td><p>Base Class for Threshold-based adjustment methods for quantification.</p></td>
 </tr>
 <tr class="row-even"><td><p><a class="reference internal" href="../modules/generated/mlquantify.adjust_counting.MatrixAdjustment.html#mlquantify.adjust_counting.MatrixAdjustment" title="mlquantify.adjust_counting.MatrixAdjustment"><code class="xref py py-obj docutils literal notranslate"><span class="pre">MatrixAdjustment</span></code></a></p></td>
-<td><p>Base class for matrix-based quantification adjustments (FM, GAC, GPAC).</p></td>
+<td><p>Base class for matrix-based quantification adjustments.</p></td>
 </tr>
 <tr class="row-odd"><td><p><a class="reference internal" href="../modules/generated/mlquantify.adjust_counting.FM.html#mlquantify.adjust_counting.FM" title="mlquantify.adjust_counting.FM"><code class="xref py py-obj docutils literal notranslate"><span class="pre">FM</span></code></a></p></td>
-<td><p>Forman's Matrix Adjustment (FM) — solved via optimization.</p></td>
+<td><p>Friedman Method for quantification adjustment.</p></td>
 </tr>
 <tr class="row-even"><td><p><a class="reference internal" href="../modules/generated/mlquantify.adjust_counting.GAC.html#mlquantify.adjust_counting.GAC" title="mlquantify.adjust_counting.GAC"><code class="xref py py-obj docutils literal notranslate"><span class="pre">GAC</span></code></a></p></td>
-<td><p>Gonzalez-Castro’s Generalized Adjusted Count (GAC) method.</p></td>
+<td><p>Generalized Adjusted Count method.</p></td>
 </tr>
 <tr class="row-odd"><td><p><a class="reference internal" href="../modules/generated/mlquantify.adjust_counting.GPAC.html#mlquantify.adjust_counting.GPAC" title="mlquantify.adjust_counting.GPAC"><code class="xref py py-obj docutils literal notranslate"><span class="pre">GPAC</span></code></a></p></td>
-<td><p>Probabilistic GAC (GPAC) — soft version using posterior probabilities.</p></td>
+<td><p>Probabilistic Generalized Adjusted Count (GPAC) method.</p></td>
 </tr>
 <tr class="row-even"><td><p><a class="reference internal" href="../modules/generated/mlquantify.adjust_counting.ACC.html#mlquantify.adjust_counting.ACC" title="mlquantify.adjust_counting.ACC"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ACC</span></code></a></p></td>
 <td><p>Adjusted Count (ACC) — baseline threshold correction.</p></td>
 </tr>
 <tr class="row-odd"><td><p><a class="reference internal" href="../modules/generated/mlquantify.adjust_counting.X_method.html#mlquantify.adjust_counting.X_method" title="mlquantify.adjust_counting.X_method"><code class="xref py py-obj docutils literal notranslate"><span class="pre">X_method</span></code></a></p></td>
-<td><p>X method — threshold where ( text{TPR} + text{FPR} = 1 ).</p></td>
+<td><p>X method — threshold where <span class="math notranslate nohighlight">\(\text{TPR} + \text{FPR} = 1\)</span>.</p></td>
 </tr>
 <tr class="row-even"><td><p><a class="reference internal" href="../modules/generated/mlquantify.adjust_counting.MAX.html#mlquantify.adjust_counting.MAX" title="mlquantify.adjust_counting.MAX"><code class="xref py py-obj docutils literal notranslate"><span class="pre">MAX</span></code></a></p></td>
-<td><p>MAX method — threshold maximizing ( text{TPR} - text{FPR} ).</p></td>
+<td><p>MAX method — threshold maximizing <span class="math notranslate nohighlight">\(\text{TPR} - \text{FPR}\)</span>.</p></td>
 </tr>
 <tr class="row-odd"><td><p><a class="reference internal" href="../modules/generated/mlquantify.adjust_counting.T50.html#mlquantify.adjust_counting.T50" title="mlquantify.adjust_counting.T50"><code class="xref py py-obj docutils literal notranslate"><span class="pre">T50</span></code></a></p></td>
-<td><p>T50 — selects threshold where ( text{TPR} = 0.5 ).</p></td>
+<td><p>T50 — selects threshold where <span class="math notranslate nohighlight">\(\text{TPR} = 0.5\)</span>.</p></td>
 </tr>
 <tr class="row-even"><td><p><a class="reference internal" href="../modules/generated/mlquantify.adjust_counting.MS.html#mlquantify.adjust_counting.MS" title="mlquantify.adjust_counting.MS"><code class="xref py py-obj docutils literal notranslate"><span class="pre">MS</span></code></a></p></td>
-<td><p>Median Sweep (MS) — median prevalence across all thresholds.</p></td>
+<td><p>Median Sweep (MS) — median prevalence estimate across all thresholds.</p></td>
 </tr>
 <tr class="row-odd"><td><p><a class="reference internal" href="../modules/generated/mlquantify.adjust_counting.MS2.html#mlquantify.adjust_counting.MS2" title="mlquantify.adjust_counting.MS2"><code class="xref py py-obj docutils literal notranslate"><span class="pre">MS2</span></code></a></p></td>
-<td><p>MS2 — Median Sweep variant with constraint ( <a href="#id1"><span class="problematic" id="id2">|\text{TPR} - \text{FPR}|</span></a> &gt; 0.25 ).</p></td>
+<td><p>MS2 — Median Sweep variant constraining <span class="math notranslate nohighlight">\(|\text{TPR} - \text{FPR}| &gt; 0.25\)</span>.</p></td>
 </tr>
 </tbody>
 </table>

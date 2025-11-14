@@ -57,6 +57,7 @@
     <script src="../../_static/clipboard.min.js?v=a7894cd8"></script>
     <script src="../../_static/copybutton.js?v=f281be69"></script>
     <script src="../../_static/design-tabs.js?v=f930bc37"></script>
+    <script async="async" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
     <script>DOCUMENTATION_OPTIONS.pagename = 'modules/generated/mlquantify.adjust_counting.ThresholdAdjustment';</script>
     <link rel="canonical" href="https://luizfernandolj.github.io/mlquantify/modules/generated/mlquantify.adjust_counting.ThresholdAdjustment.html" />
     <link rel="author" title="About these documents" href="../../about.html" />
@@ -469,25 +470,12 @@
 <dl class="py class">
 <dt class="sig sig-object py" id="mlquantify.adjust_counting.ThresholdAdjustment">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">mlquantify.adjust_counting.</span></span><span class="sig-name descname"><span class="pre">ThresholdAdjustment</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">learner</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">threshold</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.5</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">strategy</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'ovr'</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/luizfernandolj/mlquantify/tree/master/mlquantify/adjust_counting.py"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mlquantify.adjust_counting.ThresholdAdjustment" title="Link to this definition">#</a></dt>
-<dd><p>Applies threshold-based adjustment methods for quantification.</p>
+<dd><p>Base Class for Threshold-based adjustment methods for quantification.</p>
 <p>This is the base class for methods such as ACC, X, MAX, T50, MS, and MS2, 
-which adjust prevalence estimates based on the classifier’s ROC curve, as proposed by 
-Forman (2005, 2008).</p>
-<p>These methods correct the bias in <em>Classify &amp; Count (CC)</em> estimates caused by differences
-in class distributions between the training and test datasets.</p>
-<p>Mathematical formulation</p>
-<p>Given:
-- ( p’ ): observed positive proportion from CC,
-- ( text{TPR} = P(hat{y}=1|y=1) ),
-- ( text{FPR} = P(hat{y}=1|y=0) ),</p>
-<p>the adjusted prevalence is given by:</p>
-<p>[
-hat{p} = frac{p’ - text{FPR}}{text{TPR} - text{FPR}}
-]</p>
-<dl class="simple">
-<dt>(Forman, <em>Counting Positives Accurately Despite Inaccurate Classification</em>, ECML 2005;</dt><dd><p><em>Quantifying Counts and Costs via Classification</em>, DMKD 2008).</p>
-</dd>
-</dl>
+which adjust prevalence estimates based on the classifier’s ROC curve, 
+as proposed by <a class="reference internal" href="#r020c6cc384d8-1" id="id1">[1]</a>.</p>
+<p>These methods correct the bias in <em>Classify &amp; Count (CC)</em> estimates caused 
+by differences in class distributions between the training and test datasets.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><dl class="simple">
@@ -511,8 +499,33 @@ hat{p} = frac{p’ - text{FPR}}{text{TPR} - text{FPR}}
 <p class="rubric">Notes</p>
 <ul class="simple">
 <li><p>Defined only for binary quantification tasks.</p></li>
-<li><p>When applied to multiclass problems, the one-vs-rest strategy (<code class="docutils literal notranslate"><span class="pre">ovr</span></code>) is used automatically.</p></li>
+<li><p>When applied to multiclass problems, the one-vs-rest strategy (<code class="docutils literal notranslate"><span class="pre">ovr</span></code>)</p></li>
 </ul>
+<p>is used automatically.</p>
+<p>The adjusted prevalence is calculated using the following formula:</p>
+<div class="math notranslate nohighlight">
+\[\hat{p} = \frac{p' - \text{FPR}}{\text{TPR} - \text{FPR}}\]</div>
+<dl class="simple">
+<dt>where:</dt><dd><ul class="simple">
+<li><p><span class="math notranslate nohighlight">\(p'\)</span> is the observed positive proportion from CC,</p></li>
+<li><p><span class="math notranslate nohighlight">\(\text{TPR} = P(\hat{y}=1|y=1)\)</span> is the True Positive Rate,</p></li>
+<li><p><span class="math notranslate nohighlight">\(\text{FPR} = P(\hat{y}=1|y=0)\)</span> is the False Positive Rate.</p></li>
+</ul>
+</dd>
+</dl>
+<p class="rubric">References</p>
+<div role="list" class="citation-list">
+<div class="citation" id="r020c6cc384d8-1" role="doc-biblioentry">
+<span class="label"><span class="fn-bracket">[</span><a role="doc-backlink" href="#id1">1</a><span class="fn-bracket">]</span></span>
+<p>Forman, G. (2005). “Counting Positives Accurately Despite Inaccurate 
+Classification”, <em>Proceedings of ECML</em>, pp. 564-575.</p>
+</div>
+<div class="citation" id="r020c6cc384d8-2" role="doc-biblioentry">
+<span class="label"><span class="fn-bracket">[</span>2<span class="fn-bracket">]</span></span>
+<p>Forman, G. (2008). “Quantifying Counts and Costs via Classification”, 
+<em>Data Mining and Knowledge Discovery</em>, 17(2), 164-206.</p>
+</div>
+</div>
 <p class="rubric">Examples</p>
 <div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span><span class="w"> </span><span class="nn">sklearn.linear_model</span><span class="w"> </span><span class="kn">import</span> <span class="n">LogisticRegression</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span><span class="w"> </span><span class="nn">mlquantify.adjust_counting</span><span class="w"> </span><span class="kn">import</span> <span class="n">ThresholdAdjustment</span>

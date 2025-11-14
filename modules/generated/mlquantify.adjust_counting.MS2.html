@@ -57,6 +57,7 @@
     <script src="../../_static/clipboard.min.js?v=a7894cd8"></script>
     <script src="../../_static/copybutton.js?v=f281be69"></script>
     <script src="../../_static/design-tabs.js?v=f930bc37"></script>
+    <script async="async" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
     <script>DOCUMENTATION_OPTIONS.pagename = 'modules/generated/mlquantify.adjust_counting.MS2';</script>
     <link rel="canonical" href="https://luizfernandolj.github.io/mlquantify/modules/generated/mlquantify.adjust_counting.MS2.html" />
     <link rel="author" title="About these documents" href="../../about.html" />
@@ -469,7 +470,25 @@
 <dl class="py class">
 <dt class="sig sig-object py" id="mlquantify.adjust_counting.MS2">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">mlquantify.adjust_counting.</span></span><span class="sig-name descname"><span class="pre">MS2</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">learner</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">threshold</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.5</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">strategy</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'ovr'</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/luizfernandolj/mlquantify/tree/master/mlquantify/adjust_counting.py"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mlquantify.adjust_counting.MS2" title="Link to this definition">#</a></dt>
-<dd><p>MS2 — Median Sweep variant with constraint ( <a href="#id1"><span class="problematic" id="id2">|\text{TPR} - \text{FPR}|</span></a> &gt; 0.25 ).</p>
+<dd><p>MS2 — Median Sweep variant constraining <span class="math notranslate nohighlight">\(|\text{TPR} - \text{FPR}| &gt; 0.25\)</span>.</p>
+<p>This variant of Median Sweep excludes thresholds where the absolute difference
+between true positive rate (TPR) and false positive rate (FPR) is below 0.25,
+improving stability by avoiding ambiguous threshold regions.</p>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<ul class="simple">
+<li><p>Warns if all TPR or FPR values are zero.</p></li>
+<li><p>Warns if no thresholds satisfy the constraint.</p></li>
+</ul>
+</div>
+<p class="rubric">References</p>
+<div role="list" class="citation-list">
+<div class="citation" id="r5a59223c591b-1" role="doc-biblioentry">
+<span class="label"><span class="fn-bracket">[</span>1<span class="fn-bracket">]</span></span>
+<p>Forman, G. (2008). “Quantifying Counts and Costs via Classification”,
+<em>Data Mining and Knowledge Discovery</em>, 17(2), 164-206.</p>
+</div>
+</div>
 <dl class="py method">
 <dt class="sig sig-object py" id="mlquantify.adjust_counting.MS2.aggregate">
 <span class="sig-name descname"><span class="pre">aggregate</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/luizfernandolj/mlquantify/tree/master/mlquantify/adjust_counting.py"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mlquantify.adjust_counting.MS2.aggregate" title="Link to this definition">#</a></dt>

@@ -57,6 +57,7 @@
     <script src="../../_static/clipboard.min.js?v=a7894cd8"></script>
     <script src="../../_static/copybutton.js?v=f281be69"></script>
     <script src="../../_static/design-tabs.js?v=f930bc37"></script>
+    <script async="async" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
     <script>DOCUMENTATION_OPTIONS.pagename = 'modules/generated/mlquantify.adjust_counting.MatrixAdjustment';</script>
     <link rel="canonical" href="https://luizfernandolj.github.io/mlquantify/modules/generated/mlquantify.adjust_counting.MatrixAdjustment.html" />
     <link rel="author" title="About these documents" href="../../about.html" />
@@ -469,35 +470,20 @@
 <dl class="py class">
 <dt class="sig sig-object py" id="mlquantify.adjust_counting.MatrixAdjustment">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">mlquantify.adjust_counting.</span></span><span class="sig-name descname"><span class="pre">MatrixAdjustment</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">learner</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">solver</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/luizfernandolj/mlquantify/tree/master/mlquantify/adjust_counting.py"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mlquantify.adjust_counting.MatrixAdjustment" title="Link to this definition">#</a></dt>
-<dd><p>Base class for matrix-based quantification adjustments (FM, GAC, GPAC).</p>
+<dd><p>Base class for matrix-based quantification adjustments.</p>
 <p>This class implements the matrix correction model for quantification
-as formulated in Firat (2016), which expresses the observed prevalences as
-a linear combination of true prevalences through the confusion matrix.</p>
-<p>Mathematical model</p>
-<p>The system is given by:</p>
-<p>[
-mathbf{y} = mathbf{C}hat{pi}_F + varepsilon
-]</p>
-<p>subject to:</p>
-<p>[
-hat{pi}_F ge 0, quad sum_k hat{pi}_{F,k} = 1
-]</p>
-<p>where:
-- ( mathbf{y} ): vector of predicted prevalences in test set,
-- ( mathbf{C} ): confusion matrix,
-- ( hat{pi}_F ): true class prevalence vector (unknown),
-- ( varepsilon ): residual error.</p>
-<p>The model can be solved either via:
-- Linear algebraic solution, or
-- Constrained optimization (quadratic or least-squares).</p>
+as formulated in Firat (2016) <a class="reference internal" href="#rbeacd928cb6e-1" id="id1">[1]</a>, which expresses the observed prevalences 
+as a linear combination of true prevalences through the confusion matrix.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><dl class="simple">
 <dt><strong>learner</strong><span class="classifier">estimator, optional</span></dt><dd><p>Classifier with <code class="docutils literal notranslate"><span class="pre">fit</span></code> and <code class="docutils literal notranslate"><span class="pre">predict</span></code> methods.</p>
 </dd>
-<dt><strong>solver</strong><span class="classifier">{‘optim’, ‘linear’}, optional</span></dt><dd><p>Solver for the adjustment system:
-- <code class="docutils literal notranslate"><span class="pre">'linear'</span></code>: uses matrix inversion (e.g., GAC, GPAC)
-- <code class="docutils literal notranslate"><span class="pre">'optim'</span></code>: uses optimization (e.g., FM)</p>
+<dt><strong>solver</strong><span class="classifier">{‘optim’, ‘linear’}, optional</span></dt><dd><p>Solver for the adjustment system:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">'linear'</span></code>: uses matrix inversion (e.g., GAC, GPAC)</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">'optim'</span></code>: uses optimization (e.g., FM)</p></li>
+</ul>
 </dd>
 </dl>
 </dd>
@@ -510,13 +496,40 @@ hat{pi}_F ge 0, quad sum_k hat{pi}_{F,k} = 1
 </dl>
 </dd>
 </dl>
-<p class="rubric">References</p>
-<ul class="simple">
-<li><p>Firat, A. (2016). <em>Unified Framework for Quantification.</em> AAAI, pp. 1-8.</p></li>
+<p class="rubric">Notes</p>
+<p>The system is modeled as:</p>
+<div class="math notranslate nohighlight">
+\[\mathbf{y} = \mathbf{C}\hat{\pi}_F + \varepsilon\]</div>
+<p>subject to the constraints:</p>
+<div class="math notranslate nohighlight">
+\[\hat{\pi}_F \ge 0, \quad \sum_k \hat{\pi}_{F,k} = 1\]</div>
+<dl class="simple">
+<dt>where:</dt><dd><ul class="simple">
+<li><p><span class="math notranslate nohighlight">\(\mathbf{y}\)</span> is the vector of predicted prevalences in test set,</p></li>
+<li><p><span class="math notranslate nohighlight">\(\mathbf{C}\)</span> is the confusion matrix,</p></li>
+<li><p><span class="math notranslate nohighlight">\(\hat{\pi}_F\)</span> is the true class prevalence vector (unknown),</p></li>
+<li><p><span class="math notranslate nohighlight">\(\varepsilon\)</span> is the residual error.</p></li>
 </ul>
+</dd>
+</dl>
+<p>The model can be solved via:</p>
+<ul class="simple">
+<li><p><strong>Linear algebraic solution</strong>: uses matrix inversion</p></li>
+<li><p><strong>Constrained optimization</strong>: quadratic or least-squares approach</p></li>
+</ul>
+<p class="rubric">References</p>
+<div role="list" class="citation-list">
+<div class="citation" id="rbeacd928cb6e-1" role="doc-biblioentry">
+<span class="label"><span class="fn-bracket">[</span><a role="doc-backlink" href="#id1">1</a><span class="fn-bracket">]</span></span>
+<p>Firat, A. (2016). “Unified Framework for Quantification”, 
+<em>Proceedings of AAAI Conference on Artificial Intelligence</em>, 
+pp. 1-8.</p>
+</div>
+</div>
 <p class="rubric">Examples</p>
 <div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span><span class="w"> </span><span class="nn">sklearn.linear_model</span><span class="w"> </span><span class="kn">import</span> <span class="n">LogisticRegression</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span><span class="w"> </span><span class="nn">mlquantify.adjust_counting</span><span class="w"> </span><span class="kn">import</span> <span class="n">MatrixAdjustment</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="k">class</span><span class="w"> </span><span class="nc">MyMatrix</span><span class="p">(</span><span class="n">MatrixAdjustment</span><span class="p">):</span>
 <span class="gp">... </span>    <span class="k">def</span><span class="w"> </span><span class="nf">_compute_confusion_matrix</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">preds</span><span class="p">,</span> <span class="n">y</span><span class="p">):</span>
 <span class="gp">... </span>        <span class="n">cm</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">((</span><span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">))</span>
