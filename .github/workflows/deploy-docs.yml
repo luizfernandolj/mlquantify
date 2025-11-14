@@ -30,6 +30,12 @@ jobs:
                       matplotlib sphinxcontrib-sass sphinx_remove_toctrees \
                       sphinx_design numpydoc
 
+      - name: Conferir pacotes instalados
+        run: |
+          pip list
+          pip show mlquantify
+          python -c "import mlquantify; print(mlquantify.__file__)"
+
       - name: Construir documentação
         run: |
           sphinx-build docs/source docs/build/html
