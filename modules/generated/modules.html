@@ -1,0 +1,523 @@
+
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="../../" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+<meta property="og:title" content="mlquantify" />
+<meta property="og:type" content="website" />
+<meta property="og:url" content="modules/generated/modules.html" />
+<meta property="og:site_name" content="mlquantify" />
+<meta property="og:description" content="mlquantify package- Subpackages- mlquantify.adjust_counting package- Module contents., mlquantify.likelihood package- Module contents., mlquantify.meta package- Module contents., mlquantify.metrics..." />
+<meta property="og:image:width" content="1146" />
+<meta property="og:image:height" content="600" />
+<meta property="og:image" content="_images/social_previews/summary_modules_generated_modules_00da33ef.png" />
+<meta property="og:image:alt" content="mlquantify package- Subpackages- mlquantify.adjust_counting package- Module contents., mlquantify.likelihood package- Module contents., mlquantify.meta package- Module contents., mlquantify.metrics..." />
+<meta name="description" content="mlquantify package- Subpackages- mlquantify.adjust_counting package- Module contents., mlquantify.likelihood package- Module contents., mlquantify.meta package- Module contents., mlquantify.metrics..." />
+<meta name="twitter:card" content="summary_large_image" />
+
+    <title>mlquantify &#8212; mlquantify 0.1.8 documentation</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
+  </script>
+  <!--
+    this give us a css class that will be invisible only if js is disabled
+  -->
+  <noscript>
+    <style>
+      .pst-js-only { display: none !important; }
+
+    </style>
+  </noscript>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../../_static/styles/theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
+<link href="../../_static/styles/pydata-sphinx-theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
+
+    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=8f2a1f02" />
+    <link rel="stylesheet" type="text/css" href="../../_static/copybutton.css?v=76b2166b" />
+    <link rel="stylesheet" type="text/css" href="../../_static/plot_directive.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/sphinx-design.min.css?v=95c83b7e" />
+    <link rel="stylesheet" type="text/css" href="../../_static/custom.css?v=94d3f708" />
+  
+  <!-- So that users can add custom icons -->
+  <script src="../../_static/scripts/fontawesome.js?digest=8878045cc6db502f8baf"></script>
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../../_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf" />
+<link rel="preload" as="script" href="../../_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf" />
+
+    <script src="../../_static/documentation_options.js?v=22607128"></script>
+    <script src="../../_static/doctools.js?v=9bcbadda"></script>
+    <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../../_static/clipboard.min.js?v=a7894cd8"></script>
+    <script src="../../_static/copybutton.js?v=f281be69"></script>
+    <script src="../../_static/design-tabs.js?v=f930bc37"></script>
+    <script async="async" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'modules/generated/modules';</script>
+    <link rel="canonical" href="https://luizfernandolj.github.io/mlquantify/modules/generated/modules.html" />
+    <link rel="author" title="About these documents" href="../../about.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  <meta name="docsearch:version" content="" />
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+
+  
+  <dialog id="pst-search-dialog">
+    
+<form class="bd-search d-flex align-items-center"
+      action="../../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         placeholder="Search the docs ..."
+         aria-label="Search the docs ..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form>
+  </dialog>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
+  
+    <header class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+<div class="bd-header__inner bd-page-width">
+  <button class="pst-navbar-icon sidebar-toggle primary-toggle" aria-label="Site navigation">
+    <span class="fa-solid fa-bars"></span>
+  </button>
+  
+  
+  <div class=" navbar-header-items__start">
+    
+      <div class="navbar-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="../../index.html">
+  
+  
+  
+  
+  
+  
+    <p class="title logo__title">mlquantify 0.1.8 documentation</p>
+  
+</a></div>
+    
+  </div>
+  
+  <div class=" navbar-header-items">
+    
+    <div class="me-auto navbar-header-items__center">
+      
+        <div class="navbar-item">
+<nav>
+  <ul class="bd-navbar-elements navbar-nav">
+    
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../install.html">
+    Install
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../user_guide.html">
+    User Guide
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../api/index.html">
+    API
+  </a>
+</li>
+
+  </ul>
+</nav></div>
+      
+    </div>
+    
+    
+    <div class="navbar-header-items__end">
+      
+        <div class="navbar-item navbar-persistent--container">
+          
+
+<button class="btn btn-sm pst-navbar-icon search-button search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass fa-lg"></i>
+</button>
+        </div>
+      
+      
+        <div class="navbar-item">
+
+<button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button pst-js-only" aria-label="Color mode" data-bs-title="Color mode"  data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <i class="theme-switch fa-solid fa-sun                fa-lg" data-mode="light" title="Light"></i>
+  <i class="theme-switch fa-solid fa-moon               fa-lg" data-mode="dark"  title="Dark"></i>
+  <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"  title="System Settings"></i>
+</button></div>
+      
+        <div class="navbar-item"><ul class="navbar-icon-links"
+    aria-label="Icon Links">
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://github.com/luizfernandolj/mlquantify/tree/master" title="GitHub" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><i class="fa-brands fa-square-github fa-lg" aria-hidden="true"></i>
+            <span class="sr-only">GitHub</span></a>
+        </li>
+</ul></div>
+      
+    </div>
+    
+  </div>
+  
+  
+    <div class="navbar-persistent--mobile">
+
+<button class="btn btn-sm pst-navbar-icon search-button search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass fa-lg"></i>
+</button>
+    </div>
+  
+
+  
+    <button class="pst-navbar-icon sidebar-toggle secondary-toggle" aria-label="On this page">
+      <span class="fa-solid fa-outdent"></span>
+    </button>
+  
+</div>
+
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+        
+      
+      <dialog id="pst-primary-sidebar-modal"></dialog>
+      <div id="pst-primary-sidebar" class="bd-sidebar-primary bd-sidebar hide-on-wide">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+      <div class="sidebar-header-items__center">
+        
+          
+          
+            <div class="navbar-item">
+<nav>
+  <ul class="bd-navbar-elements navbar-nav">
+    
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../install.html">
+    Install
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../user_guide.html">
+    User Guide
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../api/index.html">
+    API
+  </a>
+</li>
+
+  </ul>
+</nav></div>
+          
+        
+      </div>
+    
+    
+    
+      <div class="sidebar-header-items__end">
+        
+          <div class="navbar-item">
+
+<button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button pst-js-only" aria-label="Color mode" data-bs-title="Color mode"  data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <i class="theme-switch fa-solid fa-sun                fa-lg" data-mode="light" title="Light"></i>
+  <i class="theme-switch fa-solid fa-moon               fa-lg" data-mode="dark"  title="Dark"></i>
+  <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"  title="System Settings"></i>
+</button></div>
+        
+          <div class="navbar-item"><ul class="navbar-icon-links"
+    aria-label="Icon Links">
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://github.com/luizfernandolj/mlquantify/tree/master" title="GitHub" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><i class="fa-brands fa-square-github fa-lg" aria-hidden="true"></i>
+            <span class="sr-only">GitHub</span></a>
+        </li>
+</ul></div>
+        
+      </div>
+    
+  </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+  </div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item">
+
+<nav aria-label="Breadcrumb" class="d-print-none">
+  <ul class="bd-breadcrumbs">
+    
+    <li class="breadcrumb-item breadcrumb-home">
+      <a href="../../index.html" class="nav-link" aria-label="Home">
+        <i class="fa-solid fa-home"></i>
+      </a>
+    </li>
+    <li class="breadcrumb-item active" aria-current="page"><span class="ellipsis">mlquantify</span></li>
+  </ul>
+</nav>
+</div>
+      
+    </div>
+  
+  
+</div>
+</div>
+              
+              
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <section id="mlquantify">
+<h1>mlquantify<a class="headerlink" href="#mlquantify" title="Link to this heading">#</a></h1>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="mlquantify.html">mlquantify package</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="mlquantify.html#subpackages">Subpackages</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="mlquantify.adjust_counting.html">mlquantify.adjust_counting package</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="mlquantify.adjust_counting.html#module-mlquantify.adjust_counting">Module contents</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="mlquantify.likelihood.html">mlquantify.likelihood package</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="mlquantify.likelihood.html#module-mlquantify.likelihood">Module contents</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="mlquantify.meta.html">mlquantify.meta package</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="mlquantify.meta.html#module-mlquantify.meta">Module contents</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="mlquantify.metrics.html">mlquantify.metrics package</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="mlquantify.metrics.html#module-mlquantify.metrics">Module contents</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="mlquantify.mixture.html">mlquantify.mixture package</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="mlquantify.mixture.html#module-mlquantify.mixture">Module contents</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="mlquantify.model_selection.html">mlquantify.model_selection package</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="mlquantify.model_selection.html#module-mlquantify.model_selection">Module contents</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="mlquantify.neighbors.html">mlquantify.neighbors package</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="mlquantify.neighbors.html#module-mlquantify.neighbors">Module contents</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="mlquantify.neural.html">mlquantify.neural package</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="mlquantify.neural.html#module-mlquantify.neural">Module contents</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="mlquantify.utils.html">mlquantify.utils package</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="mlquantify.utils.html#submodules">Submodules</a></li>
+<li class="toctree-l4"><a class="reference internal" href="mlquantify.utils.html#module-mlquantify.utils.prevalence">mlquantify.utils.prevalence module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="mlquantify.utils.html#module-mlquantify.utils">Module contents</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="mlquantify.html#submodules">Submodules</a></li>
+<li class="toctree-l2"><a class="reference internal" href="mlquantify.html#module-mlquantify.base">mlquantify.base module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="mlquantify.html#mlquantify.base.BaseQuantifier"><code class="docutils literal notranslate"><span class="pre">BaseQuantifier</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="mlquantify.html#mlquantify.base.BaseQuantifier.save_quantifier"><code class="docutils literal notranslate"><span class="pre">BaseQuantifier.save_quantifier</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="mlquantify.html#mlquantify.base.BaseQuantifier.skip_validation"><code class="docutils literal notranslate"><span class="pre">BaseQuantifier.skip_validation</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="mlquantify.html#mlquantify.base.MetaquantifierMixin"><code class="docutils literal notranslate"><span class="pre">MetaquantifierMixin</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="mlquantify.html#mlquantify.base.ProtocolMixin"><code class="docutils literal notranslate"><span class="pre">ProtocolMixin</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="mlquantify.html#module-mlquantify.base_aggregative">mlquantify.base_aggregative module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="mlquantify.html#mlquantify.base_aggregative.AggregationMixin"><code class="docutils literal notranslate"><span class="pre">AggregationMixin</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="mlquantify.html#mlquantify.base_aggregative.AggregationMixin.set_params"><code class="docutils literal notranslate"><span class="pre">AggregationMixin.set_params</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="mlquantify.html#mlquantify.base_aggregative.CrispLearnerQMixin"><code class="docutils literal notranslate"><span class="pre">CrispLearnerQMixin</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="mlquantify.html#mlquantify.base_aggregative.SoftLearnerQMixin"><code class="docutils literal notranslate"><span class="pre">SoftLearnerQMixin</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="mlquantify.html#mlquantify.base_aggregative.get_aggregation_requirements"><code class="docutils literal notranslate"><span class="pre">get_aggregation_requirements</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="mlquantify.html#mlquantify.base_aggregative.is_aggregative_quantifier"><code class="docutils literal notranslate"><span class="pre">is_aggregative_quantifier</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="mlquantify.html#mlquantify.base_aggregative.uses_crisp_predictions"><code class="docutils literal notranslate"><span class="pre">uses_crisp_predictions</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="mlquantify.html#mlquantify.base_aggregative.uses_soft_predictions"><code class="docutils literal notranslate"><span class="pre">uses_soft_predictions</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="mlquantify.html#module-mlquantify.calibration">mlquantify.calibration module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="mlquantify.html#module-mlquantify.confidence">mlquantify.confidence module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="mlquantify.html#mlquantify.confidence.BaseConfidenceRegion"><code class="docutils literal notranslate"><span class="pre">BaseConfidenceRegion</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="mlquantify.html#mlquantify.confidence.BaseConfidenceRegion.contains"><code class="docutils literal notranslate"><span class="pre">BaseConfidenceRegion.contains</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="mlquantify.html#mlquantify.confidence.BaseConfidenceRegion.get_point_estimate"><code class="docutils literal notranslate"><span class="pre">BaseConfidenceRegion.get_point_estimate</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="mlquantify.html#mlquantify.confidence.BaseConfidenceRegion.get_region"><code class="docutils literal notranslate"><span class="pre">BaseConfidenceRegion.get_region</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="mlquantify.html#mlquantify.confidence.ConfidenceEllipseCLR"><code class="docutils literal notranslate"><span class="pre">ConfidenceEllipseCLR</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="mlquantify.html#mlquantify.confidence.ConfidenceEllipseCLR.contains"><code class="docutils literal notranslate"><span class="pre">ConfidenceEllipseCLR.contains</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="mlquantify.html#mlquantify.confidence.ConfidenceEllipseCLR.get_point_estimate"><code class="docutils literal notranslate"><span class="pre">ConfidenceEllipseCLR.get_point_estimate</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="mlquantify.html#mlquantify.confidence.ConfidenceEllipseSimplex"><code class="docutils literal notranslate"><span class="pre">ConfidenceEllipseSimplex</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="mlquantify.html#mlquantify.confidence.ConfidenceEllipseSimplex.contains"><code class="docutils literal notranslate"><span class="pre">ConfidenceEllipseSimplex.contains</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="mlquantify.html#mlquantify.confidence.ConfidenceEllipseSimplex.get_point_estimate"><code class="docutils literal notranslate"><span class="pre">ConfidenceEllipseSimplex.get_point_estimate</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="mlquantify.html#mlquantify.confidence.ConfidenceEllipseSimplex.get_region"><code class="docutils literal notranslate"><span class="pre">ConfidenceEllipseSimplex.get_region</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="mlquantify.html#mlquantify.confidence.ConfidenceInterval"><code class="docutils literal notranslate"><span class="pre">ConfidenceInterval</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="mlquantify.html#mlquantify.confidence.ConfidenceInterval.contains"><code class="docutils literal notranslate"><span class="pre">ConfidenceInterval.contains</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="mlquantify.html#mlquantify.confidence.ConfidenceInterval.get_point_estimate"><code class="docutils literal notranslate"><span class="pre">ConfidenceInterval.get_point_estimate</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="mlquantify.html#mlquantify.confidence.ConfidenceInterval.get_region"><code class="docutils literal notranslate"><span class="pre">ConfidenceInterval.get_region</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="mlquantify.html#mlquantify.confidence.construct_confidence_region"><code class="docutils literal notranslate"><span class="pre">construct_confidence_region</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="mlquantify.html#module-mlquantify.multiclass">mlquantify.multiclass module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="mlquantify.html#mlquantify.multiclass.BinaryQuantifier"><code class="docutils literal notranslate"><span class="pre">BinaryQuantifier</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="mlquantify.html#mlquantify.multiclass.BinaryQuantifier.aggregate"><code class="docutils literal notranslate"><span class="pre">BinaryQuantifier.aggregate</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="mlquantify.html#mlquantify.multiclass.BinaryQuantifier.fit"><code class="docutils literal notranslate"><span class="pre">BinaryQuantifier.fit</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="mlquantify.html#mlquantify.multiclass.BinaryQuantifier.predict"><code class="docutils literal notranslate"><span class="pre">BinaryQuantifier.predict</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="mlquantify.html#mlquantify.multiclass.define_binary"><code class="docutils literal notranslate"><span class="pre">define_binary</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="mlquantify.html#module-mlquantify">Module contents</a></li>
+</ul>
+</li>
+</ul>
+</div>
+</section>
+
+
+                </article>
+              
+              
+              
+                <footer class="bd-footer-article">
+                  <div class="footer-article-items footer-article__inner">
+  
+    <div class="footer-article-item">
+<div class="prev-next-area">
+</div></div>
+  
+</div>
+                </footer>
+              
+              
+              
+            </div>
+            
+            
+              
+                <dialog id="pst-secondary-sidebar-modal"></dialog>
+                <div id="pst-secondary-sidebar" class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item">
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../../_sources/modules/generated/modules.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div></div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+          </footer>
+        
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script defer src="../../_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf"></script>
+<script defer src="../../_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf"></script>
+
+  <footer class="bd-footer">
+  </footer>
+  </body>
+</html>

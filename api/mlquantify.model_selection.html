@@ -17,7 +17,7 @@
 <meta property="og:image:alt" content="" />
 <meta name="twitter:card" content="summary_large_image" />
 
-    <title>mlquantify.model_selection &#8212; mlquantify 0.1.1 documentation</title>
+    <title>mlquantify.model_selection &#8212; mlquantify 0.1.8 documentation</title>
   
   
   
@@ -51,19 +51,18 @@
   <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf" />
 <link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf" />
 
-    <script src="../_static/documentation_options.js?v=a58bc63e"></script>
-    <script src="../_static/doctools.js?v=9a2dae69"></script>
+    <script src="../_static/documentation_options.js?v=22607128"></script>
+    <script src="../_static/doctools.js?v=9bcbadda"></script>
     <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../_static/clipboard.min.js?v=a7894cd8"></script>
     <script src="../_static/copybutton.js?v=f281be69"></script>
     <script src="../_static/design-tabs.js?v=f930bc37"></script>
-    <script data-domain="scikit-learn.org" defer="defer" src="https://views.scientific-python.org/js/script.js"></script>
     <script>DOCUMENTATION_OPTIONS.pagename = 'api/mlquantify.model_selection';</script>
     <link rel="canonical" href="https://luizfernandolj.github.io/mlquantify/api/mlquantify.model_selection.html" />
     <link rel="author" title="About these documents" href="../about.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="GridSearchQ" href="../modules/generated/mlquantify.model_selection.GridSearchQ.html" />
-    <link rel="prev" title="HDx" href="../modules/generated/mlquantify.methods.non_aggregative.HDx.html" />
+    <link rel="next" title="BaseProtocol" href="../modules/generated/mlquantify.model_selection.BaseProtocol.html" />
+    <link rel="prev" title="HDx" href="../modules/generated/mlquantify.mixture.HDx.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
   <meta name="docsearch:version" content="" />
@@ -128,7 +127,7 @@
   
   
   
-    <p class="title logo__title">mlquantify 0.1.1 documentation</p>
+    <p class="title logo__title">mlquantify 0.1.8 documentation</p>
   
 </a></div>
     
@@ -307,101 +306,102 @@
      aria-label="Section Navigation">
   <p class="bd-links__title" role="heading" aria-level="1">Section Navigation</p>
   <div class="bd-toc-item navbar-nav"><ul class="current nav bd-sidenav">
-<li class="toctree-l1 has-children"><a class="reference internal" href="mlquantify.html">mlquantify</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
-<li class="toctree-l2"><a class="reference internal" href="../modules/generated/mlquantify.set_arguments.html">set_arguments</a></li>
+<li class="toctree-l1"><a class="reference internal" href="mlquantify.html">mlquantify</a></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="mlquantify.adjust_counting.html">mlquantify.adjust_counting</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../modules/generated/mlquantify.adjust_counting.ThresholdAdjustment.html">ThresholdAdjustment</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../modules/generated/mlquantify.adjust_counting.MatrixAdjustment.html">MatrixAdjustment</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../modules/generated/mlquantify.adjust_counting.FM.html">FM</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../modules/generated/mlquantify.adjust_counting.GAC.html">GAC</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../modules/generated/mlquantify.adjust_counting.GPAC.html">GPAC</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../modules/generated/mlquantify.adjust_counting.ACC.html">ACC</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../modules/generated/mlquantify.adjust_counting.X_method.html">X_method</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../modules/generated/mlquantify.adjust_counting.MAX.html">MAX</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../modules/generated/mlquantify.adjust_counting.T50.html">T50</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../modules/generated/mlquantify.adjust_counting.MS.html">MS</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../modules/generated/mlquantify.adjust_counting.MS2.html">MS2</a></li>
 </ul>
 </details></li>
 <li class="toctree-l1 has-children"><a class="reference internal" href="mlquantify.base.html">mlquantify.base</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
-<li class="toctree-l2"><a class="reference internal" href="../modules/generated/mlquantify.base.Quantifier.html">Quantifier</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../modules/generated/mlquantify.base.AggregativeQuantifier.html">AggregativeQuantifier</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../modules/generated/mlquantify.base.NonAggregativeQuantifier.html">NonAggregativeQuantifier</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../modules/generated/mlquantify.base.BaseQuantifier.html">BaseQuantifier</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../modules/generated/mlquantify.base.MetaquantifierMixin.html">MetaquantifierMixin</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../modules/generated/mlquantify.base.ProtocolMixin.html">ProtocolMixin</a></li>
 </ul>
 </details></li>
-<li class="toctree-l1 has-children"><a class="reference internal" href="mlquantify.classification.methods.html">mlquantify.classification.methods</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
-<li class="toctree-l2"><a class="reference internal" href="../modules/generated/mlquantify.classification.methods.PWKCLF.html">PWKCLF</a></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="mlquantify.base_aggregative.html">mlquantify.base_aggregative</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../modules/generated/mlquantify.base_aggregative.AggregationMixin.html">AggregationMixin</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../modules/generated/mlquantify.base_aggregative.SoftLearnerQMixin.html">SoftLearnerQMixin</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../modules/generated/mlquantify.base_aggregative.CrispLearnerQMixin.html">CrispLearnerQMixin</a></li>
 </ul>
 </details></li>
-<li class="toctree-l1 has-children"><a class="reference internal" href="mlquantify.evaluation.measures.html">mlquantify.evaluation.measures</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
-<li class="toctree-l2"><a class="reference internal" href="../modules/generated/mlquantify.evaluation.measures.process_inputs.html">process_inputs</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../modules/generated/mlquantify.evaluation.measures.absolute_error.html">absolute_error</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../modules/generated/mlquantify.evaluation.measures.mean_absolute_error.html">mean_absolute_error</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../modules/generated/mlquantify.evaluation.measures.kullback_leibler_divergence.html">kullback_leibler_divergence</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../modules/generated/mlquantify.evaluation.measures.squared_error.html">squared_error</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../modules/generated/mlquantify.evaluation.measures.mean_squared_error.html">mean_squared_error</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../modules/generated/mlquantify.evaluation.measures.normalized_absolute_error.html">normalized_absolute_error</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../modules/generated/mlquantify.evaluation.measures.normalized_kullback_leibler_divergence.html">normalized_kullback_leibler_divergence</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../modules/generated/mlquantify.evaluation.measures.relative_absolute_error.html">relative_absolute_error</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../modules/generated/mlquantify.evaluation.measures.normalized_relative_absolute_error.html">normalized_relative_absolute_error</a></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="mlquantify.confidence.html">mlquantify.confidence</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../modules/generated/mlquantify.confidence.BaseConfidenceRegion.html">BaseConfidenceRegion</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../modules/generated/mlquantify.confidence.ConfidenceInterval.html">ConfidenceInterval</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../modules/generated/mlquantify.confidence.ConfidenceEllipseSimplex.html">ConfidenceEllipseSimplex</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../modules/generated/mlquantify.confidence.ConfidenceEllipseCLR.html">ConfidenceEllipseCLR</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../modules/generated/mlquantify.confidence.construct_confidence_region.html">construct_confidence_region</a></li>
 </ul>
 </details></li>
-<li class="toctree-l1 has-children"><a class="reference internal" href="mlquantify.evaluation.protocol.html">mlquantify.evaluation.protocol</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
-<li class="toctree-l2"><a class="reference internal" href="../modules/generated/mlquantify.evaluation.protocol.Protocol.html">Protocol</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../modules/generated/mlquantify.evaluation.protocol.APP.html">APP</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../modules/generated/mlquantify.evaluation.protocol.NPP.html">NPP</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../modules/generated/mlquantify.evaluation.protocol.UPP.html">UPP</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../modules/generated/mlquantify.evaluation.protocol.PPP.html">PPP</a></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="mlquantify.likelihood.html">mlquantify.likelihood</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../modules/generated/mlquantify.likelihood.EMQ.html">EMQ</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../modules/generated/mlquantify.likelihood.MLPE.html">MLPE</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../modules/generated/mlquantify.likelihood.CDE.html">CDE</a></li>
 </ul>
 </details></li>
-<li class="toctree-l1 has-children"><a class="reference internal" href="mlquantify.methods.aggregative.html">mlquantify.methods.aggregative</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
-<li class="toctree-l2"><a class="reference internal" href="../modules/generated/mlquantify.methods.aggregative.CC.html">CC</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../modules/generated/mlquantify.methods.aggregative.EMQ.html">EMQ</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../modules/generated/mlquantify.methods.aggregative.FM.html">FM</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../modules/generated/mlquantify.methods.aggregative.GAC.html">GAC</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../modules/generated/mlquantify.methods.aggregative.GPAC.html">GPAC</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../modules/generated/mlquantify.methods.aggregative.PCC.html">PCC</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../modules/generated/mlquantify.methods.aggregative.PWK.html">PWK</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../modules/generated/mlquantify.methods.aggregative.ACC.html">ACC</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../modules/generated/mlquantify.methods.aggregative.MAX.html">MAX</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../modules/generated/mlquantify.methods.aggregative.MS.html">MS</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../modules/generated/mlquantify.methods.aggregative.MS2.html">MS2</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../modules/generated/mlquantify.methods.aggregative.PACC.html">PACC</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../modules/generated/mlquantify.methods.aggregative.T50.html">T50</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../modules/generated/mlquantify.methods.aggregative.X_method.html">X_method</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../modules/generated/mlquantify.methods.aggregative.DyS.html">DyS</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../modules/generated/mlquantify.methods.aggregative.DySsyn.html">DySsyn</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../modules/generated/mlquantify.methods.aggregative.HDy.html">HDy</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../modules/generated/mlquantify.methods.aggregative.SMM.html">SMM</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../modules/generated/mlquantify.methods.aggregative.SORD.html">SORD</a></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="mlquantify.meta.html">mlquantify.meta</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../modules/generated/mlquantify.meta.EnsembleQ.html">EnsembleQ</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../modules/generated/mlquantify.meta.QuaDapt.html">QuaDapt</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../modules/generated/mlquantify.meta.AggregativeBootstrap.html">AggregativeBootstrap</a></li>
 </ul>
 </details></li>
-<li class="toctree-l1 has-children"><a class="reference internal" href="mlquantify.methods.meta.html">mlquantify.methods.meta</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
-<li class="toctree-l2"><a class="reference internal" href="../modules/generated/mlquantify.methods.meta.Ensemble.html">Ensemble</a></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="mlquantify.metrics.html">mlquantify.metrics</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../modules/generated/mlquantify.metrics.AE.html">AE</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../modules/generated/mlquantify.metrics.SE.html">SE</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../modules/generated/mlquantify.metrics.MAE.html">MAE</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../modules/generated/mlquantify.metrics.MSE.html">MSE</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../modules/generated/mlquantify.metrics.KLD.html">KLD</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../modules/generated/mlquantify.metrics.RAE.html">RAE</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../modules/generated/mlquantify.metrics.NAE.html">NAE</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../modules/generated/mlquantify.metrics.NRAE.html">NRAE</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../modules/generated/mlquantify.metrics.NKLD.html">NKLD</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../modules/generated/mlquantify.metrics.NMD.html">NMD</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../modules/generated/mlquantify.metrics.RNOD.html">RNOD</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../modules/generated/mlquantify.metrics.VSE.html">VSE</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../modules/generated/mlquantify.metrics.CvM_L1.html">CvM_L1</a></li>
 </ul>
 </details></li>
-<li class="toctree-l1 has-children"><a class="reference internal" href="mlquantify.methods.non_aggregative.html">mlquantify.methods.non_aggregative</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
-<li class="toctree-l2"><a class="reference internal" href="../modules/generated/mlquantify.methods.non_aggregative.HDx.html">HDx</a></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="mlquantify.mixture.html">mlquantify.mixture</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../modules/generated/mlquantify.mixture.HDy.html">HDy</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../modules/generated/mlquantify.mixture.DyS.html">DyS</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../modules/generated/mlquantify.mixture.SMM.html">SMM</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../modules/generated/mlquantify.mixture.SORD.html">SORD</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../modules/generated/mlquantify.mixture.HDx.html">HDx</a></li>
 </ul>
 </details></li>
 <li class="toctree-l1 current active has-children"><a class="current reference internal" href="#">mlquantify.model_selection</a><details open="open"><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../modules/generated/mlquantify.model_selection.BaseProtocol.html">BaseProtocol</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../modules/generated/mlquantify.model_selection.APP.html">APP</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../modules/generated/mlquantify.model_selection.NPP.html">NPP</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../modules/generated/mlquantify.model_selection.UPP.html">UPP</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../modules/generated/mlquantify.model_selection.PPP.html">PPP</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../modules/generated/mlquantify.model_selection.GridSearchQ.html">GridSearchQ</a></li>
 </ul>
 </details></li>
-<li class="toctree-l1 has-children"><a class="reference internal" href="mlquantify.utils.general.html">mlquantify.utils.general</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
-<li class="toctree-l2"><a class="reference internal" href="../modules/generated/mlquantify.utils.general.convert_columns_to_arrays.html">convert_columns_to_arrays</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../modules/generated/mlquantify.utils.general.generate_artificial_prevalences.html">generate_artificial_prevalences</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../modules/generated/mlquantify.utils.general.get_real_prev.html">get_real_prev</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../modules/generated/mlquantify.utils.general.load_quantifier.html">load_quantifier</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../modules/generated/mlquantify.utils.general.make_prevs.html">make_prevs</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../modules/generated/mlquantify.utils.general.normalize_prevalence.html">normalize_prevalence</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../modules/generated/mlquantify.utils.general.parallel.html">parallel</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../modules/generated/mlquantify.utils.general.round_protocol_df.html">round_protocol_df</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../modules/generated/mlquantify.utils.general.get_measure.html">get_measure</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../modules/generated/mlquantify.utils.general.get_method.html">get_method</a></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="mlquantify.multiclass.html">mlquantify.multiclass</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../modules/generated/mlquantify.multiclass.define_binary.html">define_binary</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../modules/generated/mlquantify.multiclass._fit_ovr.html">_fit_ovr</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../modules/generated/mlquantify.multiclass._fit_ovo.html">_fit_ovo</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../modules/generated/mlquantify.multiclass._predict_ovr.html">_predict_ovr</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../modules/generated/mlquantify.multiclass._predict_ovo.html">_predict_ovo</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../modules/generated/mlquantify.multiclass._aggregate_ovr.html">_aggregate_ovr</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../modules/generated/mlquantify.multiclass._aggregate_ovo.html">_aggregate_ovo</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../modules/generated/mlquantify.multiclass.BinaryQuantifier.html">BinaryQuantifier</a></li>
 </ul>
 </details></li>
-<li class="toctree-l1 has-children"><a class="reference internal" href="mlquantify.utils.method.html">mlquantify.utils.method</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
-<li class="toctree-l2"><a class="reference internal" href="../modules/generated/mlquantify.utils.method.sqEuclidean.html">sqEuclidean</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../modules/generated/mlquantify.utils.method.probsymm.html">probsymm</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../modules/generated/mlquantify.utils.method.topsoe.html">topsoe</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../modules/generated/mlquantify.utils.method.hellinger.html">hellinger</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../modules/generated/mlquantify.utils.method.get_scores.html">get_scores</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../modules/generated/mlquantify.utils.method.getHist.html">getHist</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../modules/generated/mlquantify.utils.method.MoSS.html">MoSS</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../modules/generated/mlquantify.utils.method.ternary_search.html">ternary_search</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../modules/generated/mlquantify.utils.method.compute_table.html">compute_table</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../modules/generated/mlquantify.utils.method.compute_tpr.html">compute_tpr</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../modules/generated/mlquantify.utils.method.compute_fpr.html">compute_fpr</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../modules/generated/mlquantify.utils.method.adjust_threshold.html">adjust_threshold</a></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="mlquantify.neighbors.html">mlquantify.neighbors</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../modules/generated/mlquantify.neighbors.KDEyCS.html">KDEyCS</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../modules/generated/mlquantify.neighbors.KDEyHD.html">KDEyHD</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../modules/generated/mlquantify.neighbors.KDEyML.html">KDEyML</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../modules/generated/mlquantify.neighbors.PWK.html">PWK</a></li>
 </ul>
 </details></li>
 </ul>
@@ -461,8 +461,23 @@
 <span id="mlquantify-model-selection"></span><span id="model-selection-ref"></span><h1>mlquantify.model_selection<a class="headerlink" href="#module-mlquantify.model_selection" title="Link to this heading">#</a></h1>
 <div class="pst-scrollable-table-container"><table class="autosummary longtable table autosummary">
 <tbody>
-<tr class="row-odd"><td><p><a class="reference internal" href="../modules/generated/mlquantify.model_selection.GridSearchQ.html#mlquantify.model_selection.GridSearchQ" title="mlquantify.model_selection.GridSearchQ"><code class="xref py py-obj docutils literal notranslate"><span class="pre">GridSearchQ</span></code></a></p></td>
-<td><p>Hyperparameter optimization for quantification models using grid search.</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="../modules/generated/mlquantify.model_selection.BaseProtocol.html#mlquantify.model_selection.BaseProtocol" title="mlquantify.model_selection.BaseProtocol"><code class="xref py py-obj docutils literal notranslate"><span class="pre">BaseProtocol</span></code></a></p></td>
+<td><p>Base class for evaluation protocols.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="../modules/generated/mlquantify.model_selection.APP.html#mlquantify.model_selection.APP" title="mlquantify.model_selection.APP"><code class="xref py py-obj docutils literal notranslate"><span class="pre">APP</span></code></a></p></td>
+<td><p>Artificial Prevalence Protocol (APP) for exhaustive prevalent batch evaluation.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="../modules/generated/mlquantify.model_selection.NPP.html#mlquantify.model_selection.NPP" title="mlquantify.model_selection.NPP"><code class="xref py py-obj docutils literal notranslate"><span class="pre">NPP</span></code></a></p></td>
+<td><p>Natural Prevalence Protocol (NPP) that samples data without imposing prevalence constraints.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="../modules/generated/mlquantify.model_selection.UPP.html#mlquantify.model_selection.UPP" title="mlquantify.model_selection.UPP"><code class="xref py py-obj docutils literal notranslate"><span class="pre">UPP</span></code></a></p></td>
+<td><p>Uniform Prevalence Protocol (UPP) for uniform sampling of artificial prevalences.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="../modules/generated/mlquantify.model_selection.PPP.html#mlquantify.model_selection.PPP" title="mlquantify.model_selection.PPP"><code class="xref py py-obj docutils literal notranslate"><span class="pre">PPP</span></code></a></p></td>
+<td><p>Personalized Prevalence Protocol (PPP) for targeted prevalence batch generation.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="../modules/generated/mlquantify.model_selection.GridSearchQ.html#mlquantify.model_selection.GridSearchQ" title="mlquantify.model_selection.GridSearchQ"><code class="xref py py-obj docutils literal notranslate"><span class="pre">GridSearchQ</span></code></a></p></td>
+<td><p>Grid Search for Quantifiers with evaluation protocols.</p></td>
 </tr>
 </tbody>
 </table>
@@ -480,7 +495,7 @@
     <div class="footer-article-item">
 <div class="prev-next-area">
     <a class="left-prev"
-       href="../modules/generated/mlquantify.methods.non_aggregative.HDx.html"
+       href="../modules/generated/mlquantify.mixture.HDx.html"
        title="previous page">
       <i class="fa-solid fa-angle-left"></i>
       <div class="prev-next-info">
@@ -489,11 +504,11 @@
       </div>
     </a>
     <a class="right-next"
-       href="../modules/generated/mlquantify.model_selection.GridSearchQ.html"
+       href="../modules/generated/mlquantify.model_selection.BaseProtocol.html"
        title="next page">
       <div class="prev-next-info">
         <p class="prev-next-subtitle">next</p>
-        <p class="prev-next-title">GridSearchQ</p>
+        <p class="prev-next-title">BaseProtocol</p>
       </div>
       <i class="fa-solid fa-angle-right"></i>
     </a>

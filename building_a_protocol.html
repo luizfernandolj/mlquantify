@@ -7,19 +7,19 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
-<meta property="og:title" content="6.4. Building a Protocol" />
+<meta property="og:title" content="6.1. Building a Protocol" />
 <meta property="og:type" content="website" />
 <meta property="og:url" content="building_a_protocol.html" />
 <meta property="og:site_name" content="mlquantify" />
 <meta property="og:description" content="The construction of all protocols is similar, and you can create your own protocol by inheriting from the Protocol class. The only requirement is to implement:_new_sample method: This method is res..." />
 <meta property="og:image:width" content="1146" />
 <meta property="og:image:height" content="600" />
-<meta property="og:image" content="_images/social_previews/summary_building_a_protocol_1b305cdc.png" />
+<meta property="og:image" content="_images/social_previews/summary_building_a_protocol_4da8ab84.png" />
 <meta property="og:image:alt" content="The construction of all protocols is similar, and you can create your own protocol by inheriting from the Protocol class. The only requirement is to implement:_new_sample method: This method is res..." />
 <meta name="description" content="The construction of all protocols is similar, and you can create your own protocol by inheriting from the Protocol class. The only requirement is to implement:_new_sample method: This method is res..." />
 <meta name="twitter:card" content="summary_large_image" />
 
-    <title>6.4. Building a Protocol &#8212; mlquantify 0.1.1 documentation</title>
+    <title>6.1. Building a Protocol &#8212; mlquantify 0.1.8 documentation</title>
   
   
   
@@ -53,19 +53,18 @@
   <link rel="preload" as="script" href="_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf" />
 <link rel="preload" as="script" href="_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf" />
 
-    <script src="_static/documentation_options.js?v=a58bc63e"></script>
-    <script src="_static/doctools.js?v=9a2dae69"></script>
+    <script src="_static/documentation_options.js?v=22607128"></script>
+    <script src="_static/doctools.js?v=9bcbadda"></script>
     <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="_static/clipboard.min.js?v=a7894cd8"></script>
     <script src="_static/copybutton.js?v=f281be69"></script>
     <script src="_static/design-tabs.js?v=f930bc37"></script>
-    <script data-domain="scikit-learn.org" defer="defer" src="https://views.scientific-python.org/js/script.js"></script>
     <script>DOCUMENTATION_OPTIONS.pagename = 'building_a_protocol';</script>
     <link rel="canonical" href="https://luizfernandolj.github.io/mlquantify/building_a_protocol.html" />
     <link rel="author" title="About these documents" href="about.html" />
     <link rel="search" title="Search" href="search.html" />
     <link rel="next" title="API Reference" href="api/index.html" />
-    <link rel="prev" title="6.3. Artificial Prevalence protocol with selected usage" href="modules/app_selected.html" />
+    <link rel="prev" title="6. Experiment Management" href="experiment_management.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
   <meta name="docsearch:version" content="" />
@@ -130,7 +129,7 @@
   
   
   
-    <p class="title logo__title">mlquantify 0.1.1 documentation</p>
+    <p class="title logo__title">mlquantify 0.1.8 documentation</p>
   
 </a></div>
     
@@ -313,34 +312,17 @@
      aria-label="Section Navigation">
   <p class="bd-links__title" role="heading" aria-level="1">Section Navigation</p>
   <div class="bd-toc-item navbar-nav"><ul class="current nav bd-sidenav">
-<li class="toctree-l1 has-children"><a class="reference internal" href="methods_taxonomy.html">1.  Methods Taxonomy</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
-<li class="toctree-l2"><a class="reference internal" href="modules/aggregative.html">1.1. Aggregative Quantification</a></li>
-<li class="toctree-l2"><a class="reference internal" href="modules/non_aggregative.html">1.2. Non Aggregative Quantification</a></li>
-<li class="toctree-l2"><a class="reference internal" href="modules/meta.html">1.3. Meta Quantification</a></li>
-</ul>
-</details></li>
+<li class="toctree-l1"><a class="reference internal" href="methods_taxonomy.html">1.  Methods Taxonomy</a></li>
 <li class="toctree-l1 has-children"><a class="reference internal" href="label_scheme.html">2.  Label Scheme</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
 <li class="toctree-l2"><a class="reference internal" href="binary_problems.html">2.1. Binary problems</a></li>
 <li class="toctree-l2"><a class="reference internal" href="multiclass_problems.html">2.2. Multiclass Problems</a></li>
 </ul>
 </details></li>
-<li class="toctree-l1 has-children"><a class="reference internal" href="building_a_quantifier.html">3.  Building a Quantifier</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
-<li class="toctree-l2"><a class="reference internal" href="modules/quantifier.html">3.1. Building a Quantifier</a></li>
-<li class="toctree-l2"><a class="reference internal" href="modules/aggregative_quantifier.html">3.2. Building an Aggregative Quantifier</a></li>
-<li class="toctree-l2"><a class="reference internal" href="modules/non_aggregative_quantifier.html">3.3. Building a Non-Aggregative Quantifier</a></li>
-</ul>
-</details></li>
+<li class="toctree-l1"><a class="reference internal" href="building_a_quantifier.html">3.  Building a Quantifier</a></li>
 <li class="toctree-l1"><a class="reference internal" href="non_parameters_scenarios.html">4.  Non Parameters Scenarios</a></li>
-<li class="toctree-l1 has-children"><a class="reference internal" href="model_selection_evaluation.html">5.  Model Selection and Evaluation</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
-<li class="toctree-l2"><a class="reference internal" href="modules/model_selection.html">5.1. Tunning the hyper-parameter of a quantifier</a></li>
-<li class="toctree-l2"><a class="reference internal" href="modules/evaluation.html">5.2. Metrics and scoring: quantifing the performance of a quantifier</a></li>
-</ul>
-</details></li>
+<li class="toctree-l1"><a class="reference internal" href="model_selection_evaluation.html">5.  Model Selection and Evaluation</a></li>
 <li class="toctree-l1 current active has-children"><a class="reference internal" href="experiment_management.html">6.  Experiment Management</a><details open="open"><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul class="current">
-<li class="toctree-l2"><a class="reference internal" href="modules/protocol.html">6.1. Protocol</a></li>
-<li class="toctree-l2"><a class="reference internal" href="modules/app_general.html">6.2. Artificial Prevalence protocol with general usage</a></li>
-<li class="toctree-l2"><a class="reference internal" href="modules/app_selected.html">6.3. Artificial Prevalence protocol with selected usage</a></li>
-<li class="toctree-l2 current active"><a class="current reference internal" href="#">6.4. Building a Protocol</a></li>
+<li class="toctree-l2 current active"><a class="current reference internal" href="#">6.1. Building a Protocol</a></li>
 </ul>
 </details></li>
 </ul>
@@ -382,7 +364,7 @@
     
     <li class="breadcrumb-item"><a href="experiment_management.html" class="nav-link"><span class="section-number">6. </span>Experiment Management</a></li>
     
-    <li class="breadcrumb-item active" aria-current="page"><span class="ellipsis"><span class="section-number">6.4. </span>Building a Protocol</span></li>
+    <li class="breadcrumb-item active" aria-current="page"><span class="ellipsis"><span class="section-number">6.1. </span>Building a Protocol</span></li>
   </ul>
 </nav>
 </div>
@@ -400,8 +382,8 @@
                 <article class="bd-article">
                   
   <section id="building-a-protocol">
-<span id="id1"></span><h1><span class="section-number">6.4. </span>Building a Protocol<a class="headerlink" href="#building-a-protocol" title="Link to this heading">#</a></h1>
-<p>The construction of all protocols is similar, and you can create your own protocol by inheriting from the <a class="reference internal" href="modules/generated/mlquantify.evaluation.protocol.Protocol.html#mlquantify.evaluation.protocol.Protocol" title="mlquantify.evaluation.protocol.Protocol"><code class="xref py py-class docutils literal notranslate"><span class="pre">Protocol</span></code></a> class. The only requirement is to implement:</p>
+<span id="id1"></span><h1><span class="section-number">6.1. </span>Building a Protocol<a class="headerlink" href="#building-a-protocol" title="Link to this heading">#</a></h1>
+<p>The construction of all protocols is similar, and you can create your own protocol by inheriting from the <code class="xref py py-class docutils literal notranslate"><span class="pre">Protocol</span></code> class. The only requirement is to implement:</p>
 <ul class="simple">
 <li><p><code class="docutils literal notranslate"><span class="pre">_new_sample</span></code> method: This method is responsible for generating the new sample to be used in the protocol. It should receive the X_test and y_test parameters, and return the new sample to be used in the protocol. The new sample should be a tuple of (X, y), where X is the new sample and y is the corresponding labels.</p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">predict_protocol</span></code> method: This method is responsible for predicting the quantifier. It should receive the X_test and y_test parameters, and return the predictions of the quantifier. <strong>Containing</strong> at least the names of the quantifiers, the real prevalences and the predicted prevalences for each samples. You can use the <code class="docutils literal notranslate"><span class="pre">_new_sample</span></code> function to generate the samples</p></li>
@@ -456,8 +438,8 @@
         <span class="k">return</span> <span class="n">X_test</span><span class="p">[</span><span class="n">indexes</span><span class="p">],</span> <span class="n">y_test</span><span class="p">[</span><span class="n">indexes</span><span class="p">]</span>
 </pre></div>
 </div>
-<p>An important note is that this examples uses the <a class="reference internal" href="modules/generated/mlquantify.utils.general.get_real_prev.html#mlquantify.utils.general.get_real_prev" title="mlquantify.utils.general.get_real_prev"><code class="xref py py-func docutils literal notranslate"><span class="pre">get_real_prev</span></code></a> function from the <code class="docutils literal notranslate"><span class="pre">mlquantify.utils</span></code> module to get the real prevalences of the sample. This function is used to calculate the real prevalences of the sample, and it is important to use it to ensure that the real prevalences are calculated correctly.</p>
-<p>Other point is that you need to pass the parameters of <code class="xref py py-class docutils literal notranslate"><span class="pre">Protocol</span></code> class to the constructor of the Protocol class, and the parameters of your custom protocol to the constructor of your custom protocol. The parameters of the Protocol class can be found in the <a class="reference internal" href="modules/protocol.html#protocol"><span class="std std-ref">Protocol</span></a> section.</p>
+<p>An important note is that this examples uses the <code class="xref py py-func docutils literal notranslate"><span class="pre">get_real_prev</span></code> function from the <code class="docutils literal notranslate"><span class="pre">mlquantify.utils</span></code> module to get the real prevalences of the sample. This function is used to calculate the real prevalences of the sample, and it is important to use it to ensure that the real prevalences are calculated correctly.</p>
+<p>Other point is that you need to pass the parameters of <code class="xref py py-class docutils literal notranslate"><span class="pre">Protocol</span></code> class to the constructor of the Protocol class, and the parameters of your custom protocol to the constructor of your custom protocol. The parameters of the Protocol class can be found in the <span class="xref std std-ref">protocol</span> section.</p>
 <div class="admonition warning">
 <p class="admonition-title">Warning</p>
 <p>The custom protocol must pass the columns parameter with <strong>at least</strong> the QUANTIFIER, REAL_PREVS and PRED_PREVS columns, otherwise the protocol will not work. The rest of the columns are optional.</p>
@@ -475,12 +457,12 @@
     <div class="footer-article-item">
 <div class="prev-next-area">
     <a class="left-prev"
-       href="modules/app_selected.html"
+       href="experiment_management.html"
        title="previous page">
       <i class="fa-solid fa-angle-left"></i>
       <div class="prev-next-info">
         <p class="prev-next-subtitle">previous</p>
-        <p class="prev-next-title"><span class="section-number">6.3. </span>Artificial Prevalence protocol with selected usage</p>
+        <p class="prev-next-title"><span class="section-number">6. </span>Experiment Management</p>
       </div>
     </a>
     <a class="right-next"

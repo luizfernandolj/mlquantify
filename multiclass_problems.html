@@ -19,7 +19,7 @@
 <meta name="description" content="In multiclass problems, most methods that only work with binary problems can still be used, applying them to each class separately, using the one-vs-all approach. This means that for each class, th..." />
 <meta name="twitter:card" content="summary_large_image" />
 
-    <title>2.2. Multiclass Problems &#8212; mlquantify 0.1.1 documentation</title>
+    <title>2.2. Multiclass Problems &#8212; mlquantify 0.1.8 documentation</title>
   
   
   
@@ -53,13 +53,12 @@
   <link rel="preload" as="script" href="_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf" />
 <link rel="preload" as="script" href="_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf" />
 
-    <script src="_static/documentation_options.js?v=a58bc63e"></script>
-    <script src="_static/doctools.js?v=9a2dae69"></script>
+    <script src="_static/documentation_options.js?v=22607128"></script>
+    <script src="_static/doctools.js?v=9bcbadda"></script>
     <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="_static/clipboard.min.js?v=a7894cd8"></script>
     <script src="_static/copybutton.js?v=f281be69"></script>
     <script src="_static/design-tabs.js?v=f930bc37"></script>
-    <script data-domain="scikit-learn.org" defer="defer" src="https://views.scientific-python.org/js/script.js"></script>
     <script>DOCUMENTATION_OPTIONS.pagename = 'multiclass_problems';</script>
     <link rel="canonical" href="https://luizfernandolj.github.io/mlquantify/multiclass_problems.html" />
     <link rel="author" title="About these documents" href="about.html" />
@@ -130,7 +129,7 @@
   
   
   
-    <p class="title logo__title">mlquantify 0.1.1 documentation</p>
+    <p class="title logo__title">mlquantify 0.1.8 documentation</p>
   
 </a></div>
     
@@ -313,34 +312,17 @@
      aria-label="Section Navigation">
   <p class="bd-links__title" role="heading" aria-level="1">Section Navigation</p>
   <div class="bd-toc-item navbar-nav"><ul class="current nav bd-sidenav">
-<li class="toctree-l1 has-children"><a class="reference internal" href="methods_taxonomy.html">1.  Methods Taxonomy</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
-<li class="toctree-l2"><a class="reference internal" href="modules/aggregative.html">1.1. Aggregative Quantification</a></li>
-<li class="toctree-l2"><a class="reference internal" href="modules/non_aggregative.html">1.2. Non Aggregative Quantification</a></li>
-<li class="toctree-l2"><a class="reference internal" href="modules/meta.html">1.3. Meta Quantification</a></li>
-</ul>
-</details></li>
+<li class="toctree-l1"><a class="reference internal" href="methods_taxonomy.html">1.  Methods Taxonomy</a></li>
 <li class="toctree-l1 current active has-children"><a class="reference internal" href="label_scheme.html">2.  Label Scheme</a><details open="open"><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul class="current">
 <li class="toctree-l2"><a class="reference internal" href="binary_problems.html">2.1. Binary problems</a></li>
 <li class="toctree-l2 current active"><a class="current reference internal" href="#">2.2. Multiclass Problems</a></li>
 </ul>
 </details></li>
-<li class="toctree-l1 has-children"><a class="reference internal" href="building_a_quantifier.html">3.  Building a Quantifier</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
-<li class="toctree-l2"><a class="reference internal" href="modules/quantifier.html">3.1. Building a Quantifier</a></li>
-<li class="toctree-l2"><a class="reference internal" href="modules/aggregative_quantifier.html">3.2. Building an Aggregative Quantifier</a></li>
-<li class="toctree-l2"><a class="reference internal" href="modules/non_aggregative_quantifier.html">3.3. Building a Non-Aggregative Quantifier</a></li>
-</ul>
-</details></li>
+<li class="toctree-l1"><a class="reference internal" href="building_a_quantifier.html">3.  Building a Quantifier</a></li>
 <li class="toctree-l1"><a class="reference internal" href="non_parameters_scenarios.html">4.  Non Parameters Scenarios</a></li>
-<li class="toctree-l1 has-children"><a class="reference internal" href="model_selection_evaluation.html">5.  Model Selection and Evaluation</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
-<li class="toctree-l2"><a class="reference internal" href="modules/model_selection.html">5.1. Tunning the hyper-parameter of a quantifier</a></li>
-<li class="toctree-l2"><a class="reference internal" href="modules/evaluation.html">5.2. Metrics and scoring: quantifing the performance of a quantifier</a></li>
-</ul>
-</details></li>
+<li class="toctree-l1"><a class="reference internal" href="model_selection_evaluation.html">5.  Model Selection and Evaluation</a></li>
 <li class="toctree-l1 has-children"><a class="reference internal" href="experiment_management.html">6.  Experiment Management</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
-<li class="toctree-l2"><a class="reference internal" href="modules/protocol.html">6.1. Protocol</a></li>
-<li class="toctree-l2"><a class="reference internal" href="modules/app_general.html">6.2. Artificial Prevalence protocol with general usage</a></li>
-<li class="toctree-l2"><a class="reference internal" href="modules/app_selected.html">6.3. Artificial Prevalence protocol with selected usage</a></li>
-<li class="toctree-l2"><a class="reference internal" href="building_a_protocol.html">6.4. Building a Protocol</a></li>
+<li class="toctree-l2"><a class="reference internal" href="building_a_protocol.html">6.1. Building a Protocol</a></li>
 </ul>
 </details></li>
 </ul>

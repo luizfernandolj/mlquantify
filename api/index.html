@@ -19,7 +19,7 @@
 <meta name="description" content="This is the class and function reference of scikit-learn. Please refer to the full user guide for further details, as the raw specifications of classes and functions may not be enough to give full ..." />
 <meta name="twitter:card" content="summary_large_image" />
 
-    <title>API Reference &#8212; mlquantify 0.1.1 documentation</title>
+    <title>API Reference &#8212; mlquantify 0.1.8 documentation</title>
   
   
   
@@ -53,19 +53,19 @@
   <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf" />
 <link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf" />
 
-    <script src="../_static/documentation_options.js?v=a58bc63e"></script>
-    <script src="../_static/doctools.js?v=9a2dae69"></script>
+    <script src="../_static/documentation_options.js?v=22607128"></script>
+    <script src="../_static/doctools.js?v=9bcbadda"></script>
     <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../_static/clipboard.min.js?v=a7894cd8"></script>
     <script src="../_static/copybutton.js?v=f281be69"></script>
     <script src="../_static/design-tabs.js?v=f930bc37"></script>
-    <script data-domain="scikit-learn.org" defer="defer" src="https://views.scientific-python.org/js/script.js"></script>
+    <script async="async" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
     <script>DOCUMENTATION_OPTIONS.pagename = 'api/index';</script>
     <link rel="canonical" href="https://luizfernandolj.github.io/mlquantify/api/index.html" />
     <link rel="author" title="About these documents" href="../about.html" />
     <link rel="search" title="Search" href="../search.html" />
     <link rel="next" title="mlquantify" href="mlquantify.html" />
-    <link rel="prev" title="6.4. Building a Protocol" href="../building_a_protocol.html" />
+    <link rel="prev" title="6.1. Building a Protocol" href="../building_a_protocol.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
   <meta name="docsearch:version" content="" />
@@ -130,7 +130,7 @@
   
   
   
-    <p class="title logo__title">mlquantify 0.1.1 documentation</p>
+    <p class="title logo__title">mlquantify 0.1.8 documentation</p>
   
 </a></div>
     
@@ -309,101 +309,102 @@
      aria-label="Section Navigation">
   <p class="bd-links__title" role="heading" aria-level="1">Section Navigation</p>
   <div class="bd-toc-item navbar-nav"><ul class="nav bd-sidenav">
-<li class="toctree-l1 has-children"><a class="reference internal" href="mlquantify.html">mlquantify</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
-<li class="toctree-l2"><a class="reference internal" href="../modules/generated/mlquantify.set_arguments.html">set_arguments</a></li>
+<li class="toctree-l1"><a class="reference internal" href="mlquantify.html">mlquantify</a></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="mlquantify.adjust_counting.html">mlquantify.adjust_counting</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../modules/generated/mlquantify.adjust_counting.ThresholdAdjustment.html">ThresholdAdjustment</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../modules/generated/mlquantify.adjust_counting.MatrixAdjustment.html">MatrixAdjustment</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../modules/generated/mlquantify.adjust_counting.FM.html">FM</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../modules/generated/mlquantify.adjust_counting.GAC.html">GAC</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../modules/generated/mlquantify.adjust_counting.GPAC.html">GPAC</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../modules/generated/mlquantify.adjust_counting.ACC.html">ACC</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../modules/generated/mlquantify.adjust_counting.X_method.html">X_method</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../modules/generated/mlquantify.adjust_counting.MAX.html">MAX</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../modules/generated/mlquantify.adjust_counting.T50.html">T50</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../modules/generated/mlquantify.adjust_counting.MS.html">MS</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../modules/generated/mlquantify.adjust_counting.MS2.html">MS2</a></li>
 </ul>
 </details></li>
 <li class="toctree-l1 has-children"><a class="reference internal" href="mlquantify.base.html">mlquantify.base</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
-<li class="toctree-l2"><a class="reference internal" href="../modules/generated/mlquantify.base.Quantifier.html">Quantifier</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../modules/generated/mlquantify.base.AggregativeQuantifier.html">AggregativeQuantifier</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../modules/generated/mlquantify.base.NonAggregativeQuantifier.html">NonAggregativeQuantifier</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../modules/generated/mlquantify.base.BaseQuantifier.html">BaseQuantifier</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../modules/generated/mlquantify.base.MetaquantifierMixin.html">MetaquantifierMixin</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../modules/generated/mlquantify.base.ProtocolMixin.html">ProtocolMixin</a></li>
 </ul>
 </details></li>
-<li class="toctree-l1 has-children"><a class="reference internal" href="mlquantify.classification.methods.html">mlquantify.classification.methods</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
-<li class="toctree-l2"><a class="reference internal" href="../modules/generated/mlquantify.classification.methods.PWKCLF.html">PWKCLF</a></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="mlquantify.base_aggregative.html">mlquantify.base_aggregative</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../modules/generated/mlquantify.base_aggregative.AggregationMixin.html">AggregationMixin</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../modules/generated/mlquantify.base_aggregative.SoftLearnerQMixin.html">SoftLearnerQMixin</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../modules/generated/mlquantify.base_aggregative.CrispLearnerQMixin.html">CrispLearnerQMixin</a></li>
 </ul>
 </details></li>
-<li class="toctree-l1 has-children"><a class="reference internal" href="mlquantify.evaluation.measures.html">mlquantify.evaluation.measures</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
-<li class="toctree-l2"><a class="reference internal" href="../modules/generated/mlquantify.evaluation.measures.process_inputs.html">process_inputs</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../modules/generated/mlquantify.evaluation.measures.absolute_error.html">absolute_error</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../modules/generated/mlquantify.evaluation.measures.mean_absolute_error.html">mean_absolute_error</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../modules/generated/mlquantify.evaluation.measures.kullback_leibler_divergence.html">kullback_leibler_divergence</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../modules/generated/mlquantify.evaluation.measures.squared_error.html">squared_error</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../modules/generated/mlquantify.evaluation.measures.mean_squared_error.html">mean_squared_error</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../modules/generated/mlquantify.evaluation.measures.normalized_absolute_error.html">normalized_absolute_error</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../modules/generated/mlquantify.evaluation.measures.normalized_kullback_leibler_divergence.html">normalized_kullback_leibler_divergence</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../modules/generated/mlquantify.evaluation.measures.relative_absolute_error.html">relative_absolute_error</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../modules/generated/mlquantify.evaluation.measures.normalized_relative_absolute_error.html">normalized_relative_absolute_error</a></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="mlquantify.confidence.html">mlquantify.confidence</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../modules/generated/mlquantify.confidence.BaseConfidenceRegion.html">BaseConfidenceRegion</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../modules/generated/mlquantify.confidence.ConfidenceInterval.html">ConfidenceInterval</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../modules/generated/mlquantify.confidence.ConfidenceEllipseSimplex.html">ConfidenceEllipseSimplex</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../modules/generated/mlquantify.confidence.ConfidenceEllipseCLR.html">ConfidenceEllipseCLR</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../modules/generated/mlquantify.confidence.construct_confidence_region.html">construct_confidence_region</a></li>
 </ul>
 </details></li>
-<li class="toctree-l1 has-children"><a class="reference internal" href="mlquantify.evaluation.protocol.html">mlquantify.evaluation.protocol</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
-<li class="toctree-l2"><a class="reference internal" href="../modules/generated/mlquantify.evaluation.protocol.Protocol.html">Protocol</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../modules/generated/mlquantify.evaluation.protocol.APP.html">APP</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../modules/generated/mlquantify.evaluation.protocol.NPP.html">NPP</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../modules/generated/mlquantify.evaluation.protocol.UPP.html">UPP</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../modules/generated/mlquantify.evaluation.protocol.PPP.html">PPP</a></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="mlquantify.likelihood.html">mlquantify.likelihood</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../modules/generated/mlquantify.likelihood.EMQ.html">EMQ</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../modules/generated/mlquantify.likelihood.MLPE.html">MLPE</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../modules/generated/mlquantify.likelihood.CDE.html">CDE</a></li>
 </ul>
 </details></li>
-<li class="toctree-l1 has-children"><a class="reference internal" href="mlquantify.methods.aggregative.html">mlquantify.methods.aggregative</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
-<li class="toctree-l2"><a class="reference internal" href="../modules/generated/mlquantify.methods.aggregative.CC.html">CC</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../modules/generated/mlquantify.methods.aggregative.EMQ.html">EMQ</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../modules/generated/mlquantify.methods.aggregative.FM.html">FM</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../modules/generated/mlquantify.methods.aggregative.GAC.html">GAC</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../modules/generated/mlquantify.methods.aggregative.GPAC.html">GPAC</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../modules/generated/mlquantify.methods.aggregative.PCC.html">PCC</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../modules/generated/mlquantify.methods.aggregative.PWK.html">PWK</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../modules/generated/mlquantify.methods.aggregative.ACC.html">ACC</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../modules/generated/mlquantify.methods.aggregative.MAX.html">MAX</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../modules/generated/mlquantify.methods.aggregative.MS.html">MS</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../modules/generated/mlquantify.methods.aggregative.MS2.html">MS2</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../modules/generated/mlquantify.methods.aggregative.PACC.html">PACC</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../modules/generated/mlquantify.methods.aggregative.T50.html">T50</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../modules/generated/mlquantify.methods.aggregative.X_method.html">X_method</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../modules/generated/mlquantify.methods.aggregative.DyS.html">DyS</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../modules/generated/mlquantify.methods.aggregative.DySsyn.html">DySsyn</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../modules/generated/mlquantify.methods.aggregative.HDy.html">HDy</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../modules/generated/mlquantify.methods.aggregative.SMM.html">SMM</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../modules/generated/mlquantify.methods.aggregative.SORD.html">SORD</a></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="mlquantify.meta.html">mlquantify.meta</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../modules/generated/mlquantify.meta.EnsembleQ.html">EnsembleQ</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../modules/generated/mlquantify.meta.QuaDapt.html">QuaDapt</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../modules/generated/mlquantify.meta.AggregativeBootstrap.html">AggregativeBootstrap</a></li>
 </ul>
 </details></li>
-<li class="toctree-l1 has-children"><a class="reference internal" href="mlquantify.methods.meta.html">mlquantify.methods.meta</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
-<li class="toctree-l2"><a class="reference internal" href="../modules/generated/mlquantify.methods.meta.Ensemble.html">Ensemble</a></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="mlquantify.metrics.html">mlquantify.metrics</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../modules/generated/mlquantify.metrics.AE.html">AE</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../modules/generated/mlquantify.metrics.SE.html">SE</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../modules/generated/mlquantify.metrics.MAE.html">MAE</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../modules/generated/mlquantify.metrics.MSE.html">MSE</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../modules/generated/mlquantify.metrics.KLD.html">KLD</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../modules/generated/mlquantify.metrics.RAE.html">RAE</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../modules/generated/mlquantify.metrics.NAE.html">NAE</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../modules/generated/mlquantify.metrics.NRAE.html">NRAE</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../modules/generated/mlquantify.metrics.NKLD.html">NKLD</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../modules/generated/mlquantify.metrics.NMD.html">NMD</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../modules/generated/mlquantify.metrics.RNOD.html">RNOD</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../modules/generated/mlquantify.metrics.VSE.html">VSE</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../modules/generated/mlquantify.metrics.CvM_L1.html">CvM_L1</a></li>
 </ul>
 </details></li>
-<li class="toctree-l1 has-children"><a class="reference internal" href="mlquantify.methods.non_aggregative.html">mlquantify.methods.non_aggregative</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
-<li class="toctree-l2"><a class="reference internal" href="../modules/generated/mlquantify.methods.non_aggregative.HDx.html">HDx</a></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="mlquantify.mixture.html">mlquantify.mixture</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../modules/generated/mlquantify.mixture.HDy.html">HDy</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../modules/generated/mlquantify.mixture.DyS.html">DyS</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../modules/generated/mlquantify.mixture.SMM.html">SMM</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../modules/generated/mlquantify.mixture.SORD.html">SORD</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../modules/generated/mlquantify.mixture.HDx.html">HDx</a></li>
 </ul>
 </details></li>
 <li class="toctree-l1 has-children"><a class="reference internal" href="mlquantify.model_selection.html">mlquantify.model_selection</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../modules/generated/mlquantify.model_selection.BaseProtocol.html">BaseProtocol</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../modules/generated/mlquantify.model_selection.APP.html">APP</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../modules/generated/mlquantify.model_selection.NPP.html">NPP</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../modules/generated/mlquantify.model_selection.UPP.html">UPP</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../modules/generated/mlquantify.model_selection.PPP.html">PPP</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../modules/generated/mlquantify.model_selection.GridSearchQ.html">GridSearchQ</a></li>
 </ul>
 </details></li>
-<li class="toctree-l1 has-children"><a class="reference internal" href="mlquantify.utils.general.html">mlquantify.utils.general</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
-<li class="toctree-l2"><a class="reference internal" href="../modules/generated/mlquantify.utils.general.convert_columns_to_arrays.html">convert_columns_to_arrays</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../modules/generated/mlquantify.utils.general.generate_artificial_prevalences.html">generate_artificial_prevalences</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../modules/generated/mlquantify.utils.general.get_real_prev.html">get_real_prev</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../modules/generated/mlquantify.utils.general.load_quantifier.html">load_quantifier</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../modules/generated/mlquantify.utils.general.make_prevs.html">make_prevs</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../modules/generated/mlquantify.utils.general.normalize_prevalence.html">normalize_prevalence</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../modules/generated/mlquantify.utils.general.parallel.html">parallel</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../modules/generated/mlquantify.utils.general.round_protocol_df.html">round_protocol_df</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../modules/generated/mlquantify.utils.general.get_measure.html">get_measure</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../modules/generated/mlquantify.utils.general.get_method.html">get_method</a></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="mlquantify.multiclass.html">mlquantify.multiclass</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../modules/generated/mlquantify.multiclass.define_binary.html">define_binary</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../modules/generated/mlquantify.multiclass._fit_ovr.html">_fit_ovr</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../modules/generated/mlquantify.multiclass._fit_ovo.html">_fit_ovo</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../modules/generated/mlquantify.multiclass._predict_ovr.html">_predict_ovr</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../modules/generated/mlquantify.multiclass._predict_ovo.html">_predict_ovo</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../modules/generated/mlquantify.multiclass._aggregate_ovr.html">_aggregate_ovr</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../modules/generated/mlquantify.multiclass._aggregate_ovo.html">_aggregate_ovo</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../modules/generated/mlquantify.multiclass.BinaryQuantifier.html">BinaryQuantifier</a></li>
 </ul>
 </details></li>
-<li class="toctree-l1 has-children"><a class="reference internal" href="mlquantify.utils.method.html">mlquantify.utils.method</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
-<li class="toctree-l2"><a class="reference internal" href="../modules/generated/mlquantify.utils.method.sqEuclidean.html">sqEuclidean</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../modules/generated/mlquantify.utils.method.probsymm.html">probsymm</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../modules/generated/mlquantify.utils.method.topsoe.html">topsoe</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../modules/generated/mlquantify.utils.method.hellinger.html">hellinger</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../modules/generated/mlquantify.utils.method.get_scores.html">get_scores</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../modules/generated/mlquantify.utils.method.getHist.html">getHist</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../modules/generated/mlquantify.utils.method.MoSS.html">MoSS</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../modules/generated/mlquantify.utils.method.ternary_search.html">ternary_search</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../modules/generated/mlquantify.utils.method.compute_table.html">compute_table</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../modules/generated/mlquantify.utils.method.compute_tpr.html">compute_tpr</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../modules/generated/mlquantify.utils.method.compute_fpr.html">compute_fpr</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../modules/generated/mlquantify.utils.method.adjust_threshold.html">adjust_threshold</a></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="mlquantify.neighbors.html">mlquantify.neighbors</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../modules/generated/mlquantify.neighbors.KDEyCS.html">KDEyCS</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../modules/generated/mlquantify.neighbors.KDEyHD.html">KDEyHD</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../modules/generated/mlquantify.neighbors.KDEyML.html">KDEyML</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../modules/generated/mlquantify.neighbors.PWK.html">PWK</a></li>
 </ul>
 </details></li>
 </ul>
@@ -460,7 +461,7 @@
 <span id="api-ref"></span><h1>API Reference<a class="headerlink" href="#api-reference" title="Link to this heading">#</a></h1>
 <p>This is the class and function reference of scikit-learn. Please refer to the
 <a class="reference internal" href="../user_guide.html#user-guide"><span class="std std-ref">full user guide</span></a> for further details, as the raw specifications of
-classes and functions may not be enough to give full guidelines on their uses. For
+classes and functions may not be enough to give full guidelines on their use. For
 reference on concepts repeated across the API, see <span class="xref std std-ref">glossary</span>.</p>
 <div class="toctree-wrapper compound">
 </div>
@@ -471,330 +472,410 @@ reference on concepts repeated across the API, see <span class="xref std std-ref
 </tr>
 </thead>
 <tbody>
-<tr class="row-even"><td><p><a class="reference internal" href="../modules/generated/mlquantify.set_arguments.html#mlquantify.set_arguments" title="mlquantify.set_arguments"><code class="xref py py-obj docutils literal notranslate"><span class="pre">set_arguments</span></code></a></p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="../modules/generated/mlquantify.adjust_counting.ThresholdAdjustment.html#mlquantify.adjust_counting.ThresholdAdjustment" title="mlquantify.adjust_counting.ThresholdAdjustment"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ThresholdAdjustment</span></code></a></p></td>
 <td><div class="sk-apisearch-desc docutils">
 <div class="caption docutils">
-<p><a class="reference internal" href="mlquantify.html#module-mlquantify" title="mlquantify"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mlquantify</span></code></a></p>
+<p><a class="reference internal" href="../modules/generated/mlquantify.adjust_counting.html#module-mlquantify.adjust_counting" title="mlquantify.adjust_counting"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mlquantify.adjust_counting</span></code></a></p>
 </div>
 </div>
 </td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="../modules/generated/mlquantify.base.Quantifier.html#mlquantify.base.Quantifier" title="mlquantify.base.Quantifier"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Quantifier</span></code></a></p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="../modules/generated/mlquantify.adjust_counting.MatrixAdjustment.html#mlquantify.adjust_counting.MatrixAdjustment" title="mlquantify.adjust_counting.MatrixAdjustment"><code class="xref py py-obj docutils literal notranslate"><span class="pre">MatrixAdjustment</span></code></a></p></td>
 <td><div class="sk-apisearch-desc docutils">
 <div class="caption docutils">
-<p><a class="reference internal" href="mlquantify.base.html#module-mlquantify.base" title="mlquantify.base"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mlquantify.base</span></code></a></p>
+<p><a class="reference internal" href="../modules/generated/mlquantify.adjust_counting.html#module-mlquantify.adjust_counting" title="mlquantify.adjust_counting"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mlquantify.adjust_counting</span></code></a></p>
 </div>
 </div>
 </td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="../modules/generated/mlquantify.base.AggregativeQuantifier.html#mlquantify.base.AggregativeQuantifier" title="mlquantify.base.AggregativeQuantifier"><code class="xref py py-obj docutils literal notranslate"><span class="pre">AggregativeQuantifier</span></code></a></p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="../modules/generated/mlquantify.adjust_counting.FM.html#mlquantify.adjust_counting.FM" title="mlquantify.adjust_counting.FM"><code class="xref py py-obj docutils literal notranslate"><span class="pre">FM</span></code></a></p></td>
 <td><div class="sk-apisearch-desc docutils">
 <div class="caption docutils">
-<p><a class="reference internal" href="mlquantify.base.html#module-mlquantify.base" title="mlquantify.base"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mlquantify.base</span></code></a></p>
+<p><a class="reference internal" href="../modules/generated/mlquantify.adjust_counting.html#module-mlquantify.adjust_counting" title="mlquantify.adjust_counting"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mlquantify.adjust_counting</span></code></a></p>
 </div>
 </div>
 </td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="../modules/generated/mlquantify.base.NonAggregativeQuantifier.html#mlquantify.base.NonAggregativeQuantifier" title="mlquantify.base.NonAggregativeQuantifier"><code class="xref py py-obj docutils literal notranslate"><span class="pre">NonAggregativeQuantifier</span></code></a></p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="../modules/generated/mlquantify.adjust_counting.GAC.html#mlquantify.adjust_counting.GAC" title="mlquantify.adjust_counting.GAC"><code class="xref py py-obj docutils literal notranslate"><span class="pre">GAC</span></code></a></p></td>
 <td><div class="sk-apisearch-desc docutils">
 <div class="caption docutils">
-<p><a class="reference internal" href="mlquantify.base.html#module-mlquantify.base" title="mlquantify.base"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mlquantify.base</span></code></a></p>
+<p><a class="reference internal" href="../modules/generated/mlquantify.adjust_counting.html#module-mlquantify.adjust_counting" title="mlquantify.adjust_counting"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mlquantify.adjust_counting</span></code></a></p>
 </div>
 </div>
 </td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="../modules/generated/mlquantify.classification.methods.PWKCLF.html#mlquantify.classification.methods.PWKCLF" title="mlquantify.classification.methods.PWKCLF"><code class="xref py py-obj docutils literal notranslate"><span class="pre">PWKCLF</span></code></a></p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="../modules/generated/mlquantify.adjust_counting.GPAC.html#mlquantify.adjust_counting.GPAC" title="mlquantify.adjust_counting.GPAC"><code class="xref py py-obj docutils literal notranslate"><span class="pre">GPAC</span></code></a></p></td>
 <td><div class="sk-apisearch-desc docutils">
 <div class="caption docutils">
-<p><a class="reference internal" href="mlquantify.classification.methods.html#module-mlquantify.classification.methods" title="mlquantify.classification.methods"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mlquantify.classification.methods</span></code></a></p>
+<p><a class="reference internal" href="../modules/generated/mlquantify.adjust_counting.html#module-mlquantify.adjust_counting" title="mlquantify.adjust_counting"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mlquantify.adjust_counting</span></code></a></p>
 </div>
 </div>
 </td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="../modules/generated/mlquantify.evaluation.measures.process_inputs.html#mlquantify.evaluation.measures.process_inputs" title="mlquantify.evaluation.measures.process_inputs"><code class="xref py py-obj docutils literal notranslate"><span class="pre">process_inputs</span></code></a></p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="../modules/generated/mlquantify.adjust_counting.ACC.html#mlquantify.adjust_counting.ACC" title="mlquantify.adjust_counting.ACC"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ACC</span></code></a></p></td>
 <td><div class="sk-apisearch-desc docutils">
 <div class="caption docutils">
-<p><a class="reference internal" href="mlquantify.evaluation.measures.html#module-mlquantify.evaluation.measures" title="mlquantify.evaluation.measures"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mlquantify.evaluation.measures</span></code></a></p>
+<p><a class="reference internal" href="../modules/generated/mlquantify.adjust_counting.html#module-mlquantify.adjust_counting" title="mlquantify.adjust_counting"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mlquantify.adjust_counting</span></code></a></p>
 </div>
 </div>
 </td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="../modules/generated/mlquantify.evaluation.measures.absolute_error.html#mlquantify.evaluation.measures.absolute_error" title="mlquantify.evaluation.measures.absolute_error"><code class="xref py py-obj docutils literal notranslate"><span class="pre">absolute_error</span></code></a></p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="../modules/generated/mlquantify.adjust_counting.X_method.html#mlquantify.adjust_counting.X_method" title="mlquantify.adjust_counting.X_method"><code class="xref py py-obj docutils literal notranslate"><span class="pre">X_method</span></code></a></p></td>
 <td><div class="sk-apisearch-desc docutils">
 <div class="caption docutils">
-<p><a class="reference internal" href="mlquantify.evaluation.measures.html#module-mlquantify.evaluation.measures" title="mlquantify.evaluation.measures"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mlquantify.evaluation.measures</span></code></a></p>
+<p><a class="reference internal" href="../modules/generated/mlquantify.adjust_counting.html#module-mlquantify.adjust_counting" title="mlquantify.adjust_counting"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mlquantify.adjust_counting</span></code></a></p>
 </div>
 </div>
 </td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="../modules/generated/mlquantify.evaluation.measures.mean_absolute_error.html#mlquantify.evaluation.measures.mean_absolute_error" title="mlquantify.evaluation.measures.mean_absolute_error"><code class="xref py py-obj docutils literal notranslate"><span class="pre">mean_absolute_error</span></code></a></p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="../modules/generated/mlquantify.adjust_counting.MAX.html#mlquantify.adjust_counting.MAX" title="mlquantify.adjust_counting.MAX"><code class="xref py py-obj docutils literal notranslate"><span class="pre">MAX</span></code></a></p></td>
 <td><div class="sk-apisearch-desc docutils">
 <div class="caption docutils">
-<p><a class="reference internal" href="mlquantify.evaluation.measures.html#module-mlquantify.evaluation.measures" title="mlquantify.evaluation.measures"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mlquantify.evaluation.measures</span></code></a></p>
+<p><a class="reference internal" href="../modules/generated/mlquantify.adjust_counting.html#module-mlquantify.adjust_counting" title="mlquantify.adjust_counting"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mlquantify.adjust_counting</span></code></a></p>
 </div>
 </div>
 </td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="../modules/generated/mlquantify.evaluation.measures.kullback_leibler_divergence.html#mlquantify.evaluation.measures.kullback_leibler_divergence" title="mlquantify.evaluation.measures.kullback_leibler_divergence"><code class="xref py py-obj docutils literal notranslate"><span class="pre">kullback_leibler_divergence</span></code></a></p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="../modules/generated/mlquantify.adjust_counting.T50.html#mlquantify.adjust_counting.T50" title="mlquantify.adjust_counting.T50"><code class="xref py py-obj docutils literal notranslate"><span class="pre">T50</span></code></a></p></td>
 <td><div class="sk-apisearch-desc docutils">
 <div class="caption docutils">
-<p><a class="reference internal" href="mlquantify.evaluation.measures.html#module-mlquantify.evaluation.measures" title="mlquantify.evaluation.measures"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mlquantify.evaluation.measures</span></code></a></p>
+<p><a class="reference internal" href="../modules/generated/mlquantify.adjust_counting.html#module-mlquantify.adjust_counting" title="mlquantify.adjust_counting"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mlquantify.adjust_counting</span></code></a></p>
 </div>
 </div>
 </td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="../modules/generated/mlquantify.evaluation.measures.squared_error.html#mlquantify.evaluation.measures.squared_error" title="mlquantify.evaluation.measures.squared_error"><code class="xref py py-obj docutils literal notranslate"><span class="pre">squared_error</span></code></a></p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="../modules/generated/mlquantify.adjust_counting.MS.html#mlquantify.adjust_counting.MS" title="mlquantify.adjust_counting.MS"><code class="xref py py-obj docutils literal notranslate"><span class="pre">MS</span></code></a></p></td>
 <td><div class="sk-apisearch-desc docutils">
 <div class="caption docutils">
-<p><a class="reference internal" href="mlquantify.evaluation.measures.html#module-mlquantify.evaluation.measures" title="mlquantify.evaluation.measures"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mlquantify.evaluation.measures</span></code></a></p>
+<p><a class="reference internal" href="../modules/generated/mlquantify.adjust_counting.html#module-mlquantify.adjust_counting" title="mlquantify.adjust_counting"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mlquantify.adjust_counting</span></code></a></p>
 </div>
 </div>
 </td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="../modules/generated/mlquantify.evaluation.measures.mean_squared_error.html#mlquantify.evaluation.measures.mean_squared_error" title="mlquantify.evaluation.measures.mean_squared_error"><code class="xref py py-obj docutils literal notranslate"><span class="pre">mean_squared_error</span></code></a></p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="../modules/generated/mlquantify.adjust_counting.MS2.html#mlquantify.adjust_counting.MS2" title="mlquantify.adjust_counting.MS2"><code class="xref py py-obj docutils literal notranslate"><span class="pre">MS2</span></code></a></p></td>
 <td><div class="sk-apisearch-desc docutils">
 <div class="caption docutils">
-<p><a class="reference internal" href="mlquantify.evaluation.measures.html#module-mlquantify.evaluation.measures" title="mlquantify.evaluation.measures"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mlquantify.evaluation.measures</span></code></a></p>
+<p><a class="reference internal" href="../modules/generated/mlquantify.adjust_counting.html#module-mlquantify.adjust_counting" title="mlquantify.adjust_counting"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mlquantify.adjust_counting</span></code></a></p>
 </div>
 </div>
 </td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="../modules/generated/mlquantify.evaluation.measures.normalized_absolute_error.html#mlquantify.evaluation.measures.normalized_absolute_error" title="mlquantify.evaluation.measures.normalized_absolute_error"><code class="xref py py-obj docutils literal notranslate"><span class="pre">normalized_absolute_error</span></code></a></p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="../modules/generated/mlquantify.base.BaseQuantifier.html#mlquantify.base.BaseQuantifier" title="mlquantify.base.BaseQuantifier"><code class="xref py py-obj docutils literal notranslate"><span class="pre">BaseQuantifier</span></code></a></p></td>
 <td><div class="sk-apisearch-desc docutils">
 <div class="caption docutils">
-<p><a class="reference internal" href="mlquantify.evaluation.measures.html#module-mlquantify.evaluation.measures" title="mlquantify.evaluation.measures"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mlquantify.evaluation.measures</span></code></a></p>
+<p><a class="reference internal" href="../modules/generated/mlquantify.html#module-mlquantify.base" title="mlquantify.base"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mlquantify.base</span></code></a></p>
 </div>
 </div>
 </td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="../modules/generated/mlquantify.evaluation.measures.normalized_kullback_leibler_divergence.html#mlquantify.evaluation.measures.normalized_kullback_leibler_divergence" title="mlquantify.evaluation.measures.normalized_kullback_leibler_divergence"><code class="xref py py-obj docutils literal notranslate"><span class="pre">normalized_kullback_leibler_divergence</span></code></a></p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="../modules/generated/mlquantify.base.MetaquantifierMixin.html#mlquantify.base.MetaquantifierMixin" title="mlquantify.base.MetaquantifierMixin"><code class="xref py py-obj docutils literal notranslate"><span class="pre">MetaquantifierMixin</span></code></a></p></td>
 <td><div class="sk-apisearch-desc docutils">
 <div class="caption docutils">
-<p><a class="reference internal" href="mlquantify.evaluation.measures.html#module-mlquantify.evaluation.measures" title="mlquantify.evaluation.measures"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mlquantify.evaluation.measures</span></code></a></p>
+<p><a class="reference internal" href="../modules/generated/mlquantify.html#module-mlquantify.base" title="mlquantify.base"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mlquantify.base</span></code></a></p>
 </div>
 </div>
 </td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="../modules/generated/mlquantify.evaluation.measures.relative_absolute_error.html#mlquantify.evaluation.measures.relative_absolute_error" title="mlquantify.evaluation.measures.relative_absolute_error"><code class="xref py py-obj docutils literal notranslate"><span class="pre">relative_absolute_error</span></code></a></p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="../modules/generated/mlquantify.base.ProtocolMixin.html#mlquantify.base.ProtocolMixin" title="mlquantify.base.ProtocolMixin"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ProtocolMixin</span></code></a></p></td>
 <td><div class="sk-apisearch-desc docutils">
 <div class="caption docutils">
-<p><a class="reference internal" href="mlquantify.evaluation.measures.html#module-mlquantify.evaluation.measures" title="mlquantify.evaluation.measures"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mlquantify.evaluation.measures</span></code></a></p>
+<p><a class="reference internal" href="../modules/generated/mlquantify.html#module-mlquantify.base" title="mlquantify.base"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mlquantify.base</span></code></a></p>
 </div>
 </div>
 </td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="../modules/generated/mlquantify.evaluation.measures.normalized_relative_absolute_error.html#mlquantify.evaluation.measures.normalized_relative_absolute_error" title="mlquantify.evaluation.measures.normalized_relative_absolute_error"><code class="xref py py-obj docutils literal notranslate"><span class="pre">normalized_relative_absolute_error</span></code></a></p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="../modules/generated/mlquantify.base_aggregative.AggregationMixin.html#mlquantify.base_aggregative.AggregationMixin" title="mlquantify.base_aggregative.AggregationMixin"><code class="xref py py-obj docutils literal notranslate"><span class="pre">AggregationMixin</span></code></a></p></td>
 <td><div class="sk-apisearch-desc docutils">
 <div class="caption docutils">
-<p><a class="reference internal" href="mlquantify.evaluation.measures.html#module-mlquantify.evaluation.measures" title="mlquantify.evaluation.measures"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mlquantify.evaluation.measures</span></code></a></p>
+<p><a class="reference internal" href="../modules/generated/mlquantify.html#module-mlquantify.base_aggregative" title="mlquantify.base_aggregative"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mlquantify.base_aggregative</span></code></a></p>
 </div>
 </div>
 </td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="../modules/generated/mlquantify.evaluation.protocol.Protocol.html#mlquantify.evaluation.protocol.Protocol" title="mlquantify.evaluation.protocol.Protocol"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Protocol</span></code></a></p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="../modules/generated/mlquantify.base_aggregative.SoftLearnerQMixin.html#mlquantify.base_aggregative.SoftLearnerQMixin" title="mlquantify.base_aggregative.SoftLearnerQMixin"><code class="xref py py-obj docutils literal notranslate"><span class="pre">SoftLearnerQMixin</span></code></a></p></td>
 <td><div class="sk-apisearch-desc docutils">
 <div class="caption docutils">
-<p><a class="reference internal" href="mlquantify.evaluation.protocol.html#module-mlquantify.evaluation.protocol" title="mlquantify.evaluation.protocol"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mlquantify.evaluation.protocol</span></code></a></p>
+<p><a class="reference internal" href="../modules/generated/mlquantify.html#module-mlquantify.base_aggregative" title="mlquantify.base_aggregative"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mlquantify.base_aggregative</span></code></a></p>
 </div>
 </div>
 </td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="../modules/generated/mlquantify.evaluation.protocol.APP.html#mlquantify.evaluation.protocol.APP" title="mlquantify.evaluation.protocol.APP"><code class="xref py py-obj docutils literal notranslate"><span class="pre">APP</span></code></a></p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="../modules/generated/mlquantify.base_aggregative.CrispLearnerQMixin.html#mlquantify.base_aggregative.CrispLearnerQMixin" title="mlquantify.base_aggregative.CrispLearnerQMixin"><code class="xref py py-obj docutils literal notranslate"><span class="pre">CrispLearnerQMixin</span></code></a></p></td>
 <td><div class="sk-apisearch-desc docutils">
 <div class="caption docutils">
-<p><a class="reference internal" href="mlquantify.evaluation.protocol.html#module-mlquantify.evaluation.protocol" title="mlquantify.evaluation.protocol"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mlquantify.evaluation.protocol</span></code></a></p>
+<p><a class="reference internal" href="../modules/generated/mlquantify.html#module-mlquantify.base_aggregative" title="mlquantify.base_aggregative"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mlquantify.base_aggregative</span></code></a></p>
 </div>
 </div>
 </td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="../modules/generated/mlquantify.evaluation.protocol.NPP.html#mlquantify.evaluation.protocol.NPP" title="mlquantify.evaluation.protocol.NPP"><code class="xref py py-obj docutils literal notranslate"><span class="pre">NPP</span></code></a></p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="../modules/generated/mlquantify.confidence.BaseConfidenceRegion.html#mlquantify.confidence.BaseConfidenceRegion" title="mlquantify.confidence.BaseConfidenceRegion"><code class="xref py py-obj docutils literal notranslate"><span class="pre">BaseConfidenceRegion</span></code></a></p></td>
 <td><div class="sk-apisearch-desc docutils">
 <div class="caption docutils">
-<p><a class="reference internal" href="mlquantify.evaluation.protocol.html#module-mlquantify.evaluation.protocol" title="mlquantify.evaluation.protocol"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mlquantify.evaluation.protocol</span></code></a></p>
+<p><a class="reference internal" href="../modules/generated/mlquantify.html#module-mlquantify.confidence" title="mlquantify.confidence"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mlquantify.confidence</span></code></a></p>
 </div>
 </div>
 </td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="../modules/generated/mlquantify.evaluation.protocol.UPP.html#mlquantify.evaluation.protocol.UPP" title="mlquantify.evaluation.protocol.UPP"><code class="xref py py-obj docutils literal notranslate"><span class="pre">UPP</span></code></a></p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="../modules/generated/mlquantify.confidence.ConfidenceInterval.html#mlquantify.confidence.ConfidenceInterval" title="mlquantify.confidence.ConfidenceInterval"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ConfidenceInterval</span></code></a></p></td>
 <td><div class="sk-apisearch-desc docutils">
 <div class="caption docutils">
-<p><a class="reference internal" href="mlquantify.evaluation.protocol.html#module-mlquantify.evaluation.protocol" title="mlquantify.evaluation.protocol"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mlquantify.evaluation.protocol</span></code></a></p>
+<p><a class="reference internal" href="../modules/generated/mlquantify.html#module-mlquantify.confidence" title="mlquantify.confidence"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mlquantify.confidence</span></code></a></p>
 </div>
 </div>
 </td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="../modules/generated/mlquantify.evaluation.protocol.PPP.html#mlquantify.evaluation.protocol.PPP" title="mlquantify.evaluation.protocol.PPP"><code class="xref py py-obj docutils literal notranslate"><span class="pre">PPP</span></code></a></p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="../modules/generated/mlquantify.confidence.ConfidenceEllipseSimplex.html#mlquantify.confidence.ConfidenceEllipseSimplex" title="mlquantify.confidence.ConfidenceEllipseSimplex"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ConfidenceEllipseSimplex</span></code></a></p></td>
 <td><div class="sk-apisearch-desc docutils">
 <div class="caption docutils">
-<p><a class="reference internal" href="mlquantify.evaluation.protocol.html#module-mlquantify.evaluation.protocol" title="mlquantify.evaluation.protocol"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mlquantify.evaluation.protocol</span></code></a></p>
+<p><a class="reference internal" href="../modules/generated/mlquantify.html#module-mlquantify.confidence" title="mlquantify.confidence"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mlquantify.confidence</span></code></a></p>
 </div>
 </div>
 </td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="../modules/generated/mlquantify.methods.aggregative.CC.html#mlquantify.methods.aggregative.CC" title="mlquantify.methods.aggregative.CC"><code class="xref py py-obj docutils literal notranslate"><span class="pre">CC</span></code></a></p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="../modules/generated/mlquantify.confidence.ConfidenceEllipseCLR.html#mlquantify.confidence.ConfidenceEllipseCLR" title="mlquantify.confidence.ConfidenceEllipseCLR"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ConfidenceEllipseCLR</span></code></a></p></td>
 <td><div class="sk-apisearch-desc docutils">
 <div class="caption docutils">
-<p><a class="reference internal" href="mlquantify.methods.aggregative.html#module-mlquantify.methods.aggregative" title="mlquantify.methods.aggregative"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mlquantify.methods.aggregative</span></code></a></p>
+<p><a class="reference internal" href="../modules/generated/mlquantify.html#module-mlquantify.confidence" title="mlquantify.confidence"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mlquantify.confidence</span></code></a></p>
 </div>
 </div>
 </td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="../modules/generated/mlquantify.methods.aggregative.EMQ.html#mlquantify.methods.aggregative.EMQ" title="mlquantify.methods.aggregative.EMQ"><code class="xref py py-obj docutils literal notranslate"><span class="pre">EMQ</span></code></a></p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="../modules/generated/mlquantify.confidence.construct_confidence_region.html#mlquantify.confidence.construct_confidence_region" title="mlquantify.confidence.construct_confidence_region"><code class="xref py py-obj docutils literal notranslate"><span class="pre">construct_confidence_region</span></code></a></p></td>
 <td><div class="sk-apisearch-desc docutils">
 <div class="caption docutils">
-<p><a class="reference internal" href="mlquantify.methods.aggregative.html#module-mlquantify.methods.aggregative" title="mlquantify.methods.aggregative"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mlquantify.methods.aggregative</span></code></a></p>
+<p><a class="reference internal" href="../modules/generated/mlquantify.html#module-mlquantify.confidence" title="mlquantify.confidence"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mlquantify.confidence</span></code></a></p>
 </div>
 </div>
 </td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="../modules/generated/mlquantify.methods.aggregative.FM.html#mlquantify.methods.aggregative.FM" title="mlquantify.methods.aggregative.FM"><code class="xref py py-obj docutils literal notranslate"><span class="pre">FM</span></code></a></p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="../modules/generated/mlquantify.likelihood.EMQ.html#mlquantify.likelihood.EMQ" title="mlquantify.likelihood.EMQ"><code class="xref py py-obj docutils literal notranslate"><span class="pre">EMQ</span></code></a></p></td>
 <td><div class="sk-apisearch-desc docutils">
 <div class="caption docutils">
-<p><a class="reference internal" href="mlquantify.methods.aggregative.html#module-mlquantify.methods.aggregative" title="mlquantify.methods.aggregative"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mlquantify.methods.aggregative</span></code></a></p>
+<p><a class="reference internal" href="../modules/generated/mlquantify.likelihood.html#module-mlquantify.likelihood" title="mlquantify.likelihood"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mlquantify.likelihood</span></code></a></p>
 </div>
 </div>
 </td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="../modules/generated/mlquantify.methods.aggregative.GAC.html#mlquantify.methods.aggregative.GAC" title="mlquantify.methods.aggregative.GAC"><code class="xref py py-obj docutils literal notranslate"><span class="pre">GAC</span></code></a></p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="../modules/generated/mlquantify.likelihood.MLPE.html#mlquantify.likelihood.MLPE" title="mlquantify.likelihood.MLPE"><code class="xref py py-obj docutils literal notranslate"><span class="pre">MLPE</span></code></a></p></td>
 <td><div class="sk-apisearch-desc docutils">
 <div class="caption docutils">
-<p><a class="reference internal" href="mlquantify.methods.aggregative.html#module-mlquantify.methods.aggregative" title="mlquantify.methods.aggregative"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mlquantify.methods.aggregative</span></code></a></p>
+<p><a class="reference internal" href="../modules/generated/mlquantify.likelihood.html#module-mlquantify.likelihood" title="mlquantify.likelihood"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mlquantify.likelihood</span></code></a></p>
 </div>
 </div>
 </td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="../modules/generated/mlquantify.methods.aggregative.GPAC.html#mlquantify.methods.aggregative.GPAC" title="mlquantify.methods.aggregative.GPAC"><code class="xref py py-obj docutils literal notranslate"><span class="pre">GPAC</span></code></a></p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="../modules/generated/mlquantify.likelihood.CDE.html#mlquantify.likelihood.CDE" title="mlquantify.likelihood.CDE"><code class="xref py py-obj docutils literal notranslate"><span class="pre">CDE</span></code></a></p></td>
 <td><div class="sk-apisearch-desc docutils">
 <div class="caption docutils">
-<p><a class="reference internal" href="mlquantify.methods.aggregative.html#module-mlquantify.methods.aggregative" title="mlquantify.methods.aggregative"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mlquantify.methods.aggregative</span></code></a></p>
+<p><a class="reference internal" href="../modules/generated/mlquantify.likelihood.html#module-mlquantify.likelihood" title="mlquantify.likelihood"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mlquantify.likelihood</span></code></a></p>
 </div>
 </div>
 </td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="../modules/generated/mlquantify.methods.aggregative.PCC.html#mlquantify.methods.aggregative.PCC" title="mlquantify.methods.aggregative.PCC"><code class="xref py py-obj docutils literal notranslate"><span class="pre">PCC</span></code></a></p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="../modules/generated/mlquantify.meta.EnsembleQ.html#mlquantify.meta.EnsembleQ" title="mlquantify.meta.EnsembleQ"><code class="xref py py-obj docutils literal notranslate"><span class="pre">EnsembleQ</span></code></a></p></td>
 <td><div class="sk-apisearch-desc docutils">
 <div class="caption docutils">
-<p><a class="reference internal" href="mlquantify.methods.aggregative.html#module-mlquantify.methods.aggregative" title="mlquantify.methods.aggregative"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mlquantify.methods.aggregative</span></code></a></p>
+<p><a class="reference internal" href="../modules/generated/mlquantify.meta.html#module-mlquantify.meta" title="mlquantify.meta"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mlquantify.meta</span></code></a></p>
 </div>
 </div>
 </td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="../modules/generated/mlquantify.methods.aggregative.PWK.html#mlquantify.methods.aggregative.PWK" title="mlquantify.methods.aggregative.PWK"><code class="xref py py-obj docutils literal notranslate"><span class="pre">PWK</span></code></a></p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="../modules/generated/mlquantify.meta.QuaDapt.html#mlquantify.meta.QuaDapt" title="mlquantify.meta.QuaDapt"><code class="xref py py-obj docutils literal notranslate"><span class="pre">QuaDapt</span></code></a></p></td>
 <td><div class="sk-apisearch-desc docutils">
 <div class="caption docutils">
-<p><a class="reference internal" href="mlquantify.methods.aggregative.html#module-mlquantify.methods.aggregative" title="mlquantify.methods.aggregative"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mlquantify.methods.aggregative</span></code></a></p>
+<p><a class="reference internal" href="../modules/generated/mlquantify.meta.html#module-mlquantify.meta" title="mlquantify.meta"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mlquantify.meta</span></code></a></p>
 </div>
 </div>
 </td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="../modules/generated/mlquantify.methods.aggregative.ACC.html#mlquantify.methods.aggregative.ACC" title="mlquantify.methods.aggregative.ACC"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ACC</span></code></a></p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="../modules/generated/mlquantify.meta.AggregativeBootstrap.html#mlquantify.meta.AggregativeBootstrap" title="mlquantify.meta.AggregativeBootstrap"><code class="xref py py-obj docutils literal notranslate"><span class="pre">AggregativeBootstrap</span></code></a></p></td>
 <td><div class="sk-apisearch-desc docutils">
 <div class="caption docutils">
-<p><a class="reference internal" href="mlquantify.methods.aggregative.html#module-mlquantify.methods.aggregative" title="mlquantify.methods.aggregative"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mlquantify.methods.aggregative</span></code></a></p>
+<p><a class="reference internal" href="../modules/generated/mlquantify.meta.html#module-mlquantify.meta" title="mlquantify.meta"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mlquantify.meta</span></code></a></p>
 </div>
 </div>
 </td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="../modules/generated/mlquantify.methods.aggregative.MAX.html#mlquantify.methods.aggregative.MAX" title="mlquantify.methods.aggregative.MAX"><code class="xref py py-obj docutils literal notranslate"><span class="pre">MAX</span></code></a></p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="../modules/generated/mlquantify.metrics.AE.html#mlquantify.metrics.AE" title="mlquantify.metrics.AE"><code class="xref py py-obj docutils literal notranslate"><span class="pre">AE</span></code></a></p></td>
 <td><div class="sk-apisearch-desc docutils">
 <div class="caption docutils">
-<p><a class="reference internal" href="mlquantify.methods.aggregative.html#module-mlquantify.methods.aggregative" title="mlquantify.methods.aggregative"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mlquantify.methods.aggregative</span></code></a></p>
+<p><a class="reference internal" href="../modules/generated/mlquantify.metrics.html#module-mlquantify.metrics" title="mlquantify.metrics"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mlquantify.metrics</span></code></a></p>
 </div>
 </div>
 </td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="../modules/generated/mlquantify.methods.aggregative.MS.html#mlquantify.methods.aggregative.MS" title="mlquantify.methods.aggregative.MS"><code class="xref py py-obj docutils literal notranslate"><span class="pre">MS</span></code></a></p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="../modules/generated/mlquantify.metrics.SE.html#mlquantify.metrics.SE" title="mlquantify.metrics.SE"><code class="xref py py-obj docutils literal notranslate"><span class="pre">SE</span></code></a></p></td>
 <td><div class="sk-apisearch-desc docutils">
 <div class="caption docutils">
-<p><a class="reference internal" href="mlquantify.methods.aggregative.html#module-mlquantify.methods.aggregative" title="mlquantify.methods.aggregative"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mlquantify.methods.aggregative</span></code></a></p>
+<p><a class="reference internal" href="../modules/generated/mlquantify.metrics.html#module-mlquantify.metrics" title="mlquantify.metrics"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mlquantify.metrics</span></code></a></p>
 </div>
 </div>
 </td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="../modules/generated/mlquantify.methods.aggregative.MS2.html#mlquantify.methods.aggregative.MS2" title="mlquantify.methods.aggregative.MS2"><code class="xref py py-obj docutils literal notranslate"><span class="pre">MS2</span></code></a></p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="../modules/generated/mlquantify.metrics.MAE.html#mlquantify.metrics.MAE" title="mlquantify.metrics.MAE"><code class="xref py py-obj docutils literal notranslate"><span class="pre">MAE</span></code></a></p></td>
 <td><div class="sk-apisearch-desc docutils">
 <div class="caption docutils">
-<p><a class="reference internal" href="mlquantify.methods.aggregative.html#module-mlquantify.methods.aggregative" title="mlquantify.methods.aggregative"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mlquantify.methods.aggregative</span></code></a></p>
+<p><a class="reference internal" href="../modules/generated/mlquantify.metrics.html#module-mlquantify.metrics" title="mlquantify.metrics"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mlquantify.metrics</span></code></a></p>
 </div>
 </div>
 </td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="../modules/generated/mlquantify.methods.aggregative.PACC.html#mlquantify.methods.aggregative.PACC" title="mlquantify.methods.aggregative.PACC"><code class="xref py py-obj docutils literal notranslate"><span class="pre">PACC</span></code></a></p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="../modules/generated/mlquantify.metrics.MSE.html#mlquantify.metrics.MSE" title="mlquantify.metrics.MSE"><code class="xref py py-obj docutils literal notranslate"><span class="pre">MSE</span></code></a></p></td>
 <td><div class="sk-apisearch-desc docutils">
 <div class="caption docutils">
-<p><a class="reference internal" href="mlquantify.methods.aggregative.html#module-mlquantify.methods.aggregative" title="mlquantify.methods.aggregative"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mlquantify.methods.aggregative</span></code></a></p>
+<p><a class="reference internal" href="../modules/generated/mlquantify.metrics.html#module-mlquantify.metrics" title="mlquantify.metrics"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mlquantify.metrics</span></code></a></p>
 </div>
 </div>
 </td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="../modules/generated/mlquantify.methods.aggregative.T50.html#mlquantify.methods.aggregative.T50" title="mlquantify.methods.aggregative.T50"><code class="xref py py-obj docutils literal notranslate"><span class="pre">T50</span></code></a></p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="../modules/generated/mlquantify.metrics.KLD.html#mlquantify.metrics.KLD" title="mlquantify.metrics.KLD"><code class="xref py py-obj docutils literal notranslate"><span class="pre">KLD</span></code></a></p></td>
 <td><div class="sk-apisearch-desc docutils">
 <div class="caption docutils">
-<p><a class="reference internal" href="mlquantify.methods.aggregative.html#module-mlquantify.methods.aggregative" title="mlquantify.methods.aggregative"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mlquantify.methods.aggregative</span></code></a></p>
+<p><a class="reference internal" href="../modules/generated/mlquantify.metrics.html#module-mlquantify.metrics" title="mlquantify.metrics"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mlquantify.metrics</span></code></a></p>
 </div>
 </div>
 </td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="../modules/generated/mlquantify.methods.aggregative.X_method.html#mlquantify.methods.aggregative.X_method" title="mlquantify.methods.aggregative.X_method"><code class="xref py py-obj docutils literal notranslate"><span class="pre">X_method</span></code></a></p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="../modules/generated/mlquantify.metrics.RAE.html#mlquantify.metrics.RAE" title="mlquantify.metrics.RAE"><code class="xref py py-obj docutils literal notranslate"><span class="pre">RAE</span></code></a></p></td>
 <td><div class="sk-apisearch-desc docutils">
 <div class="caption docutils">
-<p><a class="reference internal" href="mlquantify.methods.aggregative.html#module-mlquantify.methods.aggregative" title="mlquantify.methods.aggregative"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mlquantify.methods.aggregative</span></code></a></p>
+<p><a class="reference internal" href="../modules/generated/mlquantify.metrics.html#module-mlquantify.metrics" title="mlquantify.metrics"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mlquantify.metrics</span></code></a></p>
 </div>
 </div>
 </td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="../modules/generated/mlquantify.methods.aggregative.DyS.html#mlquantify.methods.aggregative.DyS" title="mlquantify.methods.aggregative.DyS"><code class="xref py py-obj docutils literal notranslate"><span class="pre">DyS</span></code></a></p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="../modules/generated/mlquantify.metrics.NAE.html#mlquantify.metrics.NAE" title="mlquantify.metrics.NAE"><code class="xref py py-obj docutils literal notranslate"><span class="pre">NAE</span></code></a></p></td>
 <td><div class="sk-apisearch-desc docutils">
 <div class="caption docutils">
-<p><a class="reference internal" href="mlquantify.methods.aggregative.html#module-mlquantify.methods.aggregative" title="mlquantify.methods.aggregative"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mlquantify.methods.aggregative</span></code></a></p>
+<p><a class="reference internal" href="../modules/generated/mlquantify.metrics.html#module-mlquantify.metrics" title="mlquantify.metrics"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mlquantify.metrics</span></code></a></p>
 </div>
 </div>
 </td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="../modules/generated/mlquantify.methods.aggregative.DySsyn.html#mlquantify.methods.aggregative.DySsyn" title="mlquantify.methods.aggregative.DySsyn"><code class="xref py py-obj docutils literal notranslate"><span class="pre">DySsyn</span></code></a></p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="../modules/generated/mlquantify.metrics.NRAE.html#mlquantify.metrics.NRAE" title="mlquantify.metrics.NRAE"><code class="xref py py-obj docutils literal notranslate"><span class="pre">NRAE</span></code></a></p></td>
 <td><div class="sk-apisearch-desc docutils">
 <div class="caption docutils">
-<p><a class="reference internal" href="mlquantify.methods.aggregative.html#module-mlquantify.methods.aggregative" title="mlquantify.methods.aggregative"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mlquantify.methods.aggregative</span></code></a></p>
+<p><a class="reference internal" href="../modules/generated/mlquantify.metrics.html#module-mlquantify.metrics" title="mlquantify.metrics"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mlquantify.metrics</span></code></a></p>
 </div>
 </div>
 </td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="../modules/generated/mlquantify.methods.aggregative.HDy.html#mlquantify.methods.aggregative.HDy" title="mlquantify.methods.aggregative.HDy"><code class="xref py py-obj docutils literal notranslate"><span class="pre">HDy</span></code></a></p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="../modules/generated/mlquantify.metrics.NKLD.html#mlquantify.metrics.NKLD" title="mlquantify.metrics.NKLD"><code class="xref py py-obj docutils literal notranslate"><span class="pre">NKLD</span></code></a></p></td>
 <td><div class="sk-apisearch-desc docutils">
 <div class="caption docutils">
-<p><a class="reference internal" href="mlquantify.methods.aggregative.html#module-mlquantify.methods.aggregative" title="mlquantify.methods.aggregative"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mlquantify.methods.aggregative</span></code></a></p>
+<p><a class="reference internal" href="../modules/generated/mlquantify.metrics.html#module-mlquantify.metrics" title="mlquantify.metrics"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mlquantify.metrics</span></code></a></p>
 </div>
 </div>
 </td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="../modules/generated/mlquantify.methods.aggregative.SMM.html#mlquantify.methods.aggregative.SMM" title="mlquantify.methods.aggregative.SMM"><code class="xref py py-obj docutils literal notranslate"><span class="pre">SMM</span></code></a></p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="../modules/generated/mlquantify.metrics.NMD.html#mlquantify.metrics.NMD" title="mlquantify.metrics.NMD"><code class="xref py py-obj docutils literal notranslate"><span class="pre">NMD</span></code></a></p></td>
 <td><div class="sk-apisearch-desc docutils">
 <div class="caption docutils">
-<p><a class="reference internal" href="mlquantify.methods.aggregative.html#module-mlquantify.methods.aggregative" title="mlquantify.methods.aggregative"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mlquantify.methods.aggregative</span></code></a></p>
+<p><a class="reference internal" href="../modules/generated/mlquantify.metrics.html#module-mlquantify.metrics" title="mlquantify.metrics"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mlquantify.metrics</span></code></a></p>
 </div>
 </div>
 </td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="../modules/generated/mlquantify.methods.aggregative.SORD.html#mlquantify.methods.aggregative.SORD" title="mlquantify.methods.aggregative.SORD"><code class="xref py py-obj docutils literal notranslate"><span class="pre">SORD</span></code></a></p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="../modules/generated/mlquantify.metrics.RNOD.html#mlquantify.metrics.RNOD" title="mlquantify.metrics.RNOD"><code class="xref py py-obj docutils literal notranslate"><span class="pre">RNOD</span></code></a></p></td>
 <td><div class="sk-apisearch-desc docutils">
 <div class="caption docutils">
-<p><a class="reference internal" href="mlquantify.methods.aggregative.html#module-mlquantify.methods.aggregative" title="mlquantify.methods.aggregative"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mlquantify.methods.aggregative</span></code></a></p>
+<p><a class="reference internal" href="../modules/generated/mlquantify.metrics.html#module-mlquantify.metrics" title="mlquantify.metrics"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mlquantify.metrics</span></code></a></p>
 </div>
 </div>
 </td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="../modules/generated/mlquantify.methods.meta.Ensemble.html#mlquantify.methods.meta.Ensemble" title="mlquantify.methods.meta.Ensemble"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Ensemble</span></code></a></p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="../modules/generated/mlquantify.metrics.VSE.html#mlquantify.metrics.VSE" title="mlquantify.metrics.VSE"><code class="xref py py-obj docutils literal notranslate"><span class="pre">VSE</span></code></a></p></td>
 <td><div class="sk-apisearch-desc docutils">
 <div class="caption docutils">
-<p><a class="reference internal" href="mlquantify.methods.meta.html#module-mlquantify.methods.meta" title="mlquantify.methods.meta"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mlquantify.methods.meta</span></code></a></p>
+<p><a class="reference internal" href="../modules/generated/mlquantify.metrics.html#module-mlquantify.metrics" title="mlquantify.metrics"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mlquantify.metrics</span></code></a></p>
 </div>
 </div>
 </td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="../modules/generated/mlquantify.methods.non_aggregative.HDx.html#mlquantify.methods.non_aggregative.HDx" title="mlquantify.methods.non_aggregative.HDx"><code class="xref py py-obj docutils literal notranslate"><span class="pre">HDx</span></code></a></p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="../modules/generated/mlquantify.metrics.CvM_L1.html#mlquantify.metrics.CvM_L1" title="mlquantify.metrics.CvM_L1"><code class="xref py py-obj docutils literal notranslate"><span class="pre">CvM_L1</span></code></a></p></td>
 <td><div class="sk-apisearch-desc docutils">
 <div class="caption docutils">
-<p><a class="reference internal" href="mlquantify.methods.non_aggregative.html#module-mlquantify.methods.non_aggregative" title="mlquantify.methods.non_aggregative"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mlquantify.methods.non_aggregative</span></code></a></p>
+<p><a class="reference internal" href="../modules/generated/mlquantify.metrics.html#module-mlquantify.metrics" title="mlquantify.metrics"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mlquantify.metrics</span></code></a></p>
+</div>
+</div>
+</td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="../modules/generated/mlquantify.mixture.HDy.html#mlquantify.mixture.HDy" title="mlquantify.mixture.HDy"><code class="xref py py-obj docutils literal notranslate"><span class="pre">HDy</span></code></a></p></td>
+<td><div class="sk-apisearch-desc docutils">
+<div class="caption docutils">
+<p><a class="reference internal" href="../modules/generated/mlquantify.mixture.html#module-mlquantify.mixture" title="mlquantify.mixture"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mlquantify.mixture</span></code></a></p>
+</div>
+</div>
+</td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="../modules/generated/mlquantify.mixture.DyS.html#mlquantify.mixture.DyS" title="mlquantify.mixture.DyS"><code class="xref py py-obj docutils literal notranslate"><span class="pre">DyS</span></code></a></p></td>
+<td><div class="sk-apisearch-desc docutils">
+<div class="caption docutils">
+<p><a class="reference internal" href="../modules/generated/mlquantify.mixture.html#module-mlquantify.mixture" title="mlquantify.mixture"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mlquantify.mixture</span></code></a></p>
+</div>
+</div>
+</td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="../modules/generated/mlquantify.mixture.SMM.html#mlquantify.mixture.SMM" title="mlquantify.mixture.SMM"><code class="xref py py-obj docutils literal notranslate"><span class="pre">SMM</span></code></a></p></td>
+<td><div class="sk-apisearch-desc docutils">
+<div class="caption docutils">
+<p><a class="reference internal" href="../modules/generated/mlquantify.mixture.html#module-mlquantify.mixture" title="mlquantify.mixture"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mlquantify.mixture</span></code></a></p>
+</div>
+</div>
+</td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="../modules/generated/mlquantify.mixture.SORD.html#mlquantify.mixture.SORD" title="mlquantify.mixture.SORD"><code class="xref py py-obj docutils literal notranslate"><span class="pre">SORD</span></code></a></p></td>
+<td><div class="sk-apisearch-desc docutils">
+<div class="caption docutils">
+<p><a class="reference internal" href="../modules/generated/mlquantify.mixture.html#module-mlquantify.mixture" title="mlquantify.mixture"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mlquantify.mixture</span></code></a></p>
+</div>
+</div>
+</td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="../modules/generated/mlquantify.mixture.HDx.html#mlquantify.mixture.HDx" title="mlquantify.mixture.HDx"><code class="xref py py-obj docutils literal notranslate"><span class="pre">HDx</span></code></a></p></td>
+<td><div class="sk-apisearch-desc docutils">
+<div class="caption docutils">
+<p><a class="reference internal" href="../modules/generated/mlquantify.mixture.html#module-mlquantify.mixture" title="mlquantify.mixture"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mlquantify.mixture</span></code></a></p>
+</div>
+</div>
+</td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="../modules/generated/mlquantify.model_selection.BaseProtocol.html#mlquantify.model_selection.BaseProtocol" title="mlquantify.model_selection.BaseProtocol"><code class="xref py py-obj docutils literal notranslate"><span class="pre">BaseProtocol</span></code></a></p></td>
+<td><div class="sk-apisearch-desc docutils">
+<div class="caption docutils">
+<p><a class="reference internal" href="../modules/generated/mlquantify.model_selection.html#module-mlquantify.model_selection" title="mlquantify.model_selection"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mlquantify.model_selection</span></code></a></p>
+</div>
+</div>
+</td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="../modules/generated/mlquantify.model_selection.APP.html#mlquantify.model_selection.APP" title="mlquantify.model_selection.APP"><code class="xref py py-obj docutils literal notranslate"><span class="pre">APP</span></code></a></p></td>
+<td><div class="sk-apisearch-desc docutils">
+<div class="caption docutils">
+<p><a class="reference internal" href="../modules/generated/mlquantify.model_selection.html#module-mlquantify.model_selection" title="mlquantify.model_selection"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mlquantify.model_selection</span></code></a></p>
+</div>
+</div>
+</td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="../modules/generated/mlquantify.model_selection.NPP.html#mlquantify.model_selection.NPP" title="mlquantify.model_selection.NPP"><code class="xref py py-obj docutils literal notranslate"><span class="pre">NPP</span></code></a></p></td>
+<td><div class="sk-apisearch-desc docutils">
+<div class="caption docutils">
+<p><a class="reference internal" href="../modules/generated/mlquantify.model_selection.html#module-mlquantify.model_selection" title="mlquantify.model_selection"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mlquantify.model_selection</span></code></a></p>
+</div>
+</div>
+</td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="../modules/generated/mlquantify.model_selection.UPP.html#mlquantify.model_selection.UPP" title="mlquantify.model_selection.UPP"><code class="xref py py-obj docutils literal notranslate"><span class="pre">UPP</span></code></a></p></td>
+<td><div class="sk-apisearch-desc docutils">
+<div class="caption docutils">
+<p><a class="reference internal" href="../modules/generated/mlquantify.model_selection.html#module-mlquantify.model_selection" title="mlquantify.model_selection"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mlquantify.model_selection</span></code></a></p>
+</div>
+</div>
+</td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="../modules/generated/mlquantify.model_selection.PPP.html#mlquantify.model_selection.PPP" title="mlquantify.model_selection.PPP"><code class="xref py py-obj docutils literal notranslate"><span class="pre">PPP</span></code></a></p></td>
+<td><div class="sk-apisearch-desc docutils">
+<div class="caption docutils">
+<p><a class="reference internal" href="../modules/generated/mlquantify.model_selection.html#module-mlquantify.model_selection" title="mlquantify.model_selection"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mlquantify.model_selection</span></code></a></p>
 </div>
 </div>
 </td>
@@ -802,191 +883,103 @@ reference on concepts repeated across the API, see <span class="xref std std-ref
 <tr class="row-odd"><td><p><a class="reference internal" href="../modules/generated/mlquantify.model_selection.GridSearchQ.html#mlquantify.model_selection.GridSearchQ" title="mlquantify.model_selection.GridSearchQ"><code class="xref py py-obj docutils literal notranslate"><span class="pre">GridSearchQ</span></code></a></p></td>
 <td><div class="sk-apisearch-desc docutils">
 <div class="caption docutils">
-<p><a class="reference internal" href="mlquantify.model_selection.html#module-mlquantify.model_selection" title="mlquantify.model_selection"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mlquantify.model_selection</span></code></a></p>
+<p><a class="reference internal" href="../modules/generated/mlquantify.model_selection.html#module-mlquantify.model_selection" title="mlquantify.model_selection"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mlquantify.model_selection</span></code></a></p>
 </div>
 </div>
 </td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="../modules/generated/mlquantify.utils.general.convert_columns_to_arrays.html#mlquantify.utils.general.convert_columns_to_arrays" title="mlquantify.utils.general.convert_columns_to_arrays"><code class="xref py py-obj docutils literal notranslate"><span class="pre">convert_columns_to_arrays</span></code></a></p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="../modules/generated/mlquantify.multiclass.define_binary.html#mlquantify.multiclass.define_binary" title="mlquantify.multiclass.define_binary"><code class="xref py py-obj docutils literal notranslate"><span class="pre">define_binary</span></code></a></p></td>
 <td><div class="sk-apisearch-desc docutils">
 <div class="caption docutils">
-<p><a class="reference internal" href="mlquantify.utils.general.html#module-mlquantify.utils.general" title="mlquantify.utils.general"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mlquantify.utils.general</span></code></a></p>
+<p><a class="reference internal" href="../modules/generated/mlquantify.html#module-mlquantify.multiclass" title="mlquantify.multiclass"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mlquantify.multiclass</span></code></a></p>
 </div>
 </div>
 </td>
 </tr>
-<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">generate_artificial_indexes</span></code></p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="../modules/generated/mlquantify.multiclass._fit_ovr.html#mlquantify.multiclass._fit_ovr" title="mlquantify.multiclass._fit_ovr"><code class="xref py py-obj docutils literal notranslate"><span class="pre">_fit_ovr</span></code></a></p></td>
 <td><div class="sk-apisearch-desc docutils">
 <div class="caption docutils">
-<p><a class="reference internal" href="mlquantify.utils.general.html#module-mlquantify.utils.general" title="mlquantify.utils.general"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mlquantify.utils.general</span></code></a></p>
+<p><a class="reference internal" href="../modules/generated/mlquantify.html#module-mlquantify.multiclass" title="mlquantify.multiclass"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mlquantify.multiclass</span></code></a></p>
 </div>
 </div>
 </td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="../modules/generated/mlquantify.utils.general.generate_artificial_prevalences.html#mlquantify.utils.general.generate_artificial_prevalences" title="mlquantify.utils.general.generate_artificial_prevalences"><code class="xref py py-obj docutils literal notranslate"><span class="pre">generate_artificial_prevalences</span></code></a></p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="../modules/generated/mlquantify.multiclass._fit_ovo.html#mlquantify.multiclass._fit_ovo" title="mlquantify.multiclass._fit_ovo"><code class="xref py py-obj docutils literal notranslate"><span class="pre">_fit_ovo</span></code></a></p></td>
 <td><div class="sk-apisearch-desc docutils">
 <div class="caption docutils">
-<p><a class="reference internal" href="mlquantify.utils.general.html#module-mlquantify.utils.general" title="mlquantify.utils.general"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mlquantify.utils.general</span></code></a></p>
+<p><a class="reference internal" href="../modules/generated/mlquantify.html#module-mlquantify.multiclass" title="mlquantify.multiclass"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mlquantify.multiclass</span></code></a></p>
 </div>
 </div>
 </td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="../modules/generated/mlquantify.utils.general.get_real_prev.html#mlquantify.utils.general.get_real_prev" title="mlquantify.utils.general.get_real_prev"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_real_prev</span></code></a></p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="../modules/generated/mlquantify.multiclass._predict_ovr.html#mlquantify.multiclass._predict_ovr" title="mlquantify.multiclass._predict_ovr"><code class="xref py py-obj docutils literal notranslate"><span class="pre">_predict_ovr</span></code></a></p></td>
 <td><div class="sk-apisearch-desc docutils">
 <div class="caption docutils">
-<p><a class="reference internal" href="mlquantify.utils.general.html#module-mlquantify.utils.general" title="mlquantify.utils.general"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mlquantify.utils.general</span></code></a></p>
+<p><a class="reference internal" href="../modules/generated/mlquantify.html#module-mlquantify.multiclass" title="mlquantify.multiclass"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mlquantify.multiclass</span></code></a></p>
 </div>
 </div>
 </td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="../modules/generated/mlquantify.utils.general.load_quantifier.html#mlquantify.utils.general.load_quantifier" title="mlquantify.utils.general.load_quantifier"><code class="xref py py-obj docutils literal notranslate"><span class="pre">load_quantifier</span></code></a></p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="../modules/generated/mlquantify.multiclass._predict_ovo.html#mlquantify.multiclass._predict_ovo" title="mlquantify.multiclass._predict_ovo"><code class="xref py py-obj docutils literal notranslate"><span class="pre">_predict_ovo</span></code></a></p></td>
 <td><div class="sk-apisearch-desc docutils">
 <div class="caption docutils">
-<p><a class="reference internal" href="mlquantify.utils.general.html#module-mlquantify.utils.general" title="mlquantify.utils.general"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mlquantify.utils.general</span></code></a></p>
+<p><a class="reference internal" href="../modules/generated/mlquantify.html#module-mlquantify.multiclass" title="mlquantify.multiclass"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mlquantify.multiclass</span></code></a></p>
 </div>
 </div>
 </td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="../modules/generated/mlquantify.utils.general.make_prevs.html#mlquantify.utils.general.make_prevs" title="mlquantify.utils.general.make_prevs"><code class="xref py py-obj docutils literal notranslate"><span class="pre">make_prevs</span></code></a></p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="../modules/generated/mlquantify.multiclass._aggregate_ovr.html#mlquantify.multiclass._aggregate_ovr" title="mlquantify.multiclass._aggregate_ovr"><code class="xref py py-obj docutils literal notranslate"><span class="pre">_aggregate_ovr</span></code></a></p></td>
 <td><div class="sk-apisearch-desc docutils">
 <div class="caption docutils">
-<p><a class="reference internal" href="mlquantify.utils.general.html#module-mlquantify.utils.general" title="mlquantify.utils.general"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mlquantify.utils.general</span></code></a></p>
+<p><a class="reference internal" href="../modules/generated/mlquantify.html#module-mlquantify.multiclass" title="mlquantify.multiclass"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mlquantify.multiclass</span></code></a></p>
 </div>
 </div>
 </td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="../modules/generated/mlquantify.utils.general.normalize_prevalence.html#mlquantify.utils.general.normalize_prevalence" title="mlquantify.utils.general.normalize_prevalence"><code class="xref py py-obj docutils literal notranslate"><span class="pre">normalize_prevalence</span></code></a></p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="../modules/generated/mlquantify.multiclass._aggregate_ovo.html#mlquantify.multiclass._aggregate_ovo" title="mlquantify.multiclass._aggregate_ovo"><code class="xref py py-obj docutils literal notranslate"><span class="pre">_aggregate_ovo</span></code></a></p></td>
 <td><div class="sk-apisearch-desc docutils">
 <div class="caption docutils">
-<p><a class="reference internal" href="mlquantify.utils.general.html#module-mlquantify.utils.general" title="mlquantify.utils.general"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mlquantify.utils.general</span></code></a></p>
+<p><a class="reference internal" href="../modules/generated/mlquantify.html#module-mlquantify.multiclass" title="mlquantify.multiclass"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mlquantify.multiclass</span></code></a></p>
 </div>
 </div>
 </td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="../modules/generated/mlquantify.utils.general.parallel.html#mlquantify.utils.general.parallel" title="mlquantify.utils.general.parallel"><code class="xref py py-obj docutils literal notranslate"><span class="pre">parallel</span></code></a></p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="../modules/generated/mlquantify.multiclass.BinaryQuantifier.html#mlquantify.multiclass.BinaryQuantifier" title="mlquantify.multiclass.BinaryQuantifier"><code class="xref py py-obj docutils literal notranslate"><span class="pre">BinaryQuantifier</span></code></a></p></td>
 <td><div class="sk-apisearch-desc docutils">
 <div class="caption docutils">
-<p><a class="reference internal" href="mlquantify.utils.general.html#module-mlquantify.utils.general" title="mlquantify.utils.general"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mlquantify.utils.general</span></code></a></p>
+<p><a class="reference internal" href="../modules/generated/mlquantify.html#module-mlquantify.multiclass" title="mlquantify.multiclass"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mlquantify.multiclass</span></code></a></p>
 </div>
 </div>
 </td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="../modules/generated/mlquantify.utils.general.round_protocol_df.html#mlquantify.utils.general.round_protocol_df" title="mlquantify.utils.general.round_protocol_df"><code class="xref py py-obj docutils literal notranslate"><span class="pre">round_protocol_df</span></code></a></p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="../modules/generated/mlquantify.neighbors.KDEyCS.html#mlquantify.neighbors.KDEyCS" title="mlquantify.neighbors.KDEyCS"><code class="xref py py-obj docutils literal notranslate"><span class="pre">KDEyCS</span></code></a></p></td>
 <td><div class="sk-apisearch-desc docutils">
 <div class="caption docutils">
-<p><a class="reference internal" href="mlquantify.utils.general.html#module-mlquantify.utils.general" title="mlquantify.utils.general"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mlquantify.utils.general</span></code></a></p>
+<p><a class="reference internal" href="../modules/generated/mlquantify.neighbors.html#module-mlquantify.neighbors" title="mlquantify.neighbors"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mlquantify.neighbors</span></code></a></p>
 </div>
 </div>
 </td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="../modules/generated/mlquantify.utils.general.get_measure.html#mlquantify.utils.general.get_measure" title="mlquantify.utils.general.get_measure"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_measure</span></code></a></p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="../modules/generated/mlquantify.neighbors.KDEyHD.html#mlquantify.neighbors.KDEyHD" title="mlquantify.neighbors.KDEyHD"><code class="xref py py-obj docutils literal notranslate"><span class="pre">KDEyHD</span></code></a></p></td>
 <td><div class="sk-apisearch-desc docutils">
 <div class="caption docutils">
-<p><a class="reference internal" href="mlquantify.utils.general.html#module-mlquantify.utils.general" title="mlquantify.utils.general"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mlquantify.utils.general</span></code></a></p>
+<p><a class="reference internal" href="../modules/generated/mlquantify.neighbors.html#module-mlquantify.neighbors" title="mlquantify.neighbors"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mlquantify.neighbors</span></code></a></p>
 </div>
 </div>
 </td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="../modules/generated/mlquantify.utils.general.get_method.html#mlquantify.utils.general.get_method" title="mlquantify.utils.general.get_method"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_method</span></code></a></p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="../modules/generated/mlquantify.neighbors.KDEyML.html#mlquantify.neighbors.KDEyML" title="mlquantify.neighbors.KDEyML"><code class="xref py py-obj docutils literal notranslate"><span class="pre">KDEyML</span></code></a></p></td>
 <td><div class="sk-apisearch-desc docutils">
 <div class="caption docutils">
-<p><a class="reference internal" href="mlquantify.utils.general.html#module-mlquantify.utils.general" title="mlquantify.utils.general"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mlquantify.utils.general</span></code></a></p>
+<p><a class="reference internal" href="../modules/generated/mlquantify.neighbors.html#module-mlquantify.neighbors" title="mlquantify.neighbors"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mlquantify.neighbors</span></code></a></p>
 </div>
 </div>
 </td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="../modules/generated/mlquantify.utils.method.sqEuclidean.html#mlquantify.utils.method.sqEuclidean" title="mlquantify.utils.method.sqEuclidean"><code class="xref py py-obj docutils literal notranslate"><span class="pre">sqEuclidean</span></code></a></p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="../modules/generated/mlquantify.neighbors.PWK.html#mlquantify.neighbors.PWK" title="mlquantify.neighbors.PWK"><code class="xref py py-obj docutils literal notranslate"><span class="pre">PWK</span></code></a></p></td>
 <td><div class="sk-apisearch-desc docutils">
 <div class="caption docutils">
-<p><a class="reference internal" href="mlquantify.utils.method.html#module-mlquantify.utils.method" title="mlquantify.utils.method"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mlquantify.utils.method</span></code></a></p>
-</div>
-</div>
-</td>
-</tr>
-<tr class="row-even"><td><p><a class="reference internal" href="../modules/generated/mlquantify.utils.method.probsymm.html#mlquantify.utils.method.probsymm" title="mlquantify.utils.method.probsymm"><code class="xref py py-obj docutils literal notranslate"><span class="pre">probsymm</span></code></a></p></td>
-<td><div class="sk-apisearch-desc docutils">
-<div class="caption docutils">
-<p><a class="reference internal" href="mlquantify.utils.method.html#module-mlquantify.utils.method" title="mlquantify.utils.method"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mlquantify.utils.method</span></code></a></p>
-</div>
-</div>
-</td>
-</tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="../modules/generated/mlquantify.utils.method.topsoe.html#mlquantify.utils.method.topsoe" title="mlquantify.utils.method.topsoe"><code class="xref py py-obj docutils literal notranslate"><span class="pre">topsoe</span></code></a></p></td>
-<td><div class="sk-apisearch-desc docutils">
-<div class="caption docutils">
-<p><a class="reference internal" href="mlquantify.utils.method.html#module-mlquantify.utils.method" title="mlquantify.utils.method"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mlquantify.utils.method</span></code></a></p>
-</div>
-</div>
-</td>
-</tr>
-<tr class="row-even"><td><p><a class="reference internal" href="../modules/generated/mlquantify.utils.method.hellinger.html#mlquantify.utils.method.hellinger" title="mlquantify.utils.method.hellinger"><code class="xref py py-obj docutils literal notranslate"><span class="pre">hellinger</span></code></a></p></td>
-<td><div class="sk-apisearch-desc docutils">
-<div class="caption docutils">
-<p><a class="reference internal" href="mlquantify.utils.method.html#module-mlquantify.utils.method" title="mlquantify.utils.method"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mlquantify.utils.method</span></code></a></p>
-</div>
-</div>
-</td>
-</tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="../modules/generated/mlquantify.utils.method.get_scores.html#mlquantify.utils.method.get_scores" title="mlquantify.utils.method.get_scores"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_scores</span></code></a></p></td>
-<td><div class="sk-apisearch-desc docutils">
-<div class="caption docutils">
-<p><a class="reference internal" href="mlquantify.utils.method.html#module-mlquantify.utils.method" title="mlquantify.utils.method"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mlquantify.utils.method</span></code></a></p>
-</div>
-</div>
-</td>
-</tr>
-<tr class="row-even"><td><p><a class="reference internal" href="../modules/generated/mlquantify.utils.method.getHist.html#mlquantify.utils.method.getHist" title="mlquantify.utils.method.getHist"><code class="xref py py-obj docutils literal notranslate"><span class="pre">getHist</span></code></a></p></td>
-<td><div class="sk-apisearch-desc docutils">
-<div class="caption docutils">
-<p><a class="reference internal" href="mlquantify.utils.method.html#module-mlquantify.utils.method" title="mlquantify.utils.method"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mlquantify.utils.method</span></code></a></p>
-</div>
-</div>
-</td>
-</tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="../modules/generated/mlquantify.utils.method.MoSS.html#mlquantify.utils.method.MoSS" title="mlquantify.utils.method.MoSS"><code class="xref py py-obj docutils literal notranslate"><span class="pre">MoSS</span></code></a></p></td>
-<td><div class="sk-apisearch-desc docutils">
-<div class="caption docutils">
-<p><a class="reference internal" href="mlquantify.utils.method.html#module-mlquantify.utils.method" title="mlquantify.utils.method"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mlquantify.utils.method</span></code></a></p>
-</div>
-</div>
-</td>
-</tr>
-<tr class="row-even"><td><p><a class="reference internal" href="../modules/generated/mlquantify.utils.method.ternary_search.html#mlquantify.utils.method.ternary_search" title="mlquantify.utils.method.ternary_search"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ternary_search</span></code></a></p></td>
-<td><div class="sk-apisearch-desc docutils">
-<div class="caption docutils">
-<p><a class="reference internal" href="mlquantify.utils.method.html#module-mlquantify.utils.method" title="mlquantify.utils.method"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mlquantify.utils.method</span></code></a></p>
-</div>
-</div>
-</td>
-</tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="../modules/generated/mlquantify.utils.method.compute_table.html#mlquantify.utils.method.compute_table" title="mlquantify.utils.method.compute_table"><code class="xref py py-obj docutils literal notranslate"><span class="pre">compute_table</span></code></a></p></td>
-<td><div class="sk-apisearch-desc docutils">
-<div class="caption docutils">
-<p><a class="reference internal" href="mlquantify.utils.method.html#module-mlquantify.utils.method" title="mlquantify.utils.method"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mlquantify.utils.method</span></code></a></p>
-</div>
-</div>
-</td>
-</tr>
-<tr class="row-even"><td><p><a class="reference internal" href="../modules/generated/mlquantify.utils.method.compute_tpr.html#mlquantify.utils.method.compute_tpr" title="mlquantify.utils.method.compute_tpr"><code class="xref py py-obj docutils literal notranslate"><span class="pre">compute_tpr</span></code></a></p></td>
-<td><div class="sk-apisearch-desc docutils">
-<div class="caption docutils">
-<p><a class="reference internal" href="mlquantify.utils.method.html#module-mlquantify.utils.method" title="mlquantify.utils.method"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mlquantify.utils.method</span></code></a></p>
-</div>
-</div>
-</td>
-</tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="../modules/generated/mlquantify.utils.method.compute_fpr.html#mlquantify.utils.method.compute_fpr" title="mlquantify.utils.method.compute_fpr"><code class="xref py py-obj docutils literal notranslate"><span class="pre">compute_fpr</span></code></a></p></td>
-<td><div class="sk-apisearch-desc docutils">
-<div class="caption docutils">
-<p><a class="reference internal" href="mlquantify.utils.method.html#module-mlquantify.utils.method" title="mlquantify.utils.method"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mlquantify.utils.method</span></code></a></p>
-</div>
-</div>
-</td>
-</tr>
-<tr class="row-even"><td><p><a class="reference internal" href="../modules/generated/mlquantify.utils.method.adjust_threshold.html#mlquantify.utils.method.adjust_threshold" title="mlquantify.utils.method.adjust_threshold"><code class="xref py py-obj docutils literal notranslate"><span class="pre">adjust_threshold</span></code></a></p></td>
-<td><div class="sk-apisearch-desc docutils">
-<div class="caption docutils">
-<p><a class="reference internal" href="mlquantify.utils.method.html#module-mlquantify.utils.method" title="mlquantify.utils.method"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mlquantify.utils.method</span></code></a></p>
+<p><a class="reference internal" href="../modules/generated/mlquantify.neighbors.html#module-mlquantify.neighbors" title="mlquantify.neighbors"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mlquantify.neighbors</span></code></a></p>
 </div>
 </div>
 </td>
@@ -1012,7 +1005,7 @@ reference on concepts repeated across the API, see <span class="xref std std-ref
       <i class="fa-solid fa-angle-left"></i>
       <div class="prev-next-info">
         <p class="prev-next-subtitle">previous</p>
-        <p class="prev-next-title"><span class="section-number">6.4. </span>Building a Protocol</p>
+        <p class="prev-next-title"><span class="section-number">6.1. </span>Building a Protocol</p>
       </div>
     </a>
     <a class="right-next"

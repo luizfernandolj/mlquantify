@@ -24,4 +24,9 @@ mlquantify.model_selection
   :template: base.rst
 
 
+  BaseProtocol
+  APP
+  NPP
+  UPP
+  PPP
   GridSearchQ
