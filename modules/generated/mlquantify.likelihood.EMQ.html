@@ -469,50 +469,67 @@
 <dl class="py class">
 <dt class="sig sig-object py" id="mlquantify.likelihood.EMQ">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">mlquantify.likelihood.</span></span><span class="sig-name descname"><span class="pre">EMQ</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">learner=None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tol=0.0001</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_iter=100</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">calib_function=None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">criteria=&lt;function</span> <span class="pre">MAE&gt;</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/luizfernandolj/mlquantify/tree/master/mlquantify/likelihood.py"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mlquantify.likelihood.EMQ" title="Link to this definition">#</a></dt>
-<dd><p>Expectation-Maximization Quantifier.</p>
-<p>Implements iterative quantification using an EM algorithm to adjust class
-prevalences under prior probability shift, assimilating posterior probabilities
-(soft predictions) from a probabilistic classifier.</p>
-<p>The EM procedure alternates between estimating posterior memberships of test
-instances (E-step) and re-estimating class prevalences (M-step), iterating until
-convergence (tolerance or max iterations) on prevalence change measured by a
-user-defined criteria (default: Mean Absolute Error, MAE).</p>
-<p>Supports optional calibration of predicted posteriors before iteration.</p>
+<dd><p>Expectation-Maximization Quantifier (EMQ).</p>
+<p>Estimates class prevalences under prior probability shift by alternating 
+between expectation (E) and maximization (M) steps on posterior probabilities.</p>
+<p>E-step:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">p_i</span><span class="o">^</span><span class="p">{(</span><span class="n">s</span><span class="o">+</span><span class="mi">1</span><span class="p">)}(</span><span class="n">x</span><span class="p">)</span> <span class="o">=</span> \<span class="n">frac</span><span class="p">{</span><span class="n">q_i</span><span class="o">^</span><span class="p">{(</span><span class="n">s</span><span class="p">)}</span> <span class="n">p_i</span><span class="p">(</span><span class="n">x</span><span class="p">)}{</span>\<span class="n">sum_j</span> <span class="n">q_j</span><span class="o">^</span><span class="p">{(</span><span class="n">s</span><span class="p">)}</span> <span class="n">p_j</span><span class="p">(</span><span class="n">x</span><span class="p">)}</span>
+</pre></div>
+</div>
+<p>M-step:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">q_i</span><span class="o">^</span><span class="p">{(</span><span class="n">s</span><span class="o">+</span><span class="mi">1</span><span class="p">)}</span> <span class="o">=</span> \<span class="n">frac</span><span class="p">{</span><span class="mi">1</span><span class="p">}{</span><span class="n">N</span><span class="p">}</span> \<span class="n">sum_</span><span class="p">{</span><span class="n">n</span><span class="o">=</span><span class="mi">1</span><span class="p">}</span><span class="o">^</span><span class="n">N</span> <span class="n">p_i</span><span class="o">^</span><span class="p">{(</span><span class="n">s</span><span class="o">+</span><span class="mi">1</span><span class="p">)}(</span><span class="n">x_n</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>where 
+- (p_i(x)) are posterior probabilities predicted by the classifier
+- (q_i^{(s)}) are class prevalence estimates at iteration (s)
+- (N) is the number of test instances.</p>
+<p>Calibrations supported on posterior probabilities before EM iteration:</p>
+<p>Temperature Scaling (TS):</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>\<span class="n">hat</span><span class="p">{</span><span class="n">p</span><span class="p">}</span> <span class="o">=</span> \<span class="n">text</span><span class="p">{</span><span class="n">softmax</span><span class="p">}</span>\<span class="n">left</span><span class="p">(</span>\<span class="n">frac</span><span class="p">{</span>\<span class="n">log</span><span class="p">(</span><span class="n">p</span><span class="p">)}{</span><span class="n">T</span><span class="p">}</span>\<span class="n">right</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Bias-Corrected Temperature Scaling (BCTS):</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>\<span class="n">hat</span><span class="p">{</span><span class="n">p</span><span class="p">}</span> <span class="o">=</span> \<span class="n">text</span><span class="p">{</span><span class="n">softmax</span><span class="p">}</span>\<span class="n">left</span><span class="p">(</span>\<span class="n">frac</span><span class="p">{</span>\<span class="n">log</span><span class="p">(</span><span class="n">p</span><span class="p">)}{</span><span class="n">T</span><span class="p">}</span> <span class="o">+</span> <span class="n">b</span>\<span class="n">right</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Vector Scaling (VS):</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>\<span class="n">hat</span><span class="p">{</span><span class="n">p</span><span class="p">}</span><span class="n">_i</span> <span class="o">=</span> \<span class="n">text</span><span class="p">{</span><span class="n">softmax</span><span class="p">}(</span><span class="n">W_i</span> \<span class="n">cdot</span> \<span class="n">log</span><span class="p">(</span><span class="n">p_i</span><span class="p">)</span> <span class="o">+</span> <span class="n">b_i</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>No-Bias Vector Scaling (NBVS):</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>\<span class="n">hat</span><span class="p">{</span><span class="n">p</span><span class="p">}</span><span class="n">_i</span> <span class="o">=</span> \<span class="n">text</span><span class="p">{</span><span class="n">softmax</span><span class="p">}(</span><span class="n">W_i</span> \<span class="n">cdot</span> \<span class="n">log</span><span class="p">(</span><span class="n">p_i</span><span class="p">))</span>
+</pre></div>
+</div>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><dl class="simple">
-<dt><strong>learner</strong><span class="classifier">estimator, optional</span></dt><dd><p>Probabilistic classifier fit on training data with <code class="docutils literal notranslate"><span class="pre">predict_proba</span></code>.</p>
+<dt><strong>learner</strong><span class="classifier">estimator, optional</span></dt><dd><p>Probabilistic classifier supporting predict_proba.</p>
 </dd>
-<dt><strong>tol</strong><span class="classifier">float, default=1e-4</span></dt><dd><p>Convergence threshold for EM iterative updates.</p>
+<dt><strong>tol</strong><span class="classifier">float, default=1e-4</span></dt><dd><p>Convergence threshold.</p>
 </dd>
-<dt><strong>max_iter</strong><span class="classifier">int, default=100</span></dt><dd><p>Maximum number of EM iterations.</p>
+<dt><strong>max_iter</strong><span class="classifier">int, default=100</span></dt><dd><p>Maximum EM iterations.</p>
 </dd>
-<dt><strong>calib_function</strong><span class="classifier">str or callable, optional</span></dt><dd><p>Calibration method applied to posterior probabilities.
-Supported strings: ‘bcts’, ‘ts’, ‘vs’, ‘nbvs’.</p>
+<dt><strong>calib_function</strong><span class="classifier">str or callable, optional</span></dt><dd><p>Calibration method: ‘bcts’, ‘ts’, ‘vs’, ‘nbvs’.</p>
 </dd>
-<dt><strong>criteria</strong><span class="classifier">callable, default=MAE</span></dt><dd><p>Function to measure convergence between prevalence estimates.</p>
-</dd>
-</dl>
+<dt><strong>criteria</strong><span class="classifier">callable, default=MAE</span></dt><dd><p>Convergence metric.</p>
 </dd>
 </dl>
-<p class="rubric">Methods</p>
-<div class="pst-scrollable-table-container"><table class="table">
-<tbody>
-<tr class="row-odd"><td><p><strong>_iterate(predictions, priors)</strong></p></td>
-<td><p>Executes EM iterations to estimate prevalences from posterior probabilities.</p></td>
-</tr>
-<tr class="row-even"><td><p><strong>EM(posteriors, priors, tolerance, max_iter, criteria)</strong></p></td>
-<td><p>Static method implementing the EM loop with E-step and M-step.</p></td>
-</tr>
-<tr class="row-odd"><td><p><strong>_apply_calibration(predictions)</strong></p></td>
-<td><p>Applies optional calibration method to posterior predictions.</p></td>
-</tr>
-</tbody>
-</table>
-</div>
+</dd>
+</dl>
 <p class="rubric">References</p>
-<p>[1] Saerens et al. (2002). Adjusting the Outputs of a Classifier to New a Priori Probabilities. Neural Computation, 14(1), 2141-2156.
-[2] Esuli et al. (2023). Learning to Quantify. Springer.</p>
+<div role="list" class="citation-list">
+<div class="citation" id="r34e7e3ab0a8c-1" role="doc-biblioentry">
+<span class="label"><span class="fn-bracket">[</span>1<span class="fn-bracket">]</span></span>
+<p>Saerens, M., Latinne, P., &amp; Decaestecker, C. (2002).
+Adjusting the Outputs of a Classifier to New a Priori Probabilities.
+Neural Computation, 14(1), 2141-2156.</p>
+</div>
+<div class="citation" id="r34e7e3ab0a8c-2" role="doc-biblioentry">
+<span class="label"><span class="fn-bracket">[</span>2<span class="fn-bracket">]</span></span>
+<p>Esuli, A., Moreo, A., &amp; Sebastiani, F. (2023). Learning to Quantify. Springer.</p>
+</div>
+</div>
 <dl class="py method">
 <dt class="sig sig-object py" id="mlquantify.likelihood.EMQ.EM">
 <em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">EM</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">posteriors</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">priors</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tolerance=1e-06</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_iter=100</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">criteria=&lt;function</span> <span class="pre">MAE&gt;</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/luizfernandolj/mlquantify/tree/master/mlquantify/likelihood.py"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mlquantify.likelihood.EMQ.EM" title="Link to this definition">#</a></dt>

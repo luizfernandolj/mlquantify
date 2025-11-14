@@ -469,18 +469,23 @@
 <dl class="py class">
 <dt class="sig sig-object py" id="mlquantify.likelihood.MLPE">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">mlquantify.likelihood.</span></span><span class="sig-name descname"><span class="pre">MLPE</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">learner</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/luizfernandolj/mlquantify/tree/master/mlquantify/likelihood.py"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mlquantify.likelihood.MLPE" title="Link to this definition">#</a></dt>
-<dd><p>Maximum Likelihood Prevalence Estimation (MLPE) quantifier.</p>
-<p>A simple iterative likelihood quantification method that returns the
-training priors as the estimated prevalences, effectively skipping iteration.</p>
-<p>This method assumes no prior probability shift between training and test.</p>
+<dd><p>Maximum Likelihood Prevalence Estimation (MLPE).</p>
+<p>Returns training priors as prevalence estimates without adaptations.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><dl class="simple">
-<dt><strong>learner</strong><span class="classifier">estimator, optional</span></dt><dd><p>Base classifier for possible extension/fitting.</p>
+<dt><strong>learner</strong><span class="classifier">estimator, optional</span></dt><dd><p>Base classifier.</p>
 </dd>
 </dl>
 </dd>
 </dl>
+<p class="rubric">References</p>
+<div role="list" class="citation-list">
+<div class="citation" id="r867ad8dd5804-2" role="doc-biblioentry">
+<span class="label"><span class="fn-bracket">[</span>2<span class="fn-bracket">]</span></span>
+<p>Esuli, A., Moreo, A., &amp; Sebastiani, F. (2023). Learning to Quantify. Springer.</p>
+</div>
+</div>
 <dl class="py method">
 <dt class="sig sig-object py" id="mlquantify.likelihood.MLPE.fit">
 <span class="sig-name descname"><span class="pre">fit</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/luizfernandolj/mlquantify/tree/master/mlquantify/likelihood.py"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mlquantify.likelihood.MLPE.fit" title="Link to this definition">#</a></dt>

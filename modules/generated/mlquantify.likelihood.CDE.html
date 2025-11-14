@@ -469,35 +469,44 @@
 <dl class="py class">
 <dt class="sig sig-object py" id="mlquantify.likelihood.CDE">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">mlquantify.likelihood.</span></span><span class="sig-name descname"><span class="pre">CDE</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">learner</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tol</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.0001</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_iter</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">100</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">init_cfp</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1.0</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/luizfernandolj/mlquantify/tree/master/mlquantify/likelihood.py"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mlquantify.likelihood.CDE" title="Link to this definition">#</a></dt>
-<dd><p>CDE-Iterate (Class Distribution Estimation Iterate) for binary classification.</p>
-<p>This method iteratively estimates class prevalences under prior probability shift
-by updating the false positive cost in a cost-sensitive classification framework,
-using a thresholding strategy based on posterior probabilities.</p>
-<p>The procedure:
-- Calculates a threshold from false-positive (cFP) and false-negative (cFN) costs.
-- Assigns hard positive predictions where posterior probability exceeds threshold.
-- Estimates the prevalence via classify-and-count on thresholded predictions.
-- Updates false positive cost according to prevalence estimates and training priors.
-- Iterates until prevalence estimates converge or max iterations reached.</p>
-<p>This implementation adopts the transductive thresholding variant described in 
-Esuli et al. (2023), rather than retraining a cost-sensitive classifier as in 
-Xue &amp; Weiss (2009).</p>
+<dd><p>CDE-Iterate for binary classification prevalence estimation.</p>
+<p>Threshold (tau) from false positive and false negative costs:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>\<span class="n">tau</span> <span class="o">=</span> \<span class="n">frac</span><span class="p">{</span><span class="n">c_</span><span class="p">{</span><span class="n">FP</span><span class="p">}}{</span><span class="n">c_</span><span class="p">{</span><span class="n">FP</span><span class="p">}</span> <span class="o">+</span> <span class="n">c_</span><span class="p">{</span><span class="n">FN</span><span class="p">}}</span>
+</pre></div>
+</div>
+<p>Hard classification by thresholding posterior probability (p(+|x)) at (tau):</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>\<span class="n">hat</span><span class="p">{</span><span class="n">y</span><span class="p">}(</span><span class="n">x</span><span class="p">)</span> <span class="o">=</span> \<span class="n">mathbf</span><span class="p">{</span><span class="mi">1</span><span class="p">}</span><span class="n">_</span><span class="p">{</span><span class="n">p</span><span class="p">(</span><span class="o">+|</span><span class="n">x</span><span class="p">)</span> <span class="o">&gt;</span> \<span class="n">tau</span><span class="p">}</span>
+</pre></div>
+</div>
+<p>Prevalence estimation via classify-and-count:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>\<span class="n">hat</span><span class="p">{</span><span class="n">p</span><span class="p">}</span><span class="n">_U</span><span class="p">(</span><span class="o">+</span><span class="p">)</span> <span class="o">=</span> \<span class="n">frac</span><span class="p">{</span><span class="mi">1</span><span class="p">}{</span><span class="n">N</span><span class="p">}</span> \<span class="n">sum_</span><span class="p">{</span><span class="n">n</span><span class="o">=</span><span class="mi">1</span><span class="p">}</span><span class="o">^</span><span class="n">N</span> \<span class="n">hat</span><span class="p">{</span><span class="n">y</span><span class="p">}(</span><span class="n">x_n</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>False positive cost update:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">c_</span><span class="p">{</span><span class="n">FP</span><span class="p">}</span><span class="o">^</span><span class="p">{</span><span class="n">new</span><span class="p">}</span> <span class="o">=</span> \<span class="n">frac</span><span class="p">{</span><span class="n">p_L</span><span class="p">(</span><span class="o">+</span><span class="p">)}{</span><span class="n">p_L</span><span class="p">(</span><span class="o">-</span><span class="p">)}</span> \<span class="n">times</span> \<span class="n">frac</span><span class="p">{</span>\<span class="n">hat</span><span class="p">{</span><span class="n">p</span><span class="p">}</span><span class="n">_U</span><span class="p">(</span><span class="o">-</span><span class="p">)}{</span>\<span class="n">hat</span><span class="p">{</span><span class="n">p</span><span class="p">}</span><span class="n">_U</span><span class="p">(</span><span class="o">+</span><span class="p">)}</span> \<span class="n">times</span> <span class="n">c_</span><span class="p">{</span><span class="n">FN</span><span class="p">}</span>
+</pre></div>
+</div>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><dl class="simple">
-<dt><strong>learner</strong><span class="classifier">estimator, optional</span></dt><dd><p>Wrapped classifier (unused here but part of base interface).</p>
+<dt><strong>learner</strong><span class="classifier">estimator, optional</span></dt><dd><p>Wrapped classifier (unused).</p>
 </dd>
-<dt><strong>tol</strong><span class="classifier">float, default=1e-4</span></dt><dd><p>Absolute tolerance for convergence of estimated prevalences.</p>
+<dt><strong>tol</strong><span class="classifier">float, default=1e-4</span></dt><dd><p>Convergence tolerance.</p>
 </dd>
-<dt><strong>max_iter</strong><span class="classifier">int, default=100</span></dt><dd><p>Max number of iterations allowed.</p>
+<dt><strong>max_iter</strong><span class="classifier">int, default=100</span></dt><dd><p>Max iterations.</p>
 </dd>
-<dt><strong>init_cfp</strong><span class="classifier">float, default=1.0</span></dt><dd><p>Initial false positive cost coefficient.</p>
+<dt><strong>init_cfp</strong><span class="classifier">float, default=1.0</span></dt><dd><p>Initial false positive cost.</p>
 </dd>
 </dl>
 </dd>
 </dl>
 <p class="rubric">References</p>
-<p>[2] Esuli, A., Moreo, A., &amp; Sebastiani, F. (2023). Learning to Quantify. Springer.</p>
+<div role="list" class="citation-list">
+<div class="citation" id="rb109b254c6bf-1" role="doc-biblioentry">
+<span class="label"><span class="fn-bracket">[</span>1<span class="fn-bracket">]</span></span>
+<p>Esuli, A., Moreo, A., &amp; Sebastiani, F. (2023). Learning to Quantify. Springer.</p>
+</div>
+</div>
 <dl class="py method">
 <dt class="sig sig-object py" id="mlquantify.likelihood.CDE.aggregate">
 <span class="sig-name descname"><span class="pre">aggregate</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/luizfernandolj/mlquantify/tree/master/mlquantify/likelihood.py"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mlquantify.likelihood.CDE.aggregate" title="Link to this definition">#</a></dt>
