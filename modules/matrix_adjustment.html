@@ -7,17 +7,19 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
-<meta property="og:title" content="<no title>" />
+<meta property="og:title" content="2. Matrix Adjustment" />
 <meta property="og:type" content="website" />
 <meta property="og:url" content="modules/matrix_adjustment.html" />
 <meta property="og:site_name" content="mlquantify" />
+<meta property="og:description" content="[translate:Matrix Adjustment is an extension of Adjust Counting where the full confusion matrix information is used to adjust the quantification estimates for multi-class problems. This involves in..." />
 <meta property="og:image:width" content="1146" />
 <meta property="og:image:height" content="600" />
-<meta property="og:image" content="_images/social_previews/summary_modules_matrix_adjustment_53cd2b56.png" />
-<meta property="og:image:alt" content="" />
+<meta property="og:image" content="_images/social_previews/summary_modules_matrix_adjustment_8e1adc7d.png" />
+<meta property="og:image:alt" content="[translate:Matrix Adjustment is an extension of Adjust Counting where the full confusion matrix information is used to adjust the quantification estimates for multi-class problems. This involves in..." />
+<meta name="description" content="[translate:Matrix Adjustment is an extension of Adjust Counting where the full confusion matrix information is used to adjust the quantification estimates for multi-class problems. This involves in..." />
 <meta name="twitter:card" content="summary_large_image" />
 
-    <title>&lt;no title&gt; &#8212; mlquantify 0.1.8 documentation</title>
+    <title>2. Matrix Adjustment &#8212; mlquantify 0.1.8 documentation</title>
   
   
   
@@ -57,6 +59,7 @@
     <script src="../_static/clipboard.min.js?v=a7894cd8"></script>
     <script src="../_static/copybutton.js?v=f281be69"></script>
     <script src="../_static/design-tabs.js?v=f930bc37"></script>
+    <script async="async" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
     <script>DOCUMENTATION_OPTIONS.pagename = 'modules/matrix_adjustment';</script>
     <link rel="canonical" href="https://luizfernandolj.github.io/mlquantify/modules/matrix_adjustment.html" />
     <link rel="author" title="About these documents" href="../about.html" />
@@ -228,10 +231,8 @@
       
       
       
-        
-      
       <dialog id="pst-primary-sidebar-modal"></dialog>
-      <div id="pst-primary-sidebar" class="bd-sidebar-primary bd-sidebar hide-on-wide">
+      <div id="pst-primary-sidebar" class="bd-sidebar-primary bd-sidebar">
         
 
   
@@ -304,6 +305,15 @@
     
   </div>
   
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+<nav class="bd-docs-nav bd-links"
+     aria-label="Section Navigation">
+  <p class="bd-links__title" role="heading" aria-level="1">Section Navigation</p>
+  <div class="bd-toc-item navbar-nav"></div>
+</nav></div>
+    </div>
+  
   
   <div class="sidebar-primary-items__end sidebar-primary__section">
   </div>
@@ -332,7 +342,7 @@
         <i class="fa-solid fa-home"></i>
       </a>
     </li>
-    <li class="breadcrumb-item active" aria-current="page"><span class="ellipsis">&lt;no title&gt;</span></li>
+    <li class="breadcrumb-item active" aria-current="page"><span class="ellipsis"><span class="section-number">2. </span>Matrix Adjustment</span></li>
   </ul>
 </nav>
 </div>
@@ -349,7 +359,16 @@
 <div id="searchbox"></div>
                 <article class="bd-article">
                   
-  
+  <section id="matrix-adjustment">
+<span id="id1"></span><h1><span class="section-number">2. </span>Matrix Adjustment<a class="headerlink" href="#matrix-adjustment" title="Link to this heading">#</a></h1>
+<p>[translate:Matrix Adjustment is an extension of Adjust Counting where the full confusion matrix information is used to adjust the quantification estimates for multi-class problems. This involves inverting the confusion matrix to obtain corrected class prevalence estimates.]</p>
+<div class="math notranslate nohighlight">
+\[\hat{\mathbf{p}} = \mathbf{C}^\top \mathbf{p}\]</div>
+<p>[translate:where (hat{mathbf{p}}) is the vector of observed predicted prevalences, (mathbf{C}) is the confusion matrix, and (mathbf{p}) is the true prevalence vector.]</p>
+<div class="math notranslate nohighlight">
+\[\mathbf{p} = (\mathbf{C}^\top)^{-1} \hat{\mathbf{p}}\]</div>
+</section>
+
 
                 </article>
               
@@ -374,18 +393,6 @@
                 <dialog id="pst-secondary-sidebar-modal"></dialog>
                 <div id="pst-secondary-sidebar" class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
 
-
-  <div class="sidebar-secondary-item">
-<div
-    id="pst-page-navigation-heading-2"
-    class="page-toc tocsection onthispage">
-    <i class="fa-solid fa-list"></i> On this page
-  </div>
-  <nav class="bd-toc-nav page-toc" aria-labelledby="pst-page-navigation-heading-2">
-    <ul class="simple visible nav section-nav flex-column">
-</ul>
-
-  </nav></div>
 
   <div class="sidebar-secondary-item">
   <div role="note" aria-label="source link">

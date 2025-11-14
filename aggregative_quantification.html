@@ -7,17 +7,19 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
-<meta property="og:title" content="1. User Guide" />
+<meta property="og:title" content="Aggregative Quantification" />
 <meta property="og:type" content="website" />
 <meta property="og:url" content="aggregative_quantification.html" />
 <meta property="og:site_name" content="mlquantify" />
+<meta property="og:description" content="[translate:Aggregative quantification refers to methods that estimate the prevalence of classes in a dataset by aggregating the predictions made on individual data items. Except for special-purpose..." />
 <meta property="og:image:width" content="1146" />
 <meta property="og:image:height" content="600" />
-<meta property="og:image" content="_images/social_previews/summary_aggregative_quantification_f2c52706.png" />
-<meta property="og:image:alt" content="" />
+<meta property="og:image" content="_images/social_previews/summary_aggregative_quantification_31afd7ab.png" />
+<meta property="og:image:alt" content="[translate:Aggregative quantification refers to methods that estimate the prevalence of classes in a dataset by aggregating the predictions made on individual data items. Except for special-purpose..." />
+<meta name="description" content="[translate:Aggregative quantification refers to methods that estimate the prevalence of classes in a dataset by aggregating the predictions made on individual data items. Except for special-purpose..." />
 <meta name="twitter:card" content="summary_large_image" />
 
-    <title>1. User Guide &#8212; mlquantify 0.1.8 documentation</title>
+    <title>Aggregative Quantification &#8212; mlquantify 0.1.8 documentation</title>
   
   
   
@@ -61,7 +63,7 @@
     <link rel="canonical" href="https://luizfernandolj.github.io/mlquantify/aggregative_quantification.html" />
     <link rel="author" title="About these documents" href="about.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="next" title="&lt;no title&gt;" href="adjust_counting.html" />
+    <link rel="next" title="1. Likelihood-Based Quantification" href="modules/likelihood.html" />
     <link rel="prev" title="User Guide" href="user_guide.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
@@ -310,13 +312,16 @@
      aria-label="Section Navigation">
   <p class="bd-links__title" role="heading" aria-level="1">Section Navigation</p>
   <div class="bd-toc-item navbar-nav"><ul class="current nav bd-sidenav">
-<li class="toctree-l1 current active has-children"><a class="current reference internal" href="#">1.  Aggregative Quantification</a><details open="open"><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul class="simple">
+<li class="toctree-l1 current active has-children"><a class="current reference internal" href="#"> Aggregative Quantification</a><details open="open"><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="modules/likelihood.html">1. Likelihood-Based Quantification</a></li>
+<li class="toctree-l2"><a class="reference internal" href="modules/mixture_models.html">2. Mixture Models</a></li>
+<li class="toctree-l2"><a class="reference internal" href="modules/neighbors.html">3. Neighbors-Based Quantification</a></li>
 </ul>
 </details></li>
-<li class="toctree-l1"><a class="reference internal" href="building_a_quantifier.html">2.  Building a Quantifier</a></li>
-<li class="toctree-l1"><a class="reference internal" href="model_selection_evaluation.html">3.  Model Selection and Evaluation</a></li>
-<li class="toctree-l1 has-children"><a class="reference internal" href="experiment_management.html">4.  Experiment Management</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
-<li class="toctree-l2"><a class="reference internal" href="building_a_protocol.html">4.1. Building a Protocol</a></li>
+<li class="toctree-l1"><a class="reference internal" href="building_a_quantifier.html">1.  Building a Quantifier</a></li>
+<li class="toctree-l1"><a class="reference internal" href="model_selection_evaluation.html">2.  Model Selection and Evaluation</a></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="experiment_management.html">3.  Experiment Management</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="building_a_protocol.html">3.1. Building a Protocol</a></li>
 </ul>
 </details></li>
 </ul>
@@ -355,7 +360,7 @@
     
     <li class="breadcrumb-item"><a href="user_guide.html" class="nav-link">User Guide</a></li>
     
-    <li class="breadcrumb-item active" aria-current="page"><span class="ellipsis"><span class="section-number">1. </span>User Guide</span></li>
+    <li class="breadcrumb-item active" aria-current="page"><span class="ellipsis">Aggregative Quantification</span></li>
   </ul>
 </nav>
 </div>
@@ -372,9 +377,20 @@
 <div id="searchbox"></div>
                 <article class="bd-article">
                   
-  <section id="user-guide">
-<span id="id1"></span><h1><span class="section-number">1. </span>User Guide<a class="headerlink" href="#user-guide" title="Link to this heading">#</a></h1>
+  <section id="aggregative-quantification">
+<span id="id1"></span><h1>Aggregative Quantification<a class="headerlink" href="#aggregative-quantification" title="Link to this heading">#</a></h1>
+<p>[translate:Aggregative quantification refers to methods that estimate the prevalence of classes in a dataset by aggregating the predictions made on individual data items. Except for special-purpose learning methods, all aggregative methods share a common structure involving three main steps:]</p>
+<p>[translate:1. <strong>fit</strong>: the model is trained on labeled data.]
+[translate:2. <strong>predict</strong>: the trained model generates predictions for each individual item in the unlabeled dataset. These predictions can be either hard labels or soft probabilities.]
+[translate:3. <strong>aggregate</strong>: this step uses the results from the prediction phase to estimate the class prevalence distribution in the dataset. The <code class="docutils literal notranslate"><span class="pre">aggregate</span></code> function takes as input the necessary information from the classification results to perform this aggregation.]</p>
+<p>[translate:This clear separation into fit, predict, and aggregate methods allows modular implementation and reuse of standard classifiers as a backbone.]</p>
+<p>[translate:The main aggregative quantification methods will be defined next, with details about their specific approaches and differences.]</p>
 <div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="modules/likelihood.html">1. Likelihood-Based Quantification</a></li>
+<li class="toctree-l1"><a class="reference internal" href="modules/mixture_models.html">2. Mixture Models</a></li>
+<li class="toctree-l1"><a class="reference internal" href="modules/neighbors.html">3. Neighbors-Based Quantification</a></li>
+</ul>
 </div>
 </section>
 
@@ -398,11 +414,11 @@
       </div>
     </a>
     <a class="right-next"
-       href="adjust_counting.html"
+       href="modules/likelihood.html"
        title="next page">
       <div class="prev-next-info">
         <p class="prev-next-subtitle">next</p>
-        <p class="prev-next-title">&lt;no title&gt;</p>
+        <p class="prev-next-title"><span class="section-number">1. </span>Likelihood-Based Quantification</p>
       </div>
       <i class="fa-solid fa-angle-right"></i>
     </a>

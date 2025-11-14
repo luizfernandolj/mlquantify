@@ -7,17 +7,19 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
-<meta property="og:title" content="<no title>" />
+<meta property="og:title" content="Classify and Count" />
 <meta property="og:type" content="website" />
 <meta property="og:url" content="modules/classify_and_count.html" />
 <meta property="og:site_name" content="mlquantify" />
+<meta property="og:description" content="Classify and Count (CC) is the most basic aggregative quantification method. It consists of training a standard hard classifier on labeled data and then applying this classifier to the unlabeled se..." />
 <meta property="og:image:width" content="1146" />
 <meta property="og:image:height" content="600" />
-<meta property="og:image" content="_images/social_previews/summary_modules_classify_and_count_53cd2b56.png" />
-<meta property="og:image:alt" content="" />
+<meta property="og:image" content="_images/social_previews/summary_modules_classify_and_count_3ef13631.png" />
+<meta property="og:image:alt" content="Classify and Count (CC) is the most basic aggregative quantification method. It consists of training a standard hard classifier on labeled data and then applying this classifier to the unlabeled se..." />
+<meta name="description" content="Classify and Count (CC) is the most basic aggregative quantification method. It consists of training a standard hard classifier on labeled data and then applying this classifier to the unlabeled se..." />
 <meta name="twitter:card" content="summary_large_image" />
 
-    <title>&lt;no title&gt; &#8212; mlquantify 0.1.8 documentation</title>
+    <title>Classify and Count &#8212; mlquantify 0.1.8 documentation</title>
   
   
   
@@ -332,7 +334,7 @@
         <i class="fa-solid fa-home"></i>
       </a>
     </li>
-    <li class="breadcrumb-item active" aria-current="page"><span class="ellipsis">&lt;no title&gt;</span></li>
+    <li class="breadcrumb-item active" aria-current="page"><span class="ellipsis">Classify and Count</span></li>
   </ul>
 </nav>
 </div>
@@ -349,7 +351,36 @@
 <div id="searchbox"></div>
                 <article class="bd-article">
                   
-  
+  <section id="classify-and-count">
+<span id="id1"></span><h1>Classify and Count<a class="headerlink" href="#classify-and-count" title="Link to this heading">#</a></h1>
+<p>Classify and Count (CC) is the most basic aggregative quantification method. It consists of training a standard hard classifier on labeled data and then applying this classifier to the unlabeled set, estimating class prevalences by counting the number of instances assigned to each class.</p>
+<p>Despite its simplicity, CC is known to be suboptimal in many scenarios because standard classifiers often exhibit bias that leads to inaccurate prevalence estimates.</p>
+<p>This method is implemented in the class <code class="xref py py-class docutils literal notranslate"><span class="pre">CC</span></code> in the package.</p>
+<section id="example-of-usage">
+<h2>Example of usage<a class="headerlink" href="#example-of-usage" title="Link to this heading">#</a></h2>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">mlquantify.adjust_counting</span><span class="w"> </span><span class="kn">import</span> <span class="n">CC</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">sklearn.linear_model</span><span class="w"> </span><span class="kn">import</span> <span class="n">LogisticRegression</span>
+
+<span class="n">X</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">randn</span><span class="p">(</span><span class="mi">100</span><span class="p">,</span> <span class="mi">5</span><span class="p">)</span>
+<span class="n">y</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">randint</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">100</span><span class="p">)</span>
+
+<span class="c1"># Using fit and predict methods</span>
+<span class="n">q</span> <span class="o">=</span> <span class="n">CC</span><span class="p">(</span><span class="n">learner</span><span class="o">=</span><span class="n">LogisticRegression</span><span class="p">())</span>
+<span class="n">q</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span>
+<span class="n">q</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">X</span><span class="p">)</span>
+<span class="p">{</span><span class="mi">0</span><span class="p">:</span> <span class="mf">0.47</span><span class="p">,</span> <span class="mi">1</span><span class="p">:</span> <span class="mf">0.53</span><span class="p">}</span>
+
+<span class="c1"># Using the aggregate method directly</span>
+<span class="n">q2</span> <span class="o">=</span> <span class="n">CC</span><span class="p">()</span>
+<span class="n">predictions</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">rand</span><span class="p">(</span><span class="mi">200</span><span class="p">)</span>
+<span class="n">q2</span><span class="o">.</span><span class="n">aggregate</span><span class="p">(</span><span class="n">predictions</span><span class="p">)</span>
+<span class="p">{</span><span class="mi">0</span><span class="p">:</span> <span class="mf">0.51</span><span class="p">,</span> <span class="mi">1</span><span class="p">:</span> <span class="mf">0.49</span><span class="p">}</span>
+</pre></div>
+</div>
+</section>
+</section>
+
 
                 </article>
               
@@ -382,9 +413,9 @@
     <i class="fa-solid fa-list"></i> On this page
   </div>
   <nav class="bd-toc-nav page-toc" aria-labelledby="pst-page-navigation-heading-2">
-    <ul class="simple visible nav section-nav flex-column">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#example-of-usage">Example of usage</a></li>
 </ul>
-
   </nav></div>
 
   <div class="sidebar-secondary-item">

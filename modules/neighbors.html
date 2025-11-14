@@ -7,17 +7,17 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
-<meta property="og:title" content="<no title>" />
+<meta property="og:title" content="3. Neighbors-Based Quantification" />
 <meta property="og:type" content="website" />
 <meta property="og:url" content="modules/neighbors.html" />
 <meta property="og:site_name" content="mlquantify" />
 <meta property="og:image:width" content="1146" />
 <meta property="og:image:height" content="600" />
-<meta property="og:image" content="_images/social_previews/summary_modules_neighbors_53cd2b56.png" />
+<meta property="og:image" content="_images/social_previews/summary_modules_neighbors_126997bf.png" />
 <meta property="og:image:alt" content="" />
 <meta name="twitter:card" content="summary_large_image" />
 
-    <title>&lt;no title&gt; &#8212; mlquantify 0.1.8 documentation</title>
+    <title>3. Neighbors-Based Quantification &#8212; mlquantify 0.1.8 documentation</title>
   
   
   
@@ -61,6 +61,8 @@
     <link rel="canonical" href="https://luizfernandolj.github.io/mlquantify/modules/neighbors.html" />
     <link rel="author" title="About these documents" href="../about.html" />
     <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="&lt;no title&gt;" href="../non_aggregative_quantification.html" />
+    <link rel="prev" title="2. Mixture Models" href="mixture_models.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
   <meta name="docsearch:version" content="" />
@@ -146,7 +148,7 @@
 </li>
 
 
-<li class="nav-item ">
+<li class="nav-item current active">
   <a class="nav-link nav-internal" href="../user_guide.html">
     User Guide
   </a>
@@ -228,10 +230,8 @@
       
       
       
-        
-      
       <dialog id="pst-primary-sidebar-modal"></dialog>
-      <div id="pst-primary-sidebar" class="bd-sidebar-primary bd-sidebar hide-on-wide">
+      <div id="pst-primary-sidebar" class="bd-sidebar-primary bd-sidebar">
         
 
   
@@ -253,7 +253,7 @@
 </li>
 
 
-<li class="nav-item ">
+<li class="nav-item current active">
   <a class="nav-link nav-internal" href="../user_guide.html">
     User Guide
   </a>
@@ -304,6 +304,29 @@
     
   </div>
   
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+<nav class="bd-docs-nav bd-links"
+     aria-label="Section Navigation">
+  <p class="bd-links__title" role="heading" aria-level="1">Section Navigation</p>
+  <div class="bd-toc-item navbar-nav"><ul class="current nav bd-sidenav">
+<li class="toctree-l1 current active has-children"><a class="reference internal" href="../aggregative_quantification.html"> Aggregative Quantification</a><details open="open"><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="likelihood.html">1. Likelihood-Based Quantification</a></li>
+<li class="toctree-l2"><a class="reference internal" href="mixture_models.html">2. Mixture Models</a></li>
+<li class="toctree-l2 current active"><a class="current reference internal" href="#">3. Neighbors-Based Quantification</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1"><a class="reference internal" href="../building_a_quantifier.html">1.  Building a Quantifier</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../model_selection_evaluation.html">2.  Model Selection and Evaluation</a></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../experiment_management.html">3.  Experiment Management</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../building_a_protocol.html">3.1. Building a Protocol</a></li>
+</ul>
+</details></li>
+</ul>
+</div>
+</nav></div>
+    </div>
+  
   
   <div class="sidebar-primary-items__end sidebar-primary__section">
   </div>
@@ -332,7 +355,13 @@
         <i class="fa-solid fa-home"></i>
       </a>
     </li>
-    <li class="breadcrumb-item active" aria-current="page"><span class="ellipsis">&lt;no title&gt;</span></li>
+    
+    <li class="breadcrumb-item"><a href="../user_guide.html" class="nav-link">User Guide</a></li>
+    
+    
+    <li class="breadcrumb-item"><a href="../aggregative_quantification.html" class="nav-link">Aggregative Quantification</a></li>
+    
+    <li class="breadcrumb-item active" aria-current="page"><span class="ellipsis"><span class="section-number">3. </span>Neighbors-Based Quantification</span></li>
   </ul>
 </nav>
 </div>
@@ -349,7 +378,10 @@
 <div id="searchbox"></div>
                 <article class="bd-article">
                   
-  
+  <section id="neighbors-based-quantification">
+<span id="neighbors"></span><h1><span class="section-number">3. </span>Neighbors-Based Quantification<a class="headerlink" href="#neighbors-based-quantification" title="Link to this heading">#</a></h1>
+</section>
+
 
                 </article>
               
@@ -360,6 +392,24 @@
   
     <div class="footer-article-item">
 <div class="prev-next-area">
+    <a class="left-prev"
+       href="mixture_models.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title"><span class="section-number">2. </span>Mixture Models</p>
+      </div>
+    </a>
+    <a class="right-next"
+       href="../non_aggregative_quantification.html"
+       title="next page">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">&lt;no title&gt;</p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
+    </a>
 </div></div>
   
 </div>
@@ -374,18 +424,6 @@
                 <dialog id="pst-secondary-sidebar-modal"></dialog>
                 <div id="pst-secondary-sidebar" class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
 
-
-  <div class="sidebar-secondary-item">
-<div
-    id="pst-page-navigation-heading-2"
-    class="page-toc tocsection onthispage">
-    <i class="fa-solid fa-list"></i> On this page
-  </div>
-  <nav class="bd-toc-nav page-toc" aria-labelledby="pst-page-navigation-heading-2">
-    <ul class="simple visible nav section-nav flex-column">
-</ul>
-
-  </nav></div>
 
   <div class="sidebar-secondary-item">
   <div role="note" aria-label="source link">

@@ -7,17 +7,19 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
-<meta property="og:title" content="<no title>" />
+<meta property="og:title" content="Adjust Counting" />
 <meta property="og:type" content="website" />
 <meta property="og:url" content="adjust_counting.html" />
 <meta property="og:site_name" content="mlquantify" />
+<meta property="og:description" content="[translate:Adjusted Counting methods improve upon the basic Classify and Count by correcting the estimated prevalences using knowledge from the training set about the behavior of the classifier, pa..." />
 <meta property="og:image:width" content="1146" />
 <meta property="og:image:height" content="600" />
-<meta property="og:image" content="_images/social_previews/summary_adjust_counting_53cd2b56.png" />
-<meta property="og:image:alt" content="" />
+<meta property="og:image" content="_images/social_previews/summary_adjust_counting_b58fbad5.png" />
+<meta property="og:image:alt" content="[translate:Adjusted Counting methods improve upon the basic Classify and Count by correcting the estimated prevalences using knowledge from the training set about the behavior of the classifier, pa..." />
+<meta name="description" content="[translate:Adjusted Counting methods improve upon the basic Classify and Count by correcting the estimated prevalences using knowledge from the training set about the behavior of the classifier, pa..." />
 <meta name="twitter:card" content="summary_large_image" />
 
-    <title>&lt;no title&gt; &#8212; mlquantify 0.1.8 documentation</title>
+    <title>Adjust Counting &#8212; mlquantify 0.1.8 documentation</title>
   
   
   
@@ -57,12 +59,11 @@
     <script src="_static/clipboard.min.js?v=a7894cd8"></script>
     <script src="_static/copybutton.js?v=f281be69"></script>
     <script src="_static/design-tabs.js?v=f930bc37"></script>
+    <script async="async" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
     <script>DOCUMENTATION_OPTIONS.pagename = 'adjust_counting';</script>
     <link rel="canonical" href="https://luizfernandolj.github.io/mlquantify/adjust_counting.html" />
     <link rel="author" title="About these documents" href="about.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="next" title="&lt;no title&gt;" href="likelihood.html" />
-    <link rel="prev" title="1. User Guide" href="aggregative_quantification.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
   <meta name="docsearch:version" content="" />
@@ -148,7 +149,7 @@
 </li>
 
 
-<li class="nav-item current active">
+<li class="nav-item ">
   <a class="nav-link nav-internal" href="user_guide.html">
     User Guide
   </a>
@@ -230,8 +231,10 @@
       
       
       
+        
+      
       <dialog id="pst-primary-sidebar-modal"></dialog>
-      <div id="pst-primary-sidebar" class="bd-sidebar-primary bd-sidebar">
+      <div id="pst-primary-sidebar" class="bd-sidebar-primary bd-sidebar hide-on-wide">
         
 
   
@@ -253,7 +256,7 @@
 </li>
 
 
-<li class="nav-item current active">
+<li class="nav-item ">
   <a class="nav-link nav-internal" href="user_guide.html">
     User Guide
   </a>
@@ -304,26 +307,6 @@
     
   </div>
   
-    <div class="sidebar-primary-items__start sidebar-primary__section">
-        <div class="sidebar-primary-item">
-<nav class="bd-docs-nav bd-links"
-     aria-label="Section Navigation">
-  <p class="bd-links__title" role="heading" aria-level="1">Section Navigation</p>
-  <div class="bd-toc-item navbar-nav"><ul class="nav bd-sidenav">
-<li class="toctree-l1 has-children"><a class="reference internal" href="aggregative_quantification.html">1.  Aggregative Quantification</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul class="simple">
-</ul>
-</details></li>
-<li class="toctree-l1"><a class="reference internal" href="building_a_quantifier.html">2.  Building a Quantifier</a></li>
-<li class="toctree-l1"><a class="reference internal" href="model_selection_evaluation.html">3.  Model Selection and Evaluation</a></li>
-<li class="toctree-l1 has-children"><a class="reference internal" href="experiment_management.html">4.  Experiment Management</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
-<li class="toctree-l2"><a class="reference internal" href="building_a_protocol.html">4.1. Building a Protocol</a></li>
-</ul>
-</details></li>
-</ul>
-</div>
-</nav></div>
-    </div>
-  
   
   <div class="sidebar-primary-items__end sidebar-primary__section">
   </div>
@@ -352,13 +335,7 @@
         <i class="fa-solid fa-home"></i>
       </a>
     </li>
-    
-    <li class="breadcrumb-item"><a href="user_guide.html" class="nav-link">User Guide</a></li>
-    
-    
-    <li class="breadcrumb-item"><a href="aggregative_quantification.html" class="nav-link"><span class="section-number">1. </span>User Guide</a></li>
-    
-    <li class="breadcrumb-item active" aria-current="page"><span class="ellipsis">&lt;no title&gt;</span></li>
+    <li class="breadcrumb-item active" aria-current="page"><span class="ellipsis">Adjust Counting</span></li>
   </ul>
 </nav>
 </div>
@@ -375,7 +352,17 @@
 <div id="searchbox"></div>
                 <article class="bd-article">
                   
-  
+  <section id="adjust-counting">
+<span id="id1"></span><h1>Adjust Counting<a class="headerlink" href="#adjust-counting" title="Link to this heading">#</a></h1>
+<p>[translate:Adjusted Counting methods improve upon the basic Classify and Count by correcting the estimated prevalences using knowledge from the training set about the behavior of the classifier, particularly accounting for its error characteristics.]</p>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="modules/threshold_adjustment.html">1. Threshold Adjustment</a></li>
+<li class="toctree-l1"><a class="reference internal" href="modules/matrix_adjustment.html">2. Matrix Adjustment</a></li>
+</ul>
+</div>
+</section>
+
 
                 </article>
               
@@ -386,24 +373,6 @@
   
     <div class="footer-article-item">
 <div class="prev-next-area">
-    <a class="left-prev"
-       href="aggregative_quantification.html"
-       title="previous page">
-      <i class="fa-solid fa-angle-left"></i>
-      <div class="prev-next-info">
-        <p class="prev-next-subtitle">previous</p>
-        <p class="prev-next-title"><span class="section-number">1. </span>User Guide</p>
-      </div>
-    </a>
-    <a class="right-next"
-       href="likelihood.html"
-       title="next page">
-      <div class="prev-next-info">
-        <p class="prev-next-subtitle">next</p>
-        <p class="prev-next-title">&lt;no title&gt;</p>
-      </div>
-      <i class="fa-solid fa-angle-right"></i>
-    </a>
 </div></div>
   
 </div>
@@ -418,18 +387,6 @@
                 <dialog id="pst-secondary-sidebar-modal"></dialog>
                 <div id="pst-secondary-sidebar" class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
 
-
-  <div class="sidebar-secondary-item">
-<div
-    id="pst-page-navigation-heading-2"
-    class="page-toc tocsection onthispage">
-    <i class="fa-solid fa-list"></i> On this page
-  </div>
-  <nav class="bd-toc-nav page-toc" aria-labelledby="pst-page-navigation-heading-2">
-    <ul class="simple visible nav section-nav flex-column">
-</ul>
-
-  </nav></div>
 
   <div class="sidebar-secondary-item">
   <div role="note" aria-label="source link">
