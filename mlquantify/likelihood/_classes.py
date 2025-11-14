@@ -13,37 +13,37 @@ class EMQ(SoftLearnerQMixin, BaseIterativeLikelihood):
     r"""Expectation-Maximization Quantifier (EMQ).
 
     Estimates class prevalences under prior probability shift by alternating 
-    between expectation (E) and maximization (M) steps on posterior probabilities. 
+    between expectation **(E)** and maximization **(M)** steps on posterior probabilities. 
 
     E-step:
-    ::
+    .. math::
         p_i^{(s+1)}(x) = \frac{q_i^{(s)} p_i(x)}{\sum_j q_j^{(s)} p_j(x)}
 
     M-step:
-    ::
+    .. math::
         q_i^{(s+1)} = \frac{1}{N} \sum_{n=1}^N p_i^{(s+1)}(x_n)
 
     where 
-    - \(p_i(x)\) are posterior probabilities predicted by the classifier
-    - \(q_i^{(s)}\) are class prevalence estimates at iteration \(s\)
-    - \(N\) is the number of test instances.
+    - :math:`p_i(x)` are posterior probabilities predicted by the classifier
+    - :math:`q_i^{(s)}` are class prevalence estimates at iteration :math:`s`
+    - :math:`N` is the number of test instances.
 
-    Calibrations supported on posterior probabilities before EM iteration:
+    Calibrations supported on posterior probabilities before **EM** iteration:
 
     Temperature Scaling (TS):
-    ::
+    .. math::
         \hat{p} = \text{softmax}\left(\frac{\log(p)}{T}\right)
 
     Bias-Corrected Temperature Scaling (BCTS):
-    ::
+    .. math::
         \hat{p} = \text{softmax}\left(\frac{\log(p)}{T} + b\right)
 
     Vector Scaling (VS):
-    ::
+    .. math::
         \hat{p}_i = \text{softmax}(W_i \cdot \log(p_i) + b_i)
 
     No-Bias Vector Scaling (NBVS):
-    ::
+    .. math::
         \hat{p}_i = \text{softmax}(W_i \cdot \log(p_i))
 
     Parameters
@@ -55,7 +55,12 @@ class EMQ(SoftLearnerQMixin, BaseIterativeLikelihood):
     max_iter : int, default=100
         Maximum EM iterations.
     calib_function : str or callable, optional
-        Calibration method: 'bcts', 'ts', 'vs', 'nbvs'.
+        Calibration method:
+        - 'ts': Temperature Scaling
+        - 'bcts': Bias-Corrected Temperature Scaling
+        - 'vs': Vector Scaling
+        - 'nbvs': No-Bias Vector Scaling
+        - callable: custom calibration function
     criteria : callable, default=MAE
         Convergence metric.
 
@@ -292,20 +297,20 @@ class MLPE(SoftLearnerQMixin, BaseIterativeLikelihood):
 class CDE(SoftLearnerQMixin, BaseIterativeLikelihood):
     r"""CDE-Iterate for binary classification prevalence estimation.
 
-    Threshold \(\tau\) from false positive and false negative costs:
-    ::
+    Threshold :math:`\tau` from false positive and false negative costs:
+    .. math::
         \tau = \frac{c_{FP}}{c_{FP} + c_{FN}}
 
-    Hard classification by thresholding posterior probability \(p(+|x)\) at \(\tau\):
-    ::
+    Hard classification by thresholding posterior probability :math:`p(+|x)` at :math:`\tau`:
+    .. math::
         \hat{y}(x) = \mathbf{1}_{p(+|x) > \tau}
 
     Prevalence estimation via classify-and-count:
-    ::
+    .. math::
         \hat{p}_U(+) = \frac{1}{N} \sum_{n=1}^N \hat{y}(x_n)
 
     False positive cost update:
-    ::
+    .. math::
         c_{FP}^{new} = \frac{p_L(+)}{p_L(-)} \times \frac{\hat{p}_U(-)}{\hat{p}_U(+)} \times c_{FN}
 
     Parameters
