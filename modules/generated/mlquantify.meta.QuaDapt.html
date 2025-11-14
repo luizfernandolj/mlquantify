@@ -479,24 +479,6 @@ metric (Hellinger, Topsoe, ProbSymm, or SORD), and aggregates quantification acc
 </dl>
 </dd>
 </dl>
-<p class="rubric">Methods</p>
-<div class="pst-scrollable-table-container"><table class="table">
-<tbody>
-<tr class="row-odd"><td><p><strong>fit(X, y)</strong></p></td>
-<td><p>Fits the base learner on training data.</p></td>
-</tr>
-<tr class="row-even"><td><p><strong>predict(X)</strong></p></td>
-<td><p>Predicts prevalence aggregating via the best merging factor.</p></td>
-</tr>
-<tr class="row-odd"><td><p><strong>aggregate(predictions, train_y_values)</strong></p></td>
-<td><p>Performs adaptation and aggregation based on merged score distributions.</p></td>
-</tr>
-<tr class="row-even"><td><p><strong>MoSS(n, alpha, m)</strong></p></td>
-<td><p>Generates merged score samples modeling class conditional distributions parameterized by mixing proportion alpha and merging factor m.</p></td>
-</tr>
-</tbody>
-</table>
-</div>
 <p class="rubric">Examples</p>
 <div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span><span class="w"> </span><span class="nn">mlquantify.meta</span><span class="w"> </span><span class="kn">import</span> <span class="n">QuaDapt</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span><span class="w"> </span><span class="nn">mlquantify.adjust_counting</span><span class="w"> </span><span class="kn">import</span> <span class="n">ACC</span>
@@ -530,8 +512,7 @@ metric (Hellinger, Topsoe, ProbSymm, or SORD), and aggregates quantification acc
 <p>Maletzke, A., Reis, D. dos, Hassan, W., &amp; Batista, G. (2021).</p>
 </div>
 </div>
-<p>Accurately Quantifying under Score Variability. 2021 IEEE International Conference on Data Mining (ICDM), 1228-1233.
-<a class="reference external" href="https://doi.org/10.1109/ICDM51629.2021.00149">https://doi.org/10.1109/ICDM51629.2021.00149</a></p>
+<p>Accurately Quantifying under Score Variability. 2021 IEEE International Conference on Data Mining (ICDM), 1228-1233. <a class="reference external" href="https://doi.org/10.1109/ICDM51629.2021.00149">https://doi.org/10.1109/ICDM51629.2021.00149</a></p>
 <p class="rubric">Examples</p>
 <div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">scores</span> <span class="o">=</span> <span class="n">QuaDapt</span><span class="o">.</span><span class="n">MoSS</span><span class="p">(</span><span class="n">n</span><span class="o">=</span><span class="mi">1000</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.3</span><span class="p">,</span> <span class="n">m</span><span class="o">=</span><span class="mf">0.5</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">scores</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>

@@ -57,6 +57,7 @@
     <script src="../../_static/clipboard.min.js?v=a7894cd8"></script>
     <script src="../../_static/copybutton.js?v=f281be69"></script>
     <script src="../../_static/design-tabs.js?v=f930bc37"></script>
+    <script async="async" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
     <script>DOCUMENTATION_OPTIONS.pagename = 'modules/generated/mlquantify.mixture.DyS';</script>
     <link rel="canonical" href="https://luizfernandolj.github.io/mlquantify/modules/generated/mlquantify.mixture.DyS.html" />
     <link rel="author" title="About these documents" href="../../about.html" />
@@ -482,7 +483,9 @@ bin sizes between 2 and 30.</p>
 <p>[1] Maletzke et al. (2019). DyS: A Framework for Mixture Models in Quantification. AAAI 2019.
 [2] Esuli et al. (2023). Learning to Quantify. Springer.</p>
 <p class="rubric">Examples</p>
-<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">q</span> <span class="o">=</span> <span class="n">DyS</span><span class="p">(</span><span class="n">learner</span><span class="o">=</span><span class="n">my_learner</span><span class="p">,</span> <span class="n">measure</span><span class="o">=</span><span class="s2">&quot;hellinger&quot;</span><span class="p">)</span>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span><span class="w"> </span><span class="nn">mlquantify.mixture</span><span class="w"> </span><span class="kn">import</span> <span class="n">DyS</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span><span class="w"> </span><span class="nn">sklearn.linear_model</span><span class="w"> </span><span class="kn">import</span> <span class="n">LogisticRegression</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">q</span> <span class="o">=</span> <span class="n">DyS</span><span class="p">(</span><span class="n">learner</span><span class="o">=</span><span class="n">LogisticRegression</span><span class="p">(),</span> <span class="n">measure</span><span class="o">=</span><span class="s2">&quot;hellinger&quot;</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">q</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">X_train</span><span class="p">,</span> <span class="n">y_train</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">prevalences</span> <span class="o">=</span> <span class="n">q</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">X_test</span><span class="p">)</span>
 </pre></div>
@@ -497,12 +500,49 @@ bin sizes between 2 and 30.</p>
 <dt class="sig sig-object py" id="mlquantify.mixture.DyS.best_mixture">
 <span class="sig-name descname"><span class="pre">best_mixture</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">predictions</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">pos_scores</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">neg_scores</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/luizfernandolj/mlquantify/tree/master/mlquantify/mixture.py"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mlquantify.mixture.DyS.best_mixture" title="Link to this definition">#</a></dt>
 <dd><p>Determine the best mixture parameters for the given data.</p>
+<p>Applies ternary search to find the mixture weight minimizing the distance
+between the test score histogram and the mixture of positive and negative</p>
+<p>The mixture weight <span class="math notranslate nohighlight">\(\alpha\)</span> is estimated as:
+.. math:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>\<span class="n">alpha</span> <span class="o">=</span> \<span class="n">arg</span> \<span class="n">min_</span><span class="p">{</span>\<span class="n">alpha</span> \<span class="ow">in</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">]}</span> <span class="n">D</span> \<span class="n">left</span><span class="p">(</span> <span class="n">H_</span><span class="p">{</span><span class="n">test</span><span class="p">},</span> \<span class="n">alpha</span> <span class="n">H_</span><span class="p">{</span><span class="n">pos</span><span class="p">}</span> <span class="o">+</span> <span class="p">(</span><span class="mi">1</span> <span class="o">-</span> \<span class="n">alpha</span><span class="p">)</span> <span class="n">H_</span><span class="p">{</span><span class="n">neg</span><span class="p">}</span> \<span class="n">right</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>where <span class="math notranslate nohighlight">\(D\)</span> is the selected distance measure and <span class="math notranslate nohighlight">\(H\)</span> denotes histograms.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>predictions</strong><span class="classifier">ndarray</span></dt><dd><p>Classifier scores for the test data.</p>
+</dd>
+<dt><strong>pos_scores</strong><span class="classifier">ndarray</span></dt><dd><p>Classifier scores for the positive class from training data.</p>
+</dd>
+<dt><strong>neg_scores</strong><span class="classifier">ndarray</span></dt><dd><p>Classifier scores for the negative class from training data.</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt><strong>alpha</strong><span class="classifier">float</span></dt><dd><p>Estimated mixture weight.</p>
+</dd>
+<dt><strong>best_distance</strong><span class="classifier">float</span></dt><dd><p>Distance corresponding to the best mixture weight.</p>
+</dd>
+</dl>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="mlquantify.mixture.DyS.fit">
 <span class="sig-name descname"><span class="pre">fit</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/luizfernandolj/mlquantify/tree/master/mlquantify/mixture.py"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mlquantify.mixture.DyS.fit" title="Link to this definition">#</a></dt>
 <dd><p>Fit the quantifier under a binary decomposition strategy.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="mlquantify.mixture.DyS.get_best_distance">
+<span class="sig-name descname"><span class="pre">get_best_distance</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/luizfernandolj/mlquantify/tree/master/mlquantify/mixture.py"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mlquantify.mixture.DyS.get_best_distance" title="Link to this definition">#</a></dt>
+<dd><p>Get the best distance value from the mixture fitting process.</p>
+<p class="rubric">Notes</p>
+<p>If the quantifier has not been fitted yet, it will fit the model for getting the
+best distance.</p>
 </dd></dl>
 
 <dl class="py method">
@@ -645,6 +685,7 @@ possible to update each component of a nested object.</p>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#mlquantify.mixture.DyS.aggregate"><code class="docutils literal notranslate"><span class="pre">aggregate</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#mlquantify.mixture.DyS.best_mixture"><code class="docutils literal notranslate"><span class="pre">best_mixture</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#mlquantify.mixture.DyS.fit"><code class="docutils literal notranslate"><span class="pre">fit</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#mlquantify.mixture.DyS.get_best_distance"><code class="docutils literal notranslate"><span class="pre">get_best_distance</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#mlquantify.mixture.DyS.get_distance"><code class="docutils literal notranslate"><span class="pre">get_distance</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#mlquantify.mixture.DyS.get_metadata_routing"><code class="docutils literal notranslate"><span class="pre">get_metadata_routing</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#mlquantify.mixture.DyS.get_params"><code class="docutils literal notranslate"><span class="pre">get_params</span></code></a></li>

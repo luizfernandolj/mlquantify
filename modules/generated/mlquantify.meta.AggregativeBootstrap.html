@@ -484,21 +484,6 @@ prevalence predictions, improving uncertainty quantification.</p>
 </dl>
 </dd>
 </dl>
-<p class="rubric">Methods</p>
-<div class="pst-scrollable-table-container"><table class="table">
-<tbody>
-<tr class="row-odd"><td><p><strong>fit(X, y, val_split=None)</strong></p></td>
-<td><p>Fits base quantifier and generates training predictions (optionally splitting data).</p></td>
-</tr>
-<tr class="row-even"><td><p><strong>predict(X)</strong></p></td>
-<td><p>Returns prevalence estimates and confidence regions aggregated from bootstrap samples.</p></td>
-</tr>
-<tr class="row-odd"><td><p><strong>aggregate(predictions, train_predictions, train_y_values)</strong></p></td>
-<td><p>Performs bootstrap resampling aggregation to obtain prevalence confidence regions.</p></td>
-</tr>
-</tbody>
-</table>
-</div>
 <p class="rubric">Examples</p>
 <div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span><span class="w"> </span><span class="nn">mlquantify.ensemble</span><span class="w"> </span><span class="kn">import</span> <span class="n">AggregativeBootstrap</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span><span class="w"> </span><span class="nn">mlquantify.neighbors</span><span class="w"> </span><span class="kn">import</span> <span class="n">EMQ</span>

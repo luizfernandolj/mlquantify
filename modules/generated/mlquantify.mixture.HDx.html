@@ -499,6 +499,15 @@ evaluating distance per feature and aggregates the results.</p>
 </dd></dl>
 
 <dl class="py method">
+<dt class="sig sig-object py" id="mlquantify.mixture.HDx.get_best_distance">
+<span class="sig-name descname"><span class="pre">get_best_distance</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/luizfernandolj/mlquantify/tree/master/mlquantify/mixture.py"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mlquantify.mixture.HDx.get_best_distance" title="Link to this definition">#</a></dt>
+<dd><p>Get the best distance value from the mixture fitting process.</p>
+<p class="rubric">Notes</p>
+<p>If the quantifier has not been fitted yet, it will fit the model for getting the
+best distance.</p>
+</dd></dl>
+
+<dl class="py method">
 <dt class="sig sig-object py" id="mlquantify.mixture.HDx.get_distance">
 <em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">get_distance</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dist_train</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dist_test</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">measure</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'hellinger'</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/luizfernandolj/mlquantify/tree/master/mlquantify/mixture.py"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mlquantify.mixture.HDx.get_distance" title="Link to this definition">#</a></dt>
 <dd><p>Compute distance between two distributions.</p>
@@ -637,6 +646,7 @@ possible to update each component of a nested object.</p>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#mlquantify.mixture.HDx"><code class="docutils literal notranslate"><span class="pre">HDx</span></code></a><ul class="nav section-nav flex-column visible">
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#mlquantify.mixture.HDx.best_mixture"><code class="docutils literal notranslate"><span class="pre">best_mixture</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#mlquantify.mixture.HDx.fit"><code class="docutils literal notranslate"><span class="pre">fit</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#mlquantify.mixture.HDx.get_best_distance"><code class="docutils literal notranslate"><span class="pre">get_best_distance</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#mlquantify.mixture.HDx.get_distance"><code class="docutils literal notranslate"><span class="pre">get_distance</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#mlquantify.mixture.HDx.get_metadata_routing"><code class="docutils literal notranslate"><span class="pre">get_metadata_routing</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#mlquantify.mixture.HDx.get_params"><code class="docutils literal notranslate"><span class="pre">get_params</span></code></a></li>

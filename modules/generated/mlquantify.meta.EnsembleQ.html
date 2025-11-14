@@ -510,27 +510,6 @@ and their prevalence estimates aggregated using various selection metrics and ag
 </dl>
 </dd>
 </dl>
-<p class="rubric">Methods</p>
-<div class="pst-scrollable-table-container"><table class="table">
-<tbody>
-<tr class="row-odd"><td><p><strong>fit(X, y)</strong></p></td>
-<td><p>Fits all ensemble member quantifiers on sampled training batches.</p></td>
-</tr>
-<tr class="row-even"><td><p><strong>predict(X)</strong></p></td>
-<td><p>Aggregates ensemble member predictions into final prevalence estimates.</p></td>
-</tr>
-<tr class="row-odd"><td><p><strong>ptr_selection_metric(prevalences, train_prevalences)</strong></p></td>
-<td><p>Implements PTR-based selection metric on prevalence estimates.</p></td>
-</tr>
-<tr class="row-even"><td><p><strong>ds_get_posteriors(X, y)</strong></p></td>
-<td><p>Computes posterior probabilities for training data with cross-validated logistic regression.</p></td>
-</tr>
-<tr class="row-odd"><td><p><strong>ds_selection_metric(X, prevalences, train_distributions, posteriors_generator)</strong></p></td>
-<td><p>Implements DS-based selection metric comparing posterior distributions.</p></td>
-</tr>
-</tbody>
-</table>
-</div>
 <p class="rubric">Notes</p>
 <ul class="simple">
 <li><p>Ensemble diversity is controlled by sampling prevalences from the specified protocol.</p></li>

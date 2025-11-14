@@ -497,21 +497,6 @@ the influence of minority classes.</p>
 </dl>
 </dd>
 </dl>
-<p class="rubric">Methods</p>
-<div class="pst-scrollable-table-container"><table class="table">
-<tbody>
-<tr class="row-odd"><td><p><strong>fit(X, y)</strong></p></td>
-<td><p>Fits the quantifier by training the internal PWKCLF and wrapping it with Classify &amp; Count quantification.</p></td>
-</tr>
-<tr class="row-even"><td><p><strong>predict(X)</strong></p></td>
-<td><p>Predicts class prevalences for input data using the trained model.</p></td>
-</tr>
-<tr class="row-odd"><td><p><strong>classify(X)</strong></p></td>
-<td><p>Returns label predictions by applying the trained PWKCLF classifier.</p></td>
-</tr>
-</tbody>
-</table>
-</div>
 <p class="rubric">Examples</p>
 <div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">q</span> <span class="o">=</span> <span class="n">PWK</span><span class="p">(</span><span class="n">alpha</span><span class="o">=</span><span class="mf">1.5</span><span class="p">,</span> <span class="n">n_neighbors</span><span class="o">=</span><span class="mi">5</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">q</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">X_train</span><span class="p">,</span> <span class="n">y_train</span><span class="p">)</span>
