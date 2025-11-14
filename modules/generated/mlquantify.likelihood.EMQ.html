@@ -57,6 +57,7 @@
     <script src="../../_static/clipboard.min.js?v=a7894cd8"></script>
     <script src="../../_static/copybutton.js?v=f281be69"></script>
     <script src="../../_static/design-tabs.js?v=f930bc37"></script>
+    <script async="async" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
     <script>DOCUMENTATION_OPTIONS.pagename = 'modules/generated/mlquantify.likelihood.EMQ';</script>
     <link rel="canonical" href="https://luizfernandolj.github.io/mlquantify/modules/generated/mlquantify.likelihood.EMQ.html" />
     <link rel="author" title="About these documents" href="../../about.html" />
@@ -463,33 +464,39 @@
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">mlquantify.likelihood.</span></span><span class="sig-name descname"><span class="pre">EMQ</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">learner=None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tol=0.0001</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_iter=100</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">calib_function=None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">criteria=&lt;function</span> <span class="pre">MAE&gt;</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/luizfernandolj/mlquantify/tree/master/mlquantify/likelihood.py"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mlquantify.likelihood.EMQ" title="Link to this definition">#</a></dt>
 <dd><p>Expectation-Maximization Quantifier (EMQ).</p>
 <p>Estimates class prevalences under prior probability shift by alternating 
-between expectation (E) and maximization (M) steps on posterior probabilities.</p>
-<p>E-step:</p>
+between expectation <strong>(E)</strong> and maximization <strong>(M)</strong> steps on posterior probabilities.</p>
+<p>E-step:
+.. math:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">p_i</span><span class="o">^</span><span class="p">{(</span><span class="n">s</span><span class="o">+</span><span class="mi">1</span><span class="p">)}(</span><span class="n">x</span><span class="p">)</span> <span class="o">=</span> \<span class="n">frac</span><span class="p">{</span><span class="n">q_i</span><span class="o">^</span><span class="p">{(</span><span class="n">s</span><span class="p">)}</span> <span class="n">p_i</span><span class="p">(</span><span class="n">x</span><span class="p">)}{</span>\<span class="n">sum_j</span> <span class="n">q_j</span><span class="o">^</span><span class="p">{(</span><span class="n">s</span><span class="p">)}</span> <span class="n">p_j</span><span class="p">(</span><span class="n">x</span><span class="p">)}</span>
 </pre></div>
 </div>
-<p>M-step:</p>
+<p>M-step:
+.. math:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">q_i</span><span class="o">^</span><span class="p">{(</span><span class="n">s</span><span class="o">+</span><span class="mi">1</span><span class="p">)}</span> <span class="o">=</span> \<span class="n">frac</span><span class="p">{</span><span class="mi">1</span><span class="p">}{</span><span class="n">N</span><span class="p">}</span> \<span class="n">sum_</span><span class="p">{</span><span class="n">n</span><span class="o">=</span><span class="mi">1</span><span class="p">}</span><span class="o">^</span><span class="n">N</span> <span class="n">p_i</span><span class="o">^</span><span class="p">{(</span><span class="n">s</span><span class="o">+</span><span class="mi">1</span><span class="p">)}(</span><span class="n">x_n</span><span class="p">)</span>
 </pre></div>
 </div>
 <p>where 
-- (p_i(x)) are posterior probabilities predicted by the classifier
-- (q_i^{(s)}) are class prevalence estimates at iteration (s)
-- (N) is the number of test instances.</p>
-<p>Calibrations supported on posterior probabilities before EM iteration:</p>
-<p>Temperature Scaling (TS):</p>
+- <span class="math notranslate nohighlight">\(p_i(x)\)</span> are posterior probabilities predicted by the classifier
+- <span class="math notranslate nohighlight">\(q_i^{(s)}\)</span> are class prevalence estimates at iteration <span class="math notranslate nohighlight">\(s\)</span>
+- <span class="math notranslate nohighlight">\(N\)</span> is the number of test instances.</p>
+<p>Calibrations supported on posterior probabilities before <strong>EM</strong> iteration:</p>
+<p>Temperature Scaling (TS):
+.. math:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span>\<span class="n">hat</span><span class="p">{</span><span class="n">p</span><span class="p">}</span> <span class="o">=</span> \<span class="n">text</span><span class="p">{</span><span class="n">softmax</span><span class="p">}</span>\<span class="n">left</span><span class="p">(</span>\<span class="n">frac</span><span class="p">{</span>\<span class="n">log</span><span class="p">(</span><span class="n">p</span><span class="p">)}{</span><span class="n">T</span><span class="p">}</span>\<span class="n">right</span><span class="p">)</span>
 </pre></div>
 </div>
-<p>Bias-Corrected Temperature Scaling (BCTS):</p>
+<p>Bias-Corrected Temperature Scaling (BCTS):
+.. math:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span>\<span class="n">hat</span><span class="p">{</span><span class="n">p</span><span class="p">}</span> <span class="o">=</span> \<span class="n">text</span><span class="p">{</span><span class="n">softmax</span><span class="p">}</span>\<span class="n">left</span><span class="p">(</span>\<span class="n">frac</span><span class="p">{</span>\<span class="n">log</span><span class="p">(</span><span class="n">p</span><span class="p">)}{</span><span class="n">T</span><span class="p">}</span> <span class="o">+</span> <span class="n">b</span>\<span class="n">right</span><span class="p">)</span>
 </pre></div>
 </div>
-<p>Vector Scaling (VS):</p>
+<p>Vector Scaling (VS):
+.. math:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span>\<span class="n">hat</span><span class="p">{</span><span class="n">p</span><span class="p">}</span><span class="n">_i</span> <span class="o">=</span> \<span class="n">text</span><span class="p">{</span><span class="n">softmax</span><span class="p">}(</span><span class="n">W_i</span> \<span class="n">cdot</span> \<span class="n">log</span><span class="p">(</span><span class="n">p_i</span><span class="p">)</span> <span class="o">+</span> <span class="n">b_i</span><span class="p">)</span>
 </pre></div>
 </div>
-<p>No-Bias Vector Scaling (NBVS):</p>
+<p>No-Bias Vector Scaling (NBVS):
+.. math:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span>\<span class="n">hat</span><span class="p">{</span><span class="n">p</span><span class="p">}</span><span class="n">_i</span> <span class="o">=</span> \<span class="n">text</span><span class="p">{</span><span class="n">softmax</span><span class="p">}(</span><span class="n">W_i</span> \<span class="n">cdot</span> \<span class="n">log</span><span class="p">(</span><span class="n">p_i</span><span class="p">))</span>
 </pre></div>
 </div>
@@ -502,7 +509,12 @@ between expectation (E) and maximization (M) steps on posterior probabilities.</
 </dd>
 <dt><strong>max_iter</strong><span class="classifier">int, default=100</span></dt><dd><p>Maximum EM iterations.</p>
 </dd>
-<dt><strong>calib_function</strong><span class="classifier">str or callable, optional</span></dt><dd><p>Calibration method: ‘bcts’, ‘ts’, ‘vs’, ‘nbvs’.</p>
+<dt><strong>calib_function</strong><span class="classifier">str or callable, optional</span></dt><dd><p>Calibration method:
+- ‘ts’: Temperature Scaling
+- ‘bcts’: Bias-Corrected Temperature Scaling
+- ‘vs’: Vector Scaling
+- ‘nbvs’: No-Bias Vector Scaling
+- callable: custom calibration function</p>
 </dd>
 <dt><strong>criteria</strong><span class="classifier">callable, default=MAE</span></dt><dd><p>Convergence metric.</p>
 </dd>
