@@ -183,7 +183,7 @@ Both :class:`GAC` and :class:`GPAC` are solved using this linear system:
 Friedman's Method (FM)  
 ----------------------
 
-FM constructs its adjustment matrix :math:`\mathbf{X}` based on a specialized feature transformation function :math:`f_l(x)` that indicates whether the predicted class probability for an item exceeds that class's proportion in the training data :math:`(\pi_l^T)` , a technique chosen because it theoretically minimizes the variance of the resulting prevalence estimates.
+The :class:`FM` constructs its adjustment matrix :math:`\mathbf{X}` based on a specialized feature transformation function :math:`f_l(x)` that indicates whether the predicted class probability for an item exceeds that class's proportion in the training data :math:`(\pi_l^T)` , a technique chosen because it theoretically minimizes the variance of the resulting prevalence estimates.
 
 .. dropdown:: Mathematical details - Friedman's Method
 
