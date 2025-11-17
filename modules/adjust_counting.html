@@ -572,8 +572,16 @@ They treat quantification as solving a small linear system.</p>
 <div class="math notranslate nohighlight">
 \[\min_{\hat{\pi}_F} \frac{1}{2} \hat{\pi}_F^\top D \hat{\pi}_F + d^\top \hat{\pi}_F
 \quad \text{subject to} \quad \hat{\pi}_F \ge 0, \quad \sum \hat{\pi}_F = 1\]</div>
-<p class="sd-card-text">to estimate the corrected prevalences <span class="math notranslate nohighlight">\(\hat{\pi}_F\)</span> on the test set.</p>
-<p class="sd-card-text">This thresholding on posterior probabilities ensures that the matrix <span class="math notranslate nohighlight">\(\mathbf{X}\)</span> highlights regions where the classifier consistently predicts a class more confidently than its baseline prevalence, improving statistical stability and reducing estimation variance.</p>
+<p class="sd-card-text">to estimate the corrected prevalences <span class="math notranslate nohighlight">\(\hat{\pi}_F\)</span> on the test set <a class="footnote-reference brackets" href="#id4" id="id2" role="doc-noteref"><span class="fn-bracket">[</span>3<span class="fn-bracket">]</span></a>.</p>
+<p class="sd-card-text">This thresholding on posterior probabilities ensures that the matrix <span class="math notranslate nohighlight">\(\mathbf{X}\)</span> highlights regions where the classifier consistently predicts a class more confidently than its baseline prevalence, improving statistical stability and reducing estimation variance <a class="footnote-reference brackets" href="#id4" id="id3" role="doc-noteref"><span class="fn-bracket">[</span>3<span class="fn-bracket">]</span></a>.</p>
+<p class="sd-card-text"><strong>References</strong></p>
+<aside class="footnote-list brackets">
+<aside class="footnote brackets" id="id4" role="doc-footnote">
+<span class="label"><span class="fn-bracket">[</span>3<span class="fn-bracket">]</span></span>
+<span class="backrefs">(<a role="doc-backlink" href="#id2">1</a>,<a role="doc-backlink" href="#id3">2</a>)</span>
+<p class="sd-card-text">Friedman, J. H. (2015). CLASS COUNTS IN FUTURE UNLABELED SAMPLES (Detecting and dealing with concept drift). (FM)</p>
+</aside>
+</aside>
 </div>
 </details></section>
 </section>
