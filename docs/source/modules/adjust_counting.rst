@@ -15,13 +15,10 @@ Currently, there are two types of adjustment methods implemented:
 2. **Matrix Adjustment Methods**: These methods use a confusion matrix derived from the classifier's performance on a validation set to adjust the estimated prevalences. Examples include the EM-based methods and other matrix inversion techniques.
 
 
-[Plot Idea: Comparison between raw CC estimate vs adjusted estimate when dataset shift occurs]
-
-
 Classify and Count  
 ==================
 
-The **Classify and Count (:ref:`~mlquantify.adjust_counting.CC` )** method is the simplest baseline.  
+The **Classify and Count** method, or :ref:`~mlquantify.adjust_counting.CC` is the simplest baseline.  
 It trains a hard classifier :math:`h` on labeled data :math:`L` , applies it to an unlabeled set :math:`U` , and counts how many samples belong to each predicted class.
 
 **Equation**
@@ -47,14 +44,14 @@ It trains a hard classifier :math:`h` on labeled data :math:`L` , applies it to 
    q.predict(X)
    # -> {0: 0.47, 1: 0.53}
 
-CC is fast and simple, but when class proportions in the test set differ from the training set, its estimates can become biased or inaccurate.
+:ref:`~mlquantify.adjust_counting.CC` is fast and simple, but when class proportions in the test set differ from the training set, its estimates can become biased or inaccurate.
 
 
 
 Probabilistic Classify and Count  
 ================================
 
-The **Probabilistic Classify and Count (PCC)** variant uses the *predicted probabilities* from a soft classifier instead of hard labels.  
+The **Probabilistic Classify and Count** or :ref:`~mlquantify.adjust_counting.PCC` variant uses the *predicted probabilities* from a soft classifier instead of hard labels.  
 This makes it less sensitive to uncertain predictions.
 
 **Equation**
@@ -89,7 +86,7 @@ Threshold Adjustment
 ====================
 
 Threshold-based adjustment methods correct the bias of CC by using the classifier's **True Positive Rate (TPR)** and **False Positive Rate (FPR)**.  
-They are mainly used for`binary`quantification tasks.
+They are mainly used for `binary` quantification tasks.
 
 **Adjusted Classify and Count (ACC) Equation**
 
@@ -164,8 +161,8 @@ Here:
 
 [Plot Idea: Matrix illustration showing how confusion corrections map to estimated prevalences]
 
-GAC and GPAC (ACC and PACC Multiclass)
---------------------------------------
+Generalized Adjusted Classify and Count (GAC) and Generalized Probabilistic Adjusted Classify and Count (GPAC)
+--------------------------------------------------------------------------------------------------------------
 
 .. code-block:: python
 
@@ -176,7 +173,7 @@ GAC and GPAC (ACC and PACC Multiclass)
    q.predict(X_test)
    # -> {0: 0.48, 1: 0.52}
 
-Both **ACC multiclass (GAC)** and **PACC multiclass (GPAC)** are solved using this linear system:
+Both :ref:`~mlquantify.adjust_counting.GAC` and :ref:`~mlquantify.adjust_counting.GPAC` are solved using this linear system:
 
 - GAC uses hard classifier decisions (confusion matrix).  
 - GPAC uses soft probabilities :math:`P(y=l|x)` .
@@ -226,4 +223,4 @@ FM constructs its adjustment matrix :math:`\mathbf{X}` based on a specialized fe
 
    **References**
 
-   .. [3] Friedman, J. H. (2015). CLASS COUNTS IN FUTURE UNLABELED SAMPLES (Detecting and dealing with concept drift). (FM)
+   .. [3] Friedman, J. H. (2015). CLASS COUNTS IN FUTURE UNLABELED SAMPLES (Detecting and dealing with concept drift).
