@@ -14,12 +14,8 @@ This clear separation into fit, predict, and aggregate methods allows modular im
 The main aggregative quantification methods will be defined next, with details about their specific approaches and differences.
 
 
-.. toctree::
-   :numbered:
-   :maxdepth: 3
-
-   adjust_counting.rst
-   likelihood.rst
-   mixture_models.rst
-   neighbors.rst
+.. include:: adjust_counting.rst
+.. include:: likelihood.rst
+.. include:: mixture_models.rst
+.. include:: neighbors.rst
 
