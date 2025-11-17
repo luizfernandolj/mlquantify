@@ -29,8 +29,6 @@ Adjusted Counting Methods
   :template: base.rst
 
 
-  ThresholdAdjustment
-  MatrixAdjustment
   FM
   GAC
   GPAC
