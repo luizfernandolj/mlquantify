@@ -11,12 +11,12 @@
 <meta property="og:type" content="website" />
 <meta property="og:url" content="user_guide.html" />
 <meta property="og:site_name" content="mlquantify" />
-<meta property="og:description" content="Aggregative Quantification, Adjust Counting- Classify and Count., Example of usage- Probabilistic Classify and Count., Example of usage- Threshold Adjustment., Matrix Adjustment, Likelihood-Based Q..." />
+<meta property="og:description" content="Aggregative Quantification- Adjust Counting- Classify and Count, Probabilistic Classify and Count, Threshold Adjustment, Matrix Adjustment., Likelihood-Based Quantification, Mixture Models, Neighbo..." />
 <meta property="og:image:width" content="1146" />
 <meta property="og:image:height" content="600" />
-<meta property="og:image" content="_images/social_previews/summary_user_guide_3593bc06.png" />
-<meta property="og:image:alt" content="Aggregative Quantification, Adjust Counting- Classify and Count., Example of usage- Probabilistic Classify and Count., Example of usage- Threshold Adjustment., Matrix Adjustment, Likelihood-Based Q..." />
-<meta name="description" content="Aggregative Quantification, Adjust Counting- Classify and Count., Example of usage- Probabilistic Classify and Count., Example of usage- Threshold Adjustment., Matrix Adjustment, Likelihood-Based Q..." />
+<meta property="og:image" content="_images/social_previews/summary_user_guide_ec288efe.png" />
+<meta property="og:image:alt" content="Aggregative Quantification- Adjust Counting- Classify and Count, Probabilistic Classify and Count, Threshold Adjustment, Matrix Adjustment., Likelihood-Based Quantification, Mixture Models, Neighbo..." />
+<meta name="description" content="Aggregative Quantification- Adjust Counting- Classify and Count, Probabilistic Classify and Count, Threshold Adjustment, Matrix Adjustment., Likelihood-Based Quantification, Mixture Models, Neighbo..." />
 <meta name="twitter:card" content="summary_large_image" />
 
     <title>User Guide &#8212; mlquantify 0.1.8 documentation</title>
@@ -313,18 +313,17 @@
      aria-label="Section Navigation">
   <p class="bd-links__title" role="heading" aria-level="1">Section Navigation</p>
   <div class="bd-toc-item navbar-nav"><ul class="nav bd-sidenav">
-<li class="toctree-l1"><a class="reference internal" href="aggregative_quantification.html">1. Aggregative Quantification</a></li>
-
-
-
-
-
-
-
-<li class="toctree-l1"><a class="reference internal" href="building_a_quantifier.html">9.  Building a Quantifier</a></li>
-<li class="toctree-l1"><a class="reference internal" href="model_selection_evaluation.html">10.  Model Selection and Evaluation</a></li>
-<li class="toctree-l1 has-children"><a class="reference internal" href="experiment_management.html">11.  Experiment Management</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
-<li class="toctree-l2"><a class="reference internal" href="building_a_protocol.html">11.1. Building a Protocol</a></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="aggregative_quantification.html">1.  Aggregative Quantification</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="adjust_counting.html">1.1. Adjust Counting</a></li>
+<li class="toctree-l2"><a class="reference internal" href="likelihood.html">1.2. Likelihood-Based Quantification</a></li>
+<li class="toctree-l2"><a class="reference internal" href="mixture_models.html">1.3. Mixture Models</a></li>
+<li class="toctree-l2"><a class="reference internal" href="neighbors.html">1.4. Neighbors-Based Quantification</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1"><a class="reference internal" href="building_a_quantifier.html">2.  Building a Quantifier</a></li>
+<li class="toctree-l1"><a class="reference internal" href="model_selection_evaluation.html">3.  Model Selection and Evaluation</a></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="experiment_management.html">4.  Experiment Management</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="building_a_protocol.html">4.1. Building a Protocol</a></li>
 </ul>
 </details></li>
 </ul>
@@ -381,31 +380,27 @@
 <span id="id1"></span><h1>User Guide<a class="headerlink" href="#user-guide" title="Link to this heading">#</a></h1>
 <div class="toctree-wrapper compound">
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="aggregative_quantification.html">1. Aggregative Quantification</a></li>
-<li class="toctree-l1"><a class="reference internal" href="aggregative_quantification.html#adjust-counting">2. Adjust Counting</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="aggregative_quantification.html#classify-and-count">2.1. Classify and Count</a></li>
+<li class="toctree-l1"><a class="reference internal" href="aggregative_quantification.html">1.  Aggregative Quantification</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="adjust_counting.html">1.1. Adjust Counting</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="modules/classify_and_count.html">1.1.1. Classify and Count</a></li>
+<li class="toctree-l3"><a class="reference internal" href="modules/classify_and_count.html#probabilistic-classify-and-count">1.1.2. Probabilistic Classify and Count</a></li>
+<li class="toctree-l3"><a class="reference internal" href="modules/threshold_adjustment.html">1.1.3. Threshold Adjustment</a></li>
+<li class="toctree-l3"><a class="reference internal" href="modules/matrix_adjustment.html">1.1.4. Matrix Adjustment</a></li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="aggregative_quantification.html#example-of-usage">3. Example of usage</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="aggregative_quantification.html#probabilistic-classify-and-count">3.1. Probabilistic Classify and Count</a></li>
+<li class="toctree-l2"><a class="reference internal" href="likelihood.html">1.2. Likelihood-Based Quantification</a></li>
+<li class="toctree-l2"><a class="reference internal" href="mixture_models.html">1.3. Mixture Models</a></li>
+<li class="toctree-l2"><a class="reference internal" href="neighbors.html">1.4. Neighbors-Based Quantification</a></li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="aggregative_quantification.html#id4">4. Example of usage</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="aggregative_quantification.html#threshold-adjustment">4.1. Threshold Adjustment</a></li>
+<li class="toctree-l1"><a class="reference internal" href="building_a_quantifier.html">2.  Building a Quantifier</a><ul class="simple">
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="aggregative_quantification.html#matrix-adjustment">5. Matrix Adjustment</a></li>
-<li class="toctree-l1"><a class="reference internal" href="aggregative_quantification.html#likelihood-based-quantification">6. Likelihood-Based Quantification</a></li>
-<li class="toctree-l1"><a class="reference internal" href="aggregative_quantification.html#mixture-models">7. Mixture Models</a></li>
-<li class="toctree-l1"><a class="reference internal" href="aggregative_quantification.html#neighbors-based-quantification">8. Neighbors-Based Quantification</a></li>
-<li class="toctree-l1"><a class="reference internal" href="building_a_quantifier.html">9.  Building a Quantifier</a><ul class="simple">
+<li class="toctree-l1"><a class="reference internal" href="model_selection_evaluation.html">3.  Model Selection and Evaluation</a><ul class="simple">
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="model_selection_evaluation.html">10.  Model Selection and Evaluation</a><ul class="simple">
-</ul>
-</li>
-<li class="toctree-l1"><a class="reference internal" href="experiment_management.html">11.  Experiment Management</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="building_a_protocol.html">11.1. Building a Protocol</a></li>
+<li class="toctree-l1"><a class="reference internal" href="experiment_management.html">4.  Experiment Management</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="building_a_protocol.html">4.1. Building a Protocol</a></li>
 </ul>
 </li>
 </ul>
