@@ -30,7 +30,7 @@ It trains a hard classifier \(h\) on labeled data \(L\), applies it to an unlabe
 
    \hat{p}^U_{CC}(y) = \frac{|\{x \in U \mid h(x) = y\}|}{|U|}
 
-:caption: *Estimated prevalence from hard classifier labels*
+   :caption: *Estimated prevalence from hard classifier labels*
 
 
 **Example**
@@ -63,7 +63,7 @@ This makes it less sensitive to uncertain predictions.
 
    \hat{p}^U_{PCC}(y) = \frac{1}{|U|} \sum_{x \in U} p(y|x)
 
-:caption: *Estimated prevalence from averaged posterior probabilities*
+   :caption: *Estimated prevalence from averaged posterior probabilities*
 
 [Plot Idea: A plot comparing probabilities per sample and their averaged mean per class]
 
@@ -105,26 +105,26 @@ The main idea is that by adjusting the observed rate of positive predictions, we
 
 Different *threshold methods* vary in how they choose the classifier cutoff \( \tau \) for scores \( s(x) \).
 
-+----------------+--------------------------------------------+--------------------------------------------------+
-| **Method**     | **Threshold Choice**                       | **Goal**                                         |
-+================+============================================+==================================================+
-| AC             | Fixed threshold = 0.5                        | Simple baseline adjustment                      |
-+----------------+--------------------------------------------+--------------------------------------------------+
-| X              | Chooses threshold where \(FPR=1-TPR\)       | Avoids unstable prediction tails                |
-+----------------+--------------------------------------------+--------------------------------------------------+
-| MAX            | Maximizes \(TPR - FPR\)                     | Improves numerical stability                    |
-+----------------+--------------------------------------------+--------------------------------------------------+
-| T50            | Sets \(TPR = 0.5\)                          | Uses central part of ROC curve                  |
-+----------------+--------------------------------------------+--------------------------------------------------+
-| MS (Median Sweep) | Uses the median of all thresholds’ ACC results | Reduces effect of threshold outliers            |
-+----------------+--------------------------------------------+--------------------------------------------------+
++-------------------+------------------------------------------------+-------------------------------------------------+
+| **Method**        | **Threshold Choice**                           | **Goal**                                        |
++-------------------+------------------------------------------------+-------------------------------------------------+
+| AC                | Fixed threshold = 0.5                          | Simple baseline adjustment                      |
++-------------------+------------------------------------------------+-------------------------------------------------+
+| X                 | Chooses threshold where \(FPR=1-TPR\)          | Avoids unstable prediction tails                |
++-------------------+------------------------------------------------+-------------------------------------------------+
+| MAX               | Maximizes \(TPR - FPR\)                        | Improves numerical stability                    |
++-------------------+------------------------------------------------+-------------------------------------------------+
+| T50               | Sets \(TPR = 0.5\)                             | Uses central part of ROC curve                  |
++-------------------+------------------------------------------------+-------------------------------------------------+
+| MS (Median Sweep) | Uses the median of all thresholds' ACC results | Reduces effect of threshold outliers            |
++-------------------+------------------------------------------------+-------------------------------------------------+
 
 **Example**
 
 .. code-block:: python
 
    from mlquantify.adjust_counting import ACC
-   q = ACC()
+   q = ACC(learner=LogisticRegression())
    q.fit(X, y)
    q.predict(X)
    # -> adjusted prevalence dictionary
@@ -135,6 +135,7 @@ Different *threshold methods* vary in how they choose the classifier cutoff \( \
 
     Threshold adjustment methods like ACC are primarily designed for binary classification tasks,  
     For multi-class problems, matrix adjustment methods are generally preferred.
+
 
 
 Matrix Adjustment  
@@ -150,7 +151,7 @@ They treat quantification as solving a small linear system.
    \mathbf{y = X \hat{\pi}_F + \epsilon}, \quad
    \text{subject to } \hat{\pi}_F \ge 0,\ \sum \hat{\pi}_F = 1
 
-:caption: *General linear system linking observed and true prevalences*
+   :caption: *General linear system linking observed and true prevalences*
 
 Here:
 
@@ -160,7 +161,8 @@ Here:
 
 [Plot Idea: Matrix illustration showing how confusion corrections map to estimated prevalences]
 
-**Example GAC / GPAC (ACC / PACC multiclass)**
+GAC and GPAC (ACC and PACC Multiclass)
+--------------------------------------
 
 .. code-block:: python
 
@@ -175,6 +177,9 @@ Both **ACC multiclass (GAC)** and **PACC multiclass (GPAC)** are solved using th
 
 - GAC uses hard classifier decisions (confusion matrix).  
 - GPAC uses soft probabilities \( P(y=l|x) \).
+
+Friedman's Method (FM)
+----------------------
 
 To improve stability, **Friedman's Method (FM)** generates the adjustment matrix \( \mathbf{X} \) using a special transformation function applied to each class \( l \) and training sample \( x \):
 
@@ -215,8 +220,8 @@ This thresholding on posterior probabilities ensures that the matrix \( \mathbf{
 
 +-------------------+-----------------------------------------------+---------------------------------------------+
 | **Method**        | **Matrix / Function (f_l(x))**                | **Resolution**                              |
-+===================+===============================================+=============================================+
-| ACC (GAC)         | Indicator of classifier's hard decision        | Direct linear system                        |
++-------------------+-----------------------------------------------+---------------------------------------------+
+| ACC (GAC)         | Indicator of classifier's hard decision       | Direct linear system                        |
 +-------------------+-----------------------------------------------+---------------------------------------------+
 | PACC (GPAC)       | Posterior probability \(P(y=l|x)\)            | Direct linear system                        |
 +-------------------+-----------------------------------------------+---------------------------------------------+

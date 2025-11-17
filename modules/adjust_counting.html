@@ -398,12 +398,7 @@ They aim to produce better estimates of class prevalence (how frequent each clas
 It trains a hard classifier (h) on labeled data (L), applies it to an unlabeled set (U), and counts how many samples belong to each predicted class.</p>
 <p><strong>Equation</strong></p>
 <div class="math notranslate nohighlight">
-\[\hat{p}^U_{CC}(y) = \frac{|\{x \in U \mid h(x) = y\}|}{|U|}\]</div>
-<dl class="field-list simple">
-<dt class="field-odd">caption<span class="colon">:</span></dt>
-<dd class="field-odd"><p><em>Estimated prevalence from hard classifier labels</em></p>
-</dd>
-</dl>
+\[ \begin{align}\begin{aligned}\hat{p}^U_{CC}(y) = \frac{|\{x \in U \mid h(x) = y\}|}{|U|}\\:caption: *Estimated prevalence from hard classifier labels*\end{aligned}\end{align} \]</div>
 <p><strong>Example</strong></p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">mlquantify.adjust_counting</span><span class="w"> </span><span class="kn">import</span> <span class="n">CC</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">sklearn.linear_model</span><span class="w"> </span><span class="kn">import</span> <span class="n">LogisticRegression</span>
@@ -424,12 +419,7 @@ It trains a hard classifier (h) on labeled data (L), applies it to an unlabeled 
 This makes it less sensitive to uncertain predictions.</p>
 <p><strong>Equation</strong></p>
 <div class="math notranslate nohighlight">
-\[\hat{p}^U_{PCC}(y) = \frac{1}{|U|} \sum_{x \in U} p(y|x)\]</div>
-<dl class="field-list simple">
-<dt class="field-odd">caption<span class="colon">:</span></dt>
-<dd class="field-odd"><p><em>Estimated prevalence from averaged posterior probabilities</em></p>
-</dd>
-</dl>
+\[ \begin{align}\begin{aligned}\hat{p}^U_{PCC}(y) = \frac{1}{|U|} \sum_{x \in U} p(y|x)\\:caption: *Estimated prevalence from averaged posterior probabilities*\end{aligned}\end{align} \]</div>
 <p>[Plot Idea: A plot comparing probabilities per sample and their averaged mean per class]</p>
 <p><strong>Example</strong></p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">mlquantify.adjust_counting</span><span class="w"> </span><span class="kn">import</span> <span class="n">PCC</span>
@@ -460,9 +450,38 @@ They are mainly used for <code class="docutils literal notranslate"><span class=
 <p>The main idea is that by adjusting the observed rate of positive predictions, we can better approximate the real class distribution.</p>
 <p>[Plot Idea: Diagram showing how TPR and FPR move the prevalence estimate]</p>
 <p>Different <em>threshold methods</em> vary in how they choose the classifier cutoff ( tau ) for scores ( s(x) ).</p>
+<div class="pst-scrollable-table-container"><table class="table">
+<tbody>
+<tr class="row-odd"><td><p><strong>Method</strong></p></td>
+<td><p><strong>Threshold Choice</strong></p></td>
+<td><p><strong>Goal</strong></p></td>
+</tr>
+<tr class="row-even"><td><p>AC</p></td>
+<td><p>Fixed threshold = 0.5</p></td>
+<td><p>Simple baseline adjustment</p></td>
+</tr>
+<tr class="row-odd"><td><p>X</p></td>
+<td><p>Chooses threshold where (FPR=1-TPR)</p></td>
+<td><p>Avoids unstable prediction tails</p></td>
+</tr>
+<tr class="row-even"><td><p>MAX</p></td>
+<td><p>Maximizes (TPR - FPR)</p></td>
+<td><p>Improves numerical stability</p></td>
+</tr>
+<tr class="row-odd"><td><p>T50</p></td>
+<td><p>Sets (TPR = 0.5)</p></td>
+<td><p>Uses central part of ROC curve</p></td>
+</tr>
+<tr class="row-even"><td><p>MS (Median Sweep)</p></td>
+<td><p>Uses the median of all thresholds’ ACC results</p></td>
+<td><p>Reduces effect of threshold outliers</p></td>
+</tr>
+</tbody>
+</table>
+</div>
 <p><strong>Example</strong></p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">mlquantify.adjust_counting</span><span class="w"> </span><span class="kn">import</span> <span class="n">ACC</span>
-<span class="n">q</span> <span class="o">=</span> <span class="n">ACC</span><span class="p">()</span>
+<span class="n">q</span> <span class="o">=</span> <span class="n">ACC</span><span class="p">(</span><span class="n">learner</span><span class="o">=</span><span class="n">LogisticRegression</span><span class="p">())</span>
 <span class="n">q</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span>
 <span class="n">q</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">X</span><span class="p">)</span>
 <span class="c1"># -&gt; adjusted prevalence dictionary</span>
@@ -481,13 +500,8 @@ For multi-class problems, matrix adjustment methods are generally preferred.</p>
 They treat quantification as solving a small linear system.</p>
 <p><strong>Matrix Equation</strong></p>
 <div class="math notranslate nohighlight">
-\[\mathbf{y = X \hat{\pi}_F + \epsilon}, \quad
-\text{subject to } \hat{\pi}_F \ge 0,\ \sum \hat{\pi}_F = 1\]</div>
-<dl class="field-list simple">
-<dt class="field-odd">caption<span class="colon">:</span></dt>
-<dd class="field-odd"><p><em>General linear system linking observed and true prevalences</em></p>
-</dd>
-</dl>
+\[ \begin{align}\begin{aligned}\mathbf{y = X \hat{\pi}_F + \epsilon}, \quad
+\text{subject to } \hat{\pi}_F \ge 0,\ \sum \hat{\pi}_F = 1\\:caption: *General linear system linking observed and true prevalences*\end{aligned}\end{align} \]</div>
 <p>Here:</p>
 <ul class="simple">
 <li><p>( mathbf{y} ): average observed predictions in (U)</p></li>
@@ -495,7 +509,8 @@ They treat quantification as solving a small linear system.</p>
 <li><p>( hat{pi}_F ): corrected class prevalences in (U)</p></li>
 </ul>
 <p>[Plot Idea: Matrix illustration showing how confusion corrections map to estimated prevalences]</p>
-<p><strong>Example GAC / GPAC (ACC / PACC multiclass)</strong></p>
+<section id="gac-and-gpac-acc-and-pacc-multiclass">
+<h3><span class="section-number">1.1.4.1. </span>GAC and GPAC (ACC and PACC Multiclass)<a class="headerlink" href="#gac-and-gpac-acc-and-pacc-multiclass" title="Link to this heading">#</a></h3>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">mlquantify.adjust_counting</span><span class="w"> </span><span class="kn">import</span> <span class="n">GAC</span><span class="p">,</span> <span class="n">GPAC</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">sklearn.linear_model</span><span class="w"> </span><span class="kn">import</span> <span class="n">LogisticRegression</span>
 <span class="n">q</span> <span class="o">=</span> <span class="n">GAC</span><span class="p">(</span><span class="n">learner</span><span class="o">=</span><span class="n">LogisticRegression</span><span class="p">())</span>
@@ -509,6 +524,9 @@ They treat quantification as solving a small linear system.</p>
 <li><p>GAC uses hard classifier decisions (confusion matrix).</p></li>
 <li><p>GPAC uses soft probabilities ( P(y=l|x) ).</p></li>
 </ul>
+</section>
+<section id="friedman-s-method-fm">
+<h3><span class="section-number">1.1.4.2. </span>Friedman’s Method (FM)<a class="headerlink" href="#friedman-s-method-fm" title="Link to this heading">#</a></h3>
 <p>To improve stability, <strong>Friedman’s Method (FM)</strong> generates the adjustment matrix ( mathbf{X} ) using a special transformation function applied to each class ( l ) and training sample ( x ):</p>
 <div class="math notranslate nohighlight">
 \[f_l(x) = I \left[ \hat{P}_T(y = l \mid x) &gt; \pi_l^T \right]\]</div>
@@ -533,6 +551,28 @@ They treat quantification as solving a small linear system.</p>
 \quad \text{subject to} \quad \hat{\pi}_F \ge 0, \quad \sum \hat{\pi}_F = 1\]</div>
 <p>to estimate the corrected prevalences ( hat{pi}_F ) on the test set.</p>
 <p>This thresholding on posterior probabilities ensures that the matrix ( mathbf{X} ) highlights regions where the classifier consistently predicts a class more confidently than its baseline prevalence, improving statistical stability and reducing estimation variance.</p>
+<div class="pst-scrollable-table-container"><table class="table">
+<tbody>
+<tr class="row-odd"><td><p><strong>Method</strong></p></td>
+<td><p><strong>Matrix / Function (f_l(x))</strong></p></td>
+<td><p><strong>Resolution</strong></p></td>
+</tr>
+<tr class="row-even"><td><p>ACC (GAC)</p></td>
+<td><p>Indicator of classifier’s hard decision</p></td>
+<td><p>Direct linear system</p></td>
+</tr>
+<tr class="row-odd"><td><p>PACC (GPAC)</p></td>
+<td><p>Posterior probability (P(y=l|x))</p></td>
+<td><p>Direct linear system</p></td>
+</tr>
+<tr class="row-even"><td><p>FM (Friedman)</p></td>
+<td><p>Indicator if ( hat{P}_T(y=l|x) &gt; pi_l^T )</p></td>
+<td><p>Constrained least-squares (Quadratic Prog.)</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
 </section>
 </section>
 
@@ -590,7 +630,11 @@ They treat quantification as solving a small linear system.</p>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#classify-and-count">1.1.1. Classify and Count</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#probabilistic-classify-and-count">1.1.2. Probabilistic Classify and Count</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#threshold-adjustment">1.1.3. Threshold Adjustment</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#matrix-adjustment">1.1.4. Matrix Adjustment</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#matrix-adjustment">1.1.4. Matrix Adjustment</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#gac-and-gpac-acc-and-pacc-multiclass">1.1.4.1. GAC and GPAC (ACC and PACC Multiclass)</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#friedman-s-method-fm">1.1.4.2. Friedman’s Method (FM)</a></li>
+</ul>
+</li>
 </ul>
   </nav></div>
 
