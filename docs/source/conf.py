@@ -3,9 +3,9 @@ import sys
 import jinja2
 
 # Add the project directory to the sys.path
-sys.path.insert(0, os.path.abspath('../..'))  # adiciona /docs
-sys.path.insert(0, os.path.abspath('../'))  # adiciona /docs
-sys.path.insert(0, os.path.abspath('.'))  # adiciona / (raiz do projeto)
+sys.path.insert(0, os.path.abspath('../..')) 
+sys.path.insert(0, os.path.abspath('../'))
+sys.path.insert(0, os.path.abspath('.')) 
 sys.path.insert(0, os.path.abspath("sphinxext"))
 
 
