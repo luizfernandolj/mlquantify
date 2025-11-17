@@ -21,7 +21,7 @@ Currently, there are two types of adjustment methods implemented:
 Classify and Count  
 ==================
 
-The **Classify and Count (CC)** method is the simplest baseline.  
+The **Classify and Count (:ref:`~mlquantify.adjust_counting.CC` )** method is the simplest baseline.  
 It trains a hard classifier :math:`h` on labeled data :math:`L` , applies it to an unlabeled set :math:`U` , and counts how many samples belong to each predicted class.
 
 **Equation**
@@ -81,7 +81,7 @@ This makes it less sensitive to uncertain predictions.
    q.predict(X)
    # -> {0: 0.45, 1: 0.55}
 
-CC and PCC both often underestimate or overestimate the true prevalence when there is distribution shift (also known as “dataset shift”).
+CC and PCC both often underestimate or overestimate the true prevalence when there is distribution shift (also known as "dataset shift").
 
 
 
@@ -186,40 +186,40 @@ Both **ACC multiclass (GAC)** and **PACC multiclass (GPAC)** are solved using th
 Friedman's Method (FM)  
 ----------------------
 
-FM constructs its adjustment matrix :math:`\mathbf{X}` based on a specialized feature transformation function :math:`f_l(x)` that indicates whether the predicted class probability for an item exceeds that class's proportion in the training data :math:`(\pi_l^T)` , a technique chosen because it theoretically minimizes the variance of the resulting prevalence estimates.
-
 .. dropdown:: Mathematical details - Friedman's Method
 
-To improve stability, **Friedman's Method (FM)** generates the adjustment matrix :math:`\mathbf{X}` using a special transformation function applied to each class :math:`l` and training sample :math:`x` :
+   FM constructs its adjustment matrix :math:`\mathbf{X}` based on a specialized feature transformation function :math:`f_l(x)` that indicates whether the predicted class probability for an item exceeds that class's proportion in the training data :math:`(\pi_l^T)` , a technique chosen because it theoretically minimizes the variance of the resulting prevalence estimates.
 
-.. math::
+   To improve stability, **Friedman's Method (FM)** generates the adjustment matrix :math:`\mathbf{X}` using a special transformation function applied to each class :math:`l` and training sample :math:`x` :
 
-   f_l(x) = I \left[ \hat{P}_T(y = l \mid x) > \pi_l^T \right]
+   .. math::
 
-where:
+      f_l(x) = I \left[ \hat{P}_T(y = l \mid x) > \pi_l^T \right]
 
-- :math:`I[\cdot]` is the indicator function, equal to 1 if the condition inside is true, 0 otherwise.  
-- :math:`\hat{P}_T(y = l \mid x)` is the classifier's estimated posterior probability for class :math:`l` on training sample :math:`x`.  
-- :math:`\pi_l^T` is the prevalence of class :math:`l` in the training set.
+   where:
 
-The entry :math:`X_{i,l}` of the matrix :math:`\mathbf{X}` is computed as the average of :math:`f_l(x)` over all :math:`x` in class :math:`i` of the training data:
+   - :math:`I[\cdot]` is the indicator function, equal to 1 if the condition inside is true, 0 otherwise.  
+   - :math:`\hat{P}_T(y = l \mid x)` is the classifier's estimated posterior probability for class :math:`l` on training sample :math:`x`.  
+   - :math:`\pi_l^T` is the prevalence of class :math:`l` in the training set.
 
-.. math::
+   The entry :math:`X_{i,l}` of the matrix :math:`\mathbf{X}` is computed as the average of :math:`f_l(x)` over all :math:`x` in class :math:`i` of the training data:
 
-   X_{i,l} = \frac{1}{|L_i|} \sum_{x \in L_i} f_l(x)
+   .. math::
 
-where:
+      X_{i,l} = \frac{1}{|L_i|} \sum_{x \in L_i} f_l(x)
 
-- :math:`L_i` is the subset of training samples with true class :math:`i`.  
-- :math:`|L_i|` is the number of these samples.
+   where:
 
-This matrix is then used in the constrained least squares optimization:
+   - :math:`L_i` is the subset of training samples with true class :math:`i`.  
+   - :math:`|L_i|` is the number of these samples.
 
-.. math::
+   This matrix is then used in the constrained least squares optimization:
 
-   \min_{\hat{\pi}_F} \frac{1}{2} \hat{\pi}_F^\top D \hat{\pi}_F + d^\top \hat{\pi}_F
-   \quad \text{subject to} \quad \hat{\pi}_F \ge 0, \quad \sum \hat{\pi}_F = 1
+   .. math::
 
-to estimate the corrected prevalences :math:`\hat{\pi}_F` on the test set.
+      \min_{\hat{\pi}_F} \frac{1}{2} \hat{\pi}_F^\top D \hat{\pi}_F + d^\top \hat{\pi}_F
+      \quad \text{subject to} \quad \hat{\pi}_F \ge 0, \quad \sum \hat{\pi}_F = 1
 
-This thresholding on posterior probabilities ensures that the matrix :math:`\mathbf{X}` highlights regions where the classifier consistently predicts a class more confidently than its baseline prevalence, improving statistical stability and reducing estimation variance.
+   to estimate the corrected prevalences :math:`\hat{\pi}_F` on the test set.
+
+   This thresholding on posterior probabilities ensures that the matrix :math:`\mathbf{X}` highlights regions where the classifier consistently predicts a class more confidently than its baseline prevalence, improving statistical stability and reducing estimation variance.
