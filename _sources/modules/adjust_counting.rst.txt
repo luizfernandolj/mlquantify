@@ -179,12 +179,14 @@ GAC and GPAC (ACC and PACC Multiclass)
 Both **ACC multiclass (GAC)** and **PACC multiclass (GPAC)** are solved using this linear system:
 
 - GAC uses hard classifier decisions (confusion matrix).  
-- GPAC uses soft probabilities :math:`P(y=l|x)`.
+- GPAC uses soft probabilities :math:`P(y=l|x)` .
+
+
 
 Friedman's Method (FM)
 ----------------------
 
-To improve stability, **Friedman's Method (FM)** generates the adjustment matrix :math:`\mathbf{X}`using a special transformation function applied to each class :math:`l`and training sample :math:`x`:
+To improve stability, **Friedman's Method (FM)** generates the adjustment matrix :math:`\mathbf{X}` using a special transformation function applied to each class :math:`l` and training sample :math:`x` :
 
 .. math::
 

@@ -542,12 +542,12 @@ They treat quantification as solving a small linear system.</p>
 <p>Both <strong>ACC multiclass (GAC)</strong> and <strong>PACC multiclass (GPAC)</strong> are solved using this linear system:</p>
 <ul class="simple">
 <li><p>GAC uses hard classifier decisions (confusion matrix).</p></li>
-<li><p>GPAC uses soft probabilities <span class="math notranslate nohighlight">\(P(y=l|x)\)</span>.</p></li>
+<li><p>GPAC uses soft probabilities <span class="math notranslate nohighlight">\(P(y=l|x)\)</span> .</p></li>
 </ul>
 </section>
 <section id="friedman-s-method-fm">
 <h3><span class="section-number">1.1.4.2. </span>Friedman’s Method (FM)<a class="headerlink" href="#friedman-s-method-fm" title="Link to this heading">#</a></h3>
-<p>To improve stability, <strong>Friedman’s Method (FM)</strong> generates the adjustment matrix <span class="math notranslate nohighlight">\(\mathbf{X}`using a special transformation function applied to each class :math:`l`and training sample :math:`x\)</span>:</p>
+<p>To improve stability, <strong>Friedman’s Method (FM)</strong> generates the adjustment matrix <span class="math notranslate nohighlight">\(\mathbf{X}\)</span> using a special transformation function applied to each class <span class="math notranslate nohighlight">\(l\)</span> and training sample <span class="math notranslate nohighlight">\(x\)</span> :</p>
 <div class="math notranslate nohighlight">
 \[f_l(x) = I \left[ \hat{P}_T(y = l \mid x) &gt; \pi_l^T \right]\]</div>
 <p>where:</p>
