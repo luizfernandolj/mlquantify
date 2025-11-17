@@ -24,10 +24,7 @@ Classify and Count (CC) is the most basic aggregative quantification method. It 
 
 Despite its simplicity, CC is known to be suboptimal in many scenarios because standard classifiers often exhibit bias that leads to inaccurate prevalence estimates.
 
-This method is implemented in the :ref:`CC` class.
-
-Example of usage
----------------
+This method is implemented in the :ref:`CC` class:
 
 .. code-block:: python
 
@@ -60,10 +57,7 @@ However, Forman (2008) showed that CC can be biased when train and test class di
 Probabilistic Classify and Count
 ================================
 
-There is also a probabilistic variant of Classify and Count called Probabilistic Classify and Count (PCC), which uses the predicted probabilities from a probabilistic classifier instead of hard class labels to estimate prevalences. This method is implemented in the class :ref:`PCC`.
-
-Example of usage
----------------
+There is also a probabilistic variant of Classify and Count called Probabilistic Classify and Count (PCC), which uses the predicted probabilities from a probabilistic classifier instead of hard class labels to estimate prevalences. This method is implemented in the class :ref:`PCC`:
 
 .. code-block:: python
 
