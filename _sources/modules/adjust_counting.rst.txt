@@ -102,22 +102,22 @@ The main idea is that by adjusting the observed rate of positive predictions, we
 
 Different *threshold methods* vary in how they choose the classifier cutoff :math:`\tau` for scores :math:`s(x)` .
 
-+-------------------+------------------------------------------------------+-----------------------------------------+
-| **Method**        | **Threshold Choice**                                 | **Goal**                                |
-+-------------------+------------------------------------------------------+-----------------------------------------+
-| AC                | Fixed threshold :math:`\tau = 0.5`                   | Simple baseline adjustment              |
-+-------------------+------------------------------------------------------+-----------------------------------------+
-| X                 | Threshold where :math:`\text{FPR} = 1 - \text{TPR}`  | Avoids unstable prediction tails        |
-+-------------------+------------------------------------------------------+-----------------------------------------+
-| MAX               | Threshold maximizing :math:`\text{TPR} - \text{FPR}` | Improves numerical stability            |
-+-------------------+------------------------------------------------------+-----------------------------------------+
-| T50               | Threshold where :math:`\text{TPR} = 0.5`             | Uses central part of ROC curve          |
-+-------------------+------------------------------------------------------+-----------------------------------------+
-| MS (Median Sweep) | Median of all thresholds' ACC results                | Reduces effect of threshold outliers    |
-+-------------------+------------------------------------------------------+-----------------------------------------+
-| MS2               | Median Sweep variant with constraint                 | Reduces effect of threshold outliers    |
-|                   | :math:`\|\text{TPR} - \text{FPR}\| > 0.25`           |                                         |
-+-------------------+------------------------------------------------------+-----------------------------------------+
++----------------------------+------------------------------------------------------+-----------------------------------------+
+| **Method**                 | **Threshold Choice**                                 | **Goal**                                |
++----------------------------+------------------------------------------------------+-----------------------------------------+
+| :class:`ACC`               | Fixed threshold :math:`\tau = 0.5`                   | Simple baseline adjustment              |
++----------------------------+------------------------------------------------------+-----------------------------------------+
+| :class:`x_method`          | Threshold where :math:`\text{FPR} = 1 - \text{TPR}`  | Avoids unstable prediction tails        |
++----------------------------+------------------------------------------------------+-----------------------------------------+
+| :class:`MAX`               | Threshold maximizing :math:`\text{TPR} - \text{FPR}` | Improves numerical stability            |
++----------------------------+------------------------------------------------------+-----------------------------------------+
+| :class:`T50`               | Threshold where :math:`\text{TPR} = 0.5`             | Uses central part of ROC curve          |
++----------------------------+------------------------------------------------------+-----------------------------------------+
+| :class:`MS` (Median Sweep) | Median of all thresholds' ACC results                | Reduces effect of threshold outliers    |
++----------------------------+------------------------------------------------------+-----------------------------------------+
+| :class:`MS2`               | Median Sweep variant with constraint                 | Reduces effect of threshold outliers    |
+|                            | :math:`\|\text{TPR} - \text{FPR}\| > 0.25`           |                                         |
++----------------------------+------------------------------------------------------+-----------------------------------------+
 
 **Example**
 

@@ -465,27 +465,27 @@ They are mainly used for <code class="docutils literal notranslate"><span class=
 <td><p><strong>Threshold Choice</strong></p></td>
 <td><p><strong>Goal</strong></p></td>
 </tr>
-<tr class="row-even"><td><p>AC</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="generated/mlquantify.adjust_counting.ACC.html#mlquantify.adjust_counting.ACC" title="mlquantify.adjust_counting.ACC"><code class="xref py py-class docutils literal notranslate"><span class="pre">ACC</span></code></a></p></td>
 <td><p>Fixed threshold <span class="math notranslate nohighlight">\(\tau = 0.5\)</span></p></td>
 <td><p>Simple baseline adjustment</p></td>
 </tr>
-<tr class="row-odd"><td><p>X</p></td>
+<tr class="row-odd"><td><p><code class="xref py py-class docutils literal notranslate"><span class="pre">x_method</span></code></p></td>
 <td><p>Threshold where <span class="math notranslate nohighlight">\(\text{FPR} = 1 - \text{TPR}\)</span></p></td>
 <td><p>Avoids unstable prediction tails</p></td>
 </tr>
-<tr class="row-even"><td><p>MAX</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="generated/mlquantify.adjust_counting.MAX.html#mlquantify.adjust_counting.MAX" title="mlquantify.adjust_counting.MAX"><code class="xref py py-class docutils literal notranslate"><span class="pre">MAX</span></code></a></p></td>
 <td><p>Threshold maximizing <span class="math notranslate nohighlight">\(\text{TPR} - \text{FPR}\)</span></p></td>
 <td><p>Improves numerical stability</p></td>
 </tr>
-<tr class="row-odd"><td><p>T50</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="generated/mlquantify.adjust_counting.T50.html#mlquantify.adjust_counting.T50" title="mlquantify.adjust_counting.T50"><code class="xref py py-class docutils literal notranslate"><span class="pre">T50</span></code></a></p></td>
 <td><p>Threshold where <span class="math notranslate nohighlight">\(\text{TPR} = 0.5\)</span></p></td>
 <td><p>Uses central part of ROC curve</p></td>
 </tr>
-<tr class="row-even"><td><p>MS (Median Sweep)</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="generated/mlquantify.adjust_counting.MS.html#mlquantify.adjust_counting.MS" title="mlquantify.adjust_counting.MS"><code class="xref py py-class docutils literal notranslate"><span class="pre">MS</span></code></a> (Median Sweep)</p></td>
 <td><p>Median of all thresholds’ ACC results</p></td>
 <td><p>Reduces effect of threshold outliers</p></td>
 </tr>
-<tr class="row-odd"><td><p>MS2</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="generated/mlquantify.adjust_counting.MS2.html#mlquantify.adjust_counting.MS2" title="mlquantify.adjust_counting.MS2"><code class="xref py py-class docutils literal notranslate"><span class="pre">MS2</span></code></a></p></td>
 <td><p>Median Sweep variant with constraint
 <span class="math notranslate nohighlight">\(\|\text{TPR} - \text{FPR}\| &gt; 0.25\)</span></p></td>
 <td><p>Reduces effect of threshold outliers</p></td>
