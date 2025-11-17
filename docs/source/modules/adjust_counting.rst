@@ -186,9 +186,9 @@ Both **ACC multiclass (GAC)** and **PACC multiclass (GPAC)** are solved using th
 Friedman's Method (FM)  
 ----------------------
 
-.. dropdown:: Mathematical details - Friedman's Method
+FM constructs its adjustment matrix :math:`\mathbf{X}` based on a specialized feature transformation function :math:`f_l(x)` that indicates whether the predicted class probability for an item exceeds that class's proportion in the training data :math:`(\pi_l^T)` , a technique chosen because it theoretically minimizes the variance of the resulting prevalence estimates.
 
-   FM constructs its adjustment matrix :math:`\mathbf{X}` based on a specialized feature transformation function :math:`f_l(x)` that indicates whether the predicted class probability for an item exceeds that class's proportion in the training data :math:`(\pi_l^T)` , a technique chosen because it theoretically minimizes the variance of the resulting prevalence estimates.
+.. dropdown:: Mathematical details - Friedman's Method
 
    To improve stability, **Friedman's Method (FM)** generates the adjustment matrix :math:`\mathbf{X}` using a special transformation function applied to each class :math:`l` and training sample :math:`x` :
 
