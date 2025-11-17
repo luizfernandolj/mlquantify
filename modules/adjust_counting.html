@@ -395,7 +395,7 @@ They aim to produce better estimates of class prevalence (how frequent each clas
 <section id="classify-and-count">
 <h2><span class="section-number">1.1.1. </span>Classify and Count<a class="headerlink" href="#classify-and-count" title="Link to this heading">#</a></h2>
 <p>The <strong>Classify and Count (CC)</strong> method is the simplest baseline.
-It trains a hard classifier <span class="math notranslate nohighlight">\(\(h\)\)</span> on labeled data <span class="math notranslate nohighlight">\(\(L\)\)</span>, applies it to an unlabeled set <span class="math notranslate nohighlight">\(\(U\)\)</span>, and counts how many samples belong to each predicted class.</p>
+It trains a hard classifier <span class="math notranslate nohighlight">\(h`on labeled data :math:`L\)</span>, applies it to an unlabeled set <span class="math notranslate nohighlight">\(U\)</span>, and counts how many samples belong to each predicted class.</p>
 <p><strong>Equation</strong></p>
 <div class="math notranslate nohighlight">
 \[\hat{p}^U_{CC}(y) = \frac{|\{x \in U \mid h(x) = y\}|}{|U|}\]</div>
@@ -448,7 +448,7 @@ This makes it less sensitive to uncertain predictions.</p>
 <section id="threshold-adjustment">
 <h2><span class="section-number">1.1.3. </span>Threshold Adjustment<a class="headerlink" href="#threshold-adjustment" title="Link to this heading">#</a></h2>
 <p>Threshold-based adjustment methods correct the bias of CC by using the classifier’s <strong>True Positive Rate (TPR)</strong> and <strong>False Positive Rate (FPR)</strong>.
-They are mainly used for <code class="docutils literal notranslate"><span class="pre">binary</span></code> quantification tasks.</p>
+They are mainly used for`binary`quantification tasks.</p>
 <p><strong>Adjusted Classify and Count (ACC) Equation</strong></p>
 <div class="math notranslate nohighlight">
 \[\hat{p}^U_{ACC}(⊕) = \frac{\hat{p}^U_{CC}(⊕) - FPR_L}{TPR_L - FPR_L}\]</div>
@@ -459,7 +459,41 @@ They are mainly used for <code class="docutils literal notranslate"><span class=
 </dl>
 <p>The main idea is that by adjusting the observed rate of positive predictions, we can better approximate the real class distribution.</p>
 <p>[Plot Idea: Diagram showing how TPR and FPR move the prevalence estimate]</p>
-<p>Different <em>threshold methods</em> vary in how they choose the classifier cutoff :math:` tau ` for scores :math:` s(x) <a href="#id2"><span class="problematic" id="id3">`</span></a>.</p>
+<p>Different <em>threshold methods</em> vary in how they choose the classifier cutoff <span class="math notranslate nohighlight">\(\tau`for scores :math:`s(x)\)</span>.</p>
+<div class="pst-scrollable-table-container"><table class="table">
+<tbody>
+<tr class="row-odd"><td><p><strong>Method</strong></p></td>
+<td><p><strong>Threshold Choice</strong></p></td>
+<td><p><strong>Goal</strong></p></td>
+</tr>
+<tr class="row-even"><td><p>AC</p></td>
+<td><p>Fixed threshold ( tau = 0.5 )</p></td>
+<td><p>Simple baseline adjustment</p></td>
+</tr>
+<tr class="row-odd"><td><p>X</p></td>
+<td><p>Threshold where ( text{FPR} = 1 - text{TPR} )</p></td>
+<td><p>Avoids unstable prediction tails</p></td>
+</tr>
+<tr class="row-even"><td><p>MAX</p></td>
+<td><p>Threshold maximizing ( text{TPR} - text{FPR} )</p></td>
+<td><p>Improves numerical stability</p></td>
+</tr>
+<tr class="row-odd"><td><p>T50</p></td>
+<td><p>Threshold where ( text{TPR} = 0.5 )</p></td>
+<td><p>Uses central part of ROC curve</p></td>
+</tr>
+<tr class="row-even"><td><p>MS (Median Sweep)</p></td>
+<td><p>Median of all thresholds’ ACC results</p></td>
+<td><p>Reduces effect of threshold outliers</p></td>
+</tr>
+<tr class="row-odd"><td><p>MS2</p></td>
+<td><p>Median Sweep variant with constraint
+( |text{TPR} - text{FPR}| &gt; 0.25 )</p></td>
+<td><p>Reduces effect of threshold outliers</p></td>
+</tr>
+</tbody>
+</table>
+</div>
 <p><strong>Example</strong></p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">mlquantify.adjust_counting</span><span class="w"> </span><span class="kn">import</span> <span class="n">ACC</span>
 <span class="n">q</span> <span class="o">=</span> <span class="n">ACC</span><span class="p">(</span><span class="n">learner</span><span class="o">=</span><span class="n">LogisticRegression</span><span class="p">())</span>
@@ -481,11 +515,16 @@ For multi-class problems, matrix adjustment methods are generally preferred.</p>
 They treat quantification as solving a small linear system.</p>
 <p><strong>Matrix Equation</strong></p>
 <div class="math notranslate nohighlight">
-\[ \begin{align}\begin{aligned}\mathbf{y = X \hat{\pi}_F + \epsilon}, \quad
-\text{subject to } \hat{\pi}_F \ge 0,\ \sum \hat{\pi}_F = 1\\:caption: *General linear system linking observed and true prevalences*\end{aligned}\end{align} \]</div>
+\[\mathbf{y = X \hat{\pi}_F + \epsilon}, \quad
+\text{subject to } \hat{\pi}_F \ge 0,\ \sum \hat{\pi}_F = 1\]</div>
+<dl class="field-list simple">
+<dt class="field-odd">caption<span class="colon">:</span></dt>
+<dd class="field-odd"><p><em>General linear system linking observed and true prevalences</em></p>
+</dd>
+</dl>
 <p>Here:</p>
 <ul class="simple">
-<li><p>:math:<a href="#id4"><span class="problematic" id="id5">`</span></a>mathbf{y} <a href="#id6"><span class="problematic" id="id7">`</span></a>: average observed predictions in (U)</p></li>
+<li><p><span class="math notranslate nohighlight">\(\mathbf{y}\)</span>: average observed predictions in (U)</p></li>
 <li><p><span class="math notranslate nohighlight">\(\mathbf{X}\)</span>: classifier behavior from training (mean conditional rates)</p></li>
 <li><p><span class="math notranslate nohighlight">\(\hat{\pi}_F\)</span>: corrected class prevalences in (U)</p></li>
 </ul>
@@ -503,35 +542,56 @@ They treat quantification as solving a small linear system.</p>
 <p>Both <strong>ACC multiclass (GAC)</strong> and <strong>PACC multiclass (GPAC)</strong> are solved using this linear system:</p>
 <ul class="simple">
 <li><p>GAC uses hard classifier decisions (confusion matrix).</p></li>
-<li><p>GPAC uses soft probabilities :math:` P(y=l|x) <a href="#id8"><span class="problematic" id="id9">`</span></a>.</p></li>
+<li><p>GPAC uses soft probabilities <span class="math notranslate nohighlight">\(P(y=l|x)\)</span>.</p></li>
 </ul>
 </section>
 <section id="friedman-s-method-fm">
 <h3><span class="section-number">1.1.4.2. </span>Friedman’s Method (FM)<a class="headerlink" href="#friedman-s-method-fm" title="Link to this heading">#</a></h3>
-<p>To improve stability, <strong>Friedman’s Method (FM)</strong> generates the adjustment matrix :math:` mathbf{X} ` using a special transformation function applied to each class :math:` l ` and training sample :math:` x <a href="#id10"><span class="problematic" id="id11">`</span></a>:</p>
+<p>To improve stability, <strong>Friedman’s Method (FM)</strong> generates the adjustment matrix <span class="math notranslate nohighlight">\(\mathbf{X}`using a special transformation function applied to each class :math:`l`and training sample :math:`x\)</span>:</p>
 <div class="math notranslate nohighlight">
 \[f_l(x) = I \left[ \hat{P}_T(y = l \mid x) &gt; \pi_l^T \right]\]</div>
 <p>where:</p>
 <ul class="simple">
-<li><p>:math:` I[cdot]` is the indicator function, equal to 1 if the condition inside is true, 0 otherwise.</p></li>
-<li><p>:math:` hat{P}_T(y = l mid x)` is the classifier’s estimated posterior probability for class :math:` l ` on training sample :math:` x <a href="#id12"><span class="problematic" id="id13">`</span></a>.</p></li>
-<li><p>:math:` pi_l^T` is the prevalence of class :math:` l ` in the training set.</p></li>
+<li><p>:math:<a href="#id2"><span class="problematic" id="id3">`</span></a>I[cdot]`is the indicator function, equal to 1 if the condition inside is true, 0 otherwise.</p></li>
+<li><p><span class="math notranslate nohighlight">\(\hat{P}_T(y = l \mid x)`is the classifier's estimated posterior probability for class :math:`l`on training sample :math:`x\)</span>.</p></li>
+<li><p>:math:<a href="#id4"><span class="problematic" id="id5">`</span></a>pi_l^T`is the prevalence of class :math:<a href="#id6"><span class="problematic" id="id7">`</span></a>l`in the training set.</p></li>
 </ul>
 <p>The entry ( X_{i,l} ) of the matrix ( mathbf{X} ) is computed as the average of ( f_l(x) ) over all ( x ) in class ( i ) of the training data:</p>
 <div class="math notranslate nohighlight">
 \[X_{i,l} = \frac{1}{|L_i|} \sum_{x \in L_i} f_l(x)\]</div>
 <p>where:</p>
 <ul class="simple">
-<li><p>:math:` L_i` is the subset of training samples with true class ( i ).</p></li>
-<li><p>:math:` <a href="#id14"><span class="problematic" id="id15">|</span></a>L_i|` is the number of these samples.</p></li>
+<li><p>:math:<a href="#id8"><span class="problematic" id="id9">`</span></a>L_i`is the subset of training samples with true class ( i ).</p></li>
+<li><p>:math:<a href="#id10"><span class="problematic" id="id11">`</span></a><a href="#id12"><span class="problematic" id="id13">|</span></a>L_i|`is the number of these samples.</p></li>
 </ul>
-<p>Hence, each column :math:` l ` of :math:` mathbf{X} ` corresponds to the transformed feature averages across all classes :math:` i <a href="#id16"><span class="problematic" id="id17">`</span></a>, forming a “thresholded confusion-like” matrix.</p>
+<p>Hence, each column <span class="math notranslate nohighlight">\(l\)</span>’of <span class="math notranslate nohighlight">\(\mathbf{X}`corresponds to the transformed feature averages across all classes :math:`i\)</span>, forming a “thresholded confusion-like” matrix.</p>
 <p>This matrix is then used in the constrained least squares optimization:</p>
 <div class="math notranslate nohighlight">
 \[\min_{\hat{\pi}_F} \frac{1}{2} \hat{\pi}_F^\top D \hat{\pi}_F + d^\top \hat{\pi}_F
 \quad \text{subject to} \quad \hat{\pi}_F \ge 0, \quad \sum \hat{\pi}_F = 1\]</div>
-<p>to estimate the corrected prevalences :math:` hat{pi}_F ` on the test set.</p>
-<p>This thresholding on posterior probabilities ensures that the matrix :math:` mathbf{X} ` highlights regions where the classifier consistently predicts a class more confidently than its baseline prevalence, improving statistical stability and reducing estimation variance.</p>
+<p>to estimate the corrected prevalences :math:<a href="#id14"><span class="problematic" id="id15">`</span></a>hat{pi}_F`on the test set.</p>
+<p>This thresholding on posterior probabilities ensures that the matrix :math:<a href="#id16"><span class="problematic" id="id17">`</span></a>mathbf{X}`highlights regions where the classifier consistently predicts a class more confidently than its baseline prevalence, improving statistical stability and reducing estimation variance.</p>
+<div class="pst-scrollable-table-container"><table class="table">
+<tbody>
+<tr class="row-odd"><td><p><strong>Method</strong></p></td>
+<td><p><strong>Matrix / Function :math:`f_l(x)`</strong></p></td>
+<td><p><strong>Resolution</strong></p></td>
+</tr>
+<tr class="row-even"><td><p>ACC (GAC)</p></td>
+<td><p>Indicator of classifier’s hard decision</p></td>
+<td><p>Direct linear system</p></td>
+</tr>
+<tr class="row-odd"><td><p>PACC (GPAC)</p></td>
+<td><p>Posterior probability <span class="math notranslate nohighlight">\(P(y=l|x)\)</span></p></td>
+<td><p>Direct linear system</p></td>
+</tr>
+<tr class="row-even"><td><p>FM (Friedman)</p></td>
+<td><p>Indicator if <span class="math notranslate nohighlight">\(\hat{P}_T(y=l|x) &gt; \pi_l^T\)</span></p></td>
+<td><p>Constrained least-squares (Quadratic Prog.)</p></td>
+</tr>
+</tbody>
+</table>
+</div>
 </section>
 </section>
 </section>
