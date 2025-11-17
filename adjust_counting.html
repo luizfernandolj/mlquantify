@@ -11,12 +11,12 @@
 <meta property="og:type" content="website" />
 <meta property="og:url" content="adjust_counting.html" />
 <meta property="og:site_name" content="mlquantify" />
-<meta property="og:description" content="[translate:Adjusted Counting methods improve upon the basic Classify and Count by correcting the estimated prevalences using knowledge from the training set about the behavior of the classifier, pa..." />
+<meta property="og:description" content="Adjusted Counting methods improve upon the basic Classify and Count CC or its probabilistic variant PCC by correcting the estimated prevalences using knowledge from the training set about the behav..." />
 <meta property="og:image:width" content="1146" />
 <meta property="og:image:height" content="600" />
-<meta property="og:image" content="_images/social_previews/summary_adjust_counting_74e6165f.png" />
-<meta property="og:image:alt" content="[translate:Adjusted Counting methods improve upon the basic Classify and Count by correcting the estimated prevalences using knowledge from the training set about the behavior of the classifier, pa..." />
-<meta name="description" content="[translate:Adjusted Counting methods improve upon the basic Classify and Count by correcting the estimated prevalences using knowledge from the training set about the behavior of the classifier, pa..." />
+<meta property="og:image" content="_images/social_previews/summary_adjust_counting_2c58913e.png" />
+<meta property="og:image:alt" content="Adjusted Counting methods improve upon the basic Classify and Count CC or its probabilistic variant PCC by correcting the estimated prevalences using knowledge from the training set about the behav..." />
+<meta name="description" content="Adjusted Counting methods improve upon the basic Classify and Count CC or its probabilistic variant PCC by correcting the estimated prevalences using knowledge from the training set about the behav..." />
 <meta name="twitter:card" content="summary_large_image" />
 
     <title>1. Adjust Counting &#8212; mlquantify 0.1.8 documentation</title>
@@ -64,7 +64,7 @@
     <link rel="canonical" href="https://luizfernandolj.github.io/mlquantify/adjust_counting.html" />
     <link rel="author" title="About these documents" href="about.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="next" title="1.1. Threshold Adjustment" href="modules/threshold_adjustment.html" />
+    <link rel="next" title="1.1. Classify and Count" href="modules/classify_and_count.html" />
     <link rel="prev" title="Aggregative Quantification" href="aggregative_quantification.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
@@ -384,11 +384,22 @@
                   
   <section id="adjust-counting">
 <span id="id1"></span><h1><span class="section-number">1. </span>Adjust Counting<a class="headerlink" href="#adjust-counting" title="Link to this heading">#</a></h1>
-<p>[translate:Adjusted Counting methods improve upon the basic Classify and Count by correcting the estimated prevalences using knowledge from the training set about the behavior of the classifier, particularly accounting for its error characteristics.]</p>
+<p>Adjusted Counting methods improve upon the basic Classify and Count <span class="xref std std-ref">CC</span> or its probabilistic variant <span class="xref std std-ref">PCC</span> by correcting the estimated prevalences using knowledge from the training set about the behavior of the classifier, particularly accounting for its error characteristics.</p>
+<p>Currently, there are two types of adjustment methods implemented:
+1. <strong>Threshold Adjustment Methods</strong>: These methods adjust the decision threshold of the classifier to optimize prevalence estimation. Examples include Adjusted Classify and Count (ACC) and its probabilistic counterpart PACC.
+2. <strong>Matrix Adjustment Methods</strong>: These methods use a confusion matrix derived from the classifier’s performance on a validation set to adjust the estimated prevalences. Examples include the EM-based methods and other matrix inversion techniques.</p>
 <div class="toctree-wrapper compound">
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="modules/threshold_adjustment.html">1.1. Threshold Adjustment</a></li>
-<li class="toctree-l1"><a class="reference internal" href="modules/matrix_adjustment.html">1.2. Matrix Adjustment</a></li>
+<li class="toctree-l1"><a class="reference internal" href="modules/classify_and_count.html">1.1. Classify and Count</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="modules/classify_and_count.html#example-of-usage">1.1.1. Example of usage</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="modules/classify_and_count.html#probabilistic-classify-and-count">1.2. Probabilistic Classify and Count</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="modules/classify_and_count.html#id2">1.2.1. Example of usage</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="modules/threshold_adjustment.html">1.3. Threshold Adjustment</a></li>
+<li class="toctree-l1"><a class="reference internal" href="modules/matrix_adjustment.html">1.4. Matrix Adjustment</a></li>
 </ul>
 </div>
 </section>
@@ -413,11 +424,11 @@
       </div>
     </a>
     <a class="right-next"
-       href="modules/threshold_adjustment.html"
+       href="modules/classify_and_count.html"
        title="next page">
       <div class="prev-next-info">
         <p class="prev-next-subtitle">next</p>
-        <p class="prev-next-title"><span class="section-number">1.1. </span>Threshold Adjustment</p>
+        <p class="prev-next-title"><span class="section-number">1.1. </span>Classify and Count</p>
       </div>
       <i class="fa-solid fa-angle-right"></i>
     </a>

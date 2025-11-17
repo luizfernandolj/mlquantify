@@ -11,12 +11,12 @@
 <meta property="og:type" content="website" />
 <meta property="og:url" content="aggregative_quantification.html" />
 <meta property="og:site_name" content="mlquantify" />
-<meta property="og:description" content="[translate:Aggregative quantification refers to methods that estimate the prevalence of classes in a dataset by aggregating the predictions made on individual data items. Except for special-purpose..." />
+<meta property="og:description" content="Aggregative quantification refers to methods that estimate the prevalence of classes in a dataset by aggregating the predictions made on individual data items. Except for special-purpose learning m..." />
 <meta property="og:image:width" content="1146" />
 <meta property="og:image:height" content="600" />
-<meta property="og:image" content="_images/social_previews/summary_aggregative_quantification_31afd7ab.png" />
-<meta property="og:image:alt" content="[translate:Aggregative quantification refers to methods that estimate the prevalence of classes in a dataset by aggregating the predictions made on individual data items. Except for special-purpose..." />
-<meta name="description" content="[translate:Aggregative quantification refers to methods that estimate the prevalence of classes in a dataset by aggregating the predictions made on individual data items. Except for special-purpose..." />
+<meta property="og:image" content="_images/social_previews/summary_aggregative_quantification_4a96506d.png" />
+<meta property="og:image:alt" content="Aggregative quantification refers to methods that estimate the prevalence of classes in a dataset by aggregating the predictions made on individual data items. Except for special-purpose learning m..." />
+<meta name="description" content="Aggregative quantification refers to methods that estimate the prevalence of classes in a dataset by aggregating the predictions made on individual data items. Except for special-purpose learning m..." />
 <meta name="twitter:card" content="summary_large_image" />
 
     <title>Aggregative Quantification &#8212; mlquantify 0.1.8 documentation</title>
@@ -381,17 +381,27 @@
                   
   <section id="aggregative-quantification">
 <span id="id1"></span><h1>Aggregative Quantification<a class="headerlink" href="#aggregative-quantification" title="Link to this heading">#</a></h1>
-<p>[translate:Aggregative quantification refers to methods that estimate the prevalence of classes in a dataset by aggregating the predictions made on individual data items. Except for special-purpose learning methods, all aggregative methods share a common structure involving three main steps:]</p>
-<p>[translate:1. <strong>fit</strong>: the model is trained on labeled data.]
-[translate:2. <strong>predict</strong>: the trained model generates predictions for each individual item in the unlabeled dataset. These predictions can be either hard labels or soft probabilities.]
-[translate:3. <strong>aggregate</strong>: this step uses the results from the prediction phase to estimate the class prevalence distribution in the dataset. The <code class="docutils literal notranslate"><span class="pre">aggregate</span></code> function takes as input the necessary information from the classification results to perform this aggregation.]</p>
-<p>[translate:This clear separation into fit, predict, and aggregate methods allows modular implementation and reuse of standard classifiers as a backbone.]</p>
-<p>[translate:The main aggregative quantification methods will be defined next, with details about their specific approaches and differences.]</p>
+<p>Aggregative quantification refers to methods that estimate the prevalence of classes in a dataset by aggregating the predictions made on individual data items. Except for special-purpose learning methods, all aggregative methods share a common structure involving three main steps:</p>
+<ol class="arabic simple">
+<li><p><strong>fit</strong>: the model is trained on labeled data.</p></li>
+<li><p><strong>predict</strong>: the trained model generates predictions for each individual item in the unlabeled dataset. These predictions can be either hard labels or soft probabilities.</p></li>
+<li><p><strong>aggregate</strong>: this step uses the results from the prediction phase to estimate the class prevalence distribution in the dataset. The <code class="docutils literal notranslate"><span class="pre">aggregate</span></code> function takes as input the necessary information from the classification results to perform this aggregation.</p></li>
+</ol>
+<p>This clear separation into fit, predict, and aggregate methods allows modular implementation and reuse of standard classifiers as a backbone.</p>
+<p>The main aggregative quantification methods will be defined next, with details about their specific approaches and differences.</p>
 <div class="toctree-wrapper compound">
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="adjust_counting.html">1. Adjust Counting</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="modules/threshold_adjustment.html">1.1. Threshold Adjustment</a></li>
-<li class="toctree-l2"><a class="reference internal" href="modules/matrix_adjustment.html">1.2. Matrix Adjustment</a></li>
+<li class="toctree-l2"><a class="reference internal" href="modules/classify_and_count.html">1.1. Classify and Count</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="modules/classify_and_count.html#example-of-usage">1.1.1. Example of usage</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="modules/classify_and_count.html#probabilistic-classify-and-count">1.2. Probabilistic Classify and Count</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="modules/classify_and_count.html#id2">1.2.1. Example of usage</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="modules/threshold_adjustment.html">1.3. Threshold Adjustment</a></li>
+<li class="toctree-l2"><a class="reference internal" href="modules/matrix_adjustment.html">1.4. Matrix Adjustment</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="likelihood.html">2. Likelihood-Based Quantification</a></li>

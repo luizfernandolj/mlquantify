@@ -1,9 +1,9 @@
 .. _threshold_adjustment:
 
 Threshold Adjustment
---------------------
+====================
 
-[translate:Threshold Adjustment methods optimize the classifier decision threshold to improve quantification accuracy. The threshold affects the classifier's true positive and false positive rates, which in turn influence correction methods such as Adjust Counting.]
+Threshold Adjustment methods optimize the classifier decision threshold to improve quantification accuracy. The threshold affects the classifier's true positive and false positive rates, which in turn influence correction methods such as Adjust Counting.
 
 .. math::
 
@@ -12,7 +12,9 @@ Threshold Adjustment
    0 & \text{otherwise}
    \end{cases}
 
-[translate:where \(s\) is the classifier score and \(\tau\) is the decision threshold.]
+where \(s\) is the classifier score and \(\tau\) is the decision threshold.
 
-[translate:By selecting appropriate \(\tau\), the quantification estimates can be stabilized, avoiding estimation issues with probabilities near zero or one.]
+By selecting appropriate \(\tau\), the quantification estimates can be stabilized, avoiding estimation issues with probabilities near zero or one.
+
+Each Threshold Adjustment method typically chooses \(\tau\) based on different criteria, such as minimizing quantification error on validation data or balancing true positive and false positive rates.
 
