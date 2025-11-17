@@ -117,6 +117,8 @@ Different *threshold methods* vary in how they choose the classifier cutoff :mat
 | T50               | Sets \(TPR = 0.5\)                             | Uses central part of ROC curve                  |
 +-------------------+------------------------------------------------+-------------------------------------------------+
 | MS (Median Sweep) | Uses the median of all thresholds' ACC results | Reduces effect of threshold outliers            |
++----------------------+------------------------------------------------+-------------------------------------------------+
+| MS2               | Median Sweep variant constraining :math:`|\text{TPR} - \text{FPR}| > 0.25` | Reduces effect of threshold outliers            |
 +-------------------+------------------------------------------------+-------------------------------------------------+
 
 **Example**
@@ -155,9 +157,9 @@ They treat quantification as solving a small linear system.
 
 Here:
 
-- :math:`( \mathbf{y} )`: average observed predictions in \(U\)  
-- :math:`( \mathbf{X} )`: classifier behavior from training (mean conditional rates)  
-- :math:`( \hat{\pi}_F )`: corrected class prevalences in \(U\)
+- :math:`\mathbf{y} `: average observed predictions in \(U\)  
+- :math:`\mathbf{X}`: classifier behavior from training (mean conditional rates)  
+- :math:`\hat{\pi}_F`: corrected class prevalences in \(U\)
 
 [Plot Idea: Matrix illustration showing how confusion corrections map to estimated prevalences]
 

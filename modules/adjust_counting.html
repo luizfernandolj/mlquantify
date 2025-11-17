@@ -460,35 +460,6 @@ They are mainly used for <code class="docutils literal notranslate"><span class=
 <p>The main idea is that by adjusting the observed rate of positive predictions, we can better approximate the real class distribution.</p>
 <p>[Plot Idea: Diagram showing how TPR and FPR move the prevalence estimate]</p>
 <p>Different <em>threshold methods</em> vary in how they choose the classifier cutoff :math:` tau ` for scores :math:` s(x) <a href="#id2"><span class="problematic" id="id3">`</span></a>.</p>
-<div class="pst-scrollable-table-container"><table class="table">
-<tbody>
-<tr class="row-odd"><td><p><strong>Method</strong></p></td>
-<td><p><strong>Threshold Choice</strong></p></td>
-<td><p><strong>Goal</strong></p></td>
-</tr>
-<tr class="row-even"><td><p>AC</p></td>
-<td><p>Fixed threshold = 0.5</p></td>
-<td><p>Simple baseline adjustment</p></td>
-</tr>
-<tr class="row-odd"><td><p>X</p></td>
-<td><p>Chooses threshold where (FPR=1-TPR)</p></td>
-<td><p>Avoids unstable prediction tails</p></td>
-</tr>
-<tr class="row-even"><td><p>MAX</p></td>
-<td><p>Maximizes (TPR - FPR)</p></td>
-<td><p>Improves numerical stability</p></td>
-</tr>
-<tr class="row-odd"><td><p>T50</p></td>
-<td><p>Sets (TPR = 0.5)</p></td>
-<td><p>Uses central part of ROC curve</p></td>
-</tr>
-<tr class="row-even"><td><p>MS (Median Sweep)</p></td>
-<td><p>Uses the median of all thresholds’ ACC results</p></td>
-<td><p>Reduces effect of threshold outliers</p></td>
-</tr>
-</tbody>
-</table>
-</div>
 <p><strong>Example</strong></p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">mlquantify.adjust_counting</span><span class="w"> </span><span class="kn">import</span> <span class="n">ACC</span>
 <span class="n">q</span> <span class="o">=</span> <span class="n">ACC</span><span class="p">(</span><span class="n">learner</span><span class="o">=</span><span class="n">LogisticRegression</span><span class="p">())</span>
@@ -514,9 +485,9 @@ They treat quantification as solving a small linear system.</p>
 \text{subject to } \hat{\pi}_F \ge 0,\ \sum \hat{\pi}_F = 1\\:caption: *General linear system linking observed and true prevalences*\end{aligned}\end{align} \]</div>
 <p>Here:</p>
 <ul class="simple">
-<li><p><span class="math notranslate nohighlight">\(( \mathbf{y} )\)</span>: average observed predictions in (U)</p></li>
-<li><p><span class="math notranslate nohighlight">\(( \mathbf{X} )\)</span>: classifier behavior from training (mean conditional rates)</p></li>
-<li><p><span class="math notranslate nohighlight">\(( \hat{\pi}_F )\)</span>: corrected class prevalences in (U)</p></li>
+<li><p>:math:<a href="#id4"><span class="problematic" id="id5">`</span></a>mathbf{y} <a href="#id6"><span class="problematic" id="id7">`</span></a>: average observed predictions in (U)</p></li>
+<li><p><span class="math notranslate nohighlight">\(\mathbf{X}\)</span>: classifier behavior from training (mean conditional rates)</p></li>
+<li><p><span class="math notranslate nohighlight">\(\hat{\pi}_F\)</span>: corrected class prevalences in (U)</p></li>
 </ul>
 <p>[Plot Idea: Matrix illustration showing how confusion corrections map to estimated prevalences]</p>
 <section id="gac-and-gpac-acc-and-pacc-multiclass">
@@ -532,18 +503,18 @@ They treat quantification as solving a small linear system.</p>
 <p>Both <strong>ACC multiclass (GAC)</strong> and <strong>PACC multiclass (GPAC)</strong> are solved using this linear system:</p>
 <ul class="simple">
 <li><p>GAC uses hard classifier decisions (confusion matrix).</p></li>
-<li><p>GPAC uses soft probabilities :math:` P(y=l|x) <a href="#id4"><span class="problematic" id="id5">`</span></a>.</p></li>
+<li><p>GPAC uses soft probabilities :math:` P(y=l|x) <a href="#id8"><span class="problematic" id="id9">`</span></a>.</p></li>
 </ul>
 </section>
 <section id="friedman-s-method-fm">
 <h3><span class="section-number">1.1.4.2. </span>Friedman’s Method (FM)<a class="headerlink" href="#friedman-s-method-fm" title="Link to this heading">#</a></h3>
-<p>To improve stability, <strong>Friedman’s Method (FM)</strong> generates the adjustment matrix :math:` mathbf{X} ` using a special transformation function applied to each class :math:` l ` and training sample :math:` x <a href="#id6"><span class="problematic" id="id7">`</span></a>:</p>
+<p>To improve stability, <strong>Friedman’s Method (FM)</strong> generates the adjustment matrix :math:` mathbf{X} ` using a special transformation function applied to each class :math:` l ` and training sample :math:` x <a href="#id10"><span class="problematic" id="id11">`</span></a>:</p>
 <div class="math notranslate nohighlight">
 \[f_l(x) = I \left[ \hat{P}_T(y = l \mid x) &gt; \pi_l^T \right]\]</div>
 <p>where:</p>
 <ul class="simple">
 <li><p>:math:` I[cdot]` is the indicator function, equal to 1 if the condition inside is true, 0 otherwise.</p></li>
-<li><p>:math:` hat{P}_T(y = l mid x)` is the classifier’s estimated posterior probability for class :math:` l ` on training sample :math:` x <a href="#id8"><span class="problematic" id="id9">`</span></a>.</p></li>
+<li><p>:math:` hat{P}_T(y = l mid x)` is the classifier’s estimated posterior probability for class :math:` l ` on training sample :math:` x <a href="#id12"><span class="problematic" id="id13">`</span></a>.</p></li>
 <li><p>:math:` pi_l^T` is the prevalence of class :math:` l ` in the training set.</p></li>
 </ul>
 <p>The entry ( X_{i,l} ) of the matrix ( mathbf{X} ) is computed as the average of ( f_l(x) ) over all ( x ) in class ( i ) of the training data:</p>
@@ -552,9 +523,9 @@ They treat quantification as solving a small linear system.</p>
 <p>where:</p>
 <ul class="simple">
 <li><p>:math:` L_i` is the subset of training samples with true class ( i ).</p></li>
-<li><p>:math:` <a href="#id10"><span class="problematic" id="id11">|</span></a>L_i|` is the number of these samples.</p></li>
+<li><p>:math:` <a href="#id14"><span class="problematic" id="id15">|</span></a>L_i|` is the number of these samples.</p></li>
 </ul>
-<p>Hence, each column :math:` l ` of :math:` mathbf{X} ` corresponds to the transformed feature averages across all classes :math:` i <a href="#id12"><span class="problematic" id="id13">`</span></a>, forming a “thresholded confusion-like” matrix.</p>
+<p>Hence, each column :math:` l ` of :math:` mathbf{X} ` corresponds to the transformed feature averages across all classes :math:` i <a href="#id16"><span class="problematic" id="id17">`</span></a>, forming a “thresholded confusion-like” matrix.</p>
 <p>This matrix is then used in the constrained least squares optimization:</p>
 <div class="math notranslate nohighlight">
 \[\min_{\hat{\pi}_F} \frac{1}{2} \hat{\pi}_F^\top D \hat{\pi}_F + d^\top \hat{\pi}_F
