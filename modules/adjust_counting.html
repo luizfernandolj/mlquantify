@@ -548,30 +548,33 @@ They treat quantification as solving a small linear system.</p>
 <section id="friedman-s-method-fm">
 <h3><span class="section-number">1.1.4.2. </span>Friedman’s Method (FM)<a class="headerlink" href="#friedman-s-method-fm" title="Link to this heading">#</a></h3>
 <p>To improve stability, <strong>Friedman’s Method (FM)</strong> generates the adjustment matrix <span class="math notranslate nohighlight">\(\mathbf{X}\)</span> using a special transformation function applied to each class <span class="math notranslate nohighlight">\(l\)</span> and training sample <span class="math notranslate nohighlight">\(x\)</span> :</p>
+<details class="sd-sphinx-override sd-dropdown sd-card sd-mb-3">
+<summary class="sd-summary-title sd-card-header">
+<span class="sd-summary-text">Mathematical details - Friedman’s Method</span><span class="sd-summary-state-marker sd-summary-chevron-right"><svg version="1.1" width="1.5em" height="1.5em" class="sd-octicon sd-octicon-chevron-right" viewBox="0 0 24 24" aria-hidden="true"><path d="M8.72 18.78a.75.75 0 0 1 0-1.06L14.44 12 8.72 6.28a.751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018l6.25 6.25a.75.75 0 0 1 0 1.06l-6.25 6.25a.75.75 0 0 1-1.06 0Z"></path></svg></span></summary><div class="sd-summary-content sd-card-body docutils">
 <div class="math notranslate nohighlight">
 \[f_l(x) = I \left[ \hat{P}_T(y = l \mid x) &gt; \pi_l^T \right]\]</div>
-<p>where:</p>
+<p class="sd-card-text">where:</p>
 <ul class="simple">
-<li><p><span class="math notranslate nohighlight">\(I[\cdot]\)</span> is the indicator function, equal to 1 if the condition inside is true, 0 otherwise.</p></li>
-<li><p><span class="math notranslate nohighlight">\(\hat{P}_T(y = l \mid x)\)</span> is the classifier’s estimated posterior probability for class <span class="math notranslate nohighlight">\(l\)</span> on training sample <span class="math notranslate nohighlight">\(x\)</span> .</p></li>
-<li><p><span class="math notranslate nohighlight">\(\pi_l^T\)</span> is the prevalence of class <span class="math notranslate nohighlight">\(l\)</span> in the training set.</p></li>
+<li><p class="sd-card-text"><span class="math notranslate nohighlight">\(I[\cdot]\)</span> is the indicator function, equal to 1 if the condition inside is true, 0 otherwise.</p></li>
+<li><p class="sd-card-text"><span class="math notranslate nohighlight">\(\hat{P}_T(y = l \mid x)\)</span> is the classifier’s estimated posterior probability for class <span class="math notranslate nohighlight">\(l\)</span> on training sample <span class="math notranslate nohighlight">\(x\)</span>.</p></li>
+<li><p class="sd-card-text"><span class="math notranslate nohighlight">\(\pi_l^T\)</span> is the prevalence of class <span class="math notranslate nohighlight">\(l\)</span> in the training set.</p></li>
 </ul>
-<p>The entry <span class="math notranslate nohighlight">\(X_{i,l}\)</span> of the matrix <span class="math notranslate nohighlight">\(\mathbf{X}\)</span> is computed as the average of <span class="math notranslate nohighlight">\(f_l(x)\)</span> over all <span class="math notranslate nohighlight">\(x\)</span> in class <span class="math notranslate nohighlight">\(i\)</span> of the training data:</p>
+<p class="sd-card-text">The entry <span class="math notranslate nohighlight">\(X_{i,l}\)</span> of the matrix <span class="math notranslate nohighlight">\(\mathbf{X}\)</span> is computed as the average of <span class="math notranslate nohighlight">\(f_l(x)\)</span> over all <span class="math notranslate nohighlight">\(x\)</span> in class <span class="math notranslate nohighlight">\(i\)</span> of the training data:</p>
 <div class="math notranslate nohighlight">
 \[X_{i,l} = \frac{1}{|L_i|} \sum_{x \in L_i} f_l(x)\]</div>
-<p>where:</p>
+<p class="sd-card-text">where:</p>
 <ul class="simple">
-<li><p><span class="math notranslate nohighlight">\(L_i\)</span> is the subset of training samples with true class <span class="math notranslate nohighlight">\(i\)</span> .</p></li>
-<li><p><span class="math notranslate nohighlight">\(|L_i|\)</span> is the number of these samples.</p></li>
+<li><p class="sd-card-text"><span class="math notranslate nohighlight">\(L_i\)</span> is the subset of training samples with true class <span class="math notranslate nohighlight">\(i\)</span>.</p></li>
+<li><p class="sd-card-text"><span class="math notranslate nohighlight">\(|L_i|\)</span> is the number of these samples.</p></li>
 </ul>
-<p>Hence, each column <span class="math notranslate nohighlight">\(l\)</span> ‘of <span class="math notranslate nohighlight">\(\mathbf{X}\)</span> corresponds to the transformed feature averages across all classes <span class="math notranslate nohighlight">\(i\)</span> , forming a “thresholded confusion-like” matrix.</p>
-<p>This matrix is then used in the constrained least squares optimization:</p>
+<p class="sd-card-text">This matrix is then used in the constrained least squares optimization:</p>
 <div class="math notranslate nohighlight">
 \[\min_{\hat{\pi}_F} \frac{1}{2} \hat{\pi}_F^\top D \hat{\pi}_F + d^\top \hat{\pi}_F
 \quad \text{subject to} \quad \hat{\pi}_F \ge 0, \quad \sum \hat{\pi}_F = 1\]</div>
-<p>to estimate the corrected prevalences <span class="math notranslate nohighlight">\(\hat{\pi}_F\)</span> on the test set.</p>
-<p>This thresholding on posterior probabilities ensures that the matrix <span class="math notranslate nohighlight">\(\mathbf{X}\)</span> highlights regions where the classifier consistently predicts a class more confidently than its baseline prevalence, improving statistical stability and reducing estimation variance.</p>
-<div class="pst-scrollable-table-container"><table class="table">
+<p class="sd-card-text">to estimate the corrected prevalences <span class="math notranslate nohighlight">\(\hat{\pi}_F\)</span> on the test set.</p>
+<p class="sd-card-text">This thresholding on posterior probabilities ensures that the matrix <span class="math notranslate nohighlight">\(\mathbf{X}\)</span> highlights regions where the classifier consistently predicts a class more confidently than its baseline prevalence, improving statistical stability and reducing estimation variance.</p>
+</div>
+</details><div class="pst-scrollable-table-container"><table class="table">
 <tbody>
 <tr class="row-odd"><td><p><strong>Method</strong></p></td>
 <td><p><strong>Matrix / Function :math:`f_l(x)`</strong></p></td>

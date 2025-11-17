@@ -183,44 +183,44 @@ Both **ACC multiclass (GAC)** and **PACC multiclass (GPAC)** are solved using th
 
 
 
-Friedman's Method (FM)
+Friedman's Method (FM)  
 ----------------------
 
 To improve stability, **Friedman's Method (FM)** generates the adjustment matrix :math:`\mathbf{X}` using a special transformation function applied to each class :math:`l` and training sample :math:`x` :
 
-.. math::
+.. dropdown:: Mathematical details - Friedman's Method
 
-   f_l(x) = I \left[ \hat{P}_T(y = l \mid x) > \pi_l^T \right]
+  .. math::
 
-where:
+     f_l(x) = I \left[ \hat{P}_T(y = l \mid x) > \pi_l^T \right]
 
-- :math:`I[\cdot]` is the indicator function, equal to 1 if the condition inside is true, 0 otherwise.
-- :math:`\hat{P}_T(y = l \mid x)` is the classifier's estimated posterior probability for class :math:`l` on training sample :math:`x` .
-- :math:`\pi_l^T` is the prevalence of class :math:`l` in the training set.
+  where:
 
-The entry :math:`X_{i,l}` of the matrix :math:`\mathbf{X}` is computed as the average of :math:`f_l(x)` over all :math:`x` in class :math:`i` of the training data:
+  - :math:`I[\cdot]` is the indicator function, equal to 1 if the condition inside is true, 0 otherwise.  
+  - :math:`\hat{P}_T(y = l \mid x)` is the classifier's estimated posterior probability for class :math:`l` on training sample :math:`x`.  
+  - :math:`\pi_l^T` is the prevalence of class :math:`l` in the training set.
 
-.. math::
+  The entry :math:`X_{i,l}` of the matrix :math:`\mathbf{X}` is computed as the average of :math:`f_l(x)` over all :math:`x` in class :math:`i` of the training data:
 
-   X_{i,l} = \frac{1}{|L_i|} \sum_{x \in L_i} f_l(x)
+  .. math::
 
-where:
+     X_{i,l} = \frac{1}{|L_i|} \sum_{x \in L_i} f_l(x)
 
-- :math:`L_i` is the subset of training samples with true class :math:`i` .
-- :math:`|L_i|` is the number of these samples.
+  where:
 
-Hence, each column :math:`l` 'of :math:`\mathbf{X}` corresponds to the transformed feature averages across all classes :math:`i` , forming a "thresholded confusion-like" matrix.
+  - :math:`L_i` is the subset of training samples with true class :math:`i`.  
+  - :math:`|L_i|` is the number of these samples.
 
-This matrix is then used in the constrained least squares optimization:
+  This matrix is then used in the constrained least squares optimization:
 
-.. math::
+  .. math::
 
-   \min_{\hat{\pi}_F} \frac{1}{2} \hat{\pi}_F^\top D \hat{\pi}_F + d^\top \hat{\pi}_F
-   \quad \text{subject to} \quad \hat{\pi}_F \ge 0, \quad \sum \hat{\pi}_F = 1
+     \min_{\hat{\pi}_F} \frac{1}{2} \hat{\pi}_F^\top D \hat{\pi}_F + d^\top \hat{\pi}_F
+     \quad \text{subject to} \quad \hat{\pi}_F \ge 0, \quad \sum \hat{\pi}_F = 1
 
-to estimate the corrected prevalences :math:`\hat{\pi}_F` on the test set.
+  to estimate the corrected prevalences :math:`\hat{\pi}_F` on the test set.
 
-This thresholding on posterior probabilities ensures that the matrix :math:`\mathbf{X}` highlights regions where the classifier consistently predicts a class more confidently than its baseline prevalence, improving statistical stability and reducing estimation variance.
+  This thresholding on posterior probabilities ensures that the matrix :math:`\mathbf{X}` highlights regions where the classifier consistently predicts a class more confidently than its baseline prevalence, improving statistical stability and reducing estimation variance.
 
 
 +-------------------+-----------------------------------------------------+---------------------------------------------+
