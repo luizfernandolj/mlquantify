@@ -11,6 +11,9 @@ Currently, there are two types of adjustment methods implemented:
 2. **Matrix Adjustment Methods**: These methods use a confusion matrix derived from the classifier's performance on a validation set to adjust the estimated prevalences. Examples include the EM-based methods and other matrix inversion techniques.
 
 
-.. include:: modules/classify_and_count.rst
-.. include:: modules/threshold_adjustment.rst
-.. include:: modules/matrix_adjustment.rst
+.. toctree::
+   :maxdepth: 2
+
+   modules/classify_and_count.rst
+   modules/threshold_adjustment.rst
+   modules/matrix_adjustment.rst

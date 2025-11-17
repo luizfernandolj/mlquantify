@@ -1,5 +1,6 @@
 .. _classify_and_count:
 
+==================
 Classify and Count
 ==================
 
@@ -38,7 +39,7 @@ Example of usage
 However, Forman (2008) showed that CC can be biased when train and test class distributions differ, leading to the development of various adjusted counting methods that aim to correct this bias.
 
 
-
+================================
 Probabilistic Classify and Count
 ================================
 
