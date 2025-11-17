@@ -22,7 +22,7 @@ Classify and Count
 ==================
 
 The **Classify and Count (CC)** method is the simplest baseline.  
-It trains a hard classifier :math:`h`on labeled data :math:`L`, applies it to an unlabeled set :math:`U`, and counts how many samples belong to each predicted class.
+It trains a hard classifier :math:`h` on labeled data :math:`L` , applies it to an unlabeled set :math:`U` , and counts how many samples belong to each predicted class.
 
 **Equation**
 
@@ -103,24 +103,24 @@ The main idea is that by adjusting the observed rate of positive predictions, we
 
 [Plot Idea: Diagram showing how TPR and FPR move the prevalence estimate]
 
-Different *threshold methods* vary in how they choose the classifier cutoff :math:`\tau`for scores :math:`s(x)`.
+Different *threshold methods* vary in how they choose the classifier cutoff :math:`\tau` for scores :math:`s(x)` .
 
-+-------------------+----------------------------------------------------+-----------------------------------------+
-| **Method**        | **Threshold Choice**                               | **Goal**                                |
-+-------------------+----------------------------------------------------+-----------------------------------------+
-| AC                | Fixed threshold \( \tau = 0.5 \)                   | Simple baseline adjustment              |
-+-------------------+----------------------------------------------------+-----------------------------------------+
-| X                 | Threshold where \( \text{FPR} = 1 - \text{TPR} \)  | Avoids unstable prediction tails        |
-+-------------------+----------------------------------------------------+-----------------------------------------+
-| MAX               | Threshold maximizing \( \text{TPR} - \text{FPR} \) | Improves numerical stability            |
-+-------------------+----------------------------------------------------+-----------------------------------------+
-| T50               | Threshold where \( \text{TPR} = 0.5 \)             | Uses central part of ROC curve          |
-+-------------------+----------------------------------------------------+-----------------------------------------+
-| MS (Median Sweep) | Median of all thresholds' ACC results              | Reduces effect of threshold outliers    |
-+-------------------+----------------------------------------------------+-----------------------------------------+
-| MS2               | Median Sweep variant with constraint               | Reduces effect of threshold outliers    |
-|                   | \( \|\text{TPR} - \text{FPR}\| > 0.25 \)           |                                         |
-+-------------------+----------------------------------------------------+-----------------------------------------+
++-------------------+------------------------------------------------------+-----------------------------------------+
+| **Method**        | **Threshold Choice**                                 | **Goal**                                |
++-------------------+------------------------------------------------------+-----------------------------------------+
+| AC                | Fixed threshold :math:`\tau = 0.5`                   | Simple baseline adjustment              |
++-------------------+------------------------------------------------------+-----------------------------------------+
+| X                 | Threshold where :math:`\text{FPR} = 1 - \text{TPR}`  | Avoids unstable prediction tails        |
++-------------------+------------------------------------------------------+-----------------------------------------+
+| MAX               | Threshold maximizing :math:`\text{TPR} - \text{FPR}` | Improves numerical stability            |
++-------------------+------------------------------------------------------+-----------------------------------------+
+| T50               | Threshold where :math:`\text{TPR} = 0.5`             | Uses central part of ROC curve          |
++-------------------+------------------------------------------------------+-----------------------------------------+
+| MS (Median Sweep) | Median of all thresholds' ACC results                | Reduces effect of threshold outliers    |
++-------------------+------------------------------------------------------+-----------------------------------------+
+| MS2               | Median Sweep variant with constraint                 | Reduces effect of threshold outliers    |
+|                   | :math:`\|\text{TPR} - \text{FPR}\| > 0.25`           |                                         |
++-------------------+------------------------------------------------------+-----------------------------------------+
 
 **Example**
 
@@ -158,9 +158,9 @@ They treat quantification as solving a small linear system.
 
 Here:
 
-- :math:`\mathbf{y}`: average observed predictions in \(U\)  
+- :math:`\mathbf{y}`: average observed predictions in :math:`U`  
 - :math:`\mathbf{X}`: classifier behavior from training (mean conditional rates)  
-- :math:`\hat{\pi}_F`: corrected class prevalences in \(U\)
+- :math:`\hat{\pi}_F`: corrected class prevalences in :math:`U` 
 
 [Plot Idea: Matrix illustration showing how confusion corrections map to estimated prevalences]
 
@@ -192,11 +192,11 @@ To improve stability, **Friedman's Method (FM)** generates the adjustment matrix
 
 where:
 
-- :math:`I[\cdot]`is the indicator function, equal to 1 if the condition inside is true, 0 otherwise.
-- :math:`\hat{P}_T(y = l \mid x)`is the classifier's estimated posterior probability for class :math:`l`on training sample :math:`x`.
-- :math:`\pi_l^T`is the prevalence of class :math:`l`in the training set.
+- :math:`I[\cdot]` is the indicator function, equal to 1 if the condition inside is true, 0 otherwise.
+- :math:`\hat{P}_T(y = l \mid x)` is the classifier's estimated posterior probability for class :math:`l` on training sample :math:`x` .
+- :math:`\pi_l^T` is the prevalence of class :math:`l` in the training set.
 
-The entry \( X_{i,l} \) of the matrix \( \mathbf{X} \) is computed as the average of \( f_l(x) \) over all \( x \) in class \( i \) of the training data:
+The entry :math:`X_{i,l}` of the matrix :math:`\mathbf{X}` is computed as the average of :math:`f_l(x)` over all :math:`x` in class :math:`i` of the training data:
 
 .. math::
 
@@ -204,10 +204,10 @@ The entry \( X_{i,l} \) of the matrix \( \mathbf{X} \) is computed as the averag
 
 where:
 
-- :math:`L_i`is the subset of training samples with true class \( i \).
-- :math:`|L_i|`is the number of these samples.
+- :math:`L_i` is the subset of training samples with true class :math:`i` .
+- :math:`|L_i|` is the number of these samples.
 
-Hence, each column :math:`l`'of :math:`\mathbf{X}`corresponds to the transformed feature averages across all classes :math:`i`, forming a "thresholded confusion-like" matrix.
+Hence, each column :math:`l` 'of :math:`\mathbf{X}` corresponds to the transformed feature averages across all classes :math:`i` , forming a "thresholded confusion-like" matrix.
 
 This matrix is then used in the constrained least squares optimization:
 
@@ -216,9 +216,9 @@ This matrix is then used in the constrained least squares optimization:
    \min_{\hat{\pi}_F} \frac{1}{2} \hat{\pi}_F^\top D \hat{\pi}_F + d^\top \hat{\pi}_F
    \quad \text{subject to} \quad \hat{\pi}_F \ge 0, \quad \sum \hat{\pi}_F = 1
 
-to estimate the corrected prevalences :math:`\hat{\pi}_F`on the test set.
+to estimate the corrected prevalences :math:`\hat{\pi}_F` on the test set.
 
-This thresholding on posterior probabilities ensures that the matrix :math:`\mathbf{X}`highlights regions where the classifier consistently predicts a class more confidently than its baseline prevalence, improving statistical stability and reducing estimation variance.
+This thresholding on posterior probabilities ensures that the matrix :math:`\mathbf{X}` highlights regions where the classifier consistently predicts a class more confidently than its baseline prevalence, improving statistical stability and reducing estimation variance.
 
 
 +-------------------+-----------------------------------------------------+---------------------------------------------+
