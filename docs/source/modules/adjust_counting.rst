@@ -220,6 +220,10 @@ FM constructs its adjustment matrix :math:`\mathbf{X}` based on a specialized fe
       \min_{\hat{\pi}_F} \frac{1}{2} \hat{\pi}_F^\top D \hat{\pi}_F + d^\top \hat{\pi}_F
       \quad \text{subject to} \quad \hat{\pi}_F \ge 0, \quad \sum \hat{\pi}_F = 1
 
-   to estimate the corrected prevalences :math:`\hat{\pi}_F` on the test set.
+   to estimate the corrected prevalences :math:`\hat{\pi}_F` on the test set [3]_.
 
-   This thresholding on posterior probabilities ensures that the matrix :math:`\mathbf{X}` highlights regions where the classifier consistently predicts a class more confidently than its baseline prevalence, improving statistical stability and reducing estimation variance.
+   This thresholding on posterior probabilities ensures that the matrix :math:`\mathbf{X}` highlights regions where the classifier consistently predicts a class more confidently than its baseline prevalence, improving statistical stability and reducing estimation variance [3]_.
+
+   **References**
+
+   .. [3] Friedman, J. H. (2015). CLASS COUNTS IN FUTURE UNLABELED SAMPLES (Detecting and dealing with concept drift). (FM)
