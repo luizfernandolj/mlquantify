@@ -393,7 +393,7 @@ They aim to produce better estimates of class prevalence (how frequent each clas
 </ol>
 <section id="classify-and-count">
 <h2><span class="section-number">1.1.1. </span>Classify and Count<a class="headerlink" href="#classify-and-count" title="Link to this heading">#</a></h2>
-<p>The <strong>Classify and Count</strong> method, or <span class="xref std std-ref">~mlquantify.adjust_counting.CC</span> is the simplest baseline.
+<p>The <strong>Classify and Count</strong> method, or <code class="xref py py-class docutils literal notranslate"><span class="pre">CC</span></code> is the simplest baseline.
 It trains a hard classifier <span class="math notranslate nohighlight">\(h\)</span> on labeled data <span class="math notranslate nohighlight">\(L\)</span> , applies it to an unlabeled set <span class="math notranslate nohighlight">\(U\)</span> , and counts how many samples belong to each predicted class.</p>
 <p><strong>Equation</strong></p>
 <div class="math notranslate nohighlight">
@@ -415,11 +415,11 @@ It trains a hard classifier <span class="math notranslate nohighlight">\(h\)</sp
 <span class="c1"># -&gt; {0: 0.47, 1: 0.53}</span>
 </pre></div>
 </div>
-<p><span class="xref std std-ref">~mlquantify.adjust_counting.CC</span> is fast and simple, but when class proportions in the test set differ from the training set, its estimates can become biased or inaccurate.</p>
+<p><code class="xref py py-class docutils literal notranslate"><span class="pre">CC</span></code> is fast and simple, but when class proportions in the test set differ from the training set, its estimates can become biased or inaccurate.</p>
 </section>
 <section id="probabilistic-classify-and-count">
 <h2><span class="section-number">1.1.2. </span>Probabilistic Classify and Count<a class="headerlink" href="#probabilistic-classify-and-count" title="Link to this heading">#</a></h2>
-<p>The <strong>Probabilistic Classify and Count</strong> or <span class="xref std std-ref">~mlquantify.adjust_counting.PCC</span> variant uses the <em>predicted probabilities</em> from a soft classifier instead of hard labels.
+<p>The <strong>Probabilistic Classify and Count</strong> or <code class="xref py py-class docutils literal notranslate"><span class="pre">PCC</span></code> variant uses the <em>predicted probabilities</em> from a soft classifier instead of hard labels.
 This makes it less sensitive to uncertain predictions.</p>
 <p><strong>Equation</strong></p>
 <div class="math notranslate nohighlight">
@@ -538,7 +538,7 @@ They treat quantification as solving a small linear system.</p>
 <span class="c1"># -&gt; {0: 0.48, 1: 0.52}</span>
 </pre></div>
 </div>
-<p>Both <span class="xref std std-ref">~mlquantify.adjust_counting.GAC</span> and <span class="xref std std-ref">~mlquantify.adjust_counting.GPAC</span> are solved using this linear system:</p>
+<p>Both <a class="reference internal" href="generated/mlquantify.adjust_counting.GAC.html#mlquantify.adjust_counting.GAC" title="mlquantify.adjust_counting.GAC"><code class="xref py py-class docutils literal notranslate"><span class="pre">GAC</span></code></a> and <a class="reference internal" href="generated/mlquantify.adjust_counting.GPAC.html#mlquantify.adjust_counting.GPAC" title="mlquantify.adjust_counting.GPAC"><code class="xref py py-class docutils literal notranslate"><span class="pre">GPAC</span></code></a> are solved using this linear system:</p>
 <ul class="simple">
 <li><p>GAC uses hard classifier decisions (confusion matrix).</p></li>
 <li><p>GPAC uses soft probabilities <span class="math notranslate nohighlight">\(P(y=l|x)\)</span> .</p></li>
