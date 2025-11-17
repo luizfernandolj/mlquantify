@@ -18,7 +18,7 @@ Currently, there are two types of adjustment methods implemented:
 Classify and Count  
 ==================
 
-The **Classify and Count** method, or :class:`adjust_counting.CC` is the simplest baseline.  
+The **Classify and Count** method, or :class:`mlquantify.adjust_counting.CC` is the simplest baseline.  
 It trains a hard classifier :math:`h` on labeled data :math:`L` , applies it to an unlabeled set :math:`U` , and counts how many samples belong to each predicted class.
 
 **Equation**
@@ -44,14 +44,14 @@ It trains a hard classifier :math:`h` on labeled data :math:`L` , applies it to 
    q.predict(X)
    # -> {0: 0.47, 1: 0.53}
 
-:class:`adjust_counting.CC` is fast and simple, but when class proportions in the test set differ from the training set, its estimates can become biased or inaccurate.
+:class:`mlquantify.adjust_counting.CC` is fast and simple, but when class proportions in the test set differ from the training set, its estimates can become biased or inaccurate.
 
 
 
 Probabilistic Classify and Count  
 ================================
 
-The **Probabilistic Classify and Count** or :class:`adjust_counting.PCC` variant uses the *predicted probabilities* from a soft classifier instead of hard labels.  
+The **Probabilistic Classify and Count** or :class:`mlquantify.adjust_counting.PCC` variant uses the *predicted probabilities* from a soft classifier instead of hard labels.  
 This makes it less sensitive to uncertain predictions.
 
 **Equation**
@@ -173,7 +173,7 @@ Generalized Adjusted Classify and Count (GAC) and Generalized Probabilistic Adju
    q.predict(X_test)
    # -> {0: 0.48, 1: 0.52}
 
-Both :class:`adjust_counting.GAC` and :class:`adjust_counting.GPAC` are solved using this linear system:
+Both :class:`mlquantify.adjust_counting.GAC` and :class:`mlquantify.adjust_counting.GPAC` are solved using this linear system:
 
 - GAC uses hard classifier decisions (confusion matrix).  
 - GPAC uses soft probabilities :math:`P(y=l|x)` .
@@ -183,7 +183,7 @@ Both :class:`adjust_counting.GAC` and :class:`adjust_counting.GPAC` are solved u
 Friedman's Method (FM)  
 ----------------------
 
-:class:`adjust_counting.FM` constructs its adjustment matrix :math:`\mathbf{X}` based on a specialized feature transformation function :math:`f_l(x)` that indicates whether the predicted class probability for an item exceeds that class's proportion in the training data :math:`(\pi_l^T)` , a technique chosen because it theoretically minimizes the variance of the resulting prevalence estimates.
+FM constructs its adjustment matrix :math:`\mathbf{X}` based on a specialized feature transformation function :math:`f_l(x)` that indicates whether the predicted class probability for an item exceeds that class's proportion in the training data :math:`(\pi_l^T)` , a technique chosen because it theoretically minimizes the variance of the resulting prevalence estimates.
 
 .. dropdown:: Mathematical details - Friedman's Method
 
