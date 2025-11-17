@@ -6,7 +6,8 @@
 Adjust Counting
 ===============
 
-Adjusted Counting methods improve upon the basic Classify and Count :ref:`CC` or its probabilistic variant :ref:`PCC` by correcting the estimated prevalences using knowledge from the training set about the behavior of the classifier, particularly accounting for its error characteristics.
+Adjusted Counting methods improve upon simple "counting" quantifiers by correcting bias using what is known about the classifier's errors on the training set.  
+They aim to produce better estimates of class prevalence (how frequent each class is in a dataset) even when training and test distributions differ.
 
 Currently, there are two types of adjustment methods implemented:
 
@@ -14,110 +15,210 @@ Currently, there are two types of adjustment methods implemented:
 2. **Matrix Adjustment Methods**: These methods use a confusion matrix derived from the classifier's performance on a validation set to adjust the estimated prevalences. Examples include the EM-based methods and other matrix inversion techniques.
 
 
+[Plot Idea: Comparison between raw CC estimate vs adjusted estimate when dataset shift occurs]
 
-.. _classify_and_count:
 
-Classify and Count
+Classify and Count  
 ==================
 
-Classify and Count (CC) is the most basic aggregative quantification method. It consists of training a standard hard classifier on labeled data and then applying this classifier to the unlabeled set, estimating class prevalences by counting the number of instances assigned to each class.
+The **Classify and Count (CC)** method is the simplest baseline.  
+It trains a hard classifier \(h\) on labeled data \(L\), applies it to an unlabeled set \(U\), and counts how many samples belong to each predicted class.
 
-Despite its simplicity, CC is known to be suboptimal in many scenarios because standard classifiers often exhibit bias that leads to inaccurate prevalence estimates.
+**Equation**
 
-This method is implemented in the :ref:`CC` class:
+.. math::
+
+   \hat{p}^U_{CC}(y) = \frac{|\{x \in U \mid h(x) = y\}|}{|U|}
+
+:caption: *Estimated prevalence from hard classifier labels*
+
+
+**Example**
 
 .. code-block:: python
 
-    from mlquantify.adjust_counting import CC
-    import numpy as np
-    from sklearn.linear_model import LogisticRegression
+   from mlquantify.adjust_counting import CC
+   from sklearn.linear_model import LogisticRegression
+   import numpy as np
 
-    X = np.random.randn(100, 5)
-    y = np.random.randint(0, 2, 100)
+   X, y = np.random.randn(100, 5), np.random.randint(0, 2, 100)
+   q = CC(learner=LogisticRegression())
+   q.fit(X, y)
+   q.predict(X)
+   # -> {0: 0.47, 1: 0.53}
 
-    # Using fit and predict methods
-    q = CC(learner=LogisticRegression())
-    q.fit(X, y)
-    q.predict(X)
-    {0: 0.47, 1: 0.53}
-
-    # Using the aggregate method directly
-    q2 = CC()
-    predictions = np.random.rand(200)
-    q2.aggregate(predictions)
-    {0: 0.51, 1: 0.49}
-
-
-However, Forman (2008) showed that CC can be biased when train and test class distributions differ, leading to the development of various adjusted counting methods that aim to correct this bias.
+CC is fast and simple, but when class proportions in the test set differ from the training set, its estimates can become biased or inaccurate.
 
 
 
-.. _probabilistic_classify_and_count:
-
-Probabilistic Classify and Count
+Probabilistic Classify and Count  
 ================================
 
-There is also a probabilistic variant of Classify and Count called Probabilistic Classify and Count (PCC), which uses the predicted probabilities from a probabilistic classifier instead of hard class labels to estimate prevalences. This method is implemented in the class :ref:`PCC`:
+The **Probabilistic Classify and Count (PCC)** variant uses the *predicted probabilities* from a soft classifier instead of hard labels.  
+This makes it less sensitive to uncertain predictions.
+
+**Equation**
+
+.. math::
+
+   \hat{p}^U_{PCC}(y) = \frac{1}{|U|} \sum_{x \in U} p(y|x)
+
+:caption: *Estimated prevalence from averaged posterior probabilities*
+
+[Plot Idea: A plot comparing probabilities per sample and their averaged mean per class]
+
+**Example**
 
 .. code-block:: python
 
-    from mlquantify.adjust_counting import PCC
-    import numpy as np
-    from sklearn.linear_model import LogisticRegression
+   from mlquantify.adjust_counting import PCC
+   from sklearn.linear_model import LogisticRegression
+   import numpy as np
 
-    X = np.random.randn(100, 5)
-    y = np.random.randint(0, 2, 100)
+   X, y = np.random.randn(100, 5), np.random.randint(0, 2, 100)
+   q = PCC(learner=LogisticRegression())
+   q.fit(X, y)
+   q.predict(X)
+   # -> {0: 0.45, 1: 0.55}
 
-    # Using fit and predict methods
-    q = PCC(learner=LogisticRegression())
-    q.fit(X, y)
-    q.predict(X)
-    {0: 0.45, 1: 0.55}
-
-    # Using the aggregate method directly
-    q2 = PCC()
-    probabilities = np.random.rand(200, 2) # Probabilistic outputs for n classes
-    q2.aggregate(probabilities)
-    {0: 0.48, 1: 0.52}
+CC and PCC both often underestimate or overestimate the true prevalence when there is distribution shift (also known as “dataset shift”).
 
 
 
-.. _threshold_adjustment:
-   
-Threshold Adjustment
+Threshold Adjustment  
 ====================
 
-Threshold Adjustment methods optimize the classifier decision threshold to improve quantification accuracy. The threshold affects the classifier's true positive and false positive rates, which in turn influence correction methods such as Adjust Counting.
+Threshold-based adjustment methods correct the bias of CC by using the classifier's **True Positive Rate (TPR)** and **False Positive Rate (FPR)**.  
+They are mainly used for `binary` quantification tasks.
+
+**Adjusted Classify and Count (ACC) Equation**
 
 .. math::
 
-   \hat{y} = \begin{cases}
-   1 & s \geq \tau \\
-   0 & \text{otherwise}
-   \end{cases}
+   \hat{p}^U_{ACC}(⊕) = \frac{\hat{p}^U_{CC}(⊕) - FPR_L}{TPR_L - FPR_L}
 
-where \(s\) is the classifier score and \(\tau\) is the decision threshold.
+:caption: *Corrected prevalence estimate using classifier error rates*
 
-By selecting appropriate \(\tau\), the quantification estimates can be stabilized, avoiding estimation issues with probabilities near zero or one.
+The main idea is that by adjusting the observed rate of positive predictions, we can better approximate the real class distribution.
 
-Each Threshold Adjustment method typically chooses \(\tau\) based on different criteria, such as minimizing quantification error on validation data or balancing true positive and false positive rates.
+[Plot Idea: Diagram showing how TPR and FPR move the prevalence estimate]
+
+Different *threshold methods* vary in how they choose the classifier cutoff \( \tau \) for scores \( s(x) \).
+
++----------------+--------------------------------------------+--------------------------------------------------+
+| **Method**     | **Threshold Choice**                       | **Goal**                                         |
++================+============================================+==================================================+
+| AC             | Fixed threshold = 0.5                        | Simple baseline adjustment                      |
++----------------+--------------------------------------------+--------------------------------------------------+
+| X              | Chooses threshold where \(FPR=1-TPR\)       | Avoids unstable prediction tails                |
++----------------+--------------------------------------------+--------------------------------------------------+
+| MAX            | Maximizes \(TPR - FPR\)                     | Improves numerical stability                    |
++----------------+--------------------------------------------+--------------------------------------------------+
+| T50            | Sets \(TPR = 0.5\)                          | Uses central part of ROC curve                  |
++----------------+--------------------------------------------+--------------------------------------------------+
+| MS (Median Sweep) | Uses the median of all thresholds’ ACC results | Reduces effect of threshold outliers            |
++----------------+--------------------------------------------+--------------------------------------------------+
+
+**Example**
+
+.. code-block:: python
+
+   from mlquantify.adjust_counting import ACC
+   q = ACC()
+   q.fit(X, y)
+   q.predict(X)
+   # -> adjusted prevalence dictionary
+
+[Plot Idea: Show ROC curve with marked chosen thresholds (TPR, FPR, tau)]
+
+.. note::
+
+    Threshold adjustment methods like ACC are primarily designed for binary classification tasks,  
+    For multi-class problems, matrix adjustment methods are generally preferred.
 
 
-.. _matrix_adjustment:
+Matrix Adjustment  
+=================
 
+Matrix-based adjustment methods use a *confusion matrix* or *generalized rate matrix* to adjust predictions for multi-class quantification.  
+They treat quantification as solving a small linear system.
 
-Matrix Adjustment
-================
-
-Matrix Adjustment is an extension of Adjust Counting where the full confusion matrix information is used to adjust the quantification estimates for multi-class problems. This involves inverting the confusion matrix to obtain corrected class prevalence estimates.
+**Matrix Equation**
 
 .. math::
 
-   \hat{\mathbf{p}} = \mathbf{C}^\top \mathbf{p}
+   \mathbf{y = X \hat{\pi}_F + \epsilon}, \quad
+   \text{subject to } \hat{\pi}_F \ge 0,\ \sum \hat{\pi}_F = 1
 
-where \(\hat{\mathbf{p}}\) is the vector of observed predicted prevalences, \(\mathbf{C}\) is the confusion matrix, and \(\mathbf{p}\) is the true prevalence vector.
+:caption: *General linear system linking observed and true prevalences*
+
+Here:
+
+- \( \mathbf{y} \): average observed predictions in \(U\)  
+- \( \mathbf{X} \): classifier behavior from training (mean conditional rates)  
+- \( \hat{\pi}_F \): corrected class prevalences in \(U\)
+
+[Plot Idea: Matrix illustration showing how confusion corrections map to estimated prevalences]
+
+**Example GAC / GPAC (ACC / PACC multiclass)**
+
+.. code-block:: python
+
+   from mlquantify.adjust_counting import GAC, GPAC
+   from sklearn.linear_model import LogisticRegression
+   q = GAC(learner=LogisticRegression())
+   q.fit(X_train, y_train)
+   q.predict(X_test)
+   # -> {0: 0.48, 1: 0.52}
+
+Both **ACC multiclass (GAC)** and **PACC multiclass (GPAC)** are solved using this linear system:
+
+- GAC uses hard classifier decisions (confusion matrix).  
+- GPAC uses soft probabilities \( P(y=l|x) \).
+
+To improve stability, **Friedman's Method (FM)** generates the adjustment matrix \( \mathbf{X} \) using a special transformation function applied to each class \( l \) and training sample \( x \):
 
 .. math::
 
-   \mathbf{p} = (\mathbf{C}^\top)^{-1} \hat{\mathbf{p}}
+   f_l(x) = I \left[ \hat{P}_T(y = l \mid x) > \pi_l^T \right]
 
+where:
+
+- \( I[\cdot] \) is the indicator function, equal to 1 if the condition inside is true, 0 otherwise.
+- \( \hat{P}_T(y = l \mid x) \) is the classifier's estimated posterior probability for class \( l \) on training sample \( x \).
+- \( \pi_l^T \) is the prevalence of class \( l \) in the training set.
+
+The entry \( X_{i,l} \) of the matrix \( \mathbf{X} \) is computed as the average of \( f_l(x) \) over all \( x \) in class \( i \) of the training data:
+
+.. math::
+
+   X_{i,l} = \frac{1}{|L_i|} \sum_{x \in L_i} f_l(x)
+
+where:
+
+- \( L_i \) is the subset of training samples with true class \( i \).
+- \( |L_i| \) is the number of these samples.
+
+Hence, each column \( l \) of \( \mathbf{X} \) corresponds to the transformed feature averages across all classes \( i \), forming a "thresholded confusion-like" matrix.
+
+This matrix is then used in the constrained least squares optimization:
+
+.. math::
+
+   \min_{\hat{\pi}_F} \frac{1}{2} \hat{\pi}_F^\top D \hat{\pi}_F + d^\top \hat{\pi}_F
+   \quad \text{subject to} \quad \hat{\pi}_F \ge 0, \quad \sum \hat{\pi}_F = 1
+
+to estimate the corrected prevalences \( \hat{\pi}_F \) on the test set.
+
+This thresholding on posterior probabilities ensures that the matrix \( \mathbf{X} \) highlights regions where the classifier consistently predicts a class more confidently than its baseline prevalence, improving statistical stability and reducing estimation variance.
+
+
++-------------------+-----------------------------------------------+---------------------------------------------+
+| **Method**        | **Matrix / Function (f_l(x))**                | **Resolution**                              |
++===================+===============================================+=============================================+
+| ACC (GAC)         | Indicator of classifier's hard decision        | Direct linear system                        |
++-------------------+-----------------------------------------------+---------------------------------------------+
+| PACC (GPAC)       | Posterior probability \(P(y=l|x)\)            | Direct linear system                        |
++-------------------+-----------------------------------------------+---------------------------------------------+
+| FM (Friedman)     | Indicator if \( \hat{P}_T(y=l|x) > \pi_l^T \) | Constrained least-squares (Quadratic Prog.) |
++-------------------+-----------------------------------------------+---------------------------------------------+
