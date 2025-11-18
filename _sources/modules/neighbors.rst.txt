@@ -23,6 +23,8 @@ This multivariate representation, operating on the unit simplex (:math:`\Delta_{
 
 KDEy, particularly its **Maximum Likelihood (KDEy-ML)** variant, has proven to be one of the strongest quantifiers, often outperforming other histogram-based DM models and remaining competitive with EMQ (SLD) [1]_.
 
+The methods can be found in :class:`KDEyML`, :class:`KDEyHD` and :class:`KDEyCS`, following the methods described in [1]_.
+
 .. dropdown:: Mathematical details - KDEy Framework
 
    Framed within the Distribution Matching framework, KDEy seeks the prevalence vector :math:`\hat{\alpha}` that minimizes the discrepancy :math:`D` between the weighted mixture distribution (:math:`p_\alpha`) and the test set distribution (:math:`q_{\tilde{U}}`).
