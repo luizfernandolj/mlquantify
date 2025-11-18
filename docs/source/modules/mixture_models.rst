@@ -91,7 +91,7 @@ HDy: Hellinger Distance y-Similarity
 SMM: Sample Mean Matching
 =========================
 
-**SMM** is a member of the DyS framework, proposed by [1]_ notable for its simplicity and efficiency [4]_, located at the :class:`SMM`. 
+**SMM** is a member of the DyS framework, proposed by [4]_ notable for its simplicity and efficiency, located at the :class:`SMM`. 
 
 **What SMM does:**
 
