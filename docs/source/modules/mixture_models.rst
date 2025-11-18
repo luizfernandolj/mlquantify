@@ -47,7 +47,7 @@ DyS seeks the prevalence parameter :math:`\alpha` that minimizes the dissimilari
 
 .. dropdown:: References
 
-    .. [1] Maletzke, A., dos Reis, D., Cherman, E., & Batista, G. (2019). DyS: A Framework for Mixture Models in Quantification. www.aaai.org
+    .. [2] Maletzke, A., dos Reis, D., Cherman, E., & Batista, G. (2019). DyS: A Framework for Mixture Models in Quantification. www.aaai.org
 
 
 HDy: Hellinger Distance y-Similarity
@@ -85,14 +85,13 @@ HDy: Hellinger Distance y-Similarity
 
 .. dropdown:: References
 
-    .. [1] González-Castro, V., Alaiz-Rodríguez, R., & Alegre, E. (2013). Class distribution estimation based on the Hellinger distance. Information Sciences, 218, 146-164. https://doi.org/10.1016/j.ins.2012.05.028
-    .. [2] Maletzke, A., dos Reis, D., Cherman, E., & Batista, G. (2019). DyS: A Framework for Mixture Models in Quantification. www.aaai.org
+    .. [3] González-Castro, V., Alaiz-Rodríguez, R., & Alegre, E. (2013). Class distribution estimation based on the Hellinger distance. Information Sciences, 218, 146-164. https://doi.org/10.1016/j.ins.2012.05.028
 
 
 SMM: Sample Mean Matching
 =========================
 
-**SMM** is a member of the DyS framework, proposed by [1]_ notable for its simplicity and efficiency [1]_, located at the :class:`SMM`. 
+**SMM** is a member of the DyS framework, proposed by [1]_ notable for its simplicity and efficiency [4]_, located at the :class:`SMM`. 
 
 **What SMM does:**
 
@@ -101,7 +100,7 @@ SMM: Sample Mean Matching
 3.  **Closed Form Solution:** SMM does not require iteration or complex search procedures, as the problem can be solved in closed form.
 
 .. note::
-   SMM is mathematically equivalent to the **PACC (Probabilistic Adjusted Classify & Count)** method [3]_.
+   SMM is mathematically equivalent to the **PACC (Probabilistic Adjusted Classify & Count)** method [4]_.
 
 .. dropdown:: Mathematical details - SMM Closed Form
 
@@ -134,7 +133,7 @@ SMM: Sample Mean Matching
 
 .. dropdown:: References
 
-    .. [1] Hassan, W., Maletzke, A., & Batista, G. (2020). Accurately quantifying a billion instances per second. Proceedings - 2020 IEEE 7th International Conference on Data Science and Advanced Analytics, DSAA 2020, 1-10. https://doi.org/10.1109/DSAA49011.2020.00012
+    .. [4] Hassan, W., Maletzke, A., & Batista, G. (2020). Accurately quantifying a billion instances per second. Proceedings - 2020 IEEE 7th International Conference on Data Science and Advanced Analytics, DSAA 2020, 1-10. https://doi.org/10.1109/DSAA49011.2020.00012
 
 
 SORD: Sample Ordinal Distance
@@ -142,9 +141,8 @@ SORD: Sample Ordinal Distance
 
 **SORD (Sample Ordinal Distance)** is one of the dissimilarity functions that fall under the DyS framework, located at :class:`SORD`.
 
-SORD is notable for operating directly on **score samples (observations)** rather than discretized distributions (histograms). By eliminating the dependency on the number of bins, it seeks the minimum cost to transform a sample of scores into the weighted mixture sample. SORD provides an alternative that does not lose details after bin discretization [1]_.
+SORD is notable for operating directly on **score samples (observations)** rather than discretized distributions (histograms). By eliminating the dependency on the number of bins, it seeks the minimum cost to transform a sample of scores into the weighted mixture sample. SORD provides an alternative that does not lose details after bin discretization [5]_.
 
 .. dropdown:: References
-    
-    .. [1] Maletzke, A., dos Reis, D., Hassan, W., & Batista, G. (2021). Accurately Quantifying under Score Variability.
-    .. [2] Maletzke, A., dos Reis, D., Cherman, E., & Batista, G. (2019). DyS: A Framework for Mixture Models in Quantification. www.aaai.org
+
+    .. [5] Maletzke, A., dos Reis, D., Hassan, W., & Batista, G. (2021). Accurately Quantifying under Score Variability.
