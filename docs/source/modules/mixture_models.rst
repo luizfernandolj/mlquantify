@@ -10,8 +10,8 @@ Mixture Model (MM) methods, often referred to as **Distribution Matching (DM)** 
 
 Mixture Models seeks to model the data distribution observed in the test set as a parametric mixture of the individual class distributions obtained from training :math:`L`.
    
-.. notes::
-   Mixture Models are predominantly designed for binary quantification problems. While extensions to multi-class scenarios exist, such as one-vs-all strategies, they are computationally intensive and less commonly used.
+.. note::
+   Mixture Models are predominantly designed for binary quantification problems. While extensions to multi-class scenarios exist, such as one-vs-all strategies, they are computationally intensive and less commonly used. If you are dealing with multi-class quantification, consider using methods from the :ref:`density_module` with better scalability.
 
 .. dropdown:: Mathematical details - Mixture Formulation
 

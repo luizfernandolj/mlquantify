@@ -32,8 +32,8 @@ It trains a hard classifier :math:`h` on labeled data :math:`L` , applies it to 
    # -> {0: 0.47, 1: 0.53}
 
 
-.. alert::
-   :class:`CC` is fast and simple, but when class proportions in the test set differ from the training set, its estimates can become biased or inaccurate.
+.. note::
+    :class:`CC` is fast and simple, but when class proportions in the test set differ from the training set, its estimates can become biased or inaccurate.
 
 
 
