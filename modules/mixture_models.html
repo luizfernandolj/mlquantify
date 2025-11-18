@@ -388,6 +388,10 @@
 <span id="mixture-models"></span><h1><span class="section-number">1.4. </span>Mixture Models (Distribution Matching)<a class="headerlink" href="#mixture-models-distribution-matching" title="Link to this heading">#</a></h1>
 <p>Mixture Model (MM) methods, often referred to as <strong>Distribution Matching (DM)</strong> methods, constitute one of the main families of quantification algorithms <a class="footnote-reference brackets" href="#id2" id="id1" role="doc-noteref"><span class="fn-bracket">[</span>1<span class="fn-bracket">]</span></a>.</p>
 <p>Mixture Models seeks to model the data distribution observed in the test set as a parametric mixture of the individual class distributions obtained from training <span class="math notranslate nohighlight">\(L\)</span>.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Mixture Models are predominantly designed for binary quantification problems. While extensions to multi-class scenarios exist, such as one-vs-all strategies, they are computationally intensive and less commonly used. If you are dealing with multi-class quantification, consider using methods from the <span class="xref std std-ref">density_module</span> with better scalability.</p>
+</div>
 <details class="sd-sphinx-override sd-dropdown sd-card sd-mb-3">
 <summary class="sd-summary-title sd-card-header">
 <span class="sd-summary-text">Mathematical details - Mixture Formulation</span><span class="sd-summary-state-marker sd-summary-chevron-right"><svg version="1.1" width="1.5em" height="1.5em" class="sd-octicon sd-octicon-chevron-right" viewBox="0 0 24 24" aria-hidden="true"><path d="M8.72 18.78a.75.75 0 0 1 0-1.06L14.44 12 8.72 6.28a.751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018l6.25 6.25a.75.75 0 0 1 0 1.06l-6.25 6.25a.75.75 0 0 1-1.06 0Z"></path></svg></span></summary><div class="sd-summary-content sd-card-body docutils">
