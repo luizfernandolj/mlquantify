@@ -9,6 +9,8 @@ Adjust Counting
 Adjusted Counting methods improve upon simple "counting" quantifiers by correcting bias using what is known about the classifier's errors on the training set.  
 They aim to produce better estimates of class prevalence (how frequent each class is in a dataset) even when training and test distributions differ.
 
+see :ref:`modules/counters` for an overview of the base counters for quantification.
+
 Currently, there are two types of adjustment methods implemented:
 
 1. **Threshold Adjustment Methods**: These methods adjust the decision threshold of the classifier to optimize prevalence estimation. Examples include Adjusted Classify and Count (ACC) and its probabilistic counterpart PACC.
@@ -19,7 +21,7 @@ Currently, there are two types of adjustment methods implemented:
 Threshold Adjustment  
 ====================
 
-Threshold-based adjustment methods correct the bias of CC by using the classifier's **True Positive Rate (TPR)** and **False Positive Rate (FPR)**.  
+Threshold-based adjustment methods correct the bias of :class:`CC` by using the classifier's **True Positive Rate (TPR)** and **False Positive Rate (FPR)**.  
 They are mainly used for `binary` quantification tasks.
 
 **Adjusted Classify and Count (ACC) Equation**
