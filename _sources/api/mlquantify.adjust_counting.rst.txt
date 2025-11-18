@@ -29,6 +29,8 @@ Adjusted Counting Methods
   :template: base.rst
 
 
+  CC
+  PCC
   FM
   GAC
   GPAC

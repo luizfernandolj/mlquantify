@@ -47,6 +47,38 @@ reference on concepts repeated across the API, see :ref:`glossary`.
 
 
 
+  * - :obj:`~mlquantify.adjust_counting.CC`
+
+    - .. div:: sk-apisearch-desc
+
+        .. currentmodule:: mlquantify.adjust_counting
+
+        .. autoshortsummary:: mlquantify.adjust_counting.CC
+
+        .. div:: caption
+
+          :mod:`mlquantify.adjust_counting`
+
+
+
+
+
+  * - :obj:`~mlquantify.adjust_counting.PCC`
+
+    - .. div:: sk-apisearch-desc
+
+        .. currentmodule:: mlquantify.adjust_counting
+
+        .. autoshortsummary:: mlquantify.adjust_counting.PCC
+
+        .. div:: caption
+
+          :mod:`mlquantify.adjust_counting`
+
+
+
+
+
   * - :obj:`~mlquantify.adjust_counting.FM`
 
     - .. div:: sk-apisearch-desc
