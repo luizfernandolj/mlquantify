@@ -89,6 +89,8 @@ API_REFERENCE = {
             {
                 "title": "Adjusted Counting Methods",
                 "autosummary": [
+                    "CC",
+                    "PCC",
                     "FM",
                     "GAC",
                     "GPAC",

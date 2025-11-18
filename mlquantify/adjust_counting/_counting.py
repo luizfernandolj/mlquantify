@@ -12,8 +12,7 @@ from mlquantify.utils._constraints import Interval
 
 
 class CC(CrispLearnerQMixin, BaseCount):
-    r"""
-    Classify and Count (CC) quantifier.
+    r"""Classify and Count (CC) quantifier.
 
     Implements the Classify and Count method for quantification, describe as a
     baseline approach in the literature [1][2].
