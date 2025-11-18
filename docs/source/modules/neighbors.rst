@@ -9,15 +9,9 @@ Nearest Neighbors
 PWK: Pair-wise Weighted K-Nearest Neighbors
 ===========================================
 
-**PWK** and **PWK**\ :math:`\alpha` are neighbor-based algorithms (k-Nearest Neighbors - NN) that apply class weighting techniques to estimate prevalence in binary problems [2]_.
+:class:`PWK` and **PWK**\ :math:`\alpha` are neighbor-based algorithms (k-Nearest Neighbors - NN) that apply class weighting techniques to estimate prevalence in binary problems [2]_. They can be seen as aggregative quantification methods that adjust a k-NN classifier to account for class imbalance.
 
-Key Characteristics
--------------------
-
-* **Focus on Simplicity and Stability:** The primary goal of PWK is to offer a competitive and stable quantifier that balances simplicity with effectiveness.
-* **Proximity-Based:** By exploring the **topology** of the data, PWK is robust to changes in distribution, retaining the local structure of the data better than global classifiers [2]_.
-* **Class Weighting:** These methods complement the k-NN algorithm with weighting policies. The objective is to neutralize the bias in favor of the majority class, which is inherent in classifiers trained on imbalanced datasets [2]_.
-* **Correction:** These methods are often evaluated after applying Forman's **ACC correction**. NN methods are advantageous here because the distance matrix can be computed once, optimizing the estimation of error rates (TPR and FPR) via cross-validation [2]_.
+PWK methods focus on simplicity and stability, offering competitive quantification that balances effectiveness with interpretability. By exploring the topology of the data through proximity-based analysis, these algorithms are robust to distribution changes and retain local structure better than global classifiers [2]_. The methods complement k-NN with class weighting policies designed to neutralize the bias toward majority classes inherent in imbalanced datasets [2]_.
 
 PWK (Proportion-Weighted K-Nearest Neighbor)
 --------------------------------------------
