@@ -17,17 +17,12 @@ The core argument of KDEy is that traditional DM approaches relying on histogram
 **The KDEy Solution**
 KDEy resolves this by replacing discrete, univariate histograms with **continuous, multivariate Probability Density Functions (PDFs)** modeled via Kernel Density Estimation (KDE). These PDFs are represented as Gaussian Mixture Models (GMMs) operating on the unit simplex (:math:`\Delta_{n-1}`), effectively preserving inter-class correlations [1]_.
 
-KDEy serves as a prefix for variants that fall under different optimization frameworks.
-
-Variants of KDEy
-----------------
+KDEy serves as a prefix for variants that fall under different optimization frameworks. Next , we describe the three main KDEy quantifiers described in [1]_.
 
 The library provides three main variants of KDEy, depending on the optimization framework and the divergence function utilized.
 
 KDEy-ML (Maximum Likelihood)
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-.. class:: KDEyML
+----------------------------
 
 The :class:`KDEyML` class implements the Maximum Likelihood quantifier. It models class-conditional densities of posterior probabilities via KDE and estimates class prevalences by maximizing the likelihood of test data under a mixture model of these KDEs.
 
@@ -59,9 +54,7 @@ The :class:`KDEyML` class implements the Maximum Likelihood quantifier. It model
 
 
 KDEy-HD (Hellinger Distance)
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-.. class:: KDEyHD
+----------------------------
 
 The :class:`KDEyHD` class estimates class prevalences by minimizing the **Hellinger Distance (HD)** between the KDE mixture of class-conditional densities and the KDE of the test data.
 
@@ -93,9 +86,8 @@ The :class:`KDEyHD` class estimates class prevalences by minimizing the **Hellin
 
 
 KDEy-CS (Cauchy-Schwarz)
-~~~~~~~~~~~~~~~~~~~~~~~~
+------------------------
 
-.. class:: KDEyCS
 
 The :class:`KDEyCS` class minimizes the **Cauchy-Schwarz (CS)** divergence.
 
