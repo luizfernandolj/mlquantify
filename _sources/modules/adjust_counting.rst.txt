@@ -21,14 +21,6 @@ Classify and Count
 The **Classify and Count** method, or :class:`CC` is the simplest baseline.  
 It trains a hard classifier :math:`h` on labeled data :math:`L` , applies it to an unlabeled set :math:`U` , and counts how many samples belong to each predicted class.
 
-**Equation**
-
-.. math::
-
-   \hat{p}^U_{CC}(y) = \frac{|\{x \in U \mid h(x) = y\}|}{|U|}
-
-:caption: *Estimated prevalence from hard classifier labels*
-
 
 **Example**
 
@@ -44,7 +36,9 @@ It trains a hard classifier :math:`h` on labeled data :math:`L` , applies it to 
    q.predict(X)
    # -> {0: 0.47, 1: 0.53}
 
-:class:`CC` is fast and simple, but when class proportions in the test set differ from the training set, its estimates can become biased or inaccurate.
+
+.. alert::
+   :class:`CC` is fast and simple, but when class proportions in the test set differ from the training set, its estimates can become biased or inaccurate.
 
 
 
@@ -53,14 +47,6 @@ Probabilistic Classify and Count
 
 The **Probabilistic Classify and Count** or :class:`PCC` variant uses the *predicted probabilities* from a soft classifier instead of hard labels.  
 This makes it less sensitive to uncertain predictions.
-
-**Equation**
-
-.. math::
-
-   \hat{p}^U_{PCC}(y) = \frac{1}{|U|} \sum_{x \in U} p(y|x)
-
-:caption: *Estimated prevalence from averaged posterior probabilities*
 
 [Plot Idea: A plot comparing probabilities per sample and their averaged mean per class]
 

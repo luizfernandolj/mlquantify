@@ -395,14 +395,6 @@ They aim to produce better estimates of class prevalence (how frequent each clas
 <h2><span class="section-number">1.1.1. </span>Classify and Count<a class="headerlink" href="#classify-and-count" title="Link to this heading">#</a></h2>
 <p>The <strong>Classify and Count</strong> method, or <code class="xref py py-class docutils literal notranslate"><span class="pre">CC</span></code> is the simplest baseline.
 It trains a hard classifier <span class="math notranslate nohighlight">\(h\)</span> on labeled data <span class="math notranslate nohighlight">\(L\)</span> , applies it to an unlabeled set <span class="math notranslate nohighlight">\(U\)</span> , and counts how many samples belong to each predicted class.</p>
-<p><strong>Equation</strong></p>
-<div class="math notranslate nohighlight">
-\[\hat{p}^U_{CC}(y) = \frac{|\{x \in U \mid h(x) = y\}|}{|U|}\]</div>
-<dl class="field-list simple">
-<dt class="field-odd">caption<span class="colon">:</span></dt>
-<dd class="field-odd"><p><em>Estimated prevalence from hard classifier labels</em></p>
-</dd>
-</dl>
 <p><strong>Example</strong></p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">mlquantify.adjust_counting</span><span class="w"> </span><span class="kn">import</span> <span class="n">CC</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">sklearn.linear_model</span><span class="w"> </span><span class="kn">import</span> <span class="n">LogisticRegression</span>
@@ -415,20 +407,11 @@ It trains a hard classifier <span class="math notranslate nohighlight">\(h\)</sp
 <span class="c1"># -&gt; {0: 0.47, 1: 0.53}</span>
 </pre></div>
 </div>
-<p><code class="xref py py-class docutils literal notranslate"><span class="pre">CC</span></code> is fast and simple, but when class proportions in the test set differ from the training set, its estimates can become biased or inaccurate.</p>
 </section>
 <section id="probabilistic-classify-and-count">
 <h2><span class="section-number">1.1.2. </span>Probabilistic Classify and Count<a class="headerlink" href="#probabilistic-classify-and-count" title="Link to this heading">#</a></h2>
 <p>The <strong>Probabilistic Classify and Count</strong> or <code class="xref py py-class docutils literal notranslate"><span class="pre">PCC</span></code> variant uses the <em>predicted probabilities</em> from a soft classifier instead of hard labels.
 This makes it less sensitive to uncertain predictions.</p>
-<p><strong>Equation</strong></p>
-<div class="math notranslate nohighlight">
-\[\hat{p}^U_{PCC}(y) = \frac{1}{|U|} \sum_{x \in U} p(y|x)\]</div>
-<dl class="field-list simple">
-<dt class="field-odd">caption<span class="colon">:</span></dt>
-<dd class="field-odd"><p><em>Estimated prevalence from averaged posterior probabilities</em></p>
-</dd>
-</dl>
 <p>[Plot Idea: A plot comparing probabilities per sample and their averaged mean per class]</p>
 <p><strong>Example</strong></p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">mlquantify.adjust_counting</span><span class="w"> </span><span class="kn">import</span> <span class="n">PCC</span>
