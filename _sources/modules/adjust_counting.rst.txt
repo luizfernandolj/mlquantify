@@ -9,7 +9,7 @@ Adjust Counting
 Adjusted Counting methods improve upon simple "counting" quantifiers by correcting bias using what is known about the classifier's errors on the training set.  
 They aim to produce better estimates of class prevalence (how frequent each class is in a dataset) even when training and test distributions differ.
 
-see :ref:`modules/counters` for an overview of the base counters for quantification.
+see :ref:`counters_module` for an overview of the base counters for quantification.
 
 Currently, there are two types of adjustment methods implemented:
 
