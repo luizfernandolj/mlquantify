@@ -17,6 +17,7 @@ The main aggregative quantification methods will be defined next, with details a
 .. toctree::
    :maxdepth: 2
 
+   modules/counters.rst
    modules/adjust_counting.rst
    modules/likelihood.rst
    modules/mixture_models.rst

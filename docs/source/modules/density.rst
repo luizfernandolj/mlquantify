@@ -120,6 +120,6 @@ The :class:`KDEyCS` class minimizes the **Cauchy-Schwarz (CS)** divergence.
    q.predict(X_test)
 
 
-.. dropdown:: References
+**References**
 
-    .. [1] Moreo, A., González, P., & del Coz, J. J. (2024). Kernel Density Estimation for Multiclass Quantification. http://arxiv.org/abs/2401.00490
+.. [1] Moreo, A., González, P., & del Coz, J. J. (2024). Kernel Density Estimation for Multiclass Quantification. http://arxiv.org/abs/2401.00490
