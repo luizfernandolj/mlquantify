@@ -387,21 +387,13 @@
 <span id="id1"></span><h1><span class="section-number">1.4. </span>Nearest Neighbors<a class="headerlink" href="#nearest-neighbors" title="Link to this heading">#</a></h1>
 <section id="pwk-pair-wise-weighted-k-nearest-neighbors">
 <h2><span class="section-number">1.4.1. </span>PWK: Pair-wise Weighted K-Nearest Neighbors<a class="headerlink" href="#pwk-pair-wise-weighted-k-nearest-neighbors" title="Link to this heading">#</a></h2>
-<p><strong>PWK</strong> and <strong>PWK</strong><span class="math notranslate nohighlight">\(\alpha\)</span> are neighbor-based algorithms (k-Nearest Neighbors - NN) that apply class weighting techniques to estimate prevalence in binary problems <a class="footnote-reference brackets" href="#id10" id="id2" role="doc-noteref"><span class="fn-bracket">[</span>2<span class="fn-bracket">]</span></a>.</p>
-<section id="key-characteristics">
-<h3><span class="section-number">1.4.1.1. </span>Key Characteristics<a class="headerlink" href="#key-characteristics" title="Link to this heading">#</a></h3>
-<ul class="simple">
-<li><p><strong>Focus on Simplicity and Stability:</strong> The primary goal of PWK is to offer a competitive and stable quantifier that balances simplicity with effectiveness.</p></li>
-<li><p><strong>Proximity-Based:</strong> By exploring the <strong>topology</strong> of the data, PWK is robust to changes in distribution, retaining the local structure of the data better than global classifiers <a class="footnote-reference brackets" href="#id10" id="id3" role="doc-noteref"><span class="fn-bracket">[</span>2<span class="fn-bracket">]</span></a>.</p></li>
-<li><p><strong>Class Weighting:</strong> These methods complement the k-NN algorithm with weighting policies. The objective is to neutralize the bias in favor of the majority class, which is inherent in classifiers trained on imbalanced datasets <a class="footnote-reference brackets" href="#id10" id="id4" role="doc-noteref"><span class="fn-bracket">[</span>2<span class="fn-bracket">]</span></a>.</p></li>
-<li><p><strong>Correction:</strong> These methods are often evaluated after applying Forman’s <strong>ACC correction</strong>. NN methods are advantageous here because the distance matrix can be computed once, optimizing the estimation of error rates (TPR and FPR) via cross-validation <a class="footnote-reference brackets" href="#id10" id="id5" role="doc-noteref"><span class="fn-bracket">[</span>2<span class="fn-bracket">]</span></a>.</p></li>
-</ul>
-</section>
+<p><a class="reference internal" href="generated/mlquantify.neighbors.PWK.html#mlquantify.neighbors.PWK" title="mlquantify.neighbors.PWK"><code class="xref py py-class docutils literal notranslate"><span class="pre">PWK</span></code></a> and <strong>PWK</strong><span class="math notranslate nohighlight">\(\alpha\)</span> are neighbor-based algorithms (k-Nearest Neighbors - NN) that apply class weighting techniques to estimate prevalence in binary problems <a class="footnote-reference brackets" href="#id9" id="id2" role="doc-noteref"><span class="fn-bracket">[</span>2<span class="fn-bracket">]</span></a>. They can be seen as aggregative quantification methods that adjust a k-NN classifier to account for class imbalance.</p>
+<p>PWK methods focus on simplicity and stability, offering competitive quantification that balances effectiveness with interpretability. By exploring the topology of the data through proximity-based analysis, these algorithms are robust to distribution changes and retain local structure better than global classifiers <a class="footnote-reference brackets" href="#id9" id="id3" role="doc-noteref"><span class="fn-bracket">[</span>2<span class="fn-bracket">]</span></a>. The methods complement k-NN with class weighting policies designed to neutralize the bias toward majority classes inherent in imbalanced datasets <a class="footnote-reference brackets" href="#id9" id="id4" role="doc-noteref"><span class="fn-bracket">[</span>2<span class="fn-bracket">]</span></a>.</p>
 <section id="pwk-proportion-weighted-k-nearest-neighbor">
-<h3><span class="section-number">1.4.1.2. </span>PWK (Proportion-Weighted K-Nearest Neighbor)<a class="headerlink" href="#pwk-proportion-weighted-k-nearest-neighbor" title="Link to this heading">#</a></h3>
+<h3><span class="section-number">1.4.1.1. </span>PWK (Proportion-Weighted K-Nearest Neighbor)<a class="headerlink" href="#pwk-proportion-weighted-k-nearest-neighbor" title="Link to this heading">#</a></h3>
 <p>This is the simplest version of the algorithm.</p>
 <ul class="simple">
-<li><p><strong>Mechanism:</strong> The weight <span class="math notranslate nohighlight">\(w_c\)</span> is defined to be <strong>inversely proportional</strong> to the size of class <span class="math notranslate nohighlight">\(c\)</span> relative to the total training set size <a class="footnote-reference brackets" href="#id10" id="id6" role="doc-noteref"><span class="fn-bracket">[</span>2<span class="fn-bracket">]</span></a>.</p></li>
+<li><p><strong>Mechanism:</strong> The weight <span class="math notranslate nohighlight">\(w_c\)</span> is defined to be <strong>inversely proportional</strong> to the size of class <span class="math notranslate nohighlight">\(c\)</span> relative to the total training set size <a class="footnote-reference brackets" href="#id9" id="id5" role="doc-noteref"><span class="fn-bracket">[</span>2<span class="fn-bracket">]</span></a>.</p></li>
 <li><p><strong>Simplicity:</strong> The weights are easily interpretable, and the method only requires the calibration of the number of neighbors <span class="math notranslate nohighlight">\(k\)</span>.</p></li>
 </ul>
 <details class="sd-sphinx-override sd-dropdown sd-card sd-mb-3">
@@ -414,11 +406,11 @@
 </div>
 </details></section>
 <section id="pwk-alpha-alpha-adjusted-pwk">
-<h3><span class="section-number">1.4.1.3. </span>PWK<span class="math notranslate nohighlight">\(\alpha\)</span> (Alpha-Adjusted PWK)<a class="headerlink" href="#pwk-alpha-alpha-adjusted-pwk" title="Link to this heading">#</a></h3>
-<p><strong>PWK</strong><span class="math notranslate nohighlight">\(\alpha\)</span> is a general structure that encompasses both standard KNN and PWK as special cases <a class="footnote-reference brackets" href="#id10" id="id7" role="doc-noteref"><span class="fn-bracket">[</span>2<span class="fn-bracket">]</span></a>.</p>
+<h3><span class="section-number">1.4.1.2. </span>PWK<span class="math notranslate nohighlight">\(\alpha\)</span> (Alpha-Adjusted PWK)<a class="headerlink" href="#pwk-alpha-alpha-adjusted-pwk" title="Link to this heading">#</a></h3>
+<p><strong>PWK</strong><span class="math notranslate nohighlight">\(\alpha\)</span> is a general structure that encompasses both standard KNN and PWK as special cases <a class="footnote-reference brackets" href="#id9" id="id6" role="doc-noteref"><span class="fn-bracket">[</span>2<span class="fn-bracket">]</span></a>.</p>
 <ul class="simple">
 <li><p><strong>Mechanism:</strong> It introduces a tunable parameter <span class="math notranslate nohighlight">\(\alpha\)</span> into the weighting formula.</p></li>
-<li><p><strong>Flexibility:</strong> <span class="math notranslate nohighlight">\(\alpha\)</span> is a free parameter that allows the model to adapt to specific datasets. As <span class="math notranslate nohighlight">\(\alpha\)</span> increases, the penalty for larger classes is progressively smoothed <a class="footnote-reference brackets" href="#id10" id="id8" role="doc-noteref"><span class="fn-bracket">[</span>2<span class="fn-bracket">]</span></a>.</p></li>
+<li><p><strong>Flexibility:</strong> <span class="math notranslate nohighlight">\(\alpha\)</span> is a free parameter that allows the model to adapt to specific datasets. As <span class="math notranslate nohighlight">\(\alpha\)</span> increases, the penalty for larger classes is progressively smoothed <a class="footnote-reference brackets" href="#id9" id="id7" role="doc-noteref"><span class="fn-bracket">[</span>2<span class="fn-bracket">]</span></a>.</p></li>
 <li><dl class="simple">
 <dt><strong>Relationship with KNN and PWK:</strong></dt><dd><ul>
 <li><p>When <span class="math notranslate nohighlight">\(\alpha \to \infty\)</span>, the class weights converge to 1, and the algorithm behaves like a traditional <strong>KNN</strong>.</p></li>
@@ -427,7 +419,7 @@
 </dd>
 </dl>
 </li>
-<li><p><strong>Performance:</strong> Empirically, there is often no significant statistical difference in Absolute Error between PWK and PWK<span class="math notranslate nohighlight">\(\alpha\)</span>. However, PWK<span class="math notranslate nohighlight">\(\alpha\)</span> tends to be more <strong>conservative and robust</strong> at lower prevalences, while PWK may be more competitive at higher prevalences <a class="footnote-reference brackets" href="#id10" id="id9" role="doc-noteref"><span class="fn-bracket">[</span>2<span class="fn-bracket">]</span></a>.</p></li>
+<li><p><strong>Performance:</strong> Empirically, there is often no significant statistical difference in Absolute Error between PWK and PWK<span class="math notranslate nohighlight">\(\alpha\)</span>. However, PWK<span class="math notranslate nohighlight">\(\alpha\)</span> tends to be more <strong>conservative and robust</strong> at lower prevalences, while PWK may be more competitive at higher prevalences <a class="footnote-reference brackets" href="#id9" id="id8" role="doc-noteref"><span class="fn-bracket">[</span>2<span class="fn-bracket">]</span></a>.</p></li>
 </ul>
 <details class="sd-sphinx-override sd-dropdown sd-card sd-mb-3">
 <summary class="sd-summary-title sd-card-header">
@@ -449,9 +441,9 @@
 <summary class="sd-summary-title sd-card-header">
 <span class="sd-summary-text">References</span><span class="sd-summary-state-marker sd-summary-chevron-right"><svg version="1.1" width="1.5em" height="1.5em" class="sd-octicon sd-octicon-chevron-right" viewBox="0 0 24 24" aria-hidden="true"><path d="M8.72 18.78a.75.75 0 0 1 0-1.06L14.44 12 8.72 6.28a.751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018l6.25 6.25a.75.75 0 0 1 0 1.06l-6.25 6.25a.75.75 0 0 1-1.06 0Z"></path></svg></span></summary><div class="sd-summary-content sd-card-body docutils">
 <aside class="footnote-list brackets">
-<aside class="footnote brackets" id="id10" role="doc-footnote">
+<aside class="footnote brackets" id="id9" role="doc-footnote">
 <span class="label"><span class="fn-bracket">[</span>2<span class="fn-bracket">]</span></span>
-<span class="backrefs">(<a role="doc-backlink" href="#id2">1</a>,<a role="doc-backlink" href="#id3">2</a>,<a role="doc-backlink" href="#id4">3</a>,<a role="doc-backlink" href="#id5">4</a>,<a role="doc-backlink" href="#id6">5</a>,<a role="doc-backlink" href="#id7">6</a>,<a role="doc-backlink" href="#id8">7</a>,<a role="doc-backlink" href="#id9">8</a>)</span>
+<span class="backrefs">(<a role="doc-backlink" href="#id2">1</a>,<a role="doc-backlink" href="#id3">2</a>,<a role="doc-backlink" href="#id4">3</a>,<a role="doc-backlink" href="#id5">4</a>,<a role="doc-backlink" href="#id6">5</a>,<a role="doc-backlink" href="#id7">6</a>,<a role="doc-backlink" href="#id8">7</a>)</span>
 <p class="sd-card-text">Barranquero, J., González, P., Díez, J., &amp; del Coz, J. J. (2013). On the study of nearest neighbor algorithms for prevalence estimation in binary problems. Pattern Recognition, 46(2), 472-482. <a class="reference external" href="https://doi.org/10.1016/j.patcog.2012.07.022">https://doi.org/10.1016/j.patcog.2012.07.022</a></p>
 </aside>
 </aside>
@@ -512,9 +504,8 @@
   <nav class="bd-toc-nav page-toc" aria-labelledby="pst-page-navigation-heading-2">
     <ul class="visible nav section-nav flex-column">
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#pwk-pair-wise-weighted-k-nearest-neighbors">1.4.1. PWK: Pair-wise Weighted K-Nearest Neighbors</a><ul class="nav section-nav flex-column">
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#key-characteristics">1.4.1.1. Key Characteristics</a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pwk-proportion-weighted-k-nearest-neighbor">1.4.1.2. PWK (Proportion-Weighted K-Nearest Neighbor)</a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pwk-alpha-alpha-adjusted-pwk">1.4.1.3. PWK<span class="math notranslate nohighlight">\(\alpha\)</span> (Alpha-Adjusted PWK)</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pwk-proportion-weighted-k-nearest-neighbor">1.4.1.1. PWK (Proportion-Weighted K-Nearest Neighbor)</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pwk-alpha-alpha-adjusted-pwk">1.4.1.2. PWK<span class="math notranslate nohighlight">\(\alpha\)</span> (Alpha-Adjusted PWK)</a></li>
 </ul>
 </li>
 </ul>

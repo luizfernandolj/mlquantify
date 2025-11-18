@@ -22,48 +22,28 @@ KDEy serves as a prefix for variants that fall under different optimization fram
 Variants of KDEy
 ----------------
 
-The literature distinguishes three main variants of KDEy, depending on the optimization framework and the divergence function utilized [1]_:
-
-KDEy-HD (Hellinger Distance)
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-This variant operates within the **Distribution Matching (DM)** framework.
-
-* **Dissimilarity:** It uses the **Hellinger Distance (HD)** as the divergence measure, seeking to minimize the discrepancy between the weighted mixture distribution and the test distribution [1]_.
-* **Mechanism:** Optimization in this context typically requires Monte Carlo sampling to approximate the distance integrals.
-* **Performance:** It has proven to be one of the strongest methods. In direct comparisons, KDEy-HD consistently outperforms DM-HD (its histogram-based competitor), suggesting that the KDE-based representation is inherently superior for multi-class quantification [1]_.
-
-.. dropdown:: Mathematical details - KDEy-HD
-
-   The objective is to minimize the Hellinger Distance between the mixture :math:`p_\alpha` and the test distribution :math:`q_U`.
-
-   .. math::
-
-      \hat{\alpha} = \operatorname*{arg\,min}_{\alpha \in \Delta_{n-1}} HD(p_\alpha, q_U)
-
-   where the Hellinger distance is defined via the integral of the square root difference of the densities.
-
-KDEy-CS (Cauchy-Schwarz)
-~~~~~~~~~~~~~~~~~~~~~~~~
-
-This variant also operates within the **Distribution Matching (DM)** framework but prioritizes computational efficiency.
-
-* **Dissimilarity:** It uses the **Cauchy-Schwarz Divergence (DCS)**.
-* **Mechanism:** This variant is particularly notable for its efficiency. Unlike other metrics, the Cauchy-Schwarz divergence does not involve log-sum terms, allowing for a **closed-form solution** [1]_. This means that computationally expensive training tensors can be pre-calculated during the training phase, significantly speeding up the test phase.
-* **Performance:** KDEy-CS generally outperforms its histogram-based counterpart, DM-CS [1]_.
-
-.. dropdown:: Mathematical details - KDEy-CS
-
-   The Cauchy-Schwarz divergence allows the optimization problem to be solved without iterative approximation, relying on the interactions between the kernel components of the mixture models.
+The library provides three main variants of KDEy, depending on the optimization framework and the divergence function utilized.
 
 KDEy-ML (Maximum Likelihood)
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-This variant falls under the **Maximum Likelihood (ML)** framework.
+.. class:: KDEyML
 
-* **Mechanism:** Optimizing the distribution fit in terms of Kullback-Leibler Divergence (KLD) is mathematically equivalent to maximizing the likelihood of the test data. KDEy-ML uses standard optimization routines to directly maximize the likelihood of a mixture of KDEs on the simplex [1]_.
-* **Relation to EMQ:** While EMQ (SLD) also derives from the ML framework, it uses an iterative process (E-steps and M-steps). In contrast, KDEy-ML approaches the problem through **direct optimization** of the KDE mixture [1]_.
-* **Performance:** KDEy-ML is highly competitive and has been shown to outperform EMQ in many scenarios, challenging a method long considered "hard-to-beat" in Label Shift literature [1]_.
+The :class:`KDEyML` class implements the Maximum Likelihood quantifier. It models class-conditional densities of posterior probabilities via KDE and estimates class prevalences by maximizing the likelihood of test data under a mixture model of these KDEs.
+
+* **Mechanism:** The mixture weights correspond to class prevalences, optimized under the simplex constraint.
+* **Optimization:** The method minimizes the negative log-likelihood of the mixture density evaluated at the test posteriors.
+* **Relation to EM:** This approach generalizes EM-based quantification methods by using KDE instead of discrete histograms, allowing smooth multivariate density estimation over the probability simplex.
+
+.. dropdown:: Mathematical details - KDEy-ML Optimization
+
+    The optimization problem is solved over the probability simplex :math:`\Delta^{n-1}`:
+
+    .. math::
+
+        \hat{\alpha} = \operatorname*{arg\,min}_{\alpha \in \Delta^{n-1}} \left( - \sum_{x \in U} \log \left( \sum_{i=1}^{n} \alpha_i \cdot p_{\tilde{L}_i}(x) \right) \right)
+
+    Where :math:`p_{\tilde{L}_i}` is the KDE model for class :math:`i`. The implementation uses constrained optimization (SLSQP) to ensure :math:`\sum \alpha = 1` and :math:`\alpha_i \ge 0`.
 
 **Example**
 
@@ -72,10 +52,81 @@ This variant falls under the **Maximum Likelihood (ML)** framework.
    from mlquantify.neighbors import KDEyML
    from sklearn.ensemble import RandomForestClassifier
 
-   # KDEy-ML uses Maximum Likelihood optimization on KDE representations
+   # KDEy-ML uses Maximum Likelihood optimization
    q = KDEyML(learner=RandomForestClassifier(), bandwidth=0.1)
    q.fit(X_train, y_train)
    q.predict(X_test)
+
+
+KDEy-HD (Hellinger Distance)
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+.. class:: KDEyHD
+
+The :class:`KDEyHD` class estimates class prevalences by minimizing the **Hellinger Distance (HD)** between the KDE mixture of class-conditional densities and the KDE of the test data.
+
+* **Stochastic Approximation:** Since the Hellinger distance between Gaussian Mixture Models lacks a closed-form expression, this class uses **Monte Carlo sampling** and **importance weighting** to approximate the divergence.
+* **Parameters:** The precision of the approximation is controlled by the ``montecarlo_trials`` parameter.
+
+.. dropdown:: Mathematical details - KDEy-HD Monte Carlo
+
+    The implementation approximates the HD integral using importance sampling. It precomputes reference samples from the class KDEs and weighs them by the ratio of the test density to the reference density.
+
+    The objective function calculated during optimization is:
+
+    .. math::
+
+        J(\alpha) \approx \frac{1}{N} \sum_{k=1}^{N} \left( \sqrt{\frac{p_\alpha(x_k)}{q_U(x_k)}} - 1 \right)^2 \cdot \frac{q_U(x_k)}{p_{ref}(x_k)}
+
+    Where :math:`p_\alpha` is the mixture candidate, :math:`q_U` is the test density, and :math:`p_{ref}` is the density of the reference samples.
+
+**Example**
+
+.. code-block:: python
+
+   from mlquantify.neighbors import KDEyHD
+
+   # Uses Monte Carlo sampling (default trials=1000)
+   q = KDEyHD(learner=RandomForestClassifier(), montecarlo_trials=2000, random_state=42)
+   q.fit(X_train, y_train)
+   q.predict(X_test)
+
+
+KDEy-CS (Cauchy-Schwarz)
+~~~~~~~~~~~~~~~~~~~~~~~~
+
+.. class:: KDEyCS
+
+The :class:`KDEyCS` class minimizes the **Cauchy-Schwarz (CS)** divergence.
+
+* **Efficiency:** Unlike Hellinger distance, the CS divergence between mixtures of Gaussians allows for a **closed-form solution**.
+* **Mechanism:** This mathematically efficient approach leverages precomputed kernel **Gram matrices** of train-train (:math:`B_{bar}`) and train-test (:math:`a_{bar}`) instances. This allows for fast divergence evaluation without the need for sampling, making it scalable for multiclass quantification.
+
+.. dropdown:: Mathematical details - KDEy-CS Closed Form
+
+    The implementation minimizes the following objective derived from the CS divergence definition:
+
+    .. math::
+
+        J_{CS}(\alpha) = - \log \left( \mathbf{r}^T \mathbf{a}_{bar} \right) + \frac{1}{2} \log \left( \mathbf{r}^T \mathbf{B}_{bar} \mathbf{r} \right)
+
+    Where:
+    
+    * :math:`\mathbf{r} = \alpha / \text{counts}` are the normalized weights.
+    * :math:`\mathbf{a}_{bar}` represents kernel sums between training centers and test points.
+    * :math:`\mathbf{B}_{bar}` is the Gram matrix of kernel sums between training centers.
+
+**Example**
+
+.. code-block:: python
+
+   from mlquantify.neighbors import KDEyCS
+
+   # Fast execution using closed-form solution
+   q = KDEyCS(learner=RandomForestClassifier(), bandwidth=0.1)
+   q.fit(X_train, y_train)
+   q.predict(X_test)
+
 
 .. dropdown:: References
 
