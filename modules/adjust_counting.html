@@ -388,6 +388,7 @@
 <span id="id1"></span><h1><span class="section-number">1.2. </span>Adjust Counting<a class="headerlink" href="#adjust-counting" title="Link to this heading">#</a></h1>
 <p>Adjusted Counting methods improve upon simple “counting” quantifiers by correcting bias using what is known about the classifier’s errors on the training set.
 They aim to produce better estimates of class prevalence (how frequent each class is in a dataset) even when training and test distributions differ.</p>
+<p>see <span class="xref std std-ref">modules/counters</span> for an overview of the base counters for quantification.</p>
 <p>Currently, there are two types of adjustment methods implemented:</p>
 <ol class="arabic simple">
 <li><p><strong>Threshold Adjustment Methods</strong>: These methods adjust the decision threshold of the classifier to optimize prevalence estimation. Examples include Adjusted Classify and Count (ACC) and its probabilistic counterpart PACC.</p></li>
@@ -395,7 +396,7 @@ They aim to produce better estimates of class prevalence (how frequent each clas
 </ol>
 <section id="threshold-adjustment">
 <h2><span class="section-number">1.2.1. </span>Threshold Adjustment<a class="headerlink" href="#threshold-adjustment" title="Link to this heading">#</a></h2>
-<p>Threshold-based adjustment methods correct the bias of CC by using the classifier’s <strong>True Positive Rate (TPR)</strong> and <strong>False Positive Rate (FPR)</strong>.
+<p>Threshold-based adjustment methods correct the bias of <code class="xref py py-class docutils literal notranslate"><span class="pre">CC</span></code> by using the classifier’s <strong>True Positive Rate (TPR)</strong> and <strong>False Positive Rate (FPR)</strong>.
 They are mainly used for <code class="docutils literal notranslate"><span class="pre">binary</span></code> quantification tasks.</p>
 <p><strong>Adjusted Classify and Count (ACC) Equation</strong></p>
 <div class="math notranslate nohighlight">
