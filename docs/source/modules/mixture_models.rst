@@ -2,9 +2,9 @@
 
 .. currentmodule:: mlquantify.mixture
 
-======================================
-Mixture Models (Distribution Matching)
-======================================
+==============
+Mixture Models 
+==============
 
 Mixture Model (MM) methods, often referred to as **Distribution Matching (DM)** methods, constitute one of the main families of quantification algorithms [1]_.
 
