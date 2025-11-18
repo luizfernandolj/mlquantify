@@ -7,17 +7,19 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
-<meta property="og:title" content="1.4. Neighbors-Based Quantification" />
+<meta property="og:title" content="1.4. Neighbors and Kernel Density Estimation" />
 <meta property="og:type" content="website" />
 <meta property="og:url" content="modules/neighbors.html" />
 <meta property="og:site_name" content="mlquantify" />
+<meta property="og:description" content="Neighbor-based methods and density estimation techniques (such as KDE) focus on exploring the proximity and topology of data to infer class distribution. KDEy: Kernel Density Estimation y-Similarit..." />
 <meta property="og:image:width" content="1146" />
 <meta property="og:image:height" content="600" />
-<meta property="og:image" content="_images/social_previews/summary_modules_neighbors_2ecbc8ef.png" />
-<meta property="og:image:alt" content="" />
+<meta property="og:image" content="_images/social_previews/summary_modules_neighbors_2c1efbdc.png" />
+<meta property="og:image:alt" content="Neighbor-based methods and density estimation techniques (such as KDE) focus on exploring the proximity and topology of data to infer class distribution. KDEy: Kernel Density Estimation y-Similarit..." />
+<meta name="description" content="Neighbor-based methods and density estimation techniques (such as KDE) focus on exploring the proximity and topology of data to infer class distribution. KDEy: Kernel Density Estimation y-Similarit..." />
 <meta name="twitter:card" content="summary_large_image" />
 
-    <title>1.4. Neighbors-Based Quantification &#8212; mlquantify 0.1.8 documentation</title>
+    <title>1.4. Neighbors and Kernel Density Estimation &#8212; mlquantify 0.1.8 documentation</title>
   
   
   
@@ -57,6 +59,7 @@
     <script src="../_static/clipboard.min.js?v=a7894cd8"></script>
     <script src="../_static/copybutton.js?v=f281be69"></script>
     <script src="../_static/design-tabs.js?v=f930bc37"></script>
+    <script async="async" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
     <script>DOCUMENTATION_OPTIONS.pagename = 'modules/neighbors';</script>
     <link rel="canonical" href="https://luizfernandolj.github.io/mlquantify/modules/neighbors.html" />
     <link rel="author" title="About these documents" href="../about.html" />
@@ -314,7 +317,7 @@
 <li class="toctree-l2"><a class="reference internal" href="adjust_counting.html">1.1. Adjust Counting</a></li>
 <li class="toctree-l2"><a class="reference internal" href="likelihood.html">1.2. Likelihood-Based Quantification</a></li>
 <li class="toctree-l2"><a class="reference internal" href="mixture_models.html">1.3. Mixture Models (Distribution Matching)</a></li>
-<li class="toctree-l2 current active"><a class="current reference internal" href="#">1.4. Neighbors-Based Quantification</a></li>
+<li class="toctree-l2 current active"><a class="current reference internal" href="#">1.4. Neighbors and Kernel Density Estimation</a></li>
 </ul>
 </details></li>
 <li class="toctree-l1"><a class="reference internal" href="../building_a_quantifier.html">2.  Building a Quantifier</a></li>
@@ -362,7 +365,7 @@
     
     <li class="breadcrumb-item"><a href="../aggregative_quantification.html" class="nav-link"><span class="section-number">1. </span>Aggregative Quantification</a></li>
     
-    <li class="breadcrumb-item active" aria-current="page"><span class="ellipsis"><span class="section-number">1.4. </span>Neighbors-Based Quantification</span></li>
+    <li class="breadcrumb-item active" aria-current="page"><span class="ellipsis"><span class="section-number">1.4. </span>Neighbors and Kernel Density Estimation</span></li>
   </ul>
 </nav>
 </div>
@@ -379,8 +382,85 @@
 <div id="searchbox"></div>
                 <article class="bd-article">
                   
-  <section id="neighbors-based-quantification">
-<span id="neighbors"></span><h1><span class="section-number">1.4. </span>Neighbors-Based Quantification<a class="headerlink" href="#neighbors-based-quantification" title="Link to this heading">#</a></h1>
+  <section id="neighbors-and-kernel-density-estimation">
+<span id="neighbors-kde"></span><h1><span class="section-number">1.4. </span>Neighbors and Kernel Density Estimation<a class="headerlink" href="#neighbors-and-kernel-density-estimation" title="Link to this heading">#</a></h1>
+<p>Neighbor-based methods and density estimation techniques (such as KDE) focus on exploring the proximity and topology of data to infer class distribution.</p>
+<section id="kdey-kernel-density-estimation-y-similarity">
+<h2><span class="section-number">1.4.1. </span>KDEy: Kernel Density Estimation y-Similarity<a class="headerlink" href="#kdey-kernel-density-estimation-y-similarity" title="Link to this heading">#</a></h2>
+<p><strong>KDEy</strong> is a multi-class quantification approach that conceptually falls under the <strong>Distribution Matching (DM)</strong> methods.</p>
+<p><code class="xref py py-class docutils literal notranslate"><span class="pre">KDEy</span></code> acts as an innovative representation mechanism aimed at overcoming the limitations of traditional DM methods that rely on histograms (like HDy). For multi-class problems, KDEy models the distribution of posterior probabilities (y-scores) using <strong>Kernel Density Estimation (KDE)</strong>, which results in Gaussian Mixture Models (GMMs).</p>
+<p><strong>Advantage</strong></p>
+<p>This multivariate representation, operating on the unit simplex (<span class="math notranslate nohighlight">\(\Delta_{n-1}\)</span>), allows the model to preserve and utilize correlations and interactions between classes—information often lost in class-by-class histogram methods. The quantification problem is then framed as the task of reconstructing the test set distribution as a convex linear combination of the training class distributions.</p>
+<p><strong>Performance</strong></p>
+<p>KDEy, particularly its <strong>Maximum Likelihood (KDEy-ML)</strong> variant, has proven to be one of the strongest quantifiers, often outperforming other histogram-based DM models and remaining competitive with EMQ (SLD) <a class="footnote-reference brackets" href="#id4" id="id1" role="doc-noteref"><span class="fn-bracket">[</span>1<span class="fn-bracket">]</span></a>.</p>
+<details class="sd-sphinx-override sd-dropdown sd-card sd-mb-3">
+<summary class="sd-summary-title sd-card-header">
+<span class="sd-summary-text">Mathematical details - KDEy Framework</span><span class="sd-summary-state-marker sd-summary-chevron-right"><svg version="1.1" width="1.5em" height="1.5em" class="sd-octicon sd-octicon-chevron-right" viewBox="0 0 24 24" aria-hidden="true"><path d="M8.72 18.78a.75.75 0 0 1 0-1.06L14.44 12 8.72 6.28a.751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018l6.25 6.25a.75.75 0 0 1 0 1.06l-6.25 6.25a.75.75 0 0 1-1.06 0Z"></path></svg></span></summary><div class="sd-summary-content sd-card-body docutils">
+<p class="sd-card-text">Framed within the Distribution Matching framework, KDEy seeks the prevalence vector <span class="math notranslate nohighlight">\(\hat{\alpha}\)</span> that minimizes the discrepancy <span class="math notranslate nohighlight">\(D\)</span> between the weighted mixture distribution (<span class="math notranslate nohighlight">\(p_\alpha\)</span>) and the test set distribution (<span class="math notranslate nohighlight">\(q_{\tilde{U}}\)</span>).</p>
+<p class="sd-card-text"><strong>1. Mixture Density Function</strong></p>
+<p class="sd-card-text">In KDEy, the mixture probability density (<span class="math notranslate nohighlight">\(p_\alpha\)</span>) is defined as the weighted sum of the probability densities of each class in the training set (<span class="math notranslate nohighlight">\(p_{\tilde{L}_i}\)</span>), where <span class="math notranslate nohighlight">\(\alpha = (\alpha_1, \alpha_2, \dots, \alpha_n)\)</span> is the prevalence vector being optimized:</p>
+<div class="math notranslate nohighlight">
+\[p_\alpha(\tilde{x}) = \sum_{i=1}^n \alpha_i p_{\tilde{L}_i}(\tilde{x})\]</div>
+<p class="sd-card-text">Where <span class="math notranslate nohighlight">\(p_{\tilde{L}_i}(\tilde{x})\)</span> is the Kernel Density Estimator (KDE) for the posterior probabilities of class <span class="math notranslate nohighlight">\(i\)</span> (represented as <span class="math notranslate nohighlight">\(\tilde{L}_i\)</span>). The general kernel density estimator <span class="math notranslate nohighlight">\(p_\theta(x)\)</span> is given by:</p>
+<div class="math notranslate nohighlight">
+\[p_\theta(x) = \frac{1}{|X|} \sum_{x_i \in X} K\left(\frac{x - x_i}{h}\right)\]</div>
+<p class="sd-card-text">Where <span class="math notranslate nohighlight">\(K\)</span> is the kernel function (typically Gaussian) and <span class="math notranslate nohighlight">\(h\)</span> is the bandwidth <a class="footnote-reference brackets" href="#id4" id="id2" role="doc-noteref"><span class="fn-bracket">[</span>1<span class="fn-bracket">]</span></a>.</p>
+<p class="sd-card-text"><strong>2. Optimization Objective (Distribution Matching)</strong></p>
+<p class="sd-card-text">The goal is to find the prevalence vector <span class="math notranslate nohighlight">\(\hat{\alpha}\)</span> that minimizes the divergence <span class="math notranslate nohighlight">\(D\)</span> (such as Hellinger Distance or Cauchy-Schwarz) between the mixture distribution <span class="math notranslate nohighlight">\(p_\alpha\)</span> and the observed distribution in the test set <span class="math notranslate nohighlight">\(q_{\tilde{U}}\)</span> (which is also a GMM obtained via KDE) <a class="footnote-reference brackets" href="#id4" id="id3" role="doc-noteref"><span class="fn-bracket">[</span>1<span class="fn-bracket">]</span></a>:</p>
+<div class="math notranslate nohighlight">
+\[\hat{\alpha} = \operatorname*{arg\,min}_{\alpha \in \Delta_{n-1}} D(p_\alpha || q_{\tilde{U}})\]</div>
+</div>
+</details><p><strong>Example</strong></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">mlquantify.neighbors</span><span class="w"> </span><span class="kn">import</span> <span class="n">KDEy</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">sklearn.ensemble</span><span class="w"> </span><span class="kn">import</span> <span class="n">RandomForestClassifier</span>
+
+<span class="c1"># KDEy uses kernel density estimation on classifier scores</span>
+<span class="n">q</span> <span class="o">=</span> <span class="n">KDEy</span><span class="p">(</span><span class="n">learner</span><span class="o">=</span><span class="n">RandomForestClassifier</span><span class="p">(),</span> <span class="n">bandwidth</span><span class="o">=</span><span class="mf">0.1</span><span class="p">)</span>
+<span class="n">q</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">X_train</span><span class="p">,</span> <span class="n">y_train</span><span class="p">)</span>
+<span class="n">q</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">X_test</span><span class="p">)</span>
+</pre></div>
+</div>
+<details class="sd-sphinx-override sd-dropdown sd-card sd-mb-3">
+<summary class="sd-summary-title sd-card-header">
+<span class="sd-summary-text">References</span><span class="sd-summary-state-marker sd-summary-chevron-right"><svg version="1.1" width="1.5em" height="1.5em" class="sd-octicon sd-octicon-chevron-right" viewBox="0 0 24 24" aria-hidden="true"><path d="M8.72 18.78a.75.75 0 0 1 0-1.06L14.44 12 8.72 6.28a.751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018l6.25 6.25a.75.75 0 0 1 0 1.06l-6.25 6.25a.75.75 0 0 1-1.06 0Z"></path></svg></span></summary><div class="sd-summary-content sd-card-body docutils">
+<aside class="footnote-list brackets">
+<aside class="footnote brackets" id="id4" role="doc-footnote">
+<span class="label"><span class="fn-bracket">[</span>1<span class="fn-bracket">]</span></span>
+<span class="backrefs">(<a role="doc-backlink" href="#id1">1</a>,<a role="doc-backlink" href="#id2">2</a>,<a role="doc-backlink" href="#id3">3</a>)</span>
+<p class="sd-card-text">Moreo, A., González, P., &amp; del Coz, J. J. (2024). Kernel Density Estimation for Multiclass Quantification. <a class="reference external" href="http://arxiv.org/abs/2401.00490">http://arxiv.org/abs/2401.00490</a></p>
+</aside>
+</aside>
+</div>
+</details></section>
+<section id="pwk-pair-wise-weighted-k-nearest-neighbors">
+<h2><span class="section-number">1.4.2. </span>PWK: Pair-wise Weighted K-Nearest Neighbors<a class="headerlink" href="#pwk-pair-wise-weighted-k-nearest-neighbors" title="Link to this heading">#</a></h2>
+<p><strong>PWK (Pair-wise Weighted K-Nearest Neighbors)</strong> and its variant <strong>PWK</strong><span class="math notranslate nohighlight">\(\alpha\)</span> are algorithms based on k-Nearest Neighbors (k-NN), designed for binary quantification <a class="footnote-reference brackets" href="#id8" id="id5" role="doc-noteref"><span class="fn-bracket">[</span>2<span class="fn-bracket">]</span></a>.</p>
+<p><a class="reference internal" href="generated/mlquantify.neighbors.PWK.html#mlquantify.neighbors.PWK" title="mlquantify.neighbors.PWK"><code class="xref py py-class docutils literal notranslate"><span class="pre">PWK</span></code></a> uses a weighted <em>k-NN</em> classification rule to estimate prevalence. Unlike Adjusted Classify &amp; Count (ACC) methods that use error rates from a trained classifier, NN methods explore the <strong>topology</strong> of the data to perform the estimation <a class="footnote-reference brackets" href="#id8" id="id6" role="doc-noteref"><span class="fn-bracket">[</span>2<span class="fn-bracket">]</span></a>.</p>
+<p>PWK adjusts predictions to compensate for the systematic bias in favor of the majority class, which is inherent in classifiers trained on imbalanced data.</p>
+<p><strong>Weighting Mechanism</strong></p>
+<p>PWK bases its weighting on class size. Specifically, the weight (<span class="math notranslate nohighlight">\(w_c\)</span>) of a class <span class="math notranslate nohighlight">\(c\)</span> is defined to be inversely proportional to the size of that class in the training set.</p>
+<p><strong>PWK</strong><span class="math notranslate nohighlight">\(\alpha\)</span> introduces an <span class="math notranslate nohighlight">\(\alpha\)</span> parameter into the weighting, allowing flexibility in bias compensation. PWK and PWK<span class="math notranslate nohighlight">\(\alpha\)</span> are among the most stable and competitive quantifiers tested <a class="footnote-reference brackets" href="#id8" id="id7" role="doc-noteref"><span class="fn-bracket">[</span>2<span class="fn-bracket">]</span></a>.</p>
+<p><strong>Example</strong></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">mlquantify.neighbors</span><span class="w"> </span><span class="kn">import</span> <span class="n">PWK</span>
+
+<span class="c1"># PWK operates directly on the feature space using k-NN</span>
+<span class="n">q</span> <span class="o">=</span> <span class="n">PWK</span><span class="p">(</span><span class="n">n_neighbors</span><span class="o">=</span><span class="mi">10</span><span class="p">)</span>
+<span class="n">q</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">X_train</span><span class="p">,</span> <span class="n">y_train</span><span class="p">)</span>
+<span class="n">q</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">X_test</span><span class="p">)</span>
+</pre></div>
+</div>
+<details class="sd-sphinx-override sd-dropdown sd-card sd-mb-3">
+<summary class="sd-summary-title sd-card-header">
+<span class="sd-summary-text">References</span><span class="sd-summary-state-marker sd-summary-chevron-right"><svg version="1.1" width="1.5em" height="1.5em" class="sd-octicon sd-octicon-chevron-right" viewBox="0 0 24 24" aria-hidden="true"><path d="M8.72 18.78a.75.75 0 0 1 0-1.06L14.44 12 8.72 6.28a.751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018l6.25 6.25a.75.75 0 0 1 0 1.06l-6.25 6.25a.75.75 0 0 1-1.06 0Z"></path></svg></span></summary><div class="sd-summary-content sd-card-body docutils">
+<aside class="footnote-list brackets">
+<aside class="footnote brackets" id="id8" role="doc-footnote">
+<span class="label"><span class="fn-bracket">[</span>2<span class="fn-bracket">]</span></span>
+<span class="backrefs">(<a role="doc-backlink" href="#id5">1</a>,<a role="doc-backlink" href="#id6">2</a>,<a role="doc-backlink" href="#id7">3</a>)</span>
+<p class="sd-card-text">Barranquero, J., González, P., Díez, J., &amp; del Coz, J. J. (2013). On the study of nearest neighbor algorithms for prevalence estimation in binary problems. Pattern Recognition, 46(2), 472-482. <a class="reference external" href="https://doi.org/10.1016/j.patcog.2012.07.022">https://doi.org/10.1016/j.patcog.2012.07.022</a></p>
+</aside>
+</aside>
+</div>
+</details></section>
 </section>
 
 
@@ -425,6 +505,19 @@
                 <dialog id="pst-secondary-sidebar-modal"></dialog>
                 <div id="pst-secondary-sidebar" class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
 
+
+  <div class="sidebar-secondary-item">
+<div
+    id="pst-page-navigation-heading-2"
+    class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> On this page
+  </div>
+  <nav class="bd-toc-nav page-toc" aria-labelledby="pst-page-navigation-heading-2">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#kdey-kernel-density-estimation-y-similarity">1.4.1. KDEy: Kernel Density Estimation y-Similarity</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#pwk-pair-wise-weighted-k-nearest-neighbors">1.4.2. PWK: Pair-wise Weighted K-Nearest Neighbors</a></li>
+</ul>
+  </nav></div>
 
   <div class="sidebar-secondary-item">
   <div role="note" aria-label="source link">
