@@ -21,4 +21,5 @@ The main aggregative quantification methods will be defined next, with details a
    modules/likelihood.rst
    modules/mixture_models.rst
    modules/neighbors.rst
+   modules/density.rst
 
