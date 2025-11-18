@@ -24,6 +24,7 @@ Mixture Models seeks to model the data distribution observed in the test set as 
     Unlike methods like :class:`EMQ`, MM methods generally do not refine priors and posteriors mutually. Instead, they use a search process (exhaustive or optimized) to find the parameter :math:`\hat{p}` that minimizes the dissimilarity function.
 
 .. dropdown:: References
+
     .. [1] Forman, G. (2008). Quantifying counts and costs via classification. Data Mining and Knowledge Discovery, 17(2), 164–206. https://doi.org/10.1007/s10618-008-0097-y
 
 
@@ -45,6 +46,7 @@ DyS seeks the prevalence parameter :math:`\alpha` that minimizes the dissimilari
        \hat{p}^{DyS}(\oplus) = \alpha^* = \operatorname*{arg\,min}_{0 \le \alpha \le 1} \{ DS(\alpha f_{L^{\oplus}} + (1-\alpha) f_{L^{\ominus}}, f_U) \}
 
 .. dropdown:: References
+
     .. [1] Maletzke, A., dos Reis, D., Cherman, E., & Batista, G. (2019). DyS: A Framework for Mixture Models in Quantification. www.aaai.org
 
 
@@ -82,6 +84,7 @@ HDy: Hellinger Distance y-Similarity
     Where :math:`|D'|` and :math:`|D'_i|` are, respectively, the total cardinality and the count in bin :math:`i` for the modified training distribution [1]_[2]_.
 
 .. dropdown:: References
+
     .. [1] González-Castro, V., Alaiz-Rodríguez, R., & Alegre, E. (2013). Class distribution estimation based on the Hellinger distance. Information Sciences, 218, 146-164. https://doi.org/10.1016/j.ins.2012.05.028
     .. [2] Maletzke, A., dos Reis, D., Cherman, E., & Batista, G. (2019). DyS: A Framework for Mixture Models in Quantification. www.aaai.org
 
@@ -130,6 +133,7 @@ SMM: Sample Mean Matching
    q.predict(X_test)
 
 .. dropdown:: References
+
     .. [1] Hassan, W., Maletzke, A., & Batista, G. (2020). Accurately quantifying a billion instances per second. Proceedings - 2020 IEEE 7th International Conference on Data Science and Advanced Analytics, DSAA 2020, 1-10. https://doi.org/10.1109/DSAA49011.2020.00012
 
 
@@ -141,5 +145,6 @@ SORD: Sample Ordinal Distance
 SORD is notable for operating directly on **score samples (observations)** rather than discretized distributions (histograms). By eliminating the dependency on the number of bins, it seeks the minimum cost to transform a sample of scores into the weighted mixture sample. SORD provides an alternative that does not lose details after bin discretization [1]_.
 
 .. dropdown:: References
+    
     .. [1] Maletzke, A., dos Reis, D., Hassan, W., & Batista, G. (2021). Accurately Quantifying under Score Variability.
     .. [2] Maletzke, A., dos Reis, D., Cherman, E., & Batista, G. (2019). DyS: A Framework for Mixture Models in Quantification. www.aaai.org
