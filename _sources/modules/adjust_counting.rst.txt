@@ -93,7 +93,7 @@ Different *threshold methods* vary in how they choose the classifier cutoff :mat
 +----------------------------+------------------------------------------------------+-----------------------------------------+
 | :class:`ACC`               | Fixed threshold :math:`\tau = 0.5`                   | Simple baseline adjustment              |
 +----------------------------+------------------------------------------------------+-----------------------------------------+
-| :class:`x_method`          | Threshold where :math:`\text{FPR} = 1 - \text{TPR}`  | Avoids unstable prediction tails        |
+| :class:`X_method`          | Threshold where :math:`\text{FPR} = 1 - \text{TPR}`  | Avoids unstable prediction tails        |
 +----------------------------+------------------------------------------------------+-----------------------------------------+
 | :class:`MAX`               | Threshold maximizing :math:`\text{TPR} - \text{FPR}` | Improves numerical stability            |
 +----------------------------+------------------------------------------------------+-----------------------------------------+
