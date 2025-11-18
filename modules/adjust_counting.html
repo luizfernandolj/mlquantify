@@ -7,19 +7,19 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
-<meta property="og:title" content="1.1. Adjust Counting" />
+<meta property="og:title" content="1.2. Adjust Counting" />
 <meta property="og:type" content="website" />
 <meta property="og:url" content="modules/adjust_counting.html" />
 <meta property="og:site_name" content="mlquantify" />
 <meta property="og:description" content="Adjusted Counting methods improve upon simple “counting” quantifiers by correcting bias using what is known about the classifier’s errors on the training set. They aim to produce better estimates o..." />
 <meta property="og:image:width" content="1146" />
 <meta property="og:image:height" content="600" />
-<meta property="og:image" content="_images/social_previews/summary_modules_adjust_counting_da865eb2.png" />
+<meta property="og:image" content="_images/social_previews/summary_modules_adjust_counting_8ab7da7a.png" />
 <meta property="og:image:alt" content="Adjusted Counting methods improve upon simple “counting” quantifiers by correcting bias using what is known about the classifier’s errors on the training set. They aim to produce better estimates o..." />
 <meta name="description" content="Adjusted Counting methods improve upon simple “counting” quantifiers by correcting bias using what is known about the classifier’s errors on the training set. They aim to produce better estimates o..." />
 <meta name="twitter:card" content="summary_large_image" />
 
-    <title>1.1. Adjust Counting &#8212; mlquantify 0.1.8 documentation</title>
+    <title>1.2. Adjust Counting &#8212; mlquantify 0.1.8 documentation</title>
   
   
   
@@ -64,8 +64,8 @@
     <link rel="canonical" href="https://luizfernandolj.github.io/mlquantify/modules/adjust_counting.html" />
     <link rel="author" title="About these documents" href="../about.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="1.2. Likelihood-Based Quantification" href="likelihood.html" />
-    <link rel="prev" title="1. Aggregative Quantification" href="../aggregative_quantification.html" />
+    <link rel="next" title="1.3. Likelihood-Based Quantification" href="likelihood.html" />
+    <link rel="prev" title="1.1. Counters For Quantification" href="counters.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
   <meta name="docsearch:version" content="" />
@@ -314,11 +314,12 @@
   <p class="bd-links__title" role="heading" aria-level="1">Section Navigation</p>
   <div class="bd-toc-item navbar-nav"><ul class="current nav bd-sidenav">
 <li class="toctree-l1 current active has-children"><a class="reference internal" href="../aggregative_quantification.html">1.  Aggregative Quantification</a><details open="open"><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul class="current">
-<li class="toctree-l2 current active"><a class="current reference internal" href="#">1.1. Adjust Counting</a></li>
-<li class="toctree-l2"><a class="reference internal" href="likelihood.html">1.2. Likelihood-Based Quantification</a></li>
-<li class="toctree-l2"><a class="reference internal" href="mixture_models.html">1.3. Mixture Models (Distribution Matching)</a></li>
-<li class="toctree-l2"><a class="reference internal" href="neighbors.html">1.4. Nearest Neighbors</a></li>
-<li class="toctree-l2"><a class="reference internal" href="density.html">1.5. Kernel Density Estimation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="counters.html">1.1. Counters For Quantification</a></li>
+<li class="toctree-l2 current active"><a class="current reference internal" href="#">1.2. Adjust Counting</a></li>
+<li class="toctree-l2"><a class="reference internal" href="likelihood.html">1.3. Likelihood-Based Quantification</a></li>
+<li class="toctree-l2"><a class="reference internal" href="mixture_models.html">1.4. Mixture Models (Distribution Matching)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="neighbors.html">1.5. Nearest Neighbors</a></li>
+<li class="toctree-l2"><a class="reference internal" href="density.html">1.6. Kernel Density Estimation</a></li>
 </ul>
 </details></li>
 <li class="toctree-l1"><a class="reference internal" href="../building_a_quantifier.html">2.  Building a Quantifier</a></li>
@@ -366,7 +367,7 @@
     
     <li class="breadcrumb-item"><a href="../aggregative_quantification.html" class="nav-link"><span class="section-number">1. </span>Aggregative Quantification</a></li>
     
-    <li class="breadcrumb-item active" aria-current="page"><span class="ellipsis"><span class="section-number">1.1. </span>Adjust Counting</span></li>
+    <li class="breadcrumb-item active" aria-current="page"><span class="ellipsis"><span class="section-number">1.2. </span>Adjust Counting</span></li>
   </ul>
 </nav>
 </div>
@@ -384,7 +385,7 @@
                 <article class="bd-article">
                   
   <section id="adjust-counting">
-<span id="id1"></span><h1><span class="section-number">1.1. </span>Adjust Counting<a class="headerlink" href="#adjust-counting" title="Link to this heading">#</a></h1>
+<span id="id1"></span><h1><span class="section-number">1.2. </span>Adjust Counting<a class="headerlink" href="#adjust-counting" title="Link to this heading">#</a></h1>
 <p>Adjusted Counting methods improve upon simple “counting” quantifiers by correcting bias using what is known about the classifier’s errors on the training set.
 They aim to produce better estimates of class prevalence (how frequent each class is in a dataset) even when training and test distributions differ.</p>
 <p>Currently, there are two types of adjustment methods implemented:</p>
@@ -392,44 +393,8 @@ They aim to produce better estimates of class prevalence (how frequent each clas
 <li><p><strong>Threshold Adjustment Methods</strong>: These methods adjust the decision threshold of the classifier to optimize prevalence estimation. Examples include Adjusted Classify and Count (ACC) and its probabilistic counterpart PACC.</p></li>
 <li><p><strong>Matrix Adjustment Methods</strong>: These methods use a confusion matrix derived from the classifier’s performance on a validation set to adjust the estimated prevalences. Examples include the EM-based methods and other matrix inversion techniques.</p></li>
 </ol>
-<section id="classify-and-count">
-<h2><span class="section-number">1.1.1. </span>Classify and Count<a class="headerlink" href="#classify-and-count" title="Link to this heading">#</a></h2>
-<p>The <strong>Classify and Count</strong> method, or <code class="xref py py-class docutils literal notranslate"><span class="pre">CC</span></code> is the simplest baseline.
-It trains a hard classifier <span class="math notranslate nohighlight">\(h\)</span> on labeled data <span class="math notranslate nohighlight">\(L\)</span> , applies it to an unlabeled set <span class="math notranslate nohighlight">\(U\)</span> , and counts how many samples belong to each predicted class.</p>
-<p><strong>Example</strong></p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">mlquantify.adjust_counting</span><span class="w"> </span><span class="kn">import</span> <span class="n">CC</span>
-<span class="kn">from</span><span class="w"> </span><span class="nn">sklearn.linear_model</span><span class="w"> </span><span class="kn">import</span> <span class="n">LogisticRegression</span>
-<span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
-
-<span class="n">X</span><span class="p">,</span> <span class="n">y</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">randn</span><span class="p">(</span><span class="mi">100</span><span class="p">,</span> <span class="mi">5</span><span class="p">),</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">randint</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">100</span><span class="p">)</span>
-<span class="n">q</span> <span class="o">=</span> <span class="n">CC</span><span class="p">(</span><span class="n">learner</span><span class="o">=</span><span class="n">LogisticRegression</span><span class="p">())</span>
-<span class="n">q</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span>
-<span class="n">q</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">X</span><span class="p">)</span>
-<span class="c1"># -&gt; {0: 0.47, 1: 0.53}</span>
-</pre></div>
-</div>
-</section>
-<section id="probabilistic-classify-and-count">
-<h2><span class="section-number">1.1.2. </span>Probabilistic Classify and Count<a class="headerlink" href="#probabilistic-classify-and-count" title="Link to this heading">#</a></h2>
-<p>The <strong>Probabilistic Classify and Count</strong> or <code class="xref py py-class docutils literal notranslate"><span class="pre">PCC</span></code> variant uses the <em>predicted probabilities</em> from a soft classifier instead of hard labels.
-This makes it less sensitive to uncertain predictions.</p>
-<p>[Plot Idea: A plot comparing probabilities per sample and their averaged mean per class]</p>
-<p><strong>Example</strong></p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">mlquantify.adjust_counting</span><span class="w"> </span><span class="kn">import</span> <span class="n">PCC</span>
-<span class="kn">from</span><span class="w"> </span><span class="nn">sklearn.linear_model</span><span class="w"> </span><span class="kn">import</span> <span class="n">LogisticRegression</span>
-<span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
-
-<span class="n">X</span><span class="p">,</span> <span class="n">y</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">randn</span><span class="p">(</span><span class="mi">100</span><span class="p">,</span> <span class="mi">5</span><span class="p">),</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">randint</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">100</span><span class="p">)</span>
-<span class="n">q</span> <span class="o">=</span> <span class="n">PCC</span><span class="p">(</span><span class="n">learner</span><span class="o">=</span><span class="n">LogisticRegression</span><span class="p">())</span>
-<span class="n">q</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span>
-<span class="n">q</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">X</span><span class="p">)</span>
-<span class="c1"># -&gt; {0: 0.45, 1: 0.55}</span>
-</pre></div>
-</div>
-<p>CC and PCC both often underestimate or overestimate the true prevalence when there is distribution shift (also known as “dataset shift”).</p>
-</section>
 <section id="threshold-adjustment">
-<h2><span class="section-number">1.1.3. </span>Threshold Adjustment<a class="headerlink" href="#threshold-adjustment" title="Link to this heading">#</a></h2>
+<h2><span class="section-number">1.2.1. </span>Threshold Adjustment<a class="headerlink" href="#threshold-adjustment" title="Link to this heading">#</a></h2>
 <p>Threshold-based adjustment methods correct the bias of CC by using the classifier’s <strong>True Positive Rate (TPR)</strong> and <strong>False Positive Rate (FPR)</strong>.
 They are mainly used for <code class="docutils literal notranslate"><span class="pre">binary</span></code> quantification tasks.</p>
 <p><strong>Adjusted Classify and Count (ACC) Equation</strong></p>
@@ -493,7 +458,7 @@ For multi-class problems, matrix adjustment methods are generally preferred.</p>
 </div>
 </section>
 <section id="matrix-adjustment">
-<h2><span class="section-number">1.1.4. </span>Matrix Adjustment<a class="headerlink" href="#matrix-adjustment" title="Link to this heading">#</a></h2>
+<h2><span class="section-number">1.2.2. </span>Matrix Adjustment<a class="headerlink" href="#matrix-adjustment" title="Link to this heading">#</a></h2>
 <p>Matrix-based adjustment methods use a <em>confusion matrix</em> or <em>generalized rate matrix</em> to adjust predictions for multi-class quantification.
 They treat quantification as solving a small linear system.</p>
 <p><strong>Matrix Equation</strong></p>
@@ -513,7 +478,7 @@ They treat quantification as solving a small linear system.</p>
 </ul>
 <p>[Plot Idea: Matrix illustration showing how confusion corrections map to estimated prevalences]</p>
 <section id="generalized-adjusted-classify-and-count-gac-and-generalized-probabilistic-adjusted-classify-and-count-gpac">
-<h3><span class="section-number">1.1.4.1. </span>Generalized Adjusted Classify and Count (GAC) and Generalized Probabilistic Adjusted Classify and Count (GPAC)<a class="headerlink" href="#generalized-adjusted-classify-and-count-gac-and-generalized-probabilistic-adjusted-classify-and-count-gpac" title="Link to this heading">#</a></h3>
+<h3><span class="section-number">1.2.2.1. </span>Generalized Adjusted Classify and Count (GAC) and Generalized Probabilistic Adjusted Classify and Count (GPAC)<a class="headerlink" href="#generalized-adjusted-classify-and-count-gac-and-generalized-probabilistic-adjusted-classify-and-count-gpac" title="Link to this heading">#</a></h3>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">mlquantify.adjust_counting</span><span class="w"> </span><span class="kn">import</span> <span class="n">GAC</span><span class="p">,</span> <span class="n">GPAC</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">sklearn.linear_model</span><span class="w"> </span><span class="kn">import</span> <span class="n">LogisticRegression</span>
 <span class="n">q</span> <span class="o">=</span> <span class="n">GAC</span><span class="p">(</span><span class="n">learner</span><span class="o">=</span><span class="n">LogisticRegression</span><span class="p">())</span>
@@ -529,7 +494,7 @@ They treat quantification as solving a small linear system.</p>
 </ul>
 </section>
 <section id="friedman-s-method-fm">
-<h3><span class="section-number">1.1.4.2. </span>Friedman’s Method (FM)<a class="headerlink" href="#friedman-s-method-fm" title="Link to this heading">#</a></h3>
+<h3><span class="section-number">1.2.2.2. </span>Friedman’s Method (FM)<a class="headerlink" href="#friedman-s-method-fm" title="Link to this heading">#</a></h3>
 <p>The <a class="reference internal" href="generated/mlquantify.adjust_counting.FM.html#mlquantify.adjust_counting.FM" title="mlquantify.adjust_counting.FM"><code class="xref py py-class docutils literal notranslate"><span class="pre">FM</span></code></a> constructs its adjustment matrix <span class="math notranslate nohighlight">\(\mathbf{X}\)</span> based on a specialized feature transformation function <span class="math notranslate nohighlight">\(f_l(x)\)</span> that indicates whether the predicted class probability for an item exceeds that class’s proportion in the training data <span class="math notranslate nohighlight">\((\pi_l^T)\)</span> , a technique chosen because it theoretically minimizes the variance of the resulting prevalence estimates.</p>
 <details class="sd-sphinx-override sd-dropdown sd-card sd-mb-3">
 <summary class="sd-summary-title sd-card-header">
@@ -581,12 +546,12 @@ They treat quantification as solving a small linear system.</p>
     <div class="footer-article-item">
 <div class="prev-next-area">
     <a class="left-prev"
-       href="../aggregative_quantification.html"
+       href="counters.html"
        title="previous page">
       <i class="fa-solid fa-angle-left"></i>
       <div class="prev-next-info">
         <p class="prev-next-subtitle">previous</p>
-        <p class="prev-next-title"><span class="section-number">1. </span>Aggregative Quantification</p>
+        <p class="prev-next-title"><span class="section-number">1.1. </span>Counters For Quantification</p>
       </div>
     </a>
     <a class="right-next"
@@ -594,7 +559,7 @@ They treat quantification as solving a small linear system.</p>
        title="next page">
       <div class="prev-next-info">
         <p class="prev-next-subtitle">next</p>
-        <p class="prev-next-title"><span class="section-number">1.2. </span>Likelihood-Based Quantification</p>
+        <p class="prev-next-title"><span class="section-number">1.3. </span>Likelihood-Based Quantification</p>
       </div>
       <i class="fa-solid fa-angle-right"></i>
     </a>
@@ -621,12 +586,10 @@ They treat quantification as solving a small linear system.</p>
   </div>
   <nav class="bd-toc-nav page-toc" aria-labelledby="pst-page-navigation-heading-2">
     <ul class="visible nav section-nav flex-column">
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#classify-and-count">1.1.1. Classify and Count</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#probabilistic-classify-and-count">1.1.2. Probabilistic Classify and Count</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#threshold-adjustment">1.1.3. Threshold Adjustment</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#matrix-adjustment">1.1.4. Matrix Adjustment</a><ul class="nav section-nav flex-column">
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#generalized-adjusted-classify-and-count-gac-and-generalized-probabilistic-adjusted-classify-and-count-gpac">1.1.4.1. Generalized Adjusted Classify and Count (GAC) and Generalized Probabilistic Adjusted Classify and Count (GPAC)</a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#friedman-s-method-fm">1.1.4.2. Friedman’s Method (FM)</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#threshold-adjustment">1.2.1. Threshold Adjustment</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#matrix-adjustment">1.2.2. Matrix Adjustment</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#generalized-adjusted-classify-and-count-gac-and-generalized-probabilistic-adjusted-classify-and-count-gpac">1.2.2.1. Generalized Adjusted Classify and Count (GAC) and Generalized Probabilistic Adjusted Classify and Count (GPAC)</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#friedman-s-method-fm">1.2.2.2. Friedman’s Method (FM)</a></li>
 </ul>
 </li>
 </ul>

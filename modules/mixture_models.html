@@ -7,19 +7,19 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
-<meta property="og:title" content="1.3. Mixture Models (Distribution Matching)" />
+<meta property="og:title" content="1.4. Mixture Models (Distribution Matching)" />
 <meta property="og:type" content="website" />
 <meta property="og:url" content="modules/mixture_models.html" />
 <meta property="og:site_name" content="mlquantify" />
 <meta property="og:description" content="Mixture Model (MM) methods, often referred to as Distribution Matching (DM) methods, constitute one of the main families of quantification algorithms 1. Mixture Models seeks to model the data distr..." />
 <meta property="og:image:width" content="1146" />
 <meta property="og:image:height" content="600" />
-<meta property="og:image" content="_images/social_previews/summary_modules_mixture_models_88275d27.png" />
+<meta property="og:image" content="_images/social_previews/summary_modules_mixture_models_44950451.png" />
 <meta property="og:image:alt" content="Mixture Model (MM) methods, often referred to as Distribution Matching (DM) methods, constitute one of the main families of quantification algorithms 1. Mixture Models seeks to model the data distr..." />
 <meta name="description" content="Mixture Model (MM) methods, often referred to as Distribution Matching (DM) methods, constitute one of the main families of quantification algorithms 1. Mixture Models seeks to model the data distr..." />
 <meta name="twitter:card" content="summary_large_image" />
 
-    <title>1.3. Mixture Models (Distribution Matching) &#8212; mlquantify 0.1.8 documentation</title>
+    <title>1.4. Mixture Models (Distribution Matching) &#8212; mlquantify 0.1.8 documentation</title>
   
   
   
@@ -64,8 +64,8 @@
     <link rel="canonical" href="https://luizfernandolj.github.io/mlquantify/modules/mixture_models.html" />
     <link rel="author" title="About these documents" href="../about.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="1.4. Nearest Neighbors" href="neighbors.html" />
-    <link rel="prev" title="1.2. Likelihood-Based Quantification" href="likelihood.html" />
+    <link rel="next" title="1.5. Nearest Neighbors" href="neighbors.html" />
+    <link rel="prev" title="1.3. Likelihood-Based Quantification" href="likelihood.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
   <meta name="docsearch:version" content="" />
@@ -314,11 +314,12 @@
   <p class="bd-links__title" role="heading" aria-level="1">Section Navigation</p>
   <div class="bd-toc-item navbar-nav"><ul class="current nav bd-sidenav">
 <li class="toctree-l1 current active has-children"><a class="reference internal" href="../aggregative_quantification.html">1.  Aggregative Quantification</a><details open="open"><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul class="current">
-<li class="toctree-l2"><a class="reference internal" href="adjust_counting.html">1.1. Adjust Counting</a></li>
-<li class="toctree-l2"><a class="reference internal" href="likelihood.html">1.2. Likelihood-Based Quantification</a></li>
-<li class="toctree-l2 current active"><a class="current reference internal" href="#">1.3. Mixture Models (Distribution Matching)</a></li>
-<li class="toctree-l2"><a class="reference internal" href="neighbors.html">1.4. Nearest Neighbors</a></li>
-<li class="toctree-l2"><a class="reference internal" href="density.html">1.5. Kernel Density Estimation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="counters.html">1.1. Counters For Quantification</a></li>
+<li class="toctree-l2"><a class="reference internal" href="adjust_counting.html">1.2. Adjust Counting</a></li>
+<li class="toctree-l2"><a class="reference internal" href="likelihood.html">1.3. Likelihood-Based Quantification</a></li>
+<li class="toctree-l2 current active"><a class="current reference internal" href="#">1.4. Mixture Models (Distribution Matching)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="neighbors.html">1.5. Nearest Neighbors</a></li>
+<li class="toctree-l2"><a class="reference internal" href="density.html">1.6. Kernel Density Estimation</a></li>
 </ul>
 </details></li>
 <li class="toctree-l1"><a class="reference internal" href="../building_a_quantifier.html">2.  Building a Quantifier</a></li>
@@ -366,7 +367,7 @@
     
     <li class="breadcrumb-item"><a href="../aggregative_quantification.html" class="nav-link"><span class="section-number">1. </span>Aggregative Quantification</a></li>
     
-    <li class="breadcrumb-item active" aria-current="page"><span class="ellipsis"><span class="section-number">1.3. </span>Mixture Models (Distribution Matching)</span></li>
+    <li class="breadcrumb-item active" aria-current="page"><span class="ellipsis"><span class="section-number">1.4. </span>Mixture Models (Distribution Matching)</span></li>
   </ul>
 </nav>
 </div>
@@ -384,7 +385,7 @@
                 <article class="bd-article">
                   
   <section id="mixture-models-distribution-matching">
-<span id="mixture-models"></span><h1><span class="section-number">1.3. </span>Mixture Models (Distribution Matching)<a class="headerlink" href="#mixture-models-distribution-matching" title="Link to this heading">#</a></h1>
+<span id="mixture-models"></span><h1><span class="section-number">1.4. </span>Mixture Models (Distribution Matching)<a class="headerlink" href="#mixture-models-distribution-matching" title="Link to this heading">#</a></h1>
 <p>Mixture Model (MM) methods, often referred to as <strong>Distribution Matching (DM)</strong> methods, constitute one of the main families of quantification algorithms <a class="footnote-reference brackets" href="#id2" id="id1" role="doc-noteref"><span class="fn-bracket">[</span>1<span class="fn-bracket">]</span></a>.</p>
 <p>Mixture Models seeks to model the data distribution observed in the test set as a parametric mixture of the individual class distributions obtained from training <span class="math notranslate nohighlight">\(L\)</span>.</p>
 <details class="sd-sphinx-override sd-dropdown sd-card sd-mb-3">
@@ -407,7 +408,7 @@
 </aside>
 </div>
 </details><section id="dys-distribution-y-similarity-framework">
-<h2><span class="section-number">1.3.1. </span>DyS: Distribution y-Similarity Framework<a class="headerlink" href="#dys-distribution-y-similarity-framework" title="Link to this heading">#</a></h2>
+<h2><span class="section-number">1.4.1. </span>DyS: Distribution y-Similarity Framework<a class="headerlink" href="#dys-distribution-y-similarity-framework" title="Link to this heading">#</a></h2>
 <p><strong>DyS</strong> is a generic framework that formalizes the Mixture Models approach. The term <strong>y-Similarity</strong> indicates that it compares the similarity of classification score distributions (y-space) <a class="footnote-reference brackets" href="#id2" id="id3" role="doc-noteref"><span class="fn-bracket">[</span>1<span class="fn-bracket">]</span></a>.</p>
 <p>DyS depends on two critical factors: the method used to represent the distributions (such as histograms or means) and the dissimilarity function (DS) used to compare the test distribution with the mixture distribution.</p>
 <p>DyS seeks the prevalence parameter <span class="math notranslate nohighlight">\(\alpha\)</span> that minimizes the dissimilarity (<span class="math notranslate nohighlight">\(DS\)</span>) between the test score distribution (<span class="math notranslate nohighlight">\(f_U\)</span>) and the mixture of training score distributions weighted by <span class="math notranslate nohighlight">\(\alpha\)</span>.</p>
@@ -430,7 +431,7 @@
 </div>
 </details></section>
 <section id="hdy-hellinger-distance-y-similarity">
-<h2><span class="section-number">1.3.2. </span>HDy: Hellinger Distance y-Similarity<a class="headerlink" href="#hdy-hellinger-distance-y-similarity" title="Link to this heading">#</a></h2>
+<h2><span class="section-number">1.4.2. </span>HDy: Hellinger Distance y-Similarity<a class="headerlink" href="#hdy-hellinger-distance-y-similarity" title="Link to this heading">#</a></h2>
 <p><strong>HDy</strong> is a specific and popular instance of the DyS framework and a variant of Forman’s original MM, proposed by <a class="footnote-reference brackets" href="#id2" id="id5" role="doc-noteref"><span class="fn-bracket">[</span>1<span class="fn-bracket">]</span></a>.</p>
 <p><strong>What HDy does:</strong></p>
 <ol class="arabic simple">
@@ -468,7 +469,7 @@
 </div>
 </details></section>
 <section id="smm-sample-mean-matching">
-<h2><span class="section-number">1.3.3. </span>SMM: Sample Mean Matching<a class="headerlink" href="#smm-sample-mean-matching" title="Link to this heading">#</a></h2>
+<h2><span class="section-number">1.4.3. </span>SMM: Sample Mean Matching<a class="headerlink" href="#smm-sample-mean-matching" title="Link to this heading">#</a></h2>
 <p><strong>SMM</strong> is a member of the DyS framework, proposed by <a class="footnote-reference brackets" href="#id9" id="id7" role="doc-noteref"><span class="fn-bracket">[</span>4<span class="fn-bracket">]</span></a> notable for its simplicity and efficiency, located at the <a class="reference internal" href="generated/mlquantify.mixture.SMM.html#mlquantify.mixture.SMM" title="mlquantify.mixture.SMM"><code class="xref py py-class docutils literal notranslate"><span class="pre">SMM</span></code></a>.</p>
 <p><strong>What SMM does:</strong></p>
 <ol class="arabic simple">
@@ -516,7 +517,7 @@
 </div>
 </details></section>
 <section id="sord-sample-ordinal-distance">
-<h2><span class="section-number">1.3.4. </span>SORD: Sample Ordinal Distance<a class="headerlink" href="#sord-sample-ordinal-distance" title="Link to this heading">#</a></h2>
+<h2><span class="section-number">1.4.4. </span>SORD: Sample Ordinal Distance<a class="headerlink" href="#sord-sample-ordinal-distance" title="Link to this heading">#</a></h2>
 <p><strong>SORD (Sample Ordinal Distance)</strong> is one of the dissimilarity functions that fall under the DyS framework, located at <a class="reference internal" href="generated/mlquantify.mixture.SORD.html#mlquantify.mixture.SORD" title="mlquantify.mixture.SORD"><code class="xref py py-class docutils literal notranslate"><span class="pre">SORD</span></code></a>.</p>
 <p>SORD is notable for operating directly on <strong>score samples (observations)</strong> rather than discretized distributions (histograms). By eliminating the dependency on the number of bins, it seeks the minimum cost to transform a sample of scores into the weighted mixture sample. SORD provides an alternative that does not lose details after bin discretization <a class="footnote-reference brackets" href="#id11" id="id10" role="doc-noteref"><span class="fn-bracket">[</span>5<span class="fn-bracket">]</span></a>.</p>
 <details class="sd-sphinx-override sd-dropdown sd-card sd-mb-3">
@@ -548,7 +549,7 @@
       <i class="fa-solid fa-angle-left"></i>
       <div class="prev-next-info">
         <p class="prev-next-subtitle">previous</p>
-        <p class="prev-next-title"><span class="section-number">1.2. </span>Likelihood-Based Quantification</p>
+        <p class="prev-next-title"><span class="section-number">1.3. </span>Likelihood-Based Quantification</p>
       </div>
     </a>
     <a class="right-next"
@@ -556,7 +557,7 @@
        title="next page">
       <div class="prev-next-info">
         <p class="prev-next-subtitle">next</p>
-        <p class="prev-next-title"><span class="section-number">1.4. </span>Nearest Neighbors</p>
+        <p class="prev-next-title"><span class="section-number">1.5. </span>Nearest Neighbors</p>
       </div>
       <i class="fa-solid fa-angle-right"></i>
     </a>
@@ -583,10 +584,10 @@
   </div>
   <nav class="bd-toc-nav page-toc" aria-labelledby="pst-page-navigation-heading-2">
     <ul class="visible nav section-nav flex-column">
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#dys-distribution-y-similarity-framework">1.3.1. DyS: Distribution y-Similarity Framework</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#hdy-hellinger-distance-y-similarity">1.3.2. HDy: Hellinger Distance y-Similarity</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#smm-sample-mean-matching">1.3.3. SMM: Sample Mean Matching</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#sord-sample-ordinal-distance">1.3.4. SORD: Sample Ordinal Distance</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#dys-distribution-y-similarity-framework">1.4.1. DyS: Distribution y-Similarity Framework</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#hdy-hellinger-distance-y-similarity">1.4.2. HDy: Hellinger Distance y-Similarity</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#smm-sample-mean-matching">1.4.3. SMM: Sample Mean Matching</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#sord-sample-ordinal-distance">1.4.4. SORD: Sample Ordinal Distance</a></li>
 </ul>
   </nav></div>
 
