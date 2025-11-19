@@ -17,14 +17,14 @@ The core argument of KDEy is that traditional DM approaches relying on histogram
 **The KDEy Solution**
 KDEy resolves this by replacing discrete, univariate histograms with **continuous, multivariate Probability Density Functions (PDFs)** modeled via Kernel Density Estimation (KDE). These PDFs are represented as Gaussian Mixture Models (GMMs) operating on the unit simplex (:math:`\Delta_{n-1}`), effectively preserving inter-class correlations [1]_.
 
-For example, in a 3-class problem, instead of using three separate histograms (:math:`L_1, L_2, L_3`) for each class's posterior probabilities, KDEy models a single 2D density over the simplex defined by the three classes. This allows it to capture how the probabilities for different classes relate to each other.
+For example, in a 3-class problem (:math:`L1, L2, L3`), instead of using three separate histograms for each class's posterior probabilities, KDEy models a single 2D density over the simplex defined by the three classes. This allows it to capture how the probabilities for different classes relate to each other. 
 
 .. figure:: ../images/kdey-concept.png
    :align: center
    :width: 80%
    :alt: KDEy Concept Illustration
 
-   *Illustration of KDEy modeling class-conditional densities on the probability simplex, figure from [1]_*
+   *Illustration of KDEy modeling class-conditional densities on the probability simplex, figure from Moreo et al., 2023*
 
 
 KDEy serves as a prefix for variants that fall under different optimization frameworks. Next , we describe the three main KDEy quantifiers described in [1]_.
