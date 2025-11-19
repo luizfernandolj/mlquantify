@@ -460,14 +460,20 @@ They are mainly used for <code class="docutils literal notranslate"><span class=
 </table>
 </div>
 <p><strong>Example</strong></p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">mlquantify.adjust_counting</span><span class="w"> </span><span class="kn">import</span> <span class="n">ACC</span>
-<span class="n">q</span> <span class="o">=</span> <span class="n">ACC</span><span class="p">(</span><span class="n">learner</span><span class="o">=</span><span class="n">LogisticRegression</span><span class="p">())</span>
-<span class="n">q</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span>
-<span class="n">q</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">X</span><span class="p">)</span>
-<span class="c1"># -&gt; adjusted prevalence dictionary</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">mlquantify.adjust_counting</span><span class="w"> </span><span class="kn">import</span> <span class="n">T50</span><span class="p">,</span> <span class="n">evaluate_thresholds</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">sklearn.linear_model</span><span class="w"> </span><span class="kn">import</span> <span class="n">LogisticRegression</span>
+
+<span class="n">clf</span> <span class="o">=</span> <span class="n">LogisticRegression</span><span class="p">()</span>
+
+<span class="n">thresholds</span><span class="p">,</span> <span class="n">tprs</span><span class="p">,</span> <span class="n">fprs</span> <span class="o">=</span> <span class="n">evaluate_thresholds</span><span class="p">(</span>
+   <span class="n">y</span><span class="o">=</span><span class="n">y_test</span><span class="p">,</span>
+   <span class="n">probabilities</span><span class="o">=</span><span class="n">clf</span><span class="o">.</span><span class="n">predict_proba</span><span class="p">(</span><span class="n">X_test</span><span class="p">)[:,</span> <span class="mi">1</span><span class="p">])</span> <span class="c1"># binary proba</span>
+
+<span class="n">q</span> <span class="o">=</span> <span class="n">T50</span><span class="p">()</span>
+<span class="n">best_thr</span><span class="p">,</span> <span class="n">best_tpr</span><span class="p">,</span> <span class="n">best_fpr</span> <span class="o">=</span> <span class="n">q</span><span class="o">.</span><span class="n">get_best_thresholds</span><span class="p">(</span><span class="n">X_val</span><span class="p">,</span> <span class="n">y_val</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Best threshold: </span><span class="si">{</span><span class="n">best_thr</span><span class="si">}</span><span class="s2">, TPR: </span><span class="si">{</span><span class="n">best_tpr</span><span class="si">}</span><span class="s2">, FPR: </span><span class="si">{</span><span class="n">best_fpr</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
 </pre></div>
 </div>
-<p>[Plot Idea: Show ROC curve with marked chosen thresholds (TPR, FPR, tau)]</p>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
 <p>Threshold adjustment methods like ACC are primarily designed for binary classification tasks,

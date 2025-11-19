@@ -64,13 +64,18 @@ Different *threshold methods* vary in how they choose the classifier cutoff :mat
 
 .. code-block:: python
 
-   from mlquantify.adjust_counting import ACC
-   q = ACC(learner=LogisticRegression())
-   q.fit(X, y)
-   q.predict(X)
-   # -> adjusted prevalence dictionary
+   from mlquantify.adjust_counting import T50, evaluate_thresholds
+   from sklearn.linear_model import LogisticRegression
 
-[Plot Idea: Show ROC curve with marked chosen thresholds (TPR, FPR, tau)]
+   clf = LogisticRegression()
+
+   thresholds, tprs, fprs = evaluate_thresholds(
+      y=y_test, 
+      probabilities=clf.predict_proba(X_test)[:, 1]) # binary proba
+
+   q = T50()
+   best_thr, best_tpr, best_fpr = q.get_best_thresholds(X_val, y_val)
+   print(f"Best threshold: {best_thr}, TPR: {best_tpr}, FPR: {best_fpr}")
 
 .. note::
 
