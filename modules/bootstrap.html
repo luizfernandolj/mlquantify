@@ -7,17 +7,19 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
-<meta property="og:title" content="3.2. Bootstrap for Quantification" />
+<meta property="og:title" content="5.2. Bootstrap in Quantification" />
 <meta property="og:type" content="website" />
 <meta property="og:url" content="modules/bootstrap.html" />
 <meta property="og:site_name" content="mlquantify" />
+<meta property="og:description" content="Bootstrap is used in quantification to estimate uncertainty by constructing confidence regions around class prevalence estimates. Direct application is computationally expensive; thus, bootstrap is..." />
 <meta property="og:image:width" content="1146" />
 <meta property="og:image:height" content="600" />
-<meta property="og:image" content="_images/social_previews/summary_modules_bootstrap_ebba0562.png" />
-<meta property="og:image:alt" content="" />
+<meta property="og:image" content="_images/social_previews/summary_modules_bootstrap_be7b83db.png" />
+<meta property="og:image:alt" content="Bootstrap is used in quantification to estimate uncertainty by constructing confidence regions around class prevalence estimates. Direct application is computationally expensive; thus, bootstrap is..." />
+<meta name="description" content="Bootstrap is used in quantification to estimate uncertainty by constructing confidence regions around class prevalence estimates. Direct application is computationally expensive; thus, bootstrap is..." />
 <meta name="twitter:card" content="summary_large_image" />
 
-    <title>3.2. Bootstrap for Quantification &#8212; mlquantify 0.1.8 documentation</title>
+    <title>5.2. Bootstrap in Quantification &#8212; mlquantify 0.1.8 documentation</title>
   
   
   
@@ -61,8 +63,8 @@
     <link rel="canonical" href="https://luizfernandolj.github.io/mlquantify/modules/bootstrap.html" />
     <link rel="author" title="About these documents" href="../about.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="3.3. The Scores Adaptation Framework (QuaDapt)" href="scores_adaptation.html" />
-    <link rel="prev" title="3.1. Ensemble for Quantification" href="ensemble.html" />
+    <link rel="next" title="5.3. QuaDapt: Drift-Resilient Score Adaptation" href="scores_adaptation.html" />
+    <link rel="prev" title="5.1. Ensemble for Quantification" href="ensemble.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
   <meta name="docsearch:version" content="" />
@@ -126,8 +128,14 @@
   
   
   
+    
+    
+      
+    
+    
+    <img src="../_static/logo_mlquantify.svg" class="logo__image only-light" alt="mlquantify homepage"/>
+    <img src="../_static/logo_mlquantify-white.svg" class="logo__image only-dark pst-js-only" alt="mlquantify homepage"/>
   
-    <p class="title logo__title">mlquantify 0.1.8 documentation</p>
   
 </a></div>
     
@@ -323,16 +331,20 @@
 <li class="toctree-l2"><a class="reference internal" href="mixture_models_non_agg.html">2.1. Mixture Models for Non-Aggregative Quantification</a></li>
 </ul>
 </details></li>
-<li class="toctree-l1 current active has-children"><a class="reference internal" href="../meta_quantification.html">3.  Meta Quantification</a><details open="open"><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul class="current">
-<li class="toctree-l2"><a class="reference internal" href="ensemble.html">3.1. Ensemble for Quantification</a></li>
-<li class="toctree-l2 current active"><a class="current reference internal" href="#">3.2. Bootstrap for Quantification</a></li>
-<li class="toctree-l2"><a class="reference internal" href="scores_adaptation.html">3.3. The Scores Adaptation Framework (QuaDapt)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="confidence_intervals.html">3.  Confidence Intervals</a></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../model_selection_evaluation.html">4.  Model Selection and Evaluation</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="protocols.html">4.1. Protocols for Quantification</a></li>
 </ul>
 </details></li>
-<li class="toctree-l1"><a class="reference internal" href="../building_a_quantifier.html">4.  Building a Quantifier</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../model_selection_evaluation.html">5.  Model Selection and Evaluation</a></li>
-<li class="toctree-l1 has-children"><a class="reference internal" href="../experiment_management.html">6.  Experiment Management</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
-<li class="toctree-l2"><a class="reference internal" href="../building_a_protocol.html">6.1. Building a Protocol</a></li>
+<li class="toctree-l1 current active has-children"><a class="reference internal" href="../meta_quantification.html">5.  Meta Quantification</a><details open="open"><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="ensemble.html">5.1. Ensemble for Quantification</a></li>
+<li class="toctree-l2 current active"><a class="current reference internal" href="#">5.2. Bootstrap in Quantification</a></li>
+<li class="toctree-l2"><a class="reference internal" href="scores_adaptation.html">5.3. QuaDapt: Drift-Resilient Score Adaptation</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1"><a class="reference internal" href="../building_a_quantifier.html">6.  Building a Quantifier</a></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../experiment_management.html">7.  Experiment Management</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../building_a_protocol.html">7.1. Building a Protocol</a></li>
 </ul>
 </details></li>
 </ul>
@@ -372,9 +384,9 @@
     <li class="breadcrumb-item"><a href="../user_guide.html" class="nav-link">User Guide</a></li>
     
     
-    <li class="breadcrumb-item"><a href="../meta_quantification.html" class="nav-link"><span class="section-number">3. </span>Meta-Quantification</a></li>
+    <li class="breadcrumb-item"><a href="../meta_quantification.html" class="nav-link"><span class="section-number">5. </span>Meta-Quantification</a></li>
     
-    <li class="breadcrumb-item active" aria-current="page"><span class="ellipsis"><span class="section-number">3.2. </span>Bootstrap for Quantification</span></li>
+    <li class="breadcrumb-item active" aria-current="page"><span class="ellipsis"><span class="section-number">5.2. </span>Bootstrap in Quantification</span></li>
   </ul>
 </nav>
 </div>
@@ -391,9 +403,67 @@
 <div id="searchbox"></div>
                 <article class="bd-article">
                   
-  <section id="bootstrap-for-quantification">
-<span id="bootstrap"></span><h1><span class="section-number">3.2. </span>Bootstrap for Quantification<a class="headerlink" href="#bootstrap-for-quantification" title="Link to this heading">#</a></h1>
-</section>
+  <section id="bootstrap-in-quantification">
+<span id="bootstrap-quantification"></span><h1><span class="section-number">5.2. </span>Bootstrap in Quantification<a class="headerlink" href="#bootstrap-in-quantification" title="Link to this heading">#</a></h1>
+<p>Bootstrap is used in quantification to estimate uncertainty by constructing confidence regions around class prevalence estimates. Direct application is computationally expensive; thus, bootstrap is applied efficiently only to the adjustment or aggregation phases of aggregative quantifiers.</p>
+<p>Bootstrap strategies are classified into three main types:</p>
+<div class="sd-container-fluid sd-sphinx-override sd-mb-4 docutils">
+<div class="sd-row sd-row-cols-1 sd-row-cols-xs-1 sd-row-cols-sm-1 sd-row-cols-md-3 sd-row-cols-lg-3 sd-g-2 sd-g-xs-2 sd-g-sm-2 sd-g-md-2 sd-g-lg-2 docutils">
+<div class="sd-col sd-d-flex-row docutils">
+<div class="sd-card sd-sphinx-override sd-w-100 sd-shadow-sm sd-text-center docutils">
+<div class="sd-card-body docutils">
+<div class="sd-card-title sd-font-weight-bold docutils">
+Model-based Bootstrap</div>
+<p class="sd-card-text">Resamples the classifier’s cross-validation outputs during training of adjustment functions. Multiple adjustment models are fitted and applied to fixed classifier predictions, effectively avoiding repeated retraining of classifiers.</p>
+</div>
+</div>
+</div>
+<div class="sd-col sd-d-flex-row docutils">
+<div class="sd-card sd-sphinx-override sd-w-100 sd-shadow-sm sd-text-center docutils">
+<div class="sd-card-body docutils">
+<div class="sd-card-title sd-font-weight-bold docutils">
+Population-based Bootstrap</div>
+<p class="sd-card-text">Uses a single prediction set on the test data; bootstrap resamples the test predictions to generate multiple test sample bags. A single adjustment function is applied to each bag to produce bootstrap prevalence estimates.</p>
+</div>
+</div>
+</div>
+<div class="sd-col sd-d-flex-row docutils">
+<div class="sd-card sd-sphinx-override sd-w-100 sd-shadow-sm sd-text-center docutils">
+<div class="sd-card-body docutils">
+<div class="sd-card-title sd-font-weight-bold docutils">
+Combined Approach</div>
+<p class="sd-card-text">Applies both model-based and population-based resampling, generating a grid of prevalence estimates balancing computational efficiency and robustness under prior probability shift.</p>
+</div>
+</div>
+</div>
+</div>
+</div>
+<p>The <a class="reference internal" href="generated/mlquantify.meta.AggregativeBootstrap.html#mlquantify.meta.AggregativeBootstrap" title="mlquantify.meta.AggregativeBootstrap"><code class="xref py py-class docutils literal notranslate"><span class="pre">AggregativeBootstrap</span></code></a> class implements these strategies for aggregative quantifiers by using two parameters: <code class="docutils literal notranslate"><span class="pre">n_train_bootstraps</span></code> and <code class="docutils literal notranslate"><span class="pre">n_test_bootstraps</span></code>. These parameters define the number of bootstrap samples for the training and test phases, respectively.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">mlquantify.ensemble</span><span class="w"> </span><span class="kn">import</span> <span class="n">AggregativeBootstrap</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">mlquantify.neighbors</span><span class="w"> </span><span class="kn">import</span> <span class="n">EMQ</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">sklearn.ensemble</span><span class="w"> </span><span class="kn">import</span> <span class="n">RandomForestClassifier</span>
+
+<span class="n">agg_boot</span> <span class="o">=</span> <span class="n">AggregativeBootstrap</span><span class="p">(</span>
+    <span class="n">quantifier</span><span class="o">=</span><span class="n">EMQ</span><span class="p">(</span><span class="n">RandomForestClassifier</span><span class="p">()),</span>
+    <span class="n">n_train_bootstraps</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span>
+    <span class="n">n_test_bootstraps</span><span class="o">=</span><span class="mi">100</span>
+<span class="p">)</span>
+<span class="n">agg_boot</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">X_train</span><span class="p">,</span> <span class="n">y_train</span><span class="p">)</span>
+<span class="n">prevalence</span><span class="p">,</span> <span class="n">conf_region</span> <span class="o">=</span> <span class="n">agg_boot</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">X_test</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>For information on confidence interval construction from bootstrap samples, see <a class="reference internal" href="confidence_intervals.html#confidence-intervals"><span class="std std-ref">Confidence Intervals for Quantification</span></a>.</p>
+<details class="sd-sphinx-override sd-dropdown sd-card sd-mb-3">
+<summary class="sd-summary-title sd-card-header">
+<span class="sd-summary-text">References</span><span class="sd-summary-state-marker sd-summary-chevron-right"><svg version="1.1" width="1.5em" height="1.5em" class="sd-octicon sd-octicon-chevron-right" viewBox="0 0 24 24" aria-hidden="true"><path d="M8.72 18.78a.75.75 0 0 1 0-1.06L14.44 12 8.72 6.28a.751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018l6.25 6.25a.75.75 0 0 1 0 1.06l-6.25 6.25a.75.75 0 0 1-1.06 0Z"></path></svg></span></summary><div class="sd-summary-content sd-card-body docutils">
+<aside class="footnote-list brackets">
+<aside class="footnote brackets" id="id1" role="doc-footnote">
+<span class="label"><span class="fn-bracket">[</span>1<span class="fn-bracket">]</span></span>
+<p class="sd-card-text">Moreo, A., &amp; Salvati, N. (2025). An Efficient Method for Deriving Confidence Intervals in Aggregative Quantification.</p>
+</aside>
+</aside>
+</div>
+</details></section>
 
 
                 </article>
@@ -411,7 +481,7 @@
       <i class="fa-solid fa-angle-left"></i>
       <div class="prev-next-info">
         <p class="prev-next-subtitle">previous</p>
-        <p class="prev-next-title"><span class="section-number">3.1. </span>Ensemble for Quantification</p>
+        <p class="prev-next-title"><span class="section-number">5.1. </span>Ensemble for Quantification</p>
       </div>
     </a>
     <a class="right-next"
@@ -419,7 +489,7 @@
        title="next page">
       <div class="prev-next-info">
         <p class="prev-next-subtitle">next</p>
-        <p class="prev-next-title"><span class="section-number">3.3. </span>The Scores Adaptation Framework (QuaDapt)</p>
+        <p class="prev-next-title"><span class="section-number">5.3. </span>QuaDapt: Drift-Resilient Score Adaptation</p>
       </div>
       <i class="fa-solid fa-angle-right"></i>
     </a>

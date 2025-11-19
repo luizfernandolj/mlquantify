@@ -2,18 +2,18 @@
 <!DOCTYPE html>
 
 
-<html lang="en" data-content_root="./" >
+<html lang="en" data-content_root="../" >
 
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 <meta property="og:title" content="<no title>" />
 <meta property="og:type" content="website" />
-<meta property="og:url" content="confidence_intervals.html" />
+<meta property="og:url" content="modules/tuning_hyperparameters.html" />
 <meta property="og:site_name" content="mlquantify" />
 <meta property="og:image:width" content="1146" />
 <meta property="og:image:height" content="600" />
-<meta property="og:image" content="_images/social_previews/summary_confidence_intervals_53cd2b56.png" />
+<meta property="og:image" content="_images/social_previews/summary_modules_tuning_hyperparameters_53cd2b56.png" />
 <meta property="og:image:alt" content="" />
 <meta name="twitter:card" content="summary_large_image" />
 
@@ -36,33 +36,33 @@
   </noscript>
   
   <!-- Loaded before other Sphinx assets -->
-  <link href="_static/styles/theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
-<link href="_static/styles/pydata-sphinx-theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
+  <link href="../_static/styles/theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
+<link href="../_static/styles/pydata-sphinx-theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
 
-    <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=8f2a1f02" />
-    <link rel="stylesheet" type="text/css" href="_static/copybutton.css?v=76b2166b" />
-    <link rel="stylesheet" type="text/css" href="_static/plot_directive.css" />
-    <link rel="stylesheet" type="text/css" href="_static/sphinx-design.min.css?v=95c83b7e" />
-    <link rel="stylesheet" type="text/css" href="_static/custom.css?v=94d3f708" />
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=8f2a1f02" />
+    <link rel="stylesheet" type="text/css" href="../_static/copybutton.css?v=76b2166b" />
+    <link rel="stylesheet" type="text/css" href="../_static/plot_directive.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinx-design.min.css?v=95c83b7e" />
+    <link rel="stylesheet" type="text/css" href="../_static/custom.css?v=94d3f708" />
   
   <!-- So that users can add custom icons -->
-  <script src="_static/scripts/fontawesome.js?digest=8878045cc6db502f8baf"></script>
+  <script src="../_static/scripts/fontawesome.js?digest=8878045cc6db502f8baf"></script>
   <!-- Pre-loaded scripts that we'll load fully later -->
-  <link rel="preload" as="script" href="_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf" />
-<link rel="preload" as="script" href="_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf" />
+  <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf" />
+<link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf" />
 
-    <script src="_static/documentation_options.js?v=22607128"></script>
-    <script src="_static/doctools.js?v=9bcbadda"></script>
-    <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
-    <script src="_static/clipboard.min.js?v=a7894cd8"></script>
-    <script src="_static/copybutton.js?v=f281be69"></script>
-    <script src="_static/design-tabs.js?v=f930bc37"></script>
-    <script>DOCUMENTATION_OPTIONS.pagename = 'confidence_intervals';</script>
-    <link rel="canonical" href="https://luizfernandolj.github.io/mlquantify/confidence_intervals.html" />
-    <link rel="author" title="About these documents" href="about.html" />
-    <link rel="search" title="Search" href="search.html" />
-    <link rel="next" title="5. Model Selection and Evaluation" href="model_selection_evaluation.html" />
-    <link rel="prev" title="4. Building a Quantifier" href="building_a_quantifier.html" />
+    <script src="../_static/documentation_options.js?v=22607128"></script>
+    <script src="../_static/doctools.js?v=9bcbadda"></script>
+    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../_static/clipboard.min.js?v=a7894cd8"></script>
+    <script src="../_static/copybutton.js?v=f281be69"></script>
+    <script src="../_static/design-tabs.js?v=f930bc37"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'modules/tuning_hyperparameters';</script>
+    <link rel="canonical" href="https://luizfernandolj.github.io/mlquantify/modules/tuning_hyperparameters.html" />
+    <link rel="author" title="About these documents" href="../about.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="&lt;no title&gt;" href="evaluation_metrics.html" />
+    <link rel="prev" title="4.1. Protocols for Quantification" href="protocols.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
   <meta name="docsearch:version" content="" />
@@ -84,7 +84,7 @@
   <dialog id="pst-search-dialog">
     
 <form class="bd-search d-flex align-items-center"
-      action="search.html"
+      action="../search.html"
       method="get">
   <i class="fa-solid fa-magnifying-glass"></i>
   <input type="search"
@@ -120,14 +120,20 @@
     
   
 
-<a class="navbar-brand logo" href="index.html">
+<a class="navbar-brand logo" href="../index.html">
   
   
   
   
   
+    
+    
+      
+    
+    
+    <img src="../_static/logo_mlquantify.svg" class="logo__image only-light" alt="mlquantify homepage"/>
+    <img src="../_static/logo_mlquantify-white.svg" class="logo__image only-dark pst-js-only" alt="mlquantify homepage"/>
   
-    <p class="title logo__title">mlquantify 0.1.8 documentation</p>
   
 </a></div>
     
@@ -142,21 +148,21 @@
   <ul class="bd-navbar-elements navbar-nav">
     
 <li class="nav-item ">
-  <a class="nav-link nav-internal" href="install.html">
+  <a class="nav-link nav-internal" href="../install.html">
     Install
   </a>
 </li>
 
 
 <li class="nav-item current active">
-  <a class="nav-link nav-internal" href="user_guide.html">
+  <a class="nav-link nav-internal" href="../user_guide.html">
     User Guide
   </a>
 </li>
 
 
 <li class="nav-item ">
-  <a class="nav-link nav-internal" href="api/index.html">
+  <a class="nav-link nav-internal" href="../api/index.html">
     API
   </a>
 </li>
@@ -247,21 +253,21 @@
   <ul class="bd-navbar-elements navbar-nav">
     
 <li class="nav-item ">
-  <a class="nav-link nav-internal" href="install.html">
+  <a class="nav-link nav-internal" href="../install.html">
     Install
   </a>
 </li>
 
 
 <li class="nav-item current active">
-  <a class="nav-link nav-internal" href="user_guide.html">
+  <a class="nav-link nav-internal" href="../user_guide.html">
     User Guide
   </a>
 </li>
 
 
 <li class="nav-item ">
-  <a class="nav-link nav-internal" href="api/index.html">
+  <a class="nav-link nav-internal" href="../api/index.html">
     API
   </a>
 </li>
@@ -310,29 +316,33 @@
      aria-label="Section Navigation">
   <p class="bd-links__title" role="heading" aria-level="1">Section Navigation</p>
   <div class="bd-toc-item navbar-nav"><ul class="nav bd-sidenav">
-<li class="toctree-l1 has-children"><a class="reference internal" href="aggregative_quantification.html">1.  Aggregative Quantification</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
-<li class="toctree-l2"><a class="reference internal" href="modules/counters.html">1.1. Counters For Quantification</a></li>
-<li class="toctree-l2"><a class="reference internal" href="modules/adjust_counting.html">1.2. Adjust Counting</a></li>
-<li class="toctree-l2"><a class="reference internal" href="modules/likelihood.html">1.3. Likelihood-Based Quantification</a></li>
-<li class="toctree-l2"><a class="reference internal" href="modules/mixture_models.html">1.4. Mixture Models</a></li>
-<li class="toctree-l2"><a class="reference internal" href="modules/neighbors.html">1.5. Nearest Neighbors</a></li>
-<li class="toctree-l2"><a class="reference internal" href="modules/density.html">1.6. Kernel Density Estimation</a></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../aggregative_quantification.html">1.  Aggregative Quantification</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="counters.html">1.1. Counters For Quantification</a></li>
+<li class="toctree-l2"><a class="reference internal" href="adjust_counting.html">1.2. Adjust Counting</a></li>
+<li class="toctree-l2"><a class="reference internal" href="likelihood.html">1.3. Likelihood-Based Quantification</a></li>
+<li class="toctree-l2"><a class="reference internal" href="mixture_models.html">1.4. Mixture Models</a></li>
+<li class="toctree-l2"><a class="reference internal" href="neighbors.html">1.5. Nearest Neighbors</a></li>
+<li class="toctree-l2"><a class="reference internal" href="density.html">1.6. Kernel Density Estimation</a></li>
 </ul>
 </details></li>
-<li class="toctree-l1 has-children"><a class="reference internal" href="non_aggregative_quantification.html">2.  Non Aggregative Quantification</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
-<li class="toctree-l2"><a class="reference internal" href="modules/mixture_models_non_agg.html">2.1. Mixture Models for Non-Aggregative Quantification</a></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../non_aggregative_quantification.html">2.  Non Aggregative Quantification</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="mixture_models_non_agg.html">2.1. Mixture Models for Non-Aggregative Quantification</a></li>
 </ul>
 </details></li>
-<li class="toctree-l1 has-children"><a class="reference internal" href="meta_quantification.html">3.  Meta Quantification</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
-<li class="toctree-l2"><a class="reference internal" href="modules/ensemble.html">3.1. Ensemble for Quantification</a></li>
-<li class="toctree-l2"><a class="reference internal" href="modules/bootstrap.html">3.2. Bootstrap for Quantification</a></li>
-<li class="toctree-l2"><a class="reference internal" href="modules/scores_adaptation.html">3.3. The Scores Adaptation Framework (QuaDapt)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="confidence_intervals.html">3.  Confidence Intervals</a></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../model_selection_evaluation.html">4.  Model Selection and Evaluation</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="protocols.html">4.1. Protocols for Quantification</a></li>
 </ul>
 </details></li>
-<li class="toctree-l1"><a class="reference internal" href="building_a_quantifier.html">4.  Building a Quantifier</a></li>
-<li class="toctree-l1"><a class="reference internal" href="model_selection_evaluation.html">5.  Model Selection and Evaluation</a></li>
-<li class="toctree-l1 has-children"><a class="reference internal" href="experiment_management.html">6.  Experiment Management</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
-<li class="toctree-l2"><a class="reference internal" href="building_a_protocol.html">6.1. Building a Protocol</a></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../meta_quantification.html">5.  Meta Quantification</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="ensemble.html">5.1. Ensemble for Quantification</a></li>
+<li class="toctree-l2"><a class="reference internal" href="bootstrap.html">5.2. Bootstrap in Quantification</a></li>
+<li class="toctree-l2"><a class="reference internal" href="scores_adaptation.html">5.3. QuaDapt: Drift-Resilient Score Adaptation</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1"><a class="reference internal" href="../building_a_quantifier.html">6.  Building a Quantifier</a></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../experiment_management.html">7.  Experiment Management</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../building_a_protocol.html">7.1. Building a Protocol</a></li>
 </ul>
 </details></li>
 </ul>
@@ -364,12 +374,15 @@
   <ul class="bd-breadcrumbs">
     
     <li class="breadcrumb-item breadcrumb-home">
-      <a href="index.html" class="nav-link" aria-label="Home">
+      <a href="../index.html" class="nav-link" aria-label="Home">
         <i class="fa-solid fa-home"></i>
       </a>
     </li>
     
-    <li class="breadcrumb-item"><a href="user_guide.html" class="nav-link">User Guide</a></li>
+    <li class="breadcrumb-item"><a href="../user_guide.html" class="nav-link">User Guide</a></li>
+    
+    
+    <li class="breadcrumb-item"><a href="../model_selection_evaluation.html" class="nav-link"><span class="section-number">4. </span>Model Selection and Evaluation</a></li>
     
     <li class="breadcrumb-item active" aria-current="page"><span class="ellipsis">&lt;no title&gt;</span></li>
   </ul>
@@ -400,20 +413,20 @@
     <div class="footer-article-item">
 <div class="prev-next-area">
     <a class="left-prev"
-       href="building_a_quantifier.html"
+       href="protocols.html"
        title="previous page">
       <i class="fa-solid fa-angle-left"></i>
       <div class="prev-next-info">
         <p class="prev-next-subtitle">previous</p>
-        <p class="prev-next-title"><span class="section-number">4. </span>Building a Quantifier</p>
+        <p class="prev-next-title"><span class="section-number">4.1. </span>Protocols for Quantification</p>
       </div>
     </a>
     <a class="right-next"
-       href="model_selection_evaluation.html"
+       href="evaluation_metrics.html"
        title="next page">
       <div class="prev-next-info">
         <p class="prev-next-subtitle">next</p>
-        <p class="prev-next-title"><span class="section-number">5. </span>Model Selection and Evaluation</p>
+        <p class="prev-next-title">&lt;no title&gt;</p>
       </div>
       <i class="fa-solid fa-angle-right"></i>
     </a>
@@ -448,7 +461,7 @@
   <div role="note" aria-label="source link">
     <h3>This Page</h3>
     <ul class="this-page-menu">
-      <li><a href="_sources/confidence_intervals.rst.txt"
+      <li><a href="../_sources/modules/tuning_hyperparameters.rst.txt"
             rel="nofollow">Show Source</a></li>
     </ul>
    </div></div>
@@ -466,8 +479,8 @@
   </div>
   
   <!-- Scripts loaded after <body> so the DOM is not blocked -->
-  <script defer src="_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf"></script>
-<script defer src="_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf"></script>
+  <script defer src="../_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf"></script>
+<script defer src="../_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf"></script>
 
   <footer class="bd-footer">
   </footer>

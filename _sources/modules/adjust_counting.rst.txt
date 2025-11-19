@@ -39,7 +39,7 @@ The main idea is that by adjusting the observed rate of positive predictions, we
    :width: 80%
    :alt: Threshold selection policies comparison
 
-   *Comparison of different threshold selection policies showing FPR and 1-TPR curves with optimal thresholds for each method*
+   *Comparison of different threshold selection policies showing FPR and 1-TPR curves with optimal thresholds for each method [Adapted from Forman (2008)]*
 
 Different *threshold methods* vary in how they choose the classifier cutoff :math:`\tau` for scores :math:`s(x)` .
 

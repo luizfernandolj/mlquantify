@@ -7,17 +7,19 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
-<meta property="og:title" content="3.3. The Scores Adaptation Framework (QuaDapt)" />
+<meta property="og:title" content="5.3. QuaDapt: Drift-Resilient Score Adaptation" />
 <meta property="og:type" content="website" />
 <meta property="og:url" content="modules/scores_adaptation.html" />
 <meta property="og:site_name" content="mlquantify" />
+<meta property="og:description" content="The QuaDapt method is a drift-resilient meta-quantification strategy designed to handle situations where the classifier’s score distributions drift between training and test domains. Instead of ass..." />
 <meta property="og:image:width" content="1146" />
 <meta property="og:image:height" content="600" />
-<meta property="og:image" content="_images/social_previews/summary_modules_scores_adaptation_d8f5dbda.png" />
-<meta property="og:image:alt" content="" />
+<meta property="og:image" content="_images/social_previews/summary_modules_scores_adaptation_9b2f01aa.png" />
+<meta property="og:image:alt" content="The QuaDapt method is a drift-resilient meta-quantification strategy designed to handle situations where the classifier’s score distributions drift between training and test domains. Instead of ass..." />
+<meta name="description" content="The QuaDapt method is a drift-resilient meta-quantification strategy designed to handle situations where the classifier’s score distributions drift between training and test domains. Instead of ass..." />
 <meta name="twitter:card" content="summary_large_image" />
 
-    <title>3.3. The Scores Adaptation Framework (QuaDapt) &#8212; mlquantify 0.1.8 documentation</title>
+    <title>5.3. QuaDapt: Drift-Resilient Score Adaptation &#8212; mlquantify 0.1.8 documentation</title>
   
   
   
@@ -57,12 +59,13 @@
     <script src="../_static/clipboard.min.js?v=a7894cd8"></script>
     <script src="../_static/copybutton.js?v=f281be69"></script>
     <script src="../_static/design-tabs.js?v=f930bc37"></script>
+    <script async="async" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
     <script>DOCUMENTATION_OPTIONS.pagename = 'modules/scores_adaptation';</script>
     <link rel="canonical" href="https://luizfernandolj.github.io/mlquantify/modules/scores_adaptation.html" />
     <link rel="author" title="About these documents" href="../about.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="4. Building a Quantifier" href="../building_a_quantifier.html" />
-    <link rel="prev" title="3.2. Bootstrap for Quantification" href="bootstrap.html" />
+    <link rel="next" title="6. Building a Quantifier" href="../building_a_quantifier.html" />
+    <link rel="prev" title="5.2. Bootstrap in Quantification" href="bootstrap.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
   <meta name="docsearch:version" content="" />
@@ -126,8 +129,14 @@
   
   
   
+    
+    
+      
+    
+    
+    <img src="../_static/logo_mlquantify.svg" class="logo__image only-light" alt="mlquantify homepage"/>
+    <img src="../_static/logo_mlquantify-white.svg" class="logo__image only-dark pst-js-only" alt="mlquantify homepage"/>
   
-    <p class="title logo__title">mlquantify 0.1.8 documentation</p>
   
 </a></div>
     
@@ -323,16 +332,20 @@
 <li class="toctree-l2"><a class="reference internal" href="mixture_models_non_agg.html">2.1. Mixture Models for Non-Aggregative Quantification</a></li>
 </ul>
 </details></li>
-<li class="toctree-l1 current active has-children"><a class="reference internal" href="../meta_quantification.html">3.  Meta Quantification</a><details open="open"><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul class="current">
-<li class="toctree-l2"><a class="reference internal" href="ensemble.html">3.1. Ensemble for Quantification</a></li>
-<li class="toctree-l2"><a class="reference internal" href="bootstrap.html">3.2. Bootstrap for Quantification</a></li>
-<li class="toctree-l2 current active"><a class="current reference internal" href="#">3.3. The Scores Adaptation Framework (QuaDapt)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="confidence_intervals.html">3.  Confidence Intervals</a></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../model_selection_evaluation.html">4.  Model Selection and Evaluation</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="protocols.html">4.1. Protocols for Quantification</a></li>
 </ul>
 </details></li>
-<li class="toctree-l1"><a class="reference internal" href="../building_a_quantifier.html">4.  Building a Quantifier</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../model_selection_evaluation.html">5.  Model Selection and Evaluation</a></li>
-<li class="toctree-l1 has-children"><a class="reference internal" href="../experiment_management.html">6.  Experiment Management</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
-<li class="toctree-l2"><a class="reference internal" href="../building_a_protocol.html">6.1. Building a Protocol</a></li>
+<li class="toctree-l1 current active has-children"><a class="reference internal" href="../meta_quantification.html">5.  Meta Quantification</a><details open="open"><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="ensemble.html">5.1. Ensemble for Quantification</a></li>
+<li class="toctree-l2"><a class="reference internal" href="bootstrap.html">5.2. Bootstrap in Quantification</a></li>
+<li class="toctree-l2 current active"><a class="current reference internal" href="#">5.3. QuaDapt: Drift-Resilient Score Adaptation</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1"><a class="reference internal" href="../building_a_quantifier.html">6.  Building a Quantifier</a></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../experiment_management.html">7.  Experiment Management</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../building_a_protocol.html">7.1. Building a Protocol</a></li>
 </ul>
 </details></li>
 </ul>
@@ -372,9 +385,9 @@
     <li class="breadcrumb-item"><a href="../user_guide.html" class="nav-link">User Guide</a></li>
     
     
-    <li class="breadcrumb-item"><a href="../meta_quantification.html" class="nav-link"><span class="section-number">3. </span>Meta-Quantification</a></li>
+    <li class="breadcrumb-item"><a href="../meta_quantification.html" class="nav-link"><span class="section-number">5. </span>Meta-Quantification</a></li>
     
-    <li class="breadcrumb-item active" aria-current="page"><span class="ellipsis"><span class="section-number">3.3. </span>The Scores Adaptation Framework (QuaDapt)</span></li>
+    <li class="breadcrumb-item active" aria-current="page"><span class="ellipsis"><span class="section-number">5.3. </span>QuaDapt: Drift-Resilient Score Adaptation</span></li>
   </ul>
 </nav>
 </div>
@@ -391,9 +404,90 @@
 <div id="searchbox"></div>
                 <article class="bd-article">
                   
-  <section id="the-scores-adaptation-framework-quadapt">
-<span id="scores-adaptation"></span><h1><span class="section-number">3.3. </span>The Scores Adaptation Framework (QuaDapt)<a class="headerlink" href="#the-scores-adaptation-framework-quadapt" title="Link to this heading">#</a></h1>
-</section>
+  <section id="quadapt-drift-resilient-score-adaptation">
+<span id="scores-adaptation"></span><h1><span class="section-number">5.3. </span>QuaDapt: Drift-Resilient Score Adaptation<a class="headerlink" href="#quadapt-drift-resilient-score-adaptation" title="Link to this heading">#</a></h1>
+<p>The <a class="reference internal" href="generated/mlquantify.meta.QuaDapt.html#mlquantify.meta.QuaDapt" title="mlquantify.meta.QuaDapt"><code class="xref py py-class docutils literal notranslate"><span class="pre">QuaDapt</span></code></a> method is a drift-resilient meta-quantification strategy designed to
+handle situations where the <strong>classifier’s score distributions drift</strong> between
+training and test domains.
+Instead of assuming that the original score distributions remain stable, QuaDapt
+actively adapts them at prediction time <a class="footnote-reference brackets" href="#id4" id="id1" role="doc-noteref"><span class="fn-bracket">[</span>1<span class="fn-bracket">]</span></a>.</p>
+<figure class="align-center" id="id6">
+<a class="reference internal image-reference" href="../_images/quadapt.jpeg"><img alt="QuaDapt overview" src="../_images/quadapt.jpeg" style="width: 90%;" />
+</a>
+<figcaption>
+<p><span class="caption-text"><em>QuaDapt: adaptive score simulation and distribution matching. Ortega et al., 2025</em></span><a class="headerlink" href="#id6" title="Link to this image">#</a></p>
+</figcaption>
+</figure>
+<p><a class="reference internal" href="generated/mlquantify.meta.QuaDapt.html#mlquantify.meta.QuaDapt" title="mlquantify.meta.QuaDapt"><code class="xref py py-class docutils literal notranslate"><span class="pre">QuaDapt</span></code></a> is inspired by the principle behind <strong>Distribution Matching (DM)</strong> or
+<strong>Mixture Model (MM)</strong> quantifiers (see <a class="reference internal" href="mixture_models.html#mixture-models"><span class="std std-ref">Mixture Models</span></a>), which estimate test prevalences by finding the
+mixture of class-conditional distributions that best fits the test data.
+However, while classical MM methods rely on <strong>empirical training distributions</strong>,
+<strong>QuaDapt replaces them with synthetic score distributions</strong> generated for multiple
+hypothetical levels of class separability <a class="footnote-reference brackets" href="#id4" id="id2" role="doc-noteref"><span class="fn-bracket">[</span>1<span class="fn-bracket">]</span></a>.</p>
+<p>The method evaluates several merging factors <span class="math notranslate nohighlight">\(m\)</span> that control synthetic
+separability and selects the one producing the closest match to the test-score
+distribution.
+The chosen synthetic model is then passed to an aggregative quantifier (e.g., <code class="xref py py-class docutils literal notranslate"><span class="pre">ACC</span></code>,
+<code class="xref py py-class docutils literal notranslate"><span class="pre">T50</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">DyS</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">SORD</span></code>.) to compute final prevalence estimates.</p>
+<p>This makes QuaDapt a <strong>meta-quantifier</strong> capable of adapting to score drift without
+relying on static training distributions.</p>
+<details class="sd-sphinx-override sd-dropdown sd-card sd-mb-3">
+<summary class="sd-summary-title sd-card-header">
+<span class="sd-summary-text">MoSS: Synthetic Score Generator Used by QuaDapt</span><span class="sd-summary-state-marker sd-summary-chevron-right"><svg version="1.1" width="1.5em" height="1.5em" class="sd-octicon sd-octicon-chevron-right" viewBox="0 0 24 24" aria-hidden="true"><path d="M8.72 18.78a.75.75 0 0 1 0-1.06L14.44 12 8.72 6.28a.751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018l6.25 6.25a.75.75 0 0 1 0 1.06l-6.25 6.25a.75.75 0 0 1-1.06 0Z"></path></svg></span></summary><div class="sd-summary-content sd-card-body docutils">
+<p class="sd-card-text">QuaDapt relies on <strong>MoSS (Model for Score Simulation)</strong> to generate synthetic
+positive and negative score distributions with controlled overlap <a class="footnote-reference brackets" href="#id5" id="id3" role="doc-noteref"><span class="fn-bracket">[</span>2<span class="fn-bracket">]</span></a>.</p>
+<p class="sd-card-text">MoSS takes three parameters:</p>
+<ul class="simple">
+<li><p class="sd-card-text"><span class="math notranslate nohighlight">\(n\)</span>: number of synthetic samples</p></li>
+<li><p class="sd-card-text"><span class="math notranslate nohighlight">\(\alpha\)</span>: class proportion</p></li>
+<li><p class="sd-card-text"><span class="math notranslate nohighlight">\(m\)</span>: merging factor controlling the overlap</p></li>
+</ul>
+<p class="sd-card-text">Positive and negative scores are generated as:</p>
+<div class="math notranslate nohighlight">
+\[s^+ = U^m,
+\qquad
+s^- = 1 - U^m,
+\qquad
+U \sim \mathrm{Uniform}(0,1)\]</div>
+<p class="sd-card-text">Larger values of <span class="math notranslate nohighlight">\(m\)</span> create more overlapping distributions, modeling weaker
+classifier separability or drift.</p>
+</div>
+</details><p><strong>Example Usage</strong></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">mlquantify.meta</span><span class="w"> </span><span class="kn">import</span> <span class="n">QuaDapt</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">mlquantify.adjust_counting</span><span class="w"> </span><span class="kn">import</span> <span class="n">ACC</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">sklearn.ensemble</span><span class="w"> </span><span class="kn">import</span> <span class="n">RandomForestClassifier</span>
+
+<span class="n">q</span> <span class="o">=</span> <span class="n">QuaDapt</span><span class="p">(</span>
+    <span class="n">quantifier</span><span class="o">=</span><span class="n">ACC</span><span class="p">(</span><span class="n">RandomForestClassifier</span><span class="p">()),</span>
+    <span class="n">merging_factors</span><span class="o">=</span><span class="p">[</span><span class="mf">0.1</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">],</span>
+    <span class="n">measure</span><span class="o">=</span><span class="s2">&quot;topsoe&quot;</span>
+<span class="p">)</span>
+
+<span class="n">q</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">X_train</span><span class="p">,</span> <span class="n">y_train</span><span class="p">)</span>
+<span class="n">prevalence</span> <span class="o">=</span> <span class="n">q</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">X_test</span><span class="p">)</span>
+</pre></div>
+</div>
+<details class="sd-sphinx-override sd-dropdown sd-card sd-mb-3">
+<summary class="sd-summary-title sd-card-header">
+<span class="sd-summary-text">References</span><span class="sd-summary-state-marker sd-summary-chevron-right"><svg version="1.1" width="1.5em" height="1.5em" class="sd-octicon sd-octicon-chevron-right" viewBox="0 0 24 24" aria-hidden="true"><path d="M8.72 18.78a.75.75 0 0 1 0-1.06L14.44 12 8.72 6.28a.751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018l6.25 6.25a.75.75 0 0 1 0 1.06l-6.25 6.25a.75.75 0 0 1-1.06 0Z"></path></svg></span></summary><div class="sd-summary-content sd-card-body docutils">
+<aside class="footnote-list brackets">
+<aside class="footnote brackets" id="id4" role="doc-footnote">
+<span class="label"><span class="fn-bracket">[</span>1<span class="fn-bracket">]</span></span>
+<span class="backrefs">(<a role="doc-backlink" href="#id1">1</a>,<a role="doc-backlink" href="#id2">2</a>)</span>
+<dl class="simple">
+<dt>Ortega, J. P., Junior, L. F. L., Zalewski, W., &amp; Maletzke, A.</dt><dd><p class="sd-card-text"><em>QuaDapt: Drift-Resilient Quantification via Parameters Adaptation.</em></p>
+</dd>
+</dl>
+<p class="sd-card-text">5th International Workshop on Learning to Quantify.</p>
+</aside>
+<aside class="footnote brackets" id="id5" role="doc-footnote">
+<span class="label"><span class="fn-bracket">[</span><a role="doc-backlink" href="#id3">2</a><span class="fn-bracket">]</span></span>
+<p class="sd-card-text">Maletzke, A., Reis, D. dos, Hassan, W., &amp; Batista, G. (2021).
+<em>Accurately Quantifying under Score Variability.</em> ICDM 2021.</p>
+</aside>
+</aside>
+</div>
+</details></section>
 
 
                 </article>
@@ -411,7 +505,7 @@
       <i class="fa-solid fa-angle-left"></i>
       <div class="prev-next-info">
         <p class="prev-next-subtitle">previous</p>
-        <p class="prev-next-title"><span class="section-number">3.2. </span>Bootstrap for Quantification</p>
+        <p class="prev-next-title"><span class="section-number">5.2. </span>Bootstrap in Quantification</p>
       </div>
     </a>
     <a class="right-next"
@@ -419,7 +513,7 @@
        title="next page">
       <div class="prev-next-info">
         <p class="prev-next-subtitle">next</p>
-        <p class="prev-next-title"><span class="section-number">4. </span>Building a Quantifier</p>
+        <p class="prev-next-title"><span class="section-number">6. </span>Building a Quantifier</p>
       </div>
       <i class="fa-solid fa-angle-right"></i>
     </a>

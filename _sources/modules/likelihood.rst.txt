@@ -16,24 +16,6 @@ The **Maximum Likelihood Prevalence Estimation (MLPE)**, defined in :class:`MLPE
 MLPE is not a "true" quantification method but rather a trivial strategy. It simply takes the observed prevalence in the training set and uses it as the estimate for the test set.
 If there were no dataset shift (change in distribution), MLPE would be the optimal quantification strategy.
 
-MLPE defines the estimated prevalence in the test set :math:`U` (:math:`\hat{p}^U_{MLPE}(y)`) as the prevalence :math:`p_L(y)` in the training set :math:`L`:
-
-.. math::
-
-    \hat{p}^U_{MLPE}(y) = p_L(y)
-
-**Example**
-
-.. code-block:: python
-
-   from mlquantify.likelihood import MLPE
-   
-   # MLPE simply returns the training prevalence
-   q = MLPE()
-   q.fit(X_train, y_train)
-   q.predict(X_test) 
-   # -> returns prevalence(y_train)
-
 
 Expectation Maximization for Quantification (EMQ)
 =================================================
@@ -45,6 +27,13 @@ The SLD algorithm is based on the Expectation-Maximization (EM) framework, which
 - **Adjusting classifier outputs**: It adjusts the outputs of a probabilistic classifier to correspond to new prior probabilities (prevalences) without the need to retrain the classification model. As a byproduct of this process, it also estimates the new prior probabilities.
 - **Iterative refinement**: EMQ is a mutually recursive process that iterates by incrementally updating posterior probabilities (**E-Step**) and then class prevalences (**M-Step**) until the process converges.
 - **Convergence guarantee**: The algorithm converges to a global maximum of the likelihood estimate, as the likelihood function is concave and bounded.
+
+.. figure:: ../images/expectation-maximization.png
+   :align: center
+   :width: 80%
+   :alt: Expectation Maximization illustration
+
+   *Expectation Maximization Illustration for a binary scenario (looking only at the positive class)*
 
 The method starts at **Iteration 0**, where the initial estimated prevalence :math:`\hat{p}^{(0)}_U(y)` is defined as the training set prevalence :math:`p_L(y)` (i.e., the MLPE estimate, or priors). From there, EMQ uses iteration to adjust this initial estimate.
 

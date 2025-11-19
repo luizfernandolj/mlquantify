@@ -10,8 +10,8 @@ User Guide
 
     Aggregative Quantification <aggregative_quantification.rst>
     Non Aggregative Quantification <non_aggregative_quantification.rst>
+    Confidence Intervals <modules/confidence_intervals.rst>
+    Model Selection and Evaluation <model_selection_evaluation.rst>
     Meta Quantification <meta_quantification.rst>
     Building a Quantifier <building_a_quantifier.rst>
-    Confidence Intervals <confidence_intervals.rst>
-    Model Selection and Evaluation <model_selection_evaluation.rst>
     Experiment Management <experiment_management.rst>

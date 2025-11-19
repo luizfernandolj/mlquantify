@@ -129,8 +129,14 @@
   
   
   
+    
+    
+      
+    
+    
+    <img src="../_static/logo_mlquantify.svg" class="logo__image only-light" alt="mlquantify homepage"/>
+    <img src="../_static/logo_mlquantify-white.svg" class="logo__image only-dark pst-js-only" alt="mlquantify homepage"/>
   
-    <p class="title logo__title">mlquantify 0.1.8 documentation</p>
   
 </a></div>
     
@@ -326,16 +332,20 @@
 <li class="toctree-l2"><a class="reference internal" href="mixture_models_non_agg.html">2.1. Mixture Models for Non-Aggregative Quantification</a></li>
 </ul>
 </details></li>
-<li class="toctree-l1 has-children"><a class="reference internal" href="../meta_quantification.html">3.  Meta Quantification</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
-<li class="toctree-l2"><a class="reference internal" href="ensemble.html">3.1. Ensemble for Quantification</a></li>
-<li class="toctree-l2"><a class="reference internal" href="bootstrap.html">3.2. Bootstrap for Quantification</a></li>
-<li class="toctree-l2"><a class="reference internal" href="scores_adaptation.html">3.3. The Scores Adaptation Framework (QuaDapt)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="confidence_intervals.html">3.  Confidence Intervals</a></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../model_selection_evaluation.html">4.  Model Selection and Evaluation</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="protocols.html">4.1. Protocols for Quantification</a></li>
 </ul>
 </details></li>
-<li class="toctree-l1"><a class="reference internal" href="../building_a_quantifier.html">4.  Building a Quantifier</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../model_selection_evaluation.html">5.  Model Selection and Evaluation</a></li>
-<li class="toctree-l1 has-children"><a class="reference internal" href="../experiment_management.html">6.  Experiment Management</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
-<li class="toctree-l2"><a class="reference internal" href="../building_a_protocol.html">6.1. Building a Protocol</a></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../meta_quantification.html">5.  Meta Quantification</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="ensemble.html">5.1. Ensemble for Quantification</a></li>
+<li class="toctree-l2"><a class="reference internal" href="bootstrap.html">5.2. Bootstrap in Quantification</a></li>
+<li class="toctree-l2"><a class="reference internal" href="scores_adaptation.html">5.3. QuaDapt: Drift-Resilient Score Adaptation</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1"><a class="reference internal" href="../building_a_quantifier.html">6.  Building a Quantifier</a></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../experiment_management.html">7.  Experiment Management</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../building_a_protocol.html">7.1. Building a Protocol</a></li>
 </ul>
 </details></li>
 </ul>
@@ -402,19 +412,6 @@
 <p>The <strong>Maximum Likelihood Prevalence Estimation (MLPE)</strong>, defined in <a class="reference internal" href="generated/mlquantify.likelihood.MLPE.html#mlquantify.likelihood.MLPE" title="mlquantify.likelihood.MLPE"><code class="xref py py-class docutils literal notranslate"><span class="pre">MLPE</span></code></a>, is the simplest strategy and is considered a trivial starting point or baseline. It naively assumes that the class distribution in the test set (<span class="math notranslate nohighlight">\(U\)</span>) is the same as in the training set (<span class="math notranslate nohighlight">\(L\)</span>).</p>
 <p>MLPE is not a “true” quantification method but rather a trivial strategy. It simply takes the observed prevalence in the training set and uses it as the estimate for the test set.
 If there were no dataset shift (change in distribution), MLPE would be the optimal quantification strategy.</p>
-<p>MLPE defines the estimated prevalence in the test set <span class="math notranslate nohighlight">\(U\)</span> (<span class="math notranslate nohighlight">\(\hat{p}^U_{MLPE}(y)\)</span>) as the prevalence <span class="math notranslate nohighlight">\(p_L(y)\)</span> in the training set <span class="math notranslate nohighlight">\(L\)</span>:</p>
-<div class="math notranslate nohighlight">
-\[\hat{p}^U_{MLPE}(y) = p_L(y)\]</div>
-<p><strong>Example</strong></p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">mlquantify.likelihood</span><span class="w"> </span><span class="kn">import</span> <span class="n">MLPE</span>
-
-<span class="c1"># MLPE simply returns the training prevalence</span>
-<span class="n">q</span> <span class="o">=</span> <span class="n">MLPE</span><span class="p">()</span>
-<span class="n">q</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">X_train</span><span class="p">,</span> <span class="n">y_train</span><span class="p">)</span>
-<span class="n">q</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">X_test</span><span class="p">)</span>
-<span class="c1"># -&gt; returns prevalence(y_train)</span>
-</pre></div>
-</div>
 </section>
 <section id="expectation-maximization-for-quantification-emq">
 <h2><span class="section-number">1.3.2. </span>Expectation Maximization for Quantification (EMQ)<a class="headerlink" href="#expectation-maximization-for-quantification-emq" title="Link to this heading">#</a></h2>
@@ -425,6 +422,13 @@ If there were no dataset shift (change in distribution), MLPE would be the optim
 <li><p><strong>Iterative refinement</strong>: EMQ is a mutually recursive process that iterates by incrementally updating posterior probabilities (<strong>E-Step</strong>) and then class prevalences (<strong>M-Step</strong>) until the process converges.</p></li>
 <li><p><strong>Convergence guarantee</strong>: The algorithm converges to a global maximum of the likelihood estimate, as the likelihood function is concave and bounded.</p></li>
 </ul>
+<figure class="align-center" id="id7">
+<a class="reference internal image-reference" href="../_images/expectation-maximization.png"><img alt="Expectation Maximization illustration" src="../_images/expectation-maximization.png" style="width: 80%;" />
+</a>
+<figcaption>
+<p><span class="caption-text"><em>Expectation Maximization Illustration for a binary scenario (looking only at the positive class)</em></span><a class="headerlink" href="#id7" title="Link to this image">#</a></p>
+</figcaption>
+</figure>
 <p>The method starts at <strong>Iteration 0</strong>, where the initial estimated prevalence <span class="math notranslate nohighlight">\(\hat{p}^{(0)}_U(y)\)</span> is defined as the training set prevalence <span class="math notranslate nohighlight">\(p_L(y)\)</span> (i.e., the MLPE estimate, or priors). From there, EMQ uses iteration to adjust this initial estimate.</p>
 <details class="sd-sphinx-override sd-dropdown sd-card sd-mb-3">
 <summary class="sd-summary-title sd-card-header">
