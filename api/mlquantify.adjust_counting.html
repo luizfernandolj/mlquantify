@@ -11,12 +11,12 @@
 <meta property="og:type" content="website" />
 <meta property="og:url" content="api/mlquantify.adjust_counting.html" />
 <meta property="og:site_name" content="mlquantify" />
-<meta property="og:description" content="Adjusted Counting Methods:" />
+<meta property="og:description" content="Adjust Counting Methods:" />
 <meta property="og:image:width" content="1146" />
 <meta property="og:image:height" content="600" />
-<meta property="og:image" content="_images/social_previews/summary_api_mlquantify.adjust_counting_dc271c15.png" />
-<meta property="og:image:alt" content="Adjusted Counting Methods:" />
-<meta name="description" content="Adjusted Counting Methods:" />
+<meta property="og:image" content="_images/social_previews/summary_api_mlquantify.adjust_counting_aa041c40.png" />
+<meta property="og:image:alt" content="Adjust Counting Methods:" />
+<meta name="description" content="Adjust Counting Methods:" />
 <meta name="twitter:card" content="summary_large_image" />
 
     <title>mlquantify.adjust_counting &#8212; mlquantify 0.1.8 documentation</title>
@@ -322,6 +322,10 @@
 <li class="toctree-l2"><a class="reference internal" href="../modules/generated/mlquantify.adjust_counting.T50.html">T50</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../modules/generated/mlquantify.adjust_counting.MS.html">MS</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../modules/generated/mlquantify.adjust_counting.MS2.html">MS2</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../modules/generated/mlquantify.adjust_counting.evaluate_thresholds.html">evaluate_thresholds</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../modules/generated/mlquantify.adjust_counting.compute_tpr.html">compute_tpr</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../modules/generated/mlquantify.adjust_counting.compute_fpr.html">compute_fpr</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../modules/generated/mlquantify.adjust_counting.compute_table.html">compute_table</a></li>
 </ul>
 </details></li>
 <li class="toctree-l1 has-children"><a class="reference internal" href="mlquantify.base.html">mlquantify.base</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
@@ -456,8 +460,8 @@
                   
   <section id="module-mlquantify.adjust_counting">
 <span id="mlquantify-adjust-counting"></span><span id="adjust-counting-ref"></span><h1>mlquantify.adjust_counting<a class="headerlink" href="#module-mlquantify.adjust_counting" title="Link to this heading">#</a></h1>
-<section id="adjusted-counting-methods">
-<span id="adjust-counting-ref-adjusted-counting-methods"></span><h2>Adjusted Counting Methods<a class="headerlink" href="#adjusted-counting-methods" title="Link to this heading">#</a></h2>
+<section id="adjust-counting-methods">
+<span id="adjust-counting-ref-adjust-counting-methods"></span><h2>Adjust Counting Methods<a class="headerlink" href="#adjust-counting-methods" title="Link to this heading">#</a></h2>
 <div class="pst-scrollable-table-container"><table class="autosummary longtable table autosummary">
 <tbody>
 <tr class="row-odd"><td><p><a class="reference internal" href="../modules/generated/mlquantify.adjust_counting.CC.html#mlquantify.adjust_counting.CC" title="mlquantify.adjust_counting.CC"><code class="xref py py-obj docutils literal notranslate"><span class="pre">CC</span></code></a></p></td>
@@ -492,6 +496,18 @@
 </tr>
 <tr class="row-odd"><td><p><a class="reference internal" href="../modules/generated/mlquantify.adjust_counting.MS2.html#mlquantify.adjust_counting.MS2" title="mlquantify.adjust_counting.MS2"><code class="xref py py-obj docutils literal notranslate"><span class="pre">MS2</span></code></a></p></td>
 <td><p>MS2 — Median Sweep variant constraining <span class="math notranslate nohighlight">\(|\text{TPR} - \text{FPR}| &gt; 0.25\)</span>.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="../modules/generated/mlquantify.adjust_counting.evaluate_thresholds.html#mlquantify.adjust_counting.evaluate_thresholds" title="mlquantify.adjust_counting.evaluate_thresholds"><code class="xref py py-obj docutils literal notranslate"><span class="pre">evaluate_thresholds</span></code></a></p></td>
+<td><p>Evaluate a range of classification thresholds to compute the corresponding True Positive Rate (TPR) and False Positive Rate (FPR) for a binary quantification task.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="../modules/generated/mlquantify.adjust_counting.compute_tpr.html#mlquantify.adjust_counting.compute_tpr" title="mlquantify.adjust_counting.compute_tpr"><code class="xref py py-obj docutils literal notranslate"><span class="pre">compute_tpr</span></code></a></p></td>
+<td><p>Compute the True Positive Rate (Recall) for a binary classification task.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="../modules/generated/mlquantify.adjust_counting.compute_fpr.html#mlquantify.adjust_counting.compute_fpr" title="mlquantify.adjust_counting.compute_fpr"><code class="xref py py-obj docutils literal notranslate"><span class="pre">compute_fpr</span></code></a></p></td>
+<td><p>Compute the False Positive Rate for a binary classification task.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="../modules/generated/mlquantify.adjust_counting.compute_table.html#mlquantify.adjust_counting.compute_table" title="mlquantify.adjust_counting.compute_table"><code class="xref py py-obj docutils literal notranslate"><span class="pre">compute_table</span></code></a></p></td>
+<td><p>Compute the confusion matrix table for a binary classification task.</p></td>
 </tr>
 </tbody>
 </table>

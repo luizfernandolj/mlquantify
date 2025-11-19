@@ -223,6 +223,70 @@ reference on concepts repeated across the API, see :ref:`glossary`.
 
 
 
+  * - :obj:`~mlquantify.adjust_counting.evaluate_thresholds`
+
+    - .. div:: sk-apisearch-desc
+
+        .. currentmodule:: mlquantify.adjust_counting
+
+        .. autoshortsummary:: mlquantify.adjust_counting.evaluate_thresholds
+
+        .. div:: caption
+
+          :mod:`mlquantify.adjust_counting`
+
+
+
+
+
+  * - :obj:`~mlquantify.adjust_counting.compute_tpr`
+
+    - .. div:: sk-apisearch-desc
+
+        .. currentmodule:: mlquantify.adjust_counting
+
+        .. autoshortsummary:: mlquantify.adjust_counting.compute_tpr
+
+        .. div:: caption
+
+          :mod:`mlquantify.adjust_counting`
+
+
+
+
+
+  * - :obj:`~mlquantify.adjust_counting.compute_fpr`
+
+    - .. div:: sk-apisearch-desc
+
+        .. currentmodule:: mlquantify.adjust_counting
+
+        .. autoshortsummary:: mlquantify.adjust_counting.compute_fpr
+
+        .. div:: caption
+
+          :mod:`mlquantify.adjust_counting`
+
+
+
+
+
+  * - :obj:`~mlquantify.adjust_counting.compute_table`
+
+    - .. div:: sk-apisearch-desc
+
+        .. currentmodule:: mlquantify.adjust_counting
+
+        .. autoshortsummary:: mlquantify.adjust_counting.compute_table
+
+        .. div:: caption
+
+          :mod:`mlquantify.adjust_counting`
+
+
+
+
+
 
 
 
