@@ -208,6 +208,25 @@ API_REFERENCE = {
             }
         ],
     },
+    "mlquantify.utils": {
+        "short_summary": "Utility functions for quantification.",
+        "description": None,
+        "sections": [
+            {
+                "title": None,
+                "autosummary": [
+                    "get_prev_from_labels",
+                    "load_quantifier",
+                    "make_prevs",
+                    "apply_cross_validation",
+                    "simplex_uniform_kraemer",
+                    "simplex_grid_sampling",
+                    "simplex_uniform_sampling",
+                    "get_indexes_with_prevalence"
+                ],
+            }
+        ]
+    },
 }
 
 

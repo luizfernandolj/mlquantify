@@ -3,7 +3,7 @@ import pandas as pd
 from collections import defaultdict
 
 
-def get_prev_from_labels(y) -> dict:
+def get_prev_from_labels(y, format="dict") -> dict:
     """
     Get the real prevalence of each class in the target array.
     
@@ -19,6 +19,9 @@ def get_prev_from_labels(y) -> dict:
     """
     if isinstance(y, np.ndarray):
         y = pd.Series(y)
+    if format == "array":
+        prevalences = y.value_counts(normalize=True).sort_index().values
+        return prevalences
     real_prevs = y.value_counts(normalize=True).to_dict()
     real_prevs = dict(sorted(real_prevs.items()))
     return real_prevs

@@ -6,5 +6,6 @@ Model Selection and Evaluation
 .. toctree::
    :maxdepth: 2
 
-   modules/model_selection.rst
-   modules/evaluation.rst
+   modules/protocols.rst
+   modules/tuning_hyperparameters.rst
+   modules/evaluation_metrics.rst

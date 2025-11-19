@@ -134,6 +134,12 @@ html_theme_options = {
     # https://pydata-sphinx-theme.readthedocs.io/en/stable/user_guide/version-dropdown.html#configure-switcher-json-url
     "pygments_light_style": "tango",
     "pygments_dark_style": "monokai",
+    "logo": {
+        "alt_text": "mlquantify homepage",
+        "image_relative": "logos/logo_mlquantify.svg",
+        "image_light": "logos/logo_mlquantify.svg",
+        "image_dark": "logos/logo_mlquantify-white.svg",
+    },
     "surface_warnings": True,
     # navbar_persistent is persistent right (even when on mobiles)
     "navbar_persistent": ["search-button"],

@@ -28,6 +28,7 @@ reference on concepts repeated across the API, see :ref:`glossary`.
   mlquantify.model_selection
   mlquantify.multiclass
   mlquantify.neighbors
+  mlquantify.utils
 
 .. list-table::
   :header-rows: 1
@@ -42,6 +43,38 @@ reference on concepts repeated across the API, see :ref:`glossary`.
 
 
 
+
+
+
+
+
+  * - :obj:`~mlquantify.adjust_counting.CC`
+
+    - .. div:: sk-apisearch-desc
+
+        .. currentmodule:: mlquantify.adjust_counting
+
+        .. autoshortsummary:: mlquantify.adjust_counting.CC
+
+        .. div:: caption
+
+          :mod:`mlquantify.adjust_counting`
+
+
+
+
+
+  * - :obj:`~mlquantify.adjust_counting.PCC`
+
+    - .. div:: sk-apisearch-desc
+
+        .. currentmodule:: mlquantify.adjust_counting
+
+        .. autoshortsummary:: mlquantify.adjust_counting.PCC
+
+        .. div:: caption
+
+          :mod:`mlquantify.adjust_counting`
 
 
 
@@ -182,6 +215,70 @@ reference on concepts repeated across the API, see :ref:`glossary`.
         .. currentmodule:: mlquantify.adjust_counting
 
         .. autoshortsummary:: mlquantify.adjust_counting.MS2
+
+        .. div:: caption
+
+          :mod:`mlquantify.adjust_counting`
+
+
+
+
+
+  * - :obj:`~mlquantify.adjust_counting.evaluate_thresholds`
+
+    - .. div:: sk-apisearch-desc
+
+        .. currentmodule:: mlquantify.adjust_counting
+
+        .. autoshortsummary:: mlquantify.adjust_counting.evaluate_thresholds
+
+        .. div:: caption
+
+          :mod:`mlquantify.adjust_counting`
+
+
+
+
+
+  * - :obj:`~mlquantify.adjust_counting.compute_tpr`
+
+    - .. div:: sk-apisearch-desc
+
+        .. currentmodule:: mlquantify.adjust_counting
+
+        .. autoshortsummary:: mlquantify.adjust_counting.compute_tpr
+
+        .. div:: caption
+
+          :mod:`mlquantify.adjust_counting`
+
+
+
+
+
+  * - :obj:`~mlquantify.adjust_counting.compute_fpr`
+
+    - .. div:: sk-apisearch-desc
+
+        .. currentmodule:: mlquantify.adjust_counting
+
+        .. autoshortsummary:: mlquantify.adjust_counting.compute_fpr
+
+        .. div:: caption
+
+          :mod:`mlquantify.adjust_counting`
+
+
+
+
+
+  * - :obj:`~mlquantify.adjust_counting.compute_table`
+
+    - .. div:: sk-apisearch-desc
+
+        .. currentmodule:: mlquantify.adjust_counting
+
+        .. autoshortsummary:: mlquantify.adjust_counting.compute_table
 
         .. div:: caption
 
@@ -978,6 +1075,138 @@ reference on concepts repeated across the API, see :ref:`glossary`.
         .. div:: caption
 
           :mod:`mlquantify.neighbors`
+
+
+
+
+
+
+
+
+
+  * - :obj:`~mlquantify.utils.get_prev_from_labels`
+
+    - .. div:: sk-apisearch-desc
+
+        .. currentmodule:: mlquantify.utils
+
+        .. autoshortsummary:: mlquantify.utils.get_prev_from_labels
+
+        .. div:: caption
+
+          :mod:`mlquantify.utils`
+
+
+
+
+
+  * - :obj:`~mlquantify.utils.load_quantifier`
+
+    - .. div:: sk-apisearch-desc
+
+        .. currentmodule:: mlquantify.utils
+
+        .. autoshortsummary:: mlquantify.utils.load_quantifier
+
+        .. div:: caption
+
+          :mod:`mlquantify.utils`
+
+
+
+
+
+  * - :obj:`~mlquantify.utils.make_prevs`
+
+    - .. div:: sk-apisearch-desc
+
+        .. currentmodule:: mlquantify.utils
+
+        .. autoshortsummary:: mlquantify.utils.make_prevs
+
+        .. div:: caption
+
+          :mod:`mlquantify.utils`
+
+
+
+
+
+  * - :obj:`~mlquantify.utils.apply_cross_validation`
+
+    - .. div:: sk-apisearch-desc
+
+        .. currentmodule:: mlquantify.utils
+
+        .. autoshortsummary:: mlquantify.utils.apply_cross_validation
+
+        .. div:: caption
+
+          :mod:`mlquantify.utils`
+
+
+
+
+
+  * - :obj:`~mlquantify.utils.simplex_uniform_kraemer`
+
+    - .. div:: sk-apisearch-desc
+
+        .. currentmodule:: mlquantify.utils
+
+        .. autoshortsummary:: mlquantify.utils.simplex_uniform_kraemer
+
+        .. div:: caption
+
+          :mod:`mlquantify.utils`
+
+
+
+
+
+  * - :obj:`~mlquantify.utils.simplex_grid_sampling`
+
+    - .. div:: sk-apisearch-desc
+
+        .. currentmodule:: mlquantify.utils
+
+        .. autoshortsummary:: mlquantify.utils.simplex_grid_sampling
+
+        .. div:: caption
+
+          :mod:`mlquantify.utils`
+
+
+
+
+
+  * - :obj:`~mlquantify.utils.simplex_uniform_sampling`
+
+    - .. div:: sk-apisearch-desc
+
+        .. currentmodule:: mlquantify.utils
+
+        .. autoshortsummary:: mlquantify.utils.simplex_uniform_sampling
+
+        .. div:: caption
+
+          :mod:`mlquantify.utils`
+
+
+
+
+
+  * - :obj:`~mlquantify.utils.get_indexes_with_prevalence`
+
+    - .. div:: sk-apisearch-desc
+
+        .. currentmodule:: mlquantify.utils
+
+        .. autoshortsummary:: mlquantify.utils.get_indexes_with_prevalence
+
+        .. div:: caption
+
+          :mod:`mlquantify.utils`
 
 
 

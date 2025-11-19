@@ -2,14 +2,6 @@ import numpy as np
 from scipy.stats import chi2
 
 
-import numpy as np
-from scipy.stats import chi2
-
-
-import numpy as np
-from scipy.stats import chi2
-
-
 class BaseConfidenceRegion:
     r"""
     Base class for confidence regions of prevalence estimates.
@@ -67,7 +59,7 @@ class BaseConfidenceRegion:
     ----------
     .. [1] Moreo, A., & Salvati, N. (2025).
        *An Efficient Method for Deriving Confidence Intervals in Aggregative Quantification.*
-       Istituto di Scienza e Tecnologie dell’Informazione, CNR, Pisa.
+       Istituto di Scienza e Tecnologie dell'Informazione, CNR, Pisa.
     """
 
     def __init__(self, prev_estims, confidence_level=0.95):

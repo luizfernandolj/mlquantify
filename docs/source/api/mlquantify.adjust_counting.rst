@@ -13,12 +13,12 @@ mlquantify.adjust_counting
 
 
 
-.. _adjust_counting_ref-adjusted-counting-methods:
+.. _adjust_counting_ref-adjust-counting-methods:
 
 
 
-Adjusted Counting Methods
--------------------------
+Adjust Counting Methods
+-----------------------
 
 
 
@@ -29,6 +29,8 @@ Adjusted Counting Methods
   :template: base.rst
 
 
+  CC
+  PCC
   FM
   GAC
   GPAC
@@ -38,3 +40,7 @@ Adjusted Counting Methods
   T50
   MS
   MS2
+  evaluate_thresholds
+  compute_tpr
+  compute_fpr
+  compute_table
