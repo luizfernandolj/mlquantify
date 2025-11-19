@@ -403,6 +403,14 @@
 The core argument of KDEy is that traditional DM approaches relying on histograms are suboptimal in multi-class scenarios. Histograms tend to become specific to each class, losing the opportunity to model <strong>inter-class interactions</strong> that may exist in the data. Furthermore, binning strategies can lose critical information regarding the shape of the distribution <a class="footnote-reference brackets" href="#id5" id="id2" role="doc-noteref"><span class="fn-bracket">[</span>1<span class="fn-bracket">]</span></a>.</p>
 <p><strong>The KDEy Solution</strong>
 KDEy resolves this by replacing discrete, univariate histograms with <strong>continuous, multivariate Probability Density Functions (PDFs)</strong> modeled via Kernel Density Estimation (KDE). These PDFs are represented as Gaussian Mixture Models (GMMs) operating on the unit simplex (<span class="math notranslate nohighlight">\(\Delta_{n-1}\)</span>), effectively preserving inter-class correlations <a class="footnote-reference brackets" href="#id5" id="id3" role="doc-noteref"><span class="fn-bracket">[</span>1<span class="fn-bracket">]</span></a>.</p>
+<p>For example, in a 3-class problem, instead of using three separate histograms for each class’s posterior probabilities, KDEy models a single 2D density over the simplex defined by the three classes. This allows it to capture how the probabilities for different classes relate to each other.</p>
+<figure class="align-center" id="id6">
+<a class="reference internal image-reference" href="../_images/kdey-concept.png"><img alt="KDEy Concept Illustration" src="../_images/kdey-concept.png" style="width: 80%;" />
+</a>
+<figcaption>
+<p><span class="caption-text"><em>Illustration of KDEy modeling class-conditional densities on the probability simplex, figure from [1]_</em></span><a class="headerlink" href="#id6" title="Link to this image">#</a></p>
+</figcaption>
+</figure>
 <p>KDEy serves as a prefix for variants that fall under different optimization frameworks. Next , we describe the three main KDEy quantifiers described in <a class="footnote-reference brackets" href="#id5" id="id4" role="doc-noteref"><span class="fn-bracket">[</span>1<span class="fn-bracket">]</span></a>.</p>
 <p>The library provides three main variants of KDEy, depending on the optimization framework and the divergence function utilized.</p>
 <section id="kdey-ml-maximum-likelihood">
