@@ -7,17 +7,17 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
-<meta property="og:title" content="3. Confidence Intervals for Quantification" />
+<meta property="og:title" content="4. Confidence Intervals for Quantification" />
 <meta property="og:type" content="website" />
 <meta property="og:url" content="modules/confidence_intervals.html" />
 <meta property="og:site_name" content="mlquantify" />
 <meta property="og:image:width" content="1146" />
 <meta property="og:image:height" content="600" />
-<meta property="og:image" content="_images/social_previews/summary_modules_confidence_intervals_056ecd78.png" />
+<meta property="og:image" content="_images/social_previews/summary_modules_confidence_intervals_9f9dfe17.png" />
 <meta property="og:image:alt" content="" />
 <meta name="twitter:card" content="summary_large_image" />
 
-    <title>3. Confidence Intervals for Quantification &#8212; mlquantify 0.1.8 documentation</title>
+    <title>4. Confidence Intervals for Quantification &#8212; mlquantify 0.1.8 documentation</title>
   
   
   
@@ -61,8 +61,8 @@
     <link rel="canonical" href="https://luizfernandolj.github.io/mlquantify/modules/confidence_intervals.html" />
     <link rel="author" title="About these documents" href="../about.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="4. Model Selection and Evaluation" href="../model_selection_evaluation.html" />
-    <link rel="prev" title="2.1. Mixture Models for Non-Aggregative Quantification" href="mixture_models_non_agg.html" />
+    <link rel="next" title="5. Model Selection and Evaluation" href="../model_selection_evaluation.html" />
+    <link rel="prev" title="3.3. QuaDapt: Drift-Resilient Score Adaptation" href="scores_adaptation.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
   <meta name="docsearch:version" content="" />
@@ -329,15 +329,15 @@
 <li class="toctree-l2"><a class="reference internal" href="mixture_models_non_agg.html">2.1. Mixture Models for Non-Aggregative Quantification</a></li>
 </ul>
 </details></li>
-<li class="toctree-l1 current active"><a class="current reference internal" href="#">3.  Confidence Intervals</a></li>
-<li class="toctree-l1 has-children"><a class="reference internal" href="../model_selection_evaluation.html">4.  Model Selection and Evaluation</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
-<li class="toctree-l2"><a class="reference internal" href="protocols.html">4.1. Protocols for Quantification</a></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../meta_quantification.html">3.  Meta Quantification</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="ensemble.html">3.1. Ensemble for Quantification</a></li>
+<li class="toctree-l2"><a class="reference internal" href="bootstrap.html">3.2. Bootstrap in Quantification</a></li>
+<li class="toctree-l2"><a class="reference internal" href="scores_adaptation.html">3.3. QuaDapt: Drift-Resilient Score Adaptation</a></li>
 </ul>
 </details></li>
-<li class="toctree-l1 has-children"><a class="reference internal" href="../meta_quantification.html">5.  Meta Quantification</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
-<li class="toctree-l2"><a class="reference internal" href="ensemble.html">5.1. Ensemble for Quantification</a></li>
-<li class="toctree-l2"><a class="reference internal" href="bootstrap.html">5.2. Bootstrap in Quantification</a></li>
-<li class="toctree-l2"><a class="reference internal" href="scores_adaptation.html">5.3. QuaDapt: Drift-Resilient Score Adaptation</a></li>
+<li class="toctree-l1 current active"><a class="current reference internal" href="#">4.  Confidence Intervals</a></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../model_selection_evaluation.html">5.  Model Selection and Evaluation</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="protocols.html">5.1. Protocols for Quantification</a></li>
 </ul>
 </details></li>
 <li class="toctree-l1"><a class="reference internal" href="../building_a_quantifier.html">6.  Building a Quantifier</a></li>
@@ -381,7 +381,7 @@
     
     <li class="breadcrumb-item"><a href="../user_guide.html" class="nav-link">User Guide</a></li>
     
-    <li class="breadcrumb-item active" aria-current="page"><span class="ellipsis"><span class="section-number">3. </span>Confidence Intervals for Quantification</span></li>
+    <li class="breadcrumb-item active" aria-current="page"><span class="ellipsis"><span class="section-number">4. </span>Confidence Intervals for Quantification</span></li>
   </ul>
 </nav>
 </div>
@@ -399,7 +399,7 @@
                 <article class="bd-article">
                   
   <section id="confidence-intervals-for-quantification">
-<span id="confidence-intervals"></span><h1><span class="section-number">3. </span>Confidence Intervals for Quantification<a class="headerlink" href="#confidence-intervals-for-quantification" title="Link to this heading">#</a></h1>
+<span id="confidence-intervals"></span><h1><span class="section-number">4. </span>Confidence Intervals for Quantification<a class="headerlink" href="#confidence-intervals-for-quantification" title="Link to this heading">#</a></h1>
 </section>
 
 
@@ -413,12 +413,12 @@
     <div class="footer-article-item">
 <div class="prev-next-area">
     <a class="left-prev"
-       href="mixture_models_non_agg.html"
+       href="scores_adaptation.html"
        title="previous page">
       <i class="fa-solid fa-angle-left"></i>
       <div class="prev-next-info">
         <p class="prev-next-subtitle">previous</p>
-        <p class="prev-next-title"><span class="section-number">2.1. </span>Mixture Models for Non-Aggregative Quantification</p>
+        <p class="prev-next-title"><span class="section-number">3.3. </span>QuaDapt: Drift-Resilient Score Adaptation</p>
       </div>
     </a>
     <a class="right-next"
@@ -426,7 +426,7 @@
        title="next page">
       <div class="prev-next-info">
         <p class="prev-next-subtitle">next</p>
-        <p class="prev-next-title"><span class="section-number">4. </span>Model Selection and Evaluation</p>
+        <p class="prev-next-title"><span class="section-number">5. </span>Model Selection and Evaluation</p>
       </div>
       <i class="fa-solid fa-angle-right"></i>
     </a>

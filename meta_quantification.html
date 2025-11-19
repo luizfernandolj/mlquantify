@@ -7,19 +7,19 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
-<meta property="og:title" content="5. Meta-Quantification" />
+<meta property="og:title" content="3. Meta-Quantification" />
 <meta property="og:type" content="website" />
 <meta property="og:url" content="meta_quantification.html" />
 <meta property="og:site_name" content="mlquantify" />
 <meta property="og:description" content="Meta-quantification methods combine multiple quantification approaches to improve the accuracy and robustness of class prevalence estimates. These methods leverage the strengths of different quanti..." />
 <meta property="og:image:width" content="1146" />
 <meta property="og:image:height" content="600" />
-<meta property="og:image" content="_images/social_previews/summary_meta_quantification_36ab13b8.png" />
+<meta property="og:image" content="_images/social_previews/summary_meta_quantification_3f7532f4.png" />
 <meta property="og:image:alt" content="Meta-quantification methods combine multiple quantification approaches to improve the accuracy and robustness of class prevalence estimates. These methods leverage the strengths of different quanti..." />
 <meta name="description" content="Meta-quantification methods combine multiple quantification approaches to improve the accuracy and robustness of class prevalence estimates. These methods leverage the strengths of different quanti..." />
 <meta name="twitter:card" content="summary_large_image" />
 
-    <title>5. Meta-Quantification &#8212; mlquantify 0.1.8 documentation</title>
+    <title>3. Meta-Quantification &#8212; mlquantify 0.1.8 documentation</title>
   
   
   
@@ -64,8 +64,8 @@
     <link rel="canonical" href="https://luizfernandolj.github.io/mlquantify/meta_quantification.html" />
     <link rel="author" title="About these documents" href="about.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="next" title="5.1. Ensemble for Quantification" href="modules/ensemble.html" />
-    <link rel="prev" title="&lt;no title&gt;" href="modules/evaluation_metrics.html" />
+    <link rel="next" title="3.1. Ensemble for Quantification" href="modules/ensemble.html" />
+    <link rel="prev" title="2.1. Mixture Models for Non-Aggregative Quantification" href="modules/mixture_models_non_agg.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
   <meta name="docsearch:version" content="" />
@@ -332,15 +332,15 @@
 <li class="toctree-l2"><a class="reference internal" href="modules/mixture_models_non_agg.html">2.1. Mixture Models for Non-Aggregative Quantification</a></li>
 </ul>
 </details></li>
-<li class="toctree-l1"><a class="reference internal" href="modules/confidence_intervals.html">3.  Confidence Intervals</a></li>
-<li class="toctree-l1 has-children"><a class="reference internal" href="model_selection_evaluation.html">4.  Model Selection and Evaluation</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
-<li class="toctree-l2"><a class="reference internal" href="modules/protocols.html">4.1. Protocols for Quantification</a></li>
+<li class="toctree-l1 current active has-children"><a class="current reference internal" href="#">3.  Meta Quantification</a><details open="open"><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="modules/ensemble.html">3.1. Ensemble for Quantification</a></li>
+<li class="toctree-l2"><a class="reference internal" href="modules/bootstrap.html">3.2. Bootstrap in Quantification</a></li>
+<li class="toctree-l2"><a class="reference internal" href="modules/scores_adaptation.html">3.3. QuaDapt: Drift-Resilient Score Adaptation</a></li>
 </ul>
 </details></li>
-<li class="toctree-l1 current active has-children"><a class="current reference internal" href="#">5.  Meta Quantification</a><details open="open"><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
-<li class="toctree-l2"><a class="reference internal" href="modules/ensemble.html">5.1. Ensemble for Quantification</a></li>
-<li class="toctree-l2"><a class="reference internal" href="modules/bootstrap.html">5.2. Bootstrap in Quantification</a></li>
-<li class="toctree-l2"><a class="reference internal" href="modules/scores_adaptation.html">5.3. QuaDapt: Drift-Resilient Score Adaptation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="modules/confidence_intervals.html">4.  Confidence Intervals</a></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="model_selection_evaluation.html">5.  Model Selection and Evaluation</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="modules/protocols.html">5.1. Protocols for Quantification</a></li>
 </ul>
 </details></li>
 <li class="toctree-l1"><a class="reference internal" href="building_a_quantifier.html">6.  Building a Quantifier</a></li>
@@ -384,7 +384,7 @@
     
     <li class="breadcrumb-item"><a href="user_guide.html" class="nav-link">User Guide</a></li>
     
-    <li class="breadcrumb-item active" aria-current="page"><span class="ellipsis"><span class="section-number">5. </span>Meta-Quantification</span></li>
+    <li class="breadcrumb-item active" aria-current="page"><span class="ellipsis"><span class="section-number">3. </span>Meta-Quantification</span></li>
   </ul>
 </nav>
 </div>
@@ -402,14 +402,14 @@
                 <article class="bd-article">
                   
   <section id="meta-quantification">
-<span id="id1"></span><h1><span class="section-number">5. </span>Meta-Quantification<a class="headerlink" href="#meta-quantification" title="Link to this heading">#</a></h1>
+<span id="id1"></span><h1><span class="section-number">3. </span>Meta-Quantification<a class="headerlink" href="#meta-quantification" title="Link to this heading">#</a></h1>
 <p>Meta-quantification methods combine multiple quantification approaches to improve the accuracy and robustness of class prevalence estimates. These methods leverage the strengths of different quantification techniques, often by integrating their outputs or using ensemble strategies to mitigate individual method weaknesses. Meta-quantification can involve techniques such as stacking, voting, or weighted averaging of predictions from various quantifiers.</p>
 <p>The main meta-quantification methods will be defined next, with details about their specific approaches and differences.</p>
 <div class="toctree-wrapper compound">
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="modules/ensemble.html">5.1. Ensemble for Quantification</a></li>
-<li class="toctree-l1"><a class="reference internal" href="modules/bootstrap.html">5.2. Bootstrap in Quantification</a></li>
-<li class="toctree-l1"><a class="reference internal" href="modules/scores_adaptation.html">5.3. QuaDapt: Drift-Resilient Score Adaptation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="modules/ensemble.html">3.1. Ensemble for Quantification</a></li>
+<li class="toctree-l1"><a class="reference internal" href="modules/bootstrap.html">3.2. Bootstrap in Quantification</a></li>
+<li class="toctree-l1"><a class="reference internal" href="modules/scores_adaptation.html">3.3. QuaDapt: Drift-Resilient Score Adaptation</a></li>
 </ul>
 </div>
 </section>
@@ -425,12 +425,12 @@
     <div class="footer-article-item">
 <div class="prev-next-area">
     <a class="left-prev"
-       href="modules/evaluation_metrics.html"
+       href="modules/mixture_models_non_agg.html"
        title="previous page">
       <i class="fa-solid fa-angle-left"></i>
       <div class="prev-next-info">
         <p class="prev-next-subtitle">previous</p>
-        <p class="prev-next-title">&lt;no title&gt;</p>
+        <p class="prev-next-title"><span class="section-number">2.1. </span>Mixture Models for Non-Aggregative Quantification</p>
       </div>
     </a>
     <a class="right-next"
@@ -438,7 +438,7 @@
        title="next page">
       <div class="prev-next-info">
         <p class="prev-next-subtitle">next</p>
-        <p class="prev-next-title"><span class="section-number">5.1. </span>Ensemble for Quantification</p>
+        <p class="prev-next-title"><span class="section-number">3.1. </span>Ensemble for Quantification</p>
       </div>
       <i class="fa-solid fa-angle-right"></i>
     </a>
