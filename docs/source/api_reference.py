@@ -87,7 +87,7 @@ API_REFERENCE = {
         "description": None,
         "sections": [
             {
-                "title": "Adjusted Counting Methods",
+                "title": "Adjust Counting Methods",
                 "autosummary": [
                     "CC",
                     "PCC",
@@ -100,6 +100,10 @@ API_REFERENCE = {
                     "T50",
                     "MS",
                     "MS2",
+                    "evaluate_thresholds",
+                    "compute_tpr",
+                    "compute_fpr",
+                    "compute_table"
                 ],
             }
         ],

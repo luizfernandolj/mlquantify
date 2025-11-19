@@ -66,7 +66,7 @@ def compute_fpr(FP, TN):
     return FP / (FP + TN)
 
 
-def evaluate_thresholds (y, probabilities:np.ndarray, classes) -> tuple:
+def evaluate_thresholds (y, probabilities:np.ndarray) -> tuple:
     r"""Evaluate a range of classification thresholds to compute the corresponding
     True Positive Rate (TPR) and False Positive Rate (FPR) for a binary quantification task.
 
@@ -91,6 +91,8 @@ def evaluate_thresholds (y, probabilities:np.ndarray, classes) -> tuple:
     
     tprs = []
     fprs = []
+    
+    classes = np.unique(y)
     
     for threshold in unique_scores:
         y_pred = np.where(probabilities >= threshold, classes[1], classes[0])

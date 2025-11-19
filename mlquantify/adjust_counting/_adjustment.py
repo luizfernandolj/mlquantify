@@ -67,7 +67,7 @@ class ThresholdAdjustment(SoftLearnerQMixin, BaseAdjustCount):
     >>> from mlquantify.adjust_counting import ThresholdAdjustment
     >>> import numpy as np
     >>> class CustomThreshold(ThresholdAdjustment):
-    ...     def _get_best_threshold(self, thresholds, tprs, fprs):
+    ...     def get_best_threshold(self, thresholds, tprs, fprs):
     ...         idx = np.argmax(tprs - fprs)
     ...         return thresholds[idx], tprs[idx], fprs[idx]
     >>> X = np.random.randn(100, 4)
@@ -101,8 +101,8 @@ class ThresholdAdjustment(SoftLearnerQMixin, BaseAdjustCount):
         """Internal adjustment computation based on selected ROC threshold."""
         positive_scores = train_y_scores[:, 1]
         
-        thresholds, tprs, fprs = evaluate_thresholds(train_y_values, positive_scores, self.classes_)
-        threshold, tpr, fpr = self._get_best_threshold(thresholds, tprs, fprs)
+        thresholds, tprs, fprs = evaluate_thresholds(train_y_values, positive_scores)
+        threshold, tpr, fpr = self.get_best_threshold(thresholds, tprs, fprs)
 
         cc_predictions = CC(threshold).aggregate(predictions)[1]
 
@@ -114,7 +114,7 @@ class ThresholdAdjustment(SoftLearnerQMixin, BaseAdjustCount):
         return np.asarray([1 - prevalence, prevalence])
     
     @abstractmethod
-    def _get_best_threshold(self, thresholds, tprs, fprs):
+    def get_best_threshold(self, thresholds, tprs, fprs):
         """Select the best threshold according to the specific method."""
         ...
 
@@ -487,7 +487,7 @@ class ACC(ThresholdAdjustment):
            *ECML*, pp. 564-575.
     """
 
-    def _get_best_threshold(self, thresholds, tprs, fprs):
+    def get_best_threshold(self, thresholds, tprs, fprs):
         tpr = tprs[thresholds == self.threshold][0]
         fpr = fprs[thresholds == self.threshold][0]
         return (self.threshold, tpr, fpr)
@@ -513,7 +513,7 @@ class X_method(ThresholdAdjustment):
     .. [1] Forman, G. (2005). "Counting Positives Accurately Despite Inaccurate Classification",
            *ECML*, pp. 564-575.
     """
-    def _get_best_threshold(self, thresholds, tprs, fprs):
+    def get_best_threshold(self, thresholds, tprs, fprs):
         idx = np.argmin(np.abs(1 - (tprs + fprs)))
         return thresholds[idx], tprs[idx], fprs[idx]
 
@@ -539,7 +539,7 @@ class MAX(ThresholdAdjustment):
     .. [1] Forman, G. (2005). "Counting Positives Accurately Despite Inaccurate Classification",
            *ECML*, pp. 564-575.
     """
-    def _get_best_threshold(self, thresholds, tprs, fprs):
+    def get_best_threshold(self, thresholds, tprs, fprs):
         idx = np.argmax(np.abs(tprs - fprs))
         return thresholds[idx], tprs[idx], fprs[idx]
 
@@ -564,7 +564,7 @@ class T50(ThresholdAdjustment):
     .. [1] Forman, G. (2005). "Counting Positives Accurately Despite Inaccurate Classification",
            *ECML*, pp. 564-575.
     """
-    def _get_best_threshold(self, thresholds, tprs, fprs):
+    def get_best_threshold(self, thresholds, tprs, fprs):
         idx = np.argmin(np.abs(tprs - 0.5))
         return thresholds[idx], tprs[idx], fprs[idx]
 
@@ -596,8 +596,8 @@ class MS(ThresholdAdjustment):
     def _adjust(self, predictions, train_y_scores, train_y_values):
         positive_scores = train_y_scores[:, 1]
         
-        thresholds, tprs, fprs = evaluate_thresholds(train_y_values, positive_scores, self.classes_)
-        thresholds, tprs, fprs = self._get_best_threshold(thresholds, tprs, fprs)
+        thresholds, tprs, fprs = evaluate_thresholds(train_y_values, positive_scores)
+        thresholds, tprs, fprs = self.get_best_threshold(thresholds, tprs, fprs)
         
         prevs = []
         for thr, tpr, fpr in zip(thresholds, tprs, fprs):
@@ -608,7 +608,7 @@ class MS(ThresholdAdjustment):
         prevalence = np.median(prevs)
         return np.asarray([1 - prevalence, prevalence])
     
-    def _get_best_threshold(self, thresholds, tprs, fprs):
+    def get_best_threshold(self, thresholds, tprs, fprs):
         return thresholds, tprs, fprs
 
 
@@ -638,7 +638,7 @@ class MS2(MS):
     .. [1] Forman, G. (2008). "Quantifying Counts and Costs via Classification",
            *Data Mining and Knowledge Discovery*, 17(2), 164-206.
     """
-    def _get_best_threshold(self, thresholds, tprs, fprs):
+    def get_best_threshold(self, thresholds, tprs, fprs):
         if np.all(tprs == 0) or np.all(fprs == 0):
             warnings.warn("All TPR or FPR values are zero.")
         indices = np.where(np.abs(tprs - fprs) > 0.25)[0]

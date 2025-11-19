@@ -15,3 +15,10 @@ from ._adjustment import (
     MS,
     MS2,
 )
+
+from ._utils import (
+    compute_table,
+    compute_fpr,
+    compute_tpr,
+    evaluate_thresholds,
+)
