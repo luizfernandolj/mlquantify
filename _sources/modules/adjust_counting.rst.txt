@@ -60,7 +60,7 @@ Different *threshold methods* vary in how they choose the classifier cutoff :mat
 |                            | :math:`\|\text{TPR} - \text{FPR}\| > 0.25`           |                                         |
 +----------------------------+------------------------------------------------------+-----------------------------------------+
 
-**Example**
+All these methods have their `fit`, `predict` and `aggregate` functions, similar to other aggregative quantifiers. However, they also include a specialized method: `get_best_thresholds`, which identifies the optimal threshold, given `y` and predicted `probabilities`. Here is an example of how to use the :class:`T50` method:
 
 .. code-block:: python
 

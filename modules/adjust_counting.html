@@ -459,7 +459,7 @@ They are mainly used for <code class="docutils literal notranslate"><span class=
 </tbody>
 </table>
 </div>
-<p><strong>Example</strong></p>
+<p>All these methods have their <code class="docutils literal notranslate"><span class="pre">fit</span></code>, <code class="docutils literal notranslate"><span class="pre">predict</span></code> and <code class="docutils literal notranslate"><span class="pre">aggregate</span></code> functions, similar to other aggregative quantifiers. However, they also include a specialized method: <code class="docutils literal notranslate"><span class="pre">get_best_thresholds</span></code>, which identifies the optimal threshold, given <code class="docutils literal notranslate"><span class="pre">y</span></code> and predicted <code class="docutils literal notranslate"><span class="pre">probabilities</span></code>. Here is an example of how to use the <a class="reference internal" href="generated/mlquantify.adjust_counting.T50.html#mlquantify.adjust_counting.T50" title="mlquantify.adjust_counting.T50"><code class="xref py py-class docutils literal notranslate"><span class="pre">T50</span></code></a> method:</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">mlquantify.adjust_counting</span><span class="w"> </span><span class="kn">import</span> <span class="n">T50</span><span class="p">,</span> <span class="n">evaluate_thresholds</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">sklearn.linear_model</span><span class="w"> </span><span class="kn">import</span> <span class="n">LogisticRegression</span>
 
