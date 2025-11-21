@@ -10,5 +10,5 @@
    Install <install.rst>
    User Guide <user_guide.rst>
    API <api/index.rst>
-   <getting_started.rst>
-   <about.rst>
+   Getting Started <getting_started.rst>
+   About Us <about_us.rst>

@@ -7,7 +7,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>mlquantify: python for quantification &#8212; mlquantify 0.1.8 documentation</title>
+    <title>mlquantify: Quantification in Python &#8212; mlquantify 0.1.8 documentation</title>
   
   
   
@@ -33,7 +33,7 @@
     <link rel="stylesheet" type="text/css" href="_static/copybutton.css?v=76b2166b" />
     <link rel="stylesheet" type="text/css" href="_static/plot_directive.css" />
     <link rel="stylesheet" type="text/css" href="_static/sphinx-design.min.css?v=95c83b7e" />
-    <link rel="stylesheet" type="text/css" href="_static/custom.css?v=94d3f708" />
+    <link rel="stylesheet" type="text/css" href="_static/custom.css?v=9a2dca72" />
   
   <!-- So that users can add custom icons -->
   <script src="_static/scripts/fontawesome.js?digest=8878045cc6db502f8baf"></script>
@@ -94,6 +94,7 @@
 </div>
 
   
+<div class="container-fluid">
     
     <header class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
 <div class="bd-header__inner bd-page-width">
@@ -157,6 +158,20 @@
   </a>
 </li>
 
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="getting_started.html">
+    Getting Started
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="about_us.html">
+    About Us
+  </a>
+</li>
+
   </ul>
 </nav></div>
       
@@ -216,6 +231,11 @@
 
     </header>
   
+    <div class="container py-4">
+        <h4 class="fst-italic mb-3">Tools for Quantification and Class Prevalence Estimation</h4>
+        <a class="btn btn-primary mb-1 text-white" href="user_guide.html" role="button">User Guide</a>
+    </div>
+</div>
 
 
   <div class="bd-container">
@@ -258,6 +278,20 @@
 <li class="nav-item ">
   <a class="nav-link nav-internal" href="api/index.html">
     API
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="getting_started.html">
+    Getting Started
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="about_us.html">
+    About Us
   </a>
 </li>
 
@@ -309,17 +343,95 @@
       <main id="main-content" class="bd-main" role="main">
         
         
+<div class="container pt-3">
+  <div class="row">
+    <div class="col-md-4 mb-3">
+      <div class="card h-100 bg-dark text-white">
+        <div class="card-body">
+          <h4 class="card-title">
+            <a href="aggregative_quantification.html">Aggregate Quantification</a>
+          </h4>
+          <p>Aggregation Methods for Class Prevalence Estimation</p>
+        </div>
+        <a href="examples/aggregative_quantification.html" class="btn btn-secondary">Examples</a>
+      </div>
+    </div>
+    <div class="col-md-4 mb-3">
+      <div class="card h-100 bg-dark text-white">
+        <div class="card-body">
+          <h4 class="card-title">
+            <a href="non_aggregative_quantification.html">Non-Aggregative Quantification</a>
+          </h4>
+          <p>Non-Aggregative Methods for Class Prevalence Estimation</p>
+        </div>
+        <a href="examples/non_aggregative_quantification.html" class="btn btn-secondary">Examples</a>
+      </div>
+    </div>
+    <div class="col-md-4 mb-3">
+      <div class="card h-100 bg-dark text-white">
+        <div class="card-body">
+          <h4 class="card-title">
+            <a href="meta_quantification.html">Meta Quantification</a>
+          </h4>
+          <p>Meta Methods for Class Prevalence Estimation</p>
+        </div>
+        <a href="examples/meta_quantification.html" class="btn btn-secondary">Examples</a>
+      </div>
+    </div>
+    <div class="col-md-4 mb-3">
+      <div class="card h-100 bg-dark text-white">
+        <div class="card-body">
+          <h4 class="card-title">
+            <a href="modules/evaluation_metrics.html">Evaluation Metrics</a>
+          </h4>
+          <p>Assess the performance of quantification results with dedicated metrics.</p>
+        </div>
+        <a href="examples/evaluation_metrics.html" class="btn btn-secondary">Examples</a>
+      </div>
+    </div>
+    <div class="col-md-4 mb-3">
+      <div class="card h-100 bg-dark text-white">
+        <div class="card-body">
+          <h4 class="card-title">
+            <a href="modules/confidence_intervals.html">Confidence Intervals</a>
+          </h4>
+          <p>Calculate confidence intervals for quantification results.</p>
+        </div>
+        <a href="examples/confidence_intervals.html" class="btn btn-secondary">Examples</a>
+      </div>
+    </div>
+    <div class="col-md-4 mb-3">
+      <div class="card h-100 bg-dark text-white">
+        <div class="card-body">
+          <h4 class="card-title">
+            <a href="model_selection_evaluation.html">Model Selection and Evaluation</a>
+          </h4>
+          <p>Methods for selecting and evaluating quantification models.</p>
+        </div>
+        <a href="examples/model_selection_evaluation.html" class="btn btn-secondary">Examples</a>
+      </div>
+    </div>
+  </div>
+</div>
 
       </main>
     </div>
   </div>
   
-    
   <!-- Scripts loaded after <body> so the DOM is not blocked -->
   <script defer src="_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf"></script>
 <script defer src="_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf"></script>
 
-
+<div class="container-fluid py-3">
+  <div class="container">
+    <h4>About Us</h4>
+    <ul>
+      <li>Open source quantification library for Python</li>
+      <li>Contact: <a href="mailto:luizfernandoluth@gmail.com">luizfernandoluth@gmail.com</a></li>
+      <a href="about_us.html">See more about us</a>
+    </ul>
+  </div>
+</div>
 
   </body>
 </html>
