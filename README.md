@@ -9,7 +9,7 @@ ___
 
 ## Latest Release
 
-- **Version 0.1.3**: Inicial beta version. For a detailed list of changes, check the [changelog](#).
+- **Version 0.1.10**: Inicial beta version. For a detailed list of changes, check the [changelog](#).
 - In case you need any help, refer to the [User Guide](https://luizfernandolj.github.io/mlquantify/user_guide.html).
 - Explore the [API documentation](https://luizfernandolj.github.io/mlquantify/api/index.html) for detailed developer information.
 - See also the library in the pypi site in [pypi mlquantify](https://pypi.org/project/mlquantify/)
@@ -41,7 +41,6 @@ ___
 | **Model Selection** | Criteria and processes used to select the best model, such as grid-search for the case of quantification|
 | **Evaluation Metrics** | Specific metrics used to evaluate quantification performance, (e.g., AE, MAE, NAE, SE, KLD, etc.). |
 | **Evaluation Protocols** | Evaluation protocols used, based on sampling generation (e.g., APP, NPP, etc.).. |
-| **Plotting Results** | Tools and techniques used to visualize results, such as the protocol results.|
 | **Comprehensive Documentation** | Complete documentation of the project, including code, data, and results. |
 
 ___
@@ -52,8 +51,8 @@ This code first loads the breast cancer dataset from _sklearn_, which is then sp
 
 ```python
 from mlquantify.methods import EMQ
-from mlquantify.evaluation.measures import absolute_error, mean_absolute_error
-from mlquantify.utils import get_real_prev
+from mlquantify.metrics import MAE, NRAE
+from mlquantify.utils import get_prev_from_labels
 
 from sklearn.ensemble import RandomForestClassifier
 from sklearn.datasets import load_breast_cancer
@@ -71,14 +70,14 @@ model.fit(X_train, y_train)
 
 #Predict the class prevalence for X_test
 pred_prevalence = model.predict(X_test)
-real_prevalence = get_real_prev(y_test)
+real_prevalence = get_prev_from_labels(y_test)
 
 #Get the error for the prediction
-ae = absolute_error(real_prevalence, pred_prevalence)
-mae = mean_absolute_error(real_prevalence, pred_prevalence)
+mae = MAE(real_prevalence, pred_prevalence)
+nrae = NRAE(real_prevalence, pred_prevalence)
 
-print(f"Absolute Error -> {ae}")
 print(f"Mean Absolute Error -> {mae}")
+print(f"Normalized Relative Absolute Error -> {nrae}")
 ```
 
 ___
@@ -97,13 +96,6 @@ ___
 
 ## Documentation
 
-##### API is avaliable [here](https://luizfernandolj.github.io/mlquantify/api/index.html)
-
-- [Methods](https://github.com/luizfernandolj/mlquantify/wiki/Methods)
-- [Model Selection](https://github.com/luizfernandolj/mlquantify/wiki/Model-Selection)
-- [Evaluation](https://github.com/luizfernandolj/mlquantify/wiki/Evaluation)
-- [Plotting](https://github.com/luizfernandolj/mlquantify/wiki/Plotting)
-- [Utilities](https://github.com/luizfernandolj/mlquantify/wiki/Utilities)
-
+##### API is avaliable [here](https://luizfernandolj.github.io/mlquantify/api/)
 
 ___
