@@ -1,4 +1,4 @@
-<h1 align="center">MLQuantify</h1>
+<img src="assets/logo_mlquantify-white.svg" alt="mlquantify logo">
 <h4 align="center">A Python Package for Quantification</h4>
 
 ___
