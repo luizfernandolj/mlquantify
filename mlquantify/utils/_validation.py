@@ -274,7 +274,7 @@ def validate_data(quantifier,
         else:
             out = X, y
     elif not no_val_X and no_val_y:
-        out = check_array(X, input_name="X", **check_params)
+        out = check_array(X, input_name="X", dtype=None, **check_params)
     elif no_val_X and not no_val_y:
         out = _check_y(y, **check_params)
     else:
@@ -286,12 +286,12 @@ def validate_data(quantifier,
             check_X_params, check_y_params = validate_separately
             if "estimator" not in check_X_params:
                 check_X_params = {**default_check_params, **check_X_params}
-            X = check_array(X, input_name="X", **check_X_params)
+            X = check_array(X, input_name="X", dtype=None, **check_X_params)
             if "estimator" not in check_y_params:
                 check_y_params = {**default_check_params, **check_y_params}
             y = check_array(y, input_name="y", **check_y_params)
         else:
-            X, y = check_X_y(X, y, **check_params)
+            X, y = check_X_y(X, y, dtype=None, **check_params)
         out = X, y
         
     return out
