@@ -7,17 +7,19 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
-<meta property="og:title" content="<no title>" />
+<meta property="og:title" content="4.2. Tuning Hyperparameters" />
 <meta property="og:type" content="website" />
 <meta property="og:url" content="modules/tuning_hyperparameters.html" />
 <meta property="og:site_name" content="mlquantify" />
+<meta property="og:description" content="Hyperparameter tuning is essential for optimizing any machine learning model, and quantification models are no exception. In quantification, hyperparameter tuning often focuses on parameters that i..." />
 <meta property="og:image:width" content="1146" />
 <meta property="og:image:height" content="600" />
-<meta property="og:image" content="_images/social_previews/summary_modules_tuning_hyperparameters_53cd2b56.png" />
-<meta property="og:image:alt" content="" />
+<meta property="og:image" content="_images/social_previews/summary_modules_tuning_hyperparameters_6165b6bb.png" />
+<meta property="og:image:alt" content="Hyperparameter tuning is essential for optimizing any machine learning model, and quantification models are no exception. In quantification, hyperparameter tuning often focuses on parameters that i..." />
+<meta name="description" content="Hyperparameter tuning is essential for optimizing any machine learning model, and quantification models are no exception. In quantification, hyperparameter tuning often focuses on parameters that i..." />
 <meta name="twitter:card" content="summary_large_image" />
 
-    <title>&lt;no title&gt; &#8212; mlquantify 0.1.8 documentation</title>
+    <title>4.2. Tuning Hyperparameters &#8212; mlquantify 0.1.8 documentation</title>
   
   
   
@@ -61,8 +63,8 @@
     <link rel="canonical" href="https://luizfernandolj.github.io/mlquantify/modules/tuning_hyperparameters.html" />
     <link rel="author" title="About these documents" href="../about.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="&lt;no title&gt;" href="evaluation_metrics.html" />
-    <link rel="prev" title="5.1. Protocols for Quantification" href="protocols.html" />
+    <link rel="next" title="4.4. Evaluation Metrics" href="evaluation_metrics.html" />
+    <link rel="prev" title="4.1. Protocols for Quantification" href="protocols.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
   <meta name="docsearch:version" content="" />
@@ -315,7 +317,7 @@
 <nav class="bd-docs-nav bd-links"
      aria-label="Section Navigation">
   <p class="bd-links__title" role="heading" aria-level="1">Section Navigation</p>
-  <div class="bd-toc-item navbar-nav"><ul class="nav bd-sidenav">
+  <div class="bd-toc-item navbar-nav"><ul class="current nav bd-sidenav">
 <li class="toctree-l1 has-children"><a class="reference internal" href="../aggregative_quantification.html">1.  Aggregative Quantification</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
 <li class="toctree-l2"><a class="reference internal" href="counters.html">1.1. Counters For Quantification</a></li>
 <li class="toctree-l2"><a class="reference internal" href="adjust_counting.html">1.2. Adjust Counting</a></li>
@@ -335,16 +337,15 @@
 <li class="toctree-l2"><a class="reference internal" href="scores_adaptation.html">3.3. QuaDapt: Drift-Resilient Score Adaptation</a></li>
 </ul>
 </details></li>
-<li class="toctree-l1"><a class="reference internal" href="confidence_intervals.html">4.  Confidence Intervals</a></li>
-<li class="toctree-l1 has-children"><a class="reference internal" href="../model_selection_evaluation.html">5.  Model Selection and Evaluation</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
-<li class="toctree-l2"><a class="reference internal" href="protocols.html">5.1. Protocols for Quantification</a></li>
+<li class="toctree-l1 current active has-children"><a class="reference internal" href="../model_selection_evaluation.html">4.  Model Selection and Evaluation</a><details open="open"><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="protocols.html">4.1. Protocols for Quantification</a></li>
+<li class="toctree-l2 current active"><a class="current reference internal" href="#">4.2. Tuning Hyperparameters</a></li>
+
+<li class="toctree-l2"><a class="reference internal" href="evaluation_metrics.html">4.4. Evaluation Metrics</a></li>
 </ul>
 </details></li>
+<li class="toctree-l1"><a class="reference internal" href="confidence_intervals.html">5.  Confidence Intervals</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../building_a_quantifier.html">6.  Building a Quantifier</a></li>
-<li class="toctree-l1 has-children"><a class="reference internal" href="../experiment_management.html">7.  Experiment Management</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
-<li class="toctree-l2"><a class="reference internal" href="../building_a_protocol.html">7.1. Building a Protocol</a></li>
-</ul>
-</details></li>
 </ul>
 </div>
 </nav></div>
@@ -382,9 +383,9 @@
     <li class="breadcrumb-item"><a href="../user_guide.html" class="nav-link">User Guide</a></li>
     
     
-    <li class="breadcrumb-item"><a href="../model_selection_evaluation.html" class="nav-link"><span class="section-number">5. </span>Model Selection and Evaluation</a></li>
+    <li class="breadcrumb-item"><a href="../model_selection_evaluation.html" class="nav-link"><span class="section-number">4. </span>Model Selection and Evaluation</a></li>
     
-    <li class="breadcrumb-item active" aria-current="page"><span class="ellipsis">&lt;no title&gt;</span></li>
+    <li class="breadcrumb-item active" aria-current="page"><span class="ellipsis"><span class="section-number">4.2. </span>Tuning Hyperparameters</span></li>
   </ul>
 </nav>
 </div>
@@ -401,7 +402,61 @@
 <div id="searchbox"></div>
                 <article class="bd-article">
                   
-  
+  <section id="tuning-hyperparameters">
+<span id="id1"></span><h1><span class="section-number">4.2. </span>Tuning Hyperparameters<a class="headerlink" href="#tuning-hyperparameters" title="Link to this heading">#</a></h1>
+<p>Hyperparameter tuning is essential for optimizing any machine learning model, and quantification models are no exception. In quantification, hyperparameter tuning often focuses on parameters that influence the model’s ability to estimate class prevalences accurately under distribution shifts, using specific evaluation metrics designed for quantification tasks <a class="footnote-reference brackets" href="#id3" id="id2" role="doc-noteref"><span class="fn-bracket">[</span>1<span class="fn-bracket">]</span></a>.</p>
+<p>The <a class="reference internal" href="generated/mlquantify.model_selection.GridSearchQ.html#mlquantify.model_selection.GridSearchQ" title="mlquantify.model_selection.GridSearchQ"><code class="xref py py-class docutils literal notranslate"><span class="pre">GridSearchQ</span></code></a> class provides a systematic way to perform hyperparameter tuning for quantification models. It extends the traditional grid search approach by incorporating quantification-specific evaluation metrics and protocols.</p>
+<p><strong>Key Features of GridSearchQ:</strong></p>
+<ul class="simple">
+<li><p><strong>Quantification Metrics:</strong> Supports metrics like Absolute Error (AE), Relative Absolute Error (RAE), and Kullback-Leibler Divergence (KLD) that are specifically designed to evaluate quantification performance.</p></li>
+<li><p><strong>Protocols Integration:</strong> Seamlessly integrates with quantification protocols such as Artificial-Prevalence Protocol (APP) to generate diverse test samples for robust evaluation.</p></li>
+<li><p><strong>Cross-Validation:</strong> Implements cross-validation strategies tailored for quantification tasks to ensure reliable hyperparameter selection.</p></li>
+<li><p><strong>Parallel Processing:</strong> Supports parallel computation to speed up the hyperparameter search process.</p></li>
+</ul>
+<p><strong>Example Usage</strong></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">mlquantify.likelihood</span><span class="w"> </span><span class="kn">import</span> <span class="n">EMQ</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">mlquantify.model_selection</span><span class="w"> </span><span class="kn">import</span> <span class="n">GridSearchQ</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">mlquantify.metrics</span><span class="w"> </span><span class="kn">import</span> <span class="n">MAE</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">sklearn.ensemble</span><span class="w"> </span><span class="kn">import</span> <span class="n">RandomForestClassifier</span>
+
+<span class="n">param_grid</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;alpha&#39;</span><span class="p">:</span> <span class="p">[</span><span class="mf">0.1</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">],</span> <span class="s1">&#39;beta&#39;</span><span class="p">:</span> <span class="p">[</span><span class="mi">10</span><span class="p">,</span> <span class="mi">20</span><span class="p">]}</span>
+<span class="n">grid_search</span> <span class="o">=</span> <span class="n">GridSearchQ</span><span class="p">(</span><span class="n">quantifier</span><span class="o">=</span><span class="n">EMQ</span><span class="p">(</span><span class="n">RandomForestClassifier</span><span class="p">()),</span>
+                        <span class="n">param_grid</span><span class="o">=</span><span class="n">param_grid</span><span class="p">,</span>
+                        <span class="n">protocol</span><span class="o">=</span><span class="s1">&#39;app&#39;</span><span class="p">,</span>
+                        <span class="n">samples_sizes</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span>
+                        <span class="n">n_repetitions</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span>
+                        <span class="n">scoring</span><span class="o">=</span><span class="n">MAE</span><span class="p">,</span>
+                        <span class="n">refit</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                        <span class="n">val_split</span><span class="o">=</span><span class="mf">0.3</span><span class="p">,</span>
+                        <span class="n">n_jobs</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span>
+                        <span class="n">random_seed</span><span class="o">=</span><span class="mi">123</span><span class="p">,</span>
+                        <span class="n">verbose</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+<span class="n">grid_search</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">X_train</span><span class="p">,</span> <span class="n">y_train</span><span class="p">)</span>
+<span class="n">y_pred</span> <span class="o">=</span> <span class="n">grid_search</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">X_test</span><span class="p">)</span>
+<span class="n">best_params</span> <span class="o">=</span> <span class="n">grid_search</span><span class="o">.</span><span class="n">best_params</span><span class="p">()</span>
+<span class="n">best_model</span> <span class="o">=</span> <span class="n">grid_search</span><span class="o">.</span><span class="n">best_model</span><span class="p">()</span>
+</pre></div>
+</div>
+<div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<ul class="simple">
+<li><p><a class="reference internal" href="generated/mlquantify.model_selection.GridSearchQ.html#mlquantify.model_selection.GridSearchQ" title="mlquantify.model_selection.GridSearchQ"><code class="xref py py-class docutils literal notranslate"><span class="pre">GridSearchQ</span></code></a> for detailed implementation.</p></li>
+<li><p><a class="reference internal" href="protocols.html#quantification-protocols"><span class="std std-ref">Protocols for Quantification</span></a> for available quantification protocols.</p></li>
+<li><p><a class="reference internal" href="evaluation_metrics.html#evaluation-metrics"><span class="std std-ref">Evaluation Metrics</span></a> for available quantification metrics.</p></li>
+</ul>
+</div>
+</section>
+<section id="references">
+<h1><span class="section-number">4.3. </span>References<a class="headerlink" href="#references" title="Link to this heading">#</a></h1>
+<aside class="footnote-list brackets">
+<aside class="footnote brackets" id="id3" role="doc-footnote">
+<span class="label"><span class="fn-bracket">[</span><a role="doc-backlink" href="#id2">1</a><span class="fn-bracket">]</span></span>
+<p>Esuli, A., Fabris, A., Moreo, A., &amp; Sebastiani, F. (n.d.). Learning to Quantify The Information Retrieval Series.</p>
+</aside>
+</aside>
+</section>
+
 
                 </article>
               
@@ -418,7 +473,7 @@
       <i class="fa-solid fa-angle-left"></i>
       <div class="prev-next-info">
         <p class="prev-next-subtitle">previous</p>
-        <p class="prev-next-title"><span class="section-number">5.1. </span>Protocols for Quantification</p>
+        <p class="prev-next-title"><span class="section-number">4.1. </span>Protocols for Quantification</p>
       </div>
     </a>
     <a class="right-next"
@@ -426,7 +481,7 @@
        title="next page">
       <div class="prev-next-info">
         <p class="prev-next-subtitle">next</p>
-        <p class="prev-next-title">&lt;no title&gt;</p>
+        <p class="prev-next-title"><span class="section-number">4.4. </span>Evaluation Metrics</p>
       </div>
       <i class="fa-solid fa-angle-right"></i>
     </a>
@@ -452,7 +507,9 @@
     <i class="fa-solid fa-list"></i> On this page
   </div>
   <nav class="bd-toc-nav page-toc" aria-labelledby="pst-page-navigation-heading-2">
-    <ul class="simple visible nav section-nav flex-column">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#">4.2. Tuning Hyperparameters</a></li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#references">4.3. References</a></li>
 </ul>
 
   </nav></div>

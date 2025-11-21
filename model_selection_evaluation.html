@@ -7,19 +7,19 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
-<meta property="og:title" content="5. Model Selection and Evaluation" />
+<meta property="og:title" content="4. Model Selection and Evaluation" />
 <meta property="og:type" content="website" />
 <meta property="og:url" content="model_selection_evaluation.html" />
 <meta property="og:site_name" content="mlquantify" />
-<meta property="og:description" content="Protocols for Quantification." />
+<meta property="og:description" content="Protocols for Quantification- Artificial-Prevalence Protocol (APP), Natural-Prevalence Protocol (NPP), Uniform Prevalence Protocol (UPP), Personalized Prevalence Protocol (PPP)., Tuning Hyperparame..." />
 <meta property="og:image:width" content="1146" />
 <meta property="og:image:height" content="600" />
-<meta property="og:image" content="_images/social_previews/summary_model_selection_evaluation_5daaba57.png" />
-<meta property="og:image:alt" content="Protocols for Quantification." />
-<meta name="description" content="Protocols for Quantification." />
+<meta property="og:image" content="_images/social_previews/summary_model_selection_evaluation_af5820ce.png" />
+<meta property="og:image:alt" content="Protocols for Quantification- Artificial-Prevalence Protocol (APP), Natural-Prevalence Protocol (NPP), Uniform Prevalence Protocol (UPP), Personalized Prevalence Protocol (PPP)., Tuning Hyperparame..." />
+<meta name="description" content="Protocols for Quantification- Artificial-Prevalence Protocol (APP), Natural-Prevalence Protocol (NPP), Uniform Prevalence Protocol (UPP), Personalized Prevalence Protocol (PPP)., Tuning Hyperparame..." />
 <meta name="twitter:card" content="summary_large_image" />
 
-    <title>5. Model Selection and Evaluation &#8212; mlquantify 0.1.8 documentation</title>
+    <title>4. Model Selection and Evaluation &#8212; mlquantify 0.1.8 documentation</title>
   
   
   
@@ -59,12 +59,13 @@
     <script src="_static/clipboard.min.js?v=a7894cd8"></script>
     <script src="_static/copybutton.js?v=f281be69"></script>
     <script src="_static/design-tabs.js?v=f930bc37"></script>
+    <script async="async" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
     <script>DOCUMENTATION_OPTIONS.pagename = 'model_selection_evaluation';</script>
     <link rel="canonical" href="https://luizfernandolj.github.io/mlquantify/model_selection_evaluation.html" />
     <link rel="author" title="About these documents" href="about.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="next" title="5.1. Protocols for Quantification" href="modules/protocols.html" />
-    <link rel="prev" title="4. Confidence Intervals for Quantification" href="modules/confidence_intervals.html" />
+    <link rel="next" title="4.1. Protocols for Quantification" href="modules/protocols.html" />
+    <link rel="prev" title="3.3. QuaDapt: Drift-Resilient Score Adaptation" href="modules/scores_adaptation.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
   <meta name="docsearch:version" content="" />
@@ -337,16 +338,15 @@
 <li class="toctree-l2"><a class="reference internal" href="modules/scores_adaptation.html">3.3. QuaDapt: Drift-Resilient Score Adaptation</a></li>
 </ul>
 </details></li>
-<li class="toctree-l1"><a class="reference internal" href="modules/confidence_intervals.html">4.  Confidence Intervals</a></li>
-<li class="toctree-l1 current active has-children"><a class="current reference internal" href="#">5.  Model Selection and Evaluation</a><details open="open"><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
-<li class="toctree-l2"><a class="reference internal" href="modules/protocols.html">5.1. Protocols for Quantification</a></li>
+<li class="toctree-l1 current active has-children"><a class="current reference internal" href="#">4.  Model Selection and Evaluation</a><details open="open"><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="modules/protocols.html">4.1. Protocols for Quantification</a></li>
+<li class="toctree-l2"><a class="reference internal" href="modules/tuning_hyperparameters.html">4.2. Tuning Hyperparameters</a></li>
+
+<li class="toctree-l2"><a class="reference internal" href="modules/evaluation_metrics.html">4.4. Evaluation Metrics</a></li>
 </ul>
 </details></li>
+<li class="toctree-l1"><a class="reference internal" href="modules/confidence_intervals.html">5.  Confidence Intervals</a></li>
 <li class="toctree-l1"><a class="reference internal" href="building_a_quantifier.html">6.  Building a Quantifier</a></li>
-<li class="toctree-l1 has-children"><a class="reference internal" href="experiment_management.html">7.  Experiment Management</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
-<li class="toctree-l2"><a class="reference internal" href="building_a_protocol.html">7.1. Building a Protocol</a></li>
-</ul>
-</details></li>
 </ul>
 </div>
 </nav></div>
@@ -383,7 +383,7 @@
     
     <li class="breadcrumb-item"><a href="user_guide.html" class="nav-link">User Guide</a></li>
     
-    <li class="breadcrumb-item active" aria-current="page"><span class="ellipsis"><span class="section-number">5. </span>Model Selection and Evaluation</span></li>
+    <li class="breadcrumb-item active" aria-current="page"><span class="ellipsis"><span class="section-number">4. </span>Model Selection and Evaluation</span></li>
   </ul>
 </nav>
 </div>
@@ -401,10 +401,24 @@
                 <article class="bd-article">
                   
   <section id="model-selection-and-evaluation">
-<span id="model-selection-evaluation"></span><h1><span class="section-number">5. </span>Model Selection and Evaluation<a class="headerlink" href="#model-selection-and-evaluation" title="Link to this heading">#</a></h1>
+<span id="model-selection-evaluation"></span><h1><span class="section-number">4. </span>Model Selection and Evaluation<a class="headerlink" href="#model-selection-and-evaluation" title="Link to this heading">#</a></h1>
 <div class="toctree-wrapper compound">
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="modules/protocols.html">5.1. Protocols for Quantification</a></li>
+<li class="toctree-l1"><a class="reference internal" href="modules/protocols.html">4.1. Protocols for Quantification</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="modules/protocols.html#artificial-prevalence-protocol-app">4.1.1. Artificial-Prevalence Protocol (APP)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="modules/protocols.html#natural-prevalence-protocol-npp">4.1.2. Natural-Prevalence Protocol (NPP)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="modules/protocols.html#uniform-prevalence-protocol-upp">4.1.3. Uniform Prevalence Protocol (UPP)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="modules/protocols.html#personalized-prevalence-protocol-ppp">4.1.4. Personalized Prevalence Protocol (PPP)</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="modules/tuning_hyperparameters.html">4.2. Tuning Hyperparameters</a></li>
+<li class="toctree-l1"><a class="reference internal" href="modules/tuning_hyperparameters.html#references">4.3. References</a></li>
+<li class="toctree-l1"><a class="reference internal" href="modules/evaluation_metrics.html">4.4. Evaluation Metrics</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="modules/evaluation_metrics.html#single-label-quantification-slq-metrics">4.4.1. Single Label Quantification (SLQ) Metrics</a></li>
+<li class="toctree-l2"><a class="reference internal" href="modules/evaluation_metrics.html#regression-based-quantification-rq-metrics">4.4.2. Regression-Based Quantification (RQ) Metrics</a></li>
+<li class="toctree-l2"><a class="reference internal" href="modules/evaluation_metrics.html#ordinal-quantification-oq-metrics">4.4.3. Ordinal Quantification (OQ) Metrics</a></li>
+</ul>
+</li>
 </ul>
 </div>
 </section>
@@ -420,12 +434,12 @@
     <div class="footer-article-item">
 <div class="prev-next-area">
     <a class="left-prev"
-       href="modules/confidence_intervals.html"
+       href="modules/scores_adaptation.html"
        title="previous page">
       <i class="fa-solid fa-angle-left"></i>
       <div class="prev-next-info">
         <p class="prev-next-subtitle">previous</p>
-        <p class="prev-next-title"><span class="section-number">4. </span>Confidence Intervals for Quantification</p>
+        <p class="prev-next-title"><span class="section-number">3.3. </span>QuaDapt: Drift-Resilient Score Adaptation</p>
       </div>
     </a>
     <a class="right-next"
@@ -433,7 +447,7 @@
        title="next page">
       <div class="prev-next-info">
         <p class="prev-next-subtitle">next</p>
-        <p class="prev-next-title"><span class="section-number">5.1. </span>Protocols for Quantification</p>
+        <p class="prev-next-title"><span class="section-number">4.1. </span>Protocols for Quantification</p>
       </div>
       <i class="fa-solid fa-angle-right"></i>
     </a>

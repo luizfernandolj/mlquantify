@@ -7,17 +7,19 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
-<meta property="og:title" content="4. Confidence Intervals for Quantification" />
+<meta property="og:title" content="5. Confidence Regions for Quantification" />
 <meta property="og:type" content="website" />
 <meta property="og:url" content="modules/confidence_intervals.html" />
 <meta property="og:site_name" content="mlquantify" />
+<meta property="og:description" content="This guide details the main types of confidence regions for prevalence estimates in quantification, as implemented in mlquantify.confidence. It covers the principles, mathematical definitions, attr..." />
 <meta property="og:image:width" content="1146" />
 <meta property="og:image:height" content="600" />
-<meta property="og:image" content="_images/social_previews/summary_modules_confidence_intervals_9f9dfe17.png" />
-<meta property="og:image:alt" content="" />
+<meta property="og:image" content="_images/social_previews/summary_modules_confidence_intervals_87ee5d01.png" />
+<meta property="og:image:alt" content="This guide details the main types of confidence regions for prevalence estimates in quantification, as implemented in mlquantify.confidence. It covers the principles, mathematical definitions, attr..." />
+<meta name="description" content="This guide details the main types of confidence regions for prevalence estimates in quantification, as implemented in mlquantify.confidence. It covers the principles, mathematical definitions, attr..." />
 <meta name="twitter:card" content="summary_large_image" />
 
-    <title>4. Confidence Intervals for Quantification &#8212; mlquantify 0.1.8 documentation</title>
+    <title>5. Confidence Regions for Quantification &#8212; mlquantify 0.1.8 documentation</title>
   
   
   
@@ -57,12 +59,13 @@
     <script src="../_static/clipboard.min.js?v=a7894cd8"></script>
     <script src="../_static/copybutton.js?v=f281be69"></script>
     <script src="../_static/design-tabs.js?v=f930bc37"></script>
+    <script async="async" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
     <script>DOCUMENTATION_OPTIONS.pagename = 'modules/confidence_intervals';</script>
     <link rel="canonical" href="https://luizfernandolj.github.io/mlquantify/modules/confidence_intervals.html" />
     <link rel="author" title="About these documents" href="../about.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="5. Model Selection and Evaluation" href="../model_selection_evaluation.html" />
-    <link rel="prev" title="3.3. QuaDapt: Drift-Resilient Score Adaptation" href="scores_adaptation.html" />
+    <link rel="next" title="6. Building a Quantifier" href="../building_a_quantifier.html" />
+    <link rel="prev" title="4.4. Evaluation Metrics" href="evaluation_metrics.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
   <meta name="docsearch:version" content="" />
@@ -335,16 +338,15 @@
 <li class="toctree-l2"><a class="reference internal" href="scores_adaptation.html">3.3. QuaDapt: Drift-Resilient Score Adaptation</a></li>
 </ul>
 </details></li>
-<li class="toctree-l1 current active"><a class="current reference internal" href="#">4.  Confidence Intervals</a></li>
-<li class="toctree-l1 has-children"><a class="reference internal" href="../model_selection_evaluation.html">5.  Model Selection and Evaluation</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
-<li class="toctree-l2"><a class="reference internal" href="protocols.html">5.1. Protocols for Quantification</a></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../model_selection_evaluation.html">4.  Model Selection and Evaluation</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="protocols.html">4.1. Protocols for Quantification</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tuning_hyperparameters.html">4.2. Tuning Hyperparameters</a></li>
+
+<li class="toctree-l2"><a class="reference internal" href="evaluation_metrics.html">4.4. Evaluation Metrics</a></li>
 </ul>
 </details></li>
+<li class="toctree-l1 current active"><a class="current reference internal" href="#">5.  Confidence Intervals</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../building_a_quantifier.html">6.  Building a Quantifier</a></li>
-<li class="toctree-l1 has-children"><a class="reference internal" href="../experiment_management.html">7.  Experiment Management</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
-<li class="toctree-l2"><a class="reference internal" href="../building_a_protocol.html">7.1. Building a Protocol</a></li>
-</ul>
-</details></li>
 </ul>
 </div>
 </nav></div>
@@ -381,7 +383,7 @@
     
     <li class="breadcrumb-item"><a href="../user_guide.html" class="nav-link">User Guide</a></li>
     
-    <li class="breadcrumb-item active" aria-current="page"><span class="ellipsis"><span class="section-number">4. </span>Confidence Intervals for Quantification</span></li>
+    <li class="breadcrumb-item active" aria-current="page"><span class="ellipsis"><span class="section-number">5. </span>Confidence Regions for Quantification</span></li>
   </ul>
 </nav>
 </div>
@@ -398,8 +400,155 @@
 <div id="searchbox"></div>
                 <article class="bd-article">
                   
-  <section id="confidence-intervals-for-quantification">
-<span id="confidence-intervals"></span><h1><span class="section-number">4. </span>Confidence Intervals for Quantification<a class="headerlink" href="#confidence-intervals-for-quantification" title="Link to this heading">#</a></h1>
+  <section id="confidence-regions-for-quantification">
+<span id="confidence-intervals-quantification"></span><h1><span class="section-number">5. </span>Confidence Regions for Quantification<a class="headerlink" href="#confidence-regions-for-quantification" title="Link to this heading">#</a></h1>
+<p>This guide details the main types of confidence regions for prevalence estimates in quantification, as implemented in <a class="reference internal" href="generated/mlquantify.html#module-mlquantify.confidence" title="mlquantify.confidence"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mlquantify.confidence</span></code></a>. It covers the principles, mathematical definitions, attributes, and usage examples for each region type.</p>
+<p>For advanced bootstrap-based strategies (e.g., model-based and population-based), see <a class="reference internal" href="generated/mlquantify.meta.AggregativeBootstrap.html#mlquantify.meta.AggregativeBootstrap" title="mlquantify.meta.AggregativeBootstrap"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mlquantify.meta.AggregativeBootstrap</span></code></a>, which provides detailed implementations.</p>
+<section id="general-concept">
+<h2><span class="section-number">5.1. </span>General Concept<a class="headerlink" href="#general-concept" title="Link to this heading">#</a></h2>
+<p>A confidence region for quantification is a subset in the prevalence space that, with probability <span class="math notranslate nohighlight">\(1-\alpha\)</span>, contains the unknown true class prevalence vector <span class="math notranslate nohighlight">\(\pi^*\)</span> of the test set. The width and shape of this region express uncertainty around the point estimate. Typical regions are defined as <span class="math notranslate nohighlight">\(CR_\alpha\)</span> such that</p>
+<div class="math notranslate nohighlight">
+\[\mathbb{P}\left(\pi^{\ast} \in CR_{\alpha}\right) = 1 - \alpha\]</div>
+<p>where <span class="math notranslate nohighlight">\(\pi^{\ast}\)</span> is the true prevalence vector.</p>
+<p>Confidence region types differ by how they model joint uncertainty across class prevalences:</p>
+<ul class="simple">
+<li><p><strong>Confidence intervals</strong> (by percentiles)</p></li>
+<li><p><strong>Confidence ellipse in simplex</strong> (multivariate)</p></li>
+<li><p><strong>Confidence ellipse in CLR space</strong> (geometry-aware)</p></li>
+</ul>
+<p>All regions are constructed from <span class="math notranslate nohighlight">\(m\)</span> bootstrap resamples of prevalences for <span class="math notranslate nohighlight">\(n\)</span> classes: <span class="math notranslate nohighlight">\(X \in \mathbb{R}^{m \times n}\)</span>.</p>
+<p>API Reference: <code class="xref py py-class docutils literal notranslate"><span class="pre">BaseConfidenceRegion</span></code> (in <a class="reference internal" href="generated/mlquantify.html#module-mlquantify.confidence" title="mlquantify.confidence"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mlquantify.confidence</span></code></a>).</p>
+</section>
+<section id="percentile-based-confidence-intervals">
+<span id="confidence-intervals"></span><h2><span class="section-number">5.2. </span>Percentile-Based Confidence Intervals<a class="headerlink" href="#percentile-based-confidence-intervals" title="Link to this heading">#</a></h2>
+<p>Implements independent confidence intervals for each class based on percentiles (nonparametric, assumes independence).</p>
+<p><code class="xref py py-class docutils literal notranslate"><span class="pre">ConfidenceInterval</span></code></p>
+<figure class="align-center" id="id1">
+<a class="reference internal image-reference" href="../_images/ConfidenceInterval_class_1.png"><img alt="Confidence Intervals Illustration" src="../_images/ConfidenceInterval_class_1.png" style="width: 80%;" />
+</a>
+<figcaption>
+<p><span class="caption-text"><em>Illustration of Confidence Intervals for the positive class</em></span><a class="headerlink" href="#id1" title="Link to this image">#</a></p>
+</figcaption>
+</figure>
+<ul>
+<li><p><strong>Definition:</strong> For a desired confidence <span class="math notranslate nohighlight">\(1-\alpha\)</span>, compute interval bounds <span class="math notranslate nohighlight">\([L_i, U_i]\)</span> for each class <span class="math notranslate nohighlight">\(i\)</span> from the empirical <span class="math notranslate nohighlight">\(\alpha/2\)</span> and <span class="math notranslate nohighlight">\(1-\alpha/2\)</span> percentiles.</p></li>
+<li><p><strong>Mathematical region:</strong></p>
+<blockquote>
+<div><div class="math notranslate nohighlight">
+\[\begin{split}CI_\alpha(\pi) =
+\begin{cases}
+1 &amp; \text{if } L_i \leq \pi_i \leq U_i, \forall i=1,...,n \\
+0 &amp; \text{otherwise}
+\end{cases}\end{split}\]</div>
+</div></blockquote>
+</li>
+<li><p><strong>Limitations:</strong> Assumes class independence; region is a hyper-rectangle which can fall outside the probability simplex.</p></li>
+</ul>
+<p><strong>Example:</strong></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">mlquantify.confidence</span><span class="w"> </span><span class="kn">import</span> <span class="n">ConfidenceInterval</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+
+<span class="n">X</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">dirichlet</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="mi">3</span><span class="p">),</span> <span class="n">size</span><span class="o">=</span><span class="mi">200</span><span class="p">)</span>
+<span class="n">ci</span> <span class="o">=</span> <span class="n">ConfidenceInterval</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">confidence_level</span><span class="o">=</span><span class="mf">0.9</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">ci</span><span class="o">.</span><span class="n">get_region</span><span class="p">())</span>  <span class="c1"># returns (I_low, I_high)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">ci</span><span class="o">.</span><span class="n">contains</span><span class="p">([</span><span class="mf">0.3</span><span class="p">,</span> <span class="mf">0.4</span><span class="p">,</span> <span class="mf">0.3</span><span class="p">]))</span>  <span class="c1"># array([[True]])</span>
+</pre></div>
+</div>
+</section>
+<section id="confidence-ellipse-in-simplex">
+<span id="confidence-ellipse-simplex"></span><h2><span class="section-number">5.3. </span>Confidence Ellipse in Simplex<a class="headerlink" href="#confidence-ellipse-in-simplex" title="Link to this heading">#</a></h2>
+<p>Constructs a multivariate confidence ellipse in the simplex space, enforcing joint uncertainty and correlations.</p>
+<p><code class="xref py py-class docutils literal notranslate"><span class="pre">ConfidenceEllipseSimplex</span></code></p>
+<figure class="align-center" id="id2">
+<a class="reference internal image-reference" href="../_images/ConfidenceEllipseSimplex_class_1.png"><img alt="Confidence Ellipse in Simplex illustration" src="../_images/ConfidenceEllipseSimplex_class_1.png" style="width: 80%;" />
+</a>
+<figcaption>
+<p><span class="caption-text"><em>Illustration of Confidence Ellipse in Simplex space for the positive class</em></span><a class="headerlink" href="#id2" title="Link to this image">#</a></p>
+</figcaption>
+</figure>
+<ul>
+<li><p><strong>Definition:</strong> Derives an ellipse around the mean prevalence vector, with axes scaled by covariance, thresholded via chi-squared statistic.</p></li>
+<li><p><strong>Mathematical region:</strong></p>
+<blockquote>
+<div><div class="math notranslate nohighlight">
+\[\begin{split}CE_\alpha(\pi) =
+\begin{cases}
+1 &amp; \text{if } (\pi-\mu)^T\Sigma^{-1}(\pi-\mu) \leq \chi^2_{n-1}(1-\alpha) \\
+0 &amp; \text{otherwise}
+\end{cases}\end{split}\]</div>
+</div></blockquote>
+</li>
+<li><dl class="simple">
+<dt><strong>Attributes:</strong></dt><dd><ul class="simple">
+<li><p><span class="math notranslate nohighlight">\(\mu\)</span>: sample mean of bootstrap prevalences</p></li>
+<li><p><span class="math notranslate nohighlight">\(\Sigma^{-1}\)</span>: inverse covariance matrix</p></li>
+<li><p><span class="math notranslate nohighlight">\(\chi^2_{n-1}(1-\alpha)\)</span>: chi-squared cutoff</p></li>
+</ul>
+</dd>
+</dl>
+</li>
+<li><p><strong>Limitations:</strong> Assumes normality of prevalence estimates (may not hold); region may partially extend beyond the simplex.</p></li>
+</ul>
+<p><strong>Example:</strong></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">mlquantify.confidence</span><span class="w"> </span><span class="kn">import</span> <span class="n">ConfidenceEllipseSimplex</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+
+<span class="n">X</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">dirichlet</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="mi">3</span><span class="p">),</span> <span class="n">size</span><span class="o">=</span><span class="mi">200</span><span class="p">)</span>
+<span class="n">ce</span> <span class="o">=</span> <span class="n">ConfidenceEllipseSimplex</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">confidence_level</span><span class="o">=</span><span class="mf">0.95</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">ce</span><span class="o">.</span><span class="n">get_point_estimate</span><span class="p">())</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">ce</span><span class="o">.</span><span class="n">contains</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mf">0.4</span><span class="p">,</span> <span class="mf">0.3</span><span class="p">,</span> <span class="mf">0.3</span><span class="p">])))</span>
+</pre></div>
+</div>
+</section>
+<section id="confidence-ellipse-in-clr-space">
+<span id="confidence-ellipse-clr"></span><h2><span class="section-number">5.4. </span>Confidence Ellipse in CLR Space<a class="headerlink" href="#confidence-ellipse-in-clr-space" title="Link to this heading">#</a></h2>
+<p>Models the geometry of the simplex by transforming prevalence vectors using the Centered Log-Ratio (CLR) transformation before constructing the ellipse.</p>
+<p><code class="xref py py-class docutils literal notranslate"><span class="pre">ConfidenceEllipseCLR</span></code></p>
+<figure class="align-center" id="id3">
+<a class="reference internal image-reference" href="../_images/ConfidenceEllipseCLR_class_1.png"><img alt="Confidence Ellipse in CLR illustration" src="../_images/ConfidenceEllipseCLR_class_1.png" style="width: 80%;" />
+</a>
+<figcaption>
+<p><span class="caption-text"><em>Illustration of Confidence Ellipse in CLR space for the positive class</em></span><a class="headerlink" href="#id3" title="Link to this image">#</a></p>
+</figcaption>
+</figure>
+<ul>
+<li><p><strong>CLR transformation:</strong> <span class="math notranslate nohighlight">\(T: \Delta^{n-1} \rightarrow \mathbb{R}^n\)</span>, with</p>
+<blockquote>
+<div><div class="math notranslate nohighlight">
+\[T(\pi) = [\log(\pi_1 / g(\pi)), \ldots, \log(\pi_n / g(\pi))], \quad g(\pi) = (\prod_i \pi_i)^{1/n}\]</div>
+</div></blockquote>
+</li>
+<li><p><strong>Region definition:</strong></p>
+<blockquote>
+<div><div class="math notranslate nohighlight">
+\[\begin{split}CT_\alpha(\pi) =
+\begin{cases}
+1 &amp; \text{if } (T(\pi) - \mu_{CLR})^T \Sigma^{-1} (T(\pi) - \mu_{CLR}) \leq \chi^2_{n-1}(1-\alpha) \\
+0 &amp; \text{otherwise}
+\end{cases}\end{split}\]</div>
+</div></blockquote>
+</li>
+<li><p><strong>Attributes:</strong> As above, but all computations done in the transformed CLR space.</p></li>
+<li><p><strong>Advantages:</strong> Adapts to the compositional nature of prevalence estimates, keeping the region well-behaved within the simplex.</p></li>
+</ul>
+<p><strong>Example:</strong></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">mlquantify.confidence</span><span class="w"> </span><span class="kn">import</span> <span class="n">ConfidenceEllipseCLR</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+
+<span class="n">X</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">dirichlet</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="mi">3</span><span class="p">),</span> <span class="n">size</span><span class="o">=</span><span class="mi">200</span><span class="p">)</span>
+<span class="n">clr</span> <span class="o">=</span> <span class="n">ConfidenceEllipseCLR</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">confidence_level</span><span class="o">=</span><span class="mf">0.9</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">clr</span><span class="o">.</span><span class="n">get_point_estimate</span><span class="p">())</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">clr</span><span class="o">.</span><span class="n">contains</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mf">0.4</span><span class="p">,</span> <span class="mf">0.4</span><span class="p">,</span> <span class="mf">0.2</span><span class="p">])))</span>
+</pre></div>
+</div>
+<section id="references">
+<h3><span class="section-number">5.4.1. </span>References<a class="headerlink" href="#references" title="Link to this heading">#</a></h3>
+<ul class="simple">
+<li><p>Moreo, A., &amp; Salvati, N. (2025). <em>An Efficient Method for Deriving Confidence Intervals in Aggregative Quantification</em>. Istituto di Scienza e Tecnologie dell’Informazione, CNR, Pisa.</p></li>
+<li><p>See also: Section 3.3 and Equations (1)-(3) in the reference above.</p></li>
+</ul>
+</section>
+</section>
 </section>
 
 
@@ -413,20 +562,20 @@
     <div class="footer-article-item">
 <div class="prev-next-area">
     <a class="left-prev"
-       href="scores_adaptation.html"
+       href="evaluation_metrics.html"
        title="previous page">
       <i class="fa-solid fa-angle-left"></i>
       <div class="prev-next-info">
         <p class="prev-next-subtitle">previous</p>
-        <p class="prev-next-title"><span class="section-number">3.3. </span>QuaDapt: Drift-Resilient Score Adaptation</p>
+        <p class="prev-next-title"><span class="section-number">4.4. </span>Evaluation Metrics</p>
       </div>
     </a>
     <a class="right-next"
-       href="../model_selection_evaluation.html"
+       href="../building_a_quantifier.html"
        title="next page">
       <div class="prev-next-info">
         <p class="prev-next-subtitle">next</p>
-        <p class="prev-next-title"><span class="section-number">5. </span>Model Selection and Evaluation</p>
+        <p class="prev-next-title"><span class="section-number">6. </span>Building a Quantifier</p>
       </div>
       <i class="fa-solid fa-angle-right"></i>
     </a>
@@ -444,6 +593,24 @@
                 <dialog id="pst-secondary-sidebar-modal"></dialog>
                 <div id="pst-secondary-sidebar" class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
 
+
+  <div class="sidebar-secondary-item">
+<div
+    id="pst-page-navigation-heading-2"
+    class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> On this page
+  </div>
+  <nav class="bd-toc-nav page-toc" aria-labelledby="pst-page-navigation-heading-2">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#general-concept">5.1. General Concept</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#percentile-based-confidence-intervals">5.2. Percentile-Based Confidence Intervals</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#confidence-ellipse-in-simplex">5.3. Confidence Ellipse in Simplex</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#confidence-ellipse-in-clr-space">5.4. Confidence Ellipse in CLR Space</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#references">5.4.1. References</a></li>
+</ul>
+</li>
+</ul>
+  </nav></div>
 
   <div class="sidebar-secondary-item">
   <div role="note" aria-label="source link">

@@ -11,12 +11,12 @@
 <meta property="og:type" content="website" />
 <meta property="og:url" content="building_a_quantifier.html" />
 <meta property="og:site_name" content="mlquantify" />
-<meta property="og:description" content="General Quantifiers: In MLQuantify, you can build your own quantifier by following the BaseQuantifier base class. This base class provides the necessary structure and methods that your custom quant..." />
+<meta property="og:description" content="This guide explains how to create custom quantifiers in MLQuantify by extending the base classes and using the provided utilities. General Quantifiers: To build a custom quantifier, inherit from Ba..." />
 <meta property="og:image:width" content="1146" />
 <meta property="og:image:height" content="600" />
-<meta property="og:image" content="_images/social_previews/summary_building_a_quantifier_a5ebb46c.png" />
-<meta property="og:image:alt" content="General Quantifiers: In MLQuantify, you can build your own quantifier by following the BaseQuantifier base class. This base class provides the necessary structure and methods that your custom quant..." />
-<meta name="description" content="General Quantifiers: In MLQuantify, you can build your own quantifier by following the BaseQuantifier base class. This base class provides the necessary structure and methods that your custom quant..." />
+<meta property="og:image" content="_images/social_previews/summary_building_a_quantifier_f614a85a.png" />
+<meta property="og:image:alt" content="This guide explains how to create custom quantifiers in MLQuantify by extending the base classes and using the provided utilities. General Quantifiers: To build a custom quantifier, inherit from Ba..." />
+<meta name="description" content="This guide explains how to create custom quantifiers in MLQuantify by extending the base classes and using the provided utilities. General Quantifiers: To build a custom quantifier, inherit from Ba..." />
 <meta name="twitter:card" content="summary_large_image" />
 
     <title>6. Building a Quantifier &#8212; mlquantify 0.1.8 documentation</title>
@@ -63,8 +63,8 @@
     <link rel="canonical" href="https://luizfernandolj.github.io/mlquantify/building_a_quantifier.html" />
     <link rel="author" title="About these documents" href="about.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="next" title="7. Experiment Management" href="experiment_management.html" />
-    <link rel="prev" title="&lt;no title&gt;" href="modules/evaluation_metrics.html" />
+    <link rel="next" title="API Reference" href="api/index.html" />
+    <link rel="prev" title="5. Confidence Regions for Quantification" href="modules/confidence_intervals.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
   <meta name="docsearch:version" content="" />
@@ -337,16 +337,15 @@
 <li class="toctree-l2"><a class="reference internal" href="modules/scores_adaptation.html">3.3. QuaDapt: Drift-Resilient Score Adaptation</a></li>
 </ul>
 </details></li>
-<li class="toctree-l1"><a class="reference internal" href="modules/confidence_intervals.html">4.  Confidence Intervals</a></li>
-<li class="toctree-l1 has-children"><a class="reference internal" href="model_selection_evaluation.html">5.  Model Selection and Evaluation</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
-<li class="toctree-l2"><a class="reference internal" href="modules/protocols.html">5.1. Protocols for Quantification</a></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="model_selection_evaluation.html">4.  Model Selection and Evaluation</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="modules/protocols.html">4.1. Protocols for Quantification</a></li>
+<li class="toctree-l2"><a class="reference internal" href="modules/tuning_hyperparameters.html">4.2. Tuning Hyperparameters</a></li>
+
+<li class="toctree-l2"><a class="reference internal" href="modules/evaluation_metrics.html">4.4. Evaluation Metrics</a></li>
 </ul>
 </details></li>
+<li class="toctree-l1"><a class="reference internal" href="modules/confidence_intervals.html">5.  Confidence Intervals</a></li>
 <li class="toctree-l1 current active"><a class="current reference internal" href="#">6.  Building a Quantifier</a></li>
-<li class="toctree-l1 has-children"><a class="reference internal" href="experiment_management.html">7.  Experiment Management</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
-<li class="toctree-l2"><a class="reference internal" href="building_a_protocol.html">7.1. Building a Protocol</a></li>
-</ul>
-</details></li>
 </ul>
 </div>
 </nav></div>
@@ -402,16 +401,204 @@
                   
   <section id="building-a-quantifier">
 <span id="id1"></span><h1><span class="section-number">6. </span>Building a Quantifier<a class="headerlink" href="#building-a-quantifier" title="Link to this heading">#</a></h1>
+<p>This guide explains how to create custom quantifiers in MLQuantify by extending the base classes and using the provided utilities.</p>
 <section id="general-quantifiers">
 <h2><span class="section-number">6.1. </span>General Quantifiers<a class="headerlink" href="#general-quantifiers" title="Link to this heading">#</a></h2>
-<p>In MLQuantify, you can build your own quantifier by following the <code class="xref py py-class docutils literal notranslate"><span class="pre">BaseQuantifier</span></code> base class. This base class provides the necessary structure and methods that your custom quantifier should implement. To create a new quantifier, you need to define the following key methods:</p>
+<p>To build a custom quantifier, inherit from <code class="xref py py-class docutils literal notranslate"><span class="pre">BaseQuantifier</span></code> and implement the following methods:</p>
 <ul class="simple">
-<li><p><code class="xref py py-func docutils literal notranslate"><span class="pre">fit</span></code>: This method is responsible for training the quantifier on the provided training data. You should implement the logic to learn from the features and labels of the training set.</p></li>
-<li><p><code class="xref py py-func docutils literal notranslate"><span class="pre">predict</span></code>: This method is used to estimate the class prevalences on the test data. You should implement the logic to make predictions based on the learned model from the <code class="docutils literal notranslate"><span class="pre">fit</span></code> method.</p></li>
+<li><p><code class="xref py py-func docutils literal notranslate"><span class="pre">fit</span></code>: Train the quantifier on the provided training data (features and labels)</p></li>
+<li><p><code class="xref py py-func docutils literal notranslate"><span class="pre">predict</span></code>: Estimate class prevalences on test data using the learned model</p></li>
 </ul>
+<p><strong>Example:</strong></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">mlquantify.base</span><span class="w"> </span><span class="kn">import</span> <span class="n">BaseQuantifier</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+
+<span class="k">class</span><span class="w"> </span><span class="nc">MyQuantifier</span><span class="p">(</span><span class="n">BaseQuantifier</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">param1</span><span class="o">=</span><span class="mi">42</span><span class="p">,</span> <span class="n">param2</span><span class="o">=</span><span class="s1">&#39;default&#39;</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">param1</span> <span class="o">=</span> <span class="n">param1</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">param2</span> <span class="o">=</span> <span class="n">param2</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">fit</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">X</span><span class="p">,</span> <span class="n">y</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">classes_</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">unique</span><span class="p">(</span><span class="n">y</span><span class="p">)</span>
+        <span class="c1"># Add your training logic here</span>
+        <span class="k">return</span> <span class="bp">self</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">predict</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">X</span><span class="p">):</span>
+        <span class="n">_</span><span class="p">,</span> <span class="n">counts</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">unique</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">classes_</span><span class="p">,</span> <span class="n">return_counts</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+        <span class="n">prevalence</span> <span class="o">=</span> <span class="n">counts</span> <span class="o">/</span> <span class="n">counts</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span>
+        <span class="k">return</span> <span class="n">prevalence</span>
+</pre></div>
+</div>
 </section>
 <section id="aggregative-quantifiers">
 <h2><span class="section-number">6.2. </span>Aggregative Quantifiers<a class="headerlink" href="#aggregative-quantifiers" title="Link to this heading">#</a></h2>
+<p>Aggregative quantifiers combine predictions from a base learner. Inherit from both <code class="xref py py-class docutils literal notranslate"><span class="pre">AggregativeQuantifierMixin</span></code> and <code class="xref py py-class docutils literal notranslate"><span class="pre">BaseQuantifier</span></code> to create one.</p>
+<p><strong>Required methods:</strong></p>
+<ul class="simple">
+<li><p><code class="xref py py-func docutils literal notranslate"><span class="pre">fit</span></code>: Train the quantifier and its base learner</p></li>
+<li><p><code class="xref py py-func docutils literal notranslate"><span class="pre">predict</span></code>: Generate individual predictions</p></li>
+<li><p><code class="xref py py-func docutils literal notranslate"><span class="pre">aggregate</span></code>: Convert individual predictions into prevalence estimates</p></li>
+</ul>
+<div class="admonition important">
+<p class="admonition-title">Important</p>
+<ul class="simple">
+<li><p>Place <code class="xref py py-class docutils literal notranslate"><span class="pre">AggregativeQuantifierMixin</span></code> <strong>first</strong> in the inheritance list for proper method resolution</p></li>
+<li><p>Include a <code class="docutils literal notranslate"><span class="pre">learner</span></code> attribute for automatic parameter handling</p></li>
+</ul>
+</div>
+<p><strong>Example:</strong></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">mlquantify.base</span><span class="w"> </span><span class="kn">import</span> <span class="n">BaseQuantifier</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">mlquantify.mixins</span><span class="w"> </span><span class="kn">import</span> <span class="n">AggregativeQuantifierMixin</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+
+<span class="k">class</span><span class="w"> </span><span class="nc">MyAggregativeQuantifier</span><span class="p">(</span><span class="n">AggregativeQuantifierMixin</span><span class="p">,</span> <span class="n">BaseQuantifier</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">learner</span><span class="p">,</span> <span class="n">param1</span><span class="o">=</span><span class="mi">42</span><span class="p">,</span> <span class="n">param2</span><span class="o">=</span><span class="s1">&#39;default&#39;</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">learner</span> <span class="o">=</span> <span class="n">learner</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">param1</span> <span class="o">=</span> <span class="n">param1</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">param2</span> <span class="o">=</span> <span class="n">param2</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">fit</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">X</span><span class="p">,</span> <span class="n">y</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">classes_</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">unique</span><span class="p">(</span><span class="n">y</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">learner</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span>
+        <span class="k">return</span> <span class="bp">self</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">predict</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">X</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">learner</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">X</span><span class="p">)</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">aggregate</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">individual_predictions</span><span class="p">):</span>
+        <span class="n">_</span><span class="p">,</span> <span class="n">counts</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">unique</span><span class="p">(</span><span class="n">individual_predictions</span><span class="p">,</span> <span class="n">return_counts</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+        <span class="n">prevalence</span> <span class="o">=</span> <span class="n">counts</span> <span class="o">/</span> <span class="n">counts</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span>
+        <span class="k">return</span> <span class="n">prevalence</span>
+</pre></div>
+</div>
+</section>
+<section id="aggregation-types">
+<h2><span class="section-number">6.3. </span>Aggregation Types<a class="headerlink" href="#aggregation-types" title="Link to this heading">#</a></h2>
+<p>Specify the prediction type by inheriting from one of these mixins:</p>
+<ul class="simple">
+<li><p><code class="xref py py-class docutils literal notranslate"><span class="pre">CrispLearnerMixin</span></code>: For hard/crisp predictions (class labels)</p></li>
+<li><p><code class="xref py py-class docutils literal notranslate"><span class="pre">SoftLearnerMixin</span></code>: For soft/probabilistic predictions (class probabilities)</p></li>
+</ul>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>These mixins only work with <code class="xref py py-class docutils literal notranslate"><span class="pre">AggregativeQuantifierMixin</span></code> and require a <code class="docutils literal notranslate"><span class="pre">learner</span></code> attribute.</p>
+</div>
+</section>
+<section id="binary-quantifiers">
+<h2><span class="section-number">6.4. </span>Binary Quantifiers<a class="headerlink" href="#binary-quantifiers" title="Link to this heading">#</a></h2>
+<p>Use the <a class="reference internal" href="modules/generated/mlquantify.multiclass.define_binary.html#mlquantify.multiclass.define_binary" title="mlquantify.multiclass.define_binary"><code class="xref py py-func docutils literal notranslate"><span class="pre">&#64;define_binary</span></code></a> decorator to adapt multiclass quantifiers for binary problems. The decorator automatically modifies <code class="xref py py-func docutils literal notranslate"><span class="pre">fit</span></code>, <code class="xref py py-func docutils literal notranslate"><span class="pre">predict</span></code>, and <code class="xref py py-func docutils literal notranslate"><span class="pre">aggregate</span></code> methods.</p>
+<p><strong>Multiclass strategies:</strong></p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">'ovr'</span></code> (One-vs-Rest): Treat each class as positive vs. all others</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">'ovo'</span></code> (One-vs-One): Compare each pair of classes</p></li>
+</ul>
+<p><strong>Example:</strong></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">mlquantify.base</span><span class="w"> </span><span class="kn">import</span> <span class="n">BaseQuantifier</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">mlquantify.multiclass</span><span class="w"> </span><span class="kn">import</span> <span class="n">define_binary</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+
+<span class="nd">@define_binary</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">MyBinaryQuantifier</span><span class="p">(</span><span class="n">BaseQuantifier</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">strategy</span><span class="o">=</span><span class="s1">&#39;ovo&#39;</span><span class="p">,</span> <span class="n">param1</span><span class="o">=</span><span class="mi">42</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">strategy</span> <span class="o">=</span> <span class="n">strategy</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">param1</span> <span class="o">=</span> <span class="n">param1</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">fit</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">X</span><span class="p">,</span> <span class="n">y</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">classes_</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">unique</span><span class="p">(</span><span class="n">y</span><span class="p">)</span>
+        <span class="k">return</span> <span class="bp">self</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">predict</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">X</span><span class="p">):</span>
+        <span class="c1"># Binary prediction logic</span>
+        <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mf">0.5</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">])</span>  <span class="c1"># Example prevalence</span>
+</pre></div>
+</div>
+</section>
+<section id="validation-utilities">
+<h2><span class="section-number">6.5. </span>Validation Utilities<a class="headerlink" href="#validation-utilities" title="Link to this heading">#</a></h2>
+<p>The <a class="reference internal" href="modules/generated/mlquantify.utils.html#module-mlquantify.utils" title="mlquantify.utils"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mlquantify.utils</span></code></a> module provides validation functions to ensure data consistency:</p>
+<ul class="simple">
+<li><p><code class="xref py py-func docutils literal notranslate"><span class="pre">validate_data</span></code>: Validate input features and labels</p></li>
+<li><p><code class="xref py py-func docutils literal notranslate"><span class="pre">validate_prevalences</span></code>: Validate prevalence estimates</p></li>
+<li><p><code class="xref py py-func docutils literal notranslate"><span class="pre">validate_predictions</span></code>: Validate learner predictions (for aggregative quantifiers)</p></li>
+<li><p><code class="xref py py-func docutils literal notranslate"><span class="pre">_fit_context</span></code>: Context manager for fitting with automatic parameter validation, with an option to skip multiple validations during fitting if in a loop.</p></li>
+</ul>
+<p><strong>Example:</strong></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">mlquantify.utils</span><span class="w"> </span><span class="kn">import</span> <span class="p">(</span>
+    <span class="n">validate_data</span><span class="p">,</span>
+    <span class="n">validate_prevalences</span><span class="p">,</span>
+    <span class="n">validate_predictions</span><span class="p">,</span>
+    <span class="n">_fit_context</span>
+<span class="p">)</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">mlquantify.base</span><span class="w"> </span><span class="kn">import</span> <span class="n">BaseQuantifier</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">mlquantify.mixins</span><span class="w"> </span><span class="kn">import</span> <span class="n">SoftLearnerMixin</span><span class="p">,</span> <span class="n">AggregativeQuantifierMixin</span>
+
+<span class="k">class</span><span class="w"> </span><span class="nc">MyQuantifier</span><span class="p">(</span><span class="n">SoftLearnerMixin</span><span class="p">,</span> <span class="n">AggregativeQuantifierMixin</span><span class="p">,</span> <span class="n">BaseQuantifier</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">learner</span><span class="p">,</span> <span class="n">param1</span><span class="o">=</span><span class="mi">42</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">learner</span> <span class="o">=</span> <span class="n">learner</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">param1</span> <span class="o">=</span> <span class="n">param1</span>
+
+    <span class="nd">@_fit_context</span><span class="p">(</span><span class="n">prefer_skip_validation</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">fit</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">X</span><span class="p">,</span> <span class="n">y</span><span class="p">):</span>
+        <span class="n">X</span><span class="p">,</span> <span class="n">y</span> <span class="o">=</span> <span class="n">validate_data</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span>
+        <span class="c1"># Training logic</span>
+        <span class="k">return</span> <span class="bp">self</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">predict</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">X</span><span class="p">):</span>
+        <span class="n">X</span> <span class="o">=</span> <span class="n">validate_data</span><span class="p">(</span><span class="n">X</span><span class="p">)</span>
+        <span class="c1"># Prediction logic</span>
+        <span class="k">return</span> <span class="n">predictions</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">aggregate</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">individual_predictions</span><span class="p">):</span>
+        <span class="n">individual_predictions</span> <span class="o">=</span> <span class="n">validate_predictions</span><span class="p">(</span>
+            <span class="n">individual_predictions</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">classes_</span>
+        <span class="p">)</span>
+        <span class="c1"># Aggregation logic</span>
+        <span class="k">return</span> <span class="n">prevalence</span>
+</pre></div>
+</div>
+</section>
+<section id="parameter-constraints">
+<h2><span class="section-number">6.6. </span>Parameter Constraints<a class="headerlink" href="#parameter-constraints" title="Link to this heading">#</a></h2>
+<p>Ensure parameter validity using the <a class="reference internal" href="modules/generated/mlquantify.utils.html#module-mlquantify.utils" title="mlquantify.utils"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mlquantify.utils</span></code></a> module:</p>
+<ol class="arabic simple">
+<li><p>Apply the <code class="xref py py-func docutils literal notranslate"><span class="pre">&#64;_fit_context</span></code> decorator to the <code class="docutils literal notranslate"><span class="pre">fit</span></code> method</p></li>
+<li><p>Use constraint validators from <a class="reference internal" href="modules/generated/mlquantify.utils.html#module-mlquantify.utils" title="mlquantify.utils"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mlquantify.utils</span></code></a> to check parameter types and values</p></li>
+</ol>
+<p>These validators will raise informative errors when parameters don’t meet expectations.</p>
+<div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<ul class="simple">
+<li><p><a class="reference internal" href="api/index.html#api-ref"><span class="std std-ref">API Reference</span></a> for detailed API documentation</p></li>
+</ul>
+</div>
+<p><strong>Example:</strong></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">mlquantify.base</span><span class="w"> </span><span class="kn">import</span> <span class="n">BaseQuantifier</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">mlquantify.utils</span><span class="w"> </span><span class="kn">import</span> <span class="p">(</span>
+    <span class="n">_fit_context</span><span class="p">,</span>
+    <span class="n">Interval</span><span class="p">,</span>
+    <span class="n">Options</span>
+<span class="p">)</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+
+<span class="k">class</span><span class="w"> </span><span class="nc">MyQuantifier</span><span class="p">(</span><span class="n">BaseQuantifier</span><span class="p">):</span>
+    <span class="n">_param_constraints</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="s1">&#39;param1&#39;</span><span class="p">:</span> <span class="p">[</span><span class="n">Interval</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="n">inclusive_left</span><span class="o">=</span><span class="kc">False</span><span class="p">)],</span>
+        <span class="s1">&#39;param2&#39;</span><span class="p">:</span> <span class="p">[</span><span class="n">Options</span><span class="p">([</span><span class="s1">&#39;default&#39;</span><span class="p">,</span> <span class="s1">&#39;option1&#39;</span><span class="p">,</span> <span class="s1">&#39;option2&#39;</span><span class="p">])],</span>
+        <span class="s1">&#39;param3&#39;</span><span class="p">:</span> <span class="s2">&quot;array-like&quot;</span>
+    <span class="p">}</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">param1</span><span class="o">=</span><span class="mi">42</span><span class="p">,</span> <span class="n">param2</span><span class="o">=</span><span class="s1">&#39;default&#39;</span><span class="p">,</span> <span class="n">param3</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">param1</span> <span class="o">=</span> <span class="n">param1</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">param2</span> <span class="o">=</span> <span class="n">param2</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">param3</span> <span class="o">=</span> <span class="n">param3</span>
+
+    <span class="nd">@_fit_context</span><span class="p">(</span><span class="n">prefer_skip_validation</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">fit</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">X</span><span class="p">,</span> <span class="n">y</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">classes_</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">unique</span><span class="p">(</span><span class="n">y</span><span class="p">)</span>
+        <span class="c1"># Training logic</span>
+        <span class="k">return</span> <span class="bp">self</span>
+</pre></div>
+</div>
 </section>
 </section>
 
@@ -426,20 +613,20 @@
     <div class="footer-article-item">
 <div class="prev-next-area">
     <a class="left-prev"
-       href="modules/evaluation_metrics.html"
+       href="modules/confidence_intervals.html"
        title="previous page">
       <i class="fa-solid fa-angle-left"></i>
       <div class="prev-next-info">
         <p class="prev-next-subtitle">previous</p>
-        <p class="prev-next-title">&lt;no title&gt;</p>
+        <p class="prev-next-title"><span class="section-number">5. </span>Confidence Regions for Quantification</p>
       </div>
     </a>
     <a class="right-next"
-       href="experiment_management.html"
+       href="api/index.html"
        title="next page">
       <div class="prev-next-info">
         <p class="prev-next-subtitle">next</p>
-        <p class="prev-next-title"><span class="section-number">7. </span>Experiment Management</p>
+        <p class="prev-next-title">API Reference</p>
       </div>
       <i class="fa-solid fa-angle-right"></i>
     </a>
@@ -468,6 +655,10 @@
     <ul class="visible nav section-nav flex-column">
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#general-quantifiers">6.1. General Quantifiers</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#aggregative-quantifiers">6.2. Aggregative Quantifiers</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#aggregation-types">6.3. Aggregation Types</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#binary-quantifiers">6.4. Binary Quantifiers</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#validation-utilities">6.5. Validation Utilities</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#parameter-constraints">6.6. Parameter Constraints</a></li>
 </ul>
   </nav></div>
 
