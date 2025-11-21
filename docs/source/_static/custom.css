@@ -1,3 +1,14 @@
+:root {
+  /* Light mode - pastel theme */
+  --background-main: #F5F4FA;
+  --text-main: #222233;
+  --accent-blue: #B8C6F8;   /* Pastel blue (from logo #7088F0) */
+  --accent-magenta: #E0AFDC;/* Pastel magenta (from logo #C045B7) */
+  --accent-pink: #F8C4D8;   /* Pastel pink/purple */
+  --navbar-bg: #ECEAF4;
+  --navbar-text: #222233;
+}
+
 .toctree-wrapper > ul > li > a {
     font-size: 1.4em !important;
     font-weight: bold !important;

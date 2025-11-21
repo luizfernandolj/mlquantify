@@ -92,6 +92,7 @@ html_use_index = False
 html_css_files = ["custom.css"]
 
 html_sidebars = {
+    "about_us": [],
     "install": [],
     "getting_started": [],
 }

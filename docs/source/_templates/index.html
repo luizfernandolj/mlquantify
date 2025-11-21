@@ -1,18 +1,98 @@
 {% extends "layout.html" %}
-{% set title = 'mlquantify: python for quantification' %}
-
-{% import "static/webpack-macros.html" as _webpack with context %}
+{% set title = 'mlquantify: Quantification in Python' %}
 
 {% block docs_navbar %}
+<div class="container-fluid">
     {{ super() }}
+    <div class="container py-4">
+        <h4 class="fst-italic mb-3">Tools for Quantification and Class Prevalence Estimation</h4>
+        <a class="btn btn-primary mb-1 text-white" href="{{ pathto('user_guide') }}" role="button">User Guide</a>
+    </div>
+</div>
 {% endblock docs_navbar %}
 
 {% block docs_main %}
+<div class="container pt-3">
+  <div class="row">
+    <div class="col-md-4 mb-3">
+      <div class="card h-100 bg-dark text-white">
+        <div class="card-body">
+          <h4 class="card-title">
+            <a href="{{ pathto('aggregative_quantification') }}">Aggregate Quantification</a>
+          </h4>
+          <p>Aggregation Methods for Class Prevalence Estimation</p>
+        </div>
+        <a href="{{ pathto('examples/aggregative_quantification') }}" class="btn btn-secondary">Examples</a>
+      </div>
+    </div>
+    <div class="col-md-4 mb-3">
+      <div class="card h-100 bg-dark text-white">
+        <div class="card-body">
+          <h4 class="card-title">
+            <a href="{{ pathto('non_aggregative_quantification') }}">Non-Aggregative Quantification</a>
+          </h4>
+          <p>Non-Aggregative Methods for Class Prevalence Estimation</p>
+        </div>
+        <a href="{{ pathto('examples/non_aggregative_quantification') }}" class="btn btn-secondary">Examples</a>
+      </div>
+    </div>
+    <div class="col-md-4 mb-3">
+      <div class="card h-100 bg-dark text-white">
+        <div class="card-body">
+          <h4 class="card-title">
+            <a href="{{ pathto('meta_quantification') }}">Meta Quantification</a>
+          </h4>
+          <p>Meta Methods for Class Prevalence Estimation</p>
+        </div>
+        <a href="{{ pathto('examples/meta_quantification') }}" class="btn btn-secondary">Examples</a>
+      </div>
+    </div>
+    <div class="col-md-4 mb-3">
+      <div class="card h-100 bg-dark text-white">
+        <div class="card-body">
+          <h4 class="card-title">
+            <a href="{{ pathto('modules/evaluation_metrics') }}">Evaluation Metrics</a>
+          </h4>
+          <p>Assess the performance of quantification results with dedicated metrics.</p>
+        </div>
+        <a href="{{ pathto('examples/evaluation_metrics') }}" class="btn btn-secondary">Examples</a>
+      </div>
+    </div>
+    <div class="col-md-4 mb-3">
+      <div class="card h-100 bg-dark text-white">
+        <div class="card-body">
+          <h4 class="card-title">
+            <a href="{{ pathto('modules/confidence_intervals') }}">Confidence Intervals</a>
+          </h4>
+          <p>Calculate confidence intervals for quantification results.</p>
+        </div>
+        <a href="{{ pathto('examples/confidence_intervals') }}" class="btn btn-secondary">Examples</a>
+      </div>
+    </div>
+    <div class="col-md-4 mb-3">
+      <div class="card h-100 bg-dark text-white">
+        <div class="card-body">
+          <h4 class="card-title">
+            <a href="{{ pathto('model_selection_evaluation') }}">Model Selection and Evaluation</a>
+          </h4>
+          <p>Methods for selecting and evaluating quantification models.</p>
+        </div>
+        <a href="{{ pathto('examples/model_selection_evaluation') }}" class="btn btn-secondary">Examples</a>
+      </div>
+    </div>
+  </div>
+</div>
 {% endblock docs_main %}
 
 {% block footer %}
+<div class="container-fluid py-3">
+  <div class="container">
+    <h4>About Us</h4>
+    <ul>
+      <li>Open source quantification library for Python</li>
+      <li>Contact: <a href="mailto:luizfernandoluth@gmail.com">luizfernandoluth@gmail.com</a></li>
+      <a href="{{ pathto('about_us')}}">See more about us</a>
+    </ul>
+  </div>
+</div>
 {% endblock footer %}
-
-{% block scripts_end %}
-    {{ _webpack.body_post() }}
-{% endblock scripts_end %}
