@@ -73,8 +73,6 @@ def define_binary(cls):
     >>> qtf.predict(X)
     array([...])
     """
-    cls.binary = True
-    
     if check_has_method(cls, "fit"):
         cls._original_fit = cls.fit
     if check_has_method(cls, "predict"):
@@ -339,7 +337,7 @@ class BinaryQuantifier(MetaquantifierMixin, BaseQuantifier):
         classes = np.unique(args_dict["y_train"])
         qtf.strategy = getattr(qtf, "strategy", "ovr")
 
-        if hasattr(qtf, "binary") and qtf.binary:
+        if (hasattr(qtf, "binary") and qtf.binary) or len(classes) <= 2:
             return qtf._original_aggregate(*args_dict.values())
 
         if qtf.strategy == "ovr":
