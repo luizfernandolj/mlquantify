@@ -308,8 +308,10 @@ class SMM(AggregativeMixture):
         mean_pos = np.mean(pos_scores)
         mean_neg = np.mean(neg_scores)
         mean_test = np.mean(predictions)
-        
-        alpha = (mean_test - mean_neg) / (mean_pos - mean_neg)
+        if mean_pos - mean_neg == 0:
+            alpha = mean_test
+        else:
+            alpha = np.clip((mean_test - mean_neg) / (mean_pos - mean_neg), 0, 1)
         return alpha, None
 
 

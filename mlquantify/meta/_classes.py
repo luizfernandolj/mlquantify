@@ -661,7 +661,7 @@ class QuaDapt(MetaquantifierMixin, BaseQuantifier):
     def __init__(self, 
                  quantifier,
                  measure="topsoe", 
-                 merging_factors=(0.1, 1.0, 0.2)):
+                 merging_factors=np.arange(0.1, 1.0, 0.2)):
         self.quantifier = quantifier
         self.measure = measure
         self.merging_factors = merging_factors
@@ -701,10 +701,7 @@ class QuaDapt(MetaquantifierMixin, BaseQuantifier):
         
         self.classes = self.classes if hasattr(self, 'classes') else np.unique(train_y_values)
 
-        moss = QuaDapt.MoSS(1000, 0.5, m)
-
-        moss_scores = moss[:, :2]
-        moss_labels = moss[:, 2]
+        moss_scores, moss_labels = self.MoSS(1000, 0.5, m)
 
         prevalences = self.quantifier.aggregate(predictions,
                                                 moss_scores,
@@ -721,9 +718,9 @@ class QuaDapt(MetaquantifierMixin, BaseQuantifier):
         distances = []
         
         for mf in MF:
-            scores = QuaDapt.MoSS(1000, 0.5, mf)
-            pos_scores = scores[scores[:, 2] == 1][:, :2]
-            neg_scores = scores[scores[:, 2] == 0][:, :2]
+            scores, labels = self.MoSS(1000, 0.5, mf)
+            pos_scores = scores[labels == 1][:, 1]
+            neg_scores = scores[labels == 0][:, 1]
             
             best_distance = self._get_best_distance(predictions, pos_scores, neg_scores)
             
@@ -772,14 +769,27 @@ class QuaDapt(MetaquantifierMixin, BaseQuantifier):
         .. [1] Maletzke, A., Reis, D. dos, Hassan, W., & Batista, G. (2021).
         Accurately Quantifying under Score Variability. 2021 IEEE International Conference on Data Mining (ICDM), 1228-1233. https://doi.org/10.1109/ICDM51629.2021.00149
         """
-        p_score = np.random.uniform(size=int(n * alpha)) ** m
-        n_score = 1 - (np.random.uniform(size=int(round(n * (1 - alpha), 0))) ** m)
-        scores = np.column_stack(
-            (np.concatenate((p_score, n_score)), 
-             np.concatenate((p_score, n_score)), 
-             np.concatenate((
-                 np.ones(len(p_score)), 
-                 np.full(len(n_score), 0))))
+        if isinstance(alpha, list):
+            alpha = float(alpha[1])
+            
+        n_pos = int(n * alpha)
+        n_neg = n - n_pos
+        
+        # Scores positivos
+        p_score = np.random.uniform(size=n_pos) ** merging_factor
+        # Scores negativos
+        n_score = 1 - (np.random.uniform(size=n_neg) ** merging_factor)
+        
+        # Construção dos arrays de features (duas colunas iguais)
+        moss = np.column_stack(
+            ( 
+                1 - np.concatenate((p_score, n_score)),
+                np.concatenate((p_score, n_score)),
+                np.int16(np.concatenate((np.ones(len(p_score)), np.full(len(n_score), 0))))
+            )
         )
-        return scores
+        
+        scores = moss[:, :2]
+        labels = moss[:, 2].astype(np.int16)
+        return scores, labels
         

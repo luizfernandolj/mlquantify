@@ -603,7 +603,12 @@ class MS(ThresholdAdjustment):
         for thr, tpr, fpr in zip(thresholds, tprs, fprs):
             cc_predictions = CC(thr).aggregate(predictions)
             cc_predictions = cc_predictions[1]
-            prevalence = cc_predictions if tpr - fpr == 0 else (cc_predictions - fpr) / (tpr - fpr)
+            
+            if tpr - fpr == 0:
+                prevalence = cc_predictions
+            else:
+                prevalence = np.clip((cc_predictions - fpr) / (tpr - fpr), 0, 1)
+                
             prevs.append(prevalence)
         prevalence = np.median(prevs)
         return np.asarray([1 - prevalence, prevalence])
