@@ -73,6 +73,8 @@ def define_binary(cls):
     >>> qtf.predict(X)
     array([...])
     """
+    cls.binary = True
+    
     if check_has_method(cls, "fit"):
         cls._original_fit = cls.fit
     if check_has_method(cls, "predict"):
