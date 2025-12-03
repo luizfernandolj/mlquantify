@@ -776,9 +776,9 @@ class QuaDapt(MetaquantifierMixin, BaseQuantifier):
         n_neg = n - n_pos
         
         # Scores positivos
-        p_score = np.random.uniform(size=n_pos) ** merging_factor
+        p_score = np.random.uniform(size=n_pos) ** m
         # Scores negativos
-        n_score = 1 - (np.random.uniform(size=n_neg) ** merging_factor)
+        n_score = 1 - (np.random.uniform(size=n_neg) ** m)
         
         # Construção dos arrays de features (duas colunas iguais)
         moss = np.column_stack(
