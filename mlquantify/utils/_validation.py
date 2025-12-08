@@ -96,23 +96,49 @@ def validate_y(quantifier: Any, y: np.ndarray) -> None:
 
 def _get_valid_crisp_predictions(predictions, threshold=0.5):
     predictions = np.asarray(predictions)
-
     dimensions = predictions.ndim
 
+    if train_y_values is not None:
+        classes = np.unique(train_y_values)
+    else:
+        classes = None
+
     if dimensions > 2:
-        predictions = np.argmax(predictions, axis=1)
+        # Assuming the last dimension contains class probabilities
+        crisp_indices = np.argmax(predictions, axis=-1)
+        if classes is not None:
+            predictions = classes[crisp_indices]
+        else:
+            predictions = crisp_indices
     elif dimensions == 2:
-        predictions = (predictions[:, 1] >= threshold).astype(int)
+        # Binary or multi-class probabilities (N, C)
+        if classes is not None and len(classes) == 2:
+            # Binary case with explicit classes
+            predictions = np.where(predictions[:, 1] >= threshold, classes[1], classes[0])
+        elif classes is not None and len(classes) > 2:
+            # Multi-class case with explicit classes
+            crisp_indices = np.argmax(predictions, axis=1)
+            predictions = classes[crisp_indices]
+        else:
+            # Default binary (0 or 1) or multi-class (0 to C-1)
+            if predictions.shape[1] == 2:
+                predictions = (predictions[:, 1] >= threshold).astype(int)
+            else:
+                predictions = np.argmax(predictions, axis=1)
     elif dimensions == 1:
+        # 1D probabilities (e.g., probability of positive class)
         if np.issubdtype(predictions.dtype, np.floating):
-            predictions = (predictions >= threshold).astype(int)
+            if classes is not None and len(classes) == 2:
+                predictions = np.where(predictions >= threshold, classes[1], classes[0])
+            else:
+                predictions = (predictions >= threshold).astype(int)
     else:
         raise ValueError(f"Predictions array has an invalid number of dimensions. Expected 1 or more dimensions, got {predictions.ndim}.")
 
     return predictions
 
 
-def validate_predictions(quantifier: Any, predictions: np.ndarray, threshold: float = 0.5) -> np.ndarray:
+def validate_predictions(quantifier: Any, predictions: np.ndarray, threshold: float = 0.5, train_y_values=None) -> np.ndarray:
     """
     Validate predictions using the quantifier's declared output tags.
     Raises InputValidationError if inconsistent with tags.
@@ -132,7 +158,7 @@ def validate_predictions(quantifier: Any, predictions: np.ndarray, threshold: fl
             f"Soft predictions for {quantifier.__class__.__name__} must be float, got dtype {predictions.dtype}."
         )
     elif estimator_type == "crisp" and np.issubdtype(predictions.dtype, np.floating):
-        predictions = _get_valid_crisp_predictions(predictions, threshold) 
+        predictions = _get_valid_crisp_predictions(predictions, train_y_values, threshold) 
     return predictions   
     
     

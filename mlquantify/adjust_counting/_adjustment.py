@@ -105,7 +105,8 @@ class ThresholdAdjustment(SoftLearnerQMixin, BaseAdjustCount):
         thresholds, tprs, fprs = evaluate_thresholds(train_y_values, positive_scores)
         threshold, tpr, fpr = self.get_best_threshold(thresholds, tprs, fprs)
 
-        cc_predictions = CC(threshold=threshold).aggregate(predictions, train_y_values)[1]
+        cc_predictions = CC(threshold=threshold).aggregate(predictions, train_y_values)
+        cc_predictions = list(cc_predictions.values())[1]
 
         if tpr - fpr == 0:
             prevalence = cc_predictions
@@ -609,7 +610,7 @@ class MS(ThresholdAdjustment):
         prevs = []
         for thr, tpr, fpr in zip(thresholds, tprs, fprs):
             cc_predictions = CC(threshold=thr).aggregate(predictions, train_y_values)
-            cc_predictions = cc_predictions[1]
+            cc_predictions = list(cc_predictions.values())[1]
             
             if tpr - fpr == 0:
                 prevalence = cc_predictions
