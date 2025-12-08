@@ -204,7 +204,7 @@ class BaseAdjustCount(AggregationMixin, BaseQuantifier):
         self.learner = learner
 
     @_fit_context(prefer_skip_nested_validation=True)
-    def fit(self, X, y, learner_fitted=False):
+    def fit(self, X, y, learner_fitted=False, cv=10, stratified=True, random_state=None, shuffle=True):
         """Fit the quantifier using the provided data and learner."""
         X, y = validate_data(self, X, y)
         validate_y(self, y)
@@ -220,10 +220,10 @@ class BaseAdjustCount(AggregationMixin, BaseQuantifier):
                 X,
                 y,
                 function=learner_function,
-                cv=5,
-                stratified=True,
-                random_state=None,
-                shuffle=True
+                cv=cv,
+                stratified=stratified,
+                random_state=random_state,
+                shuffle=shuffle
             )
         
         self.train_predictions = train_predictions
@@ -241,7 +241,6 @@ class BaseAdjustCount(AggregationMixin, BaseQuantifier):
         self.classes_ = check_classes_attribute(self, np.unique(y_train_values))
         
         predictions = validate_predictions(self, predictions)
-        train_predictions = validate_predictions(self, train_predictions)
         
         prevalences = self._adjust(predictions, train_predictions, y_train_values)
         prevalences = validate_prevalences(self, prevalences, self.classes_)

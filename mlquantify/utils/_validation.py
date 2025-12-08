@@ -97,22 +97,22 @@ def validate_y(quantifier: Any, y: np.ndarray) -> None:
 def _get_valid_crisp_predictions(predictions, threshold=0.5):
     predictions = np.asarray(predictions)
 
-    dimensions = predictions.shape[1] if len(predictions.shape) > 1 else 1
+    dimensions = predictions.ndim
 
     if dimensions > 2:
         predictions = np.argmax(predictions, axis=1)
     elif dimensions == 2:
-        predictions = (predictions[:, 1] > threshold).astype(int)
+        predictions = (predictions[:, 1] >= threshold).astype(int)
     elif dimensions == 1:
         if np.issubdtype(predictions.dtype, np.floating):
-            predictions = (predictions > threshold).astype(int)
+            predictions = (predictions >= threshold).astype(int)
     else:
         raise ValueError(f"Predictions array has an invalid number of dimensions. Expected 1 or more dimensions, got {predictions.ndim}.")
 
     return predictions
 
 
-def validate_predictions(quantifier: Any, predictions: np.ndarray) -> None:
+def validate_predictions(quantifier: Any, predictions: np.ndarray, threshold: float = 0.5) -> np.ndarray:
     """
     Validate predictions using the quantifier's declared output tags.
     Raises InputValidationError if inconsistent with tags.
@@ -132,7 +132,7 @@ def validate_predictions(quantifier: Any, predictions: np.ndarray) -> None:
             f"Soft predictions for {quantifier.__class__.__name__} must be float, got dtype {predictions.dtype}."
         )
     elif estimator_type == "crisp" and np.issubdtype(predictions.dtype, np.floating):
-        predictions = _get_valid_crisp_predictions(predictions) 
+        predictions = _get_valid_crisp_predictions(predictions, threshold) 
     return predictions   
     
     

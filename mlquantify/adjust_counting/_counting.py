@@ -75,10 +75,12 @@ class CC(CrispLearnerQMixin, BaseCount):
         super().__init__(learner=learner)
         self.threshold = threshold
 
-    def aggregate(self, predictions):
-        predictions = validate_predictions(self, predictions)
+    def aggregate(self, predictions, train_y_values=None):
+        predictions = validate_predictions(self, predictions, self.threshold)
         
-        self.classes_ = check_classes_attribute(self, np.unique(predictions))
+        if train_y_values is None:
+            train_y_values = np.unique(predictions)
+        self.classes_ = check_classes_attribute(self, np.unique(train_y_values))
         class_counts = np.array([np.count_nonzero(predictions == _class) for _class in self.classes_])
         prevalences = class_counts / len(predictions)
         
