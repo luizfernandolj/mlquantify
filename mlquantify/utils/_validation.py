@@ -94,7 +94,7 @@ def validate_y(quantifier: Any, y: np.ndarray) -> None:
             f"Predictions must be 1D or 2D array, got array with ndim={y.ndim} and shape={y.shape}."
         )
 
-def _get_valid_crisp_predictions(predictions, threshold=0.5):
+def _get_valid_crisp_predictions(predictions, train_y_values=None, threshold=0.5):
     predictions = np.asarray(predictions)
     dimensions = predictions.ndim
 
