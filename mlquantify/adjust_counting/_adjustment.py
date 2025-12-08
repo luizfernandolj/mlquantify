@@ -2,6 +2,7 @@ import numpy as np
 from abc import abstractmethod
 from scipy.optimize import minimize
 import warnings
+from sklearn.metrics import confusion_matrix
 
 from mlquantify.adjust_counting._base import BaseAdjustCount
 from mlquantify.adjust_counting._counting import CC, PCC
@@ -208,7 +209,7 @@ class MatrixAdjustment(BaseAdjustCount):
             prevs_estim = self._get_estimations(predictions > priors)
             prevalence = self._solve_optimization(prevs_estim, priors)
         else:
-            self.CM = self._compute_confusion_matrix(train_y_pred)
+            self.CM = self._compute_confusion_matrix(train_y_pred, train_y_values)
             prevs_estim = self._get_estimations(predictions)
             prevalence = self._solve_linear(prevs_estim)
         
@@ -389,8 +390,11 @@ class GAC(CrispLearnerQMixin, MatrixAdjustment):
     def __init__(self, learner=None):
         super().__init__(learner=learner, solver='linear')
     
-    def _compute_confusion_matrix(self, predictions):
-        prev_estim = self._get_estimations(predictions)
+    def _compute_confusion_matrix(self, predictions, y_values):
+        self.CM = confusion_matrix(y_values, predictions, labels=self.classes_).T
+        self.CM = self.CM.astype(float)
+        prev_estim = self.CM.sum(axis=0)
+
         for i, _ in enumerate(self.classes_):
             if prev_estim[i] == 0:
                 self.CM[i, i] = 1
@@ -448,13 +452,16 @@ class GPAC(SoftLearnerQMixin, MatrixAdjustment):
     def __init__(self, learner=None):
         super().__init__(learner=learner, solver='linear')
     
-    def _compute_confusion_matrix(self, posteriors):
-        prev_estim = self._get_estimations(posteriors)
-        for i, _ in enumerate(self.classes_):
-            if prev_estim[i] == 0:
-                self.CM[i, i] = 1
-            else:
-                self.CM[:, i] /= prev_estim[i]
+    def _compute_confusion_matrix(self, posteriors, y_values):
+        n_classes = len(self.classes_)
+        confusion = np.eye(n_classes)
+
+        for i, class_label in enumerate(self.classes_):
+            indices = (y_values == class_label)
+            if np.any(indices):
+                confusion[i] = posteriors[indices].mean(axis=0)
+        
+        self.CM = confusion.T
         return self.CM
 
 
