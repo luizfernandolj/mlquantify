@@ -204,13 +204,13 @@ class MatrixAdjustment(BaseAdjustCount):
         self.CM = np.zeros((n_class, n_class))
 
         if self.solver == 'optim':
-            priors = np.array(list(CC().aggregate(train_y_pred).values()))
+            priors = np.array(list(CC().aggregate(train_y_pred, train_y_values).values()))
             self.CM = self._compute_confusion_matrix(train_y_pred, train_y_values, priors)
-            prevs_estim = self._get_estimations(predictions > priors)
+            prevs_estim = self._get_estimations(predictions > priors, train_y_values)
             prevalence = self._solve_optimization(prevs_estim, priors)
         else:
             self.CM = self._compute_confusion_matrix(train_y_pred, train_y_values)
-            prevs_estim = self._get_estimations(predictions)
+            prevs_estim = self._get_estimations(predictions, train_y_values)
             prevalence = self._solve_linear(prevs_estim)
         
         return prevalence
@@ -261,11 +261,11 @@ class MatrixAdjustment(BaseAdjustCount):
         result = minimize(objective, init, constraints=constraints, bounds=bounds)
         return result.x if result.success else priors
 
-    def _get_estimations(self, predictions):
+    def _get_estimations(self, predictions, train_y_values):
         """Return prevalence estimates using CC (crisp) or PCC (probabilistic)."""
         if uses_soft_predictions(self):
             return np.array(list(PCC().aggregate(predictions).values()))
-        return np.array(list(CC().aggregate(predictions).values()))
+        return np.array(list(CC().aggregate(predictions, train_y_values).values()))
 
     @abstractmethod
     def _compute_confusion_matrix(self, predictions, *args):
