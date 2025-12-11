@@ -1,8 +1,9 @@
 import numpy as np
+from mlquantify.utils import check_random_state
 import itertools
 
 
-def get_indexes_with_prevalence(y, prevalence: list, sample_size:int):
+def get_indexes_with_prevalence(y, prevalence: list, sample_size:int, random_state: int = None):
     """
     Get indexes for a stratified sample based on the prevalence of each class.
     
@@ -23,6 +24,7 @@ def get_indexes_with_prevalence(y, prevalence: list, sample_size:int):
         List of indexes for the stratified sample.
     """      
     classes = np.unique(y)
+    rng = check_random_state(random_state)
         
     # Ensure the sum of prevalences is 1
     assert np.isclose(sum(prevalence), 1), "The sum of prevalences must be 1"
@@ -43,12 +45,12 @@ def get_indexes_with_prevalence(y, prevalence: list, sample_size:int):
         class_indexes = np.where(y == class_)[0]
 
         # Sample the indexes for the current class
-        sampled_class_indexes = np.random.choice(class_indexes, size=num_samples, replace=True)
+        sampled_class_indexes = rng.choice(class_indexes, size=num_samples, replace=True)
         
         sampled_indexes.extend(sampled_class_indexes)
         total_sampled += num_samples
 
-    np.random.shuffle(sampled_indexes)  # Shuffle after collecting all indexes
+    rng.shuffle(sampled_indexes)  # Shuffle after collecting all indexes
         
     return sampled_indexes
 
@@ -59,7 +61,8 @@ def simplex_uniform_kraemer(n_dim: int,
                             n_iter: int, 
                             min_val: float = 0.0, 
                             max_val: float = 1.0, 
-                            max_tries: int = 1000) -> np.ndarray:
+                            max_tries: int = 1000,
+                            random_state: int = None) -> np.ndarray:
     """
     Generates n_prev prevalence vectors of n_dim classes uniformly 
     distributed on the simplex, with optional lower and upper bounds.
@@ -91,28 +94,25 @@ def simplex_uniform_kraemer(n_dim: int,
     if min_val * n_dim > 1 or max_val * n_dim < 1:
         raise ValueError("Invalid bounds: they make it impossible to sum to 1.")
 
+    rng = check_random_state(random_state)
+
     effective_simplex_size = 1 - n_dim * min_val
     prevs = []
 
-    # Amostragem em blocos até atingir n_prev válidos
     tries = 0
-    batch_size = max(n_prev, 1000)  # Gera em blocos grandes para eficiência
+    batch_size = n_prev
 
     while len(prevs) < n_prev and tries < max_tries:
         tries += 1
-
-        # Geração de pontos uniformes no simplex reduzido
-        u = np.random.uniform(0, 1, (batch_size, n_dim - 1))
+    
+        u = rng.uniform(0, 1, (batch_size, n_dim - 1))
         u.sort(axis=1)
         simplex = np.diff(np.concatenate([np.zeros((batch_size, 1)), u, np.ones((batch_size, 1))], axis=1), axis=1)
 
-        # Escala para [min_val, max_val]
         scaled = min_val + simplex * effective_simplex_size
 
-        # Normaliza para garantir soma = 1
         scaled /= scaled.sum(axis=1, keepdims=True)
 
-        # Filtra apenas vetores válidos
         mask = np.all((scaled >= min_val) & (scaled <= max_val), axis=1)
         valid = scaled[mask]
 
@@ -122,11 +122,13 @@ def simplex_uniform_kraemer(n_dim: int,
     if not prevs:
         raise RuntimeError("No valid prevalences found with given constraints. Try adjusting min_val/max_val.")
     
-    if n_iter > 1:
-        prevs = np.tile(prevs, (n_iter, 1))
-
     result = np.vstack(prevs)
-    return result[:n_prev]
+    result = result[:n_prev]
+
+    if n_iter > 1:
+        result = np.repeat(result, n_iter, axis=0)
+    
+    return result
  
  
  
@@ -135,7 +137,7 @@ def simplex_grid_sampling(
     n_prev: int,
     n_iter: int,
     min_val: float,
-    max_val: float
+    max_val: float,
 ) -> np.ndarray:
     """
     Efficiently generates artificial prevalence vectors that sum to 1
@@ -181,7 +183,7 @@ def simplex_grid_sampling(
 
     # Repetição se necessário
     if n_iter > 1:
-        prevs = np.tile(prevs, (n_iter, 1))
+        prevs = np.repeat(prevs, n_iter, axis=0)
 
     return prevs
 
@@ -193,7 +195,8 @@ def simplex_uniform_sampling(
     n_prev: int,
     n_iter: int,
     min_val: float,
-    max_val: float
+    max_val: float,
+    random_state: int = None
 ) -> np.ndarray:
     """
     Generates uniformly distributed prevalence vectors within the simplex,
@@ -265,9 +268,8 @@ def bootstrap_sample_indices(
     np.ndarray
         Array containing indices for a bootstrap sample.
     """
-    if random_state is not None:
-        np.random.seed(random_state)
+    rng = check_random_state(random_state)
 
     for _ in range(n_bootstraps):
-        indices = np.random.choice(n_samples, size=batch_size, replace=True)
+        indices = rng.choice(n_samples, size=batch_size, replace=True)
         yield indices

@@ -8,6 +8,7 @@ from mlquantify.utils._sampling import (
     simplex_uniform_kraemer,
     simplex_uniform_sampling,
 )
+from mlquantify.utils._random import check_random_state
 from mlquantify.utils._validation import validate_data
 from abc import ABC, abstractmethod
 from logging import warning
@@ -170,6 +171,8 @@ class APP(BaseProtocol):
     def _iter_indices(self, X: np.ndarray, y: np.ndarray):
         
         n_dim = len(np.unique(y))
+
+        rng = check_random_state(self.random_state)
         
         for batch_size in self.batch_size:
             prevalences = simplex_grid_sampling(n_dim=n_dim,
@@ -178,9 +181,8 @@ class APP(BaseProtocol):
                                               min_val=self.min_prev,
                                               max_val=self.max_prev)
             for prev in prevalences:
-                indexes = get_indexes_with_prevalence(y, prev, batch_size)
+                indexes = get_indexes_with_prevalence(y, prev, batch_size, random_state=rng)
                 yield indexes
-                
 
             
 
@@ -221,10 +223,10 @@ class NPP(BaseProtocol):
         self.repeats = repeats
 
     def _iter_indices(self, X: np.ndarray, y: np.ndarray):
-        
+        rng = check_random_state(self.random_state)
         for _ in range(self.n_samples):
             for batch_size in self.batch_size:
-                idx = np.random.choice(X.shape[0], batch_size, replace=True)
+                idx = rng.choice(X.shape[0], batch_size, replace=True)
                 for _ in range(self.repeats):
                     yield idx
             
@@ -289,6 +291,8 @@ class UPP(BaseProtocol):
     def _iter_indices(self, X: np.ndarray, y: np.ndarray):
         
         n_dim = len(np.unique(y))
+
+        rng = check_random_state(self.random_state)
         
         for batch_size in self.batch_size:
             if self.algorithm == 'kraemer':
@@ -296,16 +300,17 @@ class UPP(BaseProtocol):
                                            n_prev=self.n_prevalences,
                                            n_iter=self.repeats,
                                            min_val=self.min_prev,
-                                           max_val=self.max_prev)
+                                           max_val=self.max_prev,
+                                           random_state=rng)
             elif self.algorithm == 'uniform':
                 prevalences = simplex_uniform_sampling(n_dim=n_dim,
                                               n_prev=self.n_prevalences,
                                               n_iter=self.repeats,
                                               min_val=self.min_prev,
-                                              max_val=self.max_prev)
-
+                                              max_val=self.max_prev,
+                                              random_state=rng)
             for prev in prevalences:
-                indexes = get_indexes_with_prevalence(y, prev, batch_size)
+                indexes = get_indexes_with_prevalence(y, prev, batch_size, random_state=rng)
                 yield indexes
 
 
@@ -347,12 +352,12 @@ class PPP(BaseProtocol):
                         repeats=repeats)
     
     def _iter_indices(self, X: np.ndarray, y: np.ndarray):
-        
+        rng = check_random_state(self.random_state)
         for batch_size in self.batch_size:    
             for prev in self.prevalences:
                 if isinstance(prev, float):
                     prev = [1-prev, prev]
                 
-                indexes = get_indexes_with_prevalence(y, prev, batch_size)
+                indexes = get_indexes_with_prevalence(y, prev, batch_size, random_state=rng)
                 yield indexes
         
