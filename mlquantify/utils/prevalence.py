@@ -3,27 +3,36 @@ import pandas as pd
 from collections import defaultdict
 
 
-def get_prev_from_labels(y, format="dict") -> dict:
+def get_prev_from_labels(y, format="dict", classes: list = None):
     """
     Get the real prevalence of each class in the target array.
-    
+
     Parameters
     ----------
     y : np.ndarray or pd.Series
         Array of class labels.
-        
+    format : str, default="dict"
+        Format of the output. Can be "array" or "dict".
+    classes : list, optional
+        List of unique classes. If provided, the output will be sorted by these classes.
+
     Returns
     -------
-    dict
-        Dictionary of class labels and their corresponding prevalence.
+    dict or np.ndarray
+        Dictionary of class labels and their corresponding prevalence or array of prevalences.
     """
     if isinstance(y, np.ndarray):
         y = pd.Series(y)
+
+    counts = y.value_counts(normalize=True).sort_index()
+
+    if classes is not None:
+        counts = counts.reindex(classes, fill_value=0.0)
+
     if format == "array":
-        prevalences = y.value_counts(normalize=True).sort_index().values
-        return prevalences
-    real_prevs = y.value_counts(normalize=True).to_dict()
-    real_prevs = dict(sorted(real_prevs.items()))
+        return counts.values
+
+    real_prevs = counts.to_dict()
     return real_prevs
 
 
