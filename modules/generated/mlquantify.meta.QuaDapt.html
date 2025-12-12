@@ -547,13 +547,26 @@ metric (Hellinger, Topsoe, ProbSymm, or SORD), and aggregates quantification acc
 <dt class="sig sig-object py" id="mlquantify.meta.QuaDapt.MoSS">
 <em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">MoSS</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">n</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">alpha</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">m</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/luizfernandolj/mlquantify/tree/master/mlquantify/meta.py"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mlquantify.meta.QuaDapt.MoSS" title="Link to this definition">#</a></dt>
 <dd><p>Model for Score Simulation</p>
-<p>MoSS has three key parameters:
-(I) the number of observations <code class="docutils literal notranslate"><span class="pre">n</span></code>;
-(II) the class proportion <code class="docutils literal notranslate"><span class="pre">alpha</span></code>, which defines the prevalence of the positive class;
-(III) the merging factor <span class="math notranslate nohighlight">\(m\)</span>, which controls the overlap between positive and negative score distributions 
-(where <span class="math notranslate nohighlight">\(m=0\)</span> represents easily separable classes and <span class="math notranslate nohighlight">\(m=1\)</span> represents highly overlapping ones).</p>
+<dl class="field-list">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>n</strong><span class="classifier">int</span></dt><dd><p>Number of observations.</p>
+</dd>
+<dt><strong>alpha</strong><span class="classifier">float</span></dt><dd><p>Class proportion, which defines the prevalence of the positive class.</p>
+</dd>
+<dt><strong>m</strong><span class="classifier">float</span></dt><dd><p>Merging factor, which controls the overlap between positive and negative score distributions.</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt>tuple</dt><dd><p>Tuple of score and label arrays.</p>
+</dd>
+</dl>
 <div class="math notranslate nohighlight">
 \[\mathrm{moss}(n, \alpha, \mathfrak{m}) = \mathrm{syn}(\oplus, \lfloor \alpha n \rfloor, \mathfrak{m}) \cup \mathrm{syn}(\ominus , \lfloor (1 - \alpha) n \rfloor, \mathfrak{m})\]</div>
+</dd>
+</dl>
 <p class="rubric">Notes</p>
 <p>The MoSS generates only binary scores, simulating positive and negative class scores.</p>
 <p class="rubric">References</p>
