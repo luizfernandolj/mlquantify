@@ -1,18 +1,13 @@
+![PyPI - Version](https://img.shields.io/pypi/v/mlquantify)
+[![docs](https://img.shields.io/badge/docs-sphinx-blue)](https://github.com/luizfernandolj/mlquantify/)
+
+
 <img src="assets/logo_mlquantify-white.svg" alt="mlquantify logo">
 <h4 align="center">A Python Package for Quantification</h4>
 
 ___
 
  **mlquantify** is a Python library for quantification, also known as supervised prevalence estimation, designed to estimate the distribution of classes within datasets. It offers a range of tools for various quantification methods, model selection tailored for quantification tasks, evaluation metrics, and protocols to assess quantification performance. Additionally, mlquantify includes popular datasets and visualization tools to help analyze and interpret results.
-
-___
-
-## Latest Release
-
-- **Version 0.1.11**: Inicial beta version. For a detailed list of changes, check the [changelog](#).
-- In case you need any help, refer to the [User Guide](https://luizfernandolj.github.io/mlquantify/user_guide.html).
-- Explore the [API documentation](https://luizfernandolj.github.io/mlquantify/api/index.html) for detailed developer information.
-- See also the library in the pypi site in [pypi mlquantify](https://pypi.org/project/mlquantify/)
 
 ___
 
@@ -80,6 +75,10 @@ print(f"Mean Absolute Error -> {mae}")
 print(f"Normalized Relative Absolute Error -> {nrae}")
 ```
 
+- In case you need any help, refer to the [User Guide](https://luizfernandolj.github.io/mlquantify/user_guide.html).
+- Explore the [API documentation](https://luizfernandolj.github.io/mlquantify/api/index.html) for detailed developer information.
+- See also the library in the pypi site in [pypi mlquantify](https://pypi.org/project/mlquantify/)
+
 ___
 
 ## Requirements
@@ -91,11 +90,3 @@ ___
 - tqdm
 - matplotlib
 - xlrd
-
-___
-
-## Documentation
-
-##### API is avaliable [here](https://luizfernandolj.github.io/mlquantify/api/)
-
-___
