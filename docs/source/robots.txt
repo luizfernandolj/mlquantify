@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://SEU-USUARIO.github.io/NOME-REPO/sitemap.xml
+Sitemap: https://luizfernandolj.github.io/mlquantify/sitemap.xml
