@@ -696,29 +696,25 @@ class QuaDapt(MetaquantifierMixin, BaseQuantifier):
     
     def aggregate(self, predictions, train_y_values):
 
-        pos_predictions = predictions[:, 1]
-        m = self.get_best_merging_factor(pos_predictions)
+        prevalence, _, _ = self.best_mixture(predictions)
+        prevalences = np.asarray([1-prevalence, prevalence])
         
         self.classes = self.classes if hasattr(self, 'classes') else np.unique(train_y_values)
-
-        moss_scores, moss_labels = self.MoSS(1000, 0.5, m)
-
-        prevalences = self.quantifier.aggregate(predictions,
-                                                moss_scores,
-                                                moss_labels)
         
-        prevalences = {self.classes[i]: v for i, v in enumerate(prevalences.values())}
+        prevalences = validate_prevalences(self, prevalences, self.classes)
         return prevalences
 
         
-    def get_best_merging_factor(self, predictions):
+    def best_mixture(self, predictions):
+        predictions = predictions[:, 1]
         
         MF = np.atleast_1d(np.round(self.merging_factors, 2)).astype(float)
         
         distances = []
+        alphas = []
         
         for mf in MF:
-            scores, labels = self.MoSS(1000, 0.5, mf)
+            scores, labels = self.MoSS(n=1000, alpha=0.5, merging_factor=mf)
             pos_scores = scores[labels == 1][:, 1]
             neg_scores = scores[labels == 0][:, 1]
 
@@ -727,34 +723,25 @@ class QuaDapt(MetaquantifierMixin, BaseQuantifier):
             elif self.measure == "sord":
                 method = SORD()
             
-            best_distance = method.get_best_distance(predictions, pos_scores, neg_scores)
+            alpha, distance = method.best_mixture(predictions, pos_scores, neg_scores)
             
-            distances.append(best_distance)
+            distances.append(distance)
+            alphas.append(alpha)
         
         best_m = MF[np.argmin(distances)]
-        return best_m
+        best_alpha = alphas[np.argmin(distances)]
+        best_distance = np.min(distances)
+        return best_alpha, best_distance, best_m
     
     def get_best_distance(self, predictions):
         
-        pos_predictions = predictions[:, 1]
-        m = self.get_best_merging_factor(pos_predictions)
-        
-        scores, labels = self.MoSS(1000, 0.5, m)
+        _, distance, _= self.get_best_merging_factor(predictions)
 
-        pos_scores = scores[labels == 1][:, 1]
-        neg_scores = scores[labels == 0][:, 1]
-
-        if self.measure in ["hellinger", "topsoe", "probsymm"]:
-            method = DyS(measure=self.measure)
-        elif self.measure == "sord":
-            method = SORD()
-
-        best_distance = method.get_best_distance(predictions, pos_scores, neg_scores)
-        return best_distance
+        return distance
         
 
     @classmethod
-    def MoSS(cls, n, alpha, m):
+    def MoSS(cls, n, alpha, merging_factor):
         r"""Model for Score Simulation
 
         Parameters
@@ -797,9 +784,9 @@ class QuaDapt(MetaquantifierMixin, BaseQuantifier):
         n_neg = n - n_pos
         
         # Scores positivos
-        p_score = np.random.uniform(size=n_pos) ** m
+        p_score = np.random.uniform(size=n_pos) ** merging_factor
         # Scores negativos
-        n_score = 1 - (np.random.uniform(size=n_neg) ** m)
+        n_score = 1 - (np.random.uniform(size=n_neg) ** merging_factor)
         
         # Construção dos arrays de features (duas colunas iguais)
         moss = np.column_stack(
