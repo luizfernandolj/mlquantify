@@ -28,7 +28,7 @@ jobs:
           pip install sphinx pydata_sphinx_theme sphinx-rtd-theme \
                       sphinx-prompt sphinx_copybutton sphinxext-opengraph \
                       matplotlib sphinxcontrib-sass sphinx_remove_toctrees \
-                      sphinx_design numpydoc
+                      sphinx_design numpydoc sphinx_sitemap
 
       - name: Conferir pacotes instalados
         run: |
