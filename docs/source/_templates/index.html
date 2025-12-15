@@ -1,6 +1,14 @@
 {% extends "layout.html" %}
 {% set title = 'mlquantify: Quantification in Python' %}
 
+{% block extrahead %}
+  {{ super() }}
+  <meta name="description"
+        content="mlquantify is a Python library for quantification and class prevalence estimation, including aggregative, non-aggregative, and meta methods, as well as dedicated metrics and model selection tools.">
+  <meta name="keywords"
+        content="mlquantify, quantification, class prevalence estimation, machine learning, Python">
+{% endblock extrahead %}
+
 {% block docs_navbar %}
 <div class="container-fluid">
     {{ super() }}

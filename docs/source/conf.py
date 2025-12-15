@@ -34,6 +34,7 @@ extensions = [
     "numpydoc",
     "sphinx.ext.linkcode",
     "sphinx.ext.doctest",
+    "sphinx_sitemap",
     "sphinx.ext.intersphinx",
     "sphinx-prompt",
     "sphinx_copybutton",
@@ -45,7 +46,6 @@ extensions = [
     # See sphinxext/
     "override_pst_pagetoc",
 ]
-
 
 autosummary_generate = True
 
@@ -97,7 +97,7 @@ html_sidebars = {
     "getting_started": [],
 }
 
-
+html_extra_path = ["robots.txt"]
 
 
 html_theme_options = {
