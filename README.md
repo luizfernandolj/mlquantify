@@ -2,12 +2,14 @@
 [![docs](https://img.shields.io/badge/docs-sphinx-blue)](https://github.com/luizfernandolj/mlquantify/)
 
 
-<img src="assets/logo_mlquantify-white.svg" alt="mlquantify logo">
+<a href="https://luizfernandolj.github.io/mlquantify/"><img src="assets/logo_mlquantify-white.svg" alt="mlquantify logo"></a>
 <h4 align="center">A Python Package for Quantification</h4>
 
 ___
 
  **mlquantify** is a Python library for quantification, also known as supervised prevalence estimation, designed to estimate the distribution of classes within datasets. It offers a range of tools for various quantification methods, model selection tailored for quantification tasks, evaluation metrics, and protocols to assess quantification performance. Additionally, mlquantify includes popular datasets and visualization tools to help analyze and interpret results.
+
+ Website: https://luizfernandolj.github.io/mlquantify/
 
 ___
 
