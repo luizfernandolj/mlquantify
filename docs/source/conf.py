@@ -98,6 +98,7 @@ html_sidebars = {
 }
 
 html_extra_path = ["robots.txt"]
+sitemap_url_scheme = "{link}"
 
 
 html_theme_options = {
