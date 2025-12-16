@@ -32,7 +32,7 @@ Core Maintainers
    :widths: 25 25
    :header-rows: 0
 
-   * - .. image:: /images/luth_junior.jpg
+   * - .. image:: /images/luth_junior.jpeg
          :width: 120px
          :align: center
 
