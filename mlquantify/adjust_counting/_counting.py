@@ -134,12 +134,15 @@ class PCC(SoftLearnerQMixin, BaseCount):
     def __init__(self, learner=None):
         super().__init__(learner=learner)
 
-    def aggregate(self, predictions):
+    def aggregate(self, predictions, train_y_values=None):
         predictions = validate_predictions(self, predictions)
         
         # Handle categorical predictions (1D array with class labels)
         if predictions.ndim == 1 and not np.issubdtype(predictions.dtype, (np.floating, np.integer)):
-            self.classes_ = check_classes_attribute(self, np.unique(predictions))
+            if train_y_values is None:
+                y_values = np.unique(predictions)
+
+            self.classes_ = check_classes_attribute(self, np.unique(y_values))
             class_counts = np.array([np.count_nonzero(predictions == _class) for _class in self.classes_])
             prevalences = class_counts / len(predictions)
         else:

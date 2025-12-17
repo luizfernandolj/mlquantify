@@ -198,6 +198,8 @@ class StringConstraint:
             return sp.issparse(value)
         if self.keyword == "boolean":
             return isinstance(value, bool)
+        if self.keyword == "string":
+            return isinstance(value, str)
         if self.keyword == "random_state":
             return isinstance(value, (np.random.RandomState, int, type(None)))
         if self.keyword == "nan":
