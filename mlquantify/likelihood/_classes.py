@@ -1,15 +1,16 @@
+from mlquantify.base import BaseQuantifier
+from mlquantify.base_aggregative import AggregationMixin
 import numpy as np
 from mlquantify.base_aggregative import SoftLearnerQMixin
-from mlquantify.likelihood._base import BaseIterativeLikelihood
 from mlquantify.metrics._slq import MAE
-from mlquantify.multiclass import define_binary
+from mlquantify.utils import _fit_context
 from mlquantify.utils._constraints import (
     Interval,
     CallableConstraint,
     Options
 )
 
-class EMQ(SoftLearnerQMixin, BaseIterativeLikelihood):
+class EMQ(SoftLearnerQMixin, AggregationMixin, BaseQuantifier):
     r"""Expectation-Maximization Quantifier (EMQ).
 
     Estimates class prevalences under prior probability shift by alternating 
@@ -87,39 +88,53 @@ class EMQ(SoftLearnerQMixin, BaseIterativeLikelihood):
                  max_iter=100, 
                  calib_function=None,
                  criteria=MAE):
-        super().__init__(learner=learner, tol=tol, max_iter=max_iter)
+        self.learner = learner
+        self.tol = tol
+        self.max_iter = max_iter
         self.calib_function = calib_function
         self.criteria = criteria
+
+    @_fit_context(prefer_skip_nested_validation=True)
+    def fit(self, X, y):
+        """Fit the quantifier using the provided data and learner."""
+        X, y = validate_data(self, X, y)
+        validate_y(self, y)
+        self.classes_ = np.unique(y)
+        self.learner.fit(X, y)
+        counts = np.array([np.count_nonzero(y == _class) for _class in self.classes_])
+        self.priors = counts / len(y)
+        self.y_train = y
+                
+        return self
+
+    def predict(self, X):
+        """Predict the prevalence of each class."""
+        X = validate_data(self, X)
+        estimator_function = _get_learner_function(self)
+        predictions = getattr(self.learner, estimator_function)(X)
+        prevalences = self.aggregate(predictions, self.y_train)
+        return prevalences
+
+    def aggregate(self, predictions, y_train):
+        predictions = validate_predictions(self, predictions)
+        self.classes_ = check_classes_attribute(self, np.unique(y_train))
         
-    def _iterate(self, predictions, priors):
-        r"""Perform EM quantification iteration.
-        
-        Steps:
-        - Calibrate posterior predictions if calibration function specified.
-        - Apply EM procedure to re-estimate prevalences, based on training priors and calibrated posteriors.
-        
-        Parameters
-        ----------
-        predictions : ndarray of shape (n_samples, n_classes)
-            Posterior probabilities for each class on test data.
-        priors : ndarray of shape (n_classes,)
-            Training set class prevalences, serving as initial priors.
-        
-        Returns
-        -------
-        prevalences : ndarray of shape (n_classes,)
-            Estimated class prevalences after EM iteration.
-        """
+        if not hasattr(self, 'priors') or len(self.priors) != len(self.classes_):
+            counts = np.array([np.count_nonzero(y_train == _class) for _class in self.classes_])
+            self.priors = counts / len(y_train)
+
         calibrated_predictions = self._apply_calibration(predictions)
         prevalences, _ = self.EM(
             posteriors=calibrated_predictions,
-            priors=priors,
+            priors=self.priors,
             tolerance=self.tol,
             max_iter=self.max_iter,
             criteria=self.criteria
         )
-        return prevalences
 
+        prevalences = validate_prevalences(self, prevalences, self.classes_)
+        return prevalences
+    
 
     @classmethod
     def EM(cls, posteriors, priors, tolerance=1e-6, max_iter=100, criteria=MAE):
@@ -255,176 +270,3 @@ class EMQ(SoftLearnerQMixin, BaseIterativeLikelihood):
         scaled = logits * W
         exp_scaled = np.exp(scaled - np.max(scaled, axis=1, keepdims=True))
         return exp_scaled / np.sum(exp_scaled, axis=1, keepdims=True)
-
-
-
-class MLPE(SoftLearnerQMixin, BaseIterativeLikelihood):
-    r"""Maximum Likelihood Prevalence Estimation (MLPE).
-
-    Returns training priors as prevalence estimates without adaptations.
-
-    Parameters
-    ----------
-    learner : estimator, optional
-        Base classifier.
-
-    References
-    ----------
-    .. [2] Esuli, A., Moreo, A., & Sebastiani, F. (2023). Learning to Quantify. Springer.
-    """
-
-    def __init__(self, learner=None):
-        super().__init__(learner=learner, max_iter=1)
-        
-    def _iterate(self, predictions, priors):
-        """Returns training priors without adjustment.
-        
-        Parameters
-        ----------
-        predictions : array-like
-            Ignored in this implementation.
-        priors : array-like
-            Training priors, returned as is.
-        
-        Returns
-        -------
-        prevalences : array-like
-            Equal to the training priors.
-        """
-        return priors
-    
-@define_binary
-class CDE(SoftLearnerQMixin, BaseIterativeLikelihood):
-    r"""CDE-Iterate for binary classification prevalence estimation.
-
-    Threshold :math:`\tau` from false positive and false negative costs:
-    .. math::
-        \tau = \frac{c_{FP}}{c_{FP} + c_{FN}}
-
-    Hard classification by thresholding posterior probability :math:`p(+|x)` at :math:`\tau`:
-    .. math::
-        \hat{y}(x) = \mathbf{1}_{p(+|x) > \tau}
-
-    Prevalence estimation via classify-and-count:
-    .. math::
-        \hat{p}_U(+) = \frac{1}{N} \sum_{n=1}^N \hat{y}(x_n)
-
-    False positive cost update:
-    .. math::
-        c_{FP}^{new} = \frac{p_L(+)}{p_L(-)} \times \frac{\hat{p}_U(-)}{\hat{p}_U(+)} \times c_{FN}
-
-    Parameters
-    ----------
-    learner : estimator, optional
-        Wrapped classifier (unused).
-    tol : float, default=1e-4
-        Convergence tolerance.
-    max_iter : int, default=100
-        Max iterations.
-    init_cfp : float, default=1.0
-        Initial false positive cost.
-
-    References
-    ----------
-    .. [1] Esuli, A., Moreo, A., & Sebastiani, F. (2023). Learning to Quantify. Springer.
-    """
-
-    _parameter_constraints = {
-        "tol": [Interval(0, None, inclusive_left=False)],
-        "max_iter": [Interval(1, None, inclusive_left=True)],
-        "init_cfp": [Interval(0, None, inclusive_left=False)]
-    }
-
-    def __init__(self, learner=None, tol=1e-4, max_iter=100, init_cfp=1.0):
-        super().__init__(learner=learner, tol=tol, max_iter=max_iter)
-        self.init_cfp = float(init_cfp)
-
-    def _iterate(self, predictions, priors):
-        r"""Iteratively estimate prevalences via cost-sensitive thresholding.
-
-        Parameters
-        ----------
-        predictions : ndarray, shape (n_samples, 2)
-            Posterior probabilities for binary classes [neg, pos].
-        priors : ndarray, shape (2,)
-            Training priors [p(neg), p(pos)].
-
-        Returns
-        -------
-        prevalences : ndarray, shape (2,)
-            Estimated prevalences for classes [neg, pos].
-        """
-        P = np.asarray(predictions, dtype=np.float64)
-        Ptr = np.asarray(priors, dtype=np.float64)
-
-        # basic checks
-        if P.ndim != 2 or P.shape[1] != 2:
-            raise ValueError("CDE implementation here supports binary case only: predictions shape (n,2).")
-
-        # ensure no zeros
-        eps = 1e-12
-        P = np.clip(P, eps, 1.0)
-
-        # training priors pL(+), pL(-)
-        # assume Ptr order matches columns of P; if Ptr sums to 1 but order unknown, user must match.
-        pL_pos = Ptr[1]
-        pL_neg = Ptr[0]
-        if pL_pos <= 0 or pL_neg <= 0:
-            # keep them positive to avoid divisions by zero
-            pL_pos = max(pL_pos, eps)
-            pL_neg = max(pL_neg, eps)
-
-        # initialize costs
-        cFN = 1.0
-        cFP = float(self.init_cfp)
-
-        prev_prev_pos = None
-        s = 0
-
-        # iterate: compute threshold from costs, classify, estimate prevalences via CC,
-        # update cFP via eq. (4.27), repeat
-        while s < self.max_iter:
-            # decision threshold tau for positive class:
-            # Derivation:
-            # predict positive if cost_FP * p(-|x) < cost_FN * p(+|x)
-            # => predict positive if p(+|x) / p(-|x) > cost_FP / cost_FN
-            # since p(+|x) / p(-|x) = p(+|x) / (1 - p(+|x)):
-            # p(+|x) > cost_FP / (cost_FP + cost_FN)
-            tau = cFP / (cFP + cFN)
-
-            # hard predictions for positive class using threshold on posterior for positive (col 1)
-            pos_probs = P[:, 1]
-            hard_pos = (pos_probs > tau).astype(float)
-
-            # classify-and-count prevalence estimate on U
-            prev_pos = hard_pos.mean()
-            prev_neg = 1.0 - prev_pos
-
-            # update cFP according to Eq. 4.27:
-            # cFP_new = (pL_pos / pL_neg) * (pU_hat(neg) / pU_hat(pos)) * cFN
-            # guard against zero prev_pos / prev_neg
-            prev_pos_safe = max(prev_pos, eps)
-            prev_neg_safe = max(prev_neg, eps)
-
-            cFP_new = (pL_pos / pL_neg) * (prev_neg_safe / prev_pos_safe) * cFN
-
-            # check convergence on prevalences (absolute change)
-            if prev_prev_pos is not None and abs(prev_pos - prev_prev_pos) < self.tol:
-                break
-
-            # prepare next iter
-            cFP = cFP_new
-            prev_prev_pos = prev_pos
-            s += 1
-
-        # if didn't converge within max_iter we keep last estimate (book warns about lack of fisher consistency)
-        if s >= self.max_iter:
-            # optional: warning
-            # print('[warning] CDE-Iterate reached max_iter without converging')
-            pass
-
-        prevalences = np.array([prev_neg, prev_pos], dtype=np.float64)
-        # ensure sums to 1 (numerical safety)
-        prevalences = prevalences / prevalences.sum()
-
-        return prevalences

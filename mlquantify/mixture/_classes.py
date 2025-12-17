@@ -1,5 +1,7 @@
 import numpy as np
 from abc import abstractmethod
+from sklearn.metrics.pairwise import pairwise_kernels
+from scipy.optimize import minimize
 
 from mlquantify.base import BaseQuantifier
 from mlquantify.base_aggregative import AggregationMixin, SoftLearnerQMixin, _get_learner_function
@@ -439,7 +441,7 @@ class HDx(BaseMixture):
             # For each feature, compute the Hellinger distance
             for feature_idx in range(X.shape[1]):
                 
-                for bins in self.bins_size:
+                 for bins in self.bins_size:
                 
                     pos_feature = pos[:, feature_idx]
                     neg_feature = neg[:, feature_idx]
@@ -458,3 +460,296 @@ class HDx(BaseMixture):
         best_alpha = alpha_values[np.argmin(self.distances)]
         best_distance = np.min(self.distances)
         return best_alpha, best_distance
+
+
+
+class MMD_RKHS(BaseMixture):
+    r"""
+    Maximum Mean Discrepancy in RKHS (MMD-RKHS) quantification method.
+
+    This method estimates class prevalences in an unlabeled test set by
+    matching the kernel mean embedding of the test distribution to a
+    convex combination of the class-conditional training embeddings.
+
+    Let :math:`\mathcal{X} \subseteq \mathbb{R}^d` be the input space and
+    :math:`\mathcal{Y} = \{0, \dots, C-1\}` the label set. Let
+    :math:`K` be a positive definite kernel with RKHS :math:`\mathcal{H}`
+    and feature map :math:`\phi`, so that
+    :math:`K(x, x') = \langle \phi(x), \phi(x') \rangle_{\mathcal{H}}`.
+
+    For each class :math:`y`, the class-conditional kernel mean embedding is
+
+    .. math::
+        \mu_y \;=\; \mathbb{E}_{x \sim P_{D}(x \mid y)}[\phi(x)] \in \mathcal{H},
+
+    and the test mean embedding is
+
+    .. math::
+        \mu_U \;=\; \mathbb{E}_{x \sim P_{U}(x)}[\phi(x)] \in \mathcal{H}.
+
+    Under prior probability shift, the test distribution satisfies
+
+    .. math::
+        P_U(x) = \sum_{y=0}^{C-1} \theta_y \, P_D(x \mid y),
+
+    which implies
+
+    .. math::
+        \mu_U = \sum_{y=0}^{C-1} \theta_y \, \mu_y,
+
+    where :math:`\theta \in \Delta^{C-1}` is the class prevalence vector.
+    The MMD-RKHS estimator solves
+
+    .. math::
+        \hat{\theta}
+        \;=\;
+        \arg\min_{\theta \in \Delta^{C-1}}
+        \big\lVert \textstyle\sum_{y=0}^{C-1} \theta_y \mu_y - \mu_U
+        \big\rVert_{\mathcal{H}}^2.
+
+    In practice, embeddings are approximated by empirical means. Using the
+    kernel trick, the objective can be written as a quadratic program
+
+    .. math::
+        \hat{\theta}
+        \;=\;
+        \arg\min_{\theta \in \Delta^{C-1}}
+        \big( \theta^\top G \, \theta - 2 \, h^\top \theta \big),
+
+    with
+
+    .. math::
+        G_{yy'} = \langle \hat{\mu}_y, \hat{\mu}_{y'} \rangle_{\mathcal{H}},
+        \qquad
+        h_y = \langle \hat{\mu}_y, \hat{\mu}_U \rangle_{\mathcal{H}}.
+
+    The solution :math:`\hat{\theta}` is the estimated prevalence vector.
+
+    Parameters
+    ----------
+    kernel : {'rbf', 'linear', 'poly', 'sigmoid', 'cosine'}, default='rbf'
+        Kernel used to build the RKHS where MMD is computed.
+    gamma : float or None, default=None
+        Kernel coefficient for 'rbf' and 'sigmoid'.
+    degree : int, default=3
+        Degree of the polynomial kernel.
+    coef0 : float, default=0.0
+        Independent term in 'poly' and 'sigmoid' kernels.
+    strategy : {'ovr', 'ovo'}, default='ovr'
+        Multiclass quantification strategy flag (for consistency with
+        other mixture-based quantifiers).
+
+    Attributes
+    ----------
+    classes_ : ndarray of shape (n_classes,)
+        Class labels seen during fitting.
+    X_train_ : ndarray of shape (n_train, n_features)
+        Training feature matrix.
+    y_train_ : ndarray of shape (n_train,)
+        Training labels.
+    class_means_ : ndarray of shape (n_classes, n_train)
+        Empirical class-wise kernel mean embeddings in the span of training
+        samples.
+    K_train_ : ndarray of shape (n_train, n_train)
+        Gram matrix of training samples under the chosen kernel.
+
+    References
+    ----------
+    [1] Iyer, A., Nath, S., & Sarawagi, S. (2014).
+        Maximum Mean Discrepancy for Class Ratio Estimation:
+        Convergence Bounds and Kernel Selection. ICML.
+
+    [2] Esuli, A., Moreo, A., & Sebastiani, F. (2023).
+        Learning to Quantify. Springer.
+    """
+
+    _parameter_constraints = {
+        "kernel": [Options(["rbf", "linear", "poly", "sigmoid", "cosine"])],
+        "gamma": [Interval(0, None, inclusive_left=False), Options([None])],
+        "degree": [Interval(1, None, inclusive_left=True)],
+        "coef0": [Interval(0, None, inclusive_left=True)],
+        "strategy": [Options(["ovr", "ovo"])],
+    }
+
+    def __init__(self,
+                 kernel="rbf",
+                 gamma=None,
+                 degree=3,
+                 coef0=0.0,
+                 strategy="ovr"):
+        super().__init__()
+        self.kernel = kernel
+        self.gamma = gamma
+        self.degree = degree
+        self.coef0 = coef0
+        self.strategy = strategy
+
+        self.X_train_ = None
+        self.y_train_ = None
+        self.class_means_ = None  # class-wise kernel means
+        self.K_train_ = None      # train Gram matrix
+
+
+    @_fit_context(prefer_skip_nested_validation=True)
+    def _fit(self, X, y, *args, **kwargs):
+        """
+        Store X, y, validate labels and precompute class-wise kernel means.
+        """
+        self.X_train_ = X
+        self.y_train_ = y
+
+        class_means, K_train = self._compute_class_means(X, y)
+        self.class_means_ = class_means
+        self.K_train_ = K_train
+
+        return self
+
+    def _predict(self, X, y_train) -> np.ndarray:
+        """
+        Estimate the prevalence vector on X using MMD.
+        """
+        self.classes_ = check_classes_attribute(self, np.unique(y_train))
+
+        theta, _ = self.best_mixture(X, self.X_train_, self.y_train_)
+        prevalence = validate_prevalences(self, theta, self.classes_)
+        return prevalence
+
+    def best_mixture(self, X_test, X_train, y_train):
+        """
+        Implements the MMD-based class ratio estimation:
+
+            min_theta || sum_y theta_y mu_y - mu_U ||^2
+
+        and returns (theta, objective_value).
+        """
+        # Use precomputed means if available
+        if self.class_means_ is None or self.X_train_ is None:
+            class_means, _ = self._compute_class_means(X_train, y_train)
+        else:
+            class_means = self.class_means_
+
+        mu_u = self._compute_unlabeled_mean(X_test)
+        G, h = self._build_QP_matrices(class_means, mu_u)
+
+        theta = self._solve_simplex_qp(G, h)
+        # Objective value: ||A theta - a||^2 = theta^T G theta - 2 h^T theta + const
+        obj = float(theta @ G @ theta - 2.0 * (h @ theta))
+
+        return theta, obj
+
+
+    def _kernel_kwargs(self):
+        params = {}
+        if self.kernel == "rbf" and self.gamma is not None:
+            params["gamma"] = self.gamma
+        if self.kernel == "poly":
+            params["degree"] = self.degree
+            params["coef0"] = self.coef0
+        if self.kernel == "sigmoid":
+            if self.gamma is not None:
+                params["gamma"] = self.gamma
+            params["coef0"] = self.coef0
+        return params
+
+    def _compute_class_means(self, X, y):
+        """
+        Compute kernel mean embeddings per class in the RKHS.
+
+        X: (n_train, d)
+        y: (n_train,)
+        Returns:
+            class_means: (n_classes, n_train)
+            K:           (n_train, n_train)
+        """
+        classes = self.classes_
+        K = pairwise_kernels(X, X, metric=self.kernel, **self._kernel_kwargs())
+        means = []
+        for c in classes:
+            mask = (y == c)
+            Kc = K[mask]              # rows of class c
+            mu_c = Kc.mean(axis=0)    # mean over rows
+            means.append(mu_c)
+        means = np.vstack(means)
+        return means, K
+
+    def _compute_unlabeled_mean(self, X_test):
+        """
+        Compute the kernel mean embedding of the test set.
+
+        mu_U = E_{x in U} K(x, ·)
+        """
+        K_ut = pairwise_kernels(
+            X_test,
+            self.X_train_,
+            metric=self.kernel,
+            **self._kernel_kwargs()
+        )
+        mu_u = K_ut.mean(axis=0)  # shape (n_train,)
+        return mu_u
+
+    def _build_QP_matrices(self, class_means, mu_u):
+        """
+        Build G and h for the objective
+
+            min_theta  theta^T G theta - 2 h^T theta
+
+        with theta in the simplex (dimension = n_classes).
+
+        class_means: (n_classes, n_train)
+        mu_u:        (n_train,)
+        """
+        # Gram of means in RKHS: G_ij = <mu_i, mu_j>
+        G = class_means @ class_means.T       # (C, C)
+        # Inner products with mu_U: h_i = <mu_i, mu_U>
+        h = class_means @ mu_u                # (C,)
+        return G, h
+
+    def _solve_simplex_qp(self, G, h):
+        """
+        Solve:
+
+            min_theta  theta^T G theta - 2 h^T theta
+            s.t.       theta >= 0, sum(theta) = 1
+
+        using SciPy's SLSQP solver.
+        """
+        C = G.shape[0]
+
+        def obj(theta):
+            return float(theta @ G @ theta - 2.0 * (h @ theta))
+
+        def grad(theta):
+            # gradient: 2 G theta - 2 h
+            return 2.0 * (G @ theta - h)
+
+        # equality constraint: sum(theta) = 1
+        cons = {
+            "type": "eq",
+            "fun": lambda t: np.sum(t) - 1.0,
+            "jac": lambda t: np.ones_like(t),
+        }
+
+        # bounds: theta_i >= 0
+        bounds = [(0.0, 1.0) for _ in range(C)]
+
+        # initial point: uniform distribution on the simplex
+        x0 = np.ones(C) / C
+
+        res = minimize(
+            obj,
+            x0,
+            method="SLSQP",
+            jac=grad,
+            bounds=bounds,
+            constraints=[cons],
+            options={"maxiter": 100, "ftol": 1e-9},
+        )
+
+        theta = res.x
+        theta = np.maximum(theta, 0)
+        s = theta.sum()
+        if s <= 0:
+            theta = np.ones_like(theta) / len(theta)
+        else:
+            theta /= s
+        return theta

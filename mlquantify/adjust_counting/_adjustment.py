@@ -1,15 +1,30 @@
+from mlquantify.utils._validation import validate_prevalences
+from mlquantify.base import BaseQuantifier
 import numpy as np     
 from abc import abstractmethod
 from scipy.optimize import minimize
 import warnings
 from sklearn.metrics import confusion_matrix
 
+from mlquantify.utils._tags import (
+    PredictionRequirements,
+    Tags,
+)
 from mlquantify.adjust_counting._base import BaseAdjustCount
 from mlquantify.adjust_counting._counting import CC, PCC
+from mlquantify.utils import (
+    _fit_context, 
+    validate_data,
+    validate_prevalences,
+    validate_predictions,
+    check_classes_attribute
+)
 from mlquantify.base_aggregative import (
     CrispLearnerQMixin,
     SoftLearnerQMixin,
-    uses_soft_predictions,
+    AggregationMixin,
+    uses_soft_predictions, 
+    _get_learner_function
 )
 from mlquantify.multiclass import define_binary
 from mlquantify.adjust_counting._utils import evaluate_thresholds
@@ -273,6 +288,162 @@ class MatrixAdjustment(BaseAdjustCount):
         ...
 
 
+
+@define_binary
+class CDE(SoftLearnerQMixin, AggregationMixin, BaseQuantifier):
+    r"""CDE-Iterate for binary classification prevalence estimation.
+
+    Threshold :math:`\tau` from false positive and false negative costs:
+    .. math::
+        \tau = \frac{c_{FP}}{c_{FP} + c_{FN}}
+
+    Hard classification by thresholding posterior probability :math:`p(+|x)` at :math:`\tau`:
+    .. math::
+        \hat{y}(x) = \mathbf{1}_{p(+|x) > \tau}
+
+    Prevalence estimation via classify-and-count:
+    .. math::
+        \hat{p}_U(+) = \frac{1}{N} \sum_{n=1}^N \hat{y}(x_n)
+
+    False positive cost update:
+    .. math::
+        c_{FP}^{new} = \frac{p_L(+)}{p_L(-)} \times \frac{\hat{p}_U(-)}{\hat{p}_U(+)} \times c_{FN}
+
+    Parameters
+    ----------
+    learner : estimator, optional
+        Wrapped classifier (unused).
+    tol : float, default=1e-4
+        Convergence tolerance.
+    max_iter : int, default=100
+        Max iterations.
+    init_cfp : float, default=1.0
+        Initial false positive cost.
+
+    References
+    ----------
+    .. [1] Esuli, A., Moreo, A., & Sebastiani, F. (2023). Learning to Quantify. Springer.
+    """
+
+    _parameter_constraints = {
+        "tol": [Interval(0, None, inclusive_left=False)],
+        "max_iter": [Interval(1, None, inclusive_left=True)],
+        "init_cfp": [Interval(0, None, inclusive_left=False)]
+    }
+
+    def __mlquantify_tags__(self):
+        tags = super().__mlquantify_tags__()
+        tags.prediction_requirements.requires_train_proba = False
+        return tags
+
+
+    def __init__(self, learner=None, tol=1e-4, max_iter=100, init_cfp=1.0, strategy="ovr"):
+        self.learner = learner
+        self.tol = float(tol)
+        self.max_iter = int(max_iter)
+        self.init_cfp = float(init_cfp)
+        self.strategy = strategy
+
+    @_fit_context(prefer_skip_nested_validation=True)
+    def fit(self, X, y):
+        """Fit the quantifier using the provided data and learner."""
+        X, y = validate_data(self, X, y)
+        self.classes_ = np.unique(y)
+        self.learner.fit(X, y)
+        counts = np.array([np.count_nonzero(y == _class) for _class in self.classes_])
+        self.priors = counts / len(y)
+        self.y_train = y
+                
+        return self
+
+
+    def predict(self, X):
+        """Predict class prevalences for the given data."""
+        predictions = getattr(self.learner, _get_learner_function(self))(X)
+        prevalences = self.aggregate(predictions, self.y_train)
+        return prevalences
+
+
+    def aggregate(self, predictions, y_train_values):
+
+        self.classes_ = check_classes_attribute(self, np.unique(y_train_values))
+        predictions = validate_predictions(self, predictions)
+
+        if hasattr(self, 'priors'):
+            Ptr = np.asarray(self.priors, dtype=np.float64)
+        else:
+            counts = np.array([np.count_nonzero(y_train_values == _class) for _class in self.classes_])
+            Ptr = counts / len(y_train_values)
+
+        P = np.asarray(predictions, dtype=np.float64)
+
+        # ensure no zeros
+        eps = 1e-12
+        P = np.clip(P, eps, 1.0)
+
+        # training priors pL(+), pL(-)
+        # assume Ptr order matches columns of P; if Ptr sums to 1 but order unknown, user must match.
+        pL_pos = Ptr[1]
+        pL_neg = Ptr[0]
+        if pL_pos <= 0 or pL_neg <= 0:
+            # keep them positive to avoid divisions by zero
+            pL_pos = max(pL_pos, eps)
+            pL_neg = max(pL_neg, eps)
+
+        # initialize costs
+        cFN = 1.0
+        cFP = float(self.init_cfp)
+
+        prev_prev_pos = None
+        s = 0
+
+        # iterate: compute threshold from costs, classify, estimate prevalences via CC,
+        # update cFP, repeat
+        while s < self.max_iter:
+            # decision threshold tau for positive class:
+            # Derivation:
+            # predict positive if cost_FP * p(-|x) < cost_FN * p(+|x)
+            # => predict positive if p(+|x) / p(-|x) > cost_FP / cost_FN
+            # since p(+|x) / p(-|x) = p(+|x) / (1 - p(+|x)):
+            # p(+|x) > cost_FP / (cost_FP + cost_FN)
+            tau = cFP / (cFP + cFN)
+
+            # hard predictions for positive class using threshold on posterior for positive (col 1)
+            pos_probs = P[:, 1]
+            hard_pos = (pos_probs > tau).astype(float)
+
+            # classify-and-count prevalence estimate on U
+            prev_pos = hard_pos.mean()
+            prev_neg = 1.0 - prev_pos
+
+            # update cFP according to:
+            # cFP_new = (pL_pos / pL_neg) * (pU_hat(neg) / pU_hat(pos)) * cFN
+            # guard against zero prev_pos / prev_neg
+            prev_pos_safe = max(prev_pos, eps)
+            prev_neg_safe = max(prev_neg, eps)
+
+            cFP_new = (pL_pos / pL_neg) * (prev_neg_safe / prev_pos_safe) * cFN
+
+            # check convergence on prevalences (absolute change)
+            if prev_prev_pos is not None and abs(prev_pos - prev_prev_pos) < self.tol:
+                break
+
+            # prepare next iter
+            cFP = cFP_new
+            prev_prev_pos = prev_pos
+            s += 1
+
+        # if didn't converge within max_iter we keep last estimate (lack of fisher consistency)
+        if s >= self.max_iter:
+            # optional: warning
+            # print('[warning] CDE-Iterate reached max_iter without converging')
+            pass
+
+        prevalences = np.array([prev_neg, prev_pos], dtype=np.float64)
+        prevalences = validate_prevalences(self, prevalences, self.classes_)
+        return prevalences
+
+
 class FM(SoftLearnerQMixin, MatrixAdjustment):
     r"""Friedman Method for quantification adjustment.
 
@@ -341,10 +512,10 @@ class FM(SoftLearnerQMixin, MatrixAdjustment):
         return self.CM
 
 
-class GAC(CrispLearnerQMixin, MatrixAdjustment):
-    r"""Generalized Adjusted Count method.
+class AC(CrispLearnerQMixin, MatrixAdjustment):
+    r"""Adjusted Count method.
 
-    This class implements the Generalized Adjusted Count (GAC) algorithm for
+    This class implements the Adjusted Count (AC) algorithm for
     quantification adjustment as described in Firat (2016) [1]_. The method
     adjusts the estimated class prevalences by normalizing the confusion matrix
     based on prevalence estimates, providing a correction for bias caused by 
@@ -374,12 +545,12 @@ class GAC(CrispLearnerQMixin, MatrixAdjustment):
     Examples
     --------
     >>> from sklearn.linear_model import LogisticRegression
-    >>> from mlquantify.adjust_counting import GAC
+    >>> from mlquantify.adjust_counting import AC
     >>> import numpy as np
-    >>> gac = GAC(learner=LogisticRegression())
+    >>> ac = AC(learner=LogisticRegression())
     >>> X = np.random.randn(50, 4)
     >>> y = np.random.randint(0, 2, 50)
-    >>> gac.fit(X, y)
+    >>> ac.fit(X, y)
     >>> gac.predict(X)
     {0: 0.5, 1: 0.5}
 
@@ -404,11 +575,11 @@ class GAC(CrispLearnerQMixin, MatrixAdjustment):
         return self.CM
 
 
-class GPAC(SoftLearnerQMixin, MatrixAdjustment):
-    r"""Probabilistic Generalized Adjusted Count (GPAC) method.
+class PAC(SoftLearnerQMixin, MatrixAdjustment):
+    r"""Probabilistic Adjusted Count (PAC) method.
 
-    This class implements the probabilistic extension of the Generalized Adjusted Count method
-    as presented in Firat (2016) [1]_. The GPAC method normalizes the confusion matrix by
+    This class implements the probabilistic extension of the Adjusted Count method
+    as presented in Firat (2016) [1]_. The PAC method normalizes the confusion matrix by
     the estimated prevalences from posterior probabilities, enabling a probabilistic correction
     of class prevalences.
 
@@ -436,13 +607,13 @@ class GPAC(SoftLearnerQMixin, MatrixAdjustment):
     Examples
     --------
     >>> from sklearn.linear_model import LogisticRegression
-    >>> from mlquantify.adjust_counting import GPAC
+    >>> from mlquantify.adjust_counting import PAC
     >>> import numpy as np
-    >>> gpac = GPAC(learner=LogisticRegression())
+    >>> pac = PAC(learner=LogisticRegression())
     >>> X = np.random.randn(50, 4)
     >>> y = np.random.randint(0, 2, 50)
-    >>> gpac.fit(X, y)
-    >>> gpac.predict(X)
+    >>> pac.fit(X, y)
+    >>> pac.predict(X)
     {0: 0.5, 1: 0.5}
 
     References
@@ -466,8 +637,8 @@ class GPAC(SoftLearnerQMixin, MatrixAdjustment):
         return self.CM
 
 
-class ACC(ThresholdAdjustment):
-    r"""Adjusted Count (ACC) — baseline threshold correction.
+class TAC(ThresholdAdjustment):
+    r"""Threshold Adjusted Count (TAC) — baseline threshold correction.
 
     This method corrects the bias in class prevalence estimates caused by imperfect 
     classification accuracy, by adjusting the observed positive count using estimates 
@@ -501,8 +672,8 @@ class ACC(ThresholdAdjustment):
         return (self.threshold, tpr, fpr)
 
 
-class X_method(ThresholdAdjustment):
-    r"""X method — threshold where :math:`\text{TPR} + \text{FPR} = 1`.
+class TX(ThresholdAdjustment):
+    r"""Threshold X method — threshold where :math:`\text{TPR} + \text{FPR} = 1`.
 
     This method selects the classification threshold at which the sum of the true positive
     rate (TPR) and false positive rate (FPR) equals one. This threshold choice balances 
@@ -526,8 +697,8 @@ class X_method(ThresholdAdjustment):
         return thresholds[idx], tprs[idx], fprs[idx]
 
 
-class MAX(ThresholdAdjustment):
-    r"""MAX method — threshold maximizing :math:`\text{TPR} - \text{FPR}`.
+class TMAX(ThresholdAdjustment):
+    r"""Threshold MAX method — threshold maximizing :math:`\text{TPR} - \text{FPR}`.
 
     This method selects the threshold that maximizes the difference between the true positive
     rate (TPR) and the false positive rate (FPR), effectively optimizing classification

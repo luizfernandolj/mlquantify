@@ -43,5 +43,6 @@ from mlquantify.utils._validation import (
     _is_arraylike_not_scalar,
     _is_arraylike,
     validate_data,
-    check_classes_attribute
+    check_classes_attribute,
+    validate_prevalences
 )

@@ -6,14 +6,15 @@ from ._adjustment import (
     ThresholdAdjustment,
     MatrixAdjustment,
     FM,
-    GAC,
-    GPAC,
-    ACC,
-    X_method,
-    MAX,
+    AC,
+    PAC,
+    TAC,
+    TX,
+    TMAX,
     T50,
     MS,
     MS2,
+    CDE,
 )
 
 from ._utils import (

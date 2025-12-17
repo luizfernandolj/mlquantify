@@ -3,5 +3,6 @@ from ._classes import (
     DyS,
     SMM,
     SORD,
-    HDx
+    HDx,
+    MMD_RKHS
 )
