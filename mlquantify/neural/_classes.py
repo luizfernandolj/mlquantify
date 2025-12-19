@@ -3,9 +3,11 @@ import random
 from typing import Dict, Any, Sequence
 
 import numpy as np
+from sklearn.model_selection import train_test_split
 import torch
 import torch.nn as nn
-import torch.nn.functional as F
+from torch.nn import MSELoss
+from torch.nn.functional import relu
 
 from tqdm import tqdm
 
@@ -13,21 +15,81 @@ from mlquantify.base import BaseQuantifier
 from mlquantify.base_aggregative import (
     AggregationMixin,
     SoftLearnerQMixin,
-    get_aggregation_requirements
+    get_aggregation_requirements,
+    _get_learner_function
 )
 from mlquantify.utils import (
     validate_y,
     validate_data,
+    check_classes_attribute,
 )
 from mlquantify.utils._validation import validate_prevalences
-from mlquantify.model_selection import APP
+from mlquantify.model_selection import UPP
 from mlquantify.utils import get_prev_from_labels
 from mlquantify.utils._constraints import Interval, Options
 from mlquantify.utils import _fit_context
 
 from mlquantify.adjust_counting import CC, AC, PCC, PAC
+from mlquantify.likelihood import EMQ
 
 EPS = 1e-12
+
+
+
+class EarlyStop:
+    """
+    A class implementing the early-stopping condition typically used for training neural networks.
+
+    >>> earlystop = EarlyStop(patience=2, lower_is_better=True)
+    >>> earlystop(0.9, epoch=0)
+    >>> earlystop(0.7, epoch=1)
+    >>> earlystop.IMPROVED  # is True
+    >>> earlystop(1.0, epoch=2)
+    >>> earlystop.STOP  # is False (patience=1)
+    >>> earlystop(1.0, epoch=3)
+    >>> earlystop.STOP  # is True (patience=0)
+    >>> earlystop.best_epoch  # is 1
+    >>> earlystop.best_score  # is 0.7
+
+    :param patience: the number of (consecutive) times that a monitored evaluation metric (typically obtaind in a
+        held-out validation split) can be found to be worse than the best one obtained so far, before flagging the
+        stopping condition. An instance of this class is `callable`, and is to be used as follows:
+    :param lower_is_better: if True (default) the metric is to be minimized.
+    :ivar best_score: keeps track of the best value seen so far
+    :ivar best_epoch: keeps track of the epoch in which the best score was set
+    :ivar STOP: flag (boolean) indicating the stopping condition
+    :ivar IMPROVED: flag (boolean) indicating whether there was an improvement in the last call
+    """
+
+    def __init__(self, patience, lower_is_better=True):
+
+        self.PATIENCE_LIMIT = patience
+        self.better = lambda a,b: a<b if lower_is_better else a>b
+        self.patience = patience
+        self.best_score = None
+        self.best_epoch = None
+        self.STOP = False
+        self.IMPROVED = False
+
+    def __call__(self, watch_score, epoch):
+        """
+        Commits the new score found in epoch `epoch`. If the score improves over the best score found so far, then
+        the patiente counter gets reset. If otherwise, the patience counter is decreased, and in case it reachs 0,
+        the flag STOP becomes True.
+
+        :param watch_score: the new score
+        :param epoch: the current epoch
+        """
+        self.IMPROVED = (self.best_score is None or self.better(watch_score, self.best_score))
+        if self.IMPROVED:
+            self.best_score = watch_score
+            self.best_epoch = epoch
+            self.patience = self.PATIENCE_LIMIT
+        else:
+            self.patience -= 1
+            if self.patience <= 0:
+                self.STOP = True
+
 
 
 class QuaNetModule(nn.Module):
@@ -167,51 +229,35 @@ class QuaNetModule(nn.Module):
             Estimated class-prevalence vector for the input bag.
         """
         device = self.device
+        doc_embeddings = torch.as_tensor(doc_embeddings, dtype=torch.float, device=device)
+        doc_posteriors = torch.as_tensor(doc_posteriors, dtype=torch.float, device=device)
+        statistics = torch.as_tensor(statistics, dtype=torch.float, device=device)
 
-        if not isinstance(doc_embeddings, torch.Tensor):
-            doc_embeddings = torch.as_tensor(doc_embeddings, dtype=torch.float32, device=device)
-        else:
-            doc_embeddings = doc_embeddings.to(device)
-
-        if not isinstance(doc_posteriors, torch.Tensor):
-            doc_posteriors = torch.as_tensor(doc_posteriors, dtype=torch.float32, device=device)
-        else:
-            doc_posteriors = doc_posteriors.to(device)
-
-        if not isinstance(statistics, torch.Tensor):
-            statistics = torch.as_tensor(statistics, dtype=torch.float32, device=device)
-        else:
-            statistics = statistics.to(device)
-
-        # Optional sorting by posterior of a specific class
         if self.order_by is not None:
             order = torch.argsort(doc_posteriors[:, self.order_by])
             doc_embeddings = doc_embeddings[order]
             doc_posteriors = doc_posteriors[order]
 
-        # Sequence of concatenated embeddings and posteriors
-        embedded_posteriors = torch.cat((doc_embeddings, doc_posteriors), dim=-1)  # (n_docs, emb_dim + n_classes)
-        embedded_posteriors = embedded_posteriors.unsqueeze(0)  # (1, n_docs, emb_dim + n_classes)
+        embeded_posteriors = torch.cat((doc_embeddings, doc_posteriors), dim=-1)
+
+        # the entire set represents only one instance in quapy contexts, and so the batch_size=1
+        # the shape should be (1, number-of-instances, embedding-size + n_classes)
+        embeded_posteriors = embeded_posteriors.unsqueeze(0)
 
         self.lstm.flatten_parameters()
-        _, (rnn_hidden, _) = self.lstm(embedded_posteriors, self._init_hidden(batch_size=1))
-        # rnn_hidden: (num_layers * num_directions, batch=1, hidden_size)
+        _, (rnn_hidden,_) = self.lstm(embeded_posteriors, self._init_hidden())
         rnn_hidden = rnn_hidden.view(self.nlayers, self.ndirections, 1, self.hidden_size)
-        # Take the first layer's hidden states, flatten directions
-        quant_embedding = rnn_hidden[0].view(-1)  # (hidden_size * ndirections,)
+        quant_embedding = rnn_hidden[0].view(-1)
+        quant_embedding = torch.cat((quant_embedding, statistics))
 
-        if statistics.dim() == 1:
-            statistics = statistics.view(-1)
-
-        # Concatenate LSTM quantification embedding with statistics
-        quant_embedding = torch.cat((quant_embedding, statistics), dim=0)
-
-        x = quant_embedding.unsqueeze(0)
+        abstracted = quant_embedding.unsqueeze(0)
+        
         for linear in self.ff_layers:
-            x = self.dropout(F.relu(linear(x)))
+            abstracted = self.dropout(relu(linear(abstracted)))
 
-        logits = self.output(x).view(1, -1)
-        prevalence = torch.softmax(logits, dim=-1)
+        logits = self.output(abstracted).view(1, -1)
+        prevalence = torch.softmax(logits, -1)
+
         return prevalence
 
 
@@ -245,9 +291,9 @@ class QuaNet(SoftLearnerQMixin, AggregationMixin, BaseQuantifier):
         Bag size used by the APP protocol during QuaNet training.
     n_epochs : int, default=100
         Maximum number of QuaNet training epochs.
-    tr_iter_per_epoch : int, default=500
+    tr_iter : int, default=500
         Number of APP samplings (training iterations) per epoch.
-    va_iter_per_epoch : int, default=100
+    va_iter : int, default=100
         Number of APP samplings (validation iterations) per epoch.
     lr : float, default=1e-3
         Learning rate for the Adam optimizer.
@@ -275,18 +321,16 @@ class QuaNet(SoftLearnerQMixin, AggregationMixin, BaseQuantifier):
         "fit_learner": [Interval(0, None, inclusive_left=False), Options([None])],
         "sample_size": [Interval(0, None, inclusive_left=False), Options([None])],
         "n_epochs": [Interval(0, None, inclusive_left=False), Options([None])],
-        "tr_iter_per_epoch": [Interval(0, None, inclusive_left=False), Options([None])],
-        "va_iter_per_epoch": [Interval(0, None, inclusive_left=False), Options([None])],
+        "tr_iter": [Interval(0, None, inclusive_left=False), Options([None])],
+        "va_iter": [Interval(0, None, inclusive_left=False), Options([None])],
         "lr": [Interval(0, None, inclusive_left=False), Options([None])],
         "lstm_hidden_size": [Interval(0, None, inclusive_left=False), Options([None])],
         "lstm_nlayers": [Interval(0, None, inclusive_left=False), Options([None])],
-        "ff_layers": [Interval(0, None, inclusive_left=False), Options([None])],
         "bidirectional": [Interval(0, None, inclusive_left=False), Options([None])],
         "qdrop_p": [Interval(0, None, inclusive_left=False), Options([None])],
         "patience": [Interval(0, None, inclusive_left=False), Options([None])],
-        "checkpointdir": "string",
-        "checkpointname": "string",
-        "device": "string",
+        "checkpointdir": ["string"],
+        "checkpointname": ["string"],
     }
 
 
@@ -296,13 +340,14 @@ class QuaNet(SoftLearnerQMixin, AggregationMixin, BaseQuantifier):
         fit_learner: bool = True,
         sample_size: int = 100,
         n_epochs: int = 100,
-        tr_iter_per_epoch: int = 500,
-        va_iter_per_epoch: int = 100,
+        tr_iter: int = 500,
+        va_iter: int = 100,
         lr: float = 1e-3,
         lstm_hidden_size: int = 64,
         lstm_nlayers: int = 1,
         ff_layers: Sequence[int] = (1024, 512),
         bidirectional: bool = True,
+        random_state: int = None,
         qdrop_p: float = 0.5,
         patience: int = 10,
         checkpointdir: str = "./checkpoint_quanet",
@@ -318,13 +363,14 @@ class QuaNet(SoftLearnerQMixin, AggregationMixin, BaseQuantifier):
         self.fit_learner = fit_learner
         self.sample_size = sample_size
         self.n_epochs = n_epochs
-        self.tr_iter_per_epoch = tr_iter_per_epoch
-        self.va_iter_per_epoch = va_iter_per_epoch
+        self.tr_iter = tr_iter
+        self.va_iter = va_iter
         self.lr = lr
         self.lstm_hidden_size = lstm_hidden_size
         self.lstm_nlayers = lstm_nlayers
         self.ff_layers = ff_layers
-        self.bidirectional = bidirectional      # <-- IMPORTANT
+        self.bidirectional = bidirectional
+        self.random_state = random_state
         self.qdrop_p = qdrop_p
         self.patience = patience
         self.checkpointdir = checkpointdir
@@ -358,353 +404,200 @@ class QuaNet(SoftLearnerQMixin, AggregationMixin, BaseQuantifier):
             "va-mae": -1.0,
         }
 
-    @property
-    def classes_(self) -> np.ndarray:
-        """Return the class labels observed during training."""
-        return self._classes_
-
-    # ------------------------------------------------------------------
-    # Training
-    # ------------------------------------------------------------------
-
     @_fit_context(prefer_skip_nested_validation=True)
-    def fit(self, X, y, learner_fitted: bool = False):
-        """
-        Train QuaNet on labeled instances.
+    def fit(self, X, y):
+        X, y = validate_data(self, X, y)
+        self.classes_ = check_classes_attribute(self, np.unique(y))
 
-        The procedure is:
-          1. Optionally split data into:
-             - a portion for training the base learner (if `fit_learner=True`),
-             - a portion for QuaNet training,
-             - a portion for QuaNet validation.
-          2. Train the base learner if requested.
-          3. Compute posterior probabilities and embeddings for the QuaNet train/valid sets.
-          4. Train simple aggregative quantifiers (CC, ACC, PCC, PACC) on the validation set.
-          5. Initialize QuaNetModule and train it using APP-generated bags, minimizing MSE
-             between predicted and true prevalences.
+        os.makedirs(self.checkpointdir, exist_ok=True)
 
-        Parameters
-        ----------
-        X : array-like of shape (n_samples, n_features)
-            Training instances.
-        y : array-like of shape (n_samples,)
-            Class labels.
-        learner_fitted : bool, default=False
-            If True, the learner is assumed to already be fitted and will not be retrained.
+        if self.fit_learner:
+            X_clf, X_rest, y_clf, y_rest = train_test_split(X, y, test_size=0.4, random_state=self.random_state, stratify=y)
+            X_train, X_val, y_train, y_val = train_test_split(X_rest, y_rest, test_size=0.2, random_state=self.random_state, stratify=y_rest)
 
-        Returns
-        -------
-        self : QuaNetQuantifier
-            The fitted quantifier.
-        """
-        X, y = validate_data(self, X, y, ensure_2d=True, ensure_min_samples=2)
-        self._classes_ = np.unique(y)
-
-        n_samples = X.shape[0]
-        rng = np.random.RandomState(42)
-        idx_all = np.arange(n_samples)
-        rng.shuffle(idx_all)
-
-        # Split scheme similar in spirit to QuaPy:
-        # - If fit_learner: 40% learner training, 40% QuaNet training, 20% QuaNet validation.
-        # - Else: 66% QuaNet training, 34% QuaNet validation.
-        if self.fit_learner and not learner_fitted:
-            n_clf = int(0.4 * n_samples)
-            clf_idx = idx_all[:n_clf]
-            rest_idx = idx_all[n_clf:]
-            n_train = int(0.66 * rest_idx.shape[0])
-            train_idx = rest_idx[:n_train]
-            valid_idx = rest_idx[n_train:]
-
-            X_clf, y_clf = X[clf_idx], y[clf_idx]
-            X_train, y_train = X[train_idx], y[train_idx]
-            X_valid, y_valid = X[valid_idx], y[valid_idx]
-
-            # Train base learner on classifier data
             self.learner.fit(X_clf, y_clf)
         else:
-            n_train = int(0.66 * n_samples)
-            train_idx = idx_all[:n_train]
-            valid_idx = idx_all[n_train:]
-            X_train, y_train = X[train_idx], y[train_idx]
-            X_valid, y_valid = X[valid_idx], y[valid_idx]
+            X_train, X_val, y_train, y_val = train_test_split(X, y, test_size=0.40, random_state=self.random_state, stratify=y)
+        
+        self.tr_prev = get_prev_from_labels(y, format="array")
 
-        # Posterior probabilities and embeddings for QuaNet train/valid sets
-        train_post = self.learner.predict_proba(X_train)
-        valid_post = self.learner.predict_proba(X_valid)
-        train_embed = self.learner.transform(X_train)
-        valid_embed = self.learner.transform(X_valid)
+        valid_posteriors = self.learner.predict_proba(X_val)
+        train_posteriors = self.learner.predict_proba(X_train)
 
-        n_classes = len(self._classes_)
+        self.val_posteriors = valid_posteriors
+        self.y_val = y_val
 
-        # Train simple aggregative quantifiers on the validation set (to produce statistics)[file:1][file:3]
         self.quantifiers = {
-            "cc": CC(self.learner, learner_fitted=True),
-            "acc": AC(self.learner, learner_fitted=True),
-            "pcc": PCC(self.learner, learner_fitted=True),
-            "pacc": PAC(self.learner, learner_fitted=True),
+            "cc": CC(self.learner),
+            "acc": AC(self.learner),
+            "pcc": PCC(self.learner),
+            "pacc": PAC(self.learner),
+            "emq": EMQ(self.learner),
         }
-        for q in self.quantifiers.values():
-            q.fit(X_valid, y_valid, learner_fitted=True)
 
-        nQ = len(self.quantifiers)
-        stats_size = nQ * n_classes
+        self.status = {
+            "tr-loss": -1.0,
+            "va-loss": -1.0,
+            "tr-mae": -1.0,
+            "va-mae": -1.0,
+        }
 
-        # In the binary case it is common to sort by the positive class score (index 0 or 1).
-        # Here we choose index 0; for multi-class we disable sorting by default.
-        order_by = 0 if n_classes == 2 else None
+        numQtf = len(self.quantifiers)
+        numClasses = len(self.classes_)
 
-        # Initialize QuaNet module and optimizer
         self.quanet = QuaNetModule(
-            doc_embedding_size=train_embed.shape[1],
-            n_classes=n_classes,
-            stats_size=stats_size,
-            order_by=order_by,
-            **self.quanet_params,
+            doc_embedding_size=X_train.shape[1],
+            n_classes=numClasses,
+            stats_size=numQtf*numClasses,
+            order_by=0 if numClasses == 2 else 1,
+            **self.quanet_params
         ).to(self.device)
+        print(self.quanet)
+
         self.optim = torch.optim.Adam(self.quanet.parameters(), lr=self.lr)
+        early_stop = EarlyStop(
+            patience=self.patience,
+            lower_is_better=True,
+        )
 
-        best_va_loss = np.inf
-        best_epoch = -1
-        patience_left = self.patience
+        checkpoint = self.checkpoint
 
-        # Training loop with early stopping
-        for epoch_i in range(1, self.n_epochs + 1):
-            self._epoch(
-                X_train, y_train, train_embed, train_post,
-                iterations=self.tr_iter, epoch=epoch_i, train=True
-            )
-            self._epoch(
-                X_valid, y_valid, valid_embed, valid_post,
-                iterations=self.va_iter, epoch=epoch_i, train=False
-            )
+        for epoch in range(self.n_epochs):
+            self._epoch(X_train, y_train, train_posteriors, self.tr_iter, epoch, early_stop, train=True)
+            self._epoch(X_val, y_val, valid_posteriors, self.va_iter, epoch, early_stop, train=False)
 
-            va_loss = self.status["va-loss"]
-            if va_loss < best_va_loss - 1e-6:
-                best_va_loss = va_loss
-                best_epoch = epoch_i
-                patience_left = self.patience
-                torch.save(self.quanet.state_dict(), self.checkpoint)
-            else:
-                patience_left -= 1
-                if patience_left <= 0:
-                    # Early stopping: restore best model
-                    self.quanet.load_state_dict(torch.load(self.checkpoint, map_location=self.device))
-                    break
+            early_stop(self.status["va-loss"], epoch)
+            if early_stop.IMPROVED:
+                torch.save(self.quanet.state_dict(), checkpoint)
+            elif early_stop.STOP:
+                print(f'Training ended at epoch {early_stop.best_epoch}, loading best model parameters in {checkpoint}')
+                self.quanet.load_state_dict(torch.load(checkpoint))
+                break
 
         return self
 
-    def _get_aggregative_estims(
-        self,
-        posteriors: np.ndarray,
-        train_predictions: np.ndarray | None = None,
-        train_y_values: np.ndarray | None = None,
-    ) -> np.ndarray:
-        """
-        Compute a vector of simple quantification estimates (statistics) for a given bag.
+    def _aggregate_qtf(self, posteriors, train_posteriors, y_train_values):
+        qtf_estims = []
 
-        This method inspects each quantifier in `self.quantifiers` (e.g., CC, ACC, PCC, PACC)
-        and automatically adapts the call to its `aggregate` method according to its declared
-        aggregation requirements. Requirements are obtained via
-        `mlquantify.base_aggregative.get_aggregation_requirements`, which specifies whether
-        a quantifier needs:
+        for name, qtf in self.quantifiers.items():
 
-          - only test predictions,
-          - test predictions + training labels,
-          - or test predictions + training posterior probabilities + training labels.
+            requirements = get_aggregation_requirements(qtf)
 
-        The resulting prevalence estimates from all quantifiers are concatenated into a single
-        statistics vector.
-
-        Parameters
-        ----------
-        posteriors : ndarray of shape (n_docs, n_classes)
-            Posterior probabilities for the documents in the bag (test predictions).
-        train_predictions : ndarray of shape (n_train, n_classes), optional
-            Posterior probabilities for the training instances (used by some aggregative methods).
-            If None and required by some quantifier, a ValueError is raised.
-        train_y_values : ndarray of shape (n_train,), optional
-            Training labels (used by some aggregative methods). If None and required by some
-            quantifier, a ValueError is raised.
-
-        Returns
-        -------
-        stats : ndarray of shape (n_quantifiers * n_classes,)
-            Concatenated prevalence estimates from all simple quantifiers.
-        """
-        label_predictions = np.argmax(posteriors, axis=-1)
-        stats_list: list[float] = []
-
-        for q in self.quantifiers.values():
-            reqs = get_aggregation_requirements(q)
-
-            # Determine which arguments to pass based on requirements
-            if reqs.requires_train_proba and reqs.requires_train_labels:
-                if train_predictions is None or train_y_values is None:
-                    raise ValueError(
-                        f"Quantifier {q.__class__.__name__} requires training probabilities "
-                        "and training labels, but they were not provided."
-                    )
-                prev = q.aggregate(posteriors, train_predictions, train_y_values)
-            elif reqs.requires_train_labels:
-                if train_y_values is None:
-                    raise ValueError(
-                        f"Quantifier {q.__class__.__name__} requires training labels, "
-                        "but train_y_values was not provided."
-                    )
-                prev = q.aggregate(posteriors, train_y_values)
+            if requirements.requires_train_proba and requirements.requires_train_labels:
+                prev = qtf.aggregate(posteriors, train_posteriors, y_train_values)
+            elif requirements.requires_train_labels:
+                prev = qtf.aggregate(posteriors, y_train_values)
             else:
-                # Only test predictions are required; some quantifiers expect hard labels,
-                # others soft probabilities. We rely on their `aggregate` signature to decide.
-                try:
-                    prev = q.aggregate(posteriors)
-                except TypeError:
-                    # If the quantifier expects hard labels instead of probabilities, try again
-                    prev = q.aggregate(label_predictions)
+                prev = qtf.aggregate(posteriors)
 
-            # `prev` is usually a 1D array of length n_classes
-            prev = np.asarray(prev, dtype=np.float32)
-            stats_list.extend(prev)
+            qtf_estims.extend(np.asarray(list(prev.values())))
 
-        return np.asarray(stats_list, dtype=np.float32)
+        return qtf_estims
 
-    def _epoch(
-        self,
-        X: np.ndarray,
-        y: np.ndarray,
-        embeddings: np.ndarray,
-        posteriors: np.ndarray,
-        iterations: int,
-        epoch: int,
-        train: bool,
-    ) -> None:
-        """
-        Run one training or validation epoch of QuaNet using APP-generated bags.
+    
+    def predict(self, X):
+        X = validate_data(self, X)
+        
+        learner_function = _get_learner_function(self)
+        posteriors = getattr(self.learner, learner_function)(X)
+        embeddings = self.learner.transform(X)
 
-        Parameters
-        ----------
-        X : array-like of shape (n_samples, n_features)
-            Instances that form the universe for bag sampling in this epoch.
-        y : array-like of shape (n_samples,)
-            Labels corresponding to X.
-        embeddings : array-like of shape (n_samples, emb_dim)
-            Precomputed document embeddings for X.
-        posteriors : array-like of shape (n_samples, n_classes)
-            Precomputed posterior probabilities for X.
-        iterations : int
-            Number of bags (APP samples) to draw in this epoch.
-        epoch : int
-            Epoch index, used only for logging.
-        train : bool
-            True for training epoch, False for validation epoch.
-        """
-        assert self.quanet is not None
-        mse_loss = nn.MSELoss()
+        qtf_estims = self._aggregate_qtf(posteriors, self.val_posteriors, self.y_val)
+            
+        self.quanet.eval()
+        with torch.no_grad():
+            prevalence = self.quanet.forward(embeddings, posteriors, qtf_estims)
+            if self.device.type == "cuda":
+                prevalence = prevalence.cpu()
+            prevalence = prevalence.numpy().flatten()
+        
+        return prevalence
+            
+    
+    def _epoch(self, X, y, posteriors, iterations, epoch, early_stop, train: bool) -> None:
+        mse_loss = MSELoss()
+
         self.quanet.train(mode=train)
-
         losses = []
         mae_errors = []
 
-        # APP protocol: generates indices of bags with controlled prevalences.[file:2][file:3]
-        app = APP(
+        sampler = UPP(
             batch_size=self.sample_size,
-            n_prevalences=5,
-            repeats=iterations,
-            random_state=None if train else 0,
+            n_prevalences=iterations,
+            random_state= None if train else self.random_state,
         )
 
-        # We use APP.split to iterate over indices of each bag
-        idx_iter = app.split(X, y)
-        pbar = tqdm(range(iterations), desc=f"[QuaNet] epoch {epoch} ({'train' if train else 'val'})")
+        for idx in sampler.split(X, y):
+            X_batch = X[idx]
+            y_batch = y[idx]
+            posteriors_batch = posteriors[idx]
+            
+            qtf_estims = self._aggregate_qtf(posteriors_batch, self.val_posteriors, self.y_val)
 
-        for _ in pbar:
-            try:
-                idx = next(idx_iter)
-            except StopIteration:
-                break
-
-            idx = np.asarray(idx)
-            X_bag = X[idx]
-            y_bag = y[idx]
-            embed_bag = embeddings[idx]
-            post_bag = posteriors[idx]
-
-            quant_estims = self._get_aggregative_estims(
-                post_bag,
-                train_predictions=post_bag,   # train_proba = posteriors of this bag
-                train_y_values=y_bag,         # train_labels = labels of this bag
+            p_true = torch.as_tensor(
+                get_prev_from_labels(y_batch, format="array"), 
+                dtype=torch.float, 
+                device=self.device
             )
-            ptrue_np = get_prev_from_labels(y_bag, classes=self._classes_)  # true prevalences
-            ptrue = torch.as_tensor(ptrue_np[None, :], dtype=torch.float32, device=self.device)
 
             if train:
-                assert self.optim is not None
                 self.optim.zero_grad()
-                phat = self.quanet(embed_bag, post_bag, quant_estims)
-                loss = mse_loss(phat, ptrue)
-                mae = torch.mean(torch.abs(phat - ptrue))
+                p_pred = self.quanet.forward(
+                    X_batch, 
+                    posteriors_batch, 
+                    qtf_estims
+                )
+                loss = mse_loss(p_pred, p_true)
+                mae = mae_loss(p_pred, p_true)
                 loss.backward()
                 self.optim.step()
             else:
                 with torch.no_grad():
-                    phat = self.quanet(embed_bag, post_bag, quant_estims)
-                    loss = mse_loss(phat, ptrue)
-                    mae = torch.mean(torch.abs(phat - ptrue))
+                    p_pred = self.quanet.forward(
+                        X_batch, 
+                        posteriors_batch, 
+                        qtf_estims
+                    )
+                    loss = mse_loss(p_pred, p_true)
+                    mae = mae_loss(p_pred, p_true)
 
             losses.append(loss.item())
             mae_errors.append(mae.item())
 
-            mse_val = float(np.mean(losses))
-            mae_val = float(np.mean(mae_errors))
+            mae = np.mean(mae_errors)
+            mse = np.mean(losses)
+
             if train:
-                self.status["tr-loss"] = mse_val
-                self.status["tr-mae"] = mae_val
+                self.status["tr-mae"] = mae
+                self.status["tr-loss"] = mse
             else:
-                self.status["va-loss"] = mse_val
-                self.status["va-mae"] = mae_val
+                self.status["va-mae"] = mae
+                self.status["va-loss"] = mse
+            
 
-            pbar.set_postfix(
-                tr_mse=self.status["tr-loss"],
-                va_mse=self.status["va-loss"],
-                tr_mae=self.status["tr-mae"],
-                va_mae=self.status["va-mae"],
-            )
+    def _check_params_colision(self, quanet_params, learner_params):
+        quanet_keys = set(quanet_params.keys())
+        learner_keys = set(learner_params.keys())
 
-    # ------------------------------------------------------------------
-    # Prediction
-    # ------------------------------------------------------------------
+        colision_keys = quanet_keys.intersection(learner_keys)
 
-    def predict(self, X):
-        """
-        Estimate the class-prevalence vector for a bag of instances X.
+        if colision_keys:
+            raise ValueError(f"Parameters {colision_keys} are present in both quanet_params and learner_params")
 
-        In the typical quantification scenario, X is a set (or bag) of unlabelled items
-        drawn from some target distribution, and `predict` returns the estimated prevalence
-        of each class within that bag.
+    def clean_checkpoint(self):
+        if os.path.exists(self.checkpoint):
+            os.remove(self.checkpoint)
 
-        Parameters
-        ----------
-        X : array-like of shape (n_samples, n_features)
-            Unlabelled instances forming the bag to be quantified.
+    def clean_checkpoint_dir(self):
+        import shutil
+        shutil.rmtree(self.checkpointdir, ignore_errors=True)
 
-        Returns
-        -------
-        prevalence : ndarray of shape (n_classes,)
-            Estimated class-prevalence vector for the bag X.
-        """
-        assert self.quanet is not None, "QuaNet must be fitted before calling predict."
-        posteriors = self.learner.predict_proba(X)
-        embeddings = self.learner.transform(X)
-        quant_estims = self._get_aggregative_estims(posteriors)
 
-        self.quanet.eval()
-        with torch.no_grad():
-            prevalence = self.quanet(embeddings, posteriors, quant_estims)
-            if self.device.type == "cuda":
-                prevalence = prevalence.cpu()
-            prevalence = prevalence.numpy().flatten()
+def mae_loss(y_true, y_pred):
+    return torch.mean(torch.abs(y_true - y_pred))
 
-        prevalence = np.clip(prevalence, EPS, None)
-        prevalence = prevalence / prevalence.sum()
-        prevalence = validate_prevalences(self, prevalence, self._classes_)
-        return prevalence
+
+
+
+        
+        

@@ -3,7 +3,7 @@ from mlquantify.base_aggregative import AggregationMixin
 import numpy as np
 from mlquantify.base_aggregative import SoftLearnerQMixin
 from mlquantify.metrics._slq import MAE
-from mlquantify.utils import _fit_context
+from mlquantify.utils import _fit_context, validate_data, check_classes_attribute, validate_predictions, validate_prevalences
 from mlquantify.utils._constraints import (
     Interval,
     CallableConstraint,
@@ -82,6 +82,11 @@ class EMQ(SoftLearnerQMixin, AggregationMixin, BaseQuantifier):
         "criteria": [CallableConstraint()],
     }
 
+    def __mlquantify_tags__(self):
+        tags = super().__mlquantify_tags__()
+        tags.prediction_requirements.requires_train_proba = False
+        return tags
+
     def __init__(self, 
                  learner=None, 
                  tol=1e-4, 
@@ -98,7 +103,6 @@ class EMQ(SoftLearnerQMixin, AggregationMixin, BaseQuantifier):
     def fit(self, X, y):
         """Fit the quantifier using the provided data and learner."""
         X, y = validate_data(self, X, y)
-        validate_y(self, y)
         self.classes_ = np.unique(y)
         self.learner.fit(X, y)
         counts = np.array([np.count_nonzero(y == _class) for _class in self.classes_])
