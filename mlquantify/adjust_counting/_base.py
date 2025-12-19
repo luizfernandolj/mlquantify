@@ -93,7 +93,7 @@ class BaseCount(AggregationMixin, BaseQuantifier):
     def __mlquantify_tags__(self):
         tags = super().__mlquantify_tags__()
         tags.prediction_requirements.requires_train_proba = False
-        tags.prediction_requirements.requires_train_labels = False
+        tags.prediction_requirements.requires_train_labels = True
         return tags
 
     @_fit_context(prefer_skip_nested_validation=True)

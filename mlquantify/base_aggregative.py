@@ -201,7 +201,6 @@ def get_aggregation_requirements(quantifier):
 def _get_learner_function(quantifier):
     """Get the learner function name used by the aggregative quantifier."""
     tags = get_tags(quantifier)
-    print(tags)
     function_name = tags.estimator_function
     if function_name is None:
         raise ValueError(f"The quantifier {quantifier.__class__.__name__} does not specify an estimator function.")

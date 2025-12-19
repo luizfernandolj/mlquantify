@@ -11,3 +11,4 @@ from . import base
 from . import calibration
 from . import confidence
 from . import multiclass
+from . import neural

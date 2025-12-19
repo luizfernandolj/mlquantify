@@ -156,44 +156,30 @@ class QuaNetModule(nn.Module):
         self.hidden_size = lstm_hidden_size
         self.nlayers = lstm_nlayers
         self.bidirectional = bidirectional
-        self.ndirections = 2 if bidirectional else 1
+        self.ndirections = 2 if self.bidirectional else 1
         self.qdrop_p = qdrop_p
-
-        # LSTM input: [embedding, posterior_probs]
-        self.lstm = nn.LSTM(
-            input_size=doc_embedding_size + n_classes,
-            hidden_size=lstm_hidden_size,
-            num_layers=lstm_nlayers,
-            bidirectional=bidirectional,
-            dropout=qdrop_p if lstm_nlayers > 1 else 0.0,
-            batch_first=True,
-        )
-        self.dropout = nn.Dropout(self.qdrop_p)
+        self.lstm = torch.nn.LSTM(doc_embedding_size + n_classes,  # +n_classes stands for the posterior probs. (concatenated)
+                                  lstm_hidden_size, lstm_nlayers, bidirectional=bidirectional,
+                                  dropout=qdrop_p, batch_first=True)
+        self.dropout = torch.nn.Dropout(self.qdrop_p)
 
         lstm_output_size = self.hidden_size * self.ndirections
         ff_input_size = lstm_output_size + stats_size
-
         prev_size = ff_input_size
-        self.ff_layers = nn.ModuleList()
+        self.ff_layers = torch.nn.ModuleList()
         for lin_size in ff_layers:
-            self.ff_layers.append(nn.Linear(prev_size, lin_size))
+            self.ff_layers.append(torch.nn.Linear(prev_size, lin_size))
             prev_size = lin_size
-
-        self.output = nn.Linear(prev_size, n_classes)
+        self.output = torch.nn.Linear(prev_size, n_classes)
 
     @property
     def device(self) -> torch.device:
         """Return the device on which the module parameters are stored."""
         return next(self.parameters()).device
 
-    def _init_hidden(self, batch_size: int = 1) -> tuple[torch.Tensor, torch.Tensor]:
+    def _init_hidden(self) -> tuple[torch.Tensor, torch.Tensor]:
         """
         Initialize LSTM hidden and cell states with zeros.
-
-        Parameters
-        ----------
-        batch_size : int
-            Batch size for which the hidden state is initialized.
 
         Returns
         -------
@@ -201,9 +187,11 @@ class QuaNetModule(nn.Module):
             Initial hidden and cell states.
         """
         directions = 2 if self.bidirectional else 1
-        h = torch.zeros(self.nlayers * directions, batch_size, self.hidden_size, device=self.device)
-        c = torch.zeros(self.nlayers * directions, batch_size, self.hidden_size, device=self.device)
-        return h, c
+        var_hidden = torch.zeros(self.nlayers * directions, 1, self.hidden_size)
+        var_cell = torch.zeros(self.nlayers * directions, 1, self.hidden_size)
+        if next(self.lstm.parameters()).is_cuda:
+            var_hidden, var_cell = var_hidden.cuda(), var_cell.cuda()
+        return var_hidden, var_cell
 
     def forward(
         self,
@@ -242,6 +230,7 @@ class QuaNetModule(nn.Module):
 
         # the entire set represents only one instance in quapy contexts, and so the batch_size=1
         # the shape should be (1, number-of-instances, embedding-size + n_classes)
+
         embeded_posteriors = embeded_posteriors.unsqueeze(0)
 
         self.lstm.flatten_parameters()
@@ -406,21 +395,31 @@ class QuaNet(SoftLearnerQMixin, AggregationMixin, BaseQuantifier):
 
     @_fit_context(prefer_skip_nested_validation=True)
     def fit(self, X, y):
-        X, y = validate_data(self, X, y)
+        y = validate_data(self, y=y)
         self.classes_ = check_classes_attribute(self, np.unique(y))
 
         os.makedirs(self.checkpointdir, exist_ok=True)
 
         if self.fit_learner:
-            X_clf, X_rest, y_clf, y_rest = train_test_split(X, y, test_size=0.4, random_state=self.random_state, stratify=y)
-            X_train, X_val, y_train, y_val = train_test_split(X_rest, y_rest, test_size=0.2, random_state=self.random_state, stratify=y_rest)
+            X_clf, X_rest, y_clf, y_rest = train_test_split(
+                X, y, test_size=0.4, random_state=self.random_state, stratify=y
+            )
+            X_train, X_val, y_train, y_val = train_test_split(
+                X_rest, y_rest, test_size=0.2, random_state=self.random_state, stratify=y_rest
+            )
 
             self.learner.fit(X_clf, y_clf)
         else:
-            X_train, X_val, y_train, y_val = train_test_split(X, y, test_size=0.40, random_state=self.random_state, stratify=y)
+            X_train, X_val, y_train, y_val = train_test_split(
+                X, y, test_size=0.40, random_state=self.random_state, stratify=y
+            )
         
         self.tr_prev = get_prev_from_labels(y, format="array")
 
+        # **CORREÇÃO: Obter embeddings e suas dimensões**
+        X_train_embeddings = self.learner.transform(X_train)
+        X_val_embeddings = self.learner.transform(X_val)
+        
         valid_posteriors = self.learner.predict_proba(X_val)
         train_posteriors = self.learner.predict_proba(X_train)
 
@@ -445,11 +444,12 @@ class QuaNet(SoftLearnerQMixin, AggregationMixin, BaseQuantifier):
         numQtf = len(self.quantifiers)
         numClasses = len(self.classes_)
 
+        # **CORREÇÃO: Use a dimensão dos embeddings, não das features originais**
         self.quanet = QuaNetModule(
-            doc_embedding_size=X_train.shape[1],
+            doc_embedding_size=X_train_embeddings.shape[1],  # ← MUDANÇA AQUI
             n_classes=numClasses,
             stats_size=numQtf*numClasses,
-            order_by=0 if numClasses == 2 else 1,
+            order_by=0 if numClasses == 2 else None,
             **self.quanet_params
         ).to(self.device)
         print(self.quanet)
@@ -463,8 +463,15 @@ class QuaNet(SoftLearnerQMixin, AggregationMixin, BaseQuantifier):
         checkpoint = self.checkpoint
 
         for epoch in range(self.n_epochs):
-            self._epoch(X_train, y_train, train_posteriors, self.tr_iter, epoch, early_stop, train=True)
-            self._epoch(X_val, y_val, valid_posteriors, self.va_iter, epoch, early_stop, train=False)
+            # **CORREÇÃO: Passar embeddings em vez de X original**
+            self._epoch(
+                X_train_embeddings, y_train, train_posteriors, 
+                self.tr_iter, epoch, early_stop, train=True
+            )
+            self._epoch(
+                X_val_embeddings, y_val, valid_posteriors, 
+                self.va_iter, epoch, early_stop, train=False
+            )
 
             early_stop(self.status["va-loss"], epoch)
             if early_stop.IMPROVED:
@@ -496,7 +503,6 @@ class QuaNet(SoftLearnerQMixin, AggregationMixin, BaseQuantifier):
 
     
     def predict(self, X):
-        X = validate_data(self, X)
         
         learner_function = _get_learner_function(self)
         posteriors = getattr(self.learner, learner_function)(X)
@@ -535,10 +541,10 @@ class QuaNet(SoftLearnerQMixin, AggregationMixin, BaseQuantifier):
             qtf_estims = self._aggregate_qtf(posteriors_batch, self.val_posteriors, self.y_val)
 
             p_true = torch.as_tensor(
-                get_prev_from_labels(y_batch, format="array"), 
+                get_prev_from_labels(y_batch, format="array", classes=self.classes_), 
                 dtype=torch.float, 
                 device=self.device
-            )
+            ).unsqueeze(0)
 
             if train:
                 self.optim.zero_grad()
