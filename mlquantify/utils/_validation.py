@@ -266,6 +266,13 @@ def _is_arraylike(x):
     return hasattr(x, "__len__") or hasattr(x, "shape") or hasattr(x, "__array__")
 
 
+def _transform_if_float(y):
+    """Transform y to integers if it is float."""
+    if np.issubdtype(y.dtype, np.floating):
+        y = y.astype(str)
+    return y
+
+
 def validate_data(quantifier, 
                   X="no_validation",
                   y="no_validation",
@@ -316,8 +323,10 @@ def validate_data(quantifier,
             if "estimator" not in check_y_params:
                 check_y_params = {**default_check_params, **check_y_params}
             y = check_array(y, input_name="y", **check_y_params)
+            y = _transform_if_float(y)
         else:
             X, y = check_X_y(X, y, dtype=None, **check_params)
+            y = _transform_if_float(y)
         out = X, y
         
     return out

@@ -100,7 +100,6 @@ class BaseCount(AggregationMixin, BaseQuantifier):
     def fit(self, X, y, learner_fitted=False, *args, **kwargs):
         """Fit the quantifier using the provided data and learner."""
         X, y = validate_data(self, X, y)
-        validate_y(self, y)
         self.classes_ = np.unique(y)
         if not learner_fitted:
             self.learner.fit(X, y, *args, **kwargs)

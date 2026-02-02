@@ -111,7 +111,6 @@ class PWK(BaseQuantifier):
             The fitted instance.
         """
         X, y = validate_data(self, X, y, ensure_2d=True, ensure_min_samples=2)
-        validate_y(self, y)
         self.classes_ = np.unique(y)
         self.cc = CC(self.learner)
         return self.cc.fit(X, y)
