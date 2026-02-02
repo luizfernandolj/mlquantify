@@ -4,14 +4,14 @@ from typing import Dict, Any, Sequence
 
 import numpy as np
 from sklearn.model_selection import train_test_split
+
 try:
     import torch
     import torch.nn as nn
     from torch.nn import MSELoss
     from torch.nn.functional import relu
 except ImportError:
-    import warnings
-    warnings.warn("torch is not installed. Neural network quantifiers will not work.")
+    pass
 
 from mlquantify.base import BaseQuantifier
 from mlquantify.base_aggregative import (

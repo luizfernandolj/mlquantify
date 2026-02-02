@@ -11,4 +11,7 @@ from . import base
 from . import calibration
 from . import confidence
 from . import multiclass
-from . import neural
+try:
+    from . import neural
+except NameError:
+    pass
