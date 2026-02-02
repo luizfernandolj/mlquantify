@@ -483,7 +483,7 @@ class QuaNet(SoftLearnerQMixin, AggregationMixin, BaseQuantifier):
 
         return self
 
-    def _aggregate_qtf(self, posteriors, train_posteriors, y_train_values):
+    def _aggregate_qtf(self, posteriors, train_posteriors, y_train):
         qtf_estims = []
 
         for name, qtf in self.quantifiers.items():
@@ -491,9 +491,9 @@ class QuaNet(SoftLearnerQMixin, AggregationMixin, BaseQuantifier):
             requirements = get_aggregation_requirements(qtf)
 
             if requirements.requires_train_proba and requirements.requires_train_labels:
-                prev = qtf.aggregate(posteriors, train_posteriors, y_train_values)
+                prev = qtf.aggregate(posteriors, train_posteriors, y_train)
             elif requirements.requires_train_labels:
-                prev = qtf.aggregate(posteriors, y_train_values)
+                prev = qtf.aggregate(posteriors, y_train)
             else:
                 prev = qtf.aggregate(posteriors)
 

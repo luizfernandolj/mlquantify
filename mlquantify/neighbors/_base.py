@@ -96,22 +96,22 @@ class BaseKDE(SoftLearnerQMixin, AggregationMixin, BaseQuantifier):
 
         if learner_fitted:
             train_predictions = getattr(self.learner, learner_function)(X)
-            train_y_values = y
+            y_train = y
         else:
-            train_predictions, train_y_values = apply_cross_validation(
+            train_predictions, y_train = apply_cross_validation(
                 self.learner, X, y,
                 function=learner_function, cv=5,
                 stratified=True, shuffle=True
             )
 
         self.train_predictions = train_predictions
-        self.train_y_values = train_y_values
-        self._precompute_training(train_predictions, train_y_values)
+        self.y_train = y_train
+        self._precompute_training(train_predictions, y_train)
         return self
 
-    def _fit_kde_models(self, train_predictions, train_y_values):
+    def _fit_kde_models(self, train_predictions, y_train):
         P = np.atleast_2d(train_predictions)
-        y = np.asarray(train_y_values)
+        y = np.asarray(y_train)
         self._class_kdes = []
 
         for c in self.classes_:
@@ -126,18 +126,18 @@ class BaseKDE(SoftLearnerQMixin, AggregationMixin, BaseQuantifier):
 
     def predict(self, X):
         predictions = getattr(self.learner, _get_learner_function(self))(X)
-        return self.aggregate(predictions, self.train_predictions, self.train_y_values)
+        return self.aggregate(predictions, self.train_predictions, self.y_train)
     
-    def aggregate(self, predictions, train_predictions, train_y_values):
+    def aggregate(self, predictions, train_predictions, y_train):
         predictions = validate_predictions(self, predictions)
         
-        if hasattr(self, "classes_") and len(np.unique(train_y_values)) != len(self.classes_):
+        if hasattr(self, "classes_") and len(np.unique(y_train)) != len(self.classes_):
             self._precomputed = False
         
-        self.classes_ = check_classes_attribute(self, np.unique(train_y_values))
+        self.classes_ = check_classes_attribute(self, np.unique(y_train))
         
         if not self._precomputed:
-            self._precompute_training(train_predictions, train_y_values)
+            self._precompute_training(train_predictions, y_train)
             self._precomputed = True
             
         prevalence, _ = self._solve_prevalences(predictions)
@@ -145,22 +145,22 @@ class BaseKDE(SoftLearnerQMixin, AggregationMixin, BaseQuantifier):
         prevalence = validate_prevalences(self, prevalence, self.classes_)
         return prevalence
 
-    def best_distance(self, predictions, train_predictions, train_y_values):
+    def best_distance(self, predictions, train_predictions, y_train):
         """Retorna a melhor distância encontrada durante o ajuste."""
         if self.best_distance is not None:
             return self.best_distance
         
-        self.classes_ = check_classes_attribute(self, np.unique(train_y_values))
+        self.classes_ = check_classes_attribute(self, np.unique(y_train))
         
         if not self._precomputed:
-            self._precompute_training(train_predictions, train_y_values)
+            self._precompute_training(train_predictions, y_train)
             self._precomputed = True    
     
         _, best_distance = self._solve_prevalences(predictions)
         return best_distance
 
     @abstractmethod
-    def _precompute_training(self, train_predictions, train_y_values):
+    def _precompute_training(self, train_predictions, y_train):
         raise NotImplementedError
 
     @abstractmethod

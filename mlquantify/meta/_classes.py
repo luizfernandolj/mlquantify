@@ -518,15 +518,15 @@ class AggregativeBootstrap(MetaquantifierMixin, BaseQuantifier):
         
         if val_split is None:
             model.fit(X, y)
-            train_y_values = y
+            y_train = y
             train_predictions = getattr(model, learner_function)(X)
         else:
             X_fit, y_fit, X_val, y_val = train_test_split(X, y, test_size=val_split, random_state=self.random_state)
             model.fit(X_fit, y_fit)
-            train_y_values = y_val
+            y_train = y_val
             train_predictions = getattr(model, learner_function)(X_val)
         self.train_predictions = train_predictions
-        self.train_y_values = train_y_values
+        self.y_train = y_train
         
         return self
     
@@ -549,10 +549,10 @@ class AggregativeBootstrap(MetaquantifierMixin, BaseQuantifier):
         
         predictions = getattr(model, learner_function)(X)
 
-        return self.aggregate(predictions, self.train_predictions, self.train_y_values)
+        return self.aggregate(predictions, self.train_predictions, self.y_train)
 
 
-    def aggregate(self, predictions, train_predictions, train_y_values):
+    def aggregate(self, predictions, train_predictions, y_train):
         r""" Aggregates the predictions using bootstrap resampling.
         
         Parameters
@@ -561,7 +561,7 @@ class AggregativeBootstrap(MetaquantifierMixin, BaseQuantifier):
             The input data.
         train_predictions : array-like of shape (n_samples, n_classes)
             The training predictions.
-        train_y_values : array-like of shape (n_samples,)
+        y_train : array-like of shape (n_samples,)
             The training target values.
             
         Returns
@@ -571,7 +571,7 @@ class AggregativeBootstrap(MetaquantifierMixin, BaseQuantifier):
         """
         prevalences = []
         
-        self.classes = np.unique(train_y_values)
+        self.classes = np.unique(y_train)
         
         for train_idx in bootstrap_sample_indices(
             n_samples=len(train_predictions),
@@ -580,7 +580,7 @@ class AggregativeBootstrap(MetaquantifierMixin, BaseQuantifier):
             random_state=self.random_state
         ):
             train_pred_boot = train_predictions[train_idx]
-            train_y_boot = train_y_values[train_idx]
+            train_y_boot = y_train[train_idx]
             
             for test_idx in bootstrap_sample_indices(
                 n_samples=len(predictions),
@@ -679,7 +679,7 @@ class QuaDapt(MetaquantifierMixin, BaseQuantifier):
             raise ValueError(f"The quantifier {self.quantifier.__class__.__name__} does not use training probabilities, which are required for QuaDapt.")
         
         self.quantifier.learner.fit(X, y)
-        self.train_y_values = y
+        self.y_train = y
         
         return self
         
@@ -691,15 +691,15 @@ class QuaDapt(MetaquantifierMixin, BaseQuantifier):
         
         predictions = getattr(model, "predict_proba")(X)
 
-        return self.aggregate(predictions, self.train_y_values)
+        return self.aggregate(predictions, self.y_train)
     
     
-    def aggregate(self, predictions, train_y_values):
+    def aggregate(self, predictions, y_train):
 
         prevalence, _, _ = self.best_mixture(predictions)
         prevalences = np.asarray([1-prevalence, prevalence])
         
-        self.classes = self.classes if hasattr(self, 'classes') else np.unique(train_y_values)
+        self.classes = self.classes if hasattr(self, 'classes') else np.unique(y_train)
         
         prevalences = validate_prevalences(self, prevalences, self.classes)
         return prevalences

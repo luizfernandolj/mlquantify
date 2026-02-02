@@ -113,14 +113,14 @@ class ThresholdAdjustment(SoftLearnerQMixin, BaseAdjustCount):
         self.threshold = threshold
         self.strategy = strategy
 
-    def _adjust(self, predictions, train_y_scores, train_y_values):
+    def _adjust(self, predictions, train_y_scores, y_train):
         """Internal adjustment computation based on selected ROC threshold."""
         positive_scores = train_y_scores[:, 1]
         
-        thresholds, tprs, fprs = evaluate_thresholds(train_y_values, positive_scores)
+        thresholds, tprs, fprs = evaluate_thresholds(y_train, positive_scores)
         threshold, tpr, fpr = self.get_best_threshold(thresholds, tprs, fprs)
 
-        cc_predictions = CC(threshold=threshold).aggregate(predictions, train_y_values)
+        cc_predictions = CC(threshold=threshold).aggregate(predictions, y_train)
         cc_predictions = list(cc_predictions.values())[1]
 
         if tpr - fpr == 0:
@@ -215,18 +215,18 @@ class MatrixAdjustment(BaseAdjustCount):
         super().__init__(learner=learner)
         self.solver = solver
     
-    def _adjust(self, predictions, train_y_pred, train_y_values):
-        n_class = len(np.unique(train_y_values))
+    def _adjust(self, predictions, train_y_pred, y_train):
+        n_class = len(np.unique(y_train))
         self.CM = np.zeros((n_class, n_class))
 
         if self.solver == 'optim':
-            priors = np.array(list(CC().aggregate(train_y_pred, train_y_values).values()))
-            self.CM = self._compute_confusion_matrix(train_y_pred, train_y_values, priors)
-            prevs_estim = self._get_estimations(predictions > priors, train_y_values)
+            priors = np.array(list(CC().aggregate(train_y_pred, y_train).values()))
+            self.CM = self._compute_confusion_matrix(train_y_pred, y_train, priors)
+            prevs_estim = self._get_estimations(predictions > priors, y_train)
             prevalence = self._solve_optimization(prevs_estim, priors)
         else:
-            self.CM = self._compute_confusion_matrix(train_y_pred, train_y_values)
-            prevs_estim = self._get_estimations(predictions, train_y_values)
+            self.CM = self._compute_confusion_matrix(train_y_pred, y_train)
+            prevs_estim = self._get_estimations(predictions, y_train)
             prevalence = self._solve_linear(prevs_estim)
         
         return prevalence
@@ -277,11 +277,11 @@ class MatrixAdjustment(BaseAdjustCount):
         result = minimize(objective, init, constraints=constraints, bounds=bounds)
         return result.x if result.success else priors
 
-    def _get_estimations(self, predictions, train_y_values):
+    def _get_estimations(self, predictions, y_train):
         """Return prevalence estimates using CC (crisp) or PCC (probabilistic)."""
         if uses_soft_predictions(self):
             return np.array(list(PCC().aggregate(predictions).values()))
-        return np.array(list(CC().aggregate(predictions, train_y_values).values()))
+        return np.array(list(CC().aggregate(predictions, y_train).values()))
 
     @abstractmethod
     def _compute_confusion_matrix(self, predictions, *args):
@@ -364,16 +364,16 @@ class CDE(SoftLearnerQMixin, AggregationMixin, BaseQuantifier):
         return prevalences
 
 
-    def aggregate(self, predictions, y_train_values):
+    def aggregate(self, predictions, y_train):
 
-        self.classes_ = check_classes_attribute(self, np.unique(y_train_values))
+        self.classes_ = check_classes_attribute(self, np.unique(y_train))
         predictions = validate_predictions(self, predictions)
 
         if hasattr(self, 'priors'):
             Ptr = np.asarray(self.priors, dtype=np.float64)
         else:
-            counts = np.array([np.count_nonzero(y_train_values == _class) for _class in self.classes_])
-            Ptr = counts / len(y_train_values)
+            counts = np.array([np.count_nonzero(y_train == _class) for _class in self.classes_])
+            Ptr = counts / len(y_train)
 
         P = np.asarray(predictions, dtype=np.float64)
 
@@ -508,7 +508,7 @@ class FM(SoftLearnerQMixin, MatrixAdjustment):
     def _compute_confusion_matrix(self, posteriors, y_true, priors):
         for i, _class in enumerate(self.classes_):
             indices = (y_true == _class)
-            self.CM[:, i] = self._get_estimations(posteriors[indices] > priors)
+            self.CM[:, i] = self._get_estimations(posteriors[indices] > priors, y_true[indices])
         return self.CM
 
 
@@ -772,15 +772,15 @@ class MS(ThresholdAdjustment):
     .. [1] Forman, G. (2008). "Quantifying Counts and Costs via Classification",
            *Data Mining and Knowledge Discovery*, 17(2), 164-206.
     """
-    def _adjust(self, predictions, train_y_scores, train_y_values):
+    def _adjust(self, predictions, train_y_scores, y_train):
         positive_scores = train_y_scores[:, 1]
         
-        thresholds, tprs, fprs = evaluate_thresholds(train_y_values, positive_scores)
+        thresholds, tprs, fprs = evaluate_thresholds(y_train, positive_scores)
         thresholds, tprs, fprs = self.get_best_threshold(thresholds, tprs, fprs)
         
         prevs = []
         for thr, tpr, fpr in zip(thresholds, tprs, fprs):
-            cc_predictions = CC(threshold=thr).aggregate(predictions, train_y_values)
+            cc_predictions = CC(threshold=thr).aggregate(predictions, y_train)
             cc_predictions = list(cc_predictions.values())[1]
             
             if tpr - fpr == 0:

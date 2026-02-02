@@ -78,11 +78,11 @@ class KDEyML(BaseKDE):
     approaches for distribution matching and maximum likelihood estimation.
     """
 
-    def _precompute_training(self, train_predictions, train_y_values):
+    def _precompute_training(self, train_predictions, y_train):
         r"""
         Fit KDE models on class-specific training posterior predictions.
         """
-        super()._fit_kde_models(train_predictions, train_y_values)
+        super()._fit_kde_models(train_predictions, y_train)
 
     def _solve_prevalences(self, predictions):
         r"""
@@ -156,11 +156,11 @@ class KDEyHD(BaseKDE):
         self.montecarlo_trials = montecarlo_trials
         self.random_state = random_state
 
-    def _precompute_training(self, train_predictions, train_y_values):
+    def _precompute_training(self, train_predictions, y_train):
         """
         Precompute reference samples from class KDEs and their densities.
         """
-        super()._fit_kde_models(train_predictions, train_y_values)
+        super()._fit_kde_models(train_predictions, y_train)
         n_class = len(self._class_kdes)
         trials = int(self.montecarlo_trials)
         rng = check_random_state(self.random_state)
@@ -222,12 +222,12 @@ class KDEyCS(BaseKDE):
     density representations, as discussed by Moreo et al. (2023).
     """
 
-    def _precompute_training(self, train_predictions, train_y_values):
+    def _precompute_training(self, train_predictions, y_train):
         """
         Precompute kernel sums and Gram matrices needed for CS divergence evaluation.
         """
         P = np.atleast_2d(train_predictions)
-        y = np.asarray(train_y_values)
+        y = np.asarray(y_train)
         centers = [P[y == c] for c in self.classes_]
         counts = np.array([len(x) if len(x) > 0 else 1 for x in centers])
         h_eff = np.sqrt(2) * self.bandwidth

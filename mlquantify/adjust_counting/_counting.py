@@ -75,13 +75,13 @@ class CC(CrispLearnerQMixin, BaseCount):
         super().__init__(learner=learner)
         self.threshold = threshold
 
-    def aggregate(self, predictions, train_y_values=None):
-        predictions = validate_predictions(self, predictions, self.threshold, train_y_values)
+    def aggregate(self, predictions, y_train=None):
+        predictions = validate_predictions(self, predictions, self.threshold, y_train)
         
-        if train_y_values is None:
-            train_y_values = np.unique(predictions)
+        if y_train is None:
+            y_train = np.unique(predictions)
             
-        self.classes_ = check_classes_attribute(self, np.unique(train_y_values))
+        self.classes_ = check_classes_attribute(self, np.unique(y_train))
         class_counts = np.array([np.count_nonzero(predictions == _class) for _class in self.classes_])
         prevalences = class_counts / len(predictions)
 
@@ -134,12 +134,12 @@ class PCC(SoftLearnerQMixin, BaseCount):
     def __init__(self, learner=None):
         super().__init__(learner=learner)
 
-    def aggregate(self, predictions, train_y_values=None):
+    def aggregate(self, predictions, y_train=None):
         predictions = validate_predictions(self, predictions)
         
         # Handle categorical predictions (1D array with class labels)
         if predictions.ndim == 1 and not np.issubdtype(predictions.dtype, (np.floating, np.integer)):
-            if train_y_values is None:
+            if y_train is None:
                 y_values = np.unique(predictions)
 
             self.classes_ = check_classes_attribute(self, np.unique(y_values))

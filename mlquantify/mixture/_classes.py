@@ -46,9 +46,9 @@ class AggregativeMixture(SoftLearnerQMixin, AggregationMixin, BaseMixture):
         
         if learner_fitted:
             train_predictions = getattr(self.learner, learner_function)(X)
-            train_y_values = y
+            y_train = y
         else:
-            train_predictions, train_y_values = apply_cross_validation(
+            train_predictions, y_train = apply_cross_validation(
                 self.learner,
                 X,
                 y,
@@ -60,34 +60,34 @@ class AggregativeMixture(SoftLearnerQMixin, AggregationMixin, BaseMixture):
             )
             
         self.train_predictions = train_predictions
-        self.train_y_values = train_y_values
+        self.y_train = y_train
 
-        self._precompute_training(train_predictions, train_y_values)
+        self._precompute_training(train_predictions, y_train)
         return self
 
-    def _precompute_training(self, train_predictions, train_y_values):
+    def _precompute_training(self, train_predictions, y_train):
         """
         Fit learner and store score distributions for positive and negative classes.
         """ 
         # Store scores for positive and negative classes
-        self.pos_scores = train_predictions[train_y_values == self.classes_[1], 1]
-        self.neg_scores = train_predictions[train_y_values == self.classes_[0], 1]
+        self.pos_scores = train_predictions[y_train == self.classes_[1], 1]
+        self.neg_scores = train_predictions[y_train == self.classes_[0], 1]
         self._precomputed = True
         return self
     
     def _predict(self, X):
         """Predict class prevalences for the given data."""
         predictions = getattr(self.learner, _get_learner_function(self))(X)
-        prevalences = self.aggregate(predictions, self.train_predictions, self.train_y_values)
+        prevalences = self.aggregate(predictions, self.train_predictions, self.y_train)
 
         return prevalences
     
-    def aggregate(self, predictions, train_predictions, train_y_values):
+    def aggregate(self, predictions, train_predictions, y_train):
         predictions = validate_predictions(self, predictions)
-        self.classes_ = check_classes_attribute(self, np.unique(train_y_values))
+        self.classes_ = check_classes_attribute(self, np.unique(y_train))
 
         if not self._precomputed:
-            self._precompute_training(train_predictions, train_y_values)
+            self._precompute_training(train_predictions, y_train)
             self._precomputed = True
         
         pos_test_scores = predictions[:, 1]

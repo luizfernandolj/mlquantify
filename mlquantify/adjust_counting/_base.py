@@ -235,13 +235,13 @@ class BaseAdjustCount(AggregationMixin, BaseQuantifier):
         prevalences = self.aggregate(predictions, self.train_predictions, self.train_y_values)
         return prevalences
 
-    def aggregate(self, predictions, train_predictions, y_train_values):
+    def aggregate(self, predictions, train_predictions, y_train):
         """Aggregate predictions and apply matrix- or rate-based bias correction."""
-        self.classes_ = check_classes_attribute(self, np.unique(y_train_values))
+        self.classes_ = check_classes_attribute(self, np.unique(y_train))
         
         predictions = validate_predictions(self, predictions)
         train_predictions = validate_predictions(self, train_predictions)
         
-        prevalences = self._adjust(predictions, train_predictions, y_train_values)
+        prevalences = self._adjust(predictions, train_predictions, y_train)
         prevalences = validate_prevalences(self, prevalences, self.classes_)
         return prevalences
