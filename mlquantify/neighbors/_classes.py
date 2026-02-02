@@ -128,6 +128,7 @@ class PWK(BaseQuantifier):
         prevalences : array of shape (n_classes,)
             Predicted class prevalences.
         """
+        X = validate_data(self, X, ensure_2d=True)
         prevalences = self.cc.predict(X)
         prevalences = validate_prevalences(self, prevalences, self.classes_)
         return prevalences
