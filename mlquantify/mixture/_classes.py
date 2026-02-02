@@ -254,7 +254,7 @@ class HDy(AggregativeMixture):
             Distance corresponding to the best mixture weight.
         """
         
-        bins_size = np.arange(10, 110, 11)
+        bins_size =  np.linspace(10, 110, 11)
         alpha_values = np.round(np.linspace(0, 1, 101), 2)
         
         alphas, self.distances = [], []
@@ -411,7 +411,7 @@ class HDx(BaseMixture):
     def __init__(self, bins_size=None, strategy="ovr"):
         super().__init__()
         if bins_size is None:
-            bins_size = np.append(np.linspace(2, 20, 10), 30)
+            bins_size = np.linspace(10, 110, 11)
 
         self.bins_size = bins_size
         self.neg_features = None

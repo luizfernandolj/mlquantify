@@ -63,7 +63,7 @@ class PWK(BaseQuantifier):
         "leaf_size": [Interval(1, None, inclusive_right=False)],
         "p": [Interval(1, None, inclusive_right=False)],
         "metric_params": [dict, type(None)],
-        "n_jobs": [Interval(1, None, inclusive_right=False), type(None)],
+        "n_jobs": [Interval(-1, None, inclusive_right=False), type(None)],
     }
     
     def __init__(self,

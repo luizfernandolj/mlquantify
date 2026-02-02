@@ -107,7 +107,7 @@ class GridSearchQ(MetaquantifierMixin, BaseQuantifier):
         "scoring": [CallableConstraint()],
         "refit": [bool],
         "val_split": [Interval(0.0, 1.0, inclusive_left=False, inclusive_right=False)],
-        "n_jobs": [Interval(1, None), None],
+        "n_jobs": [Interval(-1, None), None],
         "random_seed": [Interval(0, None), None],
         "timeout": [Interval(-1, None)],
         "verbose": [bool]
