@@ -13,7 +13,7 @@ see :ref:`counters_module` for an overview of the base counters for quantificati
 
 Currently, there are two types of adjustment methods implemented:
 
-1. **Threshold Adjustment Methods**: These methods adjust the decision threshold of the classifier to optimize prevalence estimation. Examples include Adjusted Classify and Count (ACC) and its probabilistic counterpart PACC.
+1. **Threshold Adjustment Methods**: These methods adjust the decision threshold of the classifier to optimize prevalence estimation. Examples include Adjusted Count (TAC) and its threshold selection policies (TX, TMAX, T50, MS, MS2).
 2. **Matrix Adjustment Methods**: These methods use a confusion matrix derived from the classifier's performance on a validation set to adjust the estimated prevalences. Examples include the EM-based methods and other matrix inversion techniques.
 
 
@@ -24,11 +24,11 @@ Threshold Adjustment
 Threshold-based adjustment methods correct the bias of :class:`CC` by using the classifier's **True Positive Rate (TPR)** and **False Positive Rate (FPR)**.  
 They are mainly used for `binary` quantification tasks.
 
-**Adjusted Classify and Count (ACC) Equation**
+**Threshold Adjusted Count (TAC) Equation**
 
 .. math::
 
-   \hat{p}^U_{ACC}(⊕) = \frac{\hat{p}^U_{CC}(⊕) - FPR_L}{TPR_L - FPR_L}
+   \hat{p}^U_{TAC}(⊕) = \frac{\hat{p}^U_{CC}(⊕) - FPR_L}{TPR_L - FPR_L}
 
 :caption: *Corrected prevalence estimate using classifier error rates*
 
@@ -46,11 +46,11 @@ Different *threshold methods* vary in how they choose the classifier cutoff :mat
 +----------------------------+------------------------------------------------------+-----------------------------------------+
 | **Method**                 | **Threshold Choice**                                 | **Goal**                                |
 +----------------------------+------------------------------------------------------+-----------------------------------------+
-| :class:`ACC`               | Fixed threshold :math:`\tau = 0.5`                   | Simple baseline adjustment              |
+| :class:`TAC`               | Fixed threshold :math:`\tau = 0.5`                   | Simple baseline adjustment              |
 +----------------------------+------------------------------------------------------+-----------------------------------------+
-| :class:`X_method`          | Threshold where :math:`\text{FPR} = 1 - \text{TPR}`  | Avoids unstable prediction tails        |
+| :class:`TX`          | Threshold where :math:`\text{FPR} = 1 - \text{TPR}`  | Avoids unstable prediction tails        |
 +----------------------------+------------------------------------------------------+-----------------------------------------+
-| :class:`MAX`               | Threshold maximizing :math:`\text{TPR} - \text{FPR}` | Improves numerical stability            |
+| :class:`TMAX`               | Threshold maximizing :math:`\text{TPR} - \text{FPR}` | Improves numerical stability            |
 +----------------------------+------------------------------------------------------+-----------------------------------------+
 | :class:`T50`               | Threshold where :math:`\text{TPR} = 0.5`             | Uses central part of ROC curve          |
 +----------------------------+------------------------------------------------------+-----------------------------------------+
@@ -107,22 +107,22 @@ Here:
 
 [Plot Idea: Matrix illustration showing how confusion corrections map to estimated prevalences]
 
-Generalized Adjusted Classify and Count (GAC) and Generalized Probabilistic Adjusted Classify and Count (GPAC)
+Adjusted Count (AC) and Probabilistic Adjusted Count (PAC)
 --------------------------------------------------------------------------------------------------------------
 
 .. code-block:: python
 
-   from mlquantify.adjust_counting import GAC, GPAC
+   from mlquantify.adjust_counting import AC, PAC
    from sklearn.linear_model import LogisticRegression
-   q = GAC(learner=LogisticRegression())
+   q = AC(learner=LogisticRegression())
    q.fit(X_train, y_train)
    q.predict(X_test)
    # -> {0: 0.48, 1: 0.52}
 
-Both :class:`GAC` and :class:`GPAC` are solved using this linear system:
+Both :class:`AC` and :class:`PAC` are solved using this linear system:
 
-- GAC uses hard classifier decisions (confusion matrix).  
-- GPAC uses soft probabilities :math:`P(y=l|x)` .
+- AC uses hard classifier decisions (confusion matrix).  
+- PAC uses soft probabilities :math:`P(y=l|x)` .
 
 
 

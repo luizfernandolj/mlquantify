@@ -512,16 +512,8 @@
 <dt class="sig sig-object py" id="mlquantify.adjust_counting.PCC">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">mlquantify.adjust_counting.</span></span><span class="sig-name descname"><span class="pre">PCC</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">learner</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/luizfernandolj/mlquantify/tree/master/mlquantify/adjust_counting.py"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mlquantify.adjust_counting.PCC" title="Link to this definition">#</a></dt>
 <dd><p>Probabilistic Classify and Count (PCC) quantifier.</p>
-<p>Implements the Probabilistic Classify and Count method for quantification as described in:
-[1] Forman, G. (2005). <em>Counting Positives Accurately Despite Inaccurate Classification.</em></p>
-<blockquote>
-<div><p>ECML, pp. 564-575.</p>
-</div></blockquote>
-<dl class="simple">
-<dt>[2] Forman, G. (2008). <em>Quantifying Counts and Costs via Classification.</em></dt><dd><p>Data Mining and Knowledge Discovery, 17(2), 164-206.</p>
-</dd>
-</dl>
-<dl class="field-list simple">
+<p>Implements the Probabilistic Classify and Count method for quantification as described in <a class="reference internal" href="#ra6e8084077c2-1" id="id1">[1]</a>, <a class="reference internal" href="#ra6e8084077c2-2" id="id2">[2]</a>:</p>
+<dl class="field-list">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><dl class="simple">
 <dt><strong>learner</strong><span class="classifier">estimator, optional</span></dt><dd><p>A supervised learning estimator with fit and predict_proba methods.
@@ -530,10 +522,21 @@ If None, it is expected that will be used the aggregate method directly.</p>
 </dl>
 </dd>
 <dt class="field-even">Attributes<span class="colon">:</span></dt>
-<dd class="field-even"><dl class="simple">
+<dd class="field-even"><dl>
 <dt><strong>learner</strong><span class="classifier">estimator</span></dt><dd><p>Underlying classification model.</p>
 </dd>
 <dt><strong>classes</strong><span class="classifier">ndarray of shape (n_classes,)</span></dt><dd><p>Unique class labels observed during training.</p>
+</dd>
+<dt><strong>.. dropdown:: References</strong></dt><dd><div role="list" class="citation-list">
+<div class="citation" id="ra6e8084077c2-1" role="doc-biblioentry">
+<span class="label"><span class="fn-bracket">[</span><a role="doc-backlink" href="#id1">1</a><span class="fn-bracket">]</span></span>
+<p>Forman, G. (2005). <em>Counting Positives Accurately Despite Inaccurate Classification.</em> ECML, pp. 564-575.</p>
+</div>
+<div class="citation" id="ra6e8084077c2-2" role="doc-biblioentry">
+<span class="label"><span class="fn-bracket">[</span><a role="doc-backlink" href="#id2">2</a><span class="fn-bracket">]</span></span>
+<p>Forman, G. (2008). <em>Quantifying Counts and Costs via Classification.</em> Data Mining and Knowledge Discovery, 17(2), 164-206.</p>
+</div>
+</div>
 </dd>
 </dl>
 </dd>
@@ -548,16 +551,37 @@ If None, it is expected that will be used the aggregate method directly.</p>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">q</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">q</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">X</span><span class="p">)</span>
 <span class="go">{0: 0.48, 1: 0.52}</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">q2</span> <span class="o">=</span> <span class="n">PCC</span><span class="p">()</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">predictions</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">rand</span><span class="p">(</span><span class="mi">200</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">q2</span><span class="o">.</span><span class="n">aggregate</span><span class="p">(</span><span class="n">predictions</span><span class="p">)</span>
-<span class="go">{0: 0.50, 1: 0.50}</span>
 </pre></div>
 </div>
 <dl class="py method">
 <dt class="sig sig-object py" id="mlquantify.adjust_counting.PCC.aggregate">
 <span class="sig-name descname"><span class="pre">aggregate</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">predictions</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y_train</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/luizfernandolj/mlquantify/tree/master/mlquantify/adjust_counting.py"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mlquantify.adjust_counting.PCC.aggregate" title="Link to this definition">#</a></dt>
 <dd><p>Aggregate predictions into class prevalence estimates.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>predictions</strong><span class="classifier">ndarray of shape (n_samples, n_classes)</span></dt><dd><p>Learner predictions on test data. Can be probabilities (n_samples, n_classes) or class labels (n_samples,).</p>
+</dd>
+<dt><strong>y_train</strong><span class="classifier">ndarray of shape (n_samples,)</span></dt><dd><p>True class labels of the training data. None by default.</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt>ndarray of shape (n_classes,)</dt><dd><p>Class prevalence estimates.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span><span class="w"> </span><span class="nn">mlquantify.adjust_counting</span><span class="w"> </span><span class="kn">import</span> <span class="n">PCC</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">q</span> <span class="o">=</span> <span class="n">PCC</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">predictions</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">rand</span><span class="p">(</span><span class="mi">200</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">q</span><span class="o">.</span><span class="n">aggregate</span><span class="p">(</span><span class="n">predictions</span><span class="p">)</span>
+<span class="go">{0: 0.50, 1: 0.50}</span>
+</pre></div>
+</div>
 </dd></dl>
 
 <dl class="py method">

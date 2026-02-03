@@ -7,19 +7,19 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
-<meta property="og:title" content="1.1. Counters For Quantification" />
+<meta property="og:title" content="1.3. Counters For Quantification" />
 <meta property="og:type" content="website" />
 <meta property="og:url" content="modules/counters.html" />
 <meta property="og:site_name" content="mlquantify" />
 <meta property="og:description" content="To deal with problems of quantification, a straightforward approach is to count the number of items predicted to belong to each class in the unlabeled set. This is the basis of the Classify and Cou..." />
 <meta property="og:image:width" content="1146" />
 <meta property="og:image:height" content="600" />
-<meta property="og:image" content="_images/social_previews/summary_modules_counters_3831ae94.png" />
+<meta property="og:image" content="_images/social_previews/summary_modules_counters_7527dc7d.png" />
 <meta property="og:image:alt" content="To deal with problems of quantification, a straightforward approach is to count the number of items predicted to belong to each class in the unlabeled set. This is the basis of the Classify and Cou..." />
 <meta name="description" content="To deal with problems of quantification, a straightforward approach is to count the number of items predicted to belong to each class in the unlabeled set. This is the basis of the Classify and Cou..." />
 <meta name="twitter:card" content="summary_large_image" />
 
-    <title>1.1. Counters For Quantification &#8212; mlquantify — Quantification in Python</title>
+    <title>1.3. Counters For Quantification &#8212; mlquantify — Quantification in Python</title>
   
   
   
@@ -64,8 +64,8 @@
     <link rel="canonical" href="https://luizfernandolj.github.io/mlquantify/modules/counters.html" />
     <link rel="icon" href="../_static/favicon.ico"/>
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="1.2. Adjust Counting" href="adjust_counting.html" />
-    <link rel="prev" title="1. Aggregative Quantification" href="../aggregative_quantification.html" />
+    <link rel="next" title="1.4. Adjust Counting" href="adjust_counting.html" />
+    <link rel="prev" title="1.1. Using Aggregative Quantification Methods" href="using_aggregative.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
   <meta name="docsearch:version" content="" />
@@ -348,12 +348,14 @@
   <p class="bd-links__title" role="heading" aria-level="1">Section Navigation</p>
   <div class="bd-toc-item navbar-nav"><ul class="current nav bd-sidenav">
 <li class="toctree-l1 current active has-children"><a class="reference internal" href="../aggregative_quantification.html">1.  Aggregative Quantification</a><details open="open"><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul class="current">
-<li class="toctree-l2 current active"><a class="current reference internal" href="#">1.1. Counters For Quantification</a></li>
-<li class="toctree-l2"><a class="reference internal" href="adjust_counting.html">1.2. Adjust Counting</a></li>
-<li class="toctree-l2"><a class="reference internal" href="likelihood.html">1.3. Likelihood-Based Quantification</a></li>
-<li class="toctree-l2"><a class="reference internal" href="mixture_models.html">1.4. Mixture Models</a></li>
-<li class="toctree-l2"><a class="reference internal" href="neighbors.html">1.5. Nearest Neighbors</a></li>
-<li class="toctree-l2"><a class="reference internal" href="density.html">1.6. Kernel Density Estimation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="using_aggregative.html">1.1. Using Aggregative Quantification Methods</a></li>
+
+<li class="toctree-l2 current active"><a class="current reference internal" href="#">1.3. Counters For Quantification</a></li>
+<li class="toctree-l2"><a class="reference internal" href="adjust_counting.html">1.4. Adjust Counting</a></li>
+<li class="toctree-l2"><a class="reference internal" href="likelihood.html">1.5. Likelihood-Based Quantification</a></li>
+<li class="toctree-l2"><a class="reference internal" href="mixture_models.html">1.6. Mixture Models</a></li>
+<li class="toctree-l2"><a class="reference internal" href="neighbors.html">1.7. Nearest Neighbors</a></li>
+<li class="toctree-l2"><a class="reference internal" href="density.html">1.8. Kernel Density Estimation</a></li>
 </ul>
 </details></li>
 <li class="toctree-l1 has-children"><a class="reference internal" href="../non_aggregative_quantification.html">2.  Non Aggregative Quantification</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
@@ -414,7 +416,7 @@
     
     <li class="breadcrumb-item"><a href="../aggregative_quantification.html" class="nav-link"><span class="section-number">1. </span>Aggregative Quantification</a></li>
     
-    <li class="breadcrumb-item active" aria-current="page"><span class="ellipsis"><span class="section-number">1.1. </span>Counters For Quantification</span></li>
+    <li class="breadcrumb-item active" aria-current="page"><span class="ellipsis"><span class="section-number">1.3. </span>Counters For Quantification</span></li>
   </ul>
 </nav>
 </div>
@@ -432,10 +434,10 @@
                 <article class="bd-article">
                   
   <section id="counters-for-quantification">
-<span id="counters-module"></span><h1><span class="section-number">1.1. </span>Counters For Quantification<a class="headerlink" href="#counters-for-quantification" title="Link to this heading">#</a></h1>
+<span id="counters-module"></span><h1><span class="section-number">1.3. </span>Counters For Quantification<a class="headerlink" href="#counters-for-quantification" title="Link to this heading">#</a></h1>
 <p>To deal with problems of quantification, a straightforward approach is to count the number of items predicted to belong to each class in the unlabeled set. This is the basis of the <strong>Classify and Count</strong> family of methods.</p>
 <section id="classify-and-count">
-<h2><span class="section-number">1.1.1. </span>Classify and Count<a class="headerlink" href="#classify-and-count" title="Link to this heading">#</a></h2>
+<h2><span class="section-number">1.3.1. </span>Classify and Count<a class="headerlink" href="#classify-and-count" title="Link to this heading">#</a></h2>
 <p>The <strong>Classify and Count</strong> method, or <a class="reference internal" href="generated/mlquantify.adjust_counting.CC.html#mlquantify.adjust_counting.CC" title="mlquantify.adjust_counting.CC"><code class="xref py py-class docutils literal notranslate"><span class="pre">CC</span></code></a> is the simplest baseline.
 It trains a hard classifier <span class="math notranslate nohighlight">\(h\)</span> on labeled data <span class="math notranslate nohighlight">\(L\)</span> , applies it to an unlabeled set <span class="math notranslate nohighlight">\(U\)</span> , and counts how many samples belong to each predicted class.</p>
 <p><strong>Example</strong></p>
@@ -456,7 +458,7 @@ It trains a hard classifier <span class="math notranslate nohighlight">\(h\)</sp
 </div>
 </section>
 <section id="probabilistic-classify-and-count">
-<h2><span class="section-number">1.1.2. </span>Probabilistic Classify and Count<a class="headerlink" href="#probabilistic-classify-and-count" title="Link to this heading">#</a></h2>
+<h2><span class="section-number">1.3.2. </span>Probabilistic Classify and Count<a class="headerlink" href="#probabilistic-classify-and-count" title="Link to this heading">#</a></h2>
 <p>The <strong>Probabilistic Classify and Count</strong> or <a class="reference internal" href="generated/mlquantify.adjust_counting.PCC.html#mlquantify.adjust_counting.PCC" title="mlquantify.adjust_counting.PCC"><code class="xref py py-class docutils literal notranslate"><span class="pre">PCC</span></code></a> variant uses the <em>predicted probabilities</em> from a soft classifier instead of hard labels.
 This makes it less sensitive to uncertain predictions.</p>
 <p>[Plot Idea: A plot comparing probabilities per sample and their averaged mean per class]</p>
@@ -487,12 +489,12 @@ This makes it less sensitive to uncertain predictions.</p>
     <div class="footer-article-item">
 <div class="prev-next-area">
     <a class="left-prev"
-       href="../aggregative_quantification.html"
+       href="using_aggregative.html"
        title="previous page">
       <i class="fa-solid fa-angle-left"></i>
       <div class="prev-next-info">
         <p class="prev-next-subtitle">previous</p>
-        <p class="prev-next-title"><span class="section-number">1. </span>Aggregative Quantification</p>
+        <p class="prev-next-title"><span class="section-number">1.1. </span>Using Aggregative Quantification Methods</p>
       </div>
     </a>
     <a class="right-next"
@@ -500,7 +502,7 @@ This makes it less sensitive to uncertain predictions.</p>
        title="next page">
       <div class="prev-next-info">
         <p class="prev-next-subtitle">next</p>
-        <p class="prev-next-title"><span class="section-number">1.2. </span>Adjust Counting</p>
+        <p class="prev-next-title"><span class="section-number">1.4. </span>Adjust Counting</p>
       </div>
       <i class="fa-solid fa-angle-right"></i>
     </a>
@@ -527,8 +529,8 @@ This makes it less sensitive to uncertain predictions.</p>
   </div>
   <nav class="bd-toc-nav page-toc" aria-labelledby="pst-page-navigation-heading-2">
     <ul class="visible nav section-nav flex-column">
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#classify-and-count">1.1.1. Classify and Count</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#probabilistic-classify-and-count">1.1.2. Probabilistic Classify and Count</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#classify-and-count">1.3.1. Classify and Count</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#probabilistic-classify-and-count">1.3.2. Probabilistic Classify and Count</a></li>
 </ul>
   </nav></div>
 

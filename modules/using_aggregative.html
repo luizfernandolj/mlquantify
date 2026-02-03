@@ -7,19 +7,19 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
-<meta property="og:title" content="1.5. Likelihood-Based Quantification" />
+<meta property="og:title" content="1.1. Using Aggregative Quantification Methods" />
 <meta property="og:type" content="website" />
-<meta property="og:url" content="modules/likelihood.html" />
+<meta property="og:url" content="modules/using_aggregative.html" />
 <meta property="og:site_name" content="mlquantify" />
-<meta property="og:description" content="Likelihood-based methods (Maximum Likelihood) aim to estimate class prevalences in the test set U, assuming that the class distribution (priors) has changed, but the probability densities within ea..." />
+<meta property="og:description" content="This guide explains how to use the aggregative quantification methods in mlquantify. General Concept: Aggregative quantification refers to methods that estimate the prevalence of classes in a datas..." />
 <meta property="og:image:width" content="1146" />
 <meta property="og:image:height" content="600" />
-<meta property="og:image" content="_images/social_previews/summary_modules_likelihood_77412af5.png" />
-<meta property="og:image:alt" content="Likelihood-based methods (Maximum Likelihood) aim to estimate class prevalences in the test set U, assuming that the class distribution (priors) has changed, but the probability densities within ea..." />
-<meta name="description" content="Likelihood-based methods (Maximum Likelihood) aim to estimate class prevalences in the test set U, assuming that the class distribution (priors) has changed, but the probability densities within ea..." />
+<meta property="og:image" content="_images/social_previews/summary_modules_using_aggregative_2f64d51a.png" />
+<meta property="og:image:alt" content="This guide explains how to use the aggregative quantification methods in mlquantify. General Concept: Aggregative quantification refers to methods that estimate the prevalence of classes in a datas..." />
+<meta name="description" content="This guide explains how to use the aggregative quantification methods in mlquantify. General Concept: Aggregative quantification refers to methods that estimate the prevalence of classes in a datas..." />
 <meta name="twitter:card" content="summary_large_image" />
 
-    <title>1.5. Likelihood-Based Quantification &#8212; mlquantify — Quantification in Python</title>
+    <title>1.1. Using Aggregative Quantification Methods &#8212; mlquantify — Quantification in Python</title>
   
   
   
@@ -59,13 +59,12 @@
     <script src="../_static/clipboard.min.js?v=a7894cd8"></script>
     <script src="../_static/copybutton.js?v=f281be69"></script>
     <script src="../_static/design-tabs.js?v=f930bc37"></script>
-    <script async="async" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
-    <script>DOCUMENTATION_OPTIONS.pagename = 'modules/likelihood';</script>
-    <link rel="canonical" href="https://luizfernandolj.github.io/mlquantify/modules/likelihood.html" />
+    <script>DOCUMENTATION_OPTIONS.pagename = 'modules/using_aggregative';</script>
+    <link rel="canonical" href="https://luizfernandolj.github.io/mlquantify/modules/using_aggregative.html" />
     <link rel="icon" href="../_static/favicon.ico"/>
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="1.6. Mixture Models" href="mixture_models.html" />
-    <link rel="prev" title="1.4. Adjust Counting" href="adjust_counting.html" />
+    <link rel="next" title="1.3. Counters For Quantification" href="counters.html" />
+    <link rel="prev" title="1. Aggregative Quantification" href="../aggregative_quantification.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
   <meta name="docsearch:version" content="" />
@@ -348,11 +347,11 @@
   <p class="bd-links__title" role="heading" aria-level="1">Section Navigation</p>
   <div class="bd-toc-item navbar-nav"><ul class="current nav bd-sidenav">
 <li class="toctree-l1 current active has-children"><a class="reference internal" href="../aggregative_quantification.html">1.  Aggregative Quantification</a><details open="open"><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul class="current">
-<li class="toctree-l2"><a class="reference internal" href="using_aggregative.html">1.1. Using Aggregative Quantification Methods</a></li>
+<li class="toctree-l2 current active"><a class="current reference internal" href="#">1.1. Using Aggregative Quantification Methods</a></li>
 
 <li class="toctree-l2"><a class="reference internal" href="counters.html">1.3. Counters For Quantification</a></li>
 <li class="toctree-l2"><a class="reference internal" href="adjust_counting.html">1.4. Adjust Counting</a></li>
-<li class="toctree-l2 current active"><a class="current reference internal" href="#">1.5. Likelihood-Based Quantification</a></li>
+<li class="toctree-l2"><a class="reference internal" href="likelihood.html">1.5. Likelihood-Based Quantification</a></li>
 <li class="toctree-l2"><a class="reference internal" href="mixture_models.html">1.6. Mixture Models</a></li>
 <li class="toctree-l2"><a class="reference internal" href="neighbors.html">1.7. Nearest Neighbors</a></li>
 <li class="toctree-l2"><a class="reference internal" href="density.html">1.8. Kernel Density Estimation</a></li>
@@ -416,7 +415,7 @@
     
     <li class="breadcrumb-item"><a href="../aggregative_quantification.html" class="nav-link"><span class="section-number">1. </span>Aggregative Quantification</a></li>
     
-    <li class="breadcrumb-item active" aria-current="page"><span class="ellipsis"><span class="section-number">1.5. </span>Likelihood-Based Quantification</span></li>
+    <li class="breadcrumb-item active" aria-current="page"><span class="ellipsis"><span class="section-number">1.1. </span>Using Aggregative Quantification Methods</span></li>
   </ul>
 </nav>
 </div>
@@ -433,85 +432,47 @@
 <div id="searchbox"></div>
                 <article class="bd-article">
                   
-  <section id="likelihood-based-quantification">
-<span id="likelihood"></span><h1><span class="section-number">1.5. </span>Likelihood-Based Quantification<a class="headerlink" href="#likelihood-based-quantification" title="Link to this heading">#</a></h1>
-<p>Likelihood-based methods (Maximum Likelihood) aim to estimate class prevalences in the test set <span class="math notranslate nohighlight">\(U\)</span>, assuming that the class distribution (priors) has changed, but the probability densities within each class (<span class="math notranslate nohighlight">\(P(X|Y)\)</span>) have remained the same (Prior Probability Shift).</p>
-<section id="maximum-likelihood-prevalence-estimation-mlpe">
-<h2><span class="section-number">1.5.1. </span>Maximum Likelihood Prevalence Estimation (MLPE)<a class="headerlink" href="#maximum-likelihood-prevalence-estimation-mlpe" title="Link to this heading">#</a></h2>
-<p>The <strong>Maximum Likelihood Prevalence Estimation (MLPE)</strong>, defined in <code class="xref py py-class docutils literal notranslate"><span class="pre">MLPE</span></code>, is the simplest strategy and is considered a trivial starting point or baseline. It naively assumes that the class distribution in the test set (<span class="math notranslate nohighlight">\(U\)</span>) is the same as in the training set (<span class="math notranslate nohighlight">\(L\)</span>).</p>
-<p>MLPE is not a “true” quantification method but rather a trivial strategy. It simply takes the observed prevalence in the training set and uses it as the estimate for the test set.
-If there were no dataset shift (change in distribution), MLPE would be the optimal quantification strategy.</p>
+  <section id="using-aggregative-quantification-methods">
+<span id="using-aggregative"></span><h1><span class="section-number">1.1. </span>Using Aggregative Quantification Methods<a class="headerlink" href="#using-aggregative-quantification-methods" title="Link to this heading">#</a></h1>
+<p>This guide explains how to use the aggregative quantification methods in mlquantify.</p>
 </section>
-<section id="expectation-maximization-for-quantification-emq">
-<h2><span class="section-number">1.5.2. </span>Expectation Maximization for Quantification (EMQ)<a class="headerlink" href="#expectation-maximization-for-quantification-emq" title="Link to this heading">#</a></h2>
-<p>The <strong>Expectation Maximization for Quantification (EMQ)</strong>, defined in <a class="reference internal" href="generated/mlquantify.likelihood.EMQ.html#mlquantify.likelihood.EMQ" title="mlquantify.likelihood.EMQ"><code class="xref py py-class docutils literal notranslate"><span class="pre">EMQ</span></code></a> (also known as <strong>SLD</strong> — Saerens, Latinne, Decaestecker) <a class="footnote-reference brackets" href="#id5" id="id1" role="doc-noteref"><span class="fn-bracket">[</span>1<span class="fn-bracket">]</span></a>, is an transductive algorithm that uses a transductive correction of posterior probabilities to estimate class prevalences in the test set <span class="math notranslate nohighlight">\(U\)</span> by maximizing the likelihood of the observed data <a class="footnote-reference brackets" href="#id6" id="id2" role="doc-noteref"><span class="fn-bracket">[</span>2<span class="fn-bracket">]</span></a>.</p>
-<p>The SLD algorithm is based on the Expectation-Maximization (EM) framework, which is an iterative method for finding maximum likelihood estimates in models with latent variables. The <a class="reference internal" href="generated/mlquantify.likelihood.EMQ.html#mlquantify.likelihood.EMQ" title="mlquantify.likelihood.EMQ"><code class="xref py py-class docutils literal notranslate"><span class="pre">EMQ</span></code></a> works by:</p>
-<ul class="simple">
-<li><p><strong>Adjusting classifier outputs</strong>: It adjusts the outputs of a probabilistic classifier to correspond to new prior probabilities (prevalences) without the need to retrain the classification model. As a byproduct of this process, it also estimates the new prior probabilities.</p></li>
-<li><p><strong>Iterative refinement</strong>: EMQ is a mutually recursive process that iterates by incrementally updating posterior probabilities (<strong>E-Step</strong>) and then class prevalences (<strong>M-Step</strong>) until the process converges.</p></li>
-<li><p><strong>Convergence guarantee</strong>: The algorithm converges to a global maximum of the likelihood estimate, as the likelihood function is concave and bounded.</p></li>
-</ul>
-<figure class="align-center" id="id7">
-<a class="reference internal image-reference" href="../_images/expectation-maximization.png"><img alt="Expectation Maximization illustration" src="../_images/expectation-maximization.png" style="width: 80%;" />
-</a>
-<figcaption>
-<p><span class="caption-text"><em>Expectation Maximization Illustration for a binary scenario (looking only at the positive class)</em></span><a class="headerlink" href="#id7" title="Link to this image">#</a></p>
-</figcaption>
-</figure>
-<p>The method starts at <strong>Iteration 0</strong>, where the initial estimated prevalence <span class="math notranslate nohighlight">\(\hat{p}^{(0)}_U(y)\)</span> is defined as the training set prevalence <span class="math notranslate nohighlight">\(p_L(y)\)</span> (i.e., the MLPE estimate, or priors). From there, EMQ uses iteration to adjust this initial estimate.</p>
-<details class="sd-sphinx-override sd-dropdown sd-card sd-mb-3">
-<summary class="sd-summary-title sd-card-header">
-<span class="sd-summary-text">Mathematical details - EMQ Algorithm</span><span class="sd-summary-state-marker sd-summary-chevron-right"><svg version="1.1" width="1.5em" height="1.5em" class="sd-octicon sd-octicon-chevron-right" viewBox="0 0 24 24" aria-hidden="true"><path d="M8.72 18.78a.75.75 0 0 1 0-1.06L14.44 12 8.72 6.28a.751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018l6.25 6.25a.75.75 0 0 1 0 1.06l-6.25 6.25a.75.75 0 0 1-1.06 0Z"></path></svg></span></summary><div class="sd-summary-content sd-card-body docutils">
-<p class="sd-card-text">EMQ iterates between the E and M steps, based on:</p>
-<ul class="simple">
-<li><p class="sd-card-text"><span class="math notranslate nohighlight">\(\hat{p}^{(s)}_U(\omega_i)\)</span>: Estimated prevalence of class <span class="math notranslate nohighlight">\(\omega_i\)</span> at iteration <span class="math notranslate nohighlight">\(s\)</span>.</p></li>
-<li><p class="sd-card-text"><span class="math notranslate nohighlight">\(\hat{p}_L(\omega_i)\)</span>: Prior probability of class <span class="math notranslate nohighlight">\(\omega_i\)</span> in the source domain (training).</p></li>
-<li><p class="sd-card-text"><span class="math notranslate nohighlight">\(\hat{p}_L(\omega_i \mid x_k)\)</span>: Posterior probability of <span class="math notranslate nohighlight">\(x_k\)</span> belonging to class <span class="math notranslate nohighlight">\(\omega_i\)</span>, provided by the calibrated classifier.</p></li>
-</ul>
-<p class="sd-card-text"><strong>Initialization (Iteration s=0)</strong></p>
-<p class="sd-card-text">For each class <span class="math notranslate nohighlight">\(y \in Y\)</span>:</p>
-<div class="math notranslate nohighlight">
-\[\hat{p}^{(0)}_U(y) \leftarrow p_L(y)\]</div>
-<p class="sd-card-text"><strong>E-Step (Expectation) - Posterior Probability Correction</strong></p>
-<p class="sd-card-text">Calculates the corrected posterior probability, <span class="math notranslate nohighlight">\(p^{(s)}(\omega_i \mid x_k)\)</span>. This step adjusts the classifier output probabilities using the ratio between the new estimated prevalence and the training prevalence:</p>
-<div class="math notranslate nohighlight">
-\[p^{(s)}(\omega_i \mid x_k) \leftarrow \frac{ \frac{\hat{p}^{(s-1)}_U(\omega_i)}{\hat{p}_L(\omega_i)} \cdot p^{(0)}(\omega_i \mid x_k) }{ \sum_{\omega_j \in Y} \frac{\hat{p}^{(s-1)}_U(\omega_j)}{\hat{p}_L(\omega_j)} \cdot p^{(0)}(\omega_j \mid x_k) }\]</div>
-<p class="sd-card-text"><strong>M-Step (Maximization) - Prevalence Update</strong></p>
-<p class="sd-card-text">The new prevalence estimate (<span class="math notranslate nohighlight">\(\hat{p}^{(s)}_U(\omega_i)\)</span>) is the average of the corrected posterior probabilities over all <span class="math notranslate nohighlight">\(N\)</span> samples in the test set <span class="math notranslate nohighlight">\(U\)</span>:</p>
-<div class="math notranslate nohighlight">
-\[\hat{p}^{(s)}_U(\omega_i) \leftarrow \frac{1}{|U|} \sum_{x_k \in U} p^{(s)}(\omega_i \mid x_k)\]</div>
-<p class="sd-card-text">The EMQ iterates the E and M steps until the prevalence parameters converge <a class="footnote-reference brackets" href="#id5" id="id3" role="doc-noteref"><span class="fn-bracket">[</span>1<span class="fn-bracket">]</span></a> <a class="footnote-reference brackets" href="#id6" id="id4" role="doc-noteref"><span class="fn-bracket">[</span>2<span class="fn-bracket">]</span></a>.</p>
+<section id="general-concept">
+<h1><span class="section-number">1.2. </span>General Concept<a class="headerlink" href="#general-concept" title="Link to this heading">#</a></h1>
+<p>Aggregative quantification refers to methods that estimate the prevalence of classes in a dataset by aggregating the predictions made on individual data items. Except for special-purpose learning methods, all aggregative methods share a common structure involving three main steps:</p>
+<ol class="arabic simple">
+<li><p><strong>fit</strong>: the model is trained on labeled data.</p></li>
+<li><p><strong>predict</strong>: the trained model generates predictions for each individual item in the unlabeled dataset. These predictions can be either hard labels or soft probabilities.</p></li>
+<li><p><strong>aggregate</strong>: this step uses the results from the prediction phase to estimate the class prevalence distribution in the dataset. The <code class="docutils literal notranslate"><span class="pre">aggregate</span></code> function takes as input the necessary information from the classification results to perform this aggregation.</p></li>
+</ol>
+<p>This clear separation into fit, predict, and aggregate methods allows modular implementation and reuse of standard classifiers as a backbone.</p>
+<p>The main aggregative quantification methods will be defined next, with details about their specific approaches and differences.</p>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>All methods in this library can work with different types of prediction inputs.
+For example, <a class="reference internal" href="generated/mlquantify.adjust_counting.CC.html#mlquantify.adjust_counting.CC" title="mlquantify.adjust_counting.CC"><code class="xref py py-class docutils literal notranslate"><span class="pre">CC</span></code></a> accepts either hard class labels or soft class probabilities, while <a class="reference internal" href="generated/mlquantify.adjust_counting.PCC.html#mlquantify.adjust_counting.PCC" title="mlquantify.adjust_counting.PCC"><code class="xref py py-class docutils literal notranslate"><span class="pre">PCC</span></code></a> requires soft probabilities only.
+In contrast, <a class="reference internal" href="generated/mlquantify.adjust_counting.AC.html#mlquantify.adjust_counting.AC" title="mlquantify.adjust_counting.AC"><code class="xref py py-class docutils literal notranslate"><span class="pre">AC</span></code></a> uses soft probabilities together with the class prior probabilities and the true training labels.</p>
 </div>
-</details><p><strong>Example</strong></p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">mlquantify.likelihood</span><span class="w"> </span><span class="kn">import</span> <span class="n">EMQ</span>
-<span class="kn">from</span><span class="w"> </span><span class="nn">sklearn.linear_model</span><span class="w"> </span><span class="kn">import</span> <span class="n">LogisticRegression</span>
+<section id="examples">
+<h2><span class="section-number">1.2.1. </span>Examples<a class="headerlink" href="#examples" title="Link to this heading">#</a></h2>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">sklearn.linear_model</span><span class="w"> </span><span class="kn">import</span> <span class="n">LogisticRegression</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">mlquantify.counters</span><span class="w"> </span><span class="kn">import</span> <span class="n">AC</span>
 
-<span class="c1"># EMQ requires a probabilistic classifier (soft classifier)</span>
-<span class="n">q</span> <span class="o">=</span> <span class="n">EMQ</span><span class="p">(</span><span class="n">learner</span><span class="o">=</span><span class="n">LogisticRegression</span><span class="p">())</span>
-<span class="n">q</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">X_train</span><span class="p">,</span> <span class="n">y_train</span><span class="p">)</span>
+<span class="c1"># Create a classifier</span>
+<span class="n">clf</span> <span class="o">=</span> <span class="n">LogisticRegression</span><span class="p">()</span>
 
-<span class="c1"># Updates predictions based on the test distribution iteratively</span>
-<span class="n">q</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">X_test</span><span class="p">)</span>
-<span class="c1"># -&gt; adjusted prevalence dictionary</span>
+<span class="n">ac</span> <span class="o">=</span> <span class="n">AC</span><span class="p">()</span>
+
+<span class="c1"># used when you just have the sample to predict</span>
+<span class="n">ac</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">X_train</span><span class="p">,</span> <span class="n">y_train</span><span class="p">)</span>
+<span class="n">prevalence</span> <span class="o">=</span> <span class="n">ac</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">X_test</span><span class="p">)</span>
+
+<span class="c1"># used when you already have the sample predictions (usually from cross-validation for training predictions)</span>
+<span class="n">prevalence</span> <span class="o">=</span> <span class="n">ac</span><span class="o">.</span><span class="n">aggregate</span><span class="p">(</span><span class="n">posteriors</span><span class="p">,</span> <span class="n">train_posteriors</span><span class="p">,</span> <span class="n">y_train</span><span class="p">)</span>
 </pre></div>
 </div>
-<details class="sd-sphinx-override sd-dropdown sd-card sd-mb-3">
-<summary class="sd-summary-title sd-card-header">
-<span class="sd-summary-text">References</span><span class="sd-summary-state-marker sd-summary-chevron-right"><svg version="1.1" width="1.5em" height="1.5em" class="sd-octicon sd-octicon-chevron-right" viewBox="0 0 24 24" aria-hidden="true"><path d="M8.72 18.78a.75.75 0 0 1 0-1.06L14.44 12 8.72 6.28a.751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018l6.25 6.25a.75.75 0 0 1 0 1.06l-6.25 6.25a.75.75 0 0 1-1.06 0Z"></path></svg></span></summary><div class="sd-summary-content sd-card-body docutils">
-<aside class="footnote-list brackets">
-<aside class="footnote brackets" id="id5" role="doc-footnote">
-<span class="label"><span class="fn-bracket">[</span>1<span class="fn-bracket">]</span></span>
-<span class="backrefs">(<a role="doc-backlink" href="#id1">1</a>,<a role="doc-backlink" href="#id3">2</a>)</span>
-<p class="sd-card-text">Saerens, M., Latinne, P., &amp; Decaestecker, C. (2002). Adjusting the outputs of a classifier to new a priori probabilities: A simple procedure. Neural computation, 14(1), 21-41.</p>
-</aside>
-<aside class="footnote brackets" id="id6" role="doc-footnote">
-<span class="label"><span class="fn-bracket">[</span>2<span class="fn-bracket">]</span></span>
-<span class="backrefs">(<a role="doc-backlink" href="#id2">1</a>,<a role="doc-backlink" href="#id4">2</a>)</span>
-<p class="sd-card-text">Esuli, A., Fabris, A., Moreo, A., &amp; Sebastiani, F. (n.d.). Learning to Quantify The Information Retrieval Series.</p>
-</aside>
-</aside>
+<div class="toctree-wrapper compound">
 </div>
-</details></section>
+</section>
 </section>
 
 
@@ -525,20 +486,20 @@ If there were no dataset shift (change in distribution), MLPE would be the optim
     <div class="footer-article-item">
 <div class="prev-next-area">
     <a class="left-prev"
-       href="adjust_counting.html"
+       href="../aggregative_quantification.html"
        title="previous page">
       <i class="fa-solid fa-angle-left"></i>
       <div class="prev-next-info">
         <p class="prev-next-subtitle">previous</p>
-        <p class="prev-next-title"><span class="section-number">1.4. </span>Adjust Counting</p>
+        <p class="prev-next-title"><span class="section-number">1. </span>Aggregative Quantification</p>
       </div>
     </a>
     <a class="right-next"
-       href="mixture_models.html"
+       href="counters.html"
        title="next page">
       <div class="prev-next-info">
         <p class="prev-next-subtitle">next</p>
-        <p class="prev-next-title"><span class="section-number">1.6. </span>Mixture Models</p>
+        <p class="prev-next-title"><span class="section-number">1.3. </span>Counters For Quantification</p>
       </div>
       <i class="fa-solid fa-angle-right"></i>
     </a>
@@ -565,16 +526,22 @@ If there were no dataset shift (change in distribution), MLPE would be the optim
   </div>
   <nav class="bd-toc-nav page-toc" aria-labelledby="pst-page-navigation-heading-2">
     <ul class="visible nav section-nav flex-column">
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#maximum-likelihood-prevalence-estimation-mlpe">1.5.1. Maximum Likelihood Prevalence Estimation (MLPE)</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#expectation-maximization-for-quantification-emq">1.5.2. Expectation Maximization for Quantification (EMQ)</a></li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#">1.1. Using Aggregative Quantification Methods</a></li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#general-concept">1.2. General Concept</a><ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#examples">1.2.1. Examples</a><ul class="simple nav section-nav flex-column">
 </ul>
+</li>
+</ul>
+</li>
+</ul>
+
   </nav></div>
 
   <div class="sidebar-secondary-item">
   <div role="note" aria-label="source link">
     <h3>This Page</h3>
     <ul class="this-page-menu">
-      <li><a href="../_sources/modules/likelihood.rst.txt"
+      <li><a href="../_sources/modules/using_aggregative.rst.txt"
             rel="nofollow">Show Source</a></li>
     </ul>
    </div></div>

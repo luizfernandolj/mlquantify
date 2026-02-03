@@ -563,6 +563,35 @@ accuracy.</p>
 <dt class="sig sig-object py" id="mlquantify.adjust_counting.AC.aggregate">
 <span class="sig-name descname"><span class="pre">aggregate</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">predictions</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">train_predictions</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y_train</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/luizfernandolj/mlquantify/tree/master/mlquantify/adjust_counting.py"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mlquantify.adjust_counting.AC.aggregate" title="Link to this definition">#</a></dt>
 <dd><p>Aggregate predictions and apply matrix- or rate-based bias correction.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>predictions</strong><span class="classifier">ndarray of shape (n_samples, n_classes)</span></dt><dd><p>Learner predictions on test data. Can be probabilities (n_samples, n_classes) or class labels (n_samples,).</p>
+</dd>
+<dt><strong>train_predictions</strong><span class="classifier">ndarray of shape (n_samples, n_classes)</span></dt><dd><p>Learner predictions on training data. Can be probabilities (n_samples, n_classes) or class labels (n_samples,).</p>
+</dd>
+<dt><strong>y_train</strong><span class="classifier">ndarray of shape (n_samples,)</span></dt><dd><p>True class labels of the training data.</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt>ndarray of shape (n_classes,)</dt><dd><p>Class prevalence estimates.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span><span class="w"> </span><span class="nn">mlquantify.adjust_counting</span><span class="w"> </span><span class="kn">import</span> <span class="n">AC</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">q</span> <span class="o">=</span> <span class="n">AC</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">predictions</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">rand</span><span class="p">(</span><span class="mi">200</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">train_predictions</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">rand</span><span class="p">(</span><span class="mi">200</span><span class="p">)</span> <span class="c1"># generated via cross-validation</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">y_train</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">randint</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">200</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">q</span><span class="o">.</span><span class="n">aggregate</span><span class="p">(</span><span class="n">predictions</span><span class="p">,</span> <span class="n">train_predictions</span><span class="p">,</span> <span class="n">y_train</span><span class="p">)</span>
+<span class="go">{0: 0.51, 1: 0.49}</span>
+</pre></div>
+</div>
 </dd></dl>
 
 <dl class="py method">
