@@ -24,11 +24,11 @@ Threshold Adjustment
 Threshold-based adjustment methods correct the bias of :class:`CC` by using the classifier's **True Positive Rate (TPR)** and **False Positive Rate (FPR)**.  
 They are mainly used for `binary` quantification tasks.
 
-**Adjusted Classify and Count (ACC) Equation**
+**Threshold Adjusted Count (TAC) Equation**
 
 .. math::
 
-   \hat{p}^U_{ACC}(⊕) = \frac{\hat{p}^U_{CC}(⊕) - FPR_L}{TPR_L - FPR_L}
+   \hat{p}^U_{TAC}(⊕) = \frac{\hat{p}^U_{CC}(⊕) - FPR_L}{TPR_L - FPR_L}
 
 :caption: *Corrected prevalence estimate using classifier error rates*
 
@@ -107,7 +107,7 @@ Here:
 
 [Plot Idea: Matrix illustration showing how confusion corrections map to estimated prevalences]
 
-Generalized Adjusted Classify and Count (GAC) and Generalized Probabilistic Adjusted Classify and Count (GPAC)
+Adjusted Count (AC) and Probabilistic Adjusted Count (PAC)
 --------------------------------------------------------------------------------------------------------------
 
 .. code-block:: python
