@@ -349,11 +349,6 @@
 <li class="toctree-l2"><a class="reference internal" href="mlquantify.adjust_counting.CC.html">CC</a></li>
 <li class="toctree-l2"><a class="reference internal" href="mlquantify.adjust_counting.PCC.html">PCC</a></li>
 <li class="toctree-l2"><a class="reference internal" href="mlquantify.adjust_counting.FM.html">FM</a></li>
-<li class="toctree-l2"><a class="reference internal" href="mlquantify.adjust_counting.GAC.html">GAC</a></li>
-<li class="toctree-l2"><a class="reference internal" href="mlquantify.adjust_counting.GPAC.html">GPAC</a></li>
-<li class="toctree-l2"><a class="reference internal" href="mlquantify.adjust_counting.ACC.html">ACC</a></li>
-<li class="toctree-l2"><a class="reference internal" href="mlquantify.adjust_counting.X_method.html">X_method</a></li>
-<li class="toctree-l2"><a class="reference internal" href="mlquantify.adjust_counting.MAX.html">MAX</a></li>
 <li class="toctree-l2"><a class="reference internal" href="mlquantify.adjust_counting.T50.html">T50</a></li>
 <li class="toctree-l2"><a class="reference internal" href="mlquantify.adjust_counting.MS.html">MS</a></li>
 <li class="toctree-l2"><a class="reference internal" href="mlquantify.adjust_counting.MS2.html">MS2</a></li>
@@ -385,8 +380,6 @@
 </details></li>
 <li class="toctree-l1 has-children"><a class="reference internal" href="../../api/mlquantify.likelihood.html">mlquantify.likelihood</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
 <li class="toctree-l2"><a class="reference internal" href="mlquantify.likelihood.EMQ.html">EMQ</a></li>
-<li class="toctree-l2"><a class="reference internal" href="mlquantify.likelihood.MLPE.html">MLPE</a></li>
-<li class="toctree-l2"><a class="reference internal" href="mlquantify.likelihood.CDE.html">CDE</a></li>
 </ul>
 </details></li>
 <li class="toctree-l1 current active has-children"><a class="reference internal" href="../../api/mlquantify.meta.html">mlquantify.meta</a><details open="open"><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul class="current">
@@ -550,7 +543,7 @@ prevalence predictions, improving uncertainty quantification.</p>
 </div>
 <dl class="py method">
 <dt class="sig sig-object py" id="mlquantify.meta.AggregativeBootstrap.aggregate">
-<span class="sig-name descname"><span class="pre">aggregate</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">predictions</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">train_predictions</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">train_y_values</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/luizfernandolj/mlquantify/tree/master/mlquantify/meta.py"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mlquantify.meta.AggregativeBootstrap.aggregate" title="Link to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">aggregate</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">predictions</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">train_predictions</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y_train</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/luizfernandolj/mlquantify/tree/master/mlquantify/meta.py"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mlquantify.meta.AggregativeBootstrap.aggregate" title="Link to this definition">#</a></dt>
 <dd><p>Aggregates the predictions using bootstrap resampling.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -559,7 +552,7 @@ prevalence predictions, improving uncertainty quantification.</p>
 </dd>
 <dt><strong>train_predictions</strong><span class="classifier">array-like of shape (n_samples, n_classes)</span></dt><dd><p>The training predictions.</p>
 </dd>
-<dt><strong>train_y_values</strong><span class="classifier">array-like of shape (n_samples,)</span></dt><dd><p>The training target values.</p>
+<dt><strong>y_train</strong><span class="classifier">array-like of shape (n_samples,)</span></dt><dd><p>The training target values.</p>
 </dd>
 </dl>
 </dd>

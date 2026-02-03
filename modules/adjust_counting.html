@@ -468,15 +468,15 @@ They are mainly used for <code class="docutils literal notranslate"><span class=
 <td><p><strong>Threshold Choice</strong></p></td>
 <td><p><strong>Goal</strong></p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="generated/mlquantify.adjust_counting.ACC.html#mlquantify.adjust_counting.ACC" title="mlquantify.adjust_counting.ACC"><code class="xref py py-class docutils literal notranslate"><span class="pre">ACC</span></code></a></p></td>
+<tr class="row-even"><td><p><code class="xref py py-class docutils literal notranslate"><span class="pre">ACC</span></code></p></td>
 <td><p>Fixed threshold <span class="math notranslate nohighlight">\(\tau = 0.5\)</span></p></td>
 <td><p>Simple baseline adjustment</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="generated/mlquantify.adjust_counting.X_method.html#mlquantify.adjust_counting.X_method" title="mlquantify.adjust_counting.X_method"><code class="xref py py-class docutils literal notranslate"><span class="pre">X_method</span></code></a></p></td>
+<tr class="row-odd"><td><p><code class="xref py py-class docutils literal notranslate"><span class="pre">X_method</span></code></p></td>
 <td><p>Threshold where <span class="math notranslate nohighlight">\(\text{FPR} = 1 - \text{TPR}\)</span></p></td>
 <td><p>Avoids unstable prediction tails</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="generated/mlquantify.adjust_counting.MAX.html#mlquantify.adjust_counting.MAX" title="mlquantify.adjust_counting.MAX"><code class="xref py py-class docutils literal notranslate"><span class="pre">MAX</span></code></a></p></td>
+<tr class="row-even"><td><p><code class="xref py py-class docutils literal notranslate"><span class="pre">MAX</span></code></p></td>
 <td><p>Threshold maximizing <span class="math notranslate nohighlight">\(\text{TPR} - \text{FPR}\)</span></p></td>
 <td><p>Improves numerical stability</p></td>
 </tr>
@@ -547,7 +547,7 @@ They treat quantification as solving a small linear system.</p>
 <span class="c1"># -&gt; {0: 0.48, 1: 0.52}</span>
 </pre></div>
 </div>
-<p>Both <a class="reference internal" href="generated/mlquantify.adjust_counting.GAC.html#mlquantify.adjust_counting.GAC" title="mlquantify.adjust_counting.GAC"><code class="xref py py-class docutils literal notranslate"><span class="pre">GAC</span></code></a> and <a class="reference internal" href="generated/mlquantify.adjust_counting.GPAC.html#mlquantify.adjust_counting.GPAC" title="mlquantify.adjust_counting.GPAC"><code class="xref py py-class docutils literal notranslate"><span class="pre">GPAC</span></code></a> are solved using this linear system:</p>
+<p>Both <code class="xref py py-class docutils literal notranslate"><span class="pre">GAC</span></code> and <code class="xref py py-class docutils literal notranslate"><span class="pre">GPAC</span></code> are solved using this linear system:</p>
 <ul class="simple">
 <li><p>GAC uses hard classifier decisions (confusion matrix).</p></li>
 <li><p>GPAC uses soft probabilities <span class="math notranslate nohighlight">\(P(y=l|x)\)</span> .</p></li>
