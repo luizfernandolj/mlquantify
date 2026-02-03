@@ -511,7 +511,7 @@
 <h1>ConfidenceInterval<a class="headerlink" href="#confidenceinterval" title="Link to this heading">#</a></h1>
 <dl class="py class">
 <dt class="sig sig-object py" id="mlquantify.confidence.ConfidenceInterval">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">mlquantify.confidence.</span></span><span class="sig-name descname"><span class="pre">ConfidenceInterval</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">prev_estims</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">confidence_level</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.95</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/luizfernandolj/mlquantify/tree/master/mlquantify/confidence.py"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mlquantify.confidence.ConfidenceInterval" title="Link to this definition">#</a></dt>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">mlquantify.confidence.</span></span><span class="sig-name descname"><span class="pre">ConfidenceInterval</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">prev_estims</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">confidence_level</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.95</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/luizfernandolj/mlquantify/tree/master/mlquantify/confidence.py#L90-L153"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mlquantify.confidence.ConfidenceInterval" title="Link to this definition">#</a></dt>
 <dd><p>Bootstrap confidence intervals for each class prevalence.</p>
 <p>Constructs independent percentile-based confidence intervals 
 for each class dimension from bootstrap samples.</p>
@@ -559,19 +559,19 @@ Section 3.3, Equation (1).</p>
 </div>
 <dl class="py method">
 <dt class="sig sig-object py" id="mlquantify.confidence.ConfidenceInterval.contains">
-<span class="sig-name descname"><span class="pre">contains</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">point</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/luizfernandolj/mlquantify/tree/master/mlquantify/confidence.py"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mlquantify.confidence.ConfidenceInterval.contains" title="Link to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">contains</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">point</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/luizfernandolj/mlquantify/tree/master/mlquantify/confidence.py#L150-L153"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mlquantify.confidence.ConfidenceInterval.contains" title="Link to this definition">#</a></dt>
 <dd><p>Check whether a prevalence vector lies within the region.</p>
 </dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="mlquantify.confidence.ConfidenceInterval.get_point_estimate">
-<span class="sig-name descname"><span class="pre">get_point_estimate</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference external" href="https://github.com/luizfernandolj/mlquantify/tree/master/mlquantify/confidence.py"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mlquantify.confidence.ConfidenceInterval.get_point_estimate" title="Link to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">get_point_estimate</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference external" href="https://github.com/luizfernandolj/mlquantify/tree/master/mlquantify/confidence.py#L147-L148"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mlquantify.confidence.ConfidenceInterval.get_point_estimate" title="Link to this definition">#</a></dt>
 <dd><p>Return the point estimate of prevalence (e.g., mean of bootstrap samples).</p>
 </dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="mlquantify.confidence.ConfidenceInterval.get_region">
-<span class="sig-name descname"><span class="pre">get_region</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference external" href="https://github.com/luizfernandolj/mlquantify/tree/master/mlquantify/confidence.py"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mlquantify.confidence.ConfidenceInterval.get_region" title="Link to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">get_region</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference external" href="https://github.com/luizfernandolj/mlquantify/tree/master/mlquantify/confidence.py#L144-L145"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mlquantify.confidence.ConfidenceInterval.get_region" title="Link to this definition">#</a></dt>
 <dd><p>Return the parameters defining the confidence region.</p>
 </dd></dl>
 

@@ -462,7 +462,7 @@
 <span id="mlquantify-base-module"></span><h2>mlquantify.base module<a class="headerlink" href="#module-mlquantify.base" title="Link to this heading">#</a></h2>
 <dl class="py class">
 <dt class="sig sig-object py" id="mlquantify.base.BaseQuantifier">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">mlquantify.base.</span></span><span class="sig-name descname"><span class="pre">BaseQuantifier</span></span><a class="reference external" href="https://github.com/luizfernandolj/mlquantify/tree/master/mlquantify/base.py"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mlquantify.base.BaseQuantifier" title="Link to this definition">#</a></dt>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">mlquantify.base.</span></span><span class="sig-name descname"><span class="pre">BaseQuantifier</span></span><a class="reference external" href="https://github.com/luizfernandolj/mlquantify/tree/master/mlquantify/base.py#L13-L92"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mlquantify.base.BaseQuantifier" title="Link to this definition">#</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">ABC</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">BaseEstimator</span></code></p>
 <p>Base class for all quantifiers in mlquantify.</p>
 <p>Inhering from this class provides default implementations for</p>
@@ -501,7 +501,7 @@ at the class level in their <code class="docutils literal notranslate"><span cla
 </div>
 <dl class="py method">
 <dt class="sig sig-object py" id="mlquantify.base.BaseQuantifier.save_quantifier">
-<span class="sig-name descname"><span class="pre">save_quantifier</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">path</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference external" href="https://github.com/luizfernandolj/mlquantify/tree/master/mlquantify/base.py"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mlquantify.base.BaseQuantifier.save_quantifier" title="Link to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">save_quantifier</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">path</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference external" href="https://github.com/luizfernandolj/mlquantify/tree/master/mlquantify/base.py#L87-L92"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mlquantify.base.BaseQuantifier.save_quantifier" title="Link to this definition">#</a></dt>
 <dd><p>Save the quantifier instance to a file.</p>
 </dd></dl>
 
@@ -514,7 +514,7 @@ at the class level in their <code class="docutils literal notranslate"><span cla
 
 <dl class="py class">
 <dt class="sig sig-object py" id="mlquantify.base.MetaquantifierMixin">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">mlquantify.base.</span></span><span class="sig-name descname"><span class="pre">MetaquantifierMixin</span></span><a class="reference external" href="https://github.com/luizfernandolj/mlquantify/tree/master/mlquantify/base.py"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mlquantify.base.MetaquantifierMixin" title="Link to this definition">#</a></dt>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">mlquantify.base.</span></span><span class="sig-name descname"><span class="pre">MetaquantifierMixin</span></span><a class="reference external" href="https://github.com/luizfernandolj/mlquantify/tree/master/mlquantify/base.py#L101-L126"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mlquantify.base.MetaquantifierMixin" title="Link to this definition">#</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
 <p>Mixin class for meta-quantifiers.</p>
 <p>This mixin is empty, and only exists to indicate that the quantifier is 
@@ -542,7 +542,7 @@ a meta quantifier</p>
 
 <dl class="py class">
 <dt class="sig sig-object py" id="mlquantify.base.ProtocolMixin">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">mlquantify.base.</span></span><span class="sig-name descname"><span class="pre">ProtocolMixin</span></span><a class="reference external" href="https://github.com/luizfernandolj/mlquantify/tree/master/mlquantify/base.py"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mlquantify.base.ProtocolMixin" title="Link to this definition">#</a></dt>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">mlquantify.base.</span></span><span class="sig-name descname"><span class="pre">ProtocolMixin</span></span><a class="reference external" href="https://github.com/luizfernandolj/mlquantify/tree/master/mlquantify/base.py#L129-L156"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mlquantify.base.ProtocolMixin" title="Link to this definition">#</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
 <p>Mixin class for protocol-based quantifiers.</p>
 <p>This mixin indicates that the quantifier follows a specific protocol,
@@ -570,7 +570,7 @@ by setting the estimation_type tag to “sample” and requires_fit to False.</p
 <span id="mlquantify-base-aggregative-module"></span><h2>mlquantify.base_aggregative module<a class="headerlink" href="#module-mlquantify.base_aggregative" title="Link to this heading">#</a></h2>
 <dl class="py class">
 <dt class="sig sig-object py" id="mlquantify.base_aggregative.AggregationMixin">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">mlquantify.base_aggregative.</span></span><span class="sig-name descname"><span class="pre">AggregationMixin</span></span><a class="reference external" href="https://github.com/luizfernandolj/mlquantify/tree/master/mlquantify/base_aggregative.py"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mlquantify.base_aggregative.AggregationMixin" title="Link to this definition">#</a></dt>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">mlquantify.base_aggregative.</span></span><span class="sig-name descname"><span class="pre">AggregationMixin</span></span><a class="reference external" href="https://github.com/luizfernandolj/mlquantify/tree/master/mlquantify/base_aggregative.py#L7-L93"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mlquantify.base_aggregative.AggregationMixin" title="Link to this definition">#</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
 <p>Mixin class for all aggregative quantifiers.</p>
 <p>An aggregative quantifier is a quantifier that relies on an underlying
@@ -615,14 +615,14 @@ for more details.</p>
 </div>
 <dl class="py method">
 <dt class="sig sig-object py" id="mlquantify.base_aggregative.AggregationMixin.set_params">
-<span class="sig-name descname"><span class="pre">set_params</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">params</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/luizfernandolj/mlquantify/tree/master/mlquantify/base_aggregative.py"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mlquantify.base_aggregative.AggregationMixin.set_params" title="Link to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">set_params</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">params</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/luizfernandolj/mlquantify/tree/master/mlquantify/base_aggregative.py#L80-L93"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mlquantify.base_aggregative.AggregationMixin.set_params" title="Link to this definition">#</a></dt>
 <dd></dd></dl>
 
 </dd></dl>
 
 <dl class="py class">
 <dt class="sig sig-object py" id="mlquantify.base_aggregative.CrispLearnerQMixin">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">mlquantify.base_aggregative.</span></span><span class="sig-name descname"><span class="pre">CrispLearnerQMixin</span></span><a class="reference external" href="https://github.com/luizfernandolj/mlquantify/tree/master/mlquantify/base_aggregative.py"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mlquantify.base_aggregative.CrispLearnerQMixin" title="Link to this definition">#</a></dt>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">mlquantify.base_aggregative.</span></span><span class="sig-name descname"><span class="pre">CrispLearnerQMixin</span></span><a class="reference external" href="https://github.com/luizfernandolj/mlquantify/tree/master/mlquantify/base_aggregative.py#L138-L180"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mlquantify.base_aggregative.CrispLearnerQMixin" title="Link to this definition">#</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
 <p>Crisp predictions mixin for aggregative quantifiers.</p>
 <p>This mixin provides the following change tags:
@@ -660,7 +660,7 @@ for more details.</p>
 
 <dl class="py class">
 <dt class="sig sig-object py" id="mlquantify.base_aggregative.SoftLearnerQMixin">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">mlquantify.base_aggregative.</span></span><span class="sig-name descname"><span class="pre">SoftLearnerQMixin</span></span><a class="reference external" href="https://github.com/luizfernandolj/mlquantify/tree/master/mlquantify/base_aggregative.py"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mlquantify.base_aggregative.SoftLearnerQMixin" title="Link to this definition">#</a></dt>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">mlquantify.base_aggregative.</span></span><span class="sig-name descname"><span class="pre">SoftLearnerQMixin</span></span><a class="reference external" href="https://github.com/luizfernandolj/mlquantify/tree/master/mlquantify/base_aggregative.py#L96-L135"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mlquantify.base_aggregative.SoftLearnerQMixin" title="Link to this definition">#</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
 <p>Soft predictions mixin for aggregative quantifiers.</p>
 <p>This mixin provides the following change tags:
@@ -696,25 +696,25 @@ for more details.</p>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="mlquantify.base_aggregative.get_aggregation_requirements">
-<span class="sig-prename descclassname"><span class="pre">mlquantify.base_aggregative.</span></span><span class="sig-name descname"><span class="pre">get_aggregation_requirements</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">quantifier</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/luizfernandolj/mlquantify/tree/master/mlquantify/base_aggregative.py"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mlquantify.base_aggregative.get_aggregation_requirements" title="Link to this definition">#</a></dt>
+<span class="sig-prename descclassname"><span class="pre">mlquantify.base_aggregative.</span></span><span class="sig-name descname"><span class="pre">get_aggregation_requirements</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">quantifier</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/luizfernandolj/mlquantify/tree/master/mlquantify/base_aggregative.py#L195-L198"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mlquantify.base_aggregative.get_aggregation_requirements" title="Link to this definition">#</a></dt>
 <dd><p>Get the prediction requirements for the aggregative quantifier.</p>
 </dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="mlquantify.base_aggregative.is_aggregative_quantifier">
-<span class="sig-prename descclassname"><span class="pre">mlquantify.base_aggregative.</span></span><span class="sig-name descname"><span class="pre">is_aggregative_quantifier</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">quantifier</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/luizfernandolj/mlquantify/tree/master/mlquantify/base_aggregative.py"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mlquantify.base_aggregative.is_aggregative_quantifier" title="Link to this definition">#</a></dt>
+<span class="sig-prename descclassname"><span class="pre">mlquantify.base_aggregative.</span></span><span class="sig-name descname"><span class="pre">is_aggregative_quantifier</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">quantifier</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/luizfernandolj/mlquantify/tree/master/mlquantify/base_aggregative.py#L191-L193"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mlquantify.base_aggregative.is_aggregative_quantifier" title="Link to this definition">#</a></dt>
 <dd><p>Check if the quantifier is aggregative.</p>
 </dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="mlquantify.base_aggregative.uses_crisp_predictions">
-<span class="sig-prename descclassname"><span class="pre">mlquantify.base_aggregative.</span></span><span class="sig-name descname"><span class="pre">uses_crisp_predictions</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">quantifier</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/luizfernandolj/mlquantify/tree/master/mlquantify/base_aggregative.py"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mlquantify.base_aggregative.uses_crisp_predictions" title="Link to this definition">#</a></dt>
+<span class="sig-prename descclassname"><span class="pre">mlquantify.base_aggregative.</span></span><span class="sig-name descname"><span class="pre">uses_crisp_predictions</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">quantifier</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/luizfernandolj/mlquantify/tree/master/mlquantify/base_aggregative.py#L187-L189"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mlquantify.base_aggregative.uses_crisp_predictions" title="Link to this definition">#</a></dt>
 <dd><p>Check if the quantifier uses crisp predictions.</p>
 </dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="mlquantify.base_aggregative.uses_soft_predictions">
-<span class="sig-prename descclassname"><span class="pre">mlquantify.base_aggregative.</span></span><span class="sig-name descname"><span class="pre">uses_soft_predictions</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">quantifier</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/luizfernandolj/mlquantify/tree/master/mlquantify/base_aggregative.py"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mlquantify.base_aggregative.uses_soft_predictions" title="Link to this definition">#</a></dt>
+<span class="sig-prename descclassname"><span class="pre">mlquantify.base_aggregative.</span></span><span class="sig-name descname"><span class="pre">uses_soft_predictions</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">quantifier</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/luizfernandolj/mlquantify/tree/master/mlquantify/base_aggregative.py#L183-L185"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mlquantify.base_aggregative.uses_soft_predictions" title="Link to this definition">#</a></dt>
 <dd><p>Check if the quantifier uses soft predictions.</p>
 </dd></dl>
 
@@ -726,7 +726,7 @@ for more details.</p>
 <span id="mlquantify-confidence-module"></span><h2>mlquantify.confidence module<a class="headerlink" href="#module-mlquantify.confidence" title="Link to this heading">#</a></h2>
 <dl class="py class">
 <dt class="sig sig-object py" id="mlquantify.confidence.BaseConfidenceRegion">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">mlquantify.confidence.</span></span><span class="sig-name descname"><span class="pre">BaseConfidenceRegion</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">prev_estims</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">confidence_level</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.95</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/luizfernandolj/mlquantify/tree/master/mlquantify/confidence.py"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mlquantify.confidence.BaseConfidenceRegion" title="Link to this definition">#</a></dt>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">mlquantify.confidence.</span></span><span class="sig-name descname"><span class="pre">BaseConfidenceRegion</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">prev_estims</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">confidence_level</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.95</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/luizfernandolj/mlquantify/tree/master/mlquantify/confidence.py#L5-L83"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mlquantify.confidence.BaseConfidenceRegion" title="Link to this definition">#</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
 <p>Base class for confidence regions of prevalence estimates.</p>
 <p>This class defines the interface and core structure for constructing 
@@ -786,19 +786,19 @@ Istituto di Scienza e Tecnologie dell’Informazione, CNR, Pisa.</p>
 </div>
 <dl class="py method">
 <dt class="sig sig-object py" id="mlquantify.confidence.BaseConfidenceRegion.contains">
-<span class="sig-name descname"><span class="pre">contains</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">point</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/luizfernandolj/mlquantify/tree/master/mlquantify/confidence.py"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mlquantify.confidence.BaseConfidenceRegion.contains" title="Link to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">contains</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">point</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/luizfernandolj/mlquantify/tree/master/mlquantify/confidence.py#L81-L83"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mlquantify.confidence.BaseConfidenceRegion.contains" title="Link to this definition">#</a></dt>
 <dd><p>Check whether a prevalence vector lies within the region.</p>
 </dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="mlquantify.confidence.BaseConfidenceRegion.get_point_estimate">
-<span class="sig-name descname"><span class="pre">get_point_estimate</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference external" href="https://github.com/luizfernandolj/mlquantify/tree/master/mlquantify/confidence.py"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mlquantify.confidence.BaseConfidenceRegion.get_point_estimate" title="Link to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">get_point_estimate</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference external" href="https://github.com/luizfernandolj/mlquantify/tree/master/mlquantify/confidence.py#L77-L79"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mlquantify.confidence.BaseConfidenceRegion.get_point_estimate" title="Link to this definition">#</a></dt>
 <dd><p>Return the point estimate of prevalence (e.g., mean of bootstrap samples).</p>
 </dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="mlquantify.confidence.BaseConfidenceRegion.get_region">
-<span class="sig-name descname"><span class="pre">get_region</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference external" href="https://github.com/luizfernandolj/mlquantify/tree/master/mlquantify/confidence.py"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mlquantify.confidence.BaseConfidenceRegion.get_region" title="Link to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">get_region</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference external" href="https://github.com/luizfernandolj/mlquantify/tree/master/mlquantify/confidence.py#L73-L75"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mlquantify.confidence.BaseConfidenceRegion.get_region" title="Link to this definition">#</a></dt>
 <dd><p>Return the parameters defining the confidence region.</p>
 </dd></dl>
 
@@ -806,7 +806,7 @@ Istituto di Scienza e Tecnologie dell’Informazione, CNR, Pisa.</p>
 
 <dl class="py class">
 <dt class="sig sig-object py" id="mlquantify.confidence.ConfidenceEllipseCLR">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">mlquantify.confidence.</span></span><span class="sig-name descname"><span class="pre">ConfidenceEllipseCLR</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">prev_estims</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">confidence_level</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.95</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/luizfernandolj/mlquantify/tree/master/mlquantify/confidence.py"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mlquantify.confidence.ConfidenceEllipseCLR" title="Link to this definition">#</a></dt>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">mlquantify.confidence.</span></span><span class="sig-name descname"><span class="pre">ConfidenceEllipseCLR</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">prev_estims</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">confidence_level</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.95</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/luizfernandolj/mlquantify/tree/master/mlquantify/confidence.py#L234-L312"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mlquantify.confidence.ConfidenceEllipseCLR" title="Link to this definition">#</a></dt>
 <dd><p>Bases: <a class="reference internal" href="mlquantify.confidence.ConfidenceEllipseSimplex.html#mlquantify.confidence.ConfidenceEllipseSimplex" title="mlquantify.confidence.ConfidenceEllipseSimplex"><code class="xref py py-class docutils literal notranslate"><span class="pre">ConfidenceEllipseSimplex</span></code></a></p>
 <p>Confidence ellipse for prevalence estimates in CLR-transformed space.</p>
 <p>Applies the Centered Log-Ratio (CLR) transformation:</p>
@@ -857,13 +857,13 @@ Section 3.3, Equation (3).</p>
 </div>
 <dl class="py method">
 <dt class="sig sig-object py" id="mlquantify.confidence.ConfidenceEllipseCLR.contains">
-<span class="sig-name descname"><span class="pre">contains</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">point</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">eps</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1e-06</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/luizfernandolj/mlquantify/tree/master/mlquantify/confidence.py"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mlquantify.confidence.ConfidenceEllipseCLR.contains" title="Link to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">contains</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">point</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">eps</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1e-06</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/luizfernandolj/mlquantify/tree/master/mlquantify/confidence.py#L305-L312"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mlquantify.confidence.ConfidenceEllipseCLR.contains" title="Link to this definition">#</a></dt>
 <dd><p>Check whether a prevalence vector lies within the region.</p>
 </dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="mlquantify.confidence.ConfidenceEllipseCLR.get_point_estimate">
-<span class="sig-name descname"><span class="pre">get_point_estimate</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference external" href="https://github.com/luizfernandolj/mlquantify/tree/master/mlquantify/confidence.py"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mlquantify.confidence.ConfidenceEllipseCLR.get_point_estimate" title="Link to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">get_point_estimate</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference external" href="https://github.com/luizfernandolj/mlquantify/tree/master/mlquantify/confidence.py#L300-L303"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mlquantify.confidence.ConfidenceEllipseCLR.get_point_estimate" title="Link to this definition">#</a></dt>
 <dd><p>Return the point estimate of prevalence (e.g., mean of bootstrap samples).</p>
 </dd></dl>
 
@@ -871,7 +871,7 @@ Section 3.3, Equation (3).</p>
 
 <dl class="py class">
 <dt class="sig sig-object py" id="mlquantify.confidence.ConfidenceEllipseSimplex">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">mlquantify.confidence.</span></span><span class="sig-name descname"><span class="pre">ConfidenceEllipseSimplex</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">prev_estims</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">confidence_level</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.95</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/luizfernandolj/mlquantify/tree/master/mlquantify/confidence.py"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mlquantify.confidence.ConfidenceEllipseSimplex" title="Link to this definition">#</a></dt>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">mlquantify.confidence.</span></span><span class="sig-name descname"><span class="pre">ConfidenceEllipseSimplex</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">prev_estims</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">confidence_level</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.95</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/luizfernandolj/mlquantify/tree/master/mlquantify/confidence.py#L160-L227"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mlquantify.confidence.ConfidenceEllipseSimplex" title="Link to this definition">#</a></dt>
 <dd><p>Bases: <a class="reference internal" href="mlquantify.confidence.BaseConfidenceRegion.html#mlquantify.confidence.BaseConfidenceRegion" title="mlquantify.confidence.BaseConfidenceRegion"><code class="xref py py-class docutils literal notranslate"><span class="pre">BaseConfidenceRegion</span></code></a></p>
 <p>Confidence ellipse for prevalence estimates in the simplex.</p>
 <p>Defines a multivariate confidence region based on a chi-squared threshold:</p>
@@ -918,19 +918,19 @@ Section 3.3, Equation (2).</p>
 </div>
 <dl class="py method">
 <dt class="sig sig-object py" id="mlquantify.confidence.ConfidenceEllipseSimplex.contains">
-<span class="sig-name descname"><span class="pre">contains</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">point</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/luizfernandolj/mlquantify/tree/master/mlquantify/confidence.py"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mlquantify.confidence.ConfidenceEllipseSimplex.contains" title="Link to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">contains</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">point</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/luizfernandolj/mlquantify/tree/master/mlquantify/confidence.py#L222-L227"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mlquantify.confidence.ConfidenceEllipseSimplex.contains" title="Link to this definition">#</a></dt>
 <dd><p>Check whether a prevalence vector lies within the region.</p>
 </dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="mlquantify.confidence.ConfidenceEllipseSimplex.get_point_estimate">
-<span class="sig-name descname"><span class="pre">get_point_estimate</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference external" href="https://github.com/luizfernandolj/mlquantify/tree/master/mlquantify/confidence.py"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mlquantify.confidence.ConfidenceEllipseSimplex.get_point_estimate" title="Link to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">get_point_estimate</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference external" href="https://github.com/luizfernandolj/mlquantify/tree/master/mlquantify/confidence.py#L219-L220"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mlquantify.confidence.ConfidenceEllipseSimplex.get_point_estimate" title="Link to this definition">#</a></dt>
 <dd><p>Return the point estimate of prevalence (e.g., mean of bootstrap samples).</p>
 </dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="mlquantify.confidence.ConfidenceEllipseSimplex.get_region">
-<span class="sig-name descname"><span class="pre">get_region</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference external" href="https://github.com/luizfernandolj/mlquantify/tree/master/mlquantify/confidence.py"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mlquantify.confidence.ConfidenceEllipseSimplex.get_region" title="Link to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">get_region</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference external" href="https://github.com/luizfernandolj/mlquantify/tree/master/mlquantify/confidence.py#L216-L217"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mlquantify.confidence.ConfidenceEllipseSimplex.get_region" title="Link to this definition">#</a></dt>
 <dd><p>Return the parameters defining the confidence region.</p>
 </dd></dl>
 
@@ -938,7 +938,7 @@ Section 3.3, Equation (2).</p>
 
 <dl class="py class">
 <dt class="sig sig-object py" id="mlquantify.confidence.ConfidenceInterval">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">mlquantify.confidence.</span></span><span class="sig-name descname"><span class="pre">ConfidenceInterval</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">prev_estims</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">confidence_level</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.95</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/luizfernandolj/mlquantify/tree/master/mlquantify/confidence.py"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mlquantify.confidence.ConfidenceInterval" title="Link to this definition">#</a></dt>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">mlquantify.confidence.</span></span><span class="sig-name descname"><span class="pre">ConfidenceInterval</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">prev_estims</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">confidence_level</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.95</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/luizfernandolj/mlquantify/tree/master/mlquantify/confidence.py#L90-L153"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mlquantify.confidence.ConfidenceInterval" title="Link to this definition">#</a></dt>
 <dd><p>Bases: <a class="reference internal" href="mlquantify.confidence.BaseConfidenceRegion.html#mlquantify.confidence.BaseConfidenceRegion" title="mlquantify.confidence.BaseConfidenceRegion"><code class="xref py py-class docutils literal notranslate"><span class="pre">BaseConfidenceRegion</span></code></a></p>
 <p>Bootstrap confidence intervals for each class prevalence.</p>
 <p>Constructs independent percentile-based confidence intervals 
@@ -987,19 +987,19 @@ Section 3.3, Equation (1).</p>
 </div>
 <dl class="py method">
 <dt class="sig sig-object py" id="mlquantify.confidence.ConfidenceInterval.contains">
-<span class="sig-name descname"><span class="pre">contains</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">point</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/luizfernandolj/mlquantify/tree/master/mlquantify/confidence.py"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mlquantify.confidence.ConfidenceInterval.contains" title="Link to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">contains</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">point</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/luizfernandolj/mlquantify/tree/master/mlquantify/confidence.py#L150-L153"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mlquantify.confidence.ConfidenceInterval.contains" title="Link to this definition">#</a></dt>
 <dd><p>Check whether a prevalence vector lies within the region.</p>
 </dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="mlquantify.confidence.ConfidenceInterval.get_point_estimate">
-<span class="sig-name descname"><span class="pre">get_point_estimate</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference external" href="https://github.com/luizfernandolj/mlquantify/tree/master/mlquantify/confidence.py"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mlquantify.confidence.ConfidenceInterval.get_point_estimate" title="Link to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">get_point_estimate</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference external" href="https://github.com/luizfernandolj/mlquantify/tree/master/mlquantify/confidence.py#L147-L148"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mlquantify.confidence.ConfidenceInterval.get_point_estimate" title="Link to this definition">#</a></dt>
 <dd><p>Return the point estimate of prevalence (e.g., mean of bootstrap samples).</p>
 </dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="mlquantify.confidence.ConfidenceInterval.get_region">
-<span class="sig-name descname"><span class="pre">get_region</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference external" href="https://github.com/luizfernandolj/mlquantify/tree/master/mlquantify/confidence.py"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mlquantify.confidence.ConfidenceInterval.get_region" title="Link to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">get_region</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference external" href="https://github.com/luizfernandolj/mlquantify/tree/master/mlquantify/confidence.py#L144-L145"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mlquantify.confidence.ConfidenceInterval.get_region" title="Link to this definition">#</a></dt>
 <dd><p>Return the parameters defining the confidence region.</p>
 </dd></dl>
 
@@ -1007,7 +1007,7 @@ Section 3.3, Equation (1).</p>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="mlquantify.confidence.construct_confidence_region">
-<span class="sig-prename descclassname"><span class="pre">mlquantify.confidence.</span></span><span class="sig-name descname"><span class="pre">construct_confidence_region</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">prev_estims</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">confidence_level</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.95</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">method</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'intervals'</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/luizfernandolj/mlquantify/tree/master/mlquantify/confidence.py"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mlquantify.confidence.construct_confidence_region" title="Link to this definition">#</a></dt>
+<span class="sig-prename descclassname"><span class="pre">mlquantify.confidence.</span></span><span class="sig-name descname"><span class="pre">construct_confidence_region</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">prev_estims</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">confidence_level</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.95</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">method</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'intervals'</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/luizfernandolj/mlquantify/tree/master/mlquantify/confidence.py#L320-L329"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mlquantify.confidence.construct_confidence_region" title="Link to this definition">#</a></dt>
 <dd></dd></dl>
 
 </section>
@@ -1015,7 +1015,7 @@ Section 3.3, Equation (1).</p>
 <span id="mlquantify-multiclass-module"></span><h2>mlquantify.multiclass module<a class="headerlink" href="#module-mlquantify.multiclass" title="Link to this heading">#</a></h2>
 <dl class="py class">
 <dt class="sig sig-object py" id="mlquantify.multiclass.BinaryQuantifier">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">mlquantify.multiclass.</span></span><span class="sig-name descname"><span class="pre">BinaryQuantifier</span></span><a class="reference external" href="https://github.com/luizfernandolj/mlquantify/tree/master/mlquantify/multiclass.py"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mlquantify.multiclass.BinaryQuantifier" title="Link to this definition">#</a></dt>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">mlquantify.multiclass.</span></span><span class="sig-name descname"><span class="pre">BinaryQuantifier</span></span><a class="reference external" href="https://github.com/luizfernandolj/mlquantify/tree/master/mlquantify/multiclass.py#L277-L350"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mlquantify.multiclass.BinaryQuantifier" title="Link to this definition">#</a></dt>
 <dd><p>Bases: <a class="reference internal" href="mlquantify.base.MetaquantifierMixin.html#mlquantify.base.MetaquantifierMixin" title="mlquantify.base.MetaquantifierMixin"><code class="xref py py-class docutils literal notranslate"><span class="pre">MetaquantifierMixin</span></code></a>, <a class="reference internal" href="mlquantify.base.BaseQuantifier.html#mlquantify.base.BaseQuantifier" title="mlquantify.base.BaseQuantifier"><code class="xref py py-class docutils literal notranslate"><span class="pre">BaseQuantifier</span></code></a></p>
 <p>Meta-quantifier enabling One-vs-Rest and One-vs-One strategies.</p>
 <p>This class extends a base quantifier to handle multiclass problems by 
@@ -1033,19 +1033,19 @@ prediction, and aggregation operations to the appropriate binary quantifiers.</p
 </dl>
 <dl class="py method">
 <dt class="sig sig-object py" id="mlquantify.multiclass.BinaryQuantifier.aggregate">
-<span class="sig-name descname"><span class="pre">aggregate</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/luizfernandolj/mlquantify/tree/master/mlquantify/multiclass.py"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mlquantify.multiclass.BinaryQuantifier.aggregate" title="Link to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">aggregate</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/luizfernandolj/mlquantify/tree/master/mlquantify/multiclass.py#L324-L350"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mlquantify.multiclass.BinaryQuantifier.aggregate" title="Link to this definition">#</a></dt>
 <dd><p>Aggregate binary predictions to obtain multiclass prevalence estimates.</p>
 </dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="mlquantify.multiclass.BinaryQuantifier.fit">
-<span class="sig-name descname"><span class="pre">fit</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/luizfernandolj/mlquantify/tree/master/mlquantify/multiclass.py"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mlquantify.multiclass.BinaryQuantifier.fit" title="Link to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">fit</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/luizfernandolj/mlquantify/tree/master/mlquantify/utils/_decorators.py#L292-L308"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mlquantify.multiclass.BinaryQuantifier.fit" title="Link to this definition">#</a></dt>
 <dd><p>Fit the quantifier under a binary decomposition strategy.</p>
 </dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="mlquantify.multiclass.BinaryQuantifier.predict">
-<span class="sig-name descname"><span class="pre">predict</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/luizfernandolj/mlquantify/tree/master/mlquantify/multiclass.py"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mlquantify.multiclass.BinaryQuantifier.predict" title="Link to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">predict</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/luizfernandolj/mlquantify/tree/master/mlquantify/multiclass.py#L310-L322"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mlquantify.multiclass.BinaryQuantifier.predict" title="Link to this definition">#</a></dt>
 <dd><p>Predict class prevalences using the trained binary quantifiers.</p>
 </dd></dl>
 
@@ -1053,7 +1053,7 @@ prediction, and aggregation operations to the appropriate binary quantifiers.</p
 
 <dl class="py function">
 <dt class="sig sig-object py" id="mlquantify.multiclass.define_binary">
-<span class="sig-prename descclassname"><span class="pre">mlquantify.multiclass.</span></span><span class="sig-name descname"><span class="pre">define_binary</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">cls</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/luizfernandolj/mlquantify/tree/master/mlquantify/multiclass.py"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mlquantify.multiclass.define_binary" title="Link to this definition">#</a></dt>
+<span class="sig-prename descclassname"><span class="pre">mlquantify.multiclass.</span></span><span class="sig-name descname"><span class="pre">define_binary</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">cls</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/luizfernandolj/mlquantify/tree/master/mlquantify/multiclass.py#L24-L87"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mlquantify.multiclass.define_binary" title="Link to this definition">#</a></dt>
 <dd><p>Decorator to enable binary quantification extensions (One-vs-Rest or One-vs-One).</p>
 <p>This decorator dynamically extends a quantifier class to handle multiclass
 quantification tasks by decomposing them into multiple binary subproblems,
