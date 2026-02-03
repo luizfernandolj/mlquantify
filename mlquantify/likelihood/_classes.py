@@ -16,36 +16,53 @@ class EMQ(SoftLearnerQMixin, AggregationMixin, BaseQuantifier):
     Estimates class prevalences under prior probability shift by alternating 
     between expectation **(E)** and maximization **(M)** steps on posterior probabilities. 
 
-    E-step:
-    .. math::
-        p_i^{(s+1)}(x) = \frac{q_i^{(s)} p_i(x)}{\sum_j q_j^{(s)} p_j(x)}
+    .. dropdown:: Mathematical Formulation
 
-    M-step:
-    .. math::
-        q_i^{(s+1)} = \frac{1}{N} \sum_{n=1}^N p_i^{(s+1)}(x_n)
+        E-step:
 
-    where 
-    - :math:`p_i(x)` are posterior probabilities predicted by the classifier
-    - :math:`q_i^{(s)}` are class prevalence estimates at iteration :math:`s`
-    - :math:`N` is the number of test instances.
+        .. math::
 
-    Calibrations supported on posterior probabilities before **EM** iteration:
+            p_i^{(s+1)}(x) = \frac{q_i^{(s)} p_i(x)}{\sum_j q_j^{(s)} p_j(x)}
 
-    Temperature Scaling (TS):
-    .. math::
-        \hat{p} = \text{softmax}\left(\frac{\log(p)}{T}\right)
+        M-step:
 
-    Bias-Corrected Temperature Scaling (BCTS):
-    .. math::
-        \hat{p} = \text{softmax}\left(\frac{\log(p)}{T} + b\right)
+        .. math::
 
-    Vector Scaling (VS):
-    .. math::
-        \hat{p}_i = \text{softmax}(W_i \cdot \log(p_i) + b_i)
+            q_i^{(s+1)} = \frac{1}{N} \sum_{n=1}^N p_i^{(s+1)}(x_n)
 
-    No-Bias Vector Scaling (NBVS):
-    .. math::
-        \hat{p}_i = \text{softmax}(W_i \cdot \log(p_i))
+        where:
+
+        - :math:`p_i(x)` are posterior probabilities predicted by the classifier
+
+        - :math:`q_i^{(s)}` are class prevalence estimates at iteration :math:`s`
+
+        - :math:`N` is the number of test instances.
+
+        Calibrations supported on posterior probabilities before **EM** iteration:
+
+        Temperature Scaling (TS):
+
+        .. math::
+
+            \hat{p} = \text{softmax}\left(\frac{\log(p)}{T}\right)
+
+        Bias-Corrected Temperature Scaling (BCTS):
+
+        .. math::
+
+            \hat{p} = \text{softmax}\left(\frac{\log(p)}{T} + b\right)
+
+        Vector Scaling (VS):
+
+        .. math::
+
+            \hat{p}_i = \text{softmax}(W_i \cdot \log(p_i) + b_i)
+
+        No-Bias Vector Scaling (NBVS):
+
+        .. math::
+
+            \hat{p}_i = \text{softmax}(W_i \cdot \log(p_i))
 
     Parameters
     ----------
