@@ -379,12 +379,6 @@ def validate_prevalences(quantifier, prevalences: np.ndarray | list | dict, clas
             f"prevalences must be a numpy array, list, or dict, got {type(prevalences).__name__}."
         )
     
-    # Validate all classes are present
-    if set(prev_dict.keys()) != set(classes):
-        raise InputValidationError(
-            f"prevalences keys must match classes. Got keys {set(prev_dict.keys())}, expected {set(classes)}."
-        )
-    
     # Normalize if requested
     if normalize:
         total = sum(prev_dict.values())
