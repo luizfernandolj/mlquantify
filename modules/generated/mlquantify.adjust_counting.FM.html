@@ -521,16 +521,12 @@ concept drift.</p>
 applying thresholding on posterior probabilities against prior prevalence,
 as described in the FM algorithm. This enables the correction using
 a quadratic optimization approach.</p>
-<p>The method solves:
-.. math:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>\<span class="n">min_</span><span class="p">{</span>\<span class="n">hat</span><span class="p">{</span>\<span class="n">pi</span><span class="p">}</span><span class="n">_F</span><span class="p">}</span> \<span class="o">|</span> \<span class="n">mathbf</span><span class="p">{</span><span class="n">C</span><span class="p">}</span> \<span class="n">hat</span><span class="p">{</span>\<span class="n">pi</span><span class="p">}</span><span class="n">_F</span> <span class="o">-</span> \<span class="n">mathbf</span><span class="p">{</span><span class="n">p</span><span class="p">}</span> \<span class="o">|^</span><span class="mi">2</span>
-</pre></div>
-</div>
-<p>subject to constraints:
-.. math:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>\<span class="n">hat</span><span class="p">{</span>\<span class="n">pi</span><span class="p">}</span><span class="n">_F</span> \<span class="n">geq</span> <span class="mi">0</span><span class="p">,</span> \<span class="n">quad</span> \<span class="n">sum_k</span> \<span class="n">hat</span><span class="p">{</span>\<span class="n">pi</span><span class="p">}</span><span class="n">_</span><span class="p">{</span><span class="n">F</span><span class="p">,</span><span class="n">k</span><span class="p">}</span> <span class="o">=</span> <span class="mi">1</span>
-</pre></div>
-</div>
+<p>The method solves:</p>
+<div class="math notranslate nohighlight">
+\[\min_{\hat{\pi}_F} \| \mathbf{C} \hat{\pi}_F - \mathbf{p} \|^2\]</div>
+<p>subject to constraints:</p>
+<div class="math notranslate nohighlight">
+\[\hat{\pi}_F \geq 0, \quad \sum_k \hat{\pi}_{F,k} = 1\]</div>
 <p>where <span class="math notranslate nohighlight">\(\mathbf{C}\)</span> is the confusion matrix, <span class="math notranslate nohighlight">\(\mathbf{p}\)</span> is the
 vector of predicted prevalences.</p>
 <dl class="field-list simple">
