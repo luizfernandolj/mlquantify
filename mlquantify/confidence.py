@@ -166,10 +166,10 @@ class ConfidenceEllipseSimplex(BaseConfidenceRegion):
     .. math::
 
         CE_{\alpha}(\pi) =
-        begin{cases}
+        \begin{cases}
         1 & \text{if} (\pi - \mu)^T \Sigma^{-1} (\pi - \mu) \le \chi^2_{n-1}(1-\alpha) \\
         0 & \text{otherwise}
-        end{cases}
+        \end{cases}
 
     Parameters
     ----------
@@ -240,7 +240,8 @@ class ConfidenceEllipseCLR(ConfidenceEllipseSimplex):
 
     .. math::
 
-        T(\pi) = [\log(\pi_1/g(\pi)), ..., \log(\pi_n/g(\pi))], g(\pi) = (\prod_i \pi_i)^{1/n}
+        T(\pi) = [\log(\pi_1/g(\pi)), ..., \log(\pi_n/g(\pi))],\\ 
+        g(\pi) = (\prod_i \pi_i)^{1/n}
 
     A confidence ellipse is then built in the transformed space:
 
