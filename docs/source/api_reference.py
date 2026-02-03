@@ -92,14 +92,15 @@ API_REFERENCE = {
                     "CC",
                     "PCC",
                     "FM",
-                    "GAC",
-                    "GPAC",
-                    "ACC",
-                    "X_method",
-                    "MAX",
+                    "AC",
+                    "PAC",
+                    "TAC",
+                    "TX",
+                    "TMAX",
                     "T50",
                     "MS",
                     "MS2",
+                    "CDE",
                     "evaluate_thresholds",
                     "compute_tpr",
                     "compute_fpr",
@@ -115,9 +116,7 @@ API_REFERENCE = {
             {
                 "title": "Likelihood Methods",
                 "autosummary": [
-                    "EMQ", 
-                    "MLPE",
-                    "CDE"
+                    "EMQ"
                 ],
             }
         ],

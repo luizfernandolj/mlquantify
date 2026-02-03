@@ -215,17 +215,17 @@ class MatrixAdjustment(BaseAdjustCount):
         super().__init__(learner=learner)
         self.solver = solver
     
-    def _adjust(self, predictions, train_y_pred, y_train):
+    def _adjust(self, predictions, train_predictions, y_train):
         n_class = len(np.unique(y_train))
         self.CM = np.zeros((n_class, n_class))
 
         if self.solver == 'optim':
-            priors = np.array(list(CC().aggregate(train_y_pred, y_train).values()))
-            self.CM = self._compute_confusion_matrix(train_y_pred, y_train, priors)
+            priors = np.array(list(CC().aggregate(train_predictions, y_train).values()))
+            self.CM = self._compute_confusion_matrix(train_predictions, y_train, priors)
             prevs_estim = self._get_estimations(predictions > priors, y_train)
             prevalence = self._solve_optimization(prevs_estim, priors)
         else:
-            self.CM = self._compute_confusion_matrix(train_y_pred, y_train)
+            self.CM = self._compute_confusion_matrix(train_predictions, y_train)
             prevs_estim = self._get_estimations(predictions, y_train)
             prevalence = self._solve_linear(prevs_estim)
         

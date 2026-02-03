@@ -94,12 +94,12 @@ def validate_y(quantifier: Any, y: np.ndarray) -> None:
             f"Predictions must be 1D or 2D array, got array with ndim={y.ndim} and shape={y.shape}."
         )
 
-def _get_valid_crisp_predictions(predictions, train_y_values=None, threshold=0.5):
+def _get_valid_crisp_predictions(predictions, y_train=None, threshold=0.5):
     predictions = np.asarray(predictions)
     dimensions = predictions.ndim
 
-    if train_y_values is not None:
-        classes = np.unique(train_y_values)
+    if y_train is not None:
+        classes = np.unique(y_train)
     else:
         classes = None
 
@@ -138,7 +138,7 @@ def _get_valid_crisp_predictions(predictions, train_y_values=None, threshold=0.5
     return predictions
 
 
-def validate_predictions(quantifier: Any, predictions: np.ndarray, threshold: float = 0.5, train_y_values=None) -> np.ndarray:
+def validate_predictions(quantifier: Any, predictions: np.ndarray, threshold: float = 0.5, y_train=None) -> np.ndarray:
     """
     Validate predictions using the quantifier's declared output tags.
     Raises InputValidationError if inconsistent with tags.
@@ -158,7 +158,7 @@ def validate_predictions(quantifier: Any, predictions: np.ndarray, threshold: fl
             f"Soft predictions for {quantifier.__class__.__name__} must be float, got dtype {predictions.dtype}."
         )
     elif estimator_type == "crisp" and np.issubdtype(predictions.dtype, np.floating):
-        predictions = _get_valid_crisp_predictions(predictions, train_y_values, threshold) 
+        predictions = _get_valid_crisp_predictions(predictions, y_train, threshold) 
     return predictions   
     
     

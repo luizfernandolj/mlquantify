@@ -164,7 +164,7 @@ class BaseAdjustCount(AggregationMixin, BaseQuantifier):
         Underlying classification model.
     train_predictions : ndarray of shape (n_samples_train, n_classes)
         Predictions on training data from cross-validation.
-    train_y_values : ndarray of shape (n_samples_train,)
+    y_train : ndarray of shape (n_samples_train,)
         True labels corresponding to training predictions.
     classes : ndarray of shape (n_classes,)
         Unique class labels.
@@ -225,13 +225,13 @@ class BaseAdjustCount(AggregationMixin, BaseQuantifier):
             )
         
         self.train_predictions = train_predictions
-        self.train_y_values = y_train_labels
+        self.y_train = y_train_labels
         return self
     
     def predict(self, X):
         """Predict class prevalences for the given data."""
         predictions = getattr(self.learner, _get_learner_function(self))(X)
-        prevalences = self.aggregate(predictions, self.train_predictions, self.train_y_values)
+        prevalences = self.aggregate(predictions, self.train_predictions, self.y_train)
         return prevalences
 
     def aggregate(self, predictions, train_predictions, y_train):
