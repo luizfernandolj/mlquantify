@@ -114,7 +114,6 @@ class BaseCount(AggregationMixin, BaseQuantifier):
     
     @abstractmethod
     def aggregate(self, predictions):
-        """Aggregate predictions into class prevalence estimates."""
         ...
 
 
@@ -156,7 +155,7 @@ class BaseAdjustCount(AggregationMixin, BaseQuantifier):
     Parameters
     ----------
     learner : object, optional
-        Supervised learner implementing `fit`, `predict`, or `predict_proba`.
+        Supervised learner implementing `fit` and (`predict` or `predict_proba`) depending on the quantifier.
 
     Attributes
     ----------
@@ -236,7 +235,33 @@ class BaseAdjustCount(AggregationMixin, BaseQuantifier):
         return prevalences
 
     def aggregate(self, predictions, train_predictions, y_train):
-        """Aggregate predictions and apply matrix- or rate-based bias correction."""
+        """Aggregate predictions and apply matrix- or rate-based bias correction. 
+        
+        Parameters
+        ----------
+        predictions : ndarray of shape (n_samples, n_classes)
+            Learner predictions on test data. Can be probabilities (n_samples, n_classes) or class labels (n_samples,).
+        train_predictions : ndarray of shape (n_samples, n_classes)
+            Learner predictions on training data. Can be probabilities (n_samples, n_classes) or class labels (n_samples,).
+        y_train : ndarray of shape (n_samples,)
+            True class labels of the training data.
+        
+        Returns
+        -------
+        ndarray of shape (n_classes,)
+            Class prevalence estimates.
+
+        Examples
+        --------
+        >>> from mlquantify.adjust_counting import AC
+        >>> import numpy as np
+        >>> q = AC()
+        >>> predictions = np.random.rand(200)
+        >>> train_predictions = np.random.rand(200) # generated via cross-validation
+        >>> y_train = np.random.randint(0, 2, 200)
+        >>> q.aggregate(predictions, train_predictions, y_train)
+        {0: 0.51, 1: 0.49}
+        """
         self.classes_ = check_classes_attribute(self, np.unique(y_train))
         
         predictions = validate_predictions(self, predictions)

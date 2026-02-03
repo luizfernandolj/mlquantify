@@ -245,26 +245,31 @@ class MatrixAdjustment(BaseAdjustCount):
         return adjusted
 
     def _solve_optimization(self, prevs_estim, priors):
-        r"""Solve the system linearly.
+        r"""Solve the system using constrained optimization.
 
-        The solution is obtained by matrix inversion:
+        The solution is obtained by minimizing the discrepancy:
 
-        .. math::
+            || C @ \hat{\pi}_F - p ||
 
-            \hat{\pi}_F = \mathbf{C}^{-1} \mathbf{p}
+        subject to the constraints:
 
-        where :math:`\mathbf{C}` is the confusion matrix and :math:`\mathbf{p}` 
-        is the observed prevalence vector.
+            \hat{\pi}_F \ge 0,  sum_k \hat{\pi}_{F,k} = 1
+
+        where:
+            - C is the confusion matrix,
+            - p is the observed prevalence vector from the test set.
 
         Parameters
         ----------
-        p : ndarray of shape (n_classes,)
-            Observed prevalence vector from test set.
+        prevs_estim : ndarray of shape (n_classes,)
+            Observed prevalence vector from the test set.
+        priors : ndarray of shape (n_classes,)
+            Fallback class prior vector used if optimization fails.
 
         Returns
         -------
         ndarray of shape (n_classes,)
-            Adjusted prevalence estimates :math:`\hat{\pi}_F`.
+            Adjusted prevalence estimates \hat{\pi}_F.
         """
         def objective(prevs_pred):
             return np.linalg.norm(self.CM @ prevs_pred - prevs_estim)
@@ -296,18 +301,22 @@ class CDE(SoftLearnerQMixin, AggregationMixin, BaseQuantifier):
 
     Threshold :math:`\tau` from false positive and false negative costs:
     .. math::
+
         \tau = \frac{c_{FP}}{c_{FP} + c_{FN}}
 
     Hard classification by thresholding posterior probability :math:`p(+|x)` at :math:`\tau`:
     .. math::
+
         \hat{y}(x) = \mathbf{1}_{p(+|x) > \tau}
 
     Prevalence estimation via classify-and-count:
     .. math::
+
         \hat{p}_U(+) = \frac{1}{N} \sum_{n=1}^N \hat{y}(x_n)
 
     False positive cost update:
     .. math::
+
         c_{FP}^{new} = \frac{p_L(+)}{p_L(-)} \times \frac{\hat{p}_U(-)}{\hat{p}_U(+)} \times c_{FN}
 
     Parameters
@@ -366,6 +375,31 @@ class CDE(SoftLearnerQMixin, AggregationMixin, BaseQuantifier):
 
 
     def aggregate(self, predictions, y_train):
+        """Aggregate predictions and apply matrix- or rate-based bias correction. 
+        
+        Parameters
+        ----------
+        predictions : ndarray of shape (n_samples, n_classes)
+            Learner predictions on test data. Can be probabilities (n_samples, n_classes) or class labels (n_samples,).
+        y_train : ndarray of shape (n_samples,)
+            True class labels of the training data.
+        
+        Returns
+        -------
+        ndarray of shape (n_classes,)
+            Class prevalence estimates.
+
+        Examples
+        --------
+        >>> from mlquantify.adjust_counting import CDE
+        >>> import numpy as np
+        >>> q = CDE()
+        >>> predictions = np.random.rand(200)
+        >>> train_predictions = np.random.rand(200) # generated via cross-validation
+        >>> y_train = np.random.randint(0, 2, 200)
+        >>> q.aggregate(predictions, train_predictions, y_train)
+        {0: 0.51, 1: 0.49}
+        """
 
         self.classes_ = check_classes_attribute(self, np.unique(y_train))
         predictions = validate_predictions(self, predictions)
@@ -460,13 +494,11 @@ class FM(SoftLearnerQMixin, MatrixAdjustment):
     a quadratic optimization approach.
 
     The method solves:
-
     .. math::
 
         \min_{\hat{\pi}_F} \| \mathbf{C} \hat{\pi}_F - \mathbf{p} \|^2
 
     subject to constraints:
-
     .. math::
 
         \hat{\pi}_F \geq 0, \quad \sum_k \hat{\pi}_{F,k} = 1

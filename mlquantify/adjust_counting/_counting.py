@@ -15,10 +15,10 @@ class CC(CrispLearnerQMixin, BaseCount):
     r"""Classify and Count (CC) quantifier.
 
     Implements the Classify and Count method for quantification, describe as a
-    baseline approach in the literature [1, 2].
+    baseline approach in the literature [1]_, [2]_.
 
     References
-    ----------
+    ----------  
     .. [1] George Forman. 2008. Quantifying counts and costs via classification.
        Data Min. Knowl. Discov. 17, 2 (October 2008), 164–206.
     .. [
@@ -57,10 +57,6 @@ class CC(CrispLearnerQMixin, BaseCount):
     >>> q.fit(X, y)
     >>> q.predict(X)
     {0: 0.47, 1: 0.53}
-    >>> q2 = CC()
-    >>> predictions = np.random.rand(200)
-    >>> q2.aggregate(predictions)
-    {0: 0.51, 1: 0.49}
 
     References
     ----------
@@ -83,6 +79,29 @@ class CC(CrispLearnerQMixin, BaseCount):
         self.threshold = threshold
 
     def aggregate(self, predictions, y_train=None):
+        """Aggregate predictions into class prevalence estimates. 
+        
+        Parameters
+        ----------
+        predictions : ndarray of shape (n_samples, n_classes)
+            Learner predictions on test data. Can be probabilities (n_samples, n_classes) or class labels (n_samples,).
+        y_train : ndarray of shape (n_samples,)
+            True class labels of the training data. None by default.
+        
+        Returns
+        -------
+        ndarray of shape (n_classes,)
+            Class prevalence estimates.
+
+        Examples
+        --------
+        >>> from mlquantify.adjust_counting import CC
+        >>> import numpy as np
+        >>> q = CC()
+        >>> predictions = np.random.rand(200)
+        >>> q.aggregate(predictions)
+        {0: 0.51, 1: 0.49}
+        """
         predictions = validate_predictions(self, predictions, self.threshold, y_train)
         
         if y_train is None:
@@ -99,12 +118,8 @@ class CC(CrispLearnerQMixin, BaseCount):
 class PCC(SoftLearnerQMixin, BaseCount):
     r"""Probabilistic Classify and Count (PCC) quantifier.
     
-    Implements the Probabilistic Classify and Count method for quantification as described in:
-    [1] Forman, G. (2005). *Counting Positives Accurately Despite Inaccurate Classification.*
-        ECML, pp. 564-575.
-    [2] Forman, G. (2008). *Quantifying Counts and Costs via Classification.*
-        Data Mining and Knowledge Discovery, 17(2), 164-206.
-        
+    Implements the Probabilistic Classify and Count method for quantification as described in [1]_, [2]_:
+    
         
     Parameters
     ----------
@@ -119,6 +134,10 @@ class PCC(SoftLearnerQMixin, BaseCount):
         Underlying classification model.
     classes : ndarray of shape (n_classes,)
         Unique class labels observed during training.
+
+    .. dropdown:: References
+        .. [1] Forman, G. (2005). *Counting Positives Accurately Despite Inaccurate Classification.* ECML, pp. 564-575.
+        .. [2] Forman, G. (2008). *Quantifying Counts and Costs via Classification.* Data Mining and Knowledge Discovery, 17(2), 164-206.
         
         
     Examples
@@ -132,16 +151,35 @@ class PCC(SoftLearnerQMixin, BaseCount):
     >>> q.fit(X, y)
     >>> q.predict(X)
     {0: 0.48, 1: 0.52}
-    >>> q2 = PCC()
-    >>> predictions = np.random.rand(200, 2)
-    >>> q2.aggregate(predictions)
-    {0: 0.50, 1: 0.50}
     """
 
     def __init__(self, learner=None):
         super().__init__(learner=learner)
 
     def aggregate(self, predictions, y_train=None):
+        """Aggregate predictions into class prevalence estimates. 
+        
+        Parameters
+        ----------
+        predictions : ndarray of shape (n_samples, n_classes)
+            Learner predictions on test data. Can be probabilities (n_samples, n_classes) or class labels (n_samples,).
+        y_train : ndarray of shape (n_samples,)
+            True class labels of the training data. None by default.
+        
+        Returns
+        -------
+        ndarray of shape (n_classes,)
+            Class prevalence estimates.
+
+        Examples
+        --------
+        >>> from mlquantify.adjust_counting import PCC
+        >>> import numpy as np
+        >>> q = PCC()
+        >>> predictions = np.random.rand(200, 2)
+        >>> q.aggregate(predictions)
+        {0: 0.50, 1: 0.50}
+        """
         predictions = validate_predictions(self, predictions)
         
         # Handle categorical predictions (1D array with class labels)
