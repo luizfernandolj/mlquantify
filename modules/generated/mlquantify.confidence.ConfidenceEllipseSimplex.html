@@ -511,13 +511,13 @@
 <h1>ConfidenceEllipseSimplex<a class="headerlink" href="#confidenceellipsesimplex" title="Link to this heading">#</a></h1>
 <dl class="py class">
 <dt class="sig sig-object py" id="mlquantify.confidence.ConfidenceEllipseSimplex">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">mlquantify.confidence.</span></span><span class="sig-name descname"><span class="pre">ConfidenceEllipseSimplex</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">prev_estims</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">confidence_level</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.95</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/luizfernandolj/mlquantify/tree/master/mlquantify/confidence.py#L160-L227"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mlquantify.confidence.ConfidenceEllipseSimplex" title="Link to this definition">#</a></dt>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">mlquantify.confidence.</span></span><span class="sig-name descname"><span class="pre">ConfidenceEllipseSimplex</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">prev_estims</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">confidence_level</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.95</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/luizfernandolj/mlquantify/tree/master/mlquantify/confidence.py#L161-L229"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mlquantify.confidence.ConfidenceEllipseSimplex" title="Link to this definition">#</a></dt>
 <dd><p>Confidence ellipse for prevalence estimates in the simplex.</p>
 <p>Defines a multivariate confidence region based on a chi-squared threshold:</p>
 <div class="math notranslate nohighlight">
-\[\begin{split}CE_α(π) =
+\[\begin{split}CE_{\alpha}(\pi) =
 \\begin{cases}
-1 &amp; \\text{if } (π - μ)^T Σ^{-1} (π - μ) \\le χ^2_{n-1}(1-α) \\\\
+1 &amp; \\text{if } (\pi - \mu)^T \Sigma^{-1} (\pi - \mu) \\le \chi^2_{n-1}(1-\alpha) \\\\
 0 &amp; \\text{otherwise}
 \\end{cases}\end{split}\]</div>
 <dl class="field-list simple">
@@ -557,19 +557,19 @@ Section 3.3, Equation (2).</p>
 </div>
 <dl class="py method">
 <dt class="sig sig-object py" id="mlquantify.confidence.ConfidenceEllipseSimplex.contains">
-<span class="sig-name descname"><span class="pre">contains</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">point</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/luizfernandolj/mlquantify/tree/master/mlquantify/confidence.py#L222-L227"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mlquantify.confidence.ConfidenceEllipseSimplex.contains" title="Link to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">contains</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">point</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/luizfernandolj/mlquantify/tree/master/mlquantify/confidence.py#L224-L229"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mlquantify.confidence.ConfidenceEllipseSimplex.contains" title="Link to this definition">#</a></dt>
 <dd><p>Check whether a prevalence vector lies within the region.</p>
 </dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="mlquantify.confidence.ConfidenceEllipseSimplex.get_point_estimate">
-<span class="sig-name descname"><span class="pre">get_point_estimate</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference external" href="https://github.com/luizfernandolj/mlquantify/tree/master/mlquantify/confidence.py#L219-L220"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mlquantify.confidence.ConfidenceEllipseSimplex.get_point_estimate" title="Link to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">get_point_estimate</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference external" href="https://github.com/luizfernandolj/mlquantify/tree/master/mlquantify/confidence.py#L221-L222"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mlquantify.confidence.ConfidenceEllipseSimplex.get_point_estimate" title="Link to this definition">#</a></dt>
 <dd><p>Return the point estimate of prevalence (e.g., mean of bootstrap samples).</p>
 </dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="mlquantify.confidence.ConfidenceEllipseSimplex.get_region">
-<span class="sig-name descname"><span class="pre">get_region</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference external" href="https://github.com/luizfernandolj/mlquantify/tree/master/mlquantify/confidence.py#L216-L217"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mlquantify.confidence.ConfidenceEllipseSimplex.get_region" title="Link to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">get_region</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference external" href="https://github.com/luizfernandolj/mlquantify/tree/master/mlquantify/confidence.py#L218-L219"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mlquantify.confidence.ConfidenceEllipseSimplex.get_region" title="Link to this definition">#</a></dt>
 <dd><p>Return the parameters defining the confidence region.</p>
 </dd></dl>
 
