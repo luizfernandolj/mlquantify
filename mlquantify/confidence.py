@@ -96,14 +96,15 @@ class ConfidenceInterval(BaseConfidenceRegion):
     The confidence region is defined as:
 
     .. math::
-        CI_α(π) = 
-        \\begin{cases}
-        1 & \\text{if } L_i \\le π_i \\le U_i, \\forall i=1,...,n \\\\
-        0 & \\text{otherwise}
-        \\end{cases}
 
-    where :math:`L_i` and :math:`U_i` are the empirical 
-    α/2 and 1−α/2 quantiles for class i.
+        CI_{\alpha}(\pi) =
+        \begin{cases}
+        1 & \text{if } L_i \le \pi_i \le U_i, \forall i=1,\dots,n \\
+        0 & \text{otherwise}
+        \end{cases}
+
+    where :math:`L_i` and :math:`U_i` are the empirical
+    :math:`\alpha/2` and :math:`1-\alpha/2` quantiles for class :math:`i`.
 
     Parameters
     ----------
@@ -163,9 +164,10 @@ class ConfidenceEllipseSimplex(BaseConfidenceRegion):
     Defines a multivariate confidence region based on a chi-squared threshold:
 
     .. math::
-        CE_α(π) =
+
+        CE_{\alpha}(\pi) =
         \\begin{cases}
-        1 & \\text{if } (π - μ)^T Σ^{-1} (π - μ) \\le χ^2_{n-1}(1-α) \\\\
+        1 & \\text{if } (\pi - \mu)^T \Sigma^{-1} (\pi - \mu) \\le \chi^2_{n-1}(1-\alpha) \\\\
         0 & \\text{otherwise}
         \\end{cases}
 
@@ -237,17 +239,19 @@ class ConfidenceEllipseCLR(ConfidenceEllipseSimplex):
     Applies the Centered Log-Ratio (CLR) transformation:
 
     .. math::
-        T(π) = [\log(π_1/g(π)), ..., \log(π_n/g(π))], \\
-        g(π) = (\prod_i π_i)^{1/n}
+
+        T(\pi) = [\log(\pi_1/g(\pi)), ..., \log(\pi_n/g(\pi))], \\
+        g(\pi) = (\prod_i \pi_i)^{1/n}
 
     A confidence ellipse is then built in the transformed space:
 
     .. math::
-        CT_α(π) =
-        \\begin{cases}
-        1 & \\text{if } (T(π) - μ_{CLR})^T Σ^{-1} (T(π) - μ_{CLR}) \\le χ^2_{n-1}(1-α) \\\\
-        0 & \\text{otherwise}
-        \\end{cases}
+    
+        CT_\alpha(\pi) =
+        \begin{cases}
+        1 & \text{if } (T(\pi) - \mu_{CLR})^T \Sigma^{-1} (T(\pi) - \mu_{CLR}) \le \chi^2_{n-1}(1-\alpha) \\
+        0 & \text{otherwise}
+        \end{cases}
 
     Parameters
     ----------
