@@ -208,7 +208,6 @@ class MatrixAdjustment(BaseAdjustCount):
         pp. 1-8.
     """
 
-
     _parameter_constraints = {"solver": Options(["optim", "linear"])}
 
     def __init__(self, learner=None, solver=None):
@@ -300,21 +299,25 @@ class CDE(SoftLearnerQMixin, AggregationMixin, BaseQuantifier):
     r"""CDE-Iterate for binary classification prevalence estimation.
 
     Threshold :math:`\tau` from false positive and false negative costs:
+
     .. math::
 
         \tau = \frac{c_{FP}}{c_{FP} + c_{FN}}
 
     Hard classification by thresholding posterior probability :math:`p(+|x)` at :math:`\tau`:
+
     .. math::
 
         \hat{y}(x) = \mathbf{1}_{p(+|x) > \tau}
 
     Prevalence estimation via classify-and-count:
+
     .. math::
 
         \hat{p}_U(+) = \frac{1}{N} \sum_{n=1}^N \hat{y}(x_n)
 
     False positive cost update:
+    
     .. math::
 
         c_{FP}^{new} = \frac{p_L(+)}{p_L(-)} \times \frac{\hat{p}_U(-)}{\hat{p}_U(+)} \times c_{FN}
@@ -494,11 +497,13 @@ class FM(SoftLearnerQMixin, MatrixAdjustment):
     a quadratic optimization approach.
 
     The method solves:
+
     .. math::
 
         \min_{\hat{\pi}_F} \| \mathbf{C} \hat{\pi}_F - \mathbf{p} \|^2
 
     subject to constraints:
+    
     .. math::
 
         \hat{\pi}_F \geq 0, \quad \sum_k \hat{\pi}_{F,k} = 1
