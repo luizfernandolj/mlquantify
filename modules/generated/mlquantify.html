@@ -806,12 +806,13 @@ Istituto di Scienza e Tecnologie dell’Informazione, CNR, Pisa.</p>
 
 <dl class="py class">
 <dt class="sig sig-object py" id="mlquantify.confidence.ConfidenceEllipseCLR">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">mlquantify.confidence.</span></span><span class="sig-name descname"><span class="pre">ConfidenceEllipseCLR</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">prev_estims</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">confidence_level</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.95</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/luizfernandolj/mlquantify/tree/master/mlquantify/confidence.py#L236-L315"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mlquantify.confidence.ConfidenceEllipseCLR" title="Link to this definition">#</a></dt>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">mlquantify.confidence.</span></span><span class="sig-name descname"><span class="pre">ConfidenceEllipseCLR</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">prev_estims</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">confidence_level</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.95</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/luizfernandolj/mlquantify/tree/master/mlquantify/confidence.py#L236-L316"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mlquantify.confidence.ConfidenceEllipseCLR" title="Link to this definition">#</a></dt>
 <dd><p>Bases: <a class="reference internal" href="mlquantify.confidence.ConfidenceEllipseSimplex.html#mlquantify.confidence.ConfidenceEllipseSimplex" title="mlquantify.confidence.ConfidenceEllipseSimplex"><code class="xref py py-class docutils literal notranslate"><span class="pre">ConfidenceEllipseSimplex</span></code></a></p>
 <p>Confidence ellipse for prevalence estimates in CLR-transformed space.</p>
 <p>Applies the Centered Log-Ratio (CLR) transformation:</p>
 <div class="math notranslate nohighlight">
-\[T(\pi) = [\log(\pi_1/g(\pi)), ..., \log(\pi_n/g(\pi))], g(\pi) = (\prod_i \pi_i)^{1/n}\]</div>
+\[\begin{split}T(\pi) = [\log(\pi_1/g(\pi)), ..., \log(\pi_n/g(\pi))],\\ 
+g(\pi) = (\prod_i \pi_i)^{1/n}\end{split}\]</div>
 <p>A confidence ellipse is then built in the transformed space:</p>
 <div class="math notranslate nohighlight">
 \[\begin{split}CT_\alpha(\pi) =
@@ -856,13 +857,13 @@ Section 3.3, Equation (3).</p>
 </div>
 <dl class="py method">
 <dt class="sig sig-object py" id="mlquantify.confidence.ConfidenceEllipseCLR.contains">
-<span class="sig-name descname"><span class="pre">contains</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">point</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">eps</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1e-06</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/luizfernandolj/mlquantify/tree/master/mlquantify/confidence.py#L308-L315"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mlquantify.confidence.ConfidenceEllipseCLR.contains" title="Link to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">contains</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">point</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">eps</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1e-06</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/luizfernandolj/mlquantify/tree/master/mlquantify/confidence.py#L309-L316"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mlquantify.confidence.ConfidenceEllipseCLR.contains" title="Link to this definition">#</a></dt>
 <dd><p>Check whether a prevalence vector lies within the region.</p>
 </dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="mlquantify.confidence.ConfidenceEllipseCLR.get_point_estimate">
-<span class="sig-name descname"><span class="pre">get_point_estimate</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference external" href="https://github.com/luizfernandolj/mlquantify/tree/master/mlquantify/confidence.py#L303-L306"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mlquantify.confidence.ConfidenceEllipseCLR.get_point_estimate" title="Link to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">get_point_estimate</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference external" href="https://github.com/luizfernandolj/mlquantify/tree/master/mlquantify/confidence.py#L304-L307"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mlquantify.confidence.ConfidenceEllipseCLR.get_point_estimate" title="Link to this definition">#</a></dt>
 <dd><p>Return the point estimate of prevalence (e.g., mean of bootstrap samples).</p>
 </dd></dl>
 
@@ -876,10 +877,10 @@ Section 3.3, Equation (3).</p>
 <p>Defines a multivariate confidence region based on a chi-squared threshold:</p>
 <div class="math notranslate nohighlight">
 \[\begin{split}CE_{\alpha}(\pi) =
-begin{cases}
+\begin{cases}
 1 &amp; \text{if} (\pi - \mu)^T \Sigma^{-1} (\pi - \mu) \le \chi^2_{n-1}(1-\alpha) \\
 0 &amp; \text{otherwise}
-end{cases}\end{split}\]</div>
+\end{cases}\end{split}\]</div>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><dl class="simple">
@@ -1006,7 +1007,7 @@ Section 3.3, Equation (1).</p>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="mlquantify.confidence.construct_confidence_region">
-<span class="sig-prename descclassname"><span class="pre">mlquantify.confidence.</span></span><span class="sig-name descname"><span class="pre">construct_confidence_region</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">prev_estims</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">confidence_level</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.95</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">method</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'intervals'</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/luizfernandolj/mlquantify/tree/master/mlquantify/confidence.py#L323-L332"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mlquantify.confidence.construct_confidence_region" title="Link to this definition">#</a></dt>
+<span class="sig-prename descclassname"><span class="pre">mlquantify.confidence.</span></span><span class="sig-name descname"><span class="pre">construct_confidence_region</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">prev_estims</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">confidence_level</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.95</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">method</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'intervals'</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/luizfernandolj/mlquantify/tree/master/mlquantify/confidence.py#L324-L333"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mlquantify.confidence.construct_confidence_region" title="Link to this definition">#</a></dt>
 <dd></dd></dl>
 
 </section>
