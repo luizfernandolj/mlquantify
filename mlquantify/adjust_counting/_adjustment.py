@@ -217,7 +217,6 @@ class MatrixAdjustment(BaseAdjustCount):
     def _adjust(self, predictions, train_predictions, y_train):
         n_class = len(np.unique(y_train))
         self.CM = np.zeros((n_class, n_class))
-
         if self.solver == 'optim':
             class_counts = np.array([np.count_nonzero(y_train == _class) for _class in self.classes_])
             priors = class_counts / len(y_train)
