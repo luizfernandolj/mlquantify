@@ -15,7 +15,13 @@ class CC(CrispLearnerQMixin, BaseCount):
     r"""Classify and Count (CC) quantifier.
 
     Implements the Classify and Count method for quantification, describe as a
-    baseline approach in the literature [1][2].
+    baseline approach in the literature [1, 2].
+
+    References
+    ----------
+    .. [1] George Forman. 2008. Quantifying counts and costs via classification.
+       Data Min. Knowl. Discov. 17, 2 (October 2008), 164–206.
+    .. [
 
     Parameters
     ----------
@@ -58,10 +64,11 @@ class CC(CrispLearnerQMixin, BaseCount):
 
     References
     ----------
-    .. [1] Forman, G. (2005). "Counting Positives Accurately Despite Inaccurate Classification",
-           *ECML*, pp. 564-575.
-    .. [2] Forman, G. (2008). "Quantifying Counts and Costs via Classification",
-           *Data Mining and Knowledge Discovery*, 17(2), 164-206.
+    .. dropdown:: References
+        .. [1] Forman, G. (2005). "Counting Positives Accurately Despite Inaccurate Classification",
+            *ECML*, pp. 564-575.
+        .. [2] Forman, G. (2008). "Quantifying Counts and Costs via Classification",
+            *Data Mining and Knowledge Discovery*, 17(2), 164-206.
     """
     
     _parameters_constraints = {

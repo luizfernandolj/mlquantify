@@ -230,6 +230,7 @@ class BaseAdjustCount(AggregationMixin, BaseQuantifier):
     
     def predict(self, X):
         """Predict class prevalences for the given data."""
+        X = validate_data(self, X)
         predictions = getattr(self.learner, _get_learner_function(self))(X)
         prevalences = self.aggregate(predictions, self.train_predictions, self.y_train)
         return prevalences

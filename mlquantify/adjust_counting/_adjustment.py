@@ -220,7 +220,8 @@ class MatrixAdjustment(BaseAdjustCount):
         self.CM = np.zeros((n_class, n_class))
 
         if self.solver == 'optim':
-            priors = np.array(list(CC().aggregate(train_predictions, y_train).values()))
+            class_counts = np.array([np.count_nonzero(y_train == _class) for _class in self.classes_])
+            priors = class_counts / len(y_train)
             self.CM = self._compute_confusion_matrix(train_predictions, y_train, priors)
             prevs_estim = self._get_estimations(predictions > priors, y_train)
             prevalence = self._solve_optimization(prevs_estim, priors)
@@ -505,11 +506,26 @@ class FM(SoftLearnerQMixin, MatrixAdjustment):
     def __init__(self, learner=None):
         super().__init__(learner=learner, solver='optim')
     
-    def _compute_confusion_matrix(self, posteriors, y_true, priors):
+    def _compute_confusion_matrix(self, predictions, y_true, priors):
+        n_classes = len(self.classes_)
+        self.CM = np.zeros((n_classes, n_classes))
+
         for i, _class in enumerate(self.classes_):
             indices = (y_true == _class)
-            self.CM[:, i] = self._get_estimations(posteriors[indices] > priors, y_true[indices])
+            preds_sub = predictions[indices]
+
+            mask = preds_sub > priors               # (n_i, n_classes)
+            masked = np.where(mask, preds_sub, -np.inf)
+            best_classes = np.argmax(masked, axis=1)
+
+            hard_preds = np.zeros_like(preds_sub, dtype=bool)
+            rows = np.arange(preds_sub.shape[0])
+            hard_preds[rows, best_classes] = True
+
+            self.CM[:, i] = self._get_estimations(hard_preds, y_true[indices])
+        
         return self.CM
+
 
 
 class AC(CrispLearnerQMixin, MatrixAdjustment):
