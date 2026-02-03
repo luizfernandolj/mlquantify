@@ -348,9 +348,15 @@
 <li class="toctree-l2"><a class="reference internal" href="../modules/generated/mlquantify.adjust_counting.CC.html">CC</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../modules/generated/mlquantify.adjust_counting.PCC.html">PCC</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../modules/generated/mlquantify.adjust_counting.FM.html">FM</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../modules/generated/mlquantify.adjust_counting.AC.html">AC</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../modules/generated/mlquantify.adjust_counting.PAC.html">PAC</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../modules/generated/mlquantify.adjust_counting.TAC.html">TAC</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../modules/generated/mlquantify.adjust_counting.TX.html">TX</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../modules/generated/mlquantify.adjust_counting.TMAX.html">TMAX</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../modules/generated/mlquantify.adjust_counting.T50.html">T50</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../modules/generated/mlquantify.adjust_counting.MS.html">MS</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../modules/generated/mlquantify.adjust_counting.MS2.html">MS2</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../modules/generated/mlquantify.adjust_counting.CDE.html">CDE</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../modules/generated/mlquantify.adjust_counting.evaluate_thresholds.html">evaluate_thresholds</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../modules/generated/mlquantify.adjust_counting.compute_tpr.html">compute_tpr</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../modules/generated/mlquantify.adjust_counting.compute_fpr.html">compute_fpr</a></li>
@@ -511,14 +517,32 @@
 <tr class="row-odd"><td><p><a class="reference internal" href="../modules/generated/mlquantify.adjust_counting.FM.html#mlquantify.adjust_counting.FM" title="mlquantify.adjust_counting.FM"><code class="xref py py-obj docutils literal notranslate"><span class="pre">FM</span></code></a></p></td>
 <td><p>Friedman Method for quantification adjustment.</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="../modules/generated/mlquantify.adjust_counting.T50.html#mlquantify.adjust_counting.T50" title="mlquantify.adjust_counting.T50"><code class="xref py py-obj docutils literal notranslate"><span class="pre">T50</span></code></a></p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="../modules/generated/mlquantify.adjust_counting.AC.html#mlquantify.adjust_counting.AC" title="mlquantify.adjust_counting.AC"><code class="xref py py-obj docutils literal notranslate"><span class="pre">AC</span></code></a></p></td>
+<td><p>Adjusted Count method.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="../modules/generated/mlquantify.adjust_counting.PAC.html#mlquantify.adjust_counting.PAC" title="mlquantify.adjust_counting.PAC"><code class="xref py py-obj docutils literal notranslate"><span class="pre">PAC</span></code></a></p></td>
+<td><p>Probabilistic Adjusted Count (PAC) method.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="../modules/generated/mlquantify.adjust_counting.TAC.html#mlquantify.adjust_counting.TAC" title="mlquantify.adjust_counting.TAC"><code class="xref py py-obj docutils literal notranslate"><span class="pre">TAC</span></code></a></p></td>
+<td><p>Threshold Adjusted Count (TAC) — baseline threshold correction.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="../modules/generated/mlquantify.adjust_counting.TX.html#mlquantify.adjust_counting.TX" title="mlquantify.adjust_counting.TX"><code class="xref py py-obj docutils literal notranslate"><span class="pre">TX</span></code></a></p></td>
+<td><p>Threshold X method — threshold where <span class="math notranslate nohighlight">\(\text{TPR} + \text{FPR} = 1\)</span>.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="../modules/generated/mlquantify.adjust_counting.TMAX.html#mlquantify.adjust_counting.TMAX" title="mlquantify.adjust_counting.TMAX"><code class="xref py py-obj docutils literal notranslate"><span class="pre">TMAX</span></code></a></p></td>
+<td><p>Threshold MAX method — threshold maximizing <span class="math notranslate nohighlight">\(\text{TPR} - \text{FPR}\)</span>.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="../modules/generated/mlquantify.adjust_counting.T50.html#mlquantify.adjust_counting.T50" title="mlquantify.adjust_counting.T50"><code class="xref py py-obj docutils literal notranslate"><span class="pre">T50</span></code></a></p></td>
 <td><p>T50 — selects threshold where <span class="math notranslate nohighlight">\(\text{TPR} = 0.5\)</span>.</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="../modules/generated/mlquantify.adjust_counting.MS.html#mlquantify.adjust_counting.MS" title="mlquantify.adjust_counting.MS"><code class="xref py py-obj docutils literal notranslate"><span class="pre">MS</span></code></a></p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="../modules/generated/mlquantify.adjust_counting.MS.html#mlquantify.adjust_counting.MS" title="mlquantify.adjust_counting.MS"><code class="xref py py-obj docutils literal notranslate"><span class="pre">MS</span></code></a></p></td>
 <td><p>Median Sweep (MS) — median prevalence estimate across all thresholds.</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="../modules/generated/mlquantify.adjust_counting.MS2.html#mlquantify.adjust_counting.MS2" title="mlquantify.adjust_counting.MS2"><code class="xref py py-obj docutils literal notranslate"><span class="pre">MS2</span></code></a></p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="../modules/generated/mlquantify.adjust_counting.MS2.html#mlquantify.adjust_counting.MS2" title="mlquantify.adjust_counting.MS2"><code class="xref py py-obj docutils literal notranslate"><span class="pre">MS2</span></code></a></p></td>
 <td><p>MS2 — Median Sweep variant constraining <span class="math notranslate nohighlight">\(|\text{TPR} - \text{FPR}| &gt; 0.25\)</span>.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="../modules/generated/mlquantify.adjust_counting.CDE.html#mlquantify.adjust_counting.CDE" title="mlquantify.adjust_counting.CDE"><code class="xref py py-obj docutils literal notranslate"><span class="pre">CDE</span></code></a></p></td>
+<td><p>CDE-Iterate for binary classification prevalence estimation.</p></td>
 </tr>
 <tr class="row-odd"><td><p><a class="reference internal" href="../modules/generated/mlquantify.adjust_counting.evaluate_thresholds.html#mlquantify.adjust_counting.evaluate_thresholds" title="mlquantify.adjust_counting.evaluate_thresholds"><code class="xref py py-obj docutils literal notranslate"><span class="pre">evaluate_thresholds</span></code></a></p></td>
 <td><p>Evaluate a range of classification thresholds to compute the corresponding True Positive Rate (TPR) and False Positive Rate (FPR) for a binary quantification task.</p></td>

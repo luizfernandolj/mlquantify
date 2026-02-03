@@ -1,0 +1,10 @@
+TX
+==
+.. currentmodule:: mlquantify.adjust_counting
+.. autoclass:: TX
+    :members:
+    :inherited-members:
+    :special-members: __call__
+.. minigallery:: mlquantify.adjust_counting.TX mlquantify.adjust_counting.TX.__init__ mlquantify.adjust_counting.TX.aggregate mlquantify.adjust_counting.TX.fit mlquantify.adjust_counting.TX.get_best_threshold mlquantify.adjust_counting.TX.get_metadata_routing mlquantify.adjust_counting.TX.get_params mlquantify.adjust_counting.TX.predict mlquantify.adjust_counting.TX.save_quantifier mlquantify.adjust_counting.TX.set_fit_request mlquantify.adjust_counting.TX.set_params 
+   :add-heading: Gallery examples
+   :heading-level: -

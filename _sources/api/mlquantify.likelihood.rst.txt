@@ -30,5 +30,3 @@ Likelihood Methods
 
 
   EMQ
-  MLPE
-  CDE

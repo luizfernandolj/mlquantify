@@ -96,13 +96,13 @@ reference on concepts repeated across the API, see :ref:`glossary`.
 
 
 
-  * - :obj:`~mlquantify.adjust_counting.GAC`
+  * - :obj:`~mlquantify.adjust_counting.AC`
 
     - .. div:: sk-apisearch-desc
 
         .. currentmodule:: mlquantify.adjust_counting
 
-        .. autoshortsummary:: mlquantify.adjust_counting.GAC
+        .. autoshortsummary:: mlquantify.adjust_counting.AC
 
         .. div:: caption
 
@@ -112,13 +112,13 @@ reference on concepts repeated across the API, see :ref:`glossary`.
 
 
 
-  * - :obj:`~mlquantify.adjust_counting.GPAC`
+  * - :obj:`~mlquantify.adjust_counting.PAC`
 
     - .. div:: sk-apisearch-desc
 
         .. currentmodule:: mlquantify.adjust_counting
 
-        .. autoshortsummary:: mlquantify.adjust_counting.GPAC
+        .. autoshortsummary:: mlquantify.adjust_counting.PAC
 
         .. div:: caption
 
@@ -128,13 +128,13 @@ reference on concepts repeated across the API, see :ref:`glossary`.
 
 
 
-  * - :obj:`~mlquantify.adjust_counting.ACC`
+  * - :obj:`~mlquantify.adjust_counting.TAC`
 
     - .. div:: sk-apisearch-desc
 
         .. currentmodule:: mlquantify.adjust_counting
 
-        .. autoshortsummary:: mlquantify.adjust_counting.ACC
+        .. autoshortsummary:: mlquantify.adjust_counting.TAC
 
         .. div:: caption
 
@@ -144,13 +144,13 @@ reference on concepts repeated across the API, see :ref:`glossary`.
 
 
 
-  * - :obj:`~mlquantify.adjust_counting.X_method`
+  * - :obj:`~mlquantify.adjust_counting.TX`
 
     - .. div:: sk-apisearch-desc
 
         .. currentmodule:: mlquantify.adjust_counting
 
-        .. autoshortsummary:: mlquantify.adjust_counting.X_method
+        .. autoshortsummary:: mlquantify.adjust_counting.TX
 
         .. div:: caption
 
@@ -160,13 +160,13 @@ reference on concepts repeated across the API, see :ref:`glossary`.
 
 
 
-  * - :obj:`~mlquantify.adjust_counting.MAX`
+  * - :obj:`~mlquantify.adjust_counting.TMAX`
 
     - .. div:: sk-apisearch-desc
 
         .. currentmodule:: mlquantify.adjust_counting
 
-        .. autoshortsummary:: mlquantify.adjust_counting.MAX
+        .. autoshortsummary:: mlquantify.adjust_counting.TMAX
 
         .. div:: caption
 
@@ -215,6 +215,22 @@ reference on concepts repeated across the API, see :ref:`glossary`.
         .. currentmodule:: mlquantify.adjust_counting
 
         .. autoshortsummary:: mlquantify.adjust_counting.MS2
+
+        .. div:: caption
+
+          :mod:`mlquantify.adjust_counting`
+
+
+
+
+
+  * - :obj:`~mlquantify.adjust_counting.CDE`
+
+    - .. div:: sk-apisearch-desc
+
+        .. currentmodule:: mlquantify.adjust_counting
+
+        .. autoshortsummary:: mlquantify.adjust_counting.CDE
 
         .. div:: caption
 
@@ -487,38 +503,6 @@ reference on concepts repeated across the API, see :ref:`glossary`.
         .. currentmodule:: mlquantify.likelihood
 
         .. autoshortsummary:: mlquantify.likelihood.EMQ
-
-        .. div:: caption
-
-          :mod:`mlquantify.likelihood`
-
-
-
-
-
-  * - :obj:`~mlquantify.likelihood.MLPE`
-
-    - .. div:: sk-apisearch-desc
-
-        .. currentmodule:: mlquantify.likelihood
-
-        .. autoshortsummary:: mlquantify.likelihood.MLPE
-
-        .. div:: caption
-
-          :mod:`mlquantify.likelihood`
-
-
-
-
-
-  * - :obj:`~mlquantify.likelihood.CDE`
-
-    - .. div:: sk-apisearch-desc
-
-        .. currentmodule:: mlquantify.likelihood
-
-        .. autoshortsummary:: mlquantify.likelihood.CDE
 
         .. div:: caption
 
