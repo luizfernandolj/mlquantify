@@ -46,11 +46,11 @@ Different *threshold methods* vary in how they choose the classifier cutoff :mat
 +----------------------------+------------------------------------------------------+-----------------------------------------+
 | **Method**                 | **Threshold Choice**                                 | **Goal**                                |
 +----------------------------+------------------------------------------------------+-----------------------------------------+
-| :class:`ACC`               | Fixed threshold :math:`\tau = 0.5`                   | Simple baseline adjustment              |
+| :class:`TAC`               | Fixed threshold :math:`\tau = 0.5`                   | Simple baseline adjustment              |
 +----------------------------+------------------------------------------------------+-----------------------------------------+
-| :class:`X_method`          | Threshold where :math:`\text{FPR} = 1 - \text{TPR}`  | Avoids unstable prediction tails        |
+| :class:`TX`          | Threshold where :math:`\text{FPR} = 1 - \text{TPR}`  | Avoids unstable prediction tails        |
 +----------------------------+------------------------------------------------------+-----------------------------------------+
-| :class:`MAX`               | Threshold maximizing :math:`\text{TPR} - \text{FPR}` | Improves numerical stability            |
+| :class:`TMAX`               | Threshold maximizing :math:`\text{TPR} - \text{FPR}` | Improves numerical stability            |
 +----------------------------+------------------------------------------------------+-----------------------------------------+
 | :class:`T50`               | Threshold where :math:`\text{TPR} = 0.5`             | Uses central part of ROC curve          |
 +----------------------------+------------------------------------------------------+-----------------------------------------+
@@ -112,17 +112,17 @@ Generalized Adjusted Classify and Count (GAC) and Generalized Probabilistic Adju
 
 .. code-block:: python
 
-   from mlquantify.adjust_counting import GAC, GPAC
+   from mlquantify.adjust_counting import AC, PAC
    from sklearn.linear_model import LogisticRegression
-   q = GAC(learner=LogisticRegression())
+   q = AC(learner=LogisticRegression())
    q.fit(X_train, y_train)
    q.predict(X_test)
    # -> {0: 0.48, 1: 0.52}
 
-Both :class:`GAC` and :class:`GPAC` are solved using this linear system:
+Both :class:`AC` and :class:`PAC` are solved using this linear system:
 
-- GAC uses hard classifier decisions (confusion matrix).  
-- GPAC uses soft probabilities :math:`P(y=l|x)` .
+- AC uses hard classifier decisions (confusion matrix).  
+- PAC uses soft probabilities :math:`P(y=l|x)` .
 
 
 

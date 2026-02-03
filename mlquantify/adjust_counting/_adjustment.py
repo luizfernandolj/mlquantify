@@ -511,7 +511,7 @@ class FM(SoftLearnerQMixin, MatrixAdjustment):
     ----------
     learner : estimator, optional
         Base classifier with `fit` and `predict_proba` methods.
-        If None, a default estimator will be used.
+        If None, it is expected that user will use the `aggregate` method directly.
 
     Attributes
     ----------
