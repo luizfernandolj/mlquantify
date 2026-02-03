@@ -55,6 +55,7 @@ class CC(CrispLearnerQMixin, BaseCount):
     References
     ----------
     .. dropdown:: References
+
         .. [1] Forman, G. (2005). "Counting Positives Accurately Despite Inaccurate Classification",
             *ECML*, pp. 564-575.
         .. [2] Forman, G. (2008). "Quantifying Counts and Costs via Classification",
@@ -130,6 +131,7 @@ class PCC(SoftLearnerQMixin, BaseCount):
         Unique class labels observed during training.
 
     .. dropdown:: References
+    
         .. [1] Forman, G. (2005). *Counting Positives Accurately Despite Inaccurate Classification.* ECML, pp. 564-575.
         .. [2] Forman, G. (2008). *Quantifying Counts and Costs via Classification.* Data Mining and Knowledge Discovery, 17(2), 164-206.
         

@@ -3,7 +3,7 @@
 {% if module == "mlquantify" -%}
 {%- set module_hook = "mlquantify" -%}
 {%- elif module.startswith("mlquantify.") -%}
-{%- set module_hook = module.split(".", 1)[1] -%}
+{%- set module_hook = module[11:] -%}
 {%- else -%}
 {%- set module_hook = None -%}
 {%- endif -%}
