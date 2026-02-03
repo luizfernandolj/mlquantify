@@ -515,42 +515,36 @@
 <dd><p>Expectation-Maximization Quantifier (EMQ).</p>
 <p>Estimates class prevalences under prior probability shift by alternating 
 between expectation <strong>(E)</strong> and maximization <strong>(M)</strong> steps on posterior probabilities.</p>
-<p>E-step:
-.. math:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">p_i</span><span class="o">^</span><span class="p">{(</span><span class="n">s</span><span class="o">+</span><span class="mi">1</span><span class="p">)}(</span><span class="n">x</span><span class="p">)</span> <span class="o">=</span> \<span class="n">frac</span><span class="p">{</span><span class="n">q_i</span><span class="o">^</span><span class="p">{(</span><span class="n">s</span><span class="p">)}</span> <span class="n">p_i</span><span class="p">(</span><span class="n">x</span><span class="p">)}{</span>\<span class="n">sum_j</span> <span class="n">q_j</span><span class="o">^</span><span class="p">{(</span><span class="n">s</span><span class="p">)}</span> <span class="n">p_j</span><span class="p">(</span><span class="n">x</span><span class="p">)}</span>
-</pre></div>
+<details class="sd-sphinx-override sd-dropdown sd-card sd-mb-3">
+<summary class="sd-summary-title sd-card-header">
+<span class="sd-summary-text">Mathematical Formulation</span><span class="sd-summary-state-marker sd-summary-chevron-right"><svg version="1.1" width="1.5em" height="1.5em" class="sd-octicon sd-octicon-chevron-right" viewBox="0 0 24 24" aria-hidden="true"><path d="M8.72 18.78a.75.75 0 0 1 0-1.06L14.44 12 8.72 6.28a.751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018l6.25 6.25a.75.75 0 0 1 0 1.06l-6.25 6.25a.75.75 0 0 1-1.06 0Z"></path></svg></span></summary><div class="sd-summary-content sd-card-body docutils">
+<p class="sd-card-text">E-step:</p>
+<div class="math notranslate nohighlight">
+\[p_i^{(s+1)}(x) = \frac{q_i^{(s)} p_i(x)}{\sum_j q_j^{(s)} p_j(x)}\]</div>
+<p class="sd-card-text">M-step:</p>
+<div class="math notranslate nohighlight">
+\[q_i^{(s+1)} = \frac{1}{N} \sum_{n=1}^N p_i^{(s+1)}(x_n)\]</div>
+<p class="sd-card-text">where:</p>
+<ul class="simple">
+<li><p class="sd-card-text"><span class="math notranslate nohighlight">\(p_i(x)\)</span> are posterior probabilities predicted by the classifier</p></li>
+<li><p class="sd-card-text"><span class="math notranslate nohighlight">\(q_i^{(s)}\)</span> are class prevalence estimates at iteration <span class="math notranslate nohighlight">\(s\)</span></p></li>
+<li><p class="sd-card-text"><span class="math notranslate nohighlight">\(N\)</span> is the number of test instances.</p></li>
+</ul>
+<p class="sd-card-text">Calibrations supported on posterior probabilities before <strong>EM</strong> iteration:</p>
+<p class="sd-card-text">Temperature Scaling (TS):</p>
+<div class="math notranslate nohighlight">
+\[\hat{p} = \text{softmax}\left(\frac{\log(p)}{T}\right)\]</div>
+<p class="sd-card-text">Bias-Corrected Temperature Scaling (BCTS):</p>
+<div class="math notranslate nohighlight">
+\[\hat{p} = \text{softmax}\left(\frac{\log(p)}{T} + b\right)\]</div>
+<p class="sd-card-text">Vector Scaling (VS):</p>
+<div class="math notranslate nohighlight">
+\[\hat{p}_i = \text{softmax}(W_i \cdot \log(p_i) + b_i)\]</div>
+<p class="sd-card-text">No-Bias Vector Scaling (NBVS):</p>
+<div class="math notranslate nohighlight">
+\[\hat{p}_i = \text{softmax}(W_i \cdot \log(p_i))\]</div>
 </div>
-<p>M-step:
-.. math:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">q_i</span><span class="o">^</span><span class="p">{(</span><span class="n">s</span><span class="o">+</span><span class="mi">1</span><span class="p">)}</span> <span class="o">=</span> \<span class="n">frac</span><span class="p">{</span><span class="mi">1</span><span class="p">}{</span><span class="n">N</span><span class="p">}</span> \<span class="n">sum_</span><span class="p">{</span><span class="n">n</span><span class="o">=</span><span class="mi">1</span><span class="p">}</span><span class="o">^</span><span class="n">N</span> <span class="n">p_i</span><span class="o">^</span><span class="p">{(</span><span class="n">s</span><span class="o">+</span><span class="mi">1</span><span class="p">)}(</span><span class="n">x_n</span><span class="p">)</span>
-</pre></div>
-</div>
-<p>where 
-- <span class="math notranslate nohighlight">\(p_i(x)\)</span> are posterior probabilities predicted by the classifier
-- <span class="math notranslate nohighlight">\(q_i^{(s)}\)</span> are class prevalence estimates at iteration <span class="math notranslate nohighlight">\(s\)</span>
-- <span class="math notranslate nohighlight">\(N\)</span> is the number of test instances.</p>
-<p>Calibrations supported on posterior probabilities before <strong>EM</strong> iteration:</p>
-<p>Temperature Scaling (TS):
-.. math:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>\<span class="n">hat</span><span class="p">{</span><span class="n">p</span><span class="p">}</span> <span class="o">=</span> \<span class="n">text</span><span class="p">{</span><span class="n">softmax</span><span class="p">}</span>\<span class="n">left</span><span class="p">(</span>\<span class="n">frac</span><span class="p">{</span>\<span class="n">log</span><span class="p">(</span><span class="n">p</span><span class="p">)}{</span><span class="n">T</span><span class="p">}</span>\<span class="n">right</span><span class="p">)</span>
-</pre></div>
-</div>
-<p>Bias-Corrected Temperature Scaling (BCTS):
-.. math:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>\<span class="n">hat</span><span class="p">{</span><span class="n">p</span><span class="p">}</span> <span class="o">=</span> \<span class="n">text</span><span class="p">{</span><span class="n">softmax</span><span class="p">}</span>\<span class="n">left</span><span class="p">(</span>\<span class="n">frac</span><span class="p">{</span>\<span class="n">log</span><span class="p">(</span><span class="n">p</span><span class="p">)}{</span><span class="n">T</span><span class="p">}</span> <span class="o">+</span> <span class="n">b</span>\<span class="n">right</span><span class="p">)</span>
-</pre></div>
-</div>
-<p>Vector Scaling (VS):
-.. math:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>\<span class="n">hat</span><span class="p">{</span><span class="n">p</span><span class="p">}</span><span class="n">_i</span> <span class="o">=</span> \<span class="n">text</span><span class="p">{</span><span class="n">softmax</span><span class="p">}(</span><span class="n">W_i</span> \<span class="n">cdot</span> \<span class="n">log</span><span class="p">(</span><span class="n">p_i</span><span class="p">)</span> <span class="o">+</span> <span class="n">b_i</span><span class="p">)</span>
-</pre></div>
-</div>
-<p>No-Bias Vector Scaling (NBVS):
-.. math:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>\<span class="n">hat</span><span class="p">{</span><span class="n">p</span><span class="p">}</span><span class="n">_i</span> <span class="o">=</span> \<span class="n">text</span><span class="p">{</span><span class="n">softmax</span><span class="p">}(</span><span class="n">W_i</span> \<span class="n">cdot</span> \<span class="n">log</span><span class="p">(</span><span class="n">p_i</span><span class="p">))</span>
-</pre></div>
-</div>
-<dl class="field-list simple">
+</details><dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><dl class="simple">
 <dt><strong>learner</strong><span class="classifier">estimator, optional</span></dt><dd><p>Probabilistic classifier supporting predict_proba.</p>
