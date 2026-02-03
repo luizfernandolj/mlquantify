@@ -13,7 +13,7 @@ see :ref:`counters_module` for an overview of the base counters for quantificati
 
 Currently, there are two types of adjustment methods implemented:
 
-1. **Threshold Adjustment Methods**: These methods adjust the decision threshold of the classifier to optimize prevalence estimation. Examples include Adjusted Classify and Count (ACC) and its probabilistic counterpart PACC.
+1. **Threshold Adjustment Methods**: These methods adjust the decision threshold of the classifier to optimize prevalence estimation. Examples include Adjusted Count (TAC) and its threshold selection policies (TX, TMAX, T50, MS, MS2).
 2. **Matrix Adjustment Methods**: These methods use a confusion matrix derived from the classifier's performance on a validation set to adjust the estimated prevalences. Examples include the EM-based methods and other matrix inversion techniques.
 
 

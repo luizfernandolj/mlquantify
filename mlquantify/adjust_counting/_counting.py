@@ -17,12 +17,6 @@ class CC(CrispLearnerQMixin, BaseCount):
     Implements the Classify and Count method for quantification, describe as a
     baseline approach in the literature [1]_, [2]_.
 
-    References
-    ----------  
-    .. [1] George Forman. 2008. Quantifying counts and costs via classification.
-       Data Min. Knowl. Discov. 17, 2 (October 2008), 164–206.
-    .. [
-
     Parameters
     ----------
     learner : estimator, optional
