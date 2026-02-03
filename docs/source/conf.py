@@ -175,13 +175,44 @@ html_theme_options = {
 
 
 
-def linkcode_resolve(domain, info):
-    if domain != 'py' or not info['module']:
-        return None
+import inspect
+import importlib
 
-    filename = info['module'].replace('.', '/')
-    # Adjust branch and repository as needed
-    return f"https://github.com/luizfernandolj/mlquantify/tree/master/{filename}.py"
+def linkcode_resolve(domain, info):
+    if domain != 'py':
+        return None
+    if not info['module']:
+        return None
+    
+    module_name = info['module']
+    fullname = info['fullname']
+    
+    try:
+        submod = importlib.import_module(module_name)
+        obj = submod
+        for part in fullname.split('.'):
+            obj = getattr(obj, part)
+            
+        fn = inspect.getsourcefile(obj)
+        source, lineno = inspect.getsourcelines(obj)
+        lines = f"#L{lineno}-L{lineno + len(source) - 1}"
+        
+        # Calculate relative path from project root
+        # We assume the project root is two levels up from this conf.py file (docs/source/conf.py)
+        project_root = os.path.abspath(os.path.join(os.path.dirname(__file__), '../..'))
+        
+        if fn.startswith(project_root):
+             rel_path = os.path.relpath(fn, project_root).replace(os.path.sep, '/')
+             return f"https://github.com/luizfernandolj/mlquantify/tree/master/{rel_path}{lines}"
+        
+        # Fallback to simple module replacement if file inspection fails to map
+        filename = info['module'].replace('.', '/')
+        return f"https://github.com/luizfernandolj/mlquantify/tree/master/{filename}.py"
+
+    except Exception:
+        # Fallback if dynamic resolution fails
+        filename = info['module'].replace('.', '/')
+        return f"https://github.com/luizfernandolj/mlquantify/tree/master/{filename}.py"
 
 
 
