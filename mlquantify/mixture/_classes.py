@@ -124,8 +124,8 @@ class DyS(AggregativeMixture):
 
     References
     ----------
-    [1] Maletzke et al. (2019). DyS: A Framework for Mixture Models in Quantification. AAAI 2019.
-    [2] Esuli et al. (2023). Learning to Quantify. Springer.
+    .. [1] Maletzke et al. (2019). DyS: A Framework for Mixture Models in Quantification. AAAI 2019.
+    .. [2] Esuli et al. (2023). Learning to Quantify. Springer.
 
     Examples
     --------
@@ -156,7 +156,9 @@ class DyS(AggregativeMixture):
         between the test score histogram and the mixture of positive and negative
         
         The mixture weight :math:`\alpha` is estimated as:
+
         .. math::
+
             \alpha = \arg \min_{\alpha \in [0, 1]} D \left( H_{test}, \alpha H_{pos} + (1 - \alpha) H_{neg} \right)
             
         where :math:`D` is the selected distance measure and :math:`H` denotes histograms.
@@ -220,7 +222,7 @@ class HDy(AggregativeMixture):
 
     References
     ----------
-    [2] Esuli et al. (2023). Learning to Quantify. Springer.
+    .. [2] Esuli et al. (2023). Learning to Quantify. Springer.
 
     """
     
@@ -230,7 +232,9 @@ class HDy(AggregativeMixture):
         Compute the mixture weight :math:`\alpha` that minimizes the Hellinger distance between the test score histogram and the mixture of positive and negative class score histograms.
 
         The mixture weight :math:`\alpha` is estimated as:
+
         .. math::
+
             \alpha = \arg \min_{\alpha \in [0, 1]} Hellinger \left( H_{test}, \alpha H_{pos} + (1 - \alpha) H_{neg} \right)
             
         where :math:`H` denotes histograms.
@@ -292,6 +296,7 @@ class SMM(AggregativeMixture):
     weight :math:`\alpha` is computed as:
 
     .. math::
+
         \alpha = \frac{\bar{s}_{test} - \bar{s}_{neg}}{\bar{s}_{pos} - \bar{s}_{neg}}
 
     where :math:`\bar{s}` denotes the sample mean.
@@ -303,7 +308,7 @@ class SMM(AggregativeMixture):
 
     References
     ----------
-    [2] Esuli et al. (2023). Learning to Quantify. Springer.
+    .. [2] Esuli et al. (2023). Learning to Quantify. Springer.
     """
     
     def best_mixture(self, predictions, pos_scores, neg_scores):
@@ -336,7 +341,7 @@ class SORD(AggregativeMixture):
 
     References
     ----------
-    [2] Esuli et al. (2023). Learning to Quantify. Springer.
+    .. [2] Esuli et al. (2023). Learning to Quantify. Springer.
     """
 
     def best_mixture(self, predictions, pos_scores, neg_scores):
@@ -400,7 +405,7 @@ class HDx(BaseMixture):
 
     References
     ----------
-    [2] Esuli et al. (2023). Learning to Quantify. Springer.
+    .. [2] Esuli et al. (2023). Learning to Quantify. Springer.
     """
     
     _parameter_constraints = {
@@ -480,27 +485,32 @@ class MMD_RKHS(BaseMixture):
     For each class :math:`y`, the class-conditional kernel mean embedding is
 
     .. math::
+
         \mu_y \;=\; \mathbb{E}_{x \sim P_{D}(x \mid y)}[\phi(x)] \in \mathcal{H},
 
     and the test mean embedding is
 
     .. math::
+
         \mu_U \;=\; \mathbb{E}_{x \sim P_{U}(x)}[\phi(x)] \in \mathcal{H}.
 
     Under prior probability shift, the test distribution satisfies
 
     .. math::
+
         P_U(x) = \sum_{y=0}^{C-1} \theta_y \, P_D(x \mid y),
 
     which implies
 
     .. math::
+
         \mu_U = \sum_{y=0}^{C-1} \theta_y \, \mu_y,
 
     where :math:`\theta \in \Delta^{C-1}` is the class prevalence vector.
     The MMD-RKHS estimator solves
 
     .. math::
+
         \hat{\theta}
         \;=\;
         \arg\min_{\theta \in \Delta^{C-1}}
@@ -511,6 +521,7 @@ class MMD_RKHS(BaseMixture):
     kernel trick, the objective can be written as a quadratic program
 
     .. math::
+
         \hat{\theta}
         \;=\;
         \arg\min_{\theta \in \Delta^{C-1}}
@@ -519,6 +530,7 @@ class MMD_RKHS(BaseMixture):
     with
 
     .. math::
+
         G_{yy'} = \langle \hat{\mu}_y, \hat{\mu}_{y'} \rangle_{\mathcal{H}},
         \qquad
         h_y = \langle \hat{\mu}_y, \hat{\mu}_U \rangle_{\mathcal{H}}.
@@ -555,11 +567,11 @@ class MMD_RKHS(BaseMixture):
 
     References
     ----------
-    [1] Iyer, A., Nath, S., & Sarawagi, S. (2014).
+    .. [1] Iyer, A., Nath, S., & Sarawagi, S. (2014).
         Maximum Mean Discrepancy for Class Ratio Estimation:
         Convergence Bounds and Kernel Selection. ICML.
 
-    [2] Esuli, A., Moreo, A., & Sebastiani, F. (2023).
+    .. [2] Esuli, A., Moreo, A., & Sebastiani, F. (2023).
         Learning to Quantify. Springer.
     """
 
@@ -618,7 +630,9 @@ class MMD_RKHS(BaseMixture):
         """
         Implements the MMD-based class ratio estimation:
 
-            min_theta || sum_y theta_y mu_y - mu_U ||^2
+        .. math::
+
+            \min_{\theta \in \Delta^{C-1}} \| \sum_{y=0}^{C-1} \theta_y \mu_y - \mu_U \|^2
 
         and returns (theta, objective_value).
         """

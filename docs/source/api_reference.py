@@ -132,7 +132,8 @@ API_REFERENCE = {
                     "DyS",
                     "SMM",
                     "SORD",
-                    "HDx"
+                    "HDx",
+                    "MMD_RKHS"
                 ],
             }
         ],

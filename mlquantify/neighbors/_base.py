@@ -103,7 +103,7 @@ class BaseKDE(SoftLearnerQMixin, AggregationMixin, BaseQuantifier):
                 function=learner_function, cv=cv,
                 stratified=stratified, shuffle=shuffle
             )
-
+ 
         self.train_predictions = train_predictions
         self.y_train = y_train
         self._precompute_training(train_predictions, y_train)
