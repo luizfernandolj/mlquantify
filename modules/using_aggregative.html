@@ -460,14 +460,15 @@ In contrast, <a class="reference internal" href="generated/mlquantify.adjust_cou
 <span class="c1"># Create a classifier</span>
 <span class="n">clf</span> <span class="o">=</span> <span class="n">LogisticRegression</span><span class="p">()</span>
 
-<span class="n">ac</span> <span class="o">=</span> <span class="n">AC</span><span class="p">()</span>
+<span class="n">ac</span> <span class="o">=</span> <span class="n">AC</span><span class="p">(</span><span class="n">clf</span><span class="p">)</span>
 
 <span class="c1"># used when you just have the sample to predict</span>
 <span class="n">ac</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">X_train</span><span class="p">,</span> <span class="n">y_train</span><span class="p">)</span>
 <span class="n">prevalence</span> <span class="o">=</span> <span class="n">ac</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">X_test</span><span class="p">)</span>
 
 <span class="c1"># used when you already have the sample predictions (usually from cross-validation for training predictions)</span>
-<span class="n">prevalence</span> <span class="o">=</span> <span class="n">ac</span><span class="o">.</span><span class="n">aggregate</span><span class="p">(</span><span class="n">posteriors</span><span class="p">,</span> <span class="n">train_posteriors</span><span class="p">,</span> <span class="n">y_train</span><span class="p">)</span>
+<span class="n">ac2</span> <span class="o">=</span> <span class="n">AC</span><span class="p">()</span>
+<span class="n">prevalence</span> <span class="o">=</span> <span class="n">ac2</span><span class="o">.</span><span class="n">aggregate</span><span class="p">(</span><span class="n">posteriors</span><span class="p">,</span> <span class="n">train_posteriors</span><span class="p">,</span> <span class="n">y_train</span><span class="p">)</span>
 </pre></div>
 </div>
 <div class="toctree-wrapper compound">

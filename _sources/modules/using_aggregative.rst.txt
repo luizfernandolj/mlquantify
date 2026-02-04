@@ -41,14 +41,15 @@ Examples
    # Create a classifier
    clf = LogisticRegression()
 
-   ac = AC()
+   ac = AC(clf)
 
    # used when you just have the sample to predict
    ac.fit(X_train, y_train)
    prevalence = ac.predict(X_test)
 
    # used when you already have the sample predictions (usually from cross-validation for training predictions)
-   prevalence = ac.aggregate(posteriors, train_posteriors, y_train)
+   ac2 = AC()
+   prevalence = ac2.aggregate(posteriors, train_posteriors, y_train)
 
 
 
