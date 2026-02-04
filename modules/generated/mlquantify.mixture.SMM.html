@@ -417,6 +417,7 @@
 <li class="toctree-l2 current active"><a class="current reference internal" href="#">SMM</a></li>
 <li class="toctree-l2"><a class="reference internal" href="mlquantify.mixture.SORD.html">SORD</a></li>
 <li class="toctree-l2"><a class="reference internal" href="mlquantify.mixture.HDx.html">HDx</a></li>
+<li class="toctree-l2"><a class="reference internal" href="mlquantify.mixture.MMD_RKHS.html">MMD_RKHS</a></li>
 </ul>
 </details></li>
 <li class="toctree-l1 has-children"><a class="reference internal" href="../../api/mlquantify.model_selection.html">mlquantify.model_selection</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
@@ -511,7 +512,7 @@
 <h1>SMM<a class="headerlink" href="#smm" title="Link to this heading">#</a></h1>
 <dl class="py class">
 <dt class="sig sig-object py" id="mlquantify.mixture.SMM">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">mlquantify.mixture.</span></span><span class="sig-name descname"><span class="pre">SMM</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">learner</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">strategy</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'ovr'</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/luizfernandolj/mlquantify/tree/master/mlquantify/mixture/_classes.py#L287-L317"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mlquantify.mixture.SMM" title="Link to this definition">#</a></dt>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">mlquantify.mixture.</span></span><span class="sig-name descname"><span class="pre">SMM</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">learner</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">strategy</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'ovr'</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/luizfernandolj/mlquantify/tree/master/mlquantify/mixture/_classes.py#L291-L322"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mlquantify.mixture.SMM" title="Link to this definition">#</a></dt>
 <dd><p>Sample Mean Matching (SMM) quantification method.</p>
 <p>Estimates class prevalence by matching the mean score of the test samples 
 to a convex combination of positive and negative training scores. The mixture 
@@ -528,7 +529,12 @@ weight <span class="math notranslate nohighlight">\(\alpha\)</span> is computed 
 </dd>
 </dl>
 <p class="rubric">References</p>
-<p>[2] Esuli et al. (2023). Learning to Quantify. Springer.</p>
+<div role="list" class="citation-list">
+<div class="citation" id="r5b90a89ef005-2" role="doc-biblioentry">
+<span class="label"><span class="fn-bracket">[</span>2<span class="fn-bracket">]</span></span>
+<p>Esuli et al. (2023). Learning to Quantify. Springer.</p>
+</div>
+</div>
 <dl class="py method">
 <dt class="sig sig-object py" id="mlquantify.mixture.SMM.aggregate">
 <span class="sig-name descname"><span class="pre">aggregate</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/luizfernandolj/mlquantify/tree/master/mlquantify/multiclass.py#L324-L350"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mlquantify.mixture.SMM.aggregate" title="Link to this definition">#</a></dt>
@@ -537,7 +543,7 @@ weight <span class="math notranslate nohighlight">\(\alpha\)</span> is computed 
 
 <dl class="py method">
 <dt class="sig sig-object py" id="mlquantify.mixture.SMM.best_mixture">
-<span class="sig-name descname"><span class="pre">best_mixture</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">predictions</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">pos_scores</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">neg_scores</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/luizfernandolj/mlquantify/tree/master/mlquantify/mixture/_classes.py#L309-L317"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mlquantify.mixture.SMM.best_mixture" title="Link to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">best_mixture</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">predictions</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">pos_scores</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">neg_scores</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/luizfernandolj/mlquantify/tree/master/mlquantify/mixture/_classes.py#L314-L322"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mlquantify.mixture.SMM.best_mixture" title="Link to this definition">#</a></dt>
 <dd><p>Determine the best mixture parameters for the given data.</p>
 </dd></dl>
 

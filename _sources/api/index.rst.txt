@@ -860,6 +860,22 @@ reference on concepts repeated across the API, see :ref:`glossary`.
 
 
 
+  * - :obj:`~mlquantify.mixture.MMD_RKHS`
+
+    - .. div:: sk-apisearch-desc
+
+        .. currentmodule:: mlquantify.mixture
+
+        .. autoshortsummary:: mlquantify.mixture.MMD_RKHS
+
+        .. div:: caption
+
+          :mod:`mlquantify.mixture`
+
+
+
+
+
 
 
 

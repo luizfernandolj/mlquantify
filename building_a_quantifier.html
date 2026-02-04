@@ -63,7 +63,7 @@
     <link rel="canonical" href="https://luizfernandolj.github.io/mlquantify/building_a_quantifier.html" />
     <link rel="icon" href="_static/favicon.ico"/>
     <link rel="search" title="Search" href="search.html" />
-    <link rel="next" title="API Reference" href="api/index.html" />
+    <link rel="next" title="7. MLQuantify Methods" href="modules/mlquantify_methods.html" />
     <link rel="prev" title="5. Confidence Regions for Quantification" href="modules/confidence_intervals.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
@@ -376,6 +376,7 @@
 </details></li>
 <li class="toctree-l1"><a class="reference internal" href="modules/confidence_intervals.html">5.  Confidence Intervals</a></li>
 <li class="toctree-l1 current active"><a class="current reference internal" href="#">6.  Building a Quantifier</a></li>
+<li class="toctree-l1"><a class="reference internal" href="modules/mlquantify_methods.html">7.  Mlquantify methods</a></li>
 </ul>
 </div>
 </nav></div>
@@ -545,7 +546,7 @@
 </section>
 <section id="validation-utilities">
 <h2><span class="section-number">6.5. </span>Validation Utilities<a class="headerlink" href="#validation-utilities" title="Link to this heading">#</a></h2>
-<p>The <a class="reference internal" href="modules/generated/mlquantify.utils.html#module-mlquantify.utils" title="mlquantify.utils"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mlquantify.utils</span></code></a> module provides validation functions to ensure data consistency:</p>
+<p>The <a class="reference internal" href="api/mlquantify.utils.html#module-mlquantify.utils" title="mlquantify.utils"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mlquantify.utils</span></code></a> module provides validation functions to ensure data consistency:</p>
 <ul class="simple">
 <li><p><code class="xref py py-func docutils literal notranslate"><span class="pre">validate_data</span></code>: Validate input features and labels</p></li>
 <li><p><code class="xref py py-func docutils literal notranslate"><span class="pre">validate_prevalences</span></code>: Validate prevalence estimates</p></li>
@@ -589,10 +590,10 @@
 </section>
 <section id="parameter-constraints">
 <h2><span class="section-number">6.6. </span>Parameter Constraints<a class="headerlink" href="#parameter-constraints" title="Link to this heading">#</a></h2>
-<p>Ensure parameter validity using the <a class="reference internal" href="modules/generated/mlquantify.utils.html#module-mlquantify.utils" title="mlquantify.utils"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mlquantify.utils</span></code></a> module:</p>
+<p>Ensure parameter validity using the <a class="reference internal" href="api/mlquantify.utils.html#module-mlquantify.utils" title="mlquantify.utils"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mlquantify.utils</span></code></a> module:</p>
 <ol class="arabic simple">
 <li><p>Apply the <code class="xref py py-func docutils literal notranslate"><span class="pre">&#64;_fit_context</span></code> decorator to the <code class="docutils literal notranslate"><span class="pre">fit</span></code> method</p></li>
-<li><p>Use constraint validators from <a class="reference internal" href="modules/generated/mlquantify.utils.html#module-mlquantify.utils" title="mlquantify.utils"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mlquantify.utils</span></code></a> to check parameter types and values</p></li>
+<li><p>Use constraint validators from <a class="reference internal" href="api/mlquantify.utils.html#module-mlquantify.utils" title="mlquantify.utils"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mlquantify.utils</span></code></a> to check parameter types and values</p></li>
 </ol>
 <p>These validators will raise informative errors when parameters don’t meet expectations.</p>
 <div class="admonition seealso">
@@ -652,11 +653,11 @@
       </div>
     </a>
     <a class="right-next"
-       href="api/index.html"
+       href="modules/mlquantify_methods.html"
        title="next page">
       <div class="prev-next-info">
         <p class="prev-next-subtitle">next</p>
-        <p class="prev-next-title">API Reference</p>
+        <p class="prev-next-title"><span class="section-number">7. </span>MLQuantify Methods</p>
       </div>
       <i class="fa-solid fa-angle-right"></i>
     </a>

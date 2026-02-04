@@ -34,3 +34,4 @@ Mixture Models
   SMM
   SORD
   HDx
+  MMD_RKHS

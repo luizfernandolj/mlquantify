@@ -377,6 +377,7 @@
 </details></li>
 <li class="toctree-l1 current active"><a class="current reference internal" href="#">5.  Confidence Intervals</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../building_a_quantifier.html">6.  Building a Quantifier</a></li>
+<li class="toctree-l1"><a class="reference internal" href="mlquantify_methods.html">7.  Mlquantify methods</a></li>
 </ul>
 </div>
 </nav></div>
@@ -432,7 +433,7 @@
                   
   <section id="confidence-regions-for-quantification">
 <span id="confidence-intervals-quantification"></span><h1><span class="section-number">5. </span>Confidence Regions for Quantification<a class="headerlink" href="#confidence-regions-for-quantification" title="Link to this heading">#</a></h1>
-<p>This guide details the main types of confidence regions for prevalence estimates in quantification, as implemented in <a class="reference internal" href="generated/mlquantify.html#module-mlquantify.confidence" title="mlquantify.confidence"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mlquantify.confidence</span></code></a>. It covers the principles, mathematical definitions, attributes, and usage examples for each region type.</p>
+<p>This guide details the main types of confidence regions for prevalence estimates in quantification, as implemented in <a class="reference internal" href="../api/mlquantify.confidence.html#module-mlquantify.confidence" title="mlquantify.confidence"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mlquantify.confidence</span></code></a>. It covers the principles, mathematical definitions, attributes, and usage examples for each region type.</p>
 <p>For advanced bootstrap-based strategies (e.g., model-based and population-based), see <a class="reference internal" href="generated/mlquantify.meta.AggregativeBootstrap.html#mlquantify.meta.AggregativeBootstrap" title="mlquantify.meta.AggregativeBootstrap"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mlquantify.meta.AggregativeBootstrap</span></code></a>, which provides detailed implementations.</p>
 <section id="general-concept">
 <h2><span class="section-number">5.1. </span>General Concept<a class="headerlink" href="#general-concept" title="Link to this heading">#</a></h2>
@@ -447,7 +448,7 @@
 <li><p><strong>Confidence ellipse in CLR space</strong> (geometry-aware)</p></li>
 </ul>
 <p>All regions are constructed from <span class="math notranslate nohighlight">\(m\)</span> bootstrap resamples of prevalences for <span class="math notranslate nohighlight">\(n\)</span> classes: <span class="math notranslate nohighlight">\(X \in \mathbb{R}^{m \times n}\)</span>.</p>
-<p>API Reference: <code class="xref py py-class docutils literal notranslate"><span class="pre">BaseConfidenceRegion</span></code> (in <a class="reference internal" href="generated/mlquantify.html#module-mlquantify.confidence" title="mlquantify.confidence"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mlquantify.confidence</span></code></a>).</p>
+<p>API Reference: <code class="xref py py-class docutils literal notranslate"><span class="pre">BaseConfidenceRegion</span></code> (in <a class="reference internal" href="../api/mlquantify.confidence.html#module-mlquantify.confidence" title="mlquantify.confidence"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mlquantify.confidence</span></code></a>).</p>
 </section>
 <section id="percentile-based-confidence-intervals">
 <span id="confidence-intervals"></span><h2><span class="section-number">5.2. </span>Percentile-Based Confidence Intervals<a class="headerlink" href="#percentile-based-confidence-intervals" title="Link to this heading">#</a></h2>

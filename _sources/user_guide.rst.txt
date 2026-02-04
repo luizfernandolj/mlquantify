@@ -14,3 +14,4 @@ User Guide
     Model Selection and Evaluation <model_selection_evaluation.rst>
     Confidence Intervals <modules/confidence_intervals.rst>
     Building a Quantifier <building_a_quantifier.rst>
+    Mlquantify methods <modules/mlquantify_methods.rst>

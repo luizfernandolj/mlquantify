@@ -1,0 +1,689 @@
+
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="../" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+<meta property="og:title" content="7. MLQuantify Methods" />
+<meta property="og:type" content="website" />
+<meta property="og:url" content="modules/mlquantify_methods.html" />
+<meta property="og:site_name" content="mlquantify" />
+<meta property="og:description" content="The table below lists all the quantification methods available in the mlquantify library, their references, multiclass support, and type (aggregative, meta, or non-aggregative).,,,,, Method, Refere..." />
+<meta property="og:image:width" content="1146" />
+<meta property="og:image:height" content="600" />
+<meta property="og:image" content="_images/social_previews/summary_modules_mlquantify_methods_7ac2c3af.png" />
+<meta property="og:image:alt" content="The table below lists all the quantification methods available in the mlquantify library, their references, multiclass support, and type (aggregative, meta, or non-aggregative).,,,,, Method, Refere..." />
+<meta name="description" content="The table below lists all the quantification methods available in the mlquantify library, their references, multiclass support, and type (aggregative, meta, or non-aggregative).,,,,, Method, Refere..." />
+<meta name="twitter:card" content="summary_large_image" />
+
+    <title>7. MLQuantify Methods &#8212; mlquantify — Quantification in Python</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
+  </script>
+  <!--
+    this give us a css class that will be invisible only if js is disabled
+  -->
+  <noscript>
+    <style>
+      .pst-js-only { display: none !important; }
+
+    </style>
+  </noscript>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../_static/styles/theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
+<link href="../_static/styles/pydata-sphinx-theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
+
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=8f2a1f02" />
+    <link rel="stylesheet" type="text/css" href="../_static/copybutton.css?v=76b2166b" />
+    <link rel="stylesheet" type="text/css" href="../_static/plot_directive.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinx-design.min.css?v=95c83b7e" />
+    <link rel="stylesheet" type="text/css" href="../_static/custom.css?v=9a2dca72" />
+  
+  <!-- So that users can add custom icons -->
+  <script src="../_static/scripts/fontawesome.js?digest=8878045cc6db502f8baf"></script>
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf" />
+<link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf" />
+
+    <script src="../_static/documentation_options.js?v=17aaaefc"></script>
+    <script src="../_static/doctools.js?v=9bcbadda"></script>
+    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../_static/clipboard.min.js?v=a7894cd8"></script>
+    <script src="../_static/copybutton.js?v=f281be69"></script>
+    <script src="../_static/design-tabs.js?v=f930bc37"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'modules/mlquantify_methods';</script>
+    <link rel="canonical" href="https://luizfernandolj.github.io/mlquantify/modules/mlquantify_methods.html" />
+    <link rel="icon" href="../_static/favicon.ico"/>
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="API Reference" href="../api/index.html" />
+    <link rel="prev" title="6. Building a Quantifier" href="../building_a_quantifier.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  <meta name="docsearch:version" content="" />
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+
+  
+  <dialog id="pst-search-dialog">
+    
+<form class="bd-search d-flex align-items-center"
+      action="../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         placeholder="Search the docs ..."
+         aria-label="Search the docs ..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form>
+  </dialog>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
+  
+    <header class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+<div class="bd-header__inner bd-page-width">
+  <button class="pst-navbar-icon sidebar-toggle primary-toggle" aria-label="Site navigation">
+    <span class="fa-solid fa-bars"></span>
+  </button>
+  
+  
+  <div class=" navbar-header-items__start">
+    
+      <div class="navbar-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="../index.html">
+  
+  
+  
+  
+  
+    
+    
+      
+    
+    
+    <img src="../_static/logo_mlquantify.svg" class="logo__image only-light" alt="mlquantify homepage"/>
+    <img src="../_static/logo_mlquantify-white.svg" class="logo__image only-dark pst-js-only" alt="mlquantify homepage"/>
+  
+  
+</a></div>
+    
+  </div>
+  
+  <div class=" navbar-header-items">
+    
+    <div class="me-auto navbar-header-items__center">
+      
+        <div class="navbar-item">
+<nav>
+  <ul class="bd-navbar-elements navbar-nav">
+    
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../install.html">
+    Install
+  </a>
+</li>
+
+
+<li class="nav-item current active">
+  <a class="nav-link nav-internal" href="../user_guide.html">
+    User Guide
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../api/index.html">
+    API
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../getting_started.html">
+    Getting Started
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../about_us.html">
+    About Us
+  </a>
+</li>
+
+  </ul>
+</nav></div>
+      
+    </div>
+    
+    
+    <div class="navbar-header-items__end">
+      
+        <div class="navbar-item navbar-persistent--container">
+          
+
+<button class="btn btn-sm pst-navbar-icon search-button search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass fa-lg"></i>
+</button>
+        </div>
+      
+      
+        <div class="navbar-item">
+
+<button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button pst-js-only" aria-label="Color mode" data-bs-title="Color mode"  data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <i class="theme-switch fa-solid fa-sun                fa-lg" data-mode="light" title="Light"></i>
+  <i class="theme-switch fa-solid fa-moon               fa-lg" data-mode="dark"  title="Dark"></i>
+  <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"  title="System Settings"></i>
+</button></div>
+      
+        <div class="navbar-item"><ul class="navbar-icon-links"
+    aria-label="Icon Links">
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://github.com/luizfernandolj/mlquantify/tree/master" title="GitHub" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><i class="fa-brands fa-square-github fa-lg" aria-hidden="true"></i>
+            <span class="sr-only">GitHub</span></a>
+        </li>
+</ul></div>
+      
+    </div>
+    
+  </div>
+  
+  
+    <div class="navbar-persistent--mobile">
+
+<button class="btn btn-sm pst-navbar-icon search-button search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass fa-lg"></i>
+</button>
+    </div>
+  
+
+  
+    <button class="pst-navbar-icon sidebar-toggle secondary-toggle" aria-label="On this page">
+      <span class="fa-solid fa-outdent"></span>
+    </button>
+  
+</div>
+
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+      <dialog id="pst-primary-sidebar-modal"></dialog>
+      <div id="pst-primary-sidebar" class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+      <div class="sidebar-header-items__center">
+        
+          
+          
+            <div class="navbar-item">
+<nav>
+  <ul class="bd-navbar-elements navbar-nav">
+    
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../install.html">
+    Install
+  </a>
+</li>
+
+
+<li class="nav-item current active">
+  <a class="nav-link nav-internal" href="../user_guide.html">
+    User Guide
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../api/index.html">
+    API
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../getting_started.html">
+    Getting Started
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../about_us.html">
+    About Us
+  </a>
+</li>
+
+  </ul>
+</nav></div>
+          
+        
+      </div>
+    
+    
+    
+      <div class="sidebar-header-items__end">
+        
+          <div class="navbar-item">
+
+<button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button pst-js-only" aria-label="Color mode" data-bs-title="Color mode"  data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <i class="theme-switch fa-solid fa-sun                fa-lg" data-mode="light" title="Light"></i>
+  <i class="theme-switch fa-solid fa-moon               fa-lg" data-mode="dark"  title="Dark"></i>
+  <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"  title="System Settings"></i>
+</button></div>
+        
+          <div class="navbar-item"><ul class="navbar-icon-links"
+    aria-label="Icon Links">
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://github.com/luizfernandolj/mlquantify/tree/master" title="GitHub" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><i class="fa-brands fa-square-github fa-lg" aria-hidden="true"></i>
+            <span class="sr-only">GitHub</span></a>
+        </li>
+</ul></div>
+        
+      </div>
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+<nav class="bd-docs-nav bd-links"
+     aria-label="Section Navigation">
+  <p class="bd-links__title" role="heading" aria-level="1">Section Navigation</p>
+  <div class="bd-toc-item navbar-nav"><ul class="current nav bd-sidenav">
+<li class="toctree-l1 has-children"><a class="reference internal" href="../aggregative_quantification.html">1.  Aggregative Quantification</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="using_aggregative.html">1.1. Using Aggregative Quantification Methods</a></li>
+
+<li class="toctree-l2"><a class="reference internal" href="counters.html">1.3. Counters For Quantification</a></li>
+<li class="toctree-l2"><a class="reference internal" href="adjust_counting.html">1.4. Adjust Counting</a></li>
+<li class="toctree-l2"><a class="reference internal" href="likelihood.html">1.5. Likelihood-Based Quantification</a></li>
+<li class="toctree-l2"><a class="reference internal" href="mixture_models.html">1.6. Mixture Models</a></li>
+<li class="toctree-l2"><a class="reference internal" href="neighbors.html">1.7. Nearest Neighbors</a></li>
+<li class="toctree-l2"><a class="reference internal" href="density.html">1.8. Kernel Density Estimation</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../non_aggregative_quantification.html">2.  Non Aggregative Quantification</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="mixture_models_non_agg.html">2.1. Mixture Models for Non-Aggregative Quantification</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../meta_quantification.html">3.  Meta Quantification</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="ensemble.html">3.1. Ensemble for Quantification</a></li>
+<li class="toctree-l2"><a class="reference internal" href="bootstrap.html">3.2. Bootstrap in Quantification</a></li>
+<li class="toctree-l2"><a class="reference internal" href="scores_adaptation.html">3.3. QuaDapt: Drift-Resilient Score Adaptation</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../model_selection_evaluation.html">4.  Model Selection and Evaluation</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="protocols.html">4.1. Protocols for Quantification</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tuning_hyperparameters.html">4.2. Tuning Hyperparameters</a></li>
+
+<li class="toctree-l2"><a class="reference internal" href="evaluation_metrics.html">4.4. Evaluation Metrics</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1"><a class="reference internal" href="confidence_intervals.html">5.  Confidence Intervals</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../building_a_quantifier.html">6.  Building a Quantifier</a></li>
+<li class="toctree-l1 current active"><a class="current reference internal" href="#">7.  Mlquantify methods</a></li>
+</ul>
+</div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+  </div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item">
+
+<nav aria-label="Breadcrumb" class="d-print-none">
+  <ul class="bd-breadcrumbs">
+    
+    <li class="breadcrumb-item breadcrumb-home">
+      <a href="../index.html" class="nav-link" aria-label="Home">
+        <i class="fa-solid fa-home"></i>
+      </a>
+    </li>
+    
+    <li class="breadcrumb-item"><a href="../user_guide.html" class="nav-link">User Guide</a></li>
+    
+    <li class="breadcrumb-item active" aria-current="page"><span class="ellipsis"><span class="section-number">7. </span>MLQuantify Methods</span></li>
+  </ul>
+</nav>
+</div>
+      
+    </div>
+  
+  
+</div>
+</div>
+              
+              
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <section id="mlquantify-methods">
+<h1><span class="section-number">7. </span>MLQuantify Methods<a class="headerlink" href="#mlquantify-methods" title="Link to this heading">#</a></h1>
+<p>The table below lists all the quantification methods available in the <code class="docutils literal notranslate"><span class="pre">mlquantify</span></code> library, their references, multiclass support, and type (aggregative, meta, or non-aggregative).</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>In <code class="docutils literal notranslate"><span class="pre">binary</span></code> classification problems, methods that do not natively support multiclass classification (marked <code class="docutils literal notranslate"><span class="pre">No</span></code> in the <code class="docutils literal notranslate"><span class="pre">Multiclass</span></code> column) remain applicable through standard reduction strategies like <strong>one-vs-rest</strong> or <strong>one-vs-one</strong>.</p>
+</div>
+<div class="pst-scrollable-table-container"><table class="table">
+<colgroup>
+<col style="width: 20.8%" />
+<col style="width: 29.2%" />
+<col style="width: 16.7%" />
+<col style="width: 16.7%" />
+<col style="width: 16.7%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Method</p></th>
+<th class="head"><p>Reference</p></th>
+<th class="head"><p>Multiclass</p></th>
+<th class="head"><p>Type</p></th>
+<th class="head"><p>Module</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><a class="reference internal" href="generated/mlquantify.adjust_counting.CC.html#mlquantify.adjust_counting.CC" title="mlquantify.adjust_counting.CC"><code class="xref py py-class docutils literal notranslate"><span class="pre">CC</span></code></a></p></td>
+<td><p><a class="reference external" href="https://link.springer.com/chapter/10.1007/11564096_55">Forman (2005)</a></p></td>
+<td><p>Yes</p></td>
+<td><p>Aggregative</p></td>
+<td><p><a class="reference internal" href="../api/mlquantify.adjust_counting.html#module-mlquantify.adjust_counting" title="mlquantify.adjust_counting"><code class="xref py py-mod docutils literal notranslate"><span class="pre">adjust_counting</span></code></a></p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="generated/mlquantify.adjust_counting.PCC.html#mlquantify.adjust_counting.PCC" title="mlquantify.adjust_counting.PCC"><code class="xref py py-class docutils literal notranslate"><span class="pre">PCC</span></code></a></p></td>
+<td><p><a class="reference external" href="https://ieeexplore.ieee.org/document/5694031">Bella et al. (2010)</a></p></td>
+<td><p>Yes</p></td>
+<td><p>Aggregative</p></td>
+<td><p><a class="reference internal" href="../api/mlquantify.adjust_counting.html#module-mlquantify.adjust_counting" title="mlquantify.adjust_counting"><code class="xref py py-mod docutils literal notranslate"><span class="pre">adjust_counting</span></code></a></p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="generated/mlquantify.adjust_counting.AC.html#mlquantify.adjust_counting.AC" title="mlquantify.adjust_counting.AC"><code class="xref py py-class docutils literal notranslate"><span class="pre">AC</span></code></a></p></td>
+<td><p><a class="reference external" href="https://arxiv.org/abs/1606.00868">Firat (2016)</a></p></td>
+<td><p>Yes</p></td>
+<td><p>Aggregative</p></td>
+<td><p><a class="reference internal" href="../api/mlquantify.adjust_counting.html#module-mlquantify.adjust_counting" title="mlquantify.adjust_counting"><code class="xref py py-mod docutils literal notranslate"><span class="pre">adjust_counting</span></code></a></p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="generated/mlquantify.adjust_counting.PAC.html#mlquantify.adjust_counting.PAC" title="mlquantify.adjust_counting.PAC"><code class="xref py py-class docutils literal notranslate"><span class="pre">PAC</span></code></a></p></td>
+<td><p><a class="reference external" href="https://arxiv.org/abs/1606.00868">Firat (2016)</a></p></td>
+<td><p>Yes</p></td>
+<td><p>Aggregative</p></td>
+<td><p><a class="reference internal" href="../api/mlquantify.adjust_counting.html#module-mlquantify.adjust_counting" title="mlquantify.adjust_counting"><code class="xref py py-mod docutils literal notranslate"><span class="pre">adjust_counting</span></code></a></p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="generated/mlquantify.adjust_counting.TAC.html#mlquantify.adjust_counting.TAC" title="mlquantify.adjust_counting.TAC"><code class="xref py py-class docutils literal notranslate"><span class="pre">TAC</span></code></a></p></td>
+<td><p><a class="reference external" href="https://link.springer.com/chapter/10.1007/11564096_55">Forman (2005)</a></p></td>
+<td><p>No</p></td>
+<td><p>Aggregative</p></td>
+<td><p><a class="reference internal" href="../api/mlquantify.adjust_counting.html#module-mlquantify.adjust_counting" title="mlquantify.adjust_counting"><code class="xref py py-mod docutils literal notranslate"><span class="pre">adjust_counting</span></code></a></p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="generated/mlquantify.adjust_counting.TX.html#mlquantify.adjust_counting.TX" title="mlquantify.adjust_counting.TX"><code class="xref py py-class docutils literal notranslate"><span class="pre">TX</span></code></a></p></td>
+<td><p><a class="reference external" href="https://link.springer.com/chapter/10.1007/11564096_55">Forman (2005)</a></p></td>
+<td><p>No</p></td>
+<td><p>Aggregative</p></td>
+<td><p><a class="reference internal" href="../api/mlquantify.adjust_counting.html#module-mlquantify.adjust_counting" title="mlquantify.adjust_counting"><code class="xref py py-mod docutils literal notranslate"><span class="pre">adjust_counting</span></code></a></p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="generated/mlquantify.adjust_counting.TMAX.html#mlquantify.adjust_counting.TMAX" title="mlquantify.adjust_counting.TMAX"><code class="xref py py-class docutils literal notranslate"><span class="pre">TMAX</span></code></a></p></td>
+<td><p><a class="reference external" href="https://link.springer.com/chapter/10.1007/11564096_55">Forman (2005)</a></p></td>
+<td><p>No</p></td>
+<td><p>Aggregative</p></td>
+<td><p><a class="reference internal" href="../api/mlquantify.adjust_counting.html#module-mlquantify.adjust_counting" title="mlquantify.adjust_counting"><code class="xref py py-mod docutils literal notranslate"><span class="pre">adjust_counting</span></code></a></p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="generated/mlquantify.adjust_counting.T50.html#mlquantify.adjust_counting.T50" title="mlquantify.adjust_counting.T50"><code class="xref py py-class docutils literal notranslate"><span class="pre">T50</span></code></a></p></td>
+<td><p><a class="reference external" href="https://link.springer.com/chapter/10.1007/11564096_55">Forman (2005)</a></p></td>
+<td><p>No</p></td>
+<td><p>Aggregative</p></td>
+<td><p><a class="reference internal" href="../api/mlquantify.adjust_counting.html#module-mlquantify.adjust_counting" title="mlquantify.adjust_counting"><code class="xref py py-mod docutils literal notranslate"><span class="pre">adjust_counting</span></code></a></p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="generated/mlquantify.adjust_counting.MS.html#mlquantify.adjust_counting.MS" title="mlquantify.adjust_counting.MS"><code class="xref py py-class docutils literal notranslate"><span class="pre">MS</span></code></a></p></td>
+<td><p><a class="reference external" href="https://link.springer.com/article/10.1007/s10618-008-0097-y">Forman (2006)</a></p></td>
+<td><p>No</p></td>
+<td><p>Aggregative</p></td>
+<td><p><a class="reference internal" href="../api/mlquantify.adjust_counting.html#module-mlquantify.adjust_counting" title="mlquantify.adjust_counting"><code class="xref py py-mod docutils literal notranslate"><span class="pre">adjust_counting</span></code></a></p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="generated/mlquantify.adjust_counting.MS2.html#mlquantify.adjust_counting.MS2" title="mlquantify.adjust_counting.MS2"><code class="xref py py-class docutils literal notranslate"><span class="pre">MS2</span></code></a></p></td>
+<td><p><a class="reference external" href="https://link.springer.com/article/10.1007/s10618-008-0097-y">Forman (2006)</a></p></td>
+<td><p>No</p></td>
+<td><p>Aggregative</p></td>
+<td><p><a class="reference internal" href="../api/mlquantify.adjust_counting.html#module-mlquantify.adjust_counting" title="mlquantify.adjust_counting"><code class="xref py py-mod docutils literal notranslate"><span class="pre">adjust_counting</span></code></a></p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="generated/mlquantify.adjust_counting.FM.html#mlquantify.adjust_counting.FM" title="mlquantify.adjust_counting.FM"><code class="xref py py-class docutils literal notranslate"><span class="pre">FM</span></code></a></p></td>
+<td><p><a class="reference external" href="https://jerryfriedman.su.domains/talks/qc.pdf">Friedman et al. (2015)</a></p></td>
+<td><p>Yes</p></td>
+<td><p>Aggregative</p></td>
+<td><p><a class="reference internal" href="../api/mlquantify.adjust_counting.html#module-mlquantify.adjust_counting" title="mlquantify.adjust_counting"><code class="xref py py-mod docutils literal notranslate"><span class="pre">adjust_counting</span></code></a></p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="generated/mlquantify.adjust_counting.CDE.html#mlquantify.adjust_counting.CDE" title="mlquantify.adjust_counting.CDE"><code class="xref py py-class docutils literal notranslate"><span class="pre">CDE</span></code></a></p></td>
+<td><p><a class="reference external" href="https://dl.acm.org/doi/abs/10.1145/1557019.1557117">Xue &amp; Weiss (2009)</a></p></td>
+<td><p>No</p></td>
+<td><p>Aggregative</p></td>
+<td><p><a class="reference internal" href="../api/mlquantify.adjust_counting.html#module-mlquantify.adjust_counting" title="mlquantify.adjust_counting"><code class="xref py py-mod docutils literal notranslate"><span class="pre">adjust_counting</span></code></a></p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="generated/mlquantify.likelihood.EMQ.html#mlquantify.likelihood.EMQ" title="mlquantify.likelihood.EMQ"><code class="xref py py-class docutils literal notranslate"><span class="pre">EMQ</span></code></a></p></td>
+<td><p><a class="reference external" href="https://ieeexplore.ieee.org/abstract/document/6789744">Saerens et al. (2002)</a></p></td>
+<td><p>Yes</p></td>
+<td><p>Aggregative</p></td>
+<td><p><a class="reference internal" href="../api/mlquantify.likelihood.html#module-mlquantify.likelihood" title="mlquantify.likelihood"><code class="xref py py-mod docutils literal notranslate"><span class="pre">likelihood</span></code></a></p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="generated/mlquantify.mixture.DyS.html#mlquantify.mixture.DyS" title="mlquantify.mixture.DyS"><code class="xref py py-class docutils literal notranslate"><span class="pre">DyS</span></code></a></p></td>
+<td><p><a class="reference external" href="https://ojs.aaai.org/index.php/AAAI/article/view/4376">Maletzke et al. (2019)</a></p></td>
+<td><p>No</p></td>
+<td><p>Aggregative</p></td>
+<td><p><a class="reference internal" href="../api/mlquantify.mixture.html#module-mlquantify.mixture" title="mlquantify.mixture"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mixture</span></code></a></p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="generated/mlquantify.mixture.HDy.html#mlquantify.mixture.HDy" title="mlquantify.mixture.HDy"><code class="xref py py-class docutils literal notranslate"><span class="pre">HDy</span></code></a></p></td>
+<td><p><a class="reference external" href="https://www.sciencedirect.com/science/article/pii/S0020025512004069">Gonzalez et al. (2012)</a></p></td>
+<td><p>No</p></td>
+<td><p>Aggregative</p></td>
+<td><p><a class="reference internal" href="../api/mlquantify.mixture.html#module-mlquantify.mixture" title="mlquantify.mixture"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mixture</span></code></a></p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="generated/mlquantify.mixture.SMM.html#mlquantify.mixture.SMM" title="mlquantify.mixture.SMM"><code class="xref py py-class docutils literal notranslate"><span class="pre">SMM</span></code></a></p></td>
+<td><p><a class="reference external" href="https://ieeexplore.ieee.org/abstract/document/9260028">Hassan et al. (2020)</a></p></td>
+<td><p>No</p></td>
+<td><p>Aggregative</p></td>
+<td><p><a class="reference internal" href="../api/mlquantify.mixture.html#module-mlquantify.mixture" title="mlquantify.mixture"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mixture</span></code></a></p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="generated/mlquantify.mixture.SORD.html#mlquantify.mixture.SORD" title="mlquantify.mixture.SORD"><code class="xref py py-class docutils literal notranslate"><span class="pre">SORD</span></code></a></p></td>
+<td><p><a class="reference external" href="https://ojs.aaai.org/index.php/AAAI/article/view/4376">Maletzke et al. (2019)</a></p></td>
+<td><p>No</p></td>
+<td><p>Aggregative</p></td>
+<td><p><a class="reference internal" href="../api/mlquantify.mixture.html#module-mlquantify.mixture" title="mlquantify.mixture"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mixture</span></code></a></p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="generated/mlquantify.mixture.HDx.html#mlquantify.mixture.HDx" title="mlquantify.mixture.HDx"><code class="xref py py-class docutils literal notranslate"><span class="pre">HDx</span></code></a></p></td>
+<td><p><a class="reference external" href="https://www.sciencedirect.com/science/article/pii/S0020025512004069">Gonzalez et al. (2012)</a></p></td>
+<td><p>No</p></td>
+<td><p>Non-aggregative</p></td>
+<td><p><a class="reference internal" href="../api/mlquantify.mixture.html#module-mlquantify.mixture" title="mlquantify.mixture"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mixture</span></code></a></p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="generated/mlquantify.mixture.MMD_RKHS.html#mlquantify.mixture.MMD_RKHS" title="mlquantify.mixture.MMD_RKHS"><code class="xref py py-class docutils literal notranslate"><span class="pre">MMD_RKHS</span></code></a></p></td>
+<td><p><a class="reference external" href="https://proceedings.mlr.press/v32/iyer14.html">Iyer et al. (2014)</a></p></td>
+<td><p>No</p></td>
+<td><p>Non-aggregative</p></td>
+<td><p><a class="reference internal" href="../api/mlquantify.mixture.html#module-mlquantify.mixture" title="mlquantify.mixture"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mixture</span></code></a></p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="generated/mlquantify.neighbors.KDEyML.html#mlquantify.neighbors.KDEyML" title="mlquantify.neighbors.KDEyML"><code class="xref py py-class docutils literal notranslate"><span class="pre">KDEyML</span></code></a></p></td>
+<td><p><a class="reference external" href="https://link.springer.com/article/10.1007/s10994-024-06726-5">Moreo et al. (2025)</a></p></td>
+<td><p>Yes</p></td>
+<td><p>Aggregative</p></td>
+<td><p><a class="reference internal" href="../api/mlquantify.neighbors.html#module-mlquantify.neighbors" title="mlquantify.neighbors"><code class="xref py py-mod docutils literal notranslate"><span class="pre">neighbors</span></code></a></p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="generated/mlquantify.neighbors.KDEyHD.html#mlquantify.neighbors.KDEyHD" title="mlquantify.neighbors.KDEyHD"><code class="xref py py-class docutils literal notranslate"><span class="pre">KDEyHD</span></code></a></p></td>
+<td><p><a class="reference external" href="https://link.springer.com/article/10.1007/s10994-024-06726-5">Moreo et al. (2025)</a></p></td>
+<td><p>Yes</p></td>
+<td><p>Aggregative</p></td>
+<td><p><a class="reference internal" href="../api/mlquantify.neighbors.html#module-mlquantify.neighbors" title="mlquantify.neighbors"><code class="xref py py-mod docutils literal notranslate"><span class="pre">neighbors</span></code></a></p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="generated/mlquantify.neighbors.KDEyCS.html#mlquantify.neighbors.KDEyCS" title="mlquantify.neighbors.KDEyCS"><code class="xref py py-class docutils literal notranslate"><span class="pre">KDEyCS</span></code></a></p></td>
+<td><p><a class="reference external" href="https://link.springer.com/article/10.1007/s10994-024-06726-5">Moreo et al. (2025)</a></p></td>
+<td><p>Yes</p></td>
+<td><p>Aggregative</p></td>
+<td><p><a class="reference internal" href="../api/mlquantify.neighbors.html#module-mlquantify.neighbors" title="mlquantify.neighbors"><code class="xref py py-mod docutils literal notranslate"><span class="pre">neighbors</span></code></a></p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="generated/mlquantify.neighbors.PWK.html#mlquantify.neighbors.PWK" title="mlquantify.neighbors.PWK"><code class="xref py py-class docutils literal notranslate"><span class="pre">PWK</span></code></a></p></td>
+<td><p><a class="reference external" href="https://www.sciencedirect.com/science/article/pii/S0031320312003391">Barraquero et al. (2013)</a></p></td>
+<td><p>Yes</p></td>
+<td><p>Aggregative</p></td>
+<td><p><a class="reference internal" href="../api/mlquantify.neighbors.html#module-mlquantify.neighbors" title="mlquantify.neighbors"><code class="xref py py-mod docutils literal notranslate"><span class="pre">neighbors</span></code></a></p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="generated/mlquantify.meta.EnsembleQ.html#mlquantify.meta.EnsembleQ" title="mlquantify.meta.EnsembleQ"><code class="xref py py-class docutils literal notranslate"><span class="pre">EnsembleQ</span></code></a></p></td>
+<td><p><a class="reference external" href="https://www.sciencedirect.com/science/article/pii/S1566253516300628">Pérez-Gállego et al. (2017)</a> and <a class="reference external" href="https://www.sciencedirect.com/science/article/pii/S1566253517303652">Pérez-Gállego et al. (2019)</a></p></td>
+<td><p>Method dependent</p></td>
+<td><p>Meta</p></td>
+<td><p><a class="reference internal" href="../api/mlquantify.meta.html#module-mlquantify.meta" title="mlquantify.meta"><code class="xref py py-mod docutils literal notranslate"><span class="pre">meta</span></code></a></p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="generated/mlquantify.meta.QuaDapt.html#mlquantify.meta.QuaDapt" title="mlquantify.meta.QuaDapt"><code class="xref py py-class docutils literal notranslate"><span class="pre">QuaDapt</span></code></a></p></td>
+<td><p><a class="reference external" href="https://hal.science/hal-04942724/document">Ortega et al. (2025)</a></p></td>
+<td><p>Method dependent</p></td>
+<td><p>Meta</p></td>
+<td><p><a class="reference internal" href="../api/mlquantify.meta.html#module-mlquantify.meta" title="mlquantify.meta"><code class="xref py py-mod docutils literal notranslate"><span class="pre">meta</span></code></a></p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="generated/mlquantify.meta.AggregativeBootstrap.html#mlquantify.meta.AggregativeBootstrap" title="mlquantify.meta.AggregativeBootstrap"><code class="xref py py-class docutils literal notranslate"><span class="pre">AggregativeBootstrap</span></code></a></p></td>
+<td><p><a class="reference external" href="https://iris.cnr.it/bitstream/20.500.14243/555966/1/BootsCI.LQ2025.pdf">Moreo &amp; Salvati (2025)</a></p></td>
+<td><p>Method dependent</p></td>
+<td><p>Meta</p></td>
+<td><p><a class="reference internal" href="../api/mlquantify.meta.html#module-mlquantify.meta" title="mlquantify.meta"><code class="xref py py-mod docutils literal notranslate"><span class="pre">meta</span></code></a></p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+
+
+                </article>
+              
+              
+              
+                <footer class="bd-footer-article">
+                  <div class="footer-article-items footer-article__inner">
+  
+    <div class="footer-article-item">
+<div class="prev-next-area">
+    <a class="left-prev"
+       href="../building_a_quantifier.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title"><span class="section-number">6. </span>Building a Quantifier</p>
+      </div>
+    </a>
+    <a class="right-next"
+       href="../api/index.html"
+       title="next page">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">API Reference</p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
+    </a>
+</div></div>
+  
+</div>
+                </footer>
+              
+              
+              
+            </div>
+            
+            
+              
+                <dialog id="pst-secondary-sidebar-modal"></dialog>
+                <div id="pst-secondary-sidebar" class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item">
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../_sources/modules/mlquantify_methods.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div></div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+          </footer>
+        
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script defer src="../_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf"></script>
+<script defer src="../_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf"></script>
+
+  <footer class="bd-footer">
+  </footer>
+  </body>
+</html>

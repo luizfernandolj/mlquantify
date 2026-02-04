@@ -61,7 +61,7 @@
     <link rel="canonical" href="https://luizfernandolj.github.io/mlquantify/modules/generated/mlquantify.mixture.HDx.html" />
     <link rel="icon" href="../../_static/favicon.ico"/>
     <link rel="search" title="Search" href="../../search.html" />
-    <link rel="next" title="mlquantify.model_selection" href="../../api/mlquantify.model_selection.html" />
+    <link rel="next" title="MMD_RKHS" href="mlquantify.mixture.MMD_RKHS.html" />
     <link rel="prev" title="SORD" href="mlquantify.mixture.SORD.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
@@ -416,6 +416,7 @@
 <li class="toctree-l2"><a class="reference internal" href="mlquantify.mixture.SMM.html">SMM</a></li>
 <li class="toctree-l2"><a class="reference internal" href="mlquantify.mixture.SORD.html">SORD</a></li>
 <li class="toctree-l2 current active"><a class="current reference internal" href="#">HDx</a></li>
+<li class="toctree-l2"><a class="reference internal" href="mlquantify.mixture.MMD_RKHS.html">MMD_RKHS</a></li>
 </ul>
 </details></li>
 <li class="toctree-l1 has-children"><a class="reference internal" href="../../api/mlquantify.model_selection.html">mlquantify.model_selection</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
@@ -510,7 +511,7 @@
 <h1>HDx<a class="headerlink" href="#hdx" title="Link to this heading">#</a></h1>
 <dl class="py class">
 <dt class="sig sig-object py" id="mlquantify.mixture.HDx">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">mlquantify.mixture.</span></span><span class="sig-name descname"><span class="pre">HDx</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">bins_size</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">strategy</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'ovr'</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/luizfernandolj/mlquantify/tree/master/mlquantify/mixture/_classes.py#L378-L462"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mlquantify.mixture.HDx" title="Link to this definition">#</a></dt>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">mlquantify.mixture.</span></span><span class="sig-name descname"><span class="pre">HDx</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">bins_size</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">strategy</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'ovr'</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/luizfernandolj/mlquantify/tree/master/mlquantify/mixture/_classes.py#L383-L467"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mlquantify.mixture.HDx" title="Link to this definition">#</a></dt>
 <dd><p>Hellinger Distance-based Quantifier (HDx).</p>
 <p>A non-aggregative mixture quantifier that estimates class prevalences by 
 minimizing the average Hellinger distance between class-wise feature histograms 
@@ -535,10 +536,15 @@ evaluating distance per feature and aggregates the results.</p>
 </dd>
 </dl>
 <p class="rubric">References</p>
-<p>[2] Esuli et al. (2023). Learning to Quantify. Springer.</p>
+<div role="list" class="citation-list">
+<div class="citation" id="rbfb5a4bbfc79-2" role="doc-biblioentry">
+<span class="label"><span class="fn-bracket">[</span>2<span class="fn-bracket">]</span></span>
+<p>Esuli et al. (2023). Learning to Quantify. Springer.</p>
+</div>
+</div>
 <dl class="py method">
 <dt class="sig sig-object py" id="mlquantify.mixture.HDx.best_mixture">
-<span class="sig-name descname"><span class="pre">best_mixture</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">pos</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">neg</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/luizfernandolj/mlquantify/tree/master/mlquantify/mixture/_classes.py#L433-L462"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mlquantify.mixture.HDx.best_mixture" title="Link to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">best_mixture</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">pos</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">neg</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/luizfernandolj/mlquantify/tree/master/mlquantify/mixture/_classes.py#L438-L467"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mlquantify.mixture.HDx.best_mixture" title="Link to this definition">#</a></dt>
 <dd><p>Determine the best mixture parameters for the given data.</p>
 </dd></dl>
 
@@ -661,11 +667,11 @@ possible to update each component of a nested object.</p>
       </div>
     </a>
     <a class="right-next"
-       href="../../api/mlquantify.model_selection.html"
+       href="mlquantify.mixture.MMD_RKHS.html"
        title="next page">
       <div class="prev-next-info">
         <p class="prev-next-subtitle">next</p>
-        <p class="prev-next-title">mlquantify.model_selection</p>
+        <p class="prev-next-title">MMD_RKHS</p>
       </div>
       <i class="fa-solid fa-angle-right"></i>
     </a>

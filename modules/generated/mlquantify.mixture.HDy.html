@@ -417,6 +417,7 @@
 <li class="toctree-l2"><a class="reference internal" href="mlquantify.mixture.SMM.html">SMM</a></li>
 <li class="toctree-l2"><a class="reference internal" href="mlquantify.mixture.SORD.html">SORD</a></li>
 <li class="toctree-l2"><a class="reference internal" href="mlquantify.mixture.HDx.html">HDx</a></li>
+<li class="toctree-l2"><a class="reference internal" href="mlquantify.mixture.MMD_RKHS.html">MMD_RKHS</a></li>
 </ul>
 </details></li>
 <li class="toctree-l1 has-children"><a class="reference internal" href="../../api/mlquantify.model_selection.html">mlquantify.model_selection</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
@@ -511,7 +512,7 @@
 <h1>HDy<a class="headerlink" href="#hdy" title="Link to this heading">#</a></h1>
 <dl class="py class">
 <dt class="sig sig-object py" id="mlquantify.mixture.HDy">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">mlquantify.mixture.</span></span><span class="sig-name descname"><span class="pre">HDy</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">learner</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">strategy</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'ovr'</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/luizfernandolj/mlquantify/tree/master/mlquantify/mixture/_classes.py#L209-L279"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mlquantify.mixture.HDy" title="Link to this definition">#</a></dt>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">mlquantify.mixture.</span></span><span class="sig-name descname"><span class="pre">HDy</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">learner</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">strategy</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'ovr'</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/luizfernandolj/mlquantify/tree/master/mlquantify/mixture/_classes.py#L211-L283"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mlquantify.mixture.HDy" title="Link to this definition">#</a></dt>
 <dd><p>Hellinger Distance Minimization (HDy) quantification method.</p>
 <p>Estimates class prevalences by finding mixture weights that minimize
 the Hellinger distance between the histogram of test scores and the mixture
@@ -525,7 +526,12 @@ of positive and negative class score histograms, evaluated over multiple bin siz
 </dd>
 </dl>
 <p class="rubric">References</p>
-<p>[2] Esuli et al. (2023). Learning to Quantify. Springer.</p>
+<div role="list" class="citation-list">
+<div class="citation" id="r6984ee09aa4a-2" role="doc-biblioentry">
+<span class="label"><span class="fn-bracket">[</span>2<span class="fn-bracket">]</span></span>
+<p>Esuli et al. (2023). Learning to Quantify. Springer.</p>
+</div>
+</div>
 <dl class="py method">
 <dt class="sig sig-object py" id="mlquantify.mixture.HDy.aggregate">
 <span class="sig-name descname"><span class="pre">aggregate</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/luizfernandolj/mlquantify/tree/master/mlquantify/multiclass.py#L324-L350"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mlquantify.mixture.HDy.aggregate" title="Link to this definition">#</a></dt>
@@ -534,14 +540,12 @@ of positive and negative class score histograms, evaluated over multiple bin siz
 
 <dl class="py method">
 <dt class="sig sig-object py" id="mlquantify.mixture.HDy.best_mixture">
-<span class="sig-name descname"><span class="pre">best_mixture</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">predictions</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">pos_scores</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">neg_scores</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/luizfernandolj/mlquantify/tree/master/mlquantify/mixture/_classes.py#L227-L276"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mlquantify.mixture.HDy.best_mixture" title="Link to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">best_mixture</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">predictions</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">pos_scores</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">neg_scores</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/luizfernandolj/mlquantify/tree/master/mlquantify/mixture/_classes.py#L229-L280"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mlquantify.mixture.HDy.best_mixture" title="Link to this definition">#</a></dt>
 <dd><p>Determine the best mixture parameters for the given data.</p>
 <p>Compute the mixture weight <span class="math notranslate nohighlight">\(\alpha\)</span> that minimizes the Hellinger distance between the test score histogram and the mixture of positive and negative class score histograms.</p>
-<p>The mixture weight <span class="math notranslate nohighlight">\(\alpha\)</span> is estimated as:
-.. math:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>\<span class="n">alpha</span> <span class="o">=</span> \<span class="n">arg</span> \<span class="n">min_</span><span class="p">{</span>\<span class="n">alpha</span> \<span class="ow">in</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">]}</span> <span class="n">Hellinger</span> \<span class="n">left</span><span class="p">(</span> <span class="n">H_</span><span class="p">{</span><span class="n">test</span><span class="p">},</span> \<span class="n">alpha</span> <span class="n">H_</span><span class="p">{</span><span class="n">pos</span><span class="p">}</span> <span class="o">+</span> <span class="p">(</span><span class="mi">1</span> <span class="o">-</span> \<span class="n">alpha</span><span class="p">)</span> <span class="n">H_</span><span class="p">{</span><span class="n">neg</span><span class="p">}</span> \<span class="n">right</span><span class="p">)</span>
-</pre></div>
-</div>
+<p>The mixture weight <span class="math notranslate nohighlight">\(\alpha\)</span> is estimated as:</p>
+<div class="math notranslate nohighlight">
+\[\alpha = \arg \min_{\alpha \in [0, 1]} Hellinger \left( H_{test}, \alpha H_{pos} + (1 - \alpha) H_{neg} \right)\]</div>
 <p>where <span class="math notranslate nohighlight">\(H\)</span> denotes histograms.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
