@@ -86,7 +86,7 @@ class BaseKDE(SoftLearnerQMixin, AggregationMixin, BaseQuantifier):
         self.best_distance = None
 
     @_fit_context(prefer_skip_nested_validation=True)
-    def fit(self, X, y, learner_fitted=False):
+    def fit(self, X, y, learner_fitted=False, cv=5, stratified=True, shuffle=False):
         X, y = validate_data(self, X, y, ensure_2d=True, ensure_min_samples=2)
         validate_y(self, y)
         
@@ -100,8 +100,8 @@ class BaseKDE(SoftLearnerQMixin, AggregationMixin, BaseQuantifier):
         else:
             train_predictions, y_train = apply_cross_validation(
                 self.learner, X, y,
-                function=learner_function, cv=5,
-                stratified=True, shuffle=True
+                function=learner_function, cv=cv,
+                stratified=stratified, shuffle=shuffle
             )
 
         self.train_predictions = train_predictions
