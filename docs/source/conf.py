@@ -116,7 +116,7 @@ html_context = {
     'authors': 'Luiz Fernando Luth Junior, André Gustavo Maletzke',
     'og_title': 'mlquantify - Python Quantification Library',
     'og_description': 'Aggregate, non-aggregate and meta-methods for class prevalence estimation in imbalanced datasets.',
-    'og_image': 'https://luizfernandolj.github.io/mlquantify/assets/logo.png',  # substitua pelo seu logo
+    'og_image': 'https://luizfernandolj.github.io/mlquantify/assets/logo_mlquantify.svg',  # substitua pelo seu logo
     'og_url': 'https://luizfernandolj.github.io/mlquantify/',
     'og_type': 'website',
 }
