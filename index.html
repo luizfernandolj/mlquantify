@@ -7,7 +7,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>mlquantify: Quantification in Python &#8212; mlquantify — Quantification in Python</title>
+    <title>mlquantify | Premier Quantification Methods for Python &#8212; mlquantify — Quantification in Python</title>
   
   
   
@@ -33,7 +33,9 @@
     <link rel="stylesheet" type="text/css" href="_static/copybutton.css?v=76b2166b" />
     <link rel="stylesheet" type="text/css" href="_static/plot_directive.css" />
     <link rel="stylesheet" type="text/css" href="_static/sphinx-design.min.css?v=95c83b7e" />
-    <link rel="stylesheet" type="text/css" href="_static/custom.css?v=9a2dca72" />
+    <link rel="stylesheet" type="text/css" href="_static/variables.css?v=fded66fe" />
+    <link rel="stylesheet" type="text/css" href="_static/theme_overrides.css?v=dec63a3c" />
+    <link rel="stylesheet" type="text/css" href="_static/landing.css?v=e93fd00d" />
   
   <!-- So that users can add custom icons -->
   <script src="_static/scripts/fontawesome.js?digest=8878045cc6db502f8baf"></script>
@@ -56,12 +58,23 @@
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
   <meta name="docsearch:version" content="" />
-  <meta name="description"
-        content="mlquantify is a Python library for quantification and class prevalence estimation, including aggregative, non-aggregative, and meta methods, as well as dedicated metrics and model selection tools.">
-  <meta name="keywords"
-        content="mlquantify, quantification, class prevalence estimation, machine learning, Python">
-  <meta property="og:site_name" content="mlquantify documentation">
-  <meta property="og:title" content="mlquantify: Quantification in Python">
+  <!-- SEO Optimization -->
+  <meta name="description" content="mlquantify is the state-of-the-art Python library for quantification (class prevalence estimation). Explore aggregative, non-aggregative, and meta methods with comprehensive evaluation metrics.">
+  <meta name="keywords" content="mlquantify, quantification, class priors, prevalence estimation, machine learning, python library, data science, aggregative quantification">
+  <meta name="author" content="Luiz Fernando">
+  
+  <!-- Open Graph / Facebook -->
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://luizfernandolj.github.io/mlquantify/">
+  <meta property="og:title" content="mlquantify | Quantification in Python">
+  <meta property="og:description" content="Master class prevalence estimation with mlquantify. The comprehensive toolkit for quantification methods and evaluation.">
+  <meta property="og:image" content="_static/logos/logo_mlquantify.svg">
+
+  <!-- Twitter -->
+  <meta property="twitter:card" content="summary_large_image">
+  <meta property="twitter:title" content="mlquantify | Quantification in Python">
+  <meta property="twitter:description" content="Master class prevalence estimation with mlquantify. The comprehensive toolkit for quantification methods and evaluation.">
+  
   <meta name="google-site-verification" content="bWayDYFdWewG2kY5OEW6su5q5wOuxpB23JoE_wUVrbY" />
 
   </head>
@@ -103,7 +116,7 @@
 </div>
 
   
-<div class="container-fluid">
+<div class="container-fluid" style="background: rgba(15,23,42,0.9); border-bottom: 1px solid var(--glass-border);">
     
     <header class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
 <div class="bd-header__inner bd-page-width">
@@ -240,10 +253,6 @@
 
     </header>
   
-    <div class="container py-4">
-        <h4 class="fst-italic mb-3">Tools for Quantification and Class Prevalence Estimation</h4>
-        <a class="btn btn-primary mb-1 text-white" href="user_guide.html" role="button">User Guide</a>
-    </div>
 </div>
 
 
@@ -352,74 +361,102 @@
       <main id="main-content" class="bd-main" role="main">
         
         
-<div class="container pt-3">
-  <div class="row">
-    <div class="col-md-4 mb-3">
-      <div class="card h-100 bg-dark text-white">
-        <div class="card-body">
-          <h4 class="card-title">
-            <a href="aggregative_quantification.html">Aggregate Quantification</a>
-          </h4>
-          <p>Aggregation Methods for Class Prevalence Estimation</p>
-        </div>
-        <a href="examples/aggregative_quantification.html" class="btn btn-secondary">Examples</a>
+<!-- Hero Section -->
+<div class="hero-container">
+    <div class="container">
+      <img src="_static/logo_mlquantify-white.svg" alt="mlquantify" style="height: 180px; margin-bottom: 2rem; filter: drop-shadow(0 0 20px rgba(168, 85, 247, 0.4));">
+      <h1 class="hero-title">A Python package for Quantification</h1>
+      <p class="hero-subtitle">
+        The ultimate Python toolkit for class prevalence estimation. 
+        Robust methods, advanced metrics, and seamless scikit-learn integration.
+      </p>
+      <div class="d-flex justify-content-center gap-3">
+        <a class="btn btn-premium" href="user_guide.html">
+          <i class="fa-solid fa-book-open me-2"></i> Get Started
+        </a>
+        <a class="btn btn-outline-glow" href="modules/mlquantify_methods.html">
+          <i class="fa-solid fa-table-list me-2"></i> View All Methods
+        </a>
       </div>
     </div>
-    <div class="col-md-4 mb-3">
-      <div class="card h-100 bg-dark text-white">
-        <div class="card-body">
-          <h4 class="card-title">
-            <a href="non_aggregative_quantification.html">Non-Aggregative Quantification</a>
-          </h4>
-          <p>Non-Aggregative Methods for Class Prevalence Estimation</p>
+</div>
+
+<!-- Features Grid -->
+<div class="container py-5">
+  <div class="row g-4">
+    
+    <!-- Aggregative -->
+    <div class="col-md-4">
+      <div class="feature-card">
+        <div class="card-icon-wrapper">
+          <i class="fa-solid fa-layer-group"></i>
         </div>
-        <a href="examples/non_aggregative_quantification.html" class="btn btn-secondary">Examples</a>
+        <h4><a href="aggregative_quantification.html">Aggregative Methods</a></h4>
+        <p>Estimate prevalence by aggregating individual classifications. Includes CC, ACC, PCC, and more.</p>
+        <a href="examples/aggregative_quantification.html" class="btn-link text-decoration-none">View Examples &rarr;</a>
       </div>
     </div>
-    <div class="col-md-4 mb-3">
-      <div class="card h-100 bg-dark text-white">
-        <div class="card-body">
-          <h4 class="card-title">
-            <a href="meta_quantification.html">Meta Quantification</a>
-          </h4>
-          <p>Meta Methods for Class Prevalence Estimation</p>
+
+    <!-- Non-Aggregative -->
+    <div class="col-md-4">
+      <div class="feature-card">
+        <div class="card-icon-wrapper">
+          <i class="fa-solid fa-chart-pie"></i>
         </div>
-        <a href="examples/meta_quantification.html" class="btn btn-secondary">Examples</a>
+        <h4><a href="non_aggregative_quantification.html">Non-Aggregative</a></h4>
+        <p>Direct methods that bypass individual classification, optimizing global loss functions directly.</p>
+        <a href="examples/non_aggregative_quantification.html" class="btn-link text-decoration-none">View Examples &rarr;</a>
       </div>
     </div>
-    <div class="col-md-4 mb-3">
-      <div class="card h-100 bg-dark text-white">
-        <div class="card-body">
-          <h4 class="card-title">
-            <a href="modules/evaluation_metrics.html">Evaluation Metrics</a>
-          </h4>
-          <p>Assess the performance of quantification results with dedicated metrics.</p>
+
+    <!-- Meta -->
+    <div class="col-md-4">
+      <div class="feature-card">
+        <div class="card-icon-wrapper">
+          <i class="fa-solid fa-network-wired"></i>
         </div>
-        <a href="examples/evaluation_metrics.html" class="btn btn-secondary">Examples</a>
+        <h4><a href="meta_quantification.html">Meta Quantification</a></h4>
+        <p>Ensemble techniques and meta-learning approaches to boost quantification performance.</p>
+        <a href="examples/meta_quantification.html" class="btn-link text-decoration-none">View Examples &rarr;</a>
       </div>
     </div>
-    <div class="col-md-4 mb-3">
-      <div class="card h-100 bg-dark text-white">
-        <div class="card-body">
-          <h4 class="card-title">
-            <a href="modules/confidence_intervals.html">Confidence Intervals</a>
-          </h4>
-          <p>Calculate confidence intervals for quantification results.</p>
+
+    <!-- Metrics -->
+    <div class="col-md-4">
+      <div class="feature-card">
+        <div class="card-icon-wrapper">
+          <i class="fa-solid fa-ruler-combined"></i>
         </div>
-        <a href="examples/confidence_intervals.html" class="btn btn-secondary">Examples</a>
+        <h4><a href="modules/evaluation_metrics.html">Evaluation Metrics</a></h4>
+        <p>Dedicated metrics for quantification tasks: Absolute Error, KL Divergence, and more.</p>
+        <a href="examples/evaluation_metrics.html" class="btn-link text-decoration-none">View Examples &rarr;</a>
       </div>
     </div>
-    <div class="col-md-4 mb-3">
-      <div class="card h-100 bg-dark text-white">
-        <div class="card-body">
-          <h4 class="card-title">
-            <a href="model_selection_evaluation.html">Model Selection and Evaluation</a>
-          </h4>
-          <p>Methods for selecting and evaluating quantification models.</p>
+
+    <!-- Confidence -->
+    <div class="col-md-4">
+      <div class="feature-card">
+        <div class="card-icon-wrapper">
+          <i class="fa-solid fa-scale-balanced"></i>
         </div>
-        <a href="examples/model_selection_evaluation.html" class="btn btn-secondary">Examples</a>
+        <h4><a href="modules/confidence_intervals.html">Confidence Intervals</a></h4>
+        <p>Assess the reliability of your predictions with robust confidence interval estimation.</p>
+        <a href="examples/confidence_intervals.html" class="btn-link text-decoration-none">View Examples &rarr;</a>
       </div>
     </div>
+
+    <!-- Model Selection -->
+    <div class="col-md-4">
+      <div class="feature-card">
+        <div class="card-icon-wrapper">
+          <i class="fa-solid fa-flask"></i>
+        </div>
+        <h4><a href="model_selection_evaluation.html">Model Selection</a></h4>
+        <p>Tools for hyperparameter tuning and selecting the best quantifier for your data.</p>
+        <a href="examples/model_selection_evaluation.html" class="btn-link text-decoration-none">View Examples &rarr;</a>
+      </div>
+    </div>
+
   </div>
 </div>
 
@@ -431,14 +468,15 @@
   <script defer src="_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf"></script>
 <script defer src="_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf"></script>
 
-<div class="container-fluid py-3">
-  <div class="container">
-    <h4>About Us</h4>
-    <ul>
-      <li>Open source quantification library for Python</li>
-      <li>Contact: <a href="mailto:luizfernandoluth@gmail.com">luizfernandoluth@gmail.com</a></li>
-      <a href="about_us.html">See more about us</a>
-    </ul>
+<div class="container-fluid py-4" style="background: rgba(15,23,42,0.95); border-top: 1px solid var(--glass-border);">
+  <div class="container text-center">
+    <h5 class="text-white mb-3">mlquantify</h5>
+    <div class="d-flex justify-content-center gap-4 mb-3">
+      <a href="about_us.html" class="text-secondary text-decoration-none">About Us</a>
+      <a href="https://github.com/luizfernandolj/mlquantify" class="text-secondary text-decoration-none">GitHub</a>
+      <a href="mailto:luizfernandoluth@gmail.com" class="text-secondary text-decoration-none">Contact</a>
+    </div>
+    <small class="text-muted">&copy; 2024 Luiz Fernando. All rights reserved.</small>
   </div>
 </div>
 
