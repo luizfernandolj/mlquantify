@@ -1,109 +1,145 @@
 {% extends "layout.html" %}
-{% set title = 'mlquantify: Quantification in Python' %}
+{% set title = 'mlquantify | Premier Quantification Methods for Python' %}
 
 {% block extrahead %}
   {{ super() }}
-  <meta name="description"
-        content="mlquantify is a Python library for quantification and class prevalence estimation, including aggregative, non-aggregative, and meta methods, as well as dedicated metrics and model selection tools.">
-  <meta name="keywords"
-        content="mlquantify, quantification, class prevalence estimation, machine learning, Python">
-  <meta property="og:site_name" content="mlquantify documentation">
-  <meta property="og:title" content="mlquantify: Quantification in Python">
+  <!-- SEO Optimization -->
+  <meta name="description" content="mlquantify is the state-of-the-art Python library for quantification (class prevalence estimation). Explore aggregative, non-aggregative, and meta methods with comprehensive evaluation metrics.">
+  <meta name="keywords" content="mlquantify, quantification, class priors, prevalence estimation, machine learning, python library, data science, aggregative quantification">
+  <meta name="author" content="Luiz Fernando">
+  
+  <!-- Open Graph / Facebook -->
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://luizfernandolj.github.io/mlquantify/">
+  <meta property="og:title" content="mlquantify | Quantification in Python">
+  <meta property="og:description" content="Master class prevalence estimation with mlquantify. The comprehensive toolkit for quantification methods and evaluation.">
+  <meta property="og:image" content="{{ pathto('_static/logos/logo_mlquantify.svg', 1) }}">
+
+  <!-- Twitter -->
+  <meta property="twitter:card" content="summary_large_image">
+  <meta property="twitter:title" content="mlquantify | Quantification in Python">
+  <meta property="twitter:description" content="Master class prevalence estimation with mlquantify. The comprehensive toolkit for quantification methods and evaluation.">
+  
   <meta name="google-site-verification" content="bWayDYFdWewG2kY5OEW6su5q5wOuxpB23JoE_wUVrbY" />
 {% endblock extrahead %}
 
 {% block docs_navbar %}
-<div class="container-fluid">
+<div class="container-fluid" style="background: rgba(15,23,42,0.9); border-bottom: 1px solid var(--glass-border);">
     {{ super() }}
-    <div class="container py-4">
-        <h4 class="fst-italic mb-3">Tools for Quantification and Class Prevalence Estimation</h4>
-        <a class="btn btn-primary mb-1 text-white" href="{{ pathto('user_guide') }}" role="button">User Guide</a>
-    </div>
 </div>
 {% endblock docs_navbar %}
 
 {% block docs_main %}
-<div class="container pt-3">
-  <div class="row">
-    <div class="col-md-4 mb-3">
-      <div class="card h-100 bg-dark text-white">
-        <div class="card-body">
-          <h4 class="card-title">
-            <a href="{{ pathto('aggregative_quantification') }}">Aggregate Quantification</a>
-          </h4>
-          <p>Aggregation Methods for Class Prevalence Estimation</p>
-        </div>
-        <a href="{{ pathto('examples/aggregative_quantification') }}" class="btn btn-secondary">Examples</a>
+<!-- Hero Section -->
+<div class="hero-container">
+    <div class="container">
+      <img src="{{ pathto('_static/logo_mlquantify-white.svg', 1) }}" alt="mlquantify" style="height: 180px; margin-bottom: 2rem; filter: drop-shadow(0 0 20px rgba(168, 85, 247, 0.4));">
+      <h1 class="hero-title">A Python package for Quantification</h1>
+      <p class="hero-subtitle">
+        The ultimate Python toolkit for class prevalence estimation. 
+        Robust methods, advanced metrics, and seamless scikit-learn integration.
+      </p>
+      <div class="d-flex justify-content-center gap-3">
+        <a class="btn btn-premium" href="{{ pathto('user_guide') }}">
+          <i class="fa-solid fa-book-open me-2"></i> Get Started
+        </a>
+        <a class="btn btn-outline-glow" href="{{ pathto('modules/mlquantify_methods') }}">
+          <i class="fa-solid fa-table-list me-2"></i> View All Methods
+        </a>
       </div>
     </div>
-    <div class="col-md-4 mb-3">
-      <div class="card h-100 bg-dark text-white">
-        <div class="card-body">
-          <h4 class="card-title">
-            <a href="{{ pathto('non_aggregative_quantification') }}">Non-Aggregative Quantification</a>
-          </h4>
-          <p>Non-Aggregative Methods for Class Prevalence Estimation</p>
+</div>
+
+<!-- Features Grid -->
+<div class="container py-5">
+  <div class="row g-4">
+    
+    <!-- Aggregative -->
+    <div class="col-md-4">
+      <div class="feature-card">
+        <div class="card-icon-wrapper">
+          <i class="fa-solid fa-layer-group"></i>
         </div>
-        <a href="{{ pathto('examples/non_aggregative_quantification') }}" class="btn btn-secondary">Examples</a>
+        <h4><a href="{{ pathto('aggregative_quantification') }}">Aggregative Methods</a></h4>
+        <p>Estimate prevalence by aggregating individual classifications. Includes CC, ACC, PCC, and more.</p>
+        <a href="{{ pathto('examples/aggregative_quantification') }}" class="btn-link text-decoration-none">View Examples &rarr;</a>
       </div>
     </div>
-    <div class="col-md-4 mb-3">
-      <div class="card h-100 bg-dark text-white">
-        <div class="card-body">
-          <h4 class="card-title">
-            <a href="{{ pathto('meta_quantification') }}">Meta Quantification</a>
-          </h4>
-          <p>Meta Methods for Class Prevalence Estimation</p>
+
+    <!-- Non-Aggregative -->
+    <div class="col-md-4">
+      <div class="feature-card">
+        <div class="card-icon-wrapper">
+          <i class="fa-solid fa-chart-pie"></i>
         </div>
-        <a href="{{ pathto('examples/meta_quantification') }}" class="btn btn-secondary">Examples</a>
+        <h4><a href="{{ pathto('non_aggregative_quantification') }}">Non-Aggregative</a></h4>
+        <p>Direct methods that bypass individual classification, optimizing global loss functions directly.</p>
+        <a href="{{ pathto('examples/non_aggregative_quantification') }}" class="btn-link text-decoration-none">View Examples &rarr;</a>
       </div>
     </div>
-    <div class="col-md-4 mb-3">
-      <div class="card h-100 bg-dark text-white">
-        <div class="card-body">
-          <h4 class="card-title">
-            <a href="{{ pathto('modules/evaluation_metrics') }}">Evaluation Metrics</a>
-          </h4>
-          <p>Assess the performance of quantification results with dedicated metrics.</p>
+
+    <!-- Meta -->
+    <div class="col-md-4">
+      <div class="feature-card">
+        <div class="card-icon-wrapper">
+          <i class="fa-solid fa-network-wired"></i>
         </div>
-        <a href="{{ pathto('examples/evaluation_metrics') }}" class="btn btn-secondary">Examples</a>
+        <h4><a href="{{ pathto('meta_quantification') }}">Meta Quantification</a></h4>
+        <p>Ensemble techniques and meta-learning approaches to boost quantification performance.</p>
+        <a href="{{ pathto('examples/meta_quantification') }}" class="btn-link text-decoration-none">View Examples &rarr;</a>
       </div>
     </div>
-    <div class="col-md-4 mb-3">
-      <div class="card h-100 bg-dark text-white">
-        <div class="card-body">
-          <h4 class="card-title">
-            <a href="{{ pathto('modules/confidence_intervals') }}">Confidence Intervals</a>
-          </h4>
-          <p>Calculate confidence intervals for quantification results.</p>
+
+    <!-- Metrics -->
+    <div class="col-md-4">
+      <div class="feature-card">
+        <div class="card-icon-wrapper">
+          <i class="fa-solid fa-ruler-combined"></i>
         </div>
-        <a href="{{ pathto('examples/confidence_intervals') }}" class="btn btn-secondary">Examples</a>
+        <h4><a href="{{ pathto('modules/evaluation_metrics') }}">Evaluation Metrics</a></h4>
+        <p>Dedicated metrics for quantification tasks: Absolute Error, KL Divergence, and more.</p>
+        <a href="{{ pathto('examples/evaluation_metrics') }}" class="btn-link text-decoration-none">View Examples &rarr;</a>
       </div>
     </div>
-    <div class="col-md-4 mb-3">
-      <div class="card h-100 bg-dark text-white">
-        <div class="card-body">
-          <h4 class="card-title">
-            <a href="{{ pathto('model_selection_evaluation') }}">Model Selection and Evaluation</a>
-          </h4>
-          <p>Methods for selecting and evaluating quantification models.</p>
+
+    <!-- Confidence -->
+    <div class="col-md-4">
+      <div class="feature-card">
+        <div class="card-icon-wrapper">
+          <i class="fa-solid fa-scale-balanced"></i>
         </div>
-        <a href="{{ pathto('examples/model_selection_evaluation') }}" class="btn btn-secondary">Examples</a>
+        <h4><a href="{{ pathto('modules/confidence_intervals') }}">Confidence Intervals</a></h4>
+        <p>Assess the reliability of your predictions with robust confidence interval estimation.</p>
+        <a href="{{ pathto('examples/confidence_intervals') }}" class="btn-link text-decoration-none">View Examples &rarr;</a>
       </div>
     </div>
+
+    <!-- Model Selection -->
+    <div class="col-md-4">
+      <div class="feature-card">
+        <div class="card-icon-wrapper">
+          <i class="fa-solid fa-flask"></i>
+        </div>
+        <h4><a href="{{ pathto('model_selection_evaluation') }}">Model Selection</a></h4>
+        <p>Tools for hyperparameter tuning and selecting the best quantifier for your data.</p>
+        <a href="{{ pathto('examples/model_selection_evaluation') }}" class="btn-link text-decoration-none">View Examples &rarr;</a>
+      </div>
+    </div>
+
   </div>
 </div>
 {% endblock docs_main %}
 
 {% block footer %}
-<div class="container-fluid py-3">
-  <div class="container">
-    <h4>About Us</h4>
-    <ul>
-      <li>Open source quantification library for Python</li>
-      <li>Contact: <a href="mailto:luizfernandoluth@gmail.com">luizfernandoluth@gmail.com</a></li>
-      <a href="{{ pathto('about_us')}}">See more about us</a>
-    </ul>
+<div class="container-fluid py-4" style="background: rgba(15,23,42,0.95); border-top: 1px solid var(--glass-border);">
+  <div class="container text-center">
+    <h5 class="text-white mb-3">mlquantify</h5>
+    <div class="d-flex justify-content-center gap-4 mb-3">
+      <a href="{{ pathto('about_us') }}" class="text-secondary text-decoration-none">About Us</a>
+      <a href="https://github.com/luizfernandolj/mlquantify" class="text-secondary text-decoration-none">GitHub</a>
+      <a href="mailto:luizfernandoluth@gmail.com" class="text-secondary text-decoration-none">Contact</a>
+    </div>
+    <small class="text-muted">&copy; 2024 Luiz Fernando. All rights reserved.</small>
   </div>
 </div>
 {% endblock footer %}

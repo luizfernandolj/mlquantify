@@ -77,7 +77,7 @@ add_function_parentheses = False
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#options-for-html-output
 
 html_theme = "pydata_sphinx_theme"
-html_static_path = ['_static']
+html_static_path = ['_static', 'logos']
 
 
 html_additional_pages = {"index": "index.html"}
@@ -89,7 +89,12 @@ html_domain_indices = False
 # If false, no index is generated.
 html_use_index = False
 
-html_css_files = ["custom.css"]
+html_css_files = [
+    "variables.css",
+    "theme_overrides.css",
+    "landing.css",
+    # "custom.css" # Deprecated, split into modules above
+]
 
 html_sidebars = {
     "about_us": [],
