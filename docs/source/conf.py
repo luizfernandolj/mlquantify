@@ -105,7 +105,8 @@ html_sidebars = {
 html_extra_path = ["robots.txt"]
 sitemap_url_scheme = "{link}"
 html_favicon = "_static/favicon.ico"
-html_title = "mlquantify — Quantification in Python"
+html_title = "mlquantify"
+html_short_title = "mlquantify"
 
 
 html_theme_options = {
