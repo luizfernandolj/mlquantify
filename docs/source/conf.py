@@ -21,7 +21,9 @@ sys.path.insert(0, os.path.abspath("sphinxext"))
 
 project = 'mlquantify'
 author = 'Luiz Fernando'
-release = '0.1.20'
+release = '0.1.27'
+
+
 
 html_baseurl = "https://luizfernandolj.github.io/mlquantify/"
 
@@ -107,6 +109,17 @@ sitemap_url_scheme = "{link}"
 html_favicon = "_static/favicon.ico"
 html_title = "mlquantify"
 html_short_title = "mlquantify"
+html_context = {
+    'project_name': 'mlquantify',
+    'description': 'Python library for quantification and class prevalence estimation, including aggregate, non-aggregate, and meta methods.',
+    'keywords': 'quantification, machine learning, python library, class prevalence estimation, mlquantify',
+    'authors': 'Luiz Fernando Luth Junior, André Gustavo Maletzke',
+    'og_title': 'mlquantify - Python Quantification Library',
+    'og_description': 'Aggregate, non-aggregate and meta-methods for class prevalence estimation in imbalanced datasets.',
+    'og_image': 'https://luizfernandolj.github.io/mlquantify/assets/logo.png',  # substitua pelo seu logo
+    'og_url': 'https://luizfernandolj.github.io/mlquantify/',
+    'og_type': 'website',
+}
 
 
 html_theme_options = {
