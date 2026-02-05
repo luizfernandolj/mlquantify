@@ -5,11 +5,6 @@ from abc import abstractmethod
 from scipy.optimize import minimize
 import warnings
 from sklearn.metrics import confusion_matrix
-
-from mlquantify.utils._tags import (
-    PredictionRequirements,
-    Tags,
-)
 from mlquantify.adjust_counting._base import BaseAdjustCount
 from mlquantify.adjust_counting._counting import CC, PCC
 from mlquantify.utils import (
@@ -27,6 +22,7 @@ from mlquantify.base_aggregative import (
     _get_learner_function
 )
 from mlquantify.multiclass import define_binary
+from mlquantify.utils._optimization import _optimize_on_simplex
 from mlquantify.adjust_counting._utils import evaluate_thresholds
 from mlquantify.utils._constraints import Interval, Options
 
@@ -208,27 +204,67 @@ class MatrixAdjustment(BaseAdjustCount):
         pp. 1-8.
     """
 
-    _parameter_constraints = {"solver": Options(["optim", "linear"])}
+    _parameter_constraints = {
+        "solver": Options(["minimize", "linear", None]),
+        "method": Options(["inverse", "invariant_ratio"])
+    }
 
-    def __init__(self, learner=None, solver=None):
+    def __init__(self, learner=None, solver=None, method='inverse'):
         super().__init__(learner=learner)
         self.solver = solver
+        self.method = method
     
     def _adjust(self, predictions, train_predictions, y_train):
-        n_class = len(np.unique(y_train))
+        n_class = len(self.classes_)
         self.CM = np.zeros((n_class, n_class))
-        if self.solver == 'optim':
+        if self.solver == 'minimize':
             class_counts = np.array([np.count_nonzero(y_train == _class) for _class in self.classes_])
             priors = class_counts / len(y_train)
             self.CM = self._compute_confusion_matrix(train_predictions, y_train, priors)
             prevs_estim = self._get_estimations(predictions > priors, y_train)
-            prevalence = self._solve_optimization(prevs_estim, priors)
         else:
             self.CM = self._compute_confusion_matrix(train_predictions, y_train)
             prevs_estim = self._get_estimations(predictions, y_train)
-            prevalence = self._solve_linear(prevs_estim)
+
+        try:
+            prevalence = self._solve_adjustment(self.CM, prevs_estim)
+        except:
+            prevalence = prevs_estim
+
+        prevalence = np.clip(prevalence, 0, 1)
+        prevalence = validate_prevalences(self, prevalence, self.classes_)
         
         return prevalence
+
+    def _solve_adjustment(self, confusion_matrix, prevs_estim):
+        A = confusion_matrix
+        B = prevs_estim
+        
+        if self.method == 'inverse':
+            pass
+        elif self.method == 'invariant_ratio':
+            A[-1, :] = 1.0
+            B[-1] = 1.0
+
+        if self.solver == 'minimize':
+            def objective(prevs_pred):
+                return np.linalg.norm(A @ prevs_pred - B)
+            
+            constraints = [
+                {'type': 'eq', 'fun': lambda x: np.sum(x) - 1},
+                {'type': 'ineq', 'fun': lambda x: x}
+            ]
+
+            prevalence, self.loss_ = _optimize_on_simplex(objective, len(self.classes_), constraints)
+
+            return prevalence
+            
+        elif self.solver == 'linear':
+            try:
+                adjusted = np.linalg.solve(A, B)
+                return adjusted
+            except np.linalg.LinAlgError:
+                return B
 
     def _solve_linear(self, prevs_estim):
         r"""
@@ -540,7 +576,7 @@ class FM(SoftLearnerQMixin, MatrixAdjustment):
            *Proceedings of the IEEE*, 103(11), 1522-1541.
     """
     def __init__(self, learner=None):
-        super().__init__(learner=learner, solver='optim')
+        super().__init__(learner=learner, solver='minimize')
     
     def _compute_confusion_matrix(self, predictions, y_true, priors):
         n_classes = len(self.classes_)

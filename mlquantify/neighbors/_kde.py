@@ -8,49 +8,7 @@ from mlquantify.neighbors._utils import (
     EPS,
 )
 from mlquantify.utils import check_random_state
-from scipy.optimize import minimize
-
-
-# ============================================================
-# Auxiliary functions
-# ============================================================
-
-def _optimize_on_simplex(objective, n_classes, x0=None):
-    r"""Optimize an objective function over the probability simplex.
-    
-    This function performs constrained optimization to find the mixture weights
-    :math:`\alpha` on the simplex :math:`\Delta^{n-1} = \{ \alpha \in \mathbb{R}^n : \alpha_i \geq 0, \sum_i \alpha_i = 1 \}`
-    that minimize the given objective function.
-
-    Parameters
-    ----------
-    objective : callable
-        Function from :math:`\mathbb{R}^n \to \mathbb{R}` to minimize.
-    n_classes : int
-        Dimensionality of the simplex (number of classes).
-    x0 : array-like, optional
-        Initial guess for the optimization, defaults to uniform vector.
-
-    Returns
-    -------
-    alpha_opt : ndarray of shape (n_classes,)
-        Optimized weights summing to 1.
-    min_loss : float
-        Objective function value at optimum.
-
-    Notes
-    -----
-    The optimization uses scipy's `minimize` with bounds and equality constraint.
-    """
-    if x0 is None:
-        x0 = np.ones(n_classes) / n_classes
-
-    constraints = {'type': 'eq', 'fun': lambda x: np.sum(x) - 1}
-    bounds = [(0, 1)] * n_classes
-
-    res = minimize(objective, x0, bounds=bounds, constraints=constraints)
-    alpha_opt = res.x / np.sum(res.x)
-    return alpha_opt, res.fun
+from mlquantify.utils._optimization import _optimize_on_simplex
 
 
 # ============================================================
@@ -151,7 +109,9 @@ class KDEyHD(BaseKDE):
         "montecarlo_trials": [Interval(1, None)],
     }
 
-    def __init__(self, learner=None, bandwidth=0.1, kernel="gaussian", montecarlo_trials=1000, random_state=None):
+    EPS = 1e-10
+
+    def __init__(self, learner=None, bandwidth=0.1, kernel="gaussian", montecarlo_trials=10000, random_state=None):
         super().__init__(learner, bandwidth, kernel)
         self.montecarlo_trials = montecarlo_trials
         self.random_state = random_state
@@ -161,23 +121,20 @@ class KDEyHD(BaseKDE):
         Precompute reference samples from class KDEs and their densities.
         """
         super()._fit_kde_models(train_predictions, y_train)
-        n_class = len(self._class_kdes)
+        n_class = len(self.classes_)
         trials = int(self.montecarlo_trials)
-        rng = check_random_state(self.random_state)
-        # Convert to integer seed for sklearn compatibility
-        seed = rng.integers(0, 2**31 - 1) if hasattr(rng, 'integers') else self.random_state
 
         samples = np.vstack([
-            kde.sample(max(1, trials // n_class), random_state=seed)
+            kde.sample(max(1, trials // n_class), random_state=self.random_state)
             for kde in self._class_kdes
         ])
 
-        ref_classwise = np.array([np.exp(k.score_samples(samples)) + EPS for k in self._class_kdes])
-        ref_density = np.mean(ref_classwise, axis=0) + EPS
+        ref_classwise = np.array([np.exp(k.score_samples(samples)) for k in self._class_kdes])
+        ref_density = np.mean(ref_classwise, axis=0)
 
         self._ref_samples = samples
         self._ref_classwise = ref_classwise
-        self._ref_density = ref_density
+        self._ref_density = ref_density + EPS
 
     def _solve_prevalences(self, predictions):
         """
@@ -189,9 +146,7 @@ class KDEyHD(BaseKDE):
         fracs = self._ref_classwise / qs
 
         def objective(alpha):
-            alpha = np.clip(alpha, EPS, None)
-            alpha /= np.sum(alpha)
-            ps_div_qs = np.dot(alpha, fracs)
+            ps_div_qs = alpha @ fracs
             vals = (np.sqrt(ps_div_qs) - 1.0) ** 2 * iw
             return np.mean(vals)
 

@@ -1,6 +1,7 @@
 from copy import deepcopy
 import numpy as np
-from abc import abstractmethod
+import functools
+from inspect import signature
 from mlquantify.base import BaseQuantifier
 from mlquantify.base_aggregative import get_aggregation_requirements
 from mlquantify.utils._decorators import _fit_context
@@ -75,15 +76,23 @@ def define_binary(cls):
     """
     if check_has_method(cls, "fit"):
         cls._original_fit = cls.fit
+        # PRESERVA docstring e signature do método ORIGINAL
+        cls.fit = functools.wraps(cls._original_fit)(BinaryQuantifier.fit)
+        cls.fit.__doc__ = cls._original_fit.__doc__
+        cls.fit.__signature__ = signature(cls._original_fit)
+    
     if check_has_method(cls, "predict"):
         cls._original_predict = cls.predict
+        cls.predict = functools.wraps(cls._original_predict)(BinaryQuantifier.predict)
+        cls.predict.__doc__ = cls._original_predict.__doc__
+        cls.predict.__signature__ = signature(cls._original_predict)
+    
     if check_has_method(cls, "aggregate"):
         cls._original_aggregate = cls.aggregate
-
-    cls.fit = BinaryQuantifier.fit
-    cls.predict = BinaryQuantifier.predict
-    cls.aggregate = BinaryQuantifier.aggregate
-
+        cls.aggregate = functools.wraps(cls._original_aggregate)(BinaryQuantifier.aggregate)
+        cls.aggregate.__doc__ = cls._original_aggregate.__doc__
+        cls.aggregate.__signature__ = signature(cls._original_aggregate)
+    
     return cls
 
 

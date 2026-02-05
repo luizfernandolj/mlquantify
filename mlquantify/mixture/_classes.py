@@ -41,7 +41,7 @@ class AggregativeMixture(SoftLearnerQMixin, AggregationMixin, BaseMixture):
         self.distances = None
         self.strategy = strategy
     
-    def _fit(self, X, y, learner_fitted=False, *args, **kwargs):
+    def _fit(self, X, y, learner_fitted=False, cv=5, stratified=True, shuffle=False):
         learner_function = _get_learner_function(self)
         
         if learner_fitted:
@@ -53,11 +53,12 @@ class AggregativeMixture(SoftLearnerQMixin, AggregationMixin, BaseMixture):
                 X,
                 y,
                 function= learner_function,
-                cv= 5,
-                stratified= True,
+                cv= cv,
+                stratified= stratified,
                 random_state= None,
-                shuffle= True
+                shuffle= shuffle
             )
+            self.learner.fit(X, y)
             
         self.train_predictions = train_predictions
         self.y_train = y_train

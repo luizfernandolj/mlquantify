@@ -1,10 +1,13 @@
-from functools import wraps
-
+import functools
+import inspect
+from inspect import signature
+from mlquantify.utils import (
+    is_validation_skipped, 
+    validation_context,
+)
 from mlquantify.utils._validation import _is_fitted
-from mlquantify.utils._context import validation_context, is_validation_skipped
 
-
-def _fit_context(prefer_skip_nested_validation: bool = False):
+def _fit_context(*, prefer_skip_nested_validation: bool = False):
     """
     Decorator to manage validation context during the fit process.
     
@@ -14,7 +17,7 @@ def _fit_context(prefer_skip_nested_validation: bool = False):
         If True, prefer to skip nested validation during fitting, by default False.
     """
     def decorator(fit_method):
-        @wraps(fit_method)
+        @functools.wraps(fit_method)
         def wrapper(estimator, *args, **kwargs):
             global_skip_validation = is_validation_skipped()
 
@@ -31,6 +34,10 @@ def _fit_context(prefer_skip_nested_validation: bool = False):
             ):
                 return fit_method(estimator, *args, **kwargs)
 
+        wrapper.__doc__ = fit_method.__doc__
+        wrapper.__signature__ = signature(fit_method)
+        wrapper.__name__ = fit_method.__name__
+        
         return wrapper
 
     return decorator

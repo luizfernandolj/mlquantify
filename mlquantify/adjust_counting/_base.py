@@ -202,8 +202,32 @@ class BaseAdjustCount(AggregationMixin, BaseQuantifier):
         self.learner = learner
 
     @_fit_context(prefer_skip_nested_validation=True)
-    def fit(self, X, y, learner_fitted=False, cv=10, stratified=True, random_state=None, shuffle=True):
-        """Fit the quantifier using the provided data and learner."""
+    def fit(self, X, y, learner_fitted=False, cv=5, stratified=True, random_state=None, shuffle=False):
+        """Fit the quantifier using the provided data and learner.
+        
+        Parameters
+        ----------
+        X : array-like of shape (n_samples, n_features)
+            Training data.
+        y : array-like of shape (n_samples,)
+            True labels.
+        learner_fitted : bool, optional
+            If True, the learner is already fitted, by default False.
+        cv : int, optional
+            Number of cross-validation folds, by default 5.
+        stratified : bool, optional
+            Whether to stratify the cross-validation, by default True.
+        random_state : int, optional
+            Random state for reproducibility, by default None.
+        shuffle : bool, optional
+            Whether to shuffle the data, by default False.
+        
+        Returns
+        -------
+        self : BaseAdjustCount
+            Fitted quantifier.
+        
+        """
         X, y = validate_data(self, X, y)
         self.classes_ = np.unique(y)
         learner_function = _get_learner_function(self)
@@ -220,8 +244,9 @@ class BaseAdjustCount(AggregationMixin, BaseQuantifier):
                 cv=cv,
                 stratified=stratified,
                 random_state=random_state,
-                shuffle=shuffle
+                shuffle=shuffle,
             )
+            self.learner.fit(X, y)
         
         self.train_predictions = train_predictions
         self.y_train = y_train_labels
