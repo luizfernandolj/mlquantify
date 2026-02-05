@@ -1,7 +1,7 @@
 from mlquantify.base import BaseQuantifier
 from mlquantify.base_aggregative import AggregationMixin
 import numpy as np
-from mlquantify.base_aggregative import SoftLearnerQMixin
+from mlquantify.base_aggregative import SoftLearnerQMixin, _get_learner_function
 from mlquantify.metrics._slq import MAE
 from mlquantify.utils import _fit_context, validate_data, check_classes_attribute, validate_predictions, validate_prevalences
 from mlquantify.utils._constraints import (
