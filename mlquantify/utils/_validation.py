@@ -332,125 +332,94 @@ def validate_data(quantifier,
     return out
 
 
-def validate_prevalences(quantifier, prevalences: np.ndarray | list | dict, classes: np.ndarray, return_type: str = "dict", normalize: bool = True) -> dict | np.ndarray:
-    """
-    Validate class prevalences according to quantifier tags.
+from mlquantify._config import get_config
+
+
+from scipy.special import softmax
+
+def validate_prevalences(
+    quantifier, 
+    prevalences: np.ndarray | list | dict, 
+    classes: np.ndarray, 
+    return_type: str | None = None, 
+    normalize: bool | None = None, 
+    normalization: str | None = None
+) -> dict | np.ndarray:
     
-    Parameters
-    ----------
-    quantifier : estimator
-        The quantifier instance
-    prevalences : np.ndarray, list, or dict
-        Predicted prevalences for each class
-    classes : np.ndarray
-        Array of class labels
-    return_type : str, default="dict"
-        Return format: "dict" or "array"
-    normalize : bool, default=True
-        Whether to normalize prevalences to sum to 1
-        
-    Returns
-    -------
-    dict or np.ndarray
-        Validated prevalences in the requested format
-    """
-    if return_type not in ["dict", "array"]:
-        raise InvalidParameterError(
-            f"return_type must be 'dict' or 'array', got {return_type!r}."
-        )
+    # 1. Resolução de configurações globais
+    conf = get_config()
+    return_type = return_type or conf["prevalence_return_type"]
     
-    # Convert to dict if needed
+    if normalization is None:
+        normalization = ('sum' if normalize else None) if normalize is not None else conf["prevalence_normalization"]
+
+    # 2. Padronização imediata para Array (Trabalha internamente sempre com array)
     if isinstance(prevalences, dict):
-        prev_dict = prevalences
-    elif isinstance(prevalences, (list, np.ndarray)):
-        prevalences = np.asarray(prevalences)
-        
-        if len(prevalences) > len(classes):
-            raise InputValidationError(
-                f"Number of prevalences ({len(prevalences)}) cannot exceed number of classes ({len(classes)})."
-            )
-        
-        # Create dict, padding with zeros if classes is larger
-        prev_dict = {}
-        for i, cls in enumerate(classes):
-            prev_dict[cls] = prevalences[i] if i < len(prevalences) else 0.0
+        # Conversão direta respeitando a ordem das classes
+        prevalences_arr = np.array([prevalences.get(cls, 0.0) for cls in classes], dtype=float)
     else:
-        raise InputValidationError(
-            f"prevalences must be a numpy array, list, or dict, got {type(prevalences).__name__}."
-        )
-    
-    # Normalize if requested
-    if normalize:
-        total = sum(prev_dict.values())
-        if total == 0:
-            raise InputValidationError("Cannot normalize prevalences: sum is zero.")
-        prev_dict = {cls: val / total for cls, val in prev_dict.items()}
-    
-    # Convert numpy types to native Python types for cleaner output
-    
-    prev_dict_converted = {}
-    # Convert numpy types to native Python types
-    for cls, val in prev_dict.items():
-        if isinstance(cls, np.integer):
-            cls = int(cls)
-        elif isinstance(cls, np.floating):
-            cls = float(cls)
-        elif isinstance(cls, np.str_):
-            cls = str(cls)
-        prev_dict_converted[cls] = float(val)
-    
-    # Return in requested format
+        prevalences_arr = np.asanyarray(prevalences, dtype=float)
+
+    # 3. Processamento via normalize_prevalences
+    # Passamos o array já preparado e as classes para a função especializada
+    # Note: normalize_prevalences agora lida com as diferentes estratégias
+    result_arr = normalize_prevalences(
+        prevalences_arr, 
+        classes=classes, 
+        method=normalization
+    )
+
+    # 4. Transformação final para o tipo definido globalmente
     if return_type == "dict":
-        return prev_dict_converted
-    else:
-        return np.array([prev_dict_converted[cls] for cls in classes])
+        # Garante que NaNs não quebrem o dicionário e converte para tipos nativos Python
+        np.nan_to_num(result_arr, copy=False, nan=0.0)
+        return dict(zip(classes, result_arr))
+    
+    return result_arr
 
+def normalize_prevalences(
+    prevalences: np.ndarray, 
+    classes: np.ndarray, 
+    method: str | None = 'sum'
+) -> np.ndarray:
+    """
+    Processa a normalização e agregação focando estritamente em arrays.
+    """
+    # Garante que o input é um array para operações vetorizadas
+    arr = np.copy(prevalences)
+    
+    # Ajuste de dimensões (Padding)
+    n_classes = len(classes)
+    if arr.shape[-1] < n_classes:
+        pad_width = [(0, 0)] * arr.ndim
+        pad_width[-1] = (0, n_classes - arr.shape[-1])
+        arr = np.pad(arr, pad_width, mode='constant')
+    elif arr.shape[-1] > n_classes:
+        raise ValueError(f"Dimensão de prevalências ({arr.shape[-1]}) maior que o número de classes ({n_classes}).")
 
-def normalize_prevalences(prevalences: np.ndarray | list | dict, classes: np.ndarray = None) -> np.ndarray | dict:
-    """
-    Normalize prevalences to sum to 1.
-    
-    Parameters
-    ----------
-    prevalences : np.ndarray, list, or dict
-        Class prevalences to normalize
-    classes : np.ndarray, optional
-        Array of class labels (required if prevalences is array/list)
+    # Aplicação da lógica baseada no método
+    if method in ('sum', 'l1'):
+        if arr.ndim == 2:
+            row_sums = arr.sum(axis=1, keepdims=True)
+            np.divide(arr, row_sums, out=arr, where=row_sums != 0)
+            arr = arr.mean(axis=0)
         
-    Returns
-    -------
-    np.ndarray or dict
-        Normalized prevalences in the same format as input
-    """
-    if isinstance(prevalences, dict):
-        total = sum(prevalences.values())
-        if total == 0:
-            raise InputValidationError("Cannot normalize prevalences: sum is zero.")
-        normalized = {cls: val / total for cls, val in prevalences.items()}
-        
-        normalized_dict = {}
-        # Convert numpy types to native Python types
-        for cls, val in normalized.items():
-            if isinstance(cls, np.integer):
-                cls = int(cls)
-            elif isinstance(cls, np.floating):
-                cls = float(cls)
-            elif isinstance(cls, np.str_):
-                cls = str(cls)
-            normalized_dict[cls] = float(val)
-        return normalized_dict
-    
-    elif isinstance(prevalences, (list, np.ndarray)):
-        prevalences = np.asarray(prevalences)
-        total = prevalences.sum()
-        if total == 0:
-            raise InputValidationError("Cannot normalize prevalences: sum is zero.")
-        return prevalences / total
-    
-    else:
-        raise InputValidationError(
-            f"prevalences must be a numpy array, list, or dict, got {type(prevalences).__name__}."
-        )
+        total = arr.sum()
+        if total > 0:
+            arr /= total
+
+    elif method == 'softmax':
+        from scipy.special import softmax
+        if arr.ndim == 2:
+            arr = softmax(arr, axis=1).mean(axis=0)
+        else:
+            arr = softmax(arr)
+
+    elif arr.ndim == 2 and method in ('mean', 'median'):
+        arr = np.mean(arr, axis=0) if method == 'mean' else np.median(arr, axis=0)
+
+    return arr
+
         
         
 def check_has_method(obj: Any, method_name: str) -> bool:

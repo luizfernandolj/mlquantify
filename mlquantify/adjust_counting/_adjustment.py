@@ -104,10 +104,11 @@ class ThresholdAdjustment(SoftLearnerQMixin, BaseAdjustCount):
         ],
     }
 
-    def __init__(self, learner=None, threshold=0.5, strategy="ovr"):
+    def __init__(self, learner=None, threshold=0.5, strategy="ovr", n_jobs=None):
         super().__init__(learner=learner)
         self.threshold = threshold
         self.strategy = strategy
+        self.n_jobs = n_jobs
 
     def _adjust(self, predictions, train_y_scores, y_train):
         """Internal adjustment computation based on selected ROC threshold."""
@@ -385,12 +386,13 @@ class CDE(SoftLearnerQMixin, AggregationMixin, BaseQuantifier):
         return tags
 
 
-    def __init__(self, learner=None, tol=1e-4, max_iter=100, init_cfp=1.0, strategy="ovr"):
+    def __init__(self, learner=None, tol=1e-4, max_iter=100, init_cfp=1.0, strategy="ovr", n_jobs=None):
         self.learner = learner
         self.tol = float(tol)
         self.max_iter = int(max_iter)
-        self.init_cfp = float(init_cfp)
+        self.init_cfp = float(init_cfp) 
         self.strategy = strategy
+        self.n_jobs = n_jobs
 
     @_fit_context(prefer_skip_nested_validation=True)
     def fit(self, X, y):
