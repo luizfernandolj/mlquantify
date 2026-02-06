@@ -11,12 +11,12 @@
 <meta property="og:type" content="website" />
 <meta property="og:url" content="getting_started.html" />
 <meta property="og:site_name" content="mlquantify" />
-<meta property="og:description" content="mlquantify is a comprehensive Python toolkit for quantification (also known as class prevalence estimation or class prior estimation). This guide will help you get started with the main features of..." />
+<meta property="og:description" content="mlquantify is a comprehensive Python toolkit for Quantification(also known as Class Prevalence Estimation, Class Prior Estimation, or Shift Estimation). Installation: You can install mlquantify usi..." />
 <meta property="og:image:width" content="1146" />
 <meta property="og:image:height" content="600" />
-<meta property="og:image" content="_images/social_previews/summary_getting_started_ad772ba3.png" />
-<meta property="og:image:alt" content="mlquantify is a comprehensive Python toolkit for quantification (also known as class prevalence estimation or class prior estimation). This guide will help you get started with the main features of..." />
-<meta name="description" content="mlquantify is a comprehensive Python toolkit for quantification (also known as class prevalence estimation or class prior estimation). This guide will help you get started with the main features of..." />
+<meta property="og:image" content="_images/social_previews/summary_getting_started_a190567a.png" />
+<meta property="og:image:alt" content="mlquantify is a comprehensive Python toolkit for Quantification(also known as Class Prevalence Estimation, Class Prior Estimation, or Shift Estimation). Installation: You can install mlquantify usi..." />
+<meta name="description" content="mlquantify is a comprehensive Python toolkit for Quantification(also known as Class Prevalence Estimation, Class Prior Estimation, or Shift Estimation). Installation: You can install mlquantify usi..." />
 <meta name="twitter:card" content="summary_large_image" />
 
     <title>Getting Started &#8212; mlquantify</title>
@@ -389,90 +389,128 @@
                   
   <section id="getting-started">
 <h1>Getting Started<a class="headerlink" href="#getting-started" title="Link to this heading">#</a></h1>
-<p><code class="docutils literal notranslate"><span class="pre">mlquantify</span></code> is a comprehensive Python toolkit for quantification (also known as class prevalence estimation or class prior estimation). This guide will help you get started with the main features of the library:</p>
-<ul class="simple">
-<li><p>Aggregative methods</p></li>
-<li><p>Non-aggregative methods</p></li>
-<li><p>Meta methods</p></li>
-<li><p>Evaluation metrics</p></li>
-<li><p>Confidence Intervals</p></li>
-<li><p>Model Selection</p></li>
-</ul>
-<p>It is assumed basic knowledge of machine learning practices (fitting, evaluation, etc.). You can install <code class="docutils literal notranslate"><span class="pre">mlquantify</span></code></p>
+<p><strong>mlquantify</strong> is a comprehensive Python toolkit for <strong>Quantification</strong> (also known as <em>Class Prevalence Estimation</em>, <em>Class Prior Estimation</em>, or <em>Shift Estimation</em>).</p>
 <section id="installation">
 <h2>Installation<a class="headerlink" href="#installation" title="Link to this heading">#</a></h2>
-<p>You can install <code class="docutils literal notranslate"><span class="pre">mlquantify</span></code> directly from PyPI:</p>
+<p>You can install <code class="docutils literal notranslate"><span class="pre">mlquantify</span></code> using pip:</p>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>pip<span class="w"> </span>install<span class="w"> </span>mlquantify
 </pre></div>
 </div>
-<p>Alternatively, you can install the latest version from source:</p>
+<p>Or install the latest development version from source:</p>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>git<span class="w"> </span>clone<span class="w"> </span>https://github.com/luizfernandolj/mlquantify.git
 <span class="nb">cd</span><span class="w"> </span>mlquantify
 pip<span class="w"> </span>install<span class="w"> </span>.
 </pre></div>
 </div>
 </section>
-<section id="quick-start">
-<h2>Quick Start<a class="headerlink" href="#quick-start" title="Link to this heading">#</a></h2>
-<p>Here is a minimal example of how to use <code class="docutils literal notranslate"><span class="pre">mlquantify</span></code> to estimate class prevalences using the <strong>Classify &amp; Count (CC)</strong> method.</p>
-<ol class="arabic">
-<li><p><strong>Import necessary modules</strong></p>
-<p>We’ll use <code class="docutils literal notranslate"><span class="pre">scikit-learn</span></code> for the underlying classifier and data generation.</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">mlquantify.adjust_counting</span><span class="w"> </span><span class="kn">import</span> <span class="n">CC</span>
-<span class="kn">from</span><span class="w"> </span><span class="nn">sklearn.linear_model</span><span class="w"> </span><span class="kn">import</span> <span class="n">LogisticRegression</span>
-<span class="kn">from</span><span class="w"> </span><span class="nn">sklearn.datasets</span><span class="w"> </span><span class="kn">import</span> <span class="n">make_classification</span>
-<span class="kn">from</span><span class="w"> </span><span class="nn">sklearn.model_selection</span><span class="w"> </span><span class="kn">import</span> <span class="n">train_test_split</span>
-</pre></div>
-</div>
-</li>
-<li><p><strong>Generate Synthetic Data</strong></p>
-<p>Let’s create a binary classification dataset.</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Generate a synthetic dataset</span>
-<span class="n">X</span><span class="p">,</span> <span class="n">y</span> <span class="o">=</span> <span class="n">make_classification</span><span class="p">(</span>
-    <span class="n">n_samples</span><span class="o">=</span><span class="mi">2000</span><span class="p">,</span>
-    <span class="n">n_features</span><span class="o">=</span><span class="mi">20</span><span class="p">,</span>
-    <span class="n">n_classes</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span>
-    <span class="n">weights</span><span class="o">=</span><span class="p">[</span><span class="mf">0.8</span><span class="p">,</span> <span class="mf">0.2</span><span class="p">],</span>  <span class="c1"># Imbalanced dataset</span>
-    <span class="n">random_state</span><span class="o">=</span><span class="mi">42</span>
-<span class="p">)</span>
+<section id="basic-usage">
+<h2>Basic Usage<a class="headerlink" href="#basic-usage" title="Link to this heading">#</a></h2>
+<p>Most quantifiers in <code class="docutils literal notranslate"><span class="pre">mlquantify</span></code> behave like scikit-learn estimators. They implement <code class="docutils literal notranslate"><span class="pre">fit(X,</span> <span class="pre">y)</span></code> and <code class="docutils literal notranslate"><span class="pre">predict(X)</span></code> methods.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">sklearn.linear_model</span><span class="w"> </span><span class="kn">import</span> <span class="n">LogisticRegression</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">mlquantify.adjust_counting</span><span class="w"> </span><span class="kn">import</span> <span class="n">CC</span>  <span class="c1"># Classify &amp; Count</span>
 
-<span class="c1"># Split into training and testing sets</span>
-<span class="n">X_train</span><span class="p">,</span> <span class="n">X_test</span><span class="p">,</span> <span class="n">y_train</span><span class="p">,</span> <span class="n">y_test</span> <span class="o">=</span> <span class="n">train_test_split</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">test_size</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span> <span class="n">random_state</span><span class="o">=</span><span class="mi">42</span><span class="p">)</span>
-</pre></div>
-</div>
-</li>
-<li><p><strong>Initialize and Train the Quantifier</strong></p>
-<p>Most aggregative quantifiers in <code class="docutils literal notranslate"><span class="pre">mlquantify</span></code> wrap a standard classifier. Here we use Logistic Regression.</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Initialize the classifier</span>
-<span class="n">classifier</span> <span class="o">=</span> <span class="n">LogisticRegression</span><span class="p">()</span>
+<span class="c1"># 1. Initialize a base classifier</span>
+<span class="n">estimator</span> <span class="o">=</span> <span class="n">LogisticRegression</span><span class="p">()</span>
 
-<span class="c1"># Initialize the Classify &amp; Count (CC) quantifier</span>
-<span class="n">quantifier</span> <span class="o">=</span> <span class="n">CC</span><span class="p">(</span><span class="n">classifier</span><span class="p">)</span>
+<span class="c1"># 2. Wrap it with an aggregative quantifier (e.g., CC)</span>
+<span class="n">quantifier</span> <span class="o">=</span> <span class="n">CC</span><span class="p">(</span><span class="n">estimator</span><span class="p">)</span>
 
-<span class="c1"># Fit the quantifier on the training data</span>
+<span class="c1"># 3. Fit on labeled training data</span>
 <span class="n">quantifier</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">X_train</span><span class="p">,</span> <span class="n">y_train</span><span class="p">)</span>
-</pre></div>
-</div>
-</li>
-<li><p><strong>Estimate Class Prevalences</strong></p>
-<p>Use the <code class="docutils literal notranslate"><span class="pre">predict</span></code> method to estimate the class distribution of the test set.</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Estimate class prevalences</span>
+
+<span class="c1"># 4. Predict class prevalences on new data</span>
 <span class="n">prevalences</span> <span class="o">=</span> <span class="n">quantifier</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">X_test</span><span class="p">)</span>
 
-<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Estimated class prevalences: </span><span class="si">{</span><span class="n">prevalences</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
-<span class="c1"># Example Output: [0.79, 0.21]</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">prevalences</span><span class="p">)</span>
 </pre></div>
 </div>
-</li>
-</ol>
+</section>
+<section id="the-fit-parameters">
+<h2>The <code class="docutils literal notranslate"><span class="pre">fit</span></code> Parameters<a class="headerlink" href="#the-fit-parameters" title="Link to this heading">#</a></h2>
+<p>All aggregative quantifiers in <code class="docutils literal notranslate"><span class="pre">mlquantify</span></code> support a consistent set of parameters in their <code class="docutils literal notranslate"><span class="pre">fit</span></code> method to control how the underlying classifier is trained or used:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">X</span></code>: The training input samples (array-like, sparse matrix).</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">y</span></code>: The target values (class labels).</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">learner_fitted</span></code> (bool): If <code class="docutils literal notranslate"><span class="pre">True</span></code>, assumes the provided estimator is already trained. If <code class="docutils literal notranslate"><span class="pre">False</span></code> (default), trains the estimator on the provided <code class="docutils literal notranslate"><span class="pre">X</span></code> and <code class="docutils literal notranslate"><span class="pre">y</span></code>.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">cv</span></code> (int, cross-validation generator, or iterable): Determines the cross-validation splitting strategy for generating internal predictions (used by methods like ACC, PACC).</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">stratified</span></code> (bool): If <code class="docutils literal notranslate"><span class="pre">True</span></code>, uses stratified folds for cross-validation.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">shuffle</span></code> (bool): Whether to shuffle the data before splitting in cross-validation.</p></li>
+</ul>
+</section>
+<section id="aggregative-quantifiers-aggregate">
+<h2>Aggregative Quantifiers &amp; <code class="docutils literal notranslate"><span class="pre">aggregate</span></code><a class="headerlink" href="#aggregative-quantifiers-aggregate" title="Link to this heading">#</a></h2>
+<p>Aggregative methods (like CC, ACC, PCC) estimate prevalence by aggregating predictions from individual instances.</p>
+<p>Unlike standard estimators, they offer an additional <strong>``aggregate``</strong> method. This allows you to perform quantification <strong>without re-predicting</strong> if you already have the classifier’s outputs (labels or probabilities) for your test set.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Assume we already have predictions for the test set</span>
+<span class="n">predictions</span> <span class="o">=</span> <span class="n">classifier</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">X_test</span><span class="p">)</span>
+
+<span class="c1"># Use &#39;aggregate&#39; directly - no need for X_test</span>
+<span class="n">estimated_prevalence</span> <span class="o">=</span> <span class="n">quantifier</span><span class="o">.</span><span class="n">aggregate</span><span class="p">(</span><span class="n">predictions</span><span class="p">)</span>
+</pre></div>
+</div>
+</section>
+<section id="model-evaluation">
+<h2>Model evaluation<a class="headerlink" href="#model-evaluation" title="Link to this heading">#</a></h2>
+<p>Fitting a model to some data does not entail that it will predict well on unseen data. This needs to be directly evaluated. We typically use a <code class="docutils literal notranslate"><span class="pre">train_test_split</span></code> to split a dataset into train and test sets, and then use specific metrics to compare the predicted prevalences against the true prevalences.</p>
+<p><code class="docutils literal notranslate"><span class="pre">mlquantify</span></code> provides many tools for model evaluation in the <a class="reference internal" href="api/mlquantify.metrics.html#module-mlquantify.metrics" title="mlquantify.metrics"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mlquantify.metrics</span></code></a> module.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">sklearn.datasets</span><span class="w"> </span><span class="kn">import</span> <span class="n">make_classification</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">sklearn.model_selection</span><span class="w"> </span><span class="kn">import</span> <span class="n">train_test_split</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">mlquantify.adjust_counting</span><span class="w"> </span><span class="kn">import</span> <span class="n">CC</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">mlquantify.metrics</span><span class="w"> </span><span class="kn">import</span> <span class="n">MAE</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">sklearn.linear_model</span><span class="w"> </span><span class="kn">import</span> <span class="n">LogisticRegression</span>
+
+<span class="c1"># Generate synthetic data</span>
+<span class="n">X</span><span class="p">,</span> <span class="n">y</span> <span class="o">=</span> <span class="n">make_classification</span><span class="p">(</span><span class="n">n_samples</span><span class="o">=</span><span class="mi">1000</span><span class="p">,</span> <span class="n">weights</span><span class="o">=</span><span class="p">[</span><span class="mf">0.8</span><span class="p">,</span> <span class="mf">0.2</span><span class="p">],</span> <span class="n">random_state</span><span class="o">=</span><span class="mi">42</span><span class="p">)</span>
+<span class="n">X_train</span><span class="p">,</span> <span class="n">X_test</span><span class="p">,</span> <span class="n">y_train</span><span class="p">,</span> <span class="n">y_test</span> <span class="o">=</span> <span class="n">train_test_split</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">test_size</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span> <span class="n">random_state</span><span class="o">=</span><span class="mi">42</span><span class="p">)</span>
+
+<span class="c1"># Initialize and fit</span>
+<span class="n">quantifier</span> <span class="o">=</span> <span class="n">CC</span><span class="p">(</span><span class="n">LogisticRegression</span><span class="p">())</span>
+<span class="n">quantifier</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">X_train</span><span class="p">,</span> <span class="n">y_train</span><span class="p">)</span>
+
+<span class="c1"># Predict prevalences</span>
+<span class="n">y_pred</span> <span class="o">=</span> <span class="n">quantifier</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">X_test</span><span class="p">)</span>
+
+<span class="c1"># Calculate Mean Absolute Error (MAE)</span>
+<span class="c1"># y_test contains true labels; we convert them to prevalences for comparison</span>
+<span class="n">error</span> <span class="o">=</span> <span class="n">MAE</span><span class="p">(</span><span class="n">y_test</span><span class="p">,</span> <span class="n">y_pred</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Mean Absolute Error: </span><span class="si">{</span><span class="n">error</span><span class="si">:</span><span class="s2">.4f</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+<section id="quantification-protocols">
+<h3>Quantification Protocols<a class="headerlink" href="#quantification-protocols" title="Link to this heading">#</a></h3>
+<p>In quantification, a single test set is often insufficient because we want to evaluate performance across <em>different</em> class distributions (shifts).</p>
+<p><strong>Protocols</strong> like the <strong>Artificial Prevalence Protocol (APP)</strong> allow you to generate many test samples with varying prevalences from a single dataset.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">mlquantify.protocols</span><span class="w"> </span><span class="kn">import</span> <span class="n">APP</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">mlquantify.utils</span><span class="w"> </span><span class="kn">import</span> <span class="n">get_prev_from_labels</span>
+
+<span class="c1"># Create an APP generator:</span>
+<span class="c1"># - n_prevalences=21: Generate samples with prevalences from 0.0 to 1.0 (step 0.05)</span>
+<span class="c1"># - repeats=10: Generate 10 difference samples for each prevalence</span>
+<span class="n">protocol</span> <span class="o">=</span> <span class="n">APP</span><span class="p">(</span><span class="n">batch_size</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> <span class="n">n_prevalences</span><span class="o">=</span><span class="mi">21</span><span class="p">,</span> <span class="n">repeats</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">random_state</span><span class="o">=</span><span class="mi">42</span><span class="p">)</span>
+
+<span class="n">errors</span> <span class="o">=</span> <span class="p">[]</span>
+
+<span class="c1"># APP.split() yields indices for each test sample</span>
+<span class="k">for</span> <span class="n">test_index</span> <span class="ow">in</span> <span class="n">protocol</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="n">X_test</span><span class="p">,</span> <span class="n">y_test</span><span class="p">):</span>
+    <span class="n">X_sample</span><span class="p">,</span> <span class="n">y_sample</span> <span class="o">=</span> <span class="n">X_test</span><span class="p">[</span><span class="n">test_index</span><span class="p">],</span> <span class="n">y_test</span><span class="p">[</span><span class="n">test_index</span><span class="p">]</span>
+
+    <span class="c1"># Predict prevalence on this specific sample</span>
+    <span class="n">pred_prev</span> <span class="o">=</span> <span class="n">quantifier</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">X_sample</span><span class="p">)</span>
+
+    <span class="c1"># Calculate error for this sample</span>
+    <span class="n">errors</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">MAE</span><span class="p">(</span><span class="n">y_sample</span><span class="p">,</span> <span class="n">pred_prev</span><span class="p">))</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Mean Absolute Error across </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">errors</span><span class="p">)</span><span class="si">}</span><span class="s2"> samples: </span><span class="si">{</span><span class="nb">sum</span><span class="p">(</span><span class="n">errors</span><span class="p">)</span><span class="o">/</span><span class="nb">len</span><span class="p">(</span><span class="n">errors</span><span class="p">)</span><span class="si">:</span><span class="s2">.4f</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>See <a class="reference internal" href="modules/protocols.html#quantification-protocols"><span class="std std-ref">Protocols for Quantification</span></a> for more details on APP, NPP, and other protocols.</p>
+</section>
 </section>
 <section id="next-steps">
-<h2>Next Steps<a class="headerlink" href="#next-steps" title="Link to this heading">#</a></h2>
-<ul class="simple">
-<li><p>Explore the <span class="xref std std-ref">mlquantify-methods</span> to see all available algorithms.</p></li>
-<li><p>Check out the <span class="xref std std-ref">user-guide</span> for in-depth tutorials on Aggregative and Non-Aggregative methods.</p></li>
-<li><p>Learn about <span class="xref std std-ref">evaluation-metrics</span> to properly assess your quantifier’s performance.</p></li>
-</ul>
+<h2>Next steps<a class="headerlink" href="#next-steps" title="Link to this heading">#</a></h2>
+<p>We have briefly covered estimator fitting and predicting, aggregative methods, and model evaluation. This guide should give you an overview of some of the main features of the library, but there is much more to <code class="docutils literal notranslate"><span class="pre">mlquantify</span></code>!</p>
+<p>Please refer to our <span class="xref std std-ref">user-guide</span> for details on all the tools that we provide, including <strong>Non-Aggregative Methods</strong>, <strong>Meta Quantification</strong>, and <strong>Confidence Intervals</strong>. You can also find an exhaustive list of the public API in the <span class="xref std std-ref">api</span>.</p>
+<p>You can also look at our numerous <span class="xref std std-ref">examples</span> that illustrate the use of <code class="docutils literal notranslate"><span class="pre">mlquantify</span></code> in many different contexts.</p>
 </section>
 </section>
 
@@ -528,8 +566,14 @@ pip<span class="w"> </span>install<span class="w"> </span>.
   <nav class="bd-toc-nav page-toc" aria-labelledby="pst-page-navigation-heading-2">
     <ul class="visible nav section-nav flex-column">
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#installation">Installation</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#quick-start">Quick Start</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#next-steps">Next Steps</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#basic-usage">Basic Usage</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#the-fit-parameters">The <code class="docutils literal notranslate"><span class="pre">fit</span></code> Parameters</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#aggregative-quantifiers-aggregate">Aggregative Quantifiers &amp; <code class="docutils literal notranslate"><span class="pre">aggregate</span></code></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#model-evaluation">Model evaluation</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#quantification-protocols">Quantification Protocols</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#next-steps">Next steps</a></li>
 </ul>
   </nav></div>
 

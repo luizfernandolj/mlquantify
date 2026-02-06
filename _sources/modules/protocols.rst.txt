@@ -75,6 +75,7 @@ The :class:`UPP` is a variant of the APP that ensures uniform sampling of class 
 - Particularly beneficial in multiclass quantification tasks (less computationally intensive).
 
 **Example**
+
 .. code-block:: python
 
     from mlquantify.protocols import UPP
