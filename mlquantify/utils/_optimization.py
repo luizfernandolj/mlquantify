@@ -36,8 +36,5 @@ def _optimize_on_simplex(objective, n_classes, constraints=None):
     
     res = minimize(objective, x0=x0, constraints=constraints, bounds=bounds, method='SLSQP')
     
-    if res.success:
-        alpha_opt = res.x
-        return alpha_opt, res.fun
-    else:
-        return x0, objective(x0)
+    alpha_opt = res.x
+    return alpha_opt, res.fun
