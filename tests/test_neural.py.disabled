@@ -1,0 +1,50 @@
+import pytest
+import numpy as np
+try:
+    import torch
+    from mlquantify.neural import QuaNet
+except ImportError:
+    torch = None
+
+from mlquantify.neural import EarlyStop
+
+@pytest.mark.skipif(torch is None, reason="PyTorch not installed")
+def test_QuaNet_binary(binary_classifier, binary_dataset):
+    X_train, X_test, y_train, y_test = binary_dataset
+    
+    # QuaNet requires the learner to be fitted if fit_learner=False, 
+    # OR it fits it inside if fit_learner=True.
+    # To save time, let's use a very small network config
+    q = QuaNet(
+        learner=binary_classifier,
+        fit_learner=True,
+        n_epochs=2,
+        tr_iter=10,
+        va_iter=10,
+        sample_size=10,
+        lstm_hidden_size=4,
+        ff_layers=(8,),
+        patience=2,
+        checkpointdir="./tmp_quanet_ckpt",
+        device="cpu"
+    )
+    
+    q.fit(X_train, y_train)
+    prev = q.predict(X_test)
+    assert len(prev) == 2
+    assert pytest.approx(sum(prev)) == 1.0
+
+    # Clean up
+    q.clean_checkpoint()
+    q.clean_checkpoint_dir()
+
+def test_early_stop():
+    es = EarlyStop(patience=2)
+    es(0.9, 0)
+    assert es.IMPROVED
+    assert es.best_score == 0.9
+    es(1.0, 1) # Worse
+    assert not es.IMPROVED
+    assert not es.STOP
+    es(1.1, 2) # Worse again
+    assert es.STOP

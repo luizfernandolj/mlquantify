@@ -616,11 +616,11 @@ class MMD_RKHS(BaseMixture):
 
         return self
 
-    def _predict(self, X, y_train) -> np.ndarray:
+    def _predict(self, X) -> np.ndarray:
         """
         Estimate the prevalence vector on X using MMD.
         """
-        self.classes_ = check_classes_attribute(self, np.unique(y_train))
+        self.classes_ = check_classes_attribute(self, np.unique(self.y_train_))
 
         theta, _ = self.best_mixture(X, self.X_train_, self.y_train_)
         prevalence = validate_prevalences(self, theta, self.classes_)
