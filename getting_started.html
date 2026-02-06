@@ -7,17 +7,19 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
-<meta property="og:title" content="<no title>" />
+<meta property="og:title" content="Getting Started" />
 <meta property="og:type" content="website" />
 <meta property="og:url" content="getting_started.html" />
 <meta property="og:site_name" content="mlquantify" />
+<meta property="og:description" content="mlquantify is a comprehensive Python toolkit for quantification (also known as class prevalence estimation or class prior estimation). This guide will help you get started with the main features of..." />
 <meta property="og:image:width" content="1146" />
 <meta property="og:image:height" content="600" />
-<meta property="og:image" content="_images/social_previews/summary_getting_started_53cd2b56.png" />
-<meta property="og:image:alt" content="" />
+<meta property="og:image" content="_images/social_previews/summary_getting_started_ad772ba3.png" />
+<meta property="og:image:alt" content="mlquantify is a comprehensive Python toolkit for quantification (also known as class prevalence estimation or class prior estimation). This guide will help you get started with the main features of..." />
+<meta name="description" content="mlquantify is a comprehensive Python toolkit for quantification (also known as class prevalence estimation or class prior estimation). This guide will help you get started with the main features of..." />
 <meta name="twitter:card" content="summary_large_image" />
 
-    <title>&lt;no title&gt; &#8212; mlquantify</title>
+    <title>Getting Started &#8212; mlquantify</title>
   
   
   
@@ -368,7 +370,7 @@
         <i class="fa-solid fa-home"></i>
       </a>
     </li>
-    <li class="breadcrumb-item active" aria-current="page"><span class="ellipsis">&lt;no title&gt;</span></li>
+    <li class="breadcrumb-item active" aria-current="page"><span class="ellipsis">Getting Started</span></li>
   </ul>
 </nav>
 </div>
@@ -385,7 +387,95 @@
 <div id="searchbox"></div>
                 <article class="bd-article">
                   
-  
+  <section id="getting-started">
+<h1>Getting Started<a class="headerlink" href="#getting-started" title="Link to this heading">#</a></h1>
+<p><code class="docutils literal notranslate"><span class="pre">mlquantify</span></code> is a comprehensive Python toolkit for quantification (also known as class prevalence estimation or class prior estimation). This guide will help you get started with the main features of the library:</p>
+<ul class="simple">
+<li><p>Aggregative methods</p></li>
+<li><p>Non-aggregative methods</p></li>
+<li><p>Meta methods</p></li>
+<li><p>Evaluation metrics</p></li>
+<li><p>Confidence Intervals</p></li>
+<li><p>Model Selection</p></li>
+</ul>
+<p>It is assumed basic knowledge of machine learning practices (fitting, evaluation, etc.). You can install <code class="docutils literal notranslate"><span class="pre">mlquantify</span></code></p>
+<section id="installation">
+<h2>Installation<a class="headerlink" href="#installation" title="Link to this heading">#</a></h2>
+<p>You can install <code class="docutils literal notranslate"><span class="pre">mlquantify</span></code> directly from PyPI:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>pip<span class="w"> </span>install<span class="w"> </span>mlquantify
+</pre></div>
+</div>
+<p>Alternatively, you can install the latest version from source:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>git<span class="w"> </span>clone<span class="w"> </span>https://github.com/luizfernandolj/mlquantify.git
+<span class="nb">cd</span><span class="w"> </span>mlquantify
+pip<span class="w"> </span>install<span class="w"> </span>.
+</pre></div>
+</div>
+</section>
+<section id="quick-start">
+<h2>Quick Start<a class="headerlink" href="#quick-start" title="Link to this heading">#</a></h2>
+<p>Here is a minimal example of how to use <code class="docutils literal notranslate"><span class="pre">mlquantify</span></code> to estimate class prevalences using the <strong>Classify &amp; Count (CC)</strong> method.</p>
+<ol class="arabic">
+<li><p><strong>Import necessary modules</strong></p>
+<p>We’ll use <code class="docutils literal notranslate"><span class="pre">scikit-learn</span></code> for the underlying classifier and data generation.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">mlquantify.adjust_counting</span><span class="w"> </span><span class="kn">import</span> <span class="n">CC</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">sklearn.linear_model</span><span class="w"> </span><span class="kn">import</span> <span class="n">LogisticRegression</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">sklearn.datasets</span><span class="w"> </span><span class="kn">import</span> <span class="n">make_classification</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">sklearn.model_selection</span><span class="w"> </span><span class="kn">import</span> <span class="n">train_test_split</span>
+</pre></div>
+</div>
+</li>
+<li><p><strong>Generate Synthetic Data</strong></p>
+<p>Let’s create a binary classification dataset.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Generate a synthetic dataset</span>
+<span class="n">X</span><span class="p">,</span> <span class="n">y</span> <span class="o">=</span> <span class="n">make_classification</span><span class="p">(</span>
+    <span class="n">n_samples</span><span class="o">=</span><span class="mi">2000</span><span class="p">,</span>
+    <span class="n">n_features</span><span class="o">=</span><span class="mi">20</span><span class="p">,</span>
+    <span class="n">n_classes</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span>
+    <span class="n">weights</span><span class="o">=</span><span class="p">[</span><span class="mf">0.8</span><span class="p">,</span> <span class="mf">0.2</span><span class="p">],</span>  <span class="c1"># Imbalanced dataset</span>
+    <span class="n">random_state</span><span class="o">=</span><span class="mi">42</span>
+<span class="p">)</span>
+
+<span class="c1"># Split into training and testing sets</span>
+<span class="n">X_train</span><span class="p">,</span> <span class="n">X_test</span><span class="p">,</span> <span class="n">y_train</span><span class="p">,</span> <span class="n">y_test</span> <span class="o">=</span> <span class="n">train_test_split</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">test_size</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span> <span class="n">random_state</span><span class="o">=</span><span class="mi">42</span><span class="p">)</span>
+</pre></div>
+</div>
+</li>
+<li><p><strong>Initialize and Train the Quantifier</strong></p>
+<p>Most aggregative quantifiers in <code class="docutils literal notranslate"><span class="pre">mlquantify</span></code> wrap a standard classifier. Here we use Logistic Regression.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Initialize the classifier</span>
+<span class="n">classifier</span> <span class="o">=</span> <span class="n">LogisticRegression</span><span class="p">()</span>
+
+<span class="c1"># Initialize the Classify &amp; Count (CC) quantifier</span>
+<span class="n">quantifier</span> <span class="o">=</span> <span class="n">CC</span><span class="p">(</span><span class="n">classifier</span><span class="p">)</span>
+
+<span class="c1"># Fit the quantifier on the training data</span>
+<span class="n">quantifier</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">X_train</span><span class="p">,</span> <span class="n">y_train</span><span class="p">)</span>
+</pre></div>
+</div>
+</li>
+<li><p><strong>Estimate Class Prevalences</strong></p>
+<p>Use the <code class="docutils literal notranslate"><span class="pre">predict</span></code> method to estimate the class distribution of the test set.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Estimate class prevalences</span>
+<span class="n">prevalences</span> <span class="o">=</span> <span class="n">quantifier</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">X_test</span><span class="p">)</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Estimated class prevalences: </span><span class="si">{</span><span class="n">prevalences</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="c1"># Example Output: [0.79, 0.21]</span>
+</pre></div>
+</div>
+</li>
+</ol>
+</section>
+<section id="next-steps">
+<h2>Next Steps<a class="headerlink" href="#next-steps" title="Link to this heading">#</a></h2>
+<ul class="simple">
+<li><p>Explore the <span class="xref std std-ref">mlquantify-methods</span> to see all available algorithms.</p></li>
+<li><p>Check out the <span class="xref std std-ref">user-guide</span> for in-depth tutorials on Aggregative and Non-Aggregative methods.</p></li>
+<li><p>Learn about <span class="xref std std-ref">evaluation-metrics</span> to properly assess your quantifier’s performance.</p></li>
+</ul>
+</section>
+</section>
+
 
                 </article>
               
@@ -436,9 +526,11 @@
     <i class="fa-solid fa-list"></i> On this page
   </div>
   <nav class="bd-toc-nav page-toc" aria-labelledby="pst-page-navigation-heading-2">
-    <ul class="simple visible nav section-nav flex-column">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#installation">Installation</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#quick-start">Quick Start</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#next-steps">Next Steps</a></li>
 </ul>
-
   </nav></div>
 
   <div class="sidebar-secondary-item">

@@ -7,19 +7,19 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
-<meta property="og:title" content="4.4. Evaluation Metrics" />
+<meta property="og:title" content="4.3. Evaluation Metrics" />
 <meta property="og:type" content="website" />
 <meta property="og:url" content="modules/evaluation_metrics.html" />
 <meta property="og:site_name" content="mlquantify" />
 <meta property="og:description" content="Evaluation metrics for quantification assess the accuracy of estimated class prevalences against true prevalences. These metrics are crucial for understanding how well a quantifier performs, especi..." />
 <meta property="og:image:width" content="1146" />
 <meta property="og:image:height" content="600" />
-<meta property="og:image" content="_images/social_previews/summary_modules_evaluation_metrics_f6a4534b.png" />
+<meta property="og:image" content="_images/social_previews/summary_modules_evaluation_metrics_a7b14932.png" />
 <meta property="og:image:alt" content="Evaluation metrics for quantification assess the accuracy of estimated class prevalences against true prevalences. These metrics are crucial for understanding how well a quantifier performs, especi..." />
 <meta name="description" content="Evaluation metrics for quantification assess the accuracy of estimated class prevalences against true prevalences. These metrics are crucial for understanding how well a quantifier performs, especi..." />
 <meta name="twitter:card" content="summary_large_image" />
 
-    <title>4.4. Evaluation Metrics &#8212; mlquantify</title>
+    <title>4.3. Evaluation Metrics &#8212; mlquantify</title>
   
   
   
@@ -373,8 +373,7 @@
 <li class="toctree-l1 current active has-children"><a class="reference internal" href="../model_selection_evaluation.html">4.  Model Selection and Evaluation</a><details open="open"><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul class="current">
 <li class="toctree-l2"><a class="reference internal" href="protocols.html">4.1. Protocols for Quantification</a></li>
 <li class="toctree-l2"><a class="reference internal" href="tuning_hyperparameters.html">4.2. Tuning Hyperparameters</a></li>
-
-<li class="toctree-l2 current active"><a class="current reference internal" href="#">4.4. Evaluation Metrics</a></li>
+<li class="toctree-l2 current active"><a class="current reference internal" href="#">4.3. Evaluation Metrics</a></li>
 </ul>
 </details></li>
 <li class="toctree-l1"><a class="reference internal" href="confidence_intervals.html">5.  Confidence Intervals</a></li>
@@ -419,7 +418,7 @@
     
     <li class="breadcrumb-item"><a href="../model_selection_evaluation.html" class="nav-link"><span class="section-number">4. </span>Model Selection and Evaluation</a></li>
     
-    <li class="breadcrumb-item active" aria-current="page"><span class="ellipsis"><span class="section-number">4.4. </span>Evaluation Metrics</span></li>
+    <li class="breadcrumb-item active" aria-current="page"><span class="ellipsis"><span class="section-number">4.3. </span>Evaluation Metrics</span></li>
   </ul>
 </nav>
 </div>
@@ -437,7 +436,7 @@
                 <article class="bd-article">
                   
   <section id="evaluation-metrics">
-<span id="id1"></span><h1><span class="section-number">4.4. </span>Evaluation Metrics<a class="headerlink" href="#evaluation-metrics" title="Link to this heading">#</a></h1>
+<span id="id1"></span><h1><span class="section-number">4.3. </span>Evaluation Metrics<a class="headerlink" href="#evaluation-metrics" title="Link to this heading">#</a></h1>
 <p>Evaluation metrics for quantification assess the accuracy of estimated class prevalences against true prevalences. These metrics are crucial for understanding how well a quantifier performs, especially under distributional shifts.</p>
 <p>The library includes several widely used evaluation metrics:</p>
 <div class="pst-scrollable-table-container"><table class="table" id="id2">
@@ -495,9 +494,9 @@
 </table>
 </div>
 <section id="single-label-quantification-slq-metrics">
-<h2><span class="section-number">4.4.1. </span>Single Label Quantification (SLQ) Metrics<a class="headerlink" href="#single-label-quantification-slq-metrics" title="Link to this heading">#</a></h2>
+<h2><span class="section-number">4.3.1. </span>Single Label Quantification (SLQ) Metrics<a class="headerlink" href="#single-label-quantification-slq-metrics" title="Link to this heading">#</a></h2>
 <section id="ae-absolute-error">
-<h3><span class="section-number">4.4.1.1. </span>AE (Absolute Error)<a class="headerlink" href="#ae-absolute-error" title="Link to this heading">#</a></h3>
+<h3><span class="section-number">4.3.1.1. </span>AE (Absolute Error)<a class="headerlink" href="#ae-absolute-error" title="Link to this heading">#</a></h3>
 <p><strong>Parameters:</strong></p>
 <ul class="simple">
 <li><p><span class="math notranslate nohighlight">\(p\)</span>: array-like, shape (n_classes,)
@@ -511,7 +510,7 @@ Estimated prevalence.</p></li>
 <p>Its primary strength is transparency and ease of interpretation.</p>
 </section>
 <section id="se-squared-error">
-<h3><span class="section-number">4.4.1.2. </span>SE (Squared Error)<a class="headerlink" href="#se-squared-error" title="Link to this heading">#</a></h3>
+<h3><span class="section-number">4.3.1.2. </span>SE (Squared Error)<a class="headerlink" href="#se-squared-error" title="Link to this heading">#</a></h3>
 <p><strong>Parameters:</strong></p>
 <ul class="simple">
 <li><p><span class="math notranslate nohighlight">\(p\)</span>: array-like, shape (n_classes,)
@@ -525,7 +524,7 @@ Estimated prevalence.</p></li>
 <p>This penalizes larger errors more heavily, making outlier mistakes more obvious.</p>
 </section>
 <section id="mae-mean-absolute-error">
-<h3><span class="section-number">4.4.1.3. </span>MAE (Mean Absolute Error)<a class="headerlink" href="#mae-mean-absolute-error" title="Link to this heading">#</a></h3>
+<h3><span class="section-number">4.3.1.3. </span>MAE (Mean Absolute Error)<a class="headerlink" href="#mae-mean-absolute-error" title="Link to this heading">#</a></h3>
 <p><strong>Parameters:</strong></p>
 <ul class="simple">
 <li><p><span class="math notranslate nohighlight">\(p\)</span>: array-like, shape (n_classes,)
@@ -539,7 +538,7 @@ Estimated prevalence.</p></li>
 <p>It offers a normalized perspective, useful for comparing performances across datasets.</p>
 </section>
 <section id="mse-mean-squared-error">
-<h3><span class="section-number">4.4.1.4. </span>MSE (Mean Squared Error)<a class="headerlink" href="#mse-mean-squared-error" title="Link to this heading">#</a></h3>
+<h3><span class="section-number">4.3.1.4. </span>MSE (Mean Squared Error)<a class="headerlink" href="#mse-mean-squared-error" title="Link to this heading">#</a></h3>
 <p><strong>Parameters:</strong></p>
 <ul class="simple">
 <li><p><span class="math notranslate nohighlight">\(p\)</span>: array-like, shape (n_classes,)
@@ -553,7 +552,7 @@ Estimated prevalence.</p></li>
 <p>Ideal for highlighting large deviations in prevalence estimation.</p>
 </section>
 <section id="kld-kullback-leibler-divergence">
-<h3><span class="section-number">4.4.1.5. </span>KLD (Kullback-Leibler Divergence)<a class="headerlink" href="#kld-kullback-leibler-divergence" title="Link to this heading">#</a></h3>
+<h3><span class="section-number">4.3.1.5. </span>KLD (Kullback-Leibler Divergence)<a class="headerlink" href="#kld-kullback-leibler-divergence" title="Link to this heading">#</a></h3>
 <p><strong>Parameters:</strong></p>
 <ul class="simple">
 <li><p><span class="math notranslate nohighlight">\(p\)</span>: array-like, shape (n_classes,)
@@ -567,7 +566,7 @@ Estimated prevalence.</p></li>
 <p>Its key advantage is sensitivity to wrong predictions where the true prevalence is high.</p>
 </section>
 <section id="rae-relative-absolute-error">
-<h3><span class="section-number">4.4.1.6. </span>RAE (Relative Absolute Error)<a class="headerlink" href="#rae-relative-absolute-error" title="Link to this heading">#</a></h3>
+<h3><span class="section-number">4.3.1.6. </span>RAE (Relative Absolute Error)<a class="headerlink" href="#rae-relative-absolute-error" title="Link to this heading">#</a></h3>
 <p><strong>Parameters:</strong></p>
 <ul class="simple">
 <li><p><span class="math notranslate nohighlight">\(p\)</span>: array-like, shape (n_classes,)
@@ -583,7 +582,7 @@ Small constant to ensure numerical stability.</p></li>
 <p>This is beneficial for identifying relative impact in imbalanced scenarios.</p>
 </section>
 <section id="nae-normalized-absolute-error">
-<h3><span class="section-number">4.4.1.7. </span>NAE (Normalized Absolute Error)<a class="headerlink" href="#nae-normalized-absolute-error" title="Link to this heading">#</a></h3>
+<h3><span class="section-number">4.3.1.7. </span>NAE (Normalized Absolute Error)<a class="headerlink" href="#nae-normalized-absolute-error" title="Link to this heading">#</a></h3>
 <p><strong>Parameters:</strong></p>
 <ul class="simple">
 <li><p><span class="math notranslate nohighlight">\(p\)</span>: array-like, shape (n_classes,)
@@ -597,7 +596,7 @@ Estimated prevalence.</p></li>
 <p>Best used for ensuring error scale invariance.</p>
 </section>
 <section id="nrae-normalized-relative-absolute-error">
-<h3><span class="section-number">4.4.1.8. </span>NRAE (Normalized Relative Absolute Error)<a class="headerlink" href="#nrae-normalized-relative-absolute-error" title="Link to this heading">#</a></h3>
+<h3><span class="section-number">4.3.1.8. </span>NRAE (Normalized Relative Absolute Error)<a class="headerlink" href="#nrae-normalized-relative-absolute-error" title="Link to this heading">#</a></h3>
 <p><strong>Parameters:</strong></p>
 <ul class="simple">
 <li><p><span class="math notranslate nohighlight">\(p\)</span>: array-like, shape (n_classes,)
@@ -613,7 +612,7 @@ Small constant for numerical stability.</p></li>
 <p>This balances error measurement between true and estimated values.</p>
 </section>
 <section id="nkld-normalized-kullback-leibler-divergence">
-<h3><span class="section-number">4.4.1.9. </span>NKLD (Normalized Kullback-Leibler Divergence)<a class="headerlink" href="#nkld-normalized-kullback-leibler-divergence" title="Link to this heading">#</a></h3>
+<h3><span class="section-number">4.3.1.9. </span>NKLD (Normalized Kullback-Leibler Divergence)<a class="headerlink" href="#nkld-normalized-kullback-leibler-divergence" title="Link to this heading">#</a></h3>
 <p><strong>Parameters:</strong></p>
 <ul class="simple">
 <li><p><span class="math notranslate nohighlight">\(p\)</span>: array-like, shape (n_classes,)
@@ -630,9 +629,9 @@ Small constant for numerical stability.</p></li>
 </section>
 </section>
 <section id="regression-based-quantification-rq-metrics">
-<h2><span class="section-number">4.4.2. </span>Regression-Based Quantification (RQ) Metrics<a class="headerlink" href="#regression-based-quantification-rq-metrics" title="Link to this heading">#</a></h2>
+<h2><span class="section-number">4.3.2. </span>Regression-Based Quantification (RQ) Metrics<a class="headerlink" href="#regression-based-quantification-rq-metrics" title="Link to this heading">#</a></h2>
 <section id="vse-variance-shift-error">
-<h3><span class="section-number">4.4.2.1. </span>VSE (Variance Shift Error)<a class="headerlink" href="#vse-variance-shift-error" title="Link to this heading">#</a></h3>
+<h3><span class="section-number">4.3.2.1. </span>VSE (Variance Shift Error)<a class="headerlink" href="#vse-variance-shift-error" title="Link to this heading">#</a></h3>
 <p><strong>Parameters:</strong></p>
 <ul class="simple">
 <li><p><span class="math notranslate nohighlight">\(p\)</span>: array-like, shape (n_classes,)
@@ -646,7 +645,7 @@ Estimated prevalence.</p></li>
 <p>This metric emphasizes changes in dispersion, which is useful for detecting model bias towards certain classes.</p>
 </section>
 <section id="cvm-l1-cramer-von-mises-l1-distance">
-<h3><span class="section-number">4.4.2.2. </span>CvM_L1 (Cramér-von Mises L1 Distance)<a class="headerlink" href="#cvm-l1-cramer-von-mises-l1-distance" title="Link to this heading">#</a></h3>
+<h3><span class="section-number">4.3.2.2. </span>CvM_L1 (Cramér-von Mises L1 Distance)<a class="headerlink" href="#cvm-l1-cramer-von-mises-l1-distance" title="Link to this heading">#</a></h3>
 <p><strong>Parameters:</strong></p>
 <ul class="simple">
 <li><p><span class="math notranslate nohighlight">\(p\)</span>: array-like, shape (n_classes,)
@@ -661,9 +660,9 @@ Estimated prevalence.</p></li>
 </section>
 </section>
 <section id="ordinal-quantification-oq-metrics">
-<h2><span class="section-number">4.4.3. </span>Ordinal Quantification (OQ) Metrics<a class="headerlink" href="#ordinal-quantification-oq-metrics" title="Link to this heading">#</a></h2>
+<h2><span class="section-number">4.3.3. </span>Ordinal Quantification (OQ) Metrics<a class="headerlink" href="#ordinal-quantification-oq-metrics" title="Link to this heading">#</a></h2>
 <section id="nmd-normalized-match-distance">
-<h3><span class="section-number">4.4.3.1. </span>NMD (Normalized Match Distance)<a class="headerlink" href="#nmd-normalized-match-distance" title="Link to this heading">#</a></h3>
+<h3><span class="section-number">4.3.3.1. </span>NMD (Normalized Match Distance)<a class="headerlink" href="#nmd-normalized-match-distance" title="Link to this heading">#</a></h3>
 <p><strong>Parameters:</strong></p>
 <ul class="simple">
 <li><p><span class="math notranslate nohighlight">\(p\)</span>: array-like, shape (n_classes,)
@@ -677,7 +676,7 @@ Estimated prevalence.</p></li>
 <p>where ( p(c) ) is the true prevalence and ( hat{p}(c) ) is the estimated. The advantage of NMD is its straightforward interpretability and normalization, making it ideal for comparing different quantification methods.</p>
 </section>
 <section id="rnod-relative-normalized-overall-deviation">
-<h3><span class="section-number">4.4.3.2. </span>RNOD (Relative Normalized Overall Deviation)<a class="headerlink" href="#rnod-relative-normalized-overall-deviation" title="Link to this heading">#</a></h3>
+<h3><span class="section-number">4.3.3.2. </span>RNOD (Relative Normalized Overall Deviation)<a class="headerlink" href="#rnod-relative-normalized-overall-deviation" title="Link to this heading">#</a></h3>
 <p><strong>Parameters:</strong></p>
 <ul class="simple">
 <li><p><span class="math notranslate nohighlight">\(p\)</span>: array-like, shape (n_classes,)
@@ -746,26 +745,26 @@ Small constant to ensure numerical stability.</p></li>
   </div>
   <nav class="bd-toc-nav page-toc" aria-labelledby="pst-page-navigation-heading-2">
     <ul class="visible nav section-nav flex-column">
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#single-label-quantification-slq-metrics">4.4.1. Single Label Quantification (SLQ) Metrics</a><ul class="nav section-nav flex-column">
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#ae-absolute-error">4.4.1.1. AE (Absolute Error)</a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#se-squared-error">4.4.1.2. SE (Squared Error)</a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#mae-mean-absolute-error">4.4.1.3. MAE (Mean Absolute Error)</a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#mse-mean-squared-error">4.4.1.4. MSE (Mean Squared Error)</a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#kld-kullback-leibler-divergence">4.4.1.5. KLD (Kullback-Leibler Divergence)</a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#rae-relative-absolute-error">4.4.1.6. RAE (Relative Absolute Error)</a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#nae-normalized-absolute-error">4.4.1.7. NAE (Normalized Absolute Error)</a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#nrae-normalized-relative-absolute-error">4.4.1.8. NRAE (Normalized Relative Absolute Error)</a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#nkld-normalized-kullback-leibler-divergence">4.4.1.9. NKLD (Normalized Kullback-Leibler Divergence)</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#single-label-quantification-slq-metrics">4.3.1. Single Label Quantification (SLQ) Metrics</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#ae-absolute-error">4.3.1.1. AE (Absolute Error)</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#se-squared-error">4.3.1.2. SE (Squared Error)</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#mae-mean-absolute-error">4.3.1.3. MAE (Mean Absolute Error)</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#mse-mean-squared-error">4.3.1.4. MSE (Mean Squared Error)</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#kld-kullback-leibler-divergence">4.3.1.5. KLD (Kullback-Leibler Divergence)</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#rae-relative-absolute-error">4.3.1.6. RAE (Relative Absolute Error)</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#nae-normalized-absolute-error">4.3.1.7. NAE (Normalized Absolute Error)</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#nrae-normalized-relative-absolute-error">4.3.1.8. NRAE (Normalized Relative Absolute Error)</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#nkld-normalized-kullback-leibler-divergence">4.3.1.9. NKLD (Normalized Kullback-Leibler Divergence)</a></li>
 </ul>
 </li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#regression-based-quantification-rq-metrics">4.4.2. Regression-Based Quantification (RQ) Metrics</a><ul class="nav section-nav flex-column">
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#vse-variance-shift-error">4.4.2.1. VSE (Variance Shift Error)</a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#cvm-l1-cramer-von-mises-l1-distance">4.4.2.2. CvM_L1 (Cramér-von Mises L1 Distance)</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#regression-based-quantification-rq-metrics">4.3.2. Regression-Based Quantification (RQ) Metrics</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#vse-variance-shift-error">4.3.2.1. VSE (Variance Shift Error)</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#cvm-l1-cramer-von-mises-l1-distance">4.3.2.2. CvM_L1 (Cramér-von Mises L1 Distance)</a></li>
 </ul>
 </li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#ordinal-quantification-oq-metrics">4.4.3. Ordinal Quantification (OQ) Metrics</a><ul class="nav section-nav flex-column">
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#nmd-normalized-match-distance">4.4.3.1. NMD (Normalized Match Distance)</a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#rnod-relative-normalized-overall-deviation">4.4.3.2. RNOD (Relative Normalized Overall Deviation)</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#ordinal-quantification-oq-metrics">4.3.3. Ordinal Quantification (OQ) Metrics</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#nmd-normalized-match-distance">4.3.3.1. NMD (Normalized Match Distance)</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#rnod-relative-normalized-overall-deviation">4.3.3.2. RNOD (Relative Normalized Overall Deviation)</a></li>
 </ul>
 </li>
 </ul>
