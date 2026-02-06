@@ -40,4 +40,4 @@ def _optimize_on_simplex(objective, n_classes, constraints=None):
         alpha_opt = res.x
         return alpha_opt, res.fun
     else:
-        return None
+        return x0, objective(x0)

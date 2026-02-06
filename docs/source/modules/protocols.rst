@@ -119,6 +119,6 @@ The :class:`PPP` is another APP variant that allows users to specify desired cla
 
 
 References
-----------
+==========
 
 .. [1] Esuli, A., Fabris, A., Moreo, A., & Sebastiani, F. (n.d.). Learning to Quantify The Information Retrieval Series.

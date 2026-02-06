@@ -51,6 +51,6 @@ The :class:`GridSearchQ` class provides a systematic way to perform hyperparamet
    - :ref:`evaluation_metrics` for available quantification metrics.
   
 References
-----------
+==========
 
 .. [1] Esuli, A., Fabris, A., Moreo, A., & Sebastiani, F. (n.d.). Learning to Quantify The Information Retrieval Series.
