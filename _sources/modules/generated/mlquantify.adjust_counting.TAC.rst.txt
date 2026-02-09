@@ -5,6 +5,6 @@ TAC
     :members:
     :inherited-members:
     :special-members: __call__
-.. minigallery:: mlquantify.adjust_counting.TAC mlquantify.adjust_counting.TAC.__init__ mlquantify.adjust_counting.TAC.aggregate mlquantify.adjust_counting.TAC.fit mlquantify.adjust_counting.TAC.get_best_threshold mlquantify.adjust_counting.TAC.get_metadata_routing mlquantify.adjust_counting.TAC.get_params mlquantify.adjust_counting.TAC.predict mlquantify.adjust_counting.TAC.save_quantifier mlquantify.adjust_counting.TAC.set_fit_request mlquantify.adjust_counting.TAC.set_params 
+.. minigallery:: mlquantify.adjust_counting.TAC mlquantify.adjust_counting.TAC.__init__ mlquantify.adjust_counting.TAC.aggregate mlquantify.adjust_counting.TAC.fit mlquantify.adjust_counting.TAC.fit_predict mlquantify.adjust_counting.TAC.get_best_threshold mlquantify.adjust_counting.TAC.get_metadata_routing mlquantify.adjust_counting.TAC.get_params mlquantify.adjust_counting.TAC.predict mlquantify.adjust_counting.TAC.save_quantifier mlquantify.adjust_counting.TAC.set_fit_request mlquantify.adjust_counting.TAC.set_params 
    :add-heading: Gallery examples
    :heading-level: -
