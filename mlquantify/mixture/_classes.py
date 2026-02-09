@@ -627,8 +627,7 @@ class MMD_RKHS(BaseMixture):
         return prevalence
 
     def best_mixture(self, X_test, X_train, y_train):
-        """
-        Implements the MMD-based class ratio estimation:
+        r"""Implements the MMD-based class ratio estimation:
 
         .. math::
 

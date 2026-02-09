@@ -284,6 +284,22 @@ def _predict_ovo(quantifier, X, n_jobs=None):
     return preds
 
 
+def _ovo_pairwise_to_class_prevalences(pair_preds, classes):
+    class_sums = {cls: 0.0 for cls in classes}
+    class_counts = {cls: 0 for cls in classes}
+
+    for (cls1, cls2), prev_cls1 in pair_preds.items():
+        class_sums[cls1] += float(prev_cls1)
+        class_counts[cls1] += 1
+        class_sums[cls2] += float(1.0 - prev_cls1)
+        class_counts[cls2] += 1
+
+    return {
+        cls: (class_sums[cls] / class_counts[cls]) if class_counts[cls] else 0.0
+        for cls in classes
+    }
+
+
 # ============================================================
 # Aggregation strategies
 # ============================================================
@@ -425,6 +441,8 @@ class BinaryQuantifier(MetaquantifierMixin, BaseQuantifier):
         qtf.strategy = getattr(qtf, "strategy", "ovr")
         n_jobs = getattr(qtf, "n_jobs", None)  # Retrieve n_jobs if available
 
+        qtf.classes_ = np.unique(y)
+
         if qtf.strategy == "ovr":
             qtf.qtfs_ = _fit_ovr(qtf, X, y, n_jobs=n_jobs)
         elif qtf.strategy == "ovo":
@@ -447,7 +465,12 @@ class BinaryQuantifier(MetaquantifierMixin, BaseQuantifier):
             else:
                 raise ValueError("Strategy must be 'ovr' or 'ovo'")
 
-        return validate_prevalences(qtf, preds, qtf.qtfs_.keys())
+        if qtf.strategy == "ovo":
+            pairs = list(combinations(qtf.classes_, 2))
+            pair_preds = dict(zip(pairs, preds))
+            preds = _ovo_pairwise_to_class_prevalences(pair_preds, qtf.classes_)
+
+        return validate_prevalences(qtf, preds, qtf.classes_)
 
     def aggregate(qtf, *args):
         """Aggregate binary predictions to obtain multiclass prevalence estimates."""
@@ -472,7 +495,8 @@ class BinaryQuantifier(MetaquantifierMixin, BaseQuantifier):
         if qtf.strategy == "ovr":
             prevalences = _aggregate_ovr(qtf, n_jobs=n_jobs, **args_dict)
         elif qtf.strategy == "ovo":
-            prevalences = _aggregate_ovo(qtf, n_jobs=n_jobs, **args_dict)
+            pair_prev = _aggregate_ovo(qtf, n_jobs=n_jobs, **args_dict)
+            prevalences = _ovo_pairwise_to_class_prevalences(pair_prev, classes)
         else:
             raise ValueError("Strategy must be 'ovr' or 'ovo'")
 
@@ -502,7 +526,7 @@ class BinaryQuantifier(MetaquantifierMixin, BaseQuantifier):
             
         elif qtf.strategy == "ovo":
             preds_dict = _fit_predict_ovo(qtf, X, y, X_test, n_jobs=n_jobs)
-            keys = preds_dict.keys()
-            return validate_prevalences(qtf, preds_dict, classes) 
+            prevalences = _ovo_pairwise_to_class_prevalences(preds_dict, classes)
+            return validate_prevalences(qtf, prevalences, classes) 
         else:
             raise ValueError("Strategy must be 'ovr' or 'ovo'")

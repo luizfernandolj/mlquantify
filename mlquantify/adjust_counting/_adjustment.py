@@ -1,5 +1,6 @@
 from mlquantify.utils._validation import validate_prevalences
 from mlquantify.base import BaseQuantifier
+from mlquantify._config import config_context
 import numpy as np     
 from abc import abstractmethod
 from scipy.optimize import minimize
@@ -117,8 +118,9 @@ class ThresholdAdjustment(SoftLearnerQMixin, BaseAdjustCount):
         thresholds, tprs, fprs = evaluate_thresholds(y_train, positive_scores)
         threshold, tpr, fpr = self.get_best_threshold(thresholds, tprs, fprs)
 
-        cc_predictions = CC(threshold=threshold).aggregate(predictions, y_train)
-        cc_predictions = list(cc_predictions.values())[1]
+        with config_context(prevalence_return_type="array"):
+            cc_predictions = CC(threshold=threshold).aggregate(predictions, y_train)
+        cc_predictions = cc_predictions[1]
 
         if tpr - fpr == 0:
             prevalence = cc_predictions
@@ -320,9 +322,10 @@ class MatrixAdjustment(BaseAdjustCount):
 
     def _get_estimations(self, predictions, y_train):
         """Return prevalence estimates using CC (crisp) or PCC (probabilistic)."""
-        if uses_soft_predictions(self):
-            return np.array(list(PCC().aggregate(predictions).values()))
-        return np.array(list(CC().aggregate(predictions, y_train).values()))
+        with config_context(prevalence_return_type="array"):
+            if uses_soft_predictions(self):
+                return np.asarray(PCC().aggregate(predictions))
+            return np.asarray(CC().aggregate(predictions, y_train))
 
     @abstractmethod
     def _compute_confusion_matrix(self, predictions, *args):
@@ -870,8 +873,9 @@ class MS(ThresholdAdjustment):
         
         prevs = []
         for thr, tpr, fpr in zip(thresholds, tprs, fprs):
-            cc_predictions = CC(threshold=thr).aggregate(predictions, y_train)
-            cc_predictions = list(cc_predictions.values())[1]
+            with config_context(prevalence_return_type="array"):
+                cc_predictions = CC(threshold=thr).aggregate(predictions, y_train)
+            cc_predictions = cc_predictions[1]
             
             if tpr - fpr == 0:
                 prevalence = cc_predictions
