@@ -1,6 +1,6 @@
 from mlquantify.utils._validation import validate_prevalences
 from mlquantify.base import BaseQuantifier
-from mlquantify._config import config_context
+from mlquantify.config import config_context
 import numpy as np     
 from abc import abstractmethod
 from scipy.optimize import minimize

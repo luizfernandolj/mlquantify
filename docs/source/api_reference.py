@@ -39,6 +39,20 @@ API_REFERENCE = {
             }
         ],
     },
+    "mlquantify.config": {
+        "short_summary": "Configuration for mlquantify.",
+        "description": None,
+        "sections": [
+            {
+                "title": None,
+                "autosummary": [
+                    "get_config",
+                    "set_config",
+                    "config_context",
+                ],
+            }
+        ],
+    },
     "mlquantify.base_aggregative": {
         "short_summary": "Aggregative quantifiers base classes.",
         "description": None,

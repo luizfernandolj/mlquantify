@@ -26,7 +26,7 @@ from mlquantify.utils._sampling import (
 from mlquantify.model_selection import APP, NPP, UPP
 from mlquantify.utils._validation import validate_data, validate_prevalences
 from mlquantify.utils.prevalence import get_prev_from_labels
-from mlquantify._config import config_context
+from mlquantify.config import config_context
 
 
 
