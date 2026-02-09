@@ -332,7 +332,7 @@ def validate_data(quantifier,
     return out
 
 
-from mlquantify.config import get_config
+from mlquantify._config import get_config
 
 
 from scipy.special import softmax

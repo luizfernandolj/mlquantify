@@ -16,7 +16,7 @@ try:
 except NameError:
     pass
 
-from .config import get_config, set_config, config_context
+from ._config import get_config, set_config, config_context
 
 __all__ = [
     "neighbors",

@@ -21,6 +21,9 @@ API_REFERENCE = {
             {
                 "title": None,
                 "autosummary": [
+                    "get_config",
+                    "set_config",
+                    "config_context",
                 ],
             }
         ],
@@ -35,20 +38,6 @@ API_REFERENCE = {
                     "BaseQuantifier",
                     "MetaquantifierMixin",
                     "ProtocolMixin",
-                ],
-            }
-        ],
-    },
-    "mlquantify.config": {
-        "short_summary": "Configuration for mlquantify.",
-        "description": None,
-        "sections": [
-            {
-                "title": None,
-                "autosummary": [
-                    "get_config",
-                    "set_config",
-                    "config_context",
                 ],
             }
         ],
