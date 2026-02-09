@@ -1,0 +1,2 @@
+tests/ merge=ours
+pytest.ini merge=ours
