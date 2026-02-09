@@ -24,3 +24,6 @@ mlquantify
   :template: base.rst
 
 
+  get_config
+  set_config
+  config_context

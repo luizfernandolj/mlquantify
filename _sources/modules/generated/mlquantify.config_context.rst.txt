@@ -1,7 +1,7 @@
 config\_context
 ===============
-.. currentmodule:: mlquantify.config
+.. currentmodule:: mlquantify
 .. autofunction:: config_context
-.. minigallery:: mlquantify.config.config_context
+.. minigallery:: mlquantify.config_context
     :add-heading: Gallery examples
     :heading-level: -
