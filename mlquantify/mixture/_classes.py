@@ -33,13 +33,14 @@ class AggregativeMixture(SoftLearnerQMixin, AggregationMixin, BaseMixture):
         "strategy": [Options(["ovr", "ovo"])]
     }
 
-    def __init__(self, learner = None, strategy="ovr"):
+    def __init__(self, learner = None, strategy="ovr", n_jobs=None):
         super().__init__()
         self.learner = learner
         self.pos_scores = None
         self.neg_scores = None
         self.distances = None
         self.strategy = strategy
+        self.n_jobs = n_jobs
     
     def _fit(self, X, y, learner_fitted=False, cv=5, stratified=True, shuffle=False):
         learner_function = _get_learner_function(self)
@@ -380,7 +381,7 @@ class SORD(AggregativeMixture):
 # =====================================================
 # Non aggregative Mixture-based Quantifiers
 # =====================================================
-
+@define_binary
 class HDx(BaseMixture):
     """
     Hellinger Distance-based Quantifier (HDx).
@@ -414,7 +415,7 @@ class HDx(BaseMixture):
         "strategy": [Options(["ovr", "ovo"])]
     }
 
-    def __init__(self, bins_size=None, strategy="ovr"):
+    def __init__(self, bins_size=None, strategy="ovr", n_jobs=None):
         super().__init__()
         if bins_size is None:
             bins_size = np.linspace(10, 110, 11)
@@ -423,7 +424,7 @@ class HDx(BaseMixture):
         self.neg_features = None
         self.pos_features = None
         self.strategy = strategy
-        
+        self.n_jobs = n_jobs
     
     def _fit(self, X, y, *args, **kwargs):
         self.pos_features = X[y == self.classes_[1]]
@@ -588,14 +589,12 @@ class MMD_RKHS(BaseMixture):
                  kernel="rbf",
                  gamma=None,
                  degree=3,
-                 coef0=0.0,
-                 strategy="ovr"):
+                 coef0=0.0):
         super().__init__()
         self.kernel = kernel
         self.gamma = gamma
         self.degree = degree
         self.coef0 = coef0
-        self.strategy = strategy
 
         self.X_train_ = None
         self.y_train_ = None
@@ -617,19 +616,18 @@ class MMD_RKHS(BaseMixture):
 
         return self
 
-    def _predict(self, X, y_train) -> np.ndarray:
+    def _predict(self, X) -> np.ndarray:
         """
         Estimate the prevalence vector on X using MMD.
         """
-        self.classes_ = check_classes_attribute(self, np.unique(y_train))
+        self.classes_ = check_classes_attribute(self, np.unique(self.y_train_))
 
         theta, _ = self.best_mixture(X, self.X_train_, self.y_train_)
         prevalence = validate_prevalences(self, theta, self.classes_)
         return prevalence
 
     def best_mixture(self, X_test, X_train, y_train):
-        """
-        Implements the MMD-based class ratio estimation:
+        r"""Implements the MMD-based class ratio estimation:
 
         .. math::
 

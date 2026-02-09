@@ -1,5 +1,6 @@
 from mlquantify.utils._validation import validate_prevalences
 from mlquantify.base import BaseQuantifier
+from mlquantify._config import config_context
 import numpy as np     
 from abc import abstractmethod
 from scipy.optimize import minimize
@@ -104,10 +105,11 @@ class ThresholdAdjustment(SoftLearnerQMixin, BaseAdjustCount):
         ],
     }
 
-    def __init__(self, learner=None, threshold=0.5, strategy="ovr"):
+    def __init__(self, learner=None, threshold=0.5, strategy="ovr", n_jobs=None):
         super().__init__(learner=learner)
         self.threshold = threshold
         self.strategy = strategy
+        self.n_jobs = n_jobs
 
     def _adjust(self, predictions, train_y_scores, y_train):
         """Internal adjustment computation based on selected ROC threshold."""
@@ -116,8 +118,9 @@ class ThresholdAdjustment(SoftLearnerQMixin, BaseAdjustCount):
         thresholds, tprs, fprs = evaluate_thresholds(y_train, positive_scores)
         threshold, tpr, fpr = self.get_best_threshold(thresholds, tprs, fprs)
 
-        cc_predictions = CC(threshold=threshold).aggregate(predictions, y_train)
-        cc_predictions = list(cc_predictions.values())[1]
+        with config_context(prevalence_return_type="array"):
+            cc_predictions = CC(threshold=threshold).aggregate(predictions, y_train)
+        cc_predictions = cc_predictions[1]
 
         if tpr - fpr == 0:
             prevalence = cc_predictions
@@ -319,9 +322,10 @@ class MatrixAdjustment(BaseAdjustCount):
 
     def _get_estimations(self, predictions, y_train):
         """Return prevalence estimates using CC (crisp) or PCC (probabilistic)."""
-        if uses_soft_predictions(self):
-            return np.array(list(PCC().aggregate(predictions).values()))
-        return np.array(list(CC().aggregate(predictions, y_train).values()))
+        with config_context(prevalence_return_type="array"):
+            if uses_soft_predictions(self):
+                return np.asarray(PCC().aggregate(predictions))
+            return np.asarray(CC().aggregate(predictions, y_train))
 
     @abstractmethod
     def _compute_confusion_matrix(self, predictions, *args):
@@ -385,12 +389,13 @@ class CDE(SoftLearnerQMixin, AggregationMixin, BaseQuantifier):
         return tags
 
 
-    def __init__(self, learner=None, tol=1e-4, max_iter=100, init_cfp=1.0, strategy="ovr"):
+    def __init__(self, learner=None, tol=1e-4, max_iter=100, init_cfp=1.0, strategy="ovr", n_jobs=None):
         self.learner = learner
         self.tol = float(tol)
         self.max_iter = int(max_iter)
-        self.init_cfp = float(init_cfp)
+        self.init_cfp = float(init_cfp) 
         self.strategy = strategy
+        self.n_jobs = n_jobs
 
     @_fit_context(prefer_skip_nested_validation=True)
     def fit(self, X, y):
@@ -868,8 +873,9 @@ class MS(ThresholdAdjustment):
         
         prevs = []
         for thr, tpr, fpr in zip(thresholds, tprs, fprs):
-            cc_predictions = CC(threshold=thr).aggregate(predictions, y_train)
-            cc_predictions = list(cc_predictions.values())[1]
+            with config_context(prevalence_return_type="array"):
+                cc_predictions = CC(threshold=thr).aggregate(predictions, y_train)
+            cc_predictions = cc_predictions[1]
             
             if tpr - fpr == 0:
                 prevalence = cc_predictions

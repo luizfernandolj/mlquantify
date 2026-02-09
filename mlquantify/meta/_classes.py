@@ -26,6 +26,7 @@ from mlquantify.utils._sampling import (
 from mlquantify.model_selection import APP, NPP, UPP
 from mlquantify.utils._validation import validate_data, validate_prevalences
 from mlquantify.utils.prevalence import get_prev_from_labels
+from mlquantify._config import config_context
 
 
 
@@ -166,9 +167,9 @@ class EnsembleQ(MetaquantifierMixin, BaseQuantifier):
         "p_metric": [Interval(left=0.0, right=1.0, inclusive_left=True, inclusive_right=True)],
         "protocol": [Options(['artificial', 'natural', 'uniform', 'kraemer'])],
         "return_type": [Options(['mean', 'median'])],
-        "max_sample_size": [Options([Interval(left=1, right=None, discrete=True), None])],
+        "max_sample_size": [Interval(left=1, right=None, discrete=True), None],
         "max_trials": [Interval(left=1, right=None, discrete=True)],
-        "n_jobs": [Interval(left=1, right=None, discrete=True)],
+        "n_jobs": [Interval(left=-1, right=None, discrete=True)],
         "verbose": [bool],
     }
 
@@ -284,7 +285,18 @@ class EnsembleQ(MetaquantifierMixin, BaseQuantifier):
         test_prevalences = []
         
         for model in tqdm(self.models, disable=not self.verbose):
-            pred = np.asarray(list(model.predict(X).values()))
+            with config_context(prevalence_return_type="array"):
+                pred = np.asarray(model.predict(X))
+            # Align predictions to self.classes so every model returns the
+            # same number of entries even if its training subsample missed
+            # some classes (defaulting missing classes to 0.0 prevalence).
+            if len(pred) < len(self.classes) and hasattr(model, 'classes_'):
+                aligned = np.zeros(len(self.classes))
+                for i, c in enumerate(model.classes_):
+                    idx = np.searchsorted(self.classes, c)
+                    if idx < len(self.classes) and self.classes[idx] == c:
+                        aligned[idx] = pred[i]
+                pred = aligned
             test_prevalences.append(pred)
         
         test_prevalences = np.asarray(test_prevalences)
@@ -414,6 +426,8 @@ def _select_k(elements, order, k):
     array-like
         The selected elements.
     """
+    if isinstance(k, float):
+        k = max(1, int(k * len(elements)))
     elements_k = [elements[idx] for idx in order[:k]]
     if elements_k:
         return elements_k
@@ -521,7 +535,7 @@ class AggregativeBootstrap(MetaquantifierMixin, BaseQuantifier):
             y_train = y
             train_predictions = getattr(model, learner_function)(X)
         else:
-            X_fit, y_fit, X_val, y_val = train_test_split(X, y, test_size=val_split, random_state=self.random_state)
+            X_fit, X_val, y_fit, y_val = train_test_split(X, y, test_size=val_split, random_state=self.random_state)
             model.fit(X_fit, y_fit)
             y_train = y_val
             train_predictions = getattr(model, learner_function)(X_val)
@@ -592,15 +606,14 @@ class AggregativeBootstrap(MetaquantifierMixin, BaseQuantifier):
 
                 requirements = get_aggregation_requirements(self.quantifier)
                 
-                if requirements.requires_train_proba and requirements.requires_train_labels:
-                    prevalences_boot = self.quantifier.aggregate(test_pred_boot, train_pred_boot, train_y_boot)
-                elif requirements.requires_train_labels:
-                    prevalences_boot = self.quantifier.aggregate(test_pred_boot, train_y_boot)
-                else:
-                    prevalences_boot = self.quantifier.aggregate(test_pred_boot)
-
-                prevalences_boot = np.asarray(list(prevalences_boot.values()))
-                prevalences.append(prevalences_boot)
+                with config_context(prevalence_return_type="array"):
+                    if requirements.requires_train_proba and requirements.requires_train_labels:
+                        prevalences_boot = self.quantifier.aggregate(test_pred_boot, train_pred_boot, train_y_boot)
+                    elif requirements.requires_train_labels:
+                        prevalences_boot = self.quantifier.aggregate(test_pred_boot, train_y_boot)
+                    else:
+                        prevalences_boot = self.quantifier.aggregate(test_pred_boot)
+                prevalences.append(np.asarray(prevalences_boot))
 
         prevalences = np.asarray(prevalences)
         confidence_region = construct_confidence_region(

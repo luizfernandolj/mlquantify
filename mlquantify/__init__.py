@@ -15,3 +15,23 @@ try:
     from . import neural
 except NameError:
     pass
+
+from ._config import get_config, set_config, config_context
+
+__all__ = [
+    "neighbors",
+    "likelihood",
+    "mixture",
+    "meta",
+    "adjust_counting",
+    "model_selection",
+    "base_aggregative",
+    "base",
+    "calibration",
+    "confidence",
+    "multiclass",
+    "neural",
+    "get_config",
+    "set_config",
+    "config_context",
+]
