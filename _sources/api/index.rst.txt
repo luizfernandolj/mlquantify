@@ -21,6 +21,7 @@ reference on concepts repeated across the API, see :ref:`glossary`.
   mlquantify.base
   mlquantify.base_aggregative
   mlquantify.confidence
+  mlquantify.config
   mlquantify.likelihood
   mlquantify.meta
   mlquantify.metrics
@@ -487,6 +488,58 @@ reference on concepts repeated across the API, see :ref:`glossary`.
         .. div:: caption
 
           :mod:`mlquantify.confidence`
+
+
+
+
+
+
+
+
+
+  * - :obj:`~mlquantify.config.get_config`
+
+    - .. div:: sk-apisearch-desc
+
+        .. currentmodule:: mlquantify.config
+
+        .. autoshortsummary:: mlquantify.config.get_config
+
+        .. div:: caption
+
+          :mod:`mlquantify.config`
+
+
+
+
+
+  * - :obj:`~mlquantify.config.set_config`
+
+    - .. div:: sk-apisearch-desc
+
+        .. currentmodule:: mlquantify.config
+
+        .. autoshortsummary:: mlquantify.config.set_config
+
+        .. div:: caption
+
+          :mod:`mlquantify.config`
+
+
+
+
+
+  * - :obj:`~mlquantify.config.config_context`
+
+    - .. div:: sk-apisearch-desc
+
+        .. currentmodule:: mlquantify.config
+
+        .. autoshortsummary:: mlquantify.config.config_context
+
+        .. div:: caption
+
+          :mod:`mlquantify.config`
 
 
 

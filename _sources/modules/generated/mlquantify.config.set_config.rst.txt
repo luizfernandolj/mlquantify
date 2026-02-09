@@ -1,0 +1,7 @@
+set\_config
+===========
+.. currentmodule:: mlquantify.config
+.. autofunction:: set_config
+.. minigallery:: mlquantify.config.set_config
+    :add-heading: Gallery examples
+    :heading-level: -

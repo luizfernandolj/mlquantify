@@ -1,0 +1,29 @@
+:html_theme.sidebar_secondary.remove:
+
+
+.. _config_ref:
+
+
+mlquantify.config
+=================
+
+.. automodule:: mlquantify.config
+
+
+
+
+
+
+
+
+
+
+.. autosummary::
+  :nosignatures:
+  :toctree: ../modules/generated/
+  :template: base.rst
+
+
+  get_config
+  set_config
+  config_context
