@@ -1,2 +1,3 @@
 tests/ merge=ours
 pytest.ini merge=ours
+tests_overview.md merge=ours
