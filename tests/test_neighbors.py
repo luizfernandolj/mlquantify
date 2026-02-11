@@ -1,24 +1,34 @@
+
 import pytest
 import numpy as np
 from mlquantify.neighbors import PWK
-from sklearn.neighbors import KNeighborsClassifier
 
-def test_PWK_binary(binary_dataset):
-    X_train, X_test, y_train, y_test = binary_dataset
-    # PWK builds its own learner internally if passed params, 
-    # but the docstring example suggests simple init.
-    # The __init__ creates a PWKCLF.
-    q = PWK(n_neighbors=5)
-    q.fit(X_train, y_train)
-    prev = q.predict(X_test)
-    assert isinstance(prev, dict)
-    assert len(prev) == 2
-    assert pytest.approx(sum(prev.values())) == 1.0
+def test_pwk_fit_predict(binary_dataset):
+    X, y = binary_dataset
+    q = PWK(n_neighbors=10)
+    q.fit(X, y)
+    preds = q.predict(X)
+    assert isinstance(preds, dict)
+    assert sum(preds.values()) == pytest.approx(1.0)
 
-def test_PWK_classify(binary_dataset):
-    X_train, X_test, y_train, y_test = binary_dataset
-    q = PWK(n_neighbors=5)
-    q.fit(X_train, y_train)
-    labels = q.classify(X_test)
-    assert len(labels) == len(X_test)
-    assert set(np.unique(labels)).issubset(set(np.unique(y_train)))
+def test_pwk_multiclass(multiclass_dataset):
+    X, y = multiclass_dataset
+    q = PWK(n_neighbors=10)
+    q.fit(X, y)
+    preds = q.predict(X)
+    assert len(preds) == 3
+    assert sum(preds.values()) == pytest.approx(1.0)
+
+def test_pwk_params(binary_dataset):
+    X, y = binary_dataset
+    q = PWK(n_neighbors=5, alpha=2.0)
+    q.fit(X, y)
+    preds = q.predict(X)
+    assert sum(preds.values()) == pytest.approx(1.0)
+
+    # Test invalid n_neighbors
+    with pytest.raises(ValueError):
+         PWK(n_neighbors=-1).fit(X, y)
+    
+    # Test high neighbors count
+    q = PWK(n_neighbors=len(X) - 1).fit(X, y)

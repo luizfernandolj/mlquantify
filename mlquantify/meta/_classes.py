@@ -1,3 +1,4 @@
+from mlquantify.utils import check_classes_attribute
 import numpy as np
 import pandas as pd
 from copy import deepcopy
@@ -708,11 +709,18 @@ class QuaDapt(MetaquantifierMixin, BaseQuantifier):
     
     
     def aggregate(self, predictions, y_train):
-
-        prevalence, _, _ = self.best_mixture(predictions)
-        prevalences = np.asarray([1-prevalence, prevalence])
+        self.classes = check_classes_attribute(self, y_train)
+        _, _, best_m = self.best_mixture(predictions)
         
-        self.classes = self.classes if hasattr(self, 'classes') else np.unique(y_train)
+        moss_scores, moss_labels = self.MoSS(n=1000, alpha=0.5, merging_factor=best_m)
+
+        requirements = get_aggregation_requirements(self.quantifier)
+        if requirements.requires_train_proba and requirements.requires_train_labels:
+            prevalences = self.quantifier.aggregate(moss_scores, moss_labels, y_train)
+        elif requirements.requires_train_labels:
+            prevalences = self.quantifier.aggregate(moss_scores, y_train)
+        else:
+            prevalences = self.quantifier.aggregate(moss_scores)
         
         prevalences = validate_prevalences(self, prevalences, self.classes)
         return prevalences

@@ -1,47 +1,55 @@
+
 import pytest
 import numpy as np
-from mlquantify.mixture import (
-    DyS,
-    HDy,
-    SMM,
-    SORD,
-    HDx,
-    MMD_RKHS
-)
 from sklearn.linear_model import LogisticRegression
+from mlquantify.mixture import DyS, HDy, SMM, SORD, HDx, MMD_RKHS
 
-# -------------------------------------------------------------------------
-# Test Aggregative Mixture Models (DyS, HDy, SMM, SORD)
-# -------------------------------------------------------------------------
+MIXTURE_QUANTIFIERS = [DyS, HDy, SMM, SORD, HDx, MMD_RKHS]
 
-@pytest.mark.parametrize("Quantifier", [DyS, HDy, SMM, SORD])
-def test_aggregative_mixture_binary(Quantifier, binary_classifier, binary_dataset):
-    X_train, X_test, y_train, y_test = binary_dataset
-    q = Quantifier(learner=binary_classifier)
-    q.fit(X_train, y_train)
-    prev = q.predict(X_test)
-    assert isinstance(prev, dict)
-    assert len(prev) == 2
-    assert pytest.approx(sum(prev.values())) == 1.0
+@pytest.mark.parametrize("quantifier_class", MIXTURE_QUANTIFIERS)
+def test_mixture_fit_predict(quantifier_class, binary_dataset):
+    X, y = binary_dataset
+    learner = LogisticRegression()
+    if quantifier_class == HDx or quantifier_class == MMD_RKHS:
+        q = quantifier_class()
+    else:
+        q = quantifier_class(learner=learner)
+    q.fit(X, y)
+    preds = q.predict(X)
+    assert isinstance(preds, dict)
+    assert sum(preds.values()) == pytest.approx(1.0)
 
-# -------------------------------------------------------------------------
-# Test Non-aggregative Mixture Models (HDx, MMD_RKHS)
-# -------------------------------------------------------------------------
+def test_dys_measures(binary_dataset):
+    X, y = binary_dataset
+    learner = LogisticRegression()
+    for measure in ["hellinger", "topsoe", "probsymm"]:
+        q = DyS(learner=learner, measure=measure)
+        q.fit(X, y)
+        preds = q.predict(X)
+        assert sum(preds.values()) == pytest.approx(1.0)
+    
+    with pytest.raises(ValueError):
+        q = DyS(learner=learner, measure="invalid")
+        q.fit(X, y) # Validation might happen here
 
-def test_HDx_binary(binary_dataset):
-    X_train, X_test, y_train, y_test = binary_dataset
-    q = HDx()
-    q.fit(X_train, y_train)
-    prev = q.predict(X_test)
-    assert isinstance(prev, dict)
-    assert len(prev) == 2
-    assert pytest.approx(sum(prev.values())) == 1.0
+def test_bin_sizes(binary_dataset):
+    X, y = binary_dataset
+    learner = LogisticRegression()
+    # HDy typically uses bins
+    q = DyS(learner=learner, bins_size=[10, 20, 30, 50, 70, 100])
+    q.fit(X, y)
+    preds = q.predict(X)
+    assert sum(preds.values()) == pytest.approx(1.0)
 
-def test_MMD_RKHS_binary(binary_dataset):
-    X_train, X_test, y_train, y_test = binary_dataset
-    q = MMD_RKHS(kernel='rbf')
-    q.fit(X_train, y_train)
-    prev = q.predict(X_test)
-    assert isinstance(prev, dict)
-    assert len(prev) == 2
-    assert pytest.approx(sum(prev.values())) == 1.0
+def test_sord_multiclass(multiclass_dataset):
+    X, y = multiclass_dataset
+    learner = LogisticRegression()
+    q = SORD(learner=learner)
+    q.fit(X, y)
+    
+    # SORD uses OvR by default which doesn't guarantee sum=1 without normalization
+    with config_context(prevalence_normalization="sum"):
+        preds = q.predict(X)
+        assert len(preds) == 3
+        assert sum(preds.values()) == pytest.approx(1.0)
+

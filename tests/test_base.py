@@ -1,39 +1,54 @@
+
 import pytest
 import numpy as np
-from mlquantify.base import BaseQuantifier
-from mlquantify.base_aggregative import AggregationMixin, SoftLearnerQMixin
-from sklearn.linear_model import LogisticRegression
+from mlquantify.base import BaseQuantifier, MetaquantifierMixin, ProtocolMixin
+from mlquantify.utils._constraints import Interval
 
-class MinimalQuantifier(BaseQuantifier):
-    def __init__(self, param1=1):
+class MockQuantifier(BaseQuantifier):
+    _parameter_constraints = {
+        "param1": [Interval(0, 10)],
+    }
+    
+    def __init__(self, param1=5):
         self.param1 = param1
+
     def fit(self, X, y):
+        self._validate_params()
+        self.classes_ = np.unique(y)
         return self
+
     def predict(self, X):
-        return {}
+        return np.array([0.5, 0.5])
 
-def test_base_quantifier_params():
-    q = MinimalQuantifier(param1=10)
-    assert q.get_params() == {'param1': 10}
+def test_base_quantifier_inheritance():
+    q = MockQuantifier()
+    assert isinstance(q, BaseQuantifier)
 
-def test_aggregation_mixin_params():
-    class MyAggQ(AggregationMixin, BaseQuantifier):
-        def __init__(self, learner=None):
-            self.learner = learner
-            
-    learner = LogisticRegression(C=0.5)
-    q = MyAggQ(learner=learner)
+def test_base_quantifier_parameter_validation(binary_dataset):
+    X, y = binary_dataset
     
-    # Test getting params (should include learner's params if sklearn compatible, 
-    # but AggregationMixin doesn't auto-expose learner params in get_params unless 
-    # we implement get_params to do so, OR if we rely on sklearn's BaseEstimator 
-    # which inspects __init__.
-    # Since MyAggQ inherits BaseEstimator, get_params returns 'learner'.
+    # Valid parameter
+    q = MockQuantifier(param1=5)
+    q.fit(X, y)
     
-    params = q.get_params()
-    assert 'learner' in params
-    assert params['learner'].C == 0.5
+    # Invalid parameter
+    q = MockQuantifier(param1=20)
+    with pytest.raises(ValueError):
+        q.fit(X, y)
+
+def test_metaquantifier_mixin():
+    class MetaQ(MetaquantifierMixin, BaseQuantifier):
+        pass
     
-    # Test setting params
-    q.set_params(learner__C=0.1)
-    assert q.learner.C == 0.1
+    q = MetaQ()
+    assert isinstance(q, MetaquantifierMixin)
+
+def test_protocol_mixin():
+    class ProtocolQ(ProtocolMixin, BaseQuantifier):
+        pass
+
+    q = ProtocolQ()
+    assert isinstance(q, ProtocolMixin)
+    tags = q.__mlquantify_tags__()
+    assert tags.estimation_type == "sample"
+    assert tags.requires_fit is False

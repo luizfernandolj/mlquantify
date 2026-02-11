@@ -208,8 +208,8 @@ class MatrixAdjustment(BaseAdjustCount):
     """
 
     _parameter_constraints = {
-        "solver": Options(["minimize", "linear", None]),
-        "method": Options(["inverse", "invariant_ratio"])
+        "solver": [Options(["minimize", "linear", None])],
+        "method": [Options(["inverse", "invariant_ratio"])]
     }
 
     def __init__(self, learner=None, solver=None, method='inverse'):

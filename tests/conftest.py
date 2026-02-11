@@ -1,59 +1,36 @@
+
 import pytest
 import numpy as np
+import pandas as pd
 from sklearn.datasets import make_classification
 from sklearn.model_selection import train_test_split
-from sklearn.linear_model import LogisticRegression
-from sklearn.ensemble import RandomForestClassifier
 
 @pytest.fixture(scope="session")
 def binary_dataset():
-    """Generates a binary classification dataset."""
-    X, y = make_classification(
-        n_samples=1000,
-        n_features=20,
-        n_classes=2,
-        weights=[0.6, 0.4],
-        random_state=42
-    )
-    return train_test_split(X, y, test_size=0.3, random_state=42)
+    X, y = make_classification(n_samples=500, n_features=10, n_classes=2, random_state=42)
+    return X, y
 
 @pytest.fixture(scope="session")
 def multiclass_dataset():
-    """Generates a multiclass classification dataset."""
-    X, y = make_classification(
-        n_samples=1000,
-        n_features=20,
-        n_classes=3,
-        n_informative=10,
-        weights=[0.3, 0.4, 0.3],
-        random_state=42
-    )
-    return train_test_split(X, y, test_size=0.3, random_state=42)
+    X, y = make_classification(n_samples=500, n_features=10, n_classes=3, n_clusters_per_class=1, random_state=42)
+    return X, y
 
-@pytest.fixture(scope="session")
-def binary_classifier(binary_dataset):
-    """Returns a trained binary classifier (LogisticRegression)."""
-    X_train, X_test, y_train, y_test = binary_dataset
-    clf = LogisticRegression(random_state=42, solver='liblinear')
-    clf.fit(X_train, y_train)
-    return clf
+@pytest.fixture(params=["numpy", "pandas", "list"])
+def binary_dataset_formats(request, binary_dataset):
+    X, y = binary_dataset
+    if request.param == "numpy":
+        return X, y
+    elif request.param == "pandas":
+        return pd.DataFrame(X), pd.Series(y)
+    elif request.param == "list":
+        return X.tolist(), y.tolist()
 
-@pytest.fixture(scope="session")
-def multiclass_classifier(multiclass_dataset):
-    """Returns a trained multiclass classifier (RandomForestClassifier)."""
-    X_train, X_test, y_train, y_test = multiclass_dataset
-    clf = RandomForestClassifier(n_estimators=10, random_state=42)
-    clf.fit(X_train, y_train)
-    return clf
-
-@pytest.fixture
-def prob_predictions_binary(binary_classifier, binary_dataset):
-    """Returns probabilistic predictions for the binary test set."""
-    X_train, X_test, y_train, y_test = binary_dataset
-    return binary_classifier.predict_proba(X_test)
-
-@pytest.fixture
-def predictions_binary(binary_classifier, binary_dataset):
-    """Returns crisp predictions for the binary test set."""
-    X_train, X_test, y_train, y_test = binary_dataset
-    return binary_classifier.predict(X_test)
+@pytest.fixture(params=["numpy", "pandas", "list"])
+def multiclass_dataset_formats(request, multiclass_dataset):
+    X, y = multiclass_dataset
+    if request.param == "numpy":
+        return X, y
+    elif request.param == "pandas":
+        return pd.DataFrame(X), pd.Series(y)
+    elif request.param == "list":
+        return X.tolist(), y.tolist()
