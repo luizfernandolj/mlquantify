@@ -132,7 +132,6 @@ class SoftLearnerQMixin:
         tags = super().__mlquantify_tags__()
         tags.estimator_function = "predict_proba"
         tags.estimator_type = "soft"
-        tags.prediction_requirements.requires_train_proba = True
         return tags
 
 

@@ -28,6 +28,7 @@ from mlquantify.model_selection import APP, NPP, UPP
 from mlquantify.utils._validation import validate_data, validate_prevalences
 from mlquantify.utils.prevalence import get_prev_from_labels
 from mlquantify._config import config_context
+from mlquantify.multiclass import define_binary
 
 
 
@@ -631,7 +632,7 @@ class AggregativeBootstrap(MetaquantifierMixin, BaseQuantifier):
 
 
 
-
+@define_binary
 class QuaDapt(MetaquantifierMixin, BaseQuantifier):
     r"""QuaDapt Metaquantifier: Adaptive quantification using synthetic scores.
 
@@ -667,10 +668,16 @@ class QuaDapt(MetaquantifierMixin, BaseQuantifier):
     
     _parameter_constraints = {
         "quantifier": [BaseQuantifier],
-        "merging_factors": "array-like",
+        "merging_factors": ["array-like"],
         "measure": [Options(["hellinger", "topsoe", "probsymm", "sord"])],
         "random_state": [Options([None, int])],
     }
+
+    def __mlquantify_tags__(self):
+        tags = super().__mlquantify_tags__()
+        tags.prediction_requirements.requires_train_proba = False
+        tags.prediction_requirements.requires_train_labels = True
+        return tags
     
     def __init__(self, 
                  quantifier,
@@ -683,14 +690,10 @@ class QuaDapt(MetaquantifierMixin, BaseQuantifier):
     
     def fit(self, X, y):
         X, y = validate_data(self, X, y)
-        self.classes = np.unique(y)
+        self.classes_ = np.unique(y)
         
         if not uses_soft_predictions(self.quantifier):
             raise ValueError(f"The quantifier {self.quantifier.__class__.__name__} is not a soft (probabilistic) quantifier.")
-        
-        requirements = get_aggregation_requirements(self.quantifier)
-        if not requirements.requires_train_proba:
-            raise ValueError(f"The quantifier {self.quantifier.__class__.__name__} does not use training probabilities, which are required for QuaDapt.")
         
         self.quantifier.learner.fit(X, y)
         self.y_train = y
@@ -709,20 +712,14 @@ class QuaDapt(MetaquantifierMixin, BaseQuantifier):
     
     
     def aggregate(self, predictions, y_train):
-        self.classes = check_classes_attribute(self, y_train)
+        self.classes_ = check_classes_attribute(self, np.unique(y_train))
         _, _, best_m = self.best_mixture(predictions)
         
-        moss_scores, moss_labels = self.MoSS(n=1000, alpha=0.5, merging_factor=best_m)
+        moss_scores, moss_labels = self.MoSS(n=1000, alpha=0.5, merging_factor=best_m, classes=self.classes_)
 
-        requirements = get_aggregation_requirements(self.quantifier)
-        if requirements.requires_train_proba and requirements.requires_train_labels:
-            prevalences = self.quantifier.aggregate(moss_scores, moss_labels, y_train)
-        elif requirements.requires_train_labels:
-            prevalences = self.quantifier.aggregate(moss_scores, y_train)
-        else:
-            prevalences = self.quantifier.aggregate(moss_scores)
+        prevalences = self.quantifier.aggregate(predictions, moss_scores, moss_labels)
         
-        prevalences = validate_prevalences(self, prevalences, self.classes)
+        prevalences = validate_prevalences(self, prevalences, self.classes_)
         return prevalences
 
         
@@ -762,7 +759,7 @@ class QuaDapt(MetaquantifierMixin, BaseQuantifier):
         
 
     @classmethod
-    def MoSS(cls, n, alpha, merging_factor):
+    def MoSS(cls, n, alpha, merging_factor, classes=None):
         r"""Model for Score Simulation
 
         Parameters
@@ -800,25 +797,37 @@ class QuaDapt(MetaquantifierMixin, BaseQuantifier):
         """
         if isinstance(alpha, list):
             alpha = float(alpha[1])
-            
+
+        # Define os rótulos das classes
+        if classes is None:
+            neg_label, pos_label = 0, 1
+        else:
+            if len(classes) < 2:
+                raise ValueError("classes must contain exactly two elements.")
+
+            neg_label, pos_label = classes[0], classes[1]
+
         n_pos = int(n * alpha)
         n_neg = n - n_pos
-        
+
         # Scores positivos
         p_score = np.random.uniform(size=n_pos) ** merging_factor
         # Scores negativos
         n_score = 1 - (np.random.uniform(size=n_neg) ** merging_factor)
-        
-        # Construção dos arrays de features (duas colunas iguais)
+
+        # Labels
+        pos_labels = np.full(n_pos, pos_label)
+        neg_labels = np.full(n_neg, neg_label)
+
         moss = np.column_stack(
-            ( 
+            (
                 1 - np.concatenate((p_score, n_score)),
                 np.concatenate((p_score, n_score)),
-                np.int16(np.concatenate((np.ones(len(p_score)), np.full(len(n_score), 0))))
+                np.concatenate((pos_labels, neg_labels)),
             )
         )
-        
+
         scores = moss[:, :2]
-        labels = moss[:, 2].astype(np.int16)
+        labels = moss[:, 2].astype(type(pos_label))
         return scores, labels
         

@@ -342,38 +342,30 @@ def validate_prevalences(
     prevalences: np.ndarray | list | dict, 
     classes: np.ndarray, 
     return_type: str | None = None, 
-    normalize: bool | None = None, 
+    normalize: bool | None = True, 
     normalization: str | None = None
 ) -> dict | np.ndarray:
     
-    # 1. Resolução de configurações globais
     conf = get_config()
     return_type = return_type or conf["prevalence_return_type"]
     
     if normalization is None:
         normalization = ('sum' if normalize else None) if normalize is not None else conf["prevalence_normalization"]
 
-    # 2. Padronização imediata para Array (Trabalha internamente sempre com array)
     if isinstance(prevalences, dict):
-        # Conversão direta respeitando a ordem das classes
         prevalences_arr = np.array([prevalences.get(cls, 0.0) for cls in classes], dtype=float)
     else:
         prevalences_arr = np.asanyarray(prevalences, dtype=float)
-
-    # 3. Processamento via normalize_prevalences
-    # Passamos o array já preparado e as classes para a função especializada
-    # Note: normalize_prevalences agora lida com as diferentes estratégias
+    
     result_arr = normalize_prevalences(
         prevalences_arr, 
         classes=classes, 
         method=normalization
     )
 
-    # 4. Transformação final para o tipo definido globalmente
     if return_type == "dict":
-        # Garante que NaNs não quebrem o dicionário e converte para tipos nativos Python
         np.nan_to_num(result_arr, copy=False, nan=0.0)
-        return dict(zip(classes, result_arr))
+        return dict(zip(np.asanyarray(classes).tolist(), result_arr.tolist()))
     
     return result_arr
 
@@ -385,10 +377,10 @@ def normalize_prevalences(
     """
     Processa a normalização e agregação focando estritamente em arrays.
     """
-    # Garante que o input é um array para operações vetorizadas
+    if type(prevalences) == dict:
+        prevalences = np.array([prevalences.get(cls, 0.0) for cls in classes], dtype=float)
     arr = np.copy(prevalences)
     
-    # Ajuste de dimensões (Padding)
     n_classes = len(classes)
     if arr.shape[-1] < n_classes:
         pad_width = [(0, 0)] * arr.ndim
@@ -397,7 +389,6 @@ def normalize_prevalences(
     elif arr.shape[-1] > n_classes:
         raise ValueError(f"Dimensão de prevalências ({arr.shape[-1]}) maior que o número de classes ({n_classes}).")
 
-    # Aplicação da lógica baseada no método
     if method in ('sum', 'l1'):
         if arr.ndim == 2:
             row_sums = arr.sum(axis=1, keepdims=True)

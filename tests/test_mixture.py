@@ -1,6 +1,7 @@
 
 import pytest
 import numpy as np
+import mlquantify as mq
 from sklearn.linear_model import LogisticRegression
 from mlquantify.mixture import DyS, HDy, SMM, SORD, HDx, MMD_RKHS
 
@@ -48,7 +49,7 @@ def test_sord_multiclass(multiclass_dataset):
     q.fit(X, y)
     
     # SORD uses OvR by default which doesn't guarantee sum=1 without normalization
-    with config_context(prevalence_normalization="sum"):
+    with mq.config_context(prevalence_normalization="sum"):
         preds = q.predict(X)
         assert len(preds) == 3
         assert sum(preds.values()) == pytest.approx(1.0)

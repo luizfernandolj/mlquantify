@@ -41,6 +41,12 @@ class AggregativeMixture(SoftLearnerQMixin, AggregationMixin, BaseMixture):
         self.distances = None
         self.strategy = strategy
         self.n_jobs = n_jobs
+
+    def __mlquantify_tags__(self):
+        tags = super().__mlquantify_tags__()
+        tags.prediction_requirements.requires_train_proba = True
+        tags.prediction_requirements.requires_train_labels = True
+        return tags
     
     def _fit(self, X, y, learner_fitted=False, cv=5, stratified=True, shuffle=False):
         learner_function = _get_learner_function(self)
@@ -72,8 +78,12 @@ class AggregativeMixture(SoftLearnerQMixin, AggregationMixin, BaseMixture):
         Fit learner and store score distributions for positive and negative classes.
         """ 
         # Store scores for positive and negative classes
-        self.pos_scores = train_predictions[y_train == self.classes_[1], 1]
+
+        if train_predictions.ndim == 1:
+            train_predictions = np.column_stack([1 - train_predictions, train_predictions])
+
         self.neg_scores = train_predictions[y_train == self.classes_[0], 1]
+        self.pos_scores = train_predictions[y_train == self.classes_[1], 1]
         self._precomputed = True
         return self
     
@@ -86,6 +96,7 @@ class AggregativeMixture(SoftLearnerQMixin, AggregationMixin, BaseMixture):
     
     def aggregate(self, predictions, train_predictions, y_train):
         predictions = validate_predictions(self, predictions)
+        train_predictions = validate_predictions(self, train_predictions)
         self.classes_ = check_classes_attribute(self, np.unique(y_train))
 
         if not self._precomputed:

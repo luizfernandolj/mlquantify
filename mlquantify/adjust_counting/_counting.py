@@ -62,7 +62,7 @@ class CC(CrispLearnerQMixin, BaseCount):
             *Data Mining and Knowledge Discovery*, 17(2), 164-206.
     """
     
-    _parameters_constraints = {
+    _parameter_constraints = {
         "threshold": [
             Interval(0.0, 1.0),
             Interval(0, 1, discrete=True),

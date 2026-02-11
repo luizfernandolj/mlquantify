@@ -94,7 +94,6 @@ class BaseMixture(BaseQuantifier):
     def fit(self, X, y, *args, **kwargs):
         """Fit the quantifier using the provided data and learner."""
         X, y = validate_data(self, X, y)
-        validate_y(self, y)
         self.classes_ = np.unique(y)
         
         self._fit(X, y, *args, **kwargs)
