@@ -9,11 +9,10 @@ from mlquantify.utils._constraints import (
     CallableConstraint,
     Options
 )
-from ._utils import (
-    temperature_scaling,
-    no_bias_vector_scaling,
-    vector_scaling,
-    bias_corrected_temperature_scaling
+from abstention.calibration import (
+    NoBiasVectorScaling,
+    TempScaling,
+    VectorScaling
 )
 
 class EMQ(SoftLearnerQMixin, AggregationMixin, BaseQuantifier):
@@ -94,6 +93,23 @@ class EMQ(SoftLearnerQMixin, AggregationMixin, BaseQuantifier):
         Adjusting the Outputs of a Classifier to New a Priori Probabilities.
         Neural Computation, 14(1), 2141-2156.
     .. [2] Esuli, A., Moreo, A., & Sebastiani, F. (2023). Learning to Quantify. Springer.
+
+    Examples
+    --------
+    >>> from sklearn.datasets import make_classification
+    >>> from sklearn.linear_model import LogisticRegression
+    >>> X, y = make_classification(n_samples=200, n_features=10, random_state=7)
+    >>> q = EMQ(learner=LogisticRegression(max_iter=500), calib_function='ts')
+    >>> q.fit(X[:150], y[:150])
+    EMQ(...)
+    >>> prev = q.predict(X[150:])
+    >>> round(float(prev.sum()), 6)
+    1.0
+    >>> probs_train = q.learner.predict_proba(X[:150])
+    >>> probs_test = q.learner.predict_proba(X[150:])
+    >>> prev2 = q.aggregate(probs_test, probs_train, y[:150])
+    >>> round(float(prev2.sum()), 6)
+    1.0
     """
 
     _parameter_constraints = {
@@ -101,26 +117,45 @@ class EMQ(SoftLearnerQMixin, AggregationMixin, BaseQuantifier):
         "max_iter": [Interval(1, None, inclusive_left=True)],
         "calib_function": [
             Options(["bcts", "ts", "vs", "nbvs", None]),
+            CallableConstraint(),
         ],
         "criteria": [CallableConstraint()],
+        "on_calib_error": [Options(["raise", "backup"])]
     }
 
-    def __mlquantify_tags__(self):
-        tags = super().__mlquantify_tags__()
-        tags.prediction_requirements.requires_train_proba = False
-        return tags
 
     def __init__(self, 
                  learner=None, 
                  tol=1e-4, 
                  max_iter=100, 
                  calib_function=None,
-                 criteria=MAE):
+                 criteria=MAE,
+                 on_calib_error="backup"):
         self.learner = learner
         self.tol = tol
         self.max_iter = max_iter
         self.calib_function = calib_function
         self.criteria = criteria
+        self.on_calib_error = on_calib_error
+
+    def _resolve_calib_function(self):
+        # Build calibrator factory once and avoid mutating user parameters.
+        if self.calib_function is None:
+            return None
+        if callable(self.calib_function):
+            return self.calib_function
+        return {
+            'nbvs': NoBiasVectorScaling(),
+            'bcts': TempScaling(bias_positions='all'),
+            'ts': TempScaling(),
+            'vs': VectorScaling()
+        }.get(self.calib_function, None)
+
+    def _encode_targets(self, y_train):
+        # Support arbitrary labels (numeric or not) for one-hot encoding.
+        y_idx = np.searchsorted(self.classes_, y_train)
+        return np.eye(len(self.classes_))[y_idx]
+        
 
     @_fit_context(prefer_skip_nested_validation=True)
     def fit(self, X, y):
@@ -131,6 +166,9 @@ class EMQ(SoftLearnerQMixin, AggregationMixin, BaseQuantifier):
         counts = np.array([np.count_nonzero(y == _class) for _class in self.classes_])
         self.priors = counts / len(y)
         self.y_train = y
+        
+        learner_function = _get_learner_function(self)
+        self.train_predictions = getattr(self.learner, learner_function)(X)
                 
         return self
 
@@ -139,18 +177,50 @@ class EMQ(SoftLearnerQMixin, AggregationMixin, BaseQuantifier):
         X = validate_data(self, X)
         estimator_function = _get_learner_function(self)
         predictions = getattr(self.learner, estimator_function)(X)
-        prevalences = self.aggregate(predictions, self.y_train)
+        prevalences = self.aggregate(predictions, self.train_predictions, self.y_train)
         return prevalences
 
-    def aggregate(self, predictions, y_train):
+    def aggregate(self, predictions, train_predictions, y_train):
         predictions = validate_predictions(self, predictions)
         self.classes_ = check_classes_attribute(self, np.unique(y_train))
+        
+        eps = 1e-6
+        train_predictions = np.clip(train_predictions, eps, 1 - eps)
+        logits = np.log(train_predictions)
+        logits -= logits.mean(axis=1, keepdims=True)
+
+        predictions = np.clip(predictions, eps, 1 - eps)
+        logits_test = np.log(predictions)
+        logits_test -= logits_test.mean(axis=1, keepdims=True)
+
+        
+        
+        calibrated_predictions = predictions
+        calib_factory = self._resolve_calib_function()
+        
+        if calib_factory is not None:
+            try:
+                self.calibrator = calib_factory(
+                    logits, 
+                    self._encode_targets(y_train),
+                    posterior_supplied=False
+                )
+            except Exception as e:
+                self.calibrator = self._catch_calib_error(e, "train")
+            
+        
         
         if not hasattr(self, 'priors') or len(self.priors) != len(self.classes_):
             counts = np.array([np.count_nonzero(y_train == _class) for _class in self.classes_])
             self.priors = counts / len(y_train)
+            
+        if calib_factory is not None:
+            try:
+                calibrated_predictions = self.calibrator(logits_test)
+            except Exception as e:
+                self._catch_calib_error(e, "test")
+                calibrated_predictions = predictions
 
-        calibrated_predictions = self._apply_calibration(predictions, y_train)
         prevalences, _ = self.EM(
             posteriors=calibrated_predictions,
             priors=self.priors,
@@ -161,6 +231,15 @@ class EMQ(SoftLearnerQMixin, AggregationMixin, BaseQuantifier):
 
         prevalences = validate_prevalences(self, prevalences, self.classes_)
         return prevalences
+    
+    def _catch_calib_error(self, e, method):
+        if self.on_calib_error == 'raise':
+            raise RuntimeError(f'calibration {self.calib_function} failed at {method} time: {e}')
+        elif self.on_calib_error == 'backup':
+            if method == "train":
+                return lambda P: P
+            elif method == "test":
+                return None
     
 
     @classmethod
@@ -188,82 +267,31 @@ class EMQ(SoftLearnerQMixin, AggregationMixin, BaseQuantifier):
             Updated soft membership probabilities per instance.
         """
         
-        Px = np.array(posteriors, dtype=np.float64)
-        Ptr = np.array(priors, dtype=np.float64)
-        
-        
+        Px = np.asarray(posteriors, dtype=np.float64)
+        Ptr = np.asarray(priors, dtype=np.float64)
 
-        if np.prod(Ptr) == 0:
-            Ptr += tolerance
-            Ptr /= Ptr.sum()
+        # Avoid zero priors
+        Ptr = np.clip(Ptr, tolerance, None)
+        Ptr /= Ptr.sum()
 
-        qs = np.copy(Ptr)
-        s, converged = 0, False
-        qs_prev_ = None
-        
-        while not converged and s < max_iter:
-            # E-step:
-            ps_unnormalized = (qs / Ptr) * Px
-            ps = ps_unnormalized / ps_unnormalized.sum(axis=1, keepdims=True)
+        qs = Ptr.copy()
+        qs_prev = None
 
-            # M-step:
+        for s in range(max_iter):
+
+            # ---- E-step ----
+            ratio = qs / Ptr
+            ps = Px * ratio
+            ps /= ps.sum(axis=1, keepdims=True)
+
+            # ---- M-step ----
             qs = ps.mean(axis=0)
 
-            if qs_prev_ is not None and criteria(qs_prev_, qs) < tolerance and s > 10:
-                converged = True
+            # ---- Convergence check ----
+            if qs_prev is not None:
+                if criteria(qs_prev, qs) < tolerance and s > 5:
+                    break
 
-            qs_prev_ = qs
-            s += 1
-
-        if not converged:
-            print('[warning] the method has reached the maximum number of iterations; it might have not converged')
+            qs_prev = qs
 
         return qs, ps
-
-
-    def _apply_calibration(self, predictions, labels):
-        r"""Calibrate posterior predictions with specified calibration method.
-        
-        Parameters
-        ----------
-        predictions : ndarray
-            Posterior predictions to calibrate.
-        
-        Returns
-        -------
-        calibrated_predictions : ndarray
-            Calibrated posterior predictions.
-        
-        Raises
-        ------
-        ValueError
-            If calib_function is unrecognized.
-        """
-        if self.calib_function is None:
-            return predictions
-        
-        if predictions.ndim == 1:
-            predictions = np.vstack([-predictions, predictions]).T
-        
-        predictions = np.clip(predictions, 1e-12, 1 - 1e-12)
-        logits = np.log(predictions)
-        
-        _, y_encoded = np.unique(labels, return_inverse=True) 
-
-        if isinstance(self.calib_function, str):
-            method = self.calib_function.lower()
-            if method == "ts":
-                return temperature_scaling(logits, y_encoded)
-            elif method == "bcts":
-                return bias_corrected_temperature_scaling(logits, y_encoded)
-            elif method == "vs":
-                return vector_scaling(logits, y_encoded)
-            elif method == "nbvs":
-                return no_bias_vector_scaling(logits, y_encoded)
-
-        elif callable(self.calib_function):
-            return self.calib_function(logits, y_encoded)
-
-        raise ValueError(
-            f"Invalid calib_function '{self.calib_function}'. Expected one of {{'bcts', 'ts', 'vs', 'nbvs', None, callable}}."
-        )

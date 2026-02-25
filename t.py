@@ -4,6 +4,7 @@ from sklearn.model_selection import train_test_split
 from sklearn.datasets import make_classification
 from mlquantify.likelihood import EMQ
 from mlquantify.utils import get_prev_from_labels
+from quapy.method.aggregative import EMQ as EMQ_QP
 
 
 # -------------------------------------------------
@@ -30,6 +31,7 @@ print("True test prevalence:", get_prev_from_labels(y_test))
 clf = RandomForestClassifier(random_state=20)
 clf.fit(X_train, y_train)
 
+train_probs = clf.predict_proba(X_train)
 probs = clf.predict_proba(X_test)
 
 
@@ -42,7 +44,7 @@ def distort_probs(probs, alpha=3.0):
     probs = probs / probs.sum(axis=1, keepdims=True)
     return probs
 
-miscalibrated_probs = distort_probs(probs, alpha=3.0)
+miscalibrated_probs = distort_probs(probs, alpha=6.0)
 
 
 # -------------------------------------------------
@@ -50,9 +52,11 @@ miscalibrated_probs = distort_probs(probs, alpha=3.0)
 # -------------------------------------------------
 for calib in ["ts", "bcts", "nbvs", "vs", None]:
     emq = EMQ(learner=clf, calib_function=calib)
-    emq.fit(X_train, y_train)
-
+    emq_qp = EMQ_QP(RandomForestClassifier(random_state=20), calib=calib)
     # NOTE: pass miscalibrated scores directly
-    preds = emq.aggregate(miscalibrated_probs, y_train)
+    preds = emq.aggregate(miscalibrated_probs, train_probs, y_train)
+    emq_qp.fit(X_train, y_train)
+    preds_qp = emq_qp.predict(X_test)
 
     print(f"{calib} →", preds)
+    print(f"{calib} →", preds_qp)

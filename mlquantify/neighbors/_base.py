@@ -147,7 +147,7 @@ class BaseKDE(SoftLearnerQMixin, AggregationMixin, BaseQuantifier):
         return prevalence
 
     def best_distance(self, predictions, train_predictions, y_train):
-        """Retorna a melhor distância encontrada durante o ajuste."""
+        """Gets the best distance for a given test predictions, train predictions and the train labels"""
         if self.best_distance is not None:
             return self.best_distance
         
