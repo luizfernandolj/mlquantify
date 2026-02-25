@@ -187,8 +187,6 @@ def _fit_ovo(quantifier, X, y, n_jobs=None):
 # ============================================================
 # Prediction strategies
 # ============================================================
-    return dict(results)
-
 
 # ============================================================
 # Prediction strategies
@@ -299,11 +297,9 @@ def _ovo_pairwise_to_class_prevalences(pair_preds, classes):
         for cls in classes
     }
 
-
 # ============================================================
 # Aggregation strategies
 # ============================================================
-    return prevalences
 
 
 def _aggregate_binary_ovr(qtf, i, cls, preds, train_preds, y_train):

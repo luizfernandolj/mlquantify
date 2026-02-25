@@ -9,6 +9,12 @@ from mlquantify.utils._constraints import (
     CallableConstraint,
     Options
 )
+from ._utils import (
+    temperature_scaling,
+    no_bias_vector_scaling,
+    vector_scaling,
+    bias_corrected_temperature_scaling
+)
 
 class EMQ(SoftLearnerQMixin, AggregationMixin, BaseQuantifier):
     r"""Expectation-Maximization Quantifier (EMQ).
@@ -144,7 +150,7 @@ class EMQ(SoftLearnerQMixin, AggregationMixin, BaseQuantifier):
             counts = np.array([np.count_nonzero(y_train == _class) for _class in self.classes_])
             self.priors = counts / len(y_train)
 
-        calibrated_predictions = self._apply_calibration(predictions)
+        calibrated_predictions = self._apply_calibration(predictions, y_train)
         prevalences, _ = self.EM(
             posteriors=calibrated_predictions,
             priors=self.priors,
@@ -215,7 +221,7 @@ class EMQ(SoftLearnerQMixin, AggregationMixin, BaseQuantifier):
         return qs, ps
 
 
-    def _apply_calibration(self, predictions):
+    def _apply_calibration(self, predictions, labels):
         r"""Calibrate posterior predictions with specified calibration method.
         
         Parameters
@@ -235,59 +241,29 @@ class EMQ(SoftLearnerQMixin, AggregationMixin, BaseQuantifier):
         """
         if self.calib_function is None:
             return predictions
+        
+        if predictions.ndim == 1:
+            predictions = np.vstack([-predictions, predictions]).T
+        
+        predictions = np.clip(predictions, 1e-12, 1 - 1e-12)
+        logits = np.log(predictions)
+        
+        _, y_encoded = np.unique(labels, return_inverse=True) 
 
         if isinstance(self.calib_function, str):
             method = self.calib_function.lower()
             if method == "ts":
-                return self._temperature_scaling(predictions)
+                return temperature_scaling(logits, y_encoded)
             elif method == "bcts":
-                return self._bias_corrected_temperature_scaling(predictions)
+                return bias_corrected_temperature_scaling(logits, y_encoded)
             elif method == "vs":
-                return self._vector_scaling(predictions)
+                return vector_scaling(logits, y_encoded)
             elif method == "nbvs":
-                return self._no_bias_vector_scaling(predictions)
+                return no_bias_vector_scaling(logits, y_encoded)
 
         elif callable(self.calib_function):
-            return self.calib_function(predictions)
+            return self.calib_function(logits, y_encoded)
 
         raise ValueError(
             f"Invalid calib_function '{self.calib_function}'. Expected one of {{'bcts', 'ts', 'vs', 'nbvs', None, callable}}."
         )
-
-    def _temperature_scaling(self, preds):
-        """Temperature Scaling calibration applied to logits."""
-        T = 1.0
-        preds = np.clip(preds, 1e-12, 1.0)
-        logits = np.log(preds)
-        scaled = logits / T
-        exp_scaled = np.exp(scaled - np.max(scaled, axis=1, keepdims=True))
-        return exp_scaled / np.sum(exp_scaled, axis=1, keepdims=True)
-
-    def _bias_corrected_temperature_scaling(self, preds):
-        """Bias-Corrected Temperature Scaling calibration."""
-        T = 1.0
-        bias = np.zeros(preds.shape[1])
-        preds = np.clip(preds, 1e-12, 1.0)
-        logits = np.log(preds)
-        logits = logits / T + bias
-        exp_logits = np.exp(logits - np.max(logits, axis=1, keepdims=True))
-        return exp_logits / np.sum(exp_logits, axis=1, keepdims=True)
-
-    def _vector_scaling(self, preds):
-        """Vector Scaling calibration."""
-        W = np.ones(preds.shape[1])
-        b = np.zeros(preds.shape[1])
-        preds = np.clip(preds, 1e-12, 1.0)
-        logits = np.log(preds)
-        scaled = logits * W + b
-        exp_scaled = np.exp(scaled - np.max(scaled, axis=1, keepdims=True))
-        return exp_scaled / np.sum(exp_scaled, axis=1, keepdims=True)
-
-    def _no_bias_vector_scaling(self, preds):
-        """No-Bias Vector Scaling calibration."""
-        W = np.ones(preds.shape[1])
-        preds = np.clip(preds, 1e-12, 1.0)
-        logits = np.log(preds)
-        scaled = logits * W
-        exp_scaled = np.exp(scaled - np.max(scaled, axis=1, keepdims=True))
-        return exp_scaled / np.sum(exp_scaled, axis=1, keepdims=True)

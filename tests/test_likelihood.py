@@ -1,4 +1,3 @@
-
 import pytest
 import numpy as np
 from sklearn.linear_model import LogisticRegression
@@ -22,13 +21,11 @@ def test_emq_multiclass(multiclass_dataset):
     assert len(preds) == 3
     assert sum(preds.values()) == pytest.approx(1.0)
 
-def test_emq_calibration(binary_dataset):
+@pytest.mark.parametrize("calib_function", ["bcts", "ts", "vs", "nbvs", None])
+def test_emq_calibration(binary_dataset, calib_function):
     X, y = binary_dataset
     learner = LogisticRegression()
-    
-    # Test valid calibration
-    # 'ts' calls TempScaling, assume implementation exists and runs
-    q = EMQ(learner=learner, calib_function='ts')
+    q = EMQ(learner=learner, calib_function=calib_function)
     q.fit(X, y)
     preds = q.predict(X)
     assert sum(preds.values()) == pytest.approx(1.0)
@@ -37,14 +34,11 @@ def test_emq_convergence_params(binary_dataset):
     X, y = binary_dataset
     learner = LogisticRegression()
     
-    # Test tolerance and max_iter
-    q = EMQ(learner=learner, max_iter=50) # Coarse convergence
+    q = EMQ(learner=learner, max_iter=50)
     q.fit(X, y)
     preds = q.predict(X)
     assert sum(preds.values()) == pytest.approx(1.0)
     
-    # Test very strict
     q = EMQ(learner=learner, max_iter=200)
     q.fit(X, y)
-    assert q.max_iter <= 200 # Check attribute if exposed, or just run without error
-
+    assert q.max_iter <= 200

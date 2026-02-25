@@ -1,16 +1,58 @@
-from sklearn.linear_model import LogisticRegression
-from mlquantify.mixture import DyS
-from mlquantify.meta import QuaDapt
+import numpy as np
+from sklearn.ensemble import RandomForestClassifier
+from sklearn.model_selection import train_test_split
 from sklearn.datasets import make_classification
+from mlquantify.likelihood import EMQ
+from mlquantify.utils import get_prev_from_labels
 
-def binary_dataset():
-    X, y = make_classification(n_samples=500, n_features=10, n_classes=2, random_state=42)
-    return X, y
 
-X, y = binary_dataset()
-learner = LogisticRegression()
-# QuaDapt requires soft predictions
-base_q = DyS(learner=learner) 
-meta_q = QuaDapt(quantifier=base_q)
-meta_q.fit(X, y)
-preds = meta_q.predict(X)
+# -------------------------------------------------
+# Dataset
+# -------------------------------------------------
+X, y = make_classification(
+    n_samples=10000,
+    n_features=20,
+    n_classes=3,
+    n_informative=5,
+    random_state=20
+)
+
+X_train, X_test, y_train, y_test = train_test_split(
+    X, y, test_size=0.5, random_state=42
+)
+
+print("True test prevalence:", get_prev_from_labels(y_test))
+
+
+# -------------------------------------------------
+# Train classifier
+# -------------------------------------------------
+clf = RandomForestClassifier(random_state=20)
+clf.fit(X_train, y_train)
+
+probs = clf.predict_proba(X_test)
+
+
+# -------------------------------------------------
+# Artificial miscalibration
+# -------------------------------------------------
+def distort_probs(probs, alpha=3.0):
+    """Make probabilities overconfident."""
+    probs = np.power(probs, alpha)
+    probs = probs / probs.sum(axis=1, keepdims=True)
+    return probs
+
+miscalibrated_probs = distort_probs(probs, alpha=3.0)
+
+
+# -------------------------------------------------
+# Pass scores directly to EMQ.aggregate
+# -------------------------------------------------
+for calib in ["ts", "bcts", "nbvs", "vs", None]:
+    emq = EMQ(learner=clf, calib_function=calib)
+    emq.fit(X_train, y_train)
+
+    # NOTE: pass miscalibrated scores directly
+    preds = emq.aggregate(miscalibrated_probs, y_train)
+
+    print(f"{calib} →", preds)

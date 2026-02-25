@@ -27,6 +27,7 @@ from mlquantify.utils._sampling import (
 from mlquantify.model_selection import APP, NPP, UPP
 from mlquantify.utils._validation import validate_data, validate_prevalences
 from mlquantify.utils.prevalence import get_prev_from_labels
+from mlquantify.utils import check_random_state
 from mlquantify._config import config_context
 from mlquantify.multiclass import define_binary
 
@@ -670,7 +671,7 @@ class QuaDapt(MetaquantifierMixin, BaseQuantifier):
         "quantifier": [BaseQuantifier],
         "merging_factors": ["array-like"],
         "measure": [Options(["hellinger", "topsoe", "probsymm", "sord"])],
-        "random_state": [Options([None, int])],
+        "strategy": [Options(["ovr", "ovo"])]
     }
 
     def __mlquantify_tags__(self):
@@ -682,10 +683,12 @@ class QuaDapt(MetaquantifierMixin, BaseQuantifier):
     def __init__(self, 
                  quantifier,
                  measure="topsoe", 
-                 merging_factors=np.arange(0.1, 1.0, 0.2)):
+                 merging_factors=np.arange(0.1, 1.0, 0.2),
+                 strategy="ovr"):
         self.quantifier = quantifier
         self.measure = measure
         self.merging_factors = merging_factors
+        self.strategy = strategy
         
     
     def fit(self, X, y):
@@ -733,8 +736,8 @@ class QuaDapt(MetaquantifierMixin, BaseQuantifier):
         
         for mf in MF:
             scores, labels = self.MoSS(n=1000, alpha=0.5, merging_factor=mf)
-            pos_scores = scores[labels == 1][:, 1]
-            neg_scores = scores[labels == 0][:, 1]
+            pos_scores = scores[labels == self.classes_[1]][:, 1]
+            neg_scores = scores[labels == self.classes_[0]][:, 1]
 
             if self.measure in ["hellinger", "topsoe", "probsymm"]:
                 method = DyS(measure=self.measure)
@@ -759,7 +762,7 @@ class QuaDapt(MetaquantifierMixin, BaseQuantifier):
         
 
     @classmethod
-    def MoSS(cls, n, alpha, merging_factor, classes=None):
+    def MoSS(cls, n, alpha, merging_factor, classes=None, random_state=None):
         r"""Model for Score Simulation
 
         Parameters
@@ -797,7 +800,7 @@ class QuaDapt(MetaquantifierMixin, BaseQuantifier):
         """
         if isinstance(alpha, list):
             alpha = float(alpha[1])
-
+            
         # Define os rótulos das classes
         if classes is None:
             neg_label, pos_label = 0, 1
