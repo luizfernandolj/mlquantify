@@ -518,7 +518,7 @@
 <h1>BinaryQuantifier<a class="headerlink" href="#binaryquantifier" title="Link to this heading">#</a></h1>
 <dl class="py class">
 <dt class="sig sig-object py" id="mlquantify.multiclass.BinaryQuantifier">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">mlquantify.multiclass.</span></span><span class="sig-name descname"><span class="pre">BinaryQuantifier</span></span><a class="reference external" href="https://github.com/luizfernandolj/mlquantify/tree/master/mlquantify/multiclass.py#L419-L532"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mlquantify.multiclass.BinaryQuantifier" title="Link to this definition">#</a></dt>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">mlquantify.multiclass.</span></span><span class="sig-name descname"><span class="pre">BinaryQuantifier</span></span><a class="reference external" href="https://github.com/luizfernandolj/mlquantify/tree/master/mlquantify/multiclass.py#L415-L528"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mlquantify.multiclass.BinaryQuantifier" title="Link to this definition">#</a></dt>
 <dd><p>Meta-quantifier enabling One-vs-Rest and One-vs-One strategies.</p>
 <p>This class extends a base quantifier to handle multiclass problems by 
 decomposing them into binary subproblems. It automatically delegates fitting, 
@@ -534,14 +534,8 @@ prediction, and aggregation operations to the appropriate binary quantifiers.</p
 </dd>
 </dl>
 <dl class="py method">
-<dt class="sig sig-object py" id="mlquantify.multiclass.BinaryQuantifier.fit">
-<span class="sig-name descname"><span class="pre">fit</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/luizfernandolj/mlquantify/tree/master/mlquantify/utils/_decorators.py#L93-L101"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mlquantify.multiclass.BinaryQuantifier.fit" title="Link to this definition">#</a></dt>
-<dd><p>Fit the quantifier using the provided data and learner.</p>
-</dd></dl>
-
-<dl class="py method">
 <dt class="sig sig-object py" id="mlquantify.multiclass.BinaryQuantifier.fit_predict">
-<span class="sig-name descname"><span class="pre">fit_predict</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">X_test</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/luizfernandolj/mlquantify/tree/master/mlquantify/multiclass.py#L505-L532"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mlquantify.multiclass.BinaryQuantifier.fit_predict" title="Link to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">fit_predict</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">X_test</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/luizfernandolj/mlquantify/tree/master/mlquantify/multiclass.py#L501-L528"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mlquantify.multiclass.BinaryQuantifier.fit_predict" title="Link to this definition">#</a></dt>
 <dd><p>Fit and predict class prevalences without storing models.</p>
 </dd></dl>
 
@@ -581,12 +575,6 @@ contained subobjects that are estimators.</p>
 </dl>
 </dd>
 </dl>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="mlquantify.multiclass.BinaryQuantifier.predict">
-<span class="sig-name descname"><span class="pre">predict</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/luizfernandolj/mlquantify/tree/master/mlquantify/multiclass.py#L103-L106"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mlquantify.multiclass.BinaryQuantifier.predict" title="Link to this definition">#</a></dt>
-<dd><p>Predict class prevalences for the given data.</p>
 </dd></dl>
 
 <dl class="py method">
@@ -676,11 +664,9 @@ possible to update each component of a nested object.</p>
     
 <ul class="visible nav section-nav flex-column">
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#mlquantify.multiclass.BinaryQuantifier"><code class="docutils literal notranslate"><span class="pre">BinaryQuantifier</span></code></a><ul class="nav section-nav flex-column visible">
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#mlquantify.multiclass.BinaryQuantifier.fit"><code class="docutils literal notranslate"><span class="pre">fit</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#mlquantify.multiclass.BinaryQuantifier.fit_predict"><code class="docutils literal notranslate"><span class="pre">fit_predict</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#mlquantify.multiclass.BinaryQuantifier.get_metadata_routing"><code class="docutils literal notranslate"><span class="pre">get_metadata_routing</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#mlquantify.multiclass.BinaryQuantifier.get_params"><code class="docutils literal notranslate"><span class="pre">get_params</span></code></a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#mlquantify.multiclass.BinaryQuantifier.predict"><code class="docutils literal notranslate"><span class="pre">predict</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#mlquantify.multiclass.BinaryQuantifier.save_quantifier"><code class="docutils literal notranslate"><span class="pre">save_quantifier</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#mlquantify.multiclass.BinaryQuantifier.set_params"><code class="docutils literal notranslate"><span class="pre">set_params</span></code></a></li>
 </ul>
