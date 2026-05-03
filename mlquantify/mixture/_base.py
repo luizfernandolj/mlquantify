@@ -3,11 +3,10 @@ from abc import abstractmethod
 
 from mlquantify.base import BaseQuantifier
 
-from mlquantify.mixture._utils import sqEuclidean
 from mlquantify.utils._decorators import _fit_context
 from mlquantify.utils._validation import validate_y, validate_data
 from mlquantify.multiclass import define_binary
-from mlquantify.mixture._utils import (
+from mlquantify.metrics import (
     hellinger,
     topsoe,
     probsymm,

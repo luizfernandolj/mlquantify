@@ -156,6 +156,18 @@ API_REFERENCE = {
             }
         ],
     },
+    "mlquantify.compose": {
+        "short_summary": "Composable quantification methods.",
+        "description": None,
+        "sections": [
+            {
+                "title": "Composable Methods",
+                "autosummary": [
+                    "ComposeQuantifier",
+                ],
+            }
+        ],
+    },
     "mlquantify.meta": {
         "short_summary": "Meta methods for quantification.",
         "description": None,

@@ -9,7 +9,8 @@ from sklearn.model_selection import GridSearchCV, cross_val_predict, train_test_
 from mlquantify.base import BaseQuantifier, MetaquantifierMixin
 from mlquantify.metrics._slq import MSE
 from mlquantify.mixture._classes import SORD, DyS
-from mlquantify.mixture._utils import getHist, hellinger
+from mlquantify.mixture._utils import getHist
+from mlquantify.metrics import hellinger
 from mlquantify.utils import Options, Interval
 from mlquantify.utils import _fit_context
 from mlquantify.confidence import (
