@@ -20,6 +20,7 @@ reference on concepts repeated across the API, see :ref:`glossary`.
   mlquantify.adjust_counting
   mlquantify.base
   mlquantify.base_aggregative
+  mlquantify.compose
   mlquantify.confidence
   mlquantify.likelihood
   mlquantify.meta
@@ -451,6 +452,26 @@ reference on concepts repeated across the API, see :ref:`glossary`.
         .. div:: caption
 
           :mod:`mlquantify.base_aggregative`
+
+
+
+
+
+
+
+
+
+  * - :obj:`~mlquantify.compose.ComposeQuantifier`
+
+    - .. div:: sk-apisearch-desc
+
+        .. currentmodule:: mlquantify.compose
+
+        .. autoshortsummary:: mlquantify.compose.ComposeQuantifier
+
+        .. div:: caption
+
+          :mod:`mlquantify.compose`
 
 
 
