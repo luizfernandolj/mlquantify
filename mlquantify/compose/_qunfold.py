@@ -149,15 +149,14 @@ class ComposeQuantifier(BaseQuantifier):
         self.solver = solver
         self.seed = seed
 
-    def fit(self, X, y):
+    def fit(self, X, y, **fit_kwargs):
         from qunfold import LinearMethod
-
-        self.classes_ = np.unique(y)
 
         rep = self._adapt_representation(self.representation)
         loss = self._adapt_loss(self.loss)
 
-        kwargs = {"seed": self.seed}
+        kwargs = fit_kwargs.copy()
+        kwargs["seed"] = self.seed
 
         if self.solver is not None:
             kwargs["solver"] = self.solver
@@ -169,8 +168,25 @@ class ComposeQuantifier(BaseQuantifier):
         return self
 
     def predict(self, X):
-        prevalences = self.method_.predict(X)
-        return prevalences
+        representation = self.method_.representation
+
+        q = representation.transform(X)
+        M = self.method_.M
+        return self.method_.solve(q, M, N=self._n_samples(X))
+
+    def _n_samples(self, X):
+        if hasattr(X, "shape"):
+            return X.shape[0]
+
+        if isinstance(X, dict):
+            for key in ("features", "scores", "X", "timestamps", "T", "t"):
+                if key in X and X[key] is not None:
+                    return len(X[key])
+
+        if isinstance(X, (tuple, list)) and len(X) == 2:
+            return len(X[1])
+
+        return len(X)
 
     # --------------------------
     # ADAPTERS
