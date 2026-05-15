@@ -107,7 +107,7 @@ class MetaquantifierMixin:
     Examples
     --------
     >>> from mlquantify.base import BaseQuantifier, MetaquantifierMixin
-    >>> from mlquantify.adjust_counting import CC
+    >>> from mlquantify.counting import CC
     >>> class MyMetaQuantifier(MetaquantifierMixin, BaseQuantifier):
     ...     def __init__(self, quantifier=None):
     ...         self.quantifier = quantifier
@@ -124,7 +124,7 @@ class MetaquantifierMixin:
     CC()
     """
     ...
-    
+
 
 class ProtocolMixin:
     """Mixin class for protocol-based quantifiers.

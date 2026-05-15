@@ -1,6 +1,13 @@
 import numpy as np
 
 from mlquantify.base import BaseQuantifier
+from mlquantify.base_aggregative import AggregationMixin
+from mlquantify.utils._decorators import _fit_context
+from mlquantify.utils._validation import (
+    check_is_fitted,
+    validate_data,
+    validate_prevalences,
+)
 
 
 class ComposeQuantifier(BaseQuantifier):
@@ -62,6 +69,10 @@ class ComposeQuantifier(BaseQuantifier):
         Solver used for the constrained optimization problem. If not provided,
         the default solver from `qunfold` is used.
 
+    solver_options : dict, optional
+        Options passed to the backend optimization solver. If not provided,
+        `qunfold` uses its own defaults.
+
     seed : int, optional
         Random seed used by the `qunfold` backend for reproducible optimization.
 
@@ -89,9 +100,11 @@ class ComposeQuantifier(BaseQuantifier):
 
     >>> from sklearn.linear_model import LogisticRegression
     >>> from qunfold.sklearn import CVClassifier
-    >>> from qunfold.methods.linear.losses import LeastSquaresLoss
-    >>> from qunfold.methods.linear.representations import ClassRepresentation
-    >>> from mlquantify.compose import ComposeQuantifier
+    >>> from mlquantify.compose import (
+    ...     ClassRepresentation,
+    ...     ComposeQuantifier,
+    ...     LeastSquaresLoss,
+    ... )
     >>>
     >>> learner = LogisticRegression(max_iter=1000)
     >>> quantifier = ComposeQuantifier(
@@ -142,37 +155,55 @@ class ComposeQuantifier(BaseQuantifier):
         representation,
         loss,
         solver=None,
+        solver_options=None,
         seed=None,
     ):
         self.representation = representation
         self.loss = loss
         self.solver = solver
+        self.solver_options = solver_options
         self.seed = seed
 
-    def fit(self, X, y, **fit_kwargs):
+    @_fit_context(prefer_skip_nested_validation=True)
+    def fit(self, X, y, sample_weight=None, n_classes=None):
         from qunfold import LinearMethod
+
+        X, y = validate_data(self, X, y)
+        self.classes_, y_encoded = np.unique(y, return_inverse=True)
+        n_classes = n_classes or len(self.classes_)
 
         rep = self._adapt_representation(self.representation)
         loss = self._adapt_loss(self.loss)
 
-        kwargs = fit_kwargs.copy()
-        kwargs["seed"] = self.seed
-
+        kwargs = {}
         if self.solver is not None:
             kwargs["solver"] = self.solver
+        if self.solver_options is not None:
+            kwargs["solver_options"] = self.solver_options
+        if self.seed is not None:
+            kwargs["seed"] = self.seed
 
         self.method_ = LinearMethod(loss, rep, **kwargs)
+        self.method_.M = rep.fit_transform(
+            X,
+            y_encoded,
+            sample_weight=sample_weight,
+            n_classes=n_classes,
+        )
 
-        self.method_.fit(X, y)
-
+        self.is_fitted_ = True
         return self
 
     def predict(self, X):
+        check_is_fitted(self)
+        X = validate_data(self, X)
+
         representation = self.method_.representation
 
         q = representation.transform(X)
         M = self.method_.M
-        return self.method_.solve(q, M, N=self._n_samples(X))
+        prevalences = self.method_.solve(q, M, N=self._n_samples(X))
+        return validate_prevalences(self, prevalences, self.classes_)
 
     def _n_samples(self, X):
         if hasattr(X, "shape"):
@@ -213,6 +244,113 @@ class ComposeQuantifier(BaseQuantifier):
             return loss  # assume qunfold loss
 
         return _LossAdapter(loss)
+
+
+class _QUnfoldClassifyAndCount(AggregationMixin, ComposeQuantifier):
+    """Base class for QUnfold classify-and-count methods in mlquantify style."""
+
+    is_probabilistic = False
+
+    def __init__(
+        self,
+        learner=None,
+        solver="trust-ncg",
+        solver_options=None,
+        seed=None,
+    ):
+        self.learner = learner
+        self.solver = solver
+        self.solver_options = solver_options
+        self.seed = seed
+
+    def __mlquantify_tags__(self):
+        tags = super().__mlquantify_tags__()
+        tags.has_estimator = True
+        tags.estimator_function = "predict_proba"
+        tags.estimator_type = "soft" if self.is_probabilistic else "crisp"
+        tags.prediction_requirements.requires_train_proba = True
+        tags.prediction_requirements.requires_train_labels = True
+        return tags
+
+    @_fit_context(prefer_skip_nested_validation=True)
+    def fit(
+        self,
+        X,
+        y,
+        learner_fitted=False,
+        cv=5,
+        random_state=None,
+        sample_weight=None,
+        n_classes=None,
+    ):
+        self.representation = self._make_representation(
+            learner_fitted=learner_fitted,
+            cv=cv,
+            random_state=random_state,
+        )
+        self.loss = self._make_loss()
+
+        return ComposeQuantifier.fit(
+            self,
+            X,
+            y,
+            sample_weight=sample_weight,
+            n_classes=n_classes,
+        )
+
+    def _make_loss(self):
+        from mlquantify.compose._losses import LeastSquaresLoss
+
+        return LeastSquaresLoss()
+
+    def _make_representation(self, learner_fitted, cv, random_state):
+        from mlquantify.compose.representations import ClassRepresentation
+
+        return ClassRepresentation(
+            self._make_classifier(cv=cv, random_state=random_state),
+            is_probabilistic=self.is_probabilistic,
+            fit_classifier=not learner_fitted,
+        )
+
+    def _make_classifier(self, cv, random_state):
+        if hasattr(self.learner, "oob_score") and self.learner.oob_score:
+            return self.learner
+
+        from qunfold.sklearn import CVClassifier
+
+        return CVClassifier(
+            self.learner,
+            n_estimators=cv,
+            random_state=random_state,
+        )
+
+
+class ACC(_QUnfoldClassifyAndCount):
+    r"""Adjusted Classify and Count using the QUnfold linear formulation.
+
+    This class mirrors :class:`qunfold.ACC` while exposing the usual
+    ``mlquantify`` estimator parameter name, ``learner``.
+    """
+
+    is_probabilistic = False
+
+
+class PACC(_QUnfoldClassifyAndCount):
+    r"""Probabilistic Adjusted Classify and Count using QUnfold.
+
+    This class mirrors :class:`qunfold.PACC` while exposing the usual
+    ``mlquantify`` estimator parameter name, ``learner``.
+    """
+
+    is_probabilistic = True
+
+
+class AC(ACC):
+    r"""Alias-style mlquantify name for :class:`ACC`."""
+
+
+class PAC(PACC):
+    r"""Alias-style mlquantify name for :class:`PACC`."""
 
 
 # --------------------------

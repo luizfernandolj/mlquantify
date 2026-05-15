@@ -3,8 +3,9 @@
 from . import neighbors
 from . import likelihood
 from . import mixture
+from . import matching
 from . import meta
-from . import adjust_counting
+from . import counting
 from . import model_selection
 from . import base_aggregative
 from . import base
@@ -22,8 +23,9 @@ __all__ = [
     "neighbors",
     "likelihood",
     "mixture",
+    "matching",
     "meta",
-    "adjust_counting",
+    "counting",
     "model_selection",
     "base_aggregative",
     "base",

@@ -5,7 +5,6 @@ from mlquantify.base import BaseQuantifier
 
 from mlquantify.utils._decorators import _fit_context
 from mlquantify.utils._validation import validate_y, validate_data
-from mlquantify.multiclass import define_binary
 from mlquantify.metrics import (
     hellinger,
     topsoe,
@@ -40,8 +39,6 @@ class BaseMixture(BaseQuantifier):
     The DyS framework [3]_ generalizes mixture models by introducing 
     a variety of distribution dissimilarity measures, enabling flexible and effective 
     quantification methods.
-    
-    
     Notes
     -----
     Mixture models are defined for only binary quantification problems. For multi-class
@@ -142,4 +139,3 @@ class BaseMixture(BaseQuantifier):
             return sqEuclidean(dist_train, dist_test)
         else:
             raise ValueError(f"Invalid measure: {measure}")
-    

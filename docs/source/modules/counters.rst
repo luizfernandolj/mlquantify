@@ -1,6 +1,6 @@
 .. _counters_module:
 
-.. currentmodule:: mlquantify.adjust_counting
+.. currentmodule:: mlquantify.counting
 
 
 ===========================
@@ -21,7 +21,7 @@ It trains a hard classifier :math:`h` on labeled data :math:`L` , applies it to 
 
 .. code-block:: python
 
-   from mlquantify.adjust_counting import CC
+   from mlquantify.counting import CC
    from sklearn.linear_model import LogisticRegression
    import numpy as np
 
@@ -49,7 +49,7 @@ This makes it less sensitive to uncertain predictions.
 
 .. code-block:: python
 
-   from mlquantify.adjust_counting import PCC
+   from mlquantify.counting import PCC
    from sklearn.linear_model import LogisticRegression
    import numpy as np
 

@@ -29,7 +29,7 @@ hypothetical levels of class separability [1]_.
 The method evaluates several merging factors :math:`m` that control synthetic
 separability and selects the one producing the closest match to the test-score
 distribution.  
-The chosen synthetic model is then passed to an aggregative quantifier (e.g., :class:`ACC`,
+The chosen synthetic model is then passed to an aggregative quantifier (e.g., :class:`AC`,
 :class:`T50`, :class:`DyS`, :class:`SORD`.) to compute final prevalence estimates.
 
 This makes QuaDapt a **meta-quantifier** capable of adapting to score drift without
@@ -66,11 +66,11 @@ relying on static training distributions.
 .. code-block:: python
 
    from mlquantify.meta import QuaDapt
-   from mlquantify.adjust_counting import ACC
+   from mlquantify.counting import AC
    from sklearn.ensemble import RandomForestClassifier
 
    q = QuaDapt(
-       quantifier=ACC(RandomForestClassifier()),
+       quantifier=AC(RandomForestClassifier()),
        merging_factors=[0.1, 0.5, 1.0],
        measure="topsoe"
    )

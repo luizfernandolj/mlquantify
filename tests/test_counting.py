@@ -3,7 +3,7 @@ import pytest
 import numpy as np
 import pandas as pd
 from sklearn.linear_model import LogisticRegression
-from mlquantify.adjust_counting import CC, PCC, AC, PAC, TAC, TX, TMAX, FM, CDE
+from mlquantify.counting import CC, PCC, AC, PAC, TAC, TX, TMAX, FM, CDE
 from mlquantify.utils._exceptions import InvalidParameterError
 from mlquantify._config import config_context
 

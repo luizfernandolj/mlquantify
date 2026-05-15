@@ -31,7 +31,7 @@ from mlquantify.utils import get_prev_from_labels
 from mlquantify.utils._constraints import Interval, Options
 from mlquantify.utils import _fit_context
 
-from mlquantify.adjust_counting import CC, AC, PCC, PAC
+from mlquantify.counting import CC, AC, PCC, PAC
 from mlquantify.likelihood import EMQ
 
 EPS = 1e-12

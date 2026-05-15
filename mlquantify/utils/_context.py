@@ -1,13 +1,13 @@
 import contextlib
 import threading
 
-# Thread-local flag para suportar execuções paralelas
+# Thread-local flag to support parallel executions
 _validation_context = threading.local()
 
 
 @contextlib.contextmanager
 def validation_context(skip: bool = False):
-    """Context manager para controlar se a validação deve ser ignorada."""
+    """Context manager to control whether validation should be skipped."""
     old_state = getattr(_validation_context, "skip_validation", False)
     _validation_context.skip_validation = skip
     try:
@@ -17,5 +17,5 @@ def validation_context(skip: bool = False):
 
 
 def is_validation_skipped():
-    """Verifica se a validação está desativada no contexto atual."""
+    """Check whether validation is disabled in the current context."""
     return getattr(_validation_context, "skip_validation", False)

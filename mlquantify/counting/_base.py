@@ -278,7 +278,7 @@ class BaseAdjustCount(AggregationMixin, BaseQuantifier):
 
         Examples
         --------
-        >>> from mlquantify.adjust_counting import AC
+        >>> from mlquantify.counting import AC
         >>> import numpy as np
         >>> q = AC()
         >>> predictions = np.random.rand(200)

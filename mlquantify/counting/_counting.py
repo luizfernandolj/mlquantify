@@ -5,7 +5,7 @@ from mlquantify.base_aggregative import (
     CrispLearnerQMixin
 )
 
-from mlquantify.adjust_counting._base import BaseCount
+from mlquantify.counting._base import BaseCount
 from mlquantify.utils._validation import validate_predictions, validate_prevalences, check_classes_attribute
 from mlquantify.utils._constraints import Interval
         
@@ -42,7 +42,7 @@ class CC(CrispLearnerQMixin, BaseCount):
 
     Examples
     --------
-    >>> from mlquantify.adjust_counting import CC
+    >>> from mlquantify.counting import CC
     >>> import numpy as np
     >>> from sklearn.linear_model import LogisticRegression
     >>> X = np.random.randn(100, 5)
@@ -90,7 +90,7 @@ class CC(CrispLearnerQMixin, BaseCount):
 
         Examples
         --------
-        >>> from mlquantify.adjust_counting import CC
+        >>> from mlquantify.counting import CC
         >>> import numpy as np
         >>> q = CC()
         >>> predictions = np.random.rand(200)
@@ -138,7 +138,7 @@ class PCC(SoftLearnerQMixin, BaseCount):
         
     Examples
     --------
-    >>> from mlquantify.adjust_counting import PCC
+    >>> from mlquantify.counting import PCC
     >>> import numpy as np
     >>> from sklearn.linear_model import LogisticRegression
     >>> X = np.random.randn(100, 5)
@@ -169,7 +169,7 @@ class PCC(SoftLearnerQMixin, BaseCount):
 
         Examples
         --------
-        >>> from mlquantify.adjust_counting import PCC
+        >>> from mlquantify.counting import PCC
         >>> import numpy as np
         >>> q = PCC()
         >>> predictions = np.random.rand(200, 2)

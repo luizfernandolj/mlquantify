@@ -4,8 +4,8 @@ from contextlib import contextmanager as contextmanager
 
 
 _global_config = {
-    "prevalence_return_type": "dict",
-    "prevalence_normalization": "mean",
+    "prevalence_return_type": "array",
+    "prevalence_normalization": "sum",
 }
 _threadlocal = threading.local()
 
@@ -55,7 +55,7 @@ def set_config(
         The format of the returned prevalence estimates:
         - 'dict': Returns a dictionary mapping class labels to values.
         - 'array': Returns a numpy array of values.
-        Global default: 'dict'.
+        Global default: 'array'.
 
     prevalence_normalization : {'sum', 'l1', 'softmax', 'mean', 'median', None}, default=None
         The strategy for normalizing or aggregating prevalence estimates:
@@ -64,7 +64,7 @@ def set_config(
         - 'mean': Takes the arithmetic mean of multiple estimates.
         - 'median': Takes the median of multiple estimates.
         - None: No normalization or aggregation is performed.
-        Global default: 'mean'.
+        Global default: 'sum'.
 
     See Also
     --------
@@ -100,7 +100,7 @@ def config_context(
         If 'dict', validate_prevalences returns a dictionary.
         If 'array', validate_prevalences returns a numpy array.
         If None, the existing configuration won't change.
-        Global default: 'dict'.
+        Global default: 'array'.
 
     prevalence_normalization : {'sum', 'l1', 'softmax', 'mean', 'median', None}, default=None
         Default normalization or aggregation strategy for validate_prevalences.

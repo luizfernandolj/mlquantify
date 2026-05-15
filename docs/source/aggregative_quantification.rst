@@ -19,7 +19,7 @@ The main aggregative quantification methods will be defined next, with details a
 
    modules/using_aggregative.rst
    modules/counters.rst
-   modules/adjust_counting.rst
+   modules/counting.rst
    modules/likelihood.rst
    modules/mixture_models.rst
    modules/neighbors.rst

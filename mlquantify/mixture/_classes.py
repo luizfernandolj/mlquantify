@@ -6,7 +6,7 @@ from scipy.optimize import minimize
 from mlquantify.base import BaseQuantifier
 from mlquantify.base_aggregative import AggregationMixin, SoftLearnerQMixin, _get_learner_function
 from mlquantify.mixture._base import BaseMixture
-from mlquantify.multiclass import define_binary
+from mlquantify.multiclass import binary_quantifier
 from mlquantify.utils._constraints import Interval, Options
 from mlquantify.utils._decorators import _fit_context
 from mlquantify.utils._get_scores import apply_cross_validation
@@ -21,7 +21,7 @@ from mlquantify.mixture._utils import (
 # =====================================================
 # Base class
 # =====================================================
-@define_binary
+@binary_quantifier(strategy_attr="strategy")
 class AggregativeMixture(SoftLearnerQMixin, AggregationMixin, BaseMixture):
     r"""Base class for Mixture-based Quantification Methods.
 
@@ -392,7 +392,7 @@ class SORD(AggregativeMixture):
 # =====================================================
 # Non aggregative Mixture-based Quantifiers
 # =====================================================
-@define_binary
+@binary_quantifier(strategy_attr="strategy")
 class HDx(BaseMixture):
     """
     Hellinger Distance-based Quantifier (HDx).

@@ -28,7 +28,7 @@ Most quantifiers in ``mlquantify`` behave like scikit-learn estimators. They imp
 .. code-block:: python
 
     from sklearn.linear_model import LogisticRegression
-    from mlquantify.adjust_counting import CC  # Classify & Count
+    from mlquantify.counting import CC  # Classify & Count
 
     # 1. Initialize a base classifier
     estimator = LogisticRegression()
@@ -82,7 +82,7 @@ Fitting a model to some data does not entail that it will predict well on unseen
 
     from sklearn.datasets import make_classification
     from sklearn.model_selection import train_test_split
-    from mlquantify.adjust_counting import CC
+    from mlquantify.counting import CC
     from mlquantify.metrics import MAE
     from sklearn.linear_model import LogisticRegression
 

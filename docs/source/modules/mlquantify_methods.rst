@@ -15,66 +15,66 @@ The table below lists all the quantification methods available in the ``mlquanti
      - Multiclass
      - Type
      - Module
-   * - :class:`~mlquantify.adjust_counting.CC`
+   * - :class:`~mlquantify.counting.CC`
      - `Forman (2005) <https://link.springer.com/chapter/10.1007/11564096_55>`_
      - Yes
      - Aggregative
-     - :mod:`~mlquantify.adjust_counting`
-   * - :class:`~mlquantify.adjust_counting.PCC`
+     - :mod:`~mlquantify.counting`
+   * - :class:`~mlquantify.counting.PCC`
      - `Bella et al. (2010) <https://ieeexplore.ieee.org/document/5694031>`_
      - Yes
      - Aggregative
-     - :mod:`~mlquantify.adjust_counting`
-   * - :class:`~mlquantify.adjust_counting.AC`
+     - :mod:`~mlquantify.counting`
+   * - :class:`~mlquantify.counting.AC`
      - `Firat (2016) <https://arxiv.org/abs/1606.00868>`_
      - Yes
      - Aggregative
-     - :mod:`~mlquantify.adjust_counting`
-   * - :class:`~mlquantify.adjust_counting.PAC`
+     - :mod:`~mlquantify.counting`
+   * - :class:`~mlquantify.counting.PAC`
      - `Firat (2016) <https://arxiv.org/abs/1606.00868>`_
      - Yes
      - Aggregative
-     - :mod:`~mlquantify.adjust_counting`
-   * - :class:`~mlquantify.adjust_counting.TAC`
+     - :mod:`~mlquantify.counting`
+   * - :class:`~mlquantify.counting.TAC`
      - `Forman (2005) <https://link.springer.com/chapter/10.1007/11564096_55>`_
      - No
      - Aggregative
-     - :mod:`~mlquantify.adjust_counting`
-   * - :class:`~mlquantify.adjust_counting.TX`
+     - :mod:`~mlquantify.counting`
+   * - :class:`~mlquantify.counting.TX`
      - `Forman (2005) <https://link.springer.com/chapter/10.1007/11564096_55>`_
      - No
      - Aggregative
-     - :mod:`~mlquantify.adjust_counting`
-   * - :class:`~mlquantify.adjust_counting.TMAX`
+     - :mod:`~mlquantify.counting`
+   * - :class:`~mlquantify.counting.TMAX`
      - `Forman (2005) <https://link.springer.com/chapter/10.1007/11564096_55>`_
      - No
      - Aggregative
-     - :mod:`~mlquantify.adjust_counting`
-   * - :class:`~mlquantify.adjust_counting.T50`
+     - :mod:`~mlquantify.counting`
+   * - :class:`~mlquantify.counting.T50`
      - `Forman (2005) <https://link.springer.com/chapter/10.1007/11564096_55>`_
      - No
      - Aggregative
-     - :mod:`~mlquantify.adjust_counting`
-   * - :class:`~mlquantify.adjust_counting.MS`
+     - :mod:`~mlquantify.counting`
+   * - :class:`~mlquantify.counting.MS`
      - `Forman (2006) <https://link.springer.com/article/10.1007/s10618-008-0097-y>`_
      - No
      - Aggregative
-     - :mod:`~mlquantify.adjust_counting`
-   * - :class:`~mlquantify.adjust_counting.MS2`
+     - :mod:`~mlquantify.counting`
+   * - :class:`~mlquantify.counting.MS2`
      - `Forman (2006) <https://link.springer.com/article/10.1007/s10618-008-0097-y>`_
      - No
      - Aggregative
-     - :mod:`~mlquantify.adjust_counting`
-   * - :class:`~mlquantify.adjust_counting.FM`
+     - :mod:`~mlquantify.counting`
+   * - :class:`~mlquantify.counting.FM`
      - `Friedman et al. (2015) <https://jerryfriedman.su.domains/talks/qc.pdf>`_
      - Yes
      - Aggregative
-     - :mod:`~mlquantify.adjust_counting`
-   * - :class:`~mlquantify.adjust_counting.CDE`
+     - :mod:`~mlquantify.counting`
+   * - :class:`~mlquantify.counting.CDE`
      - `Xue & Weiss (2009) <https://dl.acm.org/doi/abs/10.1145/1557019.1557117>`_
      - No
      - Aggregative
-     - :mod:`~mlquantify.adjust_counting`
+     - :mod:`~mlquantify.counting`
    * - :class:`~mlquantify.likelihood.EMQ`
      - `Saerens et al. (2002) <https://ieeexplore.ieee.org/abstract/document/6789744>`_
      - Yes

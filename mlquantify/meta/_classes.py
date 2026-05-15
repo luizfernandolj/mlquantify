@@ -17,7 +17,7 @@ from mlquantify.confidence import (
     construct_confidence_region
 )
 from mlquantify.base_aggregative import (
-    _get_learner_function, 
+    _get_learner_function,
     is_aggregative_quantifier,
     get_aggregation_requirements,
     uses_soft_predictions
@@ -30,13 +30,13 @@ from mlquantify.utils._validation import validate_data, validate_prevalences
 from mlquantify.utils.prevalence import get_prev_from_labels
 from mlquantify.utils import check_random_state
 from mlquantify._config import config_context
-from mlquantify.multiclass import define_binary
+from mlquantify.multiclass import binary_quantifier
 
 
 
 def get_protocol_sampler(protocol_name, batch_size, n_prevalences, min_prev, max_prev, n_classes):
     r""" Returns a prevalence sampler function based on the specified protocol name.
-    
+
     Parameters
     ----------
     protocol_name : str
@@ -51,13 +51,13 @@ def get_protocol_sampler(protocol_name, batch_size, n_prevalences, min_prev, max
         The maximum prevalence value.
     n_classes : int
         The number of classes.
-        
+
     Returns
     -------
     callable
         A function that generates prevalence samples according to the specified protocol.
     """
-    
+
     if protocol_name == 'artificial':
         protocol = APP(batch_size=batch_size,
                            n_prevalences=n_prevalences,
@@ -85,12 +85,12 @@ def get_protocol_sampler(protocol_name, batch_size, n_prevalences, min_prev, max
     return protocol
 
 class EnsembleQ(MetaquantifierMixin, BaseQuantifier):
-    r"""Ensemble-based Quantifier combining multiple models trained on varied data samples 
+    r"""Ensemble-based Quantifier combining multiple models trained on varied data samples
     with controlled prevalence distributions to improve robustness and accuracy.
 
-    This quantifier constructs an ensemble of quantification models using batches of training 
-    data sampled according to an evaluation protocol (e.g. 'artificial', 'natural', 'uniform', 'kraemer') 
-    with specified prevalence constraints. Diverse models are trained on these subsamples, 
+    This quantifier constructs an ensemble of quantification models using batches of training
+    data sampled according to an evaluation protocol (e.g. 'artificial', 'natural', 'uniform', 'kraemer')
+    with specified prevalence constraints. Diverse models are trained on these subsamples,
     and their prevalence estimates aggregated using various selection metrics and aggregation methods.
 
     Parameters
@@ -146,22 +146,22 @@ class EnsembleQ(MetaquantifierMixin, BaseQuantifier):
     >>> from sklearn.ensemble import RandomForestClassifier
     >>>
     >>> ensemble = EnsembleQ(
-    ...     quantifier=DyS(RandomForestClassifier()), 
-    ...     size=30, 
-    ...     protocol='artificial', # APP protocol 
+    ...     quantifier=DyS(RandomForestClassifier()),
+    ...     size=30,
+    ...     protocol='artificial', # APP protocol
     ...     selection_metric='ptr'
     ... )
     >>> ensemble.fit(X_train, y_train)
     >>> prevalence_estimates = ensemble.predict(X_test)
-    
+
     References
     ----------
     .. [1] Pérez-Gállego, P., Castaño, A., Ramón Quevedo, J., & José del Coz, J. (2019). Dynamic ensemble selection for quantification tasks. Information Fusion, 45, 1-15. https://doi.org/10.1016/j.inffus.2018.01.001
 
     .. [2] Pérez-Gállego, P., Quevedo, J. R., & del Coz, J. J. (2017). Using ensembles for problems with characterizable changes in data distribution: A case study on quantification. Information Fusion, 34, 87-100. https://doi.org/10.1016/j.inffus.2016.07.001
 
-    """  
-      
+    """
+
     _parameter_constraints = {
         "quantifier": [BaseQuantifier],
         "size": [Interval(left=1, right=None, discrete=True)],
@@ -190,7 +190,7 @@ class EnsembleQ(MetaquantifierMixin, BaseQuantifier):
                  max_trials=100,
                  n_jobs=1,
                  verbose=False):
-        
+
         self.quantifier = quantifier
         self.size = size
         self.min_prop = min_prop
@@ -212,40 +212,40 @@ class EnsembleQ(MetaquantifierMixin, BaseQuantifier):
     @_fit_context(prefer_skip_nested_validation=True)
     def fit(self, X, y):
         """ Fits the ensemble model to the given training data.
-        
+
         Parameters
         ----------
         X : array-like of shape (n_samples, n_features)
             The input data.
         y : array-like of shape (n_samples,)
             The target values.
-            
+
         Returns
         -------
         self : Ensemble
             The fitted ensemble model.
         """
         self.sout('Fit')
-        
+
         self.models = []
         self.train_prevalences = []
         self.train_distributions = []
         self.posteriors_generator = []
-        
+
         self.classes = np.unique(y)
         X, y = validate_data(self, X, y)
-        
+
         if self.selection_metric == 'ds' and not len(self.classes) == 2:
             raise ValueError(f'ds selection_metric is only defined for binary quantification, but this dataset is not binary')
         # randomly chooses the prevalences for each member of the ensemble (preventing classes with less than
         # min_pos positive examples)
         sample_size = len(y) if self.max_sample_size is None else min(self.max_sample_size, len(y))
-        
+
         protocol = get_protocol_sampler(
             protocol_name=self.protocol,
-            batch_size=sample_size, 
-            n_prevalences=self.size, 
-            min_prev=self.min_prop, 
+            batch_size=sample_size,
+            n_prevalences=self.size,
+            min_prev=self.min_prop,
             max_prev=self.max_prop,
             n_classes=len(self.classes)
         )
@@ -254,17 +254,17 @@ class EnsembleQ(MetaquantifierMixin, BaseQuantifier):
         if self.selection_metric == 'ds':
             # precompute the training posterior probabilities
             posteriors, self.posteriors_generator = self.ds_get_posteriors(X, y)
-            
+
         for idx in protocol.split(X, y):
             X_batch, y_batch = X[idx], y[idx]
             model = deepcopy(self.quantifier)
-            
+
             model.fit(X_batch, y_batch)
             tr_prev = get_prev_from_labels(y_batch)
-            
+
             if self.selection_metric == 'ds':
                 self.train_distributions.append(getHist(posteriors[idx], 8))
-            
+
             self.train_prevalences.append(tr_prev)
             self.models.append(model)
 
@@ -273,21 +273,21 @@ class EnsembleQ(MetaquantifierMixin, BaseQuantifier):
 
     def predict(self, X):
         """ Predicts the class prevalences for the given test data.
-        
+
         Parameters
         ----------
         X : array-like of shape (n_samples, n_features)
             The input data.
-        
+
         Returns
         -------
         prevalences : array-like of shape (n_samples, n_classes)
             The predicted class prevalences.
         """
         self.sout('Predict')
-        
+
         test_prevalences = []
-        
+
         for model in tqdm(self.models, disable=not self.verbose):
             with config_context(prevalence_return_type="array"):
                 pred = np.asarray(model.predict(X))
@@ -302,23 +302,23 @@ class EnsembleQ(MetaquantifierMixin, BaseQuantifier):
                         aligned[idx] = pred[i]
                 pred = aligned
             test_prevalences.append(pred)
-        
+
         test_prevalences = np.asarray(test_prevalences)
 
         if self.selection_metric == 'ptr':
             test_prevalences = self.ptr_selection_metric(test_prevalences, self.train_prevalences)
         elif self.selection_metric == 'ds':
-            test_prevalences = self.ds_selection_metric(X, 
-                                                   test_prevalences, 
+            test_prevalences = self.ds_selection_metric(X,
+                                                   test_prevalences,
                                                    self.train_distributions,
                                                    self.posteriors_generator)
 
         if self.return_type == "median":
             prevalences = np.median(test_prevalences, axis=0)
-        else:      
+        else:
             prevalences = np.mean(test_prevalences, axis=0)
-            
-        
+
+
         self.sout('Predict [Done]')
         prevalences = validate_prevalences(self, prevalences, self.classes)
         return prevalences
@@ -345,26 +345,26 @@ class EnsembleQ(MetaquantifierMixin, BaseQuantifier):
         return _select_k(prevalences, order, k=self.p_metric)
 
     def ds_get_posteriors(self, X, y):
-        r""" 
+        r"""
         Generate posterior probabilities using cross-validated logistic regression.
         This method computes posterior probabilities for the training data via cross-validation,
         using a logistic regression classifier with hyperparameters optimized through grid search.
         It also returns a function to generate posterior probabilities for new data.
-        
+
         Parameters
         ----------
         X : array-like of shape (n_samples, n_features)
             The feature matrix representing the training data.
         y : array-like of shape (n_samples,)
             The target vector representing class labels for the training data.
-            
+
         Returns
         -------
         posteriors : ndarray of shape (n_samples, n_classes)
             Posterior probabilities for the training data obtained through cross-validation.
         posteriors_generator : callable
             A function that computes posterior probabilities for new input data.
-            
+
         Notes
         -----
         - In scenarios where the quantifier is not based on a probabilistic classifier, it's necessary
@@ -392,14 +392,14 @@ class EnsembleQ(MetaquantifierMixin, BaseQuantifier):
         r"""
         Selects the prevalence estimates from models trained on samples whose distribution of posterior
         probabilities is most similar to the distribution of posterior probabilities for the test data.
-        
+
         Parameters
         ----------
         prevalences : numpy.ndarray
             An array of prevalence estimates provided by each model in the ensemble.
         test : array-like of shape (n_samples, n_features)
             The feature matrix representing the test data.
-        
+
         Returns
         -------
         numpy.ndarray
@@ -415,7 +415,7 @@ def _select_k(elements, order, k):
     r"""
     Selects the k elements from the list of elements based on the order.
     If the list is empty, it returns the original list.
-    
+
     Parameters
     ----------
     elements : array-like
@@ -424,7 +424,7 @@ def _select_k(elements, order, k):
         The order of the elements.
     k : int
         The number of elements to be selected.
-    
+
     Returns
     -------
     array-like
@@ -446,9 +446,9 @@ class AggregativeBootstrap(MetaquantifierMixin, BaseQuantifier):
     r"""
     Aggregative Bootstrap Quantifier to compute prevalence confidence regions.
 
-    This metaquantifier applies bootstrapping to both training and test data predictions 
-    to generate multiple bootstrap prevalence estimates. These bootstrapped estimates 
-    are used to construct confidence intervals or elliptical confidence regions for 
+    This metaquantifier applies bootstrapping to both training and test data predictions
+    to generate multiple bootstrap prevalence estimates. These bootstrapped estimates
+    are used to construct confidence intervals or elliptical confidence regions for
     prevalence predictions, improving uncertainty quantification.
 
     Parameters
@@ -473,8 +473,8 @@ class AggregativeBootstrap(MetaquantifierMixin, BaseQuantifier):
     >>> from mlquantify.neighbors import EMQ
     >>> from sklearn.ensemble import RandomForestClassifier
     >>> agg_boot = AggregativeBootstrap(
-    ...     quantifier=EMQ(RandomForestClassifier()), 
-    ...     n_train_bootstraps=100, 
+    ...     quantifier=EMQ(RandomForestClassifier()),
+    ...     n_train_bootstraps=100,
     ...     n_test_bootstraps=100
     ... )
     >>> agg_boot.fit(X_train, y_train)
@@ -490,9 +490,9 @@ class AggregativeBootstrap(MetaquantifierMixin, BaseQuantifier):
         "confidence_level": [Interval(left=0.0, right=1.0)],
     }
 
-    def __init__(self, 
-                 quantifier, 
-                 n_train_bootstraps=1, 
+    def __init__(self,
+                 quantifier,
+                 n_train_bootstraps=1,
                  n_test_bootstraps=1,
                  random_state=None,
                  region_type='intervals',
@@ -503,22 +503,22 @@ class AggregativeBootstrap(MetaquantifierMixin, BaseQuantifier):
         self.random_state = random_state
         self.region_type = region_type
         self.confidence_level = confidence_level
-        
+
     def fit(self, X, y, val_split=None):
         r""" Fits the aggregative bootstrap model to the given training data.
-        
+
         Parameters
         ----------
         X : array-like of shape (n_samples, n_features)
             The input data.
         y : array-like of shape (n_samples,)
             The target values.
-            
+
         Returns
         -------
         self : AggregativeBootstrap
             The fitted aggregative bootstrap model.
-            
+
         Raises
         ------
         ValueError
@@ -526,14 +526,14 @@ class AggregativeBootstrap(MetaquantifierMixin, BaseQuantifier):
         """
         X, y = validate_data(self, X, y)
         self.classes = np.unique(y)
-        
+
         if not is_aggregative_quantifier(self.quantifier):
             raise ValueError(f"The quantifier {self.quantifier.__class__.__name__} is not an aggregative quantifier.")
         self.quantifier_learner = deepcopy(self.quantifier)
-        
+
         learner_function = _get_learner_function(self.quantifier_learner)
         model = self.quantifier_learner.learner
-        
+
         if val_split is None:
             model.fit(X, y)
             y_train = y
@@ -545,17 +545,17 @@ class AggregativeBootstrap(MetaquantifierMixin, BaseQuantifier):
             train_predictions = getattr(model, learner_function)(X_val)
         self.train_predictions = train_predictions
         self.y_train = y_train
-        
+
         return self
-    
+
     def predict(self, X):
         r""" Predicts the class prevalences for the given test data.
-        
+
         Parameters
         ----------
         X : array-like of shape (n_samples, n_features)
             The input data.
-        
+
         Returns
         -------
         prevalences : array-like of shape (n_samples, n_classes)
@@ -564,7 +564,7 @@ class AggregativeBootstrap(MetaquantifierMixin, BaseQuantifier):
         X = validate_data(self, X, None)
         learner_function = _get_learner_function(self.quantifier_learner)
         model = self.quantifier_learner.learner
-        
+
         predictions = getattr(model, learner_function)(X)
 
         return self.aggregate(predictions, self.train_predictions, self.y_train)
@@ -572,7 +572,7 @@ class AggregativeBootstrap(MetaquantifierMixin, BaseQuantifier):
 
     def aggregate(self, predictions, train_predictions, y_train):
         r""" Aggregates the predictions using bootstrap resampling.
-        
+
         Parameters
         ----------
         predictions : array-like of shape (n_samples, n_classes)
@@ -581,16 +581,16 @@ class AggregativeBootstrap(MetaquantifierMixin, BaseQuantifier):
             The training predictions.
         y_train : array-like of shape (n_samples,)
             The training target values.
-            
+
         Returns
         -------
         prevalences : array-like of shape (n_samples, n_classes)
             The predicted class prevalences.
         """
         prevalences = []
-        
+
         self.classes = np.unique(y_train)
-        
+
         for train_idx in bootstrap_sample_indices(
             n_samples=len(train_predictions),
             n_bootstraps=self.n_train_bootstraps,
@@ -599,7 +599,7 @@ class AggregativeBootstrap(MetaquantifierMixin, BaseQuantifier):
         ):
             train_pred_boot = train_predictions[train_idx]
             train_y_boot = y_train[train_idx]
-            
+
             for test_idx in bootstrap_sample_indices(
                 n_samples=len(predictions),
                 n_bootstraps=self.n_test_bootstraps,
@@ -609,7 +609,7 @@ class AggregativeBootstrap(MetaquantifierMixin, BaseQuantifier):
                 test_pred_boot = predictions[test_idx]
 
                 requirements = get_aggregation_requirements(self.quantifier)
-                
+
                 with config_context(prevalence_return_type="array"):
                     if requirements.requires_train_proba and requirements.requires_train_labels:
                         prevalences_boot = self.quantifier.aggregate(test_pred_boot, train_pred_boot, train_y_boot)
@@ -627,20 +627,20 @@ class AggregativeBootstrap(MetaquantifierMixin, BaseQuantifier):
         )
 
         prevalence = confidence_region.get_point_estimate()
-        
+
         prevalence = validate_prevalences(self, prevalence, self.classes)
 
         return prevalence
 
 
 
-@define_binary
+@binary_quantifier(strategy_attr="strategy")
 class QuaDapt(MetaquantifierMixin, BaseQuantifier):
     r"""QuaDapt Metaquantifier: Adaptive quantification using synthetic scores.
 
-    This metaquantifier improves prevalence estimation by merging training samples 
-    with different score distributions using a merging factor :math: \( m \). It evaluates 
-    candidate merging factors, chooses the best by minimizing a distribution distance 
+    This metaquantifier improves prevalence estimation by merging training samples
+    with different score distributions using a merging factor :math: \( m \). It evaluates
+    candidate merging factors, chooses the best by minimizing a distribution distance
     metric (Hellinger, Topsoe, ProbSymm, or SORD), and aggregates quantification accordingly.
 
     Parameters
@@ -655,19 +655,19 @@ class QuaDapt(MetaquantifierMixin, BaseQuantifier):
     Examples
     --------
     >>> from mlquantify.meta import QuaDapt
-    >>> from mlquantify.adjust_counting import ACC
+    >>> from mlquantify.counting import AC
     >>> from sklearn.ensemble import RandomForestClassifier
     >>> quadapt_acc = QuaDapt(
-    ...     quantifier=ACC(RandomForestClassifier()), 
-    ...     merging_factor=[0.1, 0.5, 1.0], 
+    ...     quantifier=AC(RandomForestClassifier()),
+    ...     merging_factor=[0.1, 0.5, 1.0],
     ...     measure='sord'
     ... )
     >>> quadapt_acc.fit(X_train, y_train)
     >>> prevalence = quadapt_acc.predict(X_test)
-    
-    
+
+
     """
-    
+
     _parameter_constraints = {
         "quantifier": [BaseQuantifier],
         "merging_factors": ["array-like"],
@@ -680,61 +680,61 @@ class QuaDapt(MetaquantifierMixin, BaseQuantifier):
         tags.prediction_requirements.requires_train_proba = False
         tags.prediction_requirements.requires_train_labels = True
         return tags
-    
-    def __init__(self, 
+
+    def __init__(self,
                  quantifier,
-                 measure="topsoe", 
+                 measure="topsoe",
                  merging_factors=np.arange(0.1, 1.0, 0.2),
                  strategy="ovr"):
         self.quantifier = quantifier
         self.measure = measure
         self.merging_factors = merging_factors
         self.strategy = strategy
-        
-    
+
+
     def fit(self, X, y):
         X, y = validate_data(self, X, y)
         self.classes_ = np.unique(y)
-        
+
         if not uses_soft_predictions(self.quantifier):
             raise ValueError(f"The quantifier {self.quantifier.__class__.__name__} is not a soft (probabilistic) quantifier.")
-        
+
         self.quantifier.learner.fit(X, y)
         self.y_train = y
-        
+
         return self
-        
+
     def predict(self, X):
 
         X = validate_data(self, X, None)
-        
+
         model = self.quantifier.learner
-        
+
         predictions = getattr(model, "predict_proba")(X)
 
         return self.aggregate(predictions, self.y_train)
-    
-    
+
+
     def aggregate(self, predictions, y_train):
         self.classes_ = check_classes_attribute(self, np.unique(y_train))
         _, _, best_m = self.best_mixture(predictions)
-        
+
         moss_scores, moss_labels = self.MoSS(n=1000, alpha=0.5, merging_factor=best_m, classes=self.classes_)
 
         prevalences = self.quantifier.aggregate(predictions, moss_scores, moss_labels)
-        
+
         prevalences = validate_prevalences(self, prevalences, self.classes_)
         return prevalences
 
-        
+
     def best_mixture(self, predictions):
         predictions = predictions[:, 1]
-        
+
         MF = np.atleast_1d(np.round(self.merging_factors, 2)).astype(float)
-        
+
         distances = []
         alphas = []
-        
+
         for mf in MF:
             scores, labels = self.MoSS(n=1000, alpha=0.5, merging_factor=mf)
             pos_scores = scores[labels == self.classes_[1]][:, 1]
@@ -744,23 +744,23 @@ class QuaDapt(MetaquantifierMixin, BaseQuantifier):
                 method = DyS(measure=self.measure)
             elif self.measure == "sord":
                 method = SORD()
-            
+
             alpha, distance = method.best_mixture(predictions, pos_scores, neg_scores)
-            
+
             distances.append(distance)
             alphas.append(alpha)
-        
+
         best_m = MF[np.argmin(distances)]
         best_alpha = alphas[np.argmin(distances)]
         best_distance = np.min(distances)
         return best_alpha, best_distance, best_m
-    
+
     def get_best_distance(self, predictions):
-        
+
         _, distance, _= self.get_best_merging_factor(predictions)
 
         return distance
-        
+
 
     @classmethod
     def MoSS(cls, n, alpha, merging_factor, classes=None, random_state=None):
@@ -781,7 +781,7 @@ class QuaDapt(MetaquantifierMixin, BaseQuantifier):
             Tuple of score and label arrays.
 
         .. math::
-            
+
             \mathrm{moss}(n, \alpha, \mathfrak{m}) = \mathrm{syn}(\oplus, \lfloor \alpha n \rfloor, \mathfrak{m}) \cup \mathrm{syn}(\ominus , \lfloor (1 - \alpha) n \rfloor, \mathfrak{m})
 
         Notes
@@ -801,7 +801,7 @@ class QuaDapt(MetaquantifierMixin, BaseQuantifier):
         """
         if isinstance(alpha, list):
             alpha = float(alpha[1])
-            
+
         # Define os rótulos das classes
         if classes is None:
             neg_label, pos_label = 0, 1
@@ -834,4 +834,3 @@ class QuaDapt(MetaquantifierMixin, BaseQuantifier):
         scores = moss[:, :2]
         labels = moss[:, 2].astype(type(pos_label))
         return scores, labels
-        

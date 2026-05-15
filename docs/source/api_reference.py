@@ -63,7 +63,7 @@ API_REFERENCE = {
             {
                 "title": None,
                 "autosummary": [
-                    "define_binary",
+                    "binary_quantifier",
                     "BinaryQuantifier"
                 ],
             }
@@ -85,12 +85,12 @@ API_REFERENCE = {
             }
         ],
     },
-    "mlquantify.adjust_counting": {
-        "short_summary": "Adjusted Counting methods for quantification.",
+    "mlquantify.counting": {
+        "short_summary": "Counting methods for quantification.",
         "description": None,
         "sections": [
             {
-                "title": "Adjust Counting Methods",
+                "title": "Counting Methods",
                 "autosummary": [
                     "CC",
                     "PCC",
@@ -141,6 +141,29 @@ API_REFERENCE = {
             }
         ],
     },
+    "mlquantify.matching": {
+        "short_summary": "Distribution matching methods for quantification.",
+        "description": None,
+        "sections": [
+            {
+                "title": "Matching Methods",
+                "autosummary": [
+                    "BaseMatchingQuantifier",
+                    "HistogramQuantifier",
+                    "DyS",
+                    "HDy",
+                    "HDx",
+                    "SORD",
+                    "KernelQuantifier",
+                    "MMD_RKHS",
+                    "KDEyQuantifier",
+                    "KDEyML",
+                    "KDEyHD",
+                    "KDEyCS",
+                ],
+            }
+        ],
+    },
     "mlquantify.neighbors": {
         "short_summary": "Neighbor-based methods for quantification.",
         "description": None,
@@ -164,6 +187,12 @@ API_REFERENCE = {
                 "title": "Composable Methods",
                 "autosummary": [
                     "ComposeQuantifier",
+                    "ACC",
+                    "PACC",
+                    "AC",
+                    "PAC",
+                    "ClassRepresentation",
+                    "LeastSquaresLoss",
                 ],
             }
         ],
@@ -243,5 +272,3 @@ API_REFERENCE = {
         ]
     },
 }
-
-

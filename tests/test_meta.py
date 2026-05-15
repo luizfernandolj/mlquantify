@@ -3,7 +3,7 @@ import pytest
 import numpy as np
 from sklearn.linear_model import LogisticRegression
 from mlquantify.meta import EnsembleQ, AggregativeBootstrap, QuaDapt
-from mlquantify.adjust_counting import CC, PCC, FM
+from mlquantify.counting import CC, PCC, FM
 from mlquantify.likelihood import EMQ
 from mlquantify.mixture import DyS
 

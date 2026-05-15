@@ -97,7 +97,7 @@ Specify the prediction type by inheriting from one of these mixins:
 Binary Quantifiers
 ------------------
 
-Use the :func:`@define_binary <mlquantify.multiclass.define_binary>` decorator to adapt multiclass quantifiers for binary problems. The decorator automatically modifies :func:`fit`, :func:`predict`, and :func:`aggregate` methods.
+Use the :func:`@binary_quantifier <mlquantify.multiclass.binary_quantifier>` decorator to adapt multiclass quantifiers for binary problems. The decorator automatically modifies :func:`fit`, :func:`predict`, and :func:`aggregate` methods.
 
 **Multiclass strategies:**
 
@@ -109,10 +109,10 @@ Use the :func:`@define_binary <mlquantify.multiclass.define_binary>` decorator t
 .. code-block:: python
 
     from mlquantify.base import BaseQuantifier
-    from mlquantify.multiclass import define_binary
+    from mlquantify.multiclass import binary_quantifier
     import numpy as np
     
-    @define_binary
+    @binary_quantifier(strategy_attr="strategy")
     class MyBinaryQuantifier(BaseQuantifier):
         def __init__(self, strategy='ovo', param1=42):
             self.strategy = strategy

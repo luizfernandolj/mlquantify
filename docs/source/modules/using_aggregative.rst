@@ -1,6 +1,6 @@
 .. _using_aggregative:
 
-.. currentmodule:: mlquantify.adjust_counting
+.. currentmodule:: mlquantify.counting
 
 ========================================
 Using Aggregative Quantification Methods
@@ -60,7 +60,7 @@ Examples
    :maxdepth: 2
 
    modules/counters.rst
-   modules/adjust_counting.rst
+   modules/counting.rst
    modules/likelihood.rst
    modules/mixture_models.rst
    modules/neighbors.rst

@@ -4,7 +4,7 @@ from mlquantify.neighbors._classification import PWKCLF
 from mlquantify.base_aggregative import AggregationMixin, CrispLearnerQMixin
 from mlquantify.base import BaseQuantifier
 from mlquantify.utils._decorators import _fit_context
-from mlquantify.adjust_counting import CC
+from mlquantify.counting import CC
 from mlquantify.utils import validate_y, validate_data
 from mlquantify.utils._validation import validate_prevalences
 

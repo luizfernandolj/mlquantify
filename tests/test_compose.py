@@ -94,6 +94,17 @@ def _make_qunfold_native(method_name, learner=None):
     raise ValueError(f"Unknown method: {method_name}")
 
 
+def _make_compose_native(method_name, learner=None):
+    from mlquantify.compose import ACC, PACC
+
+    if method_name == "ACC":
+        return ACC(learner=learner, seed=42)
+    if method_name == "PACC":
+        return PACC(learner=learner, seed=42)
+
+    raise ValueError(f"Unknown method: {method_name}")
+
+
 @pytest.mark.parametrize("method_name", ["ACC", "PACC", "HDx", "HDy"])
 def test_compose_quantifier_matches_qunfold_native_binary(
     method_name,
@@ -217,4 +228,115 @@ def test_compose_quantifier_dys_valid_prevalence(binary_dataset):
     print(prevalences)
     print(train_prevalence)
 
+    _assert_valid_prevalence(prevalences, n_classes=2)
+
+
+@pytest.mark.parametrize("method_name", ["ACC", "PACC"])
+def test_compose_preconfigured_matches_qunfold_native_binary(
+    method_name,
+    binary_dataset,
+):
+    X, y = binary_dataset
+
+    learner_native = LogisticRegression(max_iter=1000, random_state=42)
+    learner_compose = LogisticRegression(max_iter=1000, random_state=42)
+
+    native = _make_qunfold_native(method_name, learner=learner_native)
+    composed = _make_compose_native(method_name, learner=learner_compose)
+
+    native.fit(X, y)
+    composed.fit(X, y, cv=5, random_state=42)
+
+    native_prevs = _as_array(native.predict(X))
+    composed_prevs = _as_array(composed.predict(X))
+
+    _assert_valid_prevalence(composed_prevs, n_classes=2)
+
+    np.testing.assert_allclose(
+        composed_prevs,
+        native_prevs,
+        atol=1e-5,
+        rtol=1e-5,
+    )
+
+
+@pytest.mark.parametrize("method_name", ["ACC", "PACC"])
+def test_compose_preconfigured_matches_qunfold_native_multiclass(
+    method_name,
+    multiclass_dataset,
+):
+    X, y = multiclass_dataset
+
+    learner_native = LogisticRegression(max_iter=1000, random_state=42)
+    learner_compose = LogisticRegression(max_iter=1000, random_state=42)
+
+    native = _make_qunfold_native(method_name, learner=learner_native)
+    composed = _make_compose_native(method_name, learner=learner_compose)
+
+    native.fit(X, y)
+    composed.fit(X, y, cv=5, random_state=42)
+
+    native_prevs = _as_array(native.predict(X))
+    composed_prevs = _as_array(composed.predict(X))
+
+    _assert_valid_prevalence(composed_prevs, n_classes=3)
+
+    np.testing.assert_allclose(
+        composed_prevs,
+        native_prevs,
+        atol=1e-5,
+        rtol=1e-5,
+    )
+
+
+@pytest.mark.parametrize(
+    ("compose_class_name", "native_method_name"),
+    [("AC", "ACC"), ("PAC", "PACC")],
+)
+def test_compose_mlquantify_names_match_qunfold_native_binary(
+    compose_class_name,
+    native_method_name,
+    binary_dataset,
+):
+    from mlquantify import compose
+
+    X, y = binary_dataset
+
+    native = _make_qunfold_native(
+        native_method_name,
+        learner=LogisticRegression(max_iter=1000, random_state=42),
+    )
+    composed = getattr(compose, compose_class_name)(
+        learner=LogisticRegression(max_iter=1000, random_state=42),
+        seed=42,
+    )
+
+    native.fit(X, y)
+    composed.fit(X, y, cv=5, random_state=42)
+
+    np.testing.assert_allclose(
+        _as_array(composed.predict(X)),
+        _as_array(native.predict(X)),
+        atol=1e-5,
+        rtol=1e-5,
+    )
+
+
+def test_compose_preconfigured_supports_non_zero_based_labels(binary_dataset):
+    from mlquantify.compose import ACC
+    from mlquantify._config import config_context
+
+    X, y = binary_dataset
+    y = np.where(y == 0, 2, 4)
+
+    q = ACC(
+        learner=LogisticRegression(max_iter=1000, random_state=42),
+        seed=42,
+    )
+
+    with config_context(prevalence_return_type="dict"):
+        q.fit(X, y, cv=5, random_state=42)
+        prevalences = q.predict(X)
+
+    assert set(prevalences) == {2, 4}
     _assert_valid_prevalence(prevalences, n_classes=2)

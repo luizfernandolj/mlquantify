@@ -3,7 +3,7 @@ import pytest
 import numpy as np
 from sklearn.linear_model import LogisticRegression
 from mlquantify.model_selection import GridSearchQ
-from mlquantify.adjust_counting import CC
+from mlquantify.counting import CC
 from mlquantify.metrics import MAE
 
 class MockQuantifier(CC):

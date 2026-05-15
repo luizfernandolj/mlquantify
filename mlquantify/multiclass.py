@@ -23,7 +23,7 @@ from mlquantify.utils._validation import validate_prevalences, check_has_method
 # ============================================================
 # Decorator for enabling binary quantification behavior
 # ============================================================
-def define_binary(cls):
+def binary_quantifier(_cls=None, *, strategy_attr="strategy"):
     """Decorator to enable binary quantification extensions (One-vs-Rest or One-vs-One).
 
     This decorator dynamically extends a quantifier class to handle multiclass
@@ -40,6 +40,8 @@ def define_binary(cls):
     cls : class
         A subclass of `BaseQuantifier` implementing standard binary quantification
         methods (`fit`, `predict`, and `aggregate`).
+    strategy_attr : str, default="strategy"
+        Name of the attribute that stores the multiclass decomposition strategy.
 
     Returns
     -------
@@ -49,9 +51,9 @@ def define_binary(cls):
     Examples
     --------
     >>> from mlquantify.base import BaseQuantifier
-    >>> from mlquantify.binary import define_binary
+    >>> from mlquantify.multiclass import binary_quantifier
 
-    >>> @define_binary
+    >>> @binary_quantifier(strategy_attr="strategy")
     ... class MyQuantifier(BaseQuantifier):
     ...     def fit(self, X, y):
     ...         # Custom binary training logic
@@ -75,30 +77,45 @@ def define_binary(cls):
     >>> qtf.predict(X)
     array([...])
     """
-    if check_has_method(cls, "fit"):
-        cls._original_fit = cls.fit
-        # PRESERVA docstring e signature do método ORIGINAL
-        cls.fit = functools.wraps(cls._original_fit)(BinaryQuantifier.fit)
-        cls.fit.__doc__ = cls._original_fit.__doc__
-        cls.fit.__signature__ = signature(cls._original_fit)
-    
-    if check_has_method(cls, "predict"):
-        cls._original_predict = cls.predict
-        cls.predict = functools.wraps(cls._original_predict)(BinaryQuantifier.predict)
-        cls.predict.__doc__ = cls._original_predict.__doc__
-        cls.predict.__signature__ = signature(cls._original_predict)
-    
-    if check_has_method(cls, "aggregate"):
-        cls._original_aggregate = cls.aggregate
-        cls.aggregate = functools.wraps(cls._original_aggregate)(BinaryQuantifier.aggregate)
-        cls.aggregate.__doc__ = cls._original_aggregate.__doc__
-        cls.aggregate.__signature__ = signature(cls._original_aggregate)
-    
-    # Add fit_predict method using BinaryQuantifier.fit_predict
-    # Since fit_predict likely doesn't exist on the base class, we just add it.
-    cls.fit_predict = BinaryQuantifier.fit_predict
-    
-    return cls
+    def decorate(cls):
+        cls._binary_strategy_attr = strategy_attr
+
+        if check_has_method(cls, "fit"):
+            cls._original_fit = cls.fit
+            cls.fit = functools.wraps(cls._original_fit)(BinaryQuantifier.fit)
+            cls.fit.__doc__ = cls._original_fit.__doc__
+            cls.fit.__signature__ = signature(cls._original_fit)
+
+        if check_has_method(cls, "predict"):
+            cls._original_predict = cls.predict
+            cls.predict = functools.wraps(cls._original_predict)(BinaryQuantifier.predict)
+            cls.predict.__doc__ = cls._original_predict.__doc__
+            cls.predict.__signature__ = signature(cls._original_predict)
+
+        if check_has_method(cls, "aggregate"):
+            cls._original_aggregate = cls.aggregate
+            cls.aggregate = functools.wraps(cls._original_aggregate)(BinaryQuantifier.aggregate)
+            cls.aggregate.__doc__ = cls._original_aggregate.__doc__
+            cls.aggregate.__signature__ = signature(cls._original_aggregate)
+
+        cls.fit_predict = BinaryQuantifier.fit_predict
+        return cls
+
+    if _cls is not None:
+        return decorate(_cls)
+    return decorate
+
+
+def define_binary(cls=None):
+    """Backward-compatible alias for ``binary_quantifier(strategy_attr="strategy")``."""
+    return binary_quantifier(cls, strategy_attr="strategy")
+
+
+def _get_binary_strategy(quantifier):
+    strategy_attr = getattr(quantifier, "_binary_strategy_attr", "strategy")
+    strategy = getattr(quantifier, strategy_attr, "ovr")
+    setattr(quantifier, strategy_attr, strategy)
+    return strategy
 
 
 # ============================================================
@@ -434,14 +451,14 @@ class BinaryQuantifier(MetaquantifierMixin, BaseQuantifier):
             qtf.binary = True
             return qtf._original_fit(X, y)
 
-        qtf.strategy = getattr(qtf, "strategy", "ovr")
+        strategy = _get_binary_strategy(qtf)
         n_jobs = getattr(qtf, "n_jobs", None)  # Retrieve n_jobs if available
 
         qtf.classes_ = np.unique(y)
 
-        if qtf.strategy == "ovr":
+        if strategy == "ovr":
             qtf.qtfs_ = _fit_ovr(qtf, X, y, n_jobs=n_jobs)
-        elif qtf.strategy == "ovo":
+        elif strategy == "ovo":
             qtf.qtfs_ = _fit_ovo(qtf, X, y, n_jobs=n_jobs)
         else:
             raise ValueError("Strategy must be 'ovr' or 'ovo'")
@@ -453,15 +470,16 @@ class BinaryQuantifier(MetaquantifierMixin, BaseQuantifier):
         if hasattr(qtf, "binary") and qtf.binary:
             return qtf._original_predict(X)
         else:
+            strategy = _get_binary_strategy(qtf)
             n_jobs = getattr(qtf, "n_jobs", None)
-            if qtf.strategy == "ovr":
+            if strategy == "ovr":
                 preds = _predict_ovr(qtf, X, n_jobs=n_jobs)
-            elif qtf.strategy == "ovo":
+            elif strategy == "ovo":
                 preds = _predict_ovo(qtf, X, n_jobs=n_jobs)
             else:
                 raise ValueError("Strategy must be 'ovr' or 'ovo'")
 
-        if qtf.strategy == "ovo":
+        if strategy == "ovo":
             pairs = list(combinations(qtf.classes_, 2))
             pair_preds = dict(zip(pairs, preds))
             preds = _ovo_pairwise_to_class_prevalences(pair_preds, qtf.classes_)
@@ -482,15 +500,15 @@ class BinaryQuantifier(MetaquantifierMixin, BaseQuantifier):
             raise ValueError("Binary aggregation requires at least train labels")
 
         classes = np.unique(args_dict["y_train"])
-        qtf.strategy = getattr(qtf, "strategy", "ovr")
+        strategy = _get_binary_strategy(qtf)
         n_jobs = getattr(qtf, "n_jobs", None)
 
         if (hasattr(qtf, "binary") and qtf.binary) or len(classes) <= 2:
             return qtf._original_aggregate(*args_dict.values())
 
-        if qtf.strategy == "ovr":
+        if strategy == "ovr":
             prevalences = _aggregate_ovr(qtf, n_jobs=n_jobs, **args_dict)
-        elif qtf.strategy == "ovo":
+        elif strategy == "ovo":
             pair_prev = _aggregate_ovo(qtf, n_jobs=n_jobs, **args_dict)
             prevalences = _ovo_pairwise_to_class_prevalences(pair_prev, classes)
         else:
@@ -507,20 +525,20 @@ class BinaryQuantifier(MetaquantifierMixin, BaseQuantifier):
             qtf.fit(X, y)
             return qtf.predict(X_test)
 
-        qtf.strategy = getattr(qtf, "strategy", "ovr")
+        strategy = _get_binary_strategy(qtf)
         n_jobs = getattr(qtf, "n_jobs", None)
         
         # Set classes_ attribute required by validate_prevalences
         qtf.classes_ = classes
 
-        if qtf.strategy == "ovr":
+        if strategy == "ovr":
             # Returns dict {cls: prev}
             preds_dict = _fit_predict_ovr(qtf, X, y, X_test, n_jobs=n_jobs)
             keys = classes
             
             return validate_prevalences(qtf, preds_dict, classes)
             
-        elif qtf.strategy == "ovo":
+        elif strategy == "ovo":
             preds_dict = _fit_predict_ovo(qtf, X, y, X_test, n_jobs=n_jobs)
             prevalences = _ovo_pairwise_to_class_prevalences(preds_dict, classes)
             return validate_prevalences(qtf, prevalences, classes) 

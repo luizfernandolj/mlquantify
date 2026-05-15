@@ -6,8 +6,8 @@ from abc import abstractmethod
 from scipy.optimize import minimize
 import warnings
 from sklearn.metrics import confusion_matrix
-from mlquantify.adjust_counting._base import BaseAdjustCount
-from mlquantify.adjust_counting._counting import CC, PCC
+from mlquantify.counting._base import BaseAdjustCount
+from mlquantify.counting._counting import CC, PCC
 from mlquantify.utils import (
     _fit_context, 
     validate_data,
@@ -22,13 +22,13 @@ from mlquantify.base_aggregative import (
     uses_soft_predictions, 
     _get_learner_function
 )
-from mlquantify.multiclass import define_binary
+from mlquantify.multiclass import binary_quantifier
 from mlquantify.utils._optimization import _optimize_on_simplex
-from mlquantify.adjust_counting._utils import evaluate_thresholds
+from mlquantify.counting._utils import evaluate_thresholds
 from mlquantify.utils._constraints import Interval, Options
 
 
-@define_binary
+@binary_quantifier(strategy_attr="strategy")
 class ThresholdAdjustment(SoftLearnerQMixin, BaseAdjustCount):
     r"""Base Class for Threshold-based adjustment methods for quantification.
 
@@ -77,7 +77,7 @@ class ThresholdAdjustment(SoftLearnerQMixin, BaseAdjustCount):
     Examples
     --------
     >>> from sklearn.linear_model import LogisticRegression
-    >>> from mlquantify.adjust_counting import ThresholdAdjustment
+    >>> from mlquantify.counting import ThresholdAdjustment
     >>> import numpy as np
     >>> class CustomThreshold(ThresholdAdjustment):
     ...     def get_best_threshold(self, thresholds, tprs, fprs):
@@ -187,7 +187,7 @@ class MatrixAdjustment(BaseAdjustCount):
     Examples
     --------
     >>> from sklearn.linear_model import LogisticRegression
-    >>> from mlquantify.adjust_counting import MatrixAdjustment
+    >>> from mlquantify.counting import MatrixAdjustment
     >>> import numpy as np
     >>> class MyMatrix(MatrixAdjustment):
     ...     def _compute_confusion_matrix(self, preds, y):
@@ -333,7 +333,7 @@ class MatrixAdjustment(BaseAdjustCount):
 
 
 
-@define_binary
+@binary_quantifier(strategy_attr="strategy")
 class CDE(SoftLearnerQMixin, AggregationMixin, BaseQuantifier):
     r"""CDE-Iterate for binary classification prevalence estimation.
 
@@ -434,7 +434,7 @@ class CDE(SoftLearnerQMixin, AggregationMixin, BaseQuantifier):
 
         Examples
         --------
-        >>> from mlquantify.adjust_counting import CDE
+        >>> from mlquantify.counting import CDE
         >>> import numpy as np
         >>> q = CDE()
         >>> predictions = np.random.rand(200)
@@ -566,7 +566,7 @@ class FM(SoftLearnerQMixin, MatrixAdjustment):
 
     Examples
     --------
-    >>> from mlquantify.adjust_counting import FM
+    >>> from mlquantify.counting import FM
     >>> import numpy as np
     >>> X = np.random.randn(50, 4)
     >>> y = np.random.randint(0, 2, 50)
@@ -638,7 +638,7 @@ class AC(CrispLearnerQMixin, MatrixAdjustment):
     Examples
     --------
     >>> from sklearn.linear_model import LogisticRegression
-    >>> from mlquantify.adjust_counting import AC
+    >>> from mlquantify.counting import AC
     >>> import numpy as np
     >>> ac = AC(learner=LogisticRegression())
     >>> X = np.random.randn(50, 4)
@@ -700,7 +700,7 @@ class PAC(SoftLearnerQMixin, MatrixAdjustment):
     Examples
     --------
     >>> from sklearn.linear_model import LogisticRegression
-    >>> from mlquantify.adjust_counting import PAC
+    >>> from mlquantify.counting import PAC
     >>> import numpy as np
     >>> pac = PAC(learner=LogisticRegression())
     >>> X = np.random.randn(50, 4)

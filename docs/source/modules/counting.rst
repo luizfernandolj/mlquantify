@@ -1,10 +1,10 @@
-.. _adjust_counting:
+.. _counting:
 
-.. currentmodule:: mlquantify.adjust_counting
+.. currentmodule:: mlquantify.counting
 
-===============
-Adjust Counting
-===============
+========
+Counting
+========
 
 Adjusted Counting methods improve upon simple "counting" quantifiers by correcting bias using what is known about the classifier's errors on the training set.  
 They aim to produce better estimates of class prevalence (how frequent each class is in a dataset) even when training and test distributions differ.
@@ -64,7 +64,7 @@ All these methods have their `fit`, `predict` and `aggregate` functions, similar
 
 .. code-block:: python
 
-   from mlquantify.adjust_counting import T50, evaluate_thresholds
+   from mlquantify.counting import T50, evaluate_thresholds
    from sklearn.linear_model import LogisticRegression
 
    clf = LogisticRegression()
@@ -112,7 +112,7 @@ Adjusted Count (AC) and Probabilistic Adjusted Count (PAC)
 
 .. code-block:: python
 
-   from mlquantify.adjust_counting import AC, PAC
+   from mlquantify.counting import AC, PAC
    from sklearn.linear_model import LogisticRegression
    q = AC(learner=LogisticRegression())
    q.fit(X_train, y_train)
