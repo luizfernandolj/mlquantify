@@ -1,49 +1,58 @@
-from abc import ABC, abstractmethod
-from dataclasses import dataclass
-from typing import Callable
+import numpy as np
+
+from mlquantify.metrics import (
+    hellinger,
+    topsoe,
+    probsymm,
+    sqEuclidean,
+)
 
 
-def _least_squares(prevalences, q, M, N=None):
-    import jax.numpy as jnp
-
-    diff = q - jnp.dot(M, prevalences)
-    return jnp.dot(diff, diff)
+EPS = 1e-12
 
 
-def _nonzero_features(M):
-    import jax.numpy as jnp
+def normalize_distribution(x):
+    x = np.asarray(x, dtype=float)
+    x = np.maximum(x, EPS)
 
-    return jnp.any(M != 0, axis=1)
+    total = x.sum()
 
+    if total <= EPS:
+        return np.ones_like(x) / len(x)
 
-class AbstractLoss(ABC):
-    """Base class for composable QUnfold-style losses."""
-
-    @abstractmethod
-    def instantiate(self, q, M, N=None):
-        """Create a JAX-compatible loss function over class prevalences."""
+    return x / total
 
 
-@dataclass
-class FunctionLoss(AbstractLoss):
-    """Create a composable loss from a JAX-compatible function."""
+def get_loss(loss="hellinger", normalize=True):
+    def objective(a, b):
+        a = np.asarray(a, dtype=float)
+        b = np.asarray(b, dtype=float)
 
-    loss_function: Callable
+        if normalize:
+            a = normalize_distribution(a)
+            b = normalize_distribution(b)
 
-    def instantiate(self, q, M, N=None):
-        import jax.numpy as jnp
+        if a.shape != b.shape:
+            raise ValueError(
+                f"Representations must have the same shape. "
+                f"Got {a.shape} and {b.shape}."
+            )
 
-        M = jnp.asarray(M)
-        q = jnp.asarray(q)
-        nonzero = _nonzero_features(M)
-        M = M[nonzero, :]
-        q = q[nonzero]
+        if loss == "hellinger":
+            return float(hellinger(a, b))
 
-        return lambda prevalences: self.loss_function(prevalences, q, M, N)
+        if loss == "topsoe":
+            return float(topsoe(a, b))
 
+        if loss == "probsymm":
+            return float(probsymm(a, b))
 
-class LeastSquaresLoss(FunctionLoss):
-    """Least-squares loss used by ACC and PACC."""
+        if loss == "sqEuclidean":
+            return float(sqEuclidean(a, b))
 
-    def __init__(self):
-        super().__init__(_least_squares)
+        if loss == "euclidean":
+            return float(np.sqrt(sqEuclidean(a, b)))
+
+        raise ValueError(f"Unknown loss: {loss!r}")
+
+    return objective

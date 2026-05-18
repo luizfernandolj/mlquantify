@@ -2,6 +2,7 @@ from mlquantify.utils._tags import (
     get_tags
 )
 from mlquantify.utils._validation import validate_parameter_constraints, validate_learner_contraints
+from mlquantify.utils._get_scores import apply_cross_validation
 
 
 class AggregationMixin:
@@ -59,6 +60,32 @@ class AggregationMixin:
         tags.has_estimator = True
         tags.requires_fit = True
         return tags
+    
+    
+    def _fit_learner_predictions(self, X, y, learner_fitted=False):
+        learner_function = _get_learner_function(self)
+
+        if learner_fitted:
+            return getattr(self.learner, learner_function)(X), y
+
+        predictions, y_pred = apply_cross_validation(
+            self.learner,
+            X,
+            y,
+            function=learner_function,
+            cv=self.cv,
+            stratified=self.stratified,
+            shuffle=self.shuffle,
+            random_state=self.random_state,
+        )
+
+        self.learner.fit(X, y)
+
+        return predictions, y_pred
+
+    def _predict_learner(self, X):
+        learner_function = _get_learner_function(self)
+        return getattr(self.learner, learner_function)(X)
 
 
     def _validate_params(self):

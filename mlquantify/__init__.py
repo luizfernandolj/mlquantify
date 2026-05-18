@@ -2,7 +2,6 @@
 
 from . import neighbors
 from . import likelihood
-from . import mixture
 from . import matching
 from . import meta
 from . import counting
@@ -22,7 +21,6 @@ from ._config import get_config, set_config, config_context
 __all__ = [
     "neighbors",
     "likelihood",
-    "mixture",
     "matching",
     "meta",
     "counting",

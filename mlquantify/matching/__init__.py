@@ -1,18 +1,24 @@
 from ._base import BaseMatchingQuantifier
-from ._histogram import DyS, HDx, HDy, HistogramQuantifier, SORD
-from ._kernel import KDEyCS, KDEyHD, KDEyML, KDEyQuantifier, KernelQuantifier, MMD_RKHS
+from ._density import KDEyCS, KDEyHD, KDEyML, KDEyQuantifier
+from ._generalized import GHDx, GHDy
+from ._histogram import DyS, HDx, HDy, MatchingHistogramQuantifier
+from ._kernel import MatchingKernelQuantifier, MMD_RKHS
+from ._score import SMM, SORD
 
 __all__ = [
     "BaseMatchingQuantifier",
-    "HistogramQuantifier",
+    "MatchingHistogramQuantifier",
     "DyS",
     "HDy",
     "HDx",
     "SORD",
-    "KernelQuantifier",
+    "MatchingKernelQuantifier",
     "MMD_RKHS",
     "KDEyQuantifier",
     "KDEyML",
     "KDEyHD",
     "KDEyCS",
+    "GHDx",
+    "GHDy",
+    "SMM",
 ]

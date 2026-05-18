@@ -31,15 +31,26 @@ class BaseMatchingQuantifier(BaseQuantifier):
     _parameter_constraints = {
         "distance": [Options(["hellinger", "topsoe", "probsymm", "sqEuclidean", "euclidean"])],
         "solver": [Options(["auto", "grid", "ternary", "slsqp"])],
+        "normalize": ["boolean", None],
     }
 
-    def __init__(self, representation, distance="hellinger", solver="auto"):
+    def __init__(
+        self, 
+        representation, 
+        distance="hellinger", 
+        solver="auto",
+        normalize=None
+        ):
+        if normalize is None:
+            normalize = distance in {
+                "hellinger",
+                "topsoe",
+                "probsymm",
+            }
         self.representation = representation
         self.distance = distance
         self.solver = solver
-        self._precomputed = False
-        self.best_distance_ = None
-        self.distances_ = None
+        self.normalize = normalize
 
     def _fit(self, X, y, sample_weight=None):
         """Fit the quantifier to training data.
@@ -55,8 +66,8 @@ class BaseMatchingQuantifier(BaseQuantifier):
         sample_weight : array-like of shape (n_samples,), default=None
             Sample weights for fitting. If None, all samples are given equal weight.
         """
-        elf.representation.fit(X, y, sample_weight=sample_weight)
-
+        self.representation.fit(X, y, sample_weight=sample_weight)
+        
         if not hasattr(self.representation, "class_representations_"):
             raise AttributeError(
                 "representation must define class_representations_ after fit()."
@@ -79,7 +90,8 @@ class BaseMatchingQuantifier(BaseQuantifier):
         ts_representation = self.representation.transform(X)
 
         prevalences, distance = self._solve_prevalence(
-            test_representation=ts_representation
+            test_representation=ts_representation,
+            train_representations=self.tr_representation_,
         )
 
         self.best_distance_ = distance
@@ -87,7 +99,6 @@ class BaseMatchingQuantifier(BaseQuantifier):
         return validate_prevalences(self, prevalences, self.classes_)
     
     def get_best_distance(self, X=None):
-        """Get the distance corresponding to the best prevalence estimate."""
         if X is not None:
             self._predict(X)
         return self.best_distance_
@@ -101,11 +112,14 @@ class BaseMatchingQuantifier(BaseQuantifier):
             return np.ones_like(values) / len(values)
         return values / total
 
-    @classmethod
-    def get_distance(cls, dist_train, dist_test, distance="hellinger"):
+    def get_distance(self, dist_train, dist_test, distance="hellinger"):
         """Compute a distance between two normalized representations."""
-        dist_train = cls._normalize_distribution(dist_train)
-        dist_test = cls._normalize_distribution(dist_test)
+        dist_train = np.asarray(dist_train, dtype=float)
+        dist_test = np.asarray(dist_test, dtype=float)
+
+        if self.normalize:
+            dist_train = self._normalize_distribution(dist_train)
+            dist_test = self._normalize_distribution(dist_test)
 
         if dist_train.shape != dist_test.shape:
             raise ValueError("Distributions must have the same shape.")
@@ -123,7 +137,11 @@ class BaseMatchingQuantifier(BaseQuantifier):
 
         raise ValueError(f"Invalid distance: {distance}")
 
+    
+    @staticmethod
+    def _mixture(class_representations, prevalences):
+        return np.asarray(prevalences) @ np.asarray(class_representations)
 
     @abstractmethod
-    def _solve_prevalence(self, test_representation):
+    def _solve_prevalence(self, test_representation, train_representations):
         """Solve for class prevalences using train and test representations."""

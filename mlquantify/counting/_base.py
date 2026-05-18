@@ -198,11 +198,15 @@ class BaseAdjustCount(AggregationMixin, BaseQuantifier):
     """
 
     @abstractmethod
-    def __init__(self, learner=None):
+    def __init__(self, learner=None, cv=5, stratified=True, shuffle=False, random_state=None):
         self.learner = learner
+        self.cv = cv
+        self.stratified = stratified
+        self.shuffle = shuffle
+        self.random_state = random_state
 
     @_fit_context(prefer_skip_nested_validation=True)
-    def fit(self, X, y, learner_fitted=False, cv=5, stratified=True, random_state=None, shuffle=False):
+    def fit(self, X, y, learner_fitted=False):
         """Fit the quantifier using the provided data and learner.
         
         Parameters
@@ -230,32 +234,27 @@ class BaseAdjustCount(AggregationMixin, BaseQuantifier):
         """
         X, y = validate_data(self, X, y)
         self.classes_ = np.unique(y)
-        learner_function = _get_learner_function(self)
         
-        if learner_fitted:
-            train_predictions = getattr(self.learner, learner_function)(X)
-            y_train_labels = y
-        else:
-            train_predictions, y_train_labels = apply_cross_validation(
-                self.learner,
-                X,
-                y,
-                function=learner_function,
-                cv=cv,
-                stratified=stratified,
-                random_state=random_state,
-                shuffle=shuffle,
-            )
-            self.learner.fit(X, y)
+        train_predictions, y_train = self._fit_learner_predictions(
+            X,
+            y,
+            learner_fitted=learner_fitted,
+            cv=self.cv,
+            stratified=self.stratified,
+            random_state=self.random_state,
+            shuffle=self.shuffle,
+        )
         
         self.train_predictions = train_predictions
-        self.y_train = y_train_labels
+        self.y_train = y_train
         return self
     
     def predict(self, X):
         """Predict class prevalences for the given data."""
         X = validate_data(self, X)
-        predictions = getattr(self.learner, _get_learner_function(self))(X)
+        
+        predictions = self._predict_learner(X)
+        
         prevalences = self.aggregate(predictions, self.train_predictions, self.y_train)
         return prevalences
 

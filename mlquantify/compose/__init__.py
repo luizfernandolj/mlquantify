@@ -1,3 +1,12 @@
-from ._losses import AbstractLoss, FunctionLoss, LeastSquaresLoss
-from ._qunfold import AC, ACC, PAC, PACC, ComposeQuantifier
-from .representations import AbstractRepresentation, ClassRepresentation
+from ._base import BaseComposeQuantifier
+from ._linear import LinearComposeQuantifier
+from ._likelihood import LikelihoodComposeQuantifier
+
+ComposeQuantifier = LinearComposeQuantifier
+
+__all__ = [
+    "BaseComposeQuantifier",
+    "LinearComposeQuantifier",
+    "LikelihoodComposeQuantifier",
+    "ComposeQuantifier",
+]
