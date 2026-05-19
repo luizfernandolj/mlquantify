@@ -11,6 +11,7 @@ from . import base
 from . import calibration
 from . import confidence
 from . import multiclass
+from . import losses
 try:
     from . import neural
 except NameError:
@@ -30,6 +31,7 @@ __all__ = [
     "calibration",
     "confidence",
     "multiclass",
+    "losses",
     "neural",
     "get_config",
     "set_config",

@@ -2,16 +2,16 @@ import numpy as np
 
 from mlquantify.base import BaseQuantifier
 from mlquantify.base_aggregative import (
-    AggregationMixin,
-    SoftLearnerQMixin,
+    is_aggregative_quantifier,
+    uses_crisp_predictions,
+    uses_soft_predictions,
 )
+from mlquantify.representations import PredictionRepresentation
 from mlquantify.utils._decorators import _fit_context
 from mlquantify.utils._validation import validate_data, validate_prevalences
 
 
 class BaseComposeQuantifier(
-    SoftLearnerQMixin,
-    AggregationMixin,
     BaseQuantifier,
 ):
     r"""Base class for compose-based quantifiers.
@@ -29,32 +29,62 @@ class BaseComposeQuantifier(
         learner=None,
         solver="slsqp",
         aggregative=True,
-        cv=None,
-        stratified=True,
-        shuffle=False,
-        random_state=None,
     ):
         self.representation = representation
         self.learner = learner
         self.solver = solver
         self.aggregative = aggregative
-        self.cv = cv
-        self.stratified = stratified
-        self.shuffle = shuffle
-        self.random_state = random_state
+
+    def __mlquantify_tags__(self):
+        tags = super().__mlquantify_tags__()
+
+        if not getattr(self, "aggregative", True):
+            tags.has_estimator = False
+            tags.estimator_function = None
+            tags.estimator_type = None
+
+        return tags
+
+    def _is_configured_aggregative(self):
+        return bool(getattr(self, "aggregative", True))
+
+    def _check_aggregation_configuration(self):
+        if not self._is_configured_aggregative():
+            return
+
+        if not is_aggregative_quantifier(self):
+            raise ValueError(
+                f"{self.__class__.__name__} was configured with aggregative=True, "
+                "so the concrete method must inherit AggregationMixin."
+            )
+
+        if not (uses_soft_predictions(self) or uses_crisp_predictions(self)):
+            raise ValueError(
+                f"{self.__class__.__name__} was configured with aggregative=True, "
+                "so the concrete method must inherit either SoftLearnerQMixin "
+                "or CrispLearnerQMixin."
+            )
+
+        if not isinstance(self.representation, PredictionRepresentation):
+            raise ValueError(
+                f"{self.__class__.__name__} was configured with aggregative=True, "
+                "so its representation must be a PredictionRepresentation."
+            )
+
+    def _uses_learner_predictions(self):
+        self._check_aggregation_configuration()
+        return self._is_configured_aggregative()
 
     def _validate_params(self):
-        if self.aggregative:
-            return super()._validate_params()
-
-        return BaseQuantifier._validate_params(self)
+        self._check_aggregation_configuration()
+        return super()._validate_params()
 
     @_fit_context(prefer_skip_nested_validation=True)
     def fit(self, X, y, learner_fitted=False, sample_weight=None):
         X, y = validate_data(self, X, y)
         self.classes_ = np.unique(y)
 
-        if self.aggregative:
+        if self._uses_learner_predictions():
             X_rep, y_rep = self._fit_learner_predictions(
                 X,
                 y,
@@ -85,7 +115,7 @@ class BaseComposeQuantifier(
     def predict(self, X):
         X = validate_data(self, X)
 
-        if self.aggregative:
+        if self._uses_learner_predictions():
             X_rep = self._predict_learner(X)
         else:
             X_rep = X

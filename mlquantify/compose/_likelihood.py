@@ -1,13 +1,11 @@
 import numpy as np
 
 from mlquantify.compose._base import BaseComposeQuantifier
-from mlquantify.matching._utils import negative_log_likelihood
+from mlquantify.losses import RegularizedMixtureNLLLoss
+from mlquantify.representations import PredictionRepresentation
 from mlquantify.solvers import minimize_prevalence
 from mlquantify.utils._decorators import _fit_context
 from mlquantify.utils._validation import validate_data, validate_prevalences
-
-
-EPS = 1e-12
 
 
 class LikelihoodComposeQuantifier(BaseComposeQuantifier):
@@ -19,20 +17,12 @@ class LikelihoodComposeQuantifier(BaseComposeQuantifier):
         aggregative=True,
         tau_0=0.0,
         tau_1=0.0,
-        cv=None,
-        stratified=True,
-        shuffle=False,
-        random_state=None,
     ):
         super().__init__(
             representation=representation,
             learner=learner,
             solver=solver,
             aggregative=aggregative,
-            cv=cv,
-            stratified=stratified,
-            shuffle=shuffle,
-            random_state=random_state,
         )
         self.tau_0 = tau_0
         self.tau_1 = tau_1
@@ -50,11 +40,14 @@ class LikelihoodComposeQuantifier(BaseComposeQuantifier):
         X, y = validate_data(self, X, y)
         self.classes_ = np.unique(y)
 
-        X_rep, y_rep = self._fit_learner_predictions(
-            X,
-            y,
-            learner_fitted=learner_fitted,
-        )
+        if self._uses_learner_predictions():
+            X_rep, y_rep = self._fit_learner_predictions(
+                X,
+                y,
+                learner_fitted=learner_fitted,
+            )
+        else:
+            X_rep, y_rep = X, y
 
         self.train_priors_ = np.asarray([
             np.mean(y_rep == cls)
@@ -71,7 +64,10 @@ class LikelihoodComposeQuantifier(BaseComposeQuantifier):
             return super().predict(X)
 
         X = validate_data(self, X)
-        test_representation = self._predict_learner(X)
+        if self._uses_learner_predictions():
+            test_representation = self._predict_learner(X)
+        else:
+            test_representation = X
 
         prevalences, distance = self._solve_prevalence(
             test_representation=test_representation,
@@ -83,13 +79,14 @@ class LikelihoodComposeQuantifier(BaseComposeQuantifier):
         return validate_prevalences(self, prevalences, self.classes_)
 
     def _solve_prevalence(self, test_representation, train_representation):
-        likelihoods = self._class_likelihoods(test_representation)
+        class_likelihoods = self._class_likelihoods(test_representation)
+        loss_function = RegularizedMixtureNLLLoss(
+            tau_0=self.tau_0,
+            tau_1=self.tau_1,
+        )
 
         def objective(prevalences):
-            mixture = likelihoods @ prevalences
-            loss = -np.log(np.maximum(mixture, 1e-12)).mean()
-            loss += self._regularization(prevalences)
-            return float(loss)
+            return loss_function(prevalences, class_likelihoods)
 
         return minimize_prevalence(
             objective=objective,
@@ -98,13 +95,21 @@ class LikelihoodComposeQuantifier(BaseComposeQuantifier):
         )
 
     def _class_likelihoods(self, test_representation):
-        if self.representation is not None and hasattr(self.representation, "class_likelihoods"):
-            return self.representation.class_likelihoods(test_representation).T
+        representation = self.representation
+
+        if isinstance(representation, PredictionRepresentation):
+            nested_representation = representation.representation
+
+            if nested_representation is not None and hasattr(representation, "class_likelihoods"):
+                return representation.class_likelihoods(test_representation)
+
+        elif representation is not None and hasattr(representation, "class_likelihoods"):
+            return self.representation.class_likelihoods(test_representation)
 
         priors = np.asarray(self.train_priors_, dtype=float)
         pxy = np.asarray(test_representation, dtype=float) / np.maximum(priors, 1e-12)
         pxy = pxy / np.maximum(pxy.sum(axis=1, keepdims=True), 1e-12)
-        return pxy
+        return pxy.T
 
     def _regularization(self, prevalences):
         p = np.asarray(prevalences, dtype=float)

@@ -8,9 +8,11 @@ from sklearn.model_selection import GridSearchCV, cross_val_predict, train_test_
 
 from mlquantify.base import BaseQuantifier, MetaquantifierMixin
 from mlquantify.metrics._slq import MSE
-from mlquantify.mixture._classes import SORD, DyS
-from mlquantify.mixture._utils import getHist
+from mlquantify.matching import SORD, DyS
+from mlquantify.matching._utils import get_histogram
+from mlquantify.losses import get_loss
 from mlquantify.metrics import hellinger
+from mlquantify.solvers import minimize_prevalence
 from mlquantify.utils import Options, Interval
 from mlquantify.utils import _fit_context
 from mlquantify.confidence import (
@@ -31,6 +33,18 @@ from mlquantify.utils.prevalence import get_prev_from_labels
 from mlquantify.utils import check_random_state
 from mlquantify._config import config_context
 from mlquantify.multiclass import binary_quantifier
+
+
+def getHist(values, n_bins):
+    values = np.asarray(values, dtype=float)
+
+    if values.ndim == 1:
+        values = values.reshape(-1, 1)
+
+    return np.concatenate([
+        get_histogram(values[:, feature_idx], n_bins)
+        for feature_idx in range(values.shape[1])
+    ])
 
 
 
@@ -728,7 +742,11 @@ class QuaDapt(MetaquantifierMixin, BaseQuantifier):
 
 
     def best_mixture(self, predictions):
-        predictions = predictions[:, 1]
+        predictions = np.asarray(predictions, dtype=float)
+        if predictions.ndim == 2:
+            predictions = predictions[:, 1]
+        else:
+            predictions = predictions.ravel()
 
         MF = np.atleast_1d(np.round(self.merging_factors, 2)).astype(float)
 
@@ -741,11 +759,18 @@ class QuaDapt(MetaquantifierMixin, BaseQuantifier):
             neg_scores = scores[labels == self.classes_[0]][:, 1]
 
             if self.measure in ["hellinger", "topsoe", "probsymm"]:
-                method = DyS(measure=self.measure)
+                alpha, distance = self._histogram_best_mixture(
+                    predictions,
+                    pos_scores,
+                    neg_scores,
+                    self.measure,
+                )
             elif self.measure == "sord":
-                method = SORD()
-
-            alpha, distance = method.best_mixture(predictions, pos_scores, neg_scores)
+                alpha, distance = self._sord_best_mixture(
+                    predictions,
+                    pos_scores,
+                    neg_scores,
+                )
 
             distances.append(distance)
             alphas.append(alpha)
@@ -754,6 +779,73 @@ class QuaDapt(MetaquantifierMixin, BaseQuantifier):
         best_alpha = alphas[np.argmin(distances)]
         best_distance = np.min(distances)
         return best_alpha, best_distance, best_m
+
+    def _histogram_best_mixture(self, predictions, pos_scores, neg_scores, distance):
+        bins_size = getattr(
+            self.quantifier,
+            "bins_size",
+            np.append(np.linspace(2, 20, 10), 30).astype(int),
+        )
+        loss_function = get_loss(loss=distance, normalize=True)
+
+        best_alpha = 0.0
+        best_distance = np.inf
+
+        for n_bins in np.atleast_1d(bins_size).astype(int):
+            test_hist = get_histogram(predictions, n_bins)
+            pos_hist = get_histogram(pos_scores, n_bins)
+            neg_hist = get_histogram(neg_scores, n_bins)
+
+            def objective(alpha):
+                mixture = (1.0 - alpha) * neg_hist + alpha * pos_hist
+                return loss_function(mixture, test_hist)
+
+            prevalences, current_distance = minimize_prevalence(
+                objective=objective,
+                n_classes=2,
+                solver="grid",
+            )
+
+            if current_distance < best_distance:
+                best_alpha = float(prevalences[1])
+                best_distance = float(current_distance)
+
+        return best_alpha, best_distance
+
+    @staticmethod
+    def _sord_best_mixture(predictions, pos_scores, neg_scores):
+        predictions = np.asarray(predictions, dtype=float).ravel()
+        pos_scores = np.asarray(pos_scores, dtype=float).ravel()
+        neg_scores = np.asarray(neg_scores, dtype=float).ravel()
+
+        scores = np.concatenate([pos_scores, neg_scores, predictions])
+        order = np.argsort(scores, kind="mergesort")
+        sorted_scores = scores[order]
+        gaps = np.diff(sorted_scores)
+
+        n_pos = len(pos_scores)
+        n_neg = len(neg_scores)
+        n_test = len(predictions)
+
+        def objective(alpha):
+            weights = np.concatenate(
+                [
+                    np.full(n_pos, alpha / n_pos),
+                    np.full(n_neg, (1.0 - alpha) / n_neg),
+                    np.full(n_test, -1.0 / n_test),
+                ]
+            )
+            sorted_weights = weights[order]
+            cumulative_weights = np.cumsum(sorted_weights)[:-1]
+            return float(np.sum(np.abs(gaps * cumulative_weights)))
+
+        prevalences, distance = minimize_prevalence(
+            objective=objective,
+            n_classes=2,
+            solver="grid",
+        )
+
+        return float(prevalences[1]), float(distance)
 
     def get_best_distance(self, predictions):
 

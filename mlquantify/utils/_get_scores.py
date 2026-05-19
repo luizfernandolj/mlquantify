@@ -38,6 +38,9 @@ def apply_cross_validation(
         predictions, true_labels for all folds
     """
     
+    if not shuffle:
+        random_state = None
+
     # Choose cross-validation strategy
     if stratified:
         cv_splitter = StratifiedKFold(

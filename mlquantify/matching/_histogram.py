@@ -9,6 +9,7 @@ from mlquantify.base_aggregative import (
 from mlquantify.utils._decorators import _fit_context
 from mlquantify.matching._base import BaseMatchingQuantifier
 from mlquantify.matching._utils import ternary_search
+from mlquantify.losses import get_loss
 from mlquantify.representations import HistogramRepresentation
 from mlquantify.multiclass import binary_quantifier
 from mlquantify.utils._constraints import Interval, Options
@@ -34,14 +35,17 @@ class MatchingHistogramQuantifier(BaseMatchingQuantifier):
         solver="auto",
         strategy="ovr",
     ):
+        if bins_size is None:
+            bins_size = np.append(np.linspace(2, 20, 10), 30).astype(int)
+
         self.bins_size = bins_size
         self.distance = distance
+        self.loss_function = get_loss(loss=distance, normalize=True)
         self.solver = solver
         self.strategy = strategy
         super().__init__(
             representation=HistogramRepresentation(bins=bins_size, mode="histogram"),
-            distance=distance, 
-            solver=solver, 
+            normalize=True
         )
 
     def _solve_prevalence(self, test_representation, train_representations):
@@ -54,11 +58,10 @@ class MatchingHistogramQuantifier(BaseMatchingQuantifier):
         pos_repr = train_representations[1]
 
         def objective(alpha):
-            mix_representation = self._mixture([pos_repr, neg_repr], [1 - alpha, alpha])
-            return self.get_distance(
+            mix_representation = self._mixture([neg_repr, pos_repr], [1 - alpha, alpha])
+            return self.loss_function(
                 mix_representation,
                 test_representation,
-                distance=self.distance,
             )
 
         return minimize_prevalence(
@@ -115,7 +118,7 @@ class DyS(SoftLearnerQMixin, AggregationMixin, MatchingHistogramQuantifier):
         return self._predict(test_scores)
     
     def aggregate(self, test_scores, train_scores, y_train):
-        if not self._precomputed:
+        if not getattr(self, "_precomputed", False):
             self._fit(train_scores, y_train)
         return self._predict(test_scores)
 
@@ -169,7 +172,7 @@ class HDy(SoftLearnerQMixin, AggregationMixin, MatchingHistogramQuantifier):
         return self._predict(test_scores)
     
     def aggregate(self, test_scores, train_scores, y_train):
-        if not self._precomputed:
+        if not getattr(self, "_precomputed", False):
             self._fit(train_scores, y_train)
         return self._predict(test_scores)
 
@@ -207,4 +210,3 @@ class HDx(MatchingHistogramQuantifier):
     def predict(self, X):
         X = validate_data(self, X)
         return self._predict(X)
-

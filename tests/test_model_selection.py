@@ -10,6 +10,15 @@ class MockQuantifier(CC):
     def __init__(self, learner=None, threshold=0.5):
         super().__init__(learner=learner, threshold=threshold)
 
+
+def _assert_valid_prevalence(prevalence, n_classes):
+    prevalence = np.asarray(prevalence, dtype=float)
+    assert prevalence.shape == (n_classes,)
+    assert np.all(prevalence >= 0)
+    assert np.all(prevalence <= 1)
+    assert prevalence.sum() == pytest.approx(1.0)
+
+
 def test_gridsearchq_fit_predict(binary_dataset):
     X, y = binary_dataset
     learner = LogisticRegression()
@@ -27,8 +36,7 @@ def test_gridsearchq_fit_predict(binary_dataset):
     
     assert gs.best_params['threshold'] in [0.4, 0.6]
     preds = gs.predict(X)
-    assert isinstance(preds, dict)
-    assert sum(preds.values()) == pytest.approx(1.0)
+    _assert_valid_prevalence(preds, n_classes=2)
 
 def test_gridsearchq_random_state(binary_dataset):
     X, y = binary_dataset
@@ -76,4 +84,3 @@ def test_protocols(binary_dataset):
         )
         gs.fit(X, y)
         assert gs.best_score is not None
-

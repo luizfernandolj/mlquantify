@@ -1,342 +1,222 @@
-# tests/compose/test_compose_quantifier.py
-
 import numpy as np
 import pytest
-
+from sklearn.base import BaseEstimator, ClassifierMixin
 from sklearn.linear_model import LogisticRegression
 
+from mlquantify._config import config_context
+from mlquantify.base_aggregative import (
+    AggregationMixin,
+    SoftLearnerQMixin,
+    is_aggregative_quantifier,
+    uses_crisp_predictions,
+    uses_soft_predictions,
+)
+from mlquantify.compose import (
+    ComposeQuantifier,
+    LeastSquaresLoss,
+    LikelihoodComposeQuantifier,
+    LinearComposeQuantifier,
+)
+from mlquantify.counting import AC
+from mlquantify.matching import GHDx
+from mlquantify.representations import HistogramRepresentation, PredictionRepresentation
 
-pytest.importorskip("qunfold")
+
+class PredictOnlyLearner(BaseEstimator, ClassifierMixin):
+    def fit(self, X, y):
+        X = np.asarray(X)
+        self.classes_ = np.unique(y)
+        self.threshold_ = np.median(X[:, 0])
+        return self
+
+    def predict(self, X):
+        X = np.asarray(X)
+        return np.where(X[:, 0] >= self.threshold_, self.classes_[-1], self.classes_[0])
 
 
-def _as_array(prevalences):
-    if isinstance(prevalences, dict):
-        return np.asarray(list(prevalences.values()), dtype=float)
+class SoftLinearCompose(SoftLearnerQMixin, AggregationMixin, LinearComposeQuantifier):
+    def __init__(
+        self,
+        representation,
+        learner=None,
+        loss="hellinger",
+        solver="slsqp",
+        normalize=None,
+        cv=None,
+        stratified=True,
+        shuffle=False,
+        random_state=None,
+    ):
+        super().__init__(
+            representation=representation,
+            learner=learner,
+            loss=loss,
+            solver=solver,
+            aggregative=True,
+            normalize=normalize,
+        )
+        self.cv = cv
+        self.stratified = stratified
+        self.shuffle = shuffle
+        self.random_state = random_state
 
-    return np.asarray(prevalences, dtype=float)
+
+class SoftLikelihoodCompose(SoftLearnerQMixin, AggregationMixin, LikelihoodComposeQuantifier):
+    def __init__(
+        self,
+        learner=None,
+        solver="slsqp",
+        cv=None,
+        stratified=True,
+        shuffle=False,
+        random_state=None,
+    ):
+        super().__init__(
+            representation=PredictionRepresentation(method="soft", average=False),
+            learner=learner,
+            solver=solver,
+            aggregative=True,
+        )
+        self.cv = cv
+        self.stratified = stratified
+        self.shuffle = shuffle
+        self.random_state = random_state
 
 
-def _assert_valid_prevalence(prevalences, n_classes):
-    prevalences = _as_array(prevalences)
+def _assert_valid_prevalence(prevalence, n_classes):
+    prevalence = np.asarray(prevalence, dtype=float)
+    assert prevalence.shape == (n_classes,)
+    assert np.all(prevalence >= 0)
+    assert np.all(prevalence <= 1)
+    assert prevalence.sum() == pytest.approx(1.0)
 
-    assert prevalences.shape == (n_classes,)
-    assert np.all(prevalences >= 0)
-    assert np.all(prevalences <= 1)
-    assert prevalences.sum() == pytest.approx(1.0, abs=1e-5)
+
+def test_compose_quantifier_aliases_linear_compose():
+    assert ComposeQuantifier is LinearComposeQuantifier
+    assert LeastSquaresLoss()([1.0, 2.0], [2.0, 4.0]) == pytest.approx(5.0)
 
 
-def _make_qunfold_components(method_name, learner=None):
-    from qunfold.sklearn import CVClassifier
-    from qunfold.methods.linear.losses import LeastSquaresLoss, HellingerSurrogateLoss
-    from qunfold.methods.linear.representations import (
-        ClassRepresentation,
-        HistogramRepresentation,
+def test_compose_mixins_define_learner_prediction_modes():
+    linear = LinearComposeQuantifier(
+        representation=PredictionRepresentation(method="soft", average=True),
+        aggregative=False,
     )
+    soft_linear = SoftLinearCompose(
+        learner=LogisticRegression(),
+        representation=PredictionRepresentation(method="soft", average=True),
+    )
+    likelihood = SoftLikelihoodCompose(learner=LogisticRegression())
+    crisp = AC(learner=PredictOnlyLearner())
+    non_aggregative = GHDx()
 
-    if method_name == "ACC":
-        return {
-            "representation": ClassRepresentation(
-                CVClassifier(learner, random_state=42),
-                is_probabilistic=False,
-            ),
-            "loss": LeastSquaresLoss(),
-        }
-
-    if method_name == "PACC":
-        return {
-            "representation": ClassRepresentation(
-                CVClassifier(learner, random_state=42),
-                is_probabilistic=True,
-            ),
-            "loss": LeastSquaresLoss(),
-        }
-
-    if method_name == "HDx":
-        return {
-            "representation": HistogramRepresentation(
-                n_bins=8,
-                unit_scale=False,
-            ),
-            "loss": HellingerSurrogateLoss(),
-        }
-
-    if method_name == "HDy":
-        return {
-            "representation": HistogramRepresentation(
-                n_bins=8,
-                preprocessor=ClassRepresentation(
-                    CVClassifier(learner, random_state=42),
-                    is_probabilistic=True,
-                ),
-                unit_scale=False,
-            ),
-            "loss": HellingerSurrogateLoss(),
-        }
-
-    raise ValueError(f"Unknown method: {method_name}")
+    assert not uses_soft_predictions(linear)
+    assert not is_aggregative_quantifier(linear)
+    assert uses_soft_predictions(soft_linear)
+    assert is_aggregative_quantifier(soft_linear)
+    assert uses_soft_predictions(likelihood)
+    assert uses_crisp_predictions(crisp)
+    assert not is_aggregative_quantifier(non_aggregative)
 
 
-def _make_qunfold_native(method_name, learner=None):
-    from qunfold import HDx, HDy, ACC, PACC
-    from qunfold.sklearn import CVClassifier
-
-    learner = CVClassifier(learner, random_state=42) if learner is not None else None
-
-    if method_name == "ACC":
-        return ACC(learner)
-    if method_name == "PACC":
-        return PACC(learner)
-    if method_name == "HDx":
-        return HDx(n_bins=8, seed=42)
-    if method_name == "HDy":
-        return HDy(learner, n_bins=8, seed=42)
-
-    raise ValueError(f"Unknown method: {method_name}")
-
-
-def _make_compose_native(method_name, learner=None):
-    from mlquantify.compose import ACC, PACC
-
-    if method_name == "ACC":
-        return ACC(learner=learner, seed=42)
-    if method_name == "PACC":
-        return PACC(learner=learner, seed=42)
-
-    raise ValueError(f"Unknown method: {method_name}")
-
-
-@pytest.mark.parametrize("method_name", ["ACC", "PACC", "HDx", "HDy"])
-def test_compose_quantifier_matches_qunfold_native_binary(
-    method_name,
-    binary_dataset,
-):
-    from mlquantify.compose import ComposeQuantifier
-
+def test_generic_compose_requires_method_mixins_when_aggregative(binary_dataset):
     X, y = binary_dataset
-
-    learner_native = LogisticRegression(max_iter=1000, random_state=42)
-    learner_compose = LogisticRegression(max_iter=1000, random_state=42)
-
-    native = _make_qunfold_native(
-        method_name,
-        learner=learner_native,
+    q = LinearComposeQuantifier(
+        learner=LogisticRegression(max_iter=1000, random_state=42),
+        representation=PredictionRepresentation(method="soft", average=True),
     )
 
-    components = _make_qunfold_components(
-        method_name,
-        learner=learner_compose,
-    )
-
-    composed = ComposeQuantifier(
-        representation=components["representation"],
-        loss=components["loss"],
-        seed=42,
-    )
-
-    native.fit(X, y)
-    composed.fit(X, y)
-
-    native_prevs = _as_array(native.predict(X))
-    composed_prevs = _as_array(composed.predict(X))
-
-    _assert_valid_prevalence(composed_prevs, n_classes=2)
-
-    np.testing.assert_allclose(
-        composed_prevs,
-        native_prevs,
-        atol=1e-5,
-        rtol=1e-5,
-    )
+    with pytest.raises(ValueError, match="AggregationMixin"):
+        q.fit(X, y)
 
 
-@pytest.mark.parametrize("method_name", ["ACC", "PACC", "HDx", "HDy"])
-def test_compose_quantifier_matches_qunfold_native_multiclass(
-    method_name,
-    multiclass_dataset,
-):
-    from mlquantify.compose import ComposeQuantifier
-
-    X, y = multiclass_dataset
-
-    learner_native = LogisticRegression(max_iter=1000, random_state=42)
-    learner_compose = LogisticRegression(max_iter=1000, random_state=42)
-
-    native = _make_qunfold_native(
-        method_name,
-        learner=learner_native,
-    )
-
-    components = _make_qunfold_components(
-        method_name,
-        learner=learner_compose,
-    )
-
-    composed = ComposeQuantifier(
-        representation=components["representation"],
-        loss=components["loss"],
-        seed=42,
-    )
-
-    native.fit(X, y)
-    composed.fit(X, y)
-
-    native_prevs = _as_array(native.predict(X))
-    composed_prevs = _as_array(composed.predict(X))
-
-    _assert_valid_prevalence(composed_prevs, n_classes=3)
-
-    np.testing.assert_allclose(
-        composed_prevs,
-        native_prevs,
-        atol=1e-5,
-        rtol=1e-5,
-    )
-
-
-def test_compose_quantifier_dys_valid_prevalence(binary_dataset):
-    from qunfold.sklearn import CVClassifier
-    from qunfold.methods.linear.representations import (
-        ClassRepresentation,
-        HistogramRepresentation,
-    )
-
-    from mlquantify.compose import ComposeQuantifier
-    from mlquantify.metrics import topsoe_jax
-
+def test_aggregative_compose_requires_prediction_representation(binary_dataset):
     X, y = binary_dataset
-
-    learner = LogisticRegression(max_iter=1000, random_state=42)
-
-    representation = HistogramRepresentation(
-        n_bins=8,
-        preprocessor=ClassRepresentation(
-            CVClassifier(learner, random_state=42),
-            is_probabilistic=True,
-        ),
-        unit_scale=False,
+    q = SoftLinearCompose(
+        learner=LogisticRegression(max_iter=1000, random_state=42),
+        representation=HistogramRepresentation(bins=[4], mode="histogram"),
     )
 
-    q = ComposeQuantifier(
-        representation=representation,
-        loss=topsoe_jax,
-        seed=42,
+    with pytest.raises(ValueError, match="PredictionRepresentation"):
+        q.fit(X, y)
+
+
+def test_crisp_compose_method_accepts_predict_only_learner(binary_dataset):
+    X, y = binary_dataset
+    q = AC(learner=PredictOnlyLearner(), cv=3)
+
+    q.fit(X, y)
+
+    with config_context(prevalence_return_type="array"):
+        prevalence = q.predict(X)
+
+    _assert_valid_prevalence(prevalence, n_classes=2)
+
+
+def test_linear_compose_aggregative_soft_representation(binary_dataset):
+    X, y = binary_dataset
+    q = SoftLinearCompose(
+        learner=LogisticRegression(max_iter=1000, random_state=42),
+        representation=PredictionRepresentation(method="soft", average=True),
+        loss="ls",
+        cv=3,
+        solver="slsqp",
     )
 
     q.fit(X, y)
-    prevalences = q.predict(X)
-    train_prevalence = np.bincount(y) / len(y)
-    print(prevalences)
-    print(train_prevalence)
 
-    _assert_valid_prevalence(prevalences, n_classes=2)
+    with config_context(prevalence_return_type="array"):
+        prevalence = q.predict(X)
+
+    _assert_valid_prevalence(prevalence, n_classes=2)
+    assert q.best_distance_ is not None
 
 
-@pytest.mark.parametrize("method_name", ["ACC", "PACC"])
-def test_compose_preconfigured_matches_qunfold_native_binary(
-    method_name,
-    binary_dataset,
-):
+def test_linear_compose_accepts_loss_instances(binary_dataset):
     X, y = binary_dataset
-
-    learner_native = LogisticRegression(max_iter=1000, random_state=42)
-    learner_compose = LogisticRegression(max_iter=1000, random_state=42)
-
-    native = _make_qunfold_native(method_name, learner=learner_native)
-    composed = _make_compose_native(method_name, learner=learner_compose)
-
-    native.fit(X, y)
-    composed.fit(X, y, cv=5, random_state=42)
-
-    native_prevs = _as_array(native.predict(X))
-    composed_prevs = _as_array(composed.predict(X))
-
-    _assert_valid_prevalence(composed_prevs, n_classes=2)
-
-    np.testing.assert_allclose(
-        composed_prevs,
-        native_prevs,
-        atol=1e-5,
-        rtol=1e-5,
+    q = SoftLinearCompose(
+        learner=LogisticRegression(max_iter=1000, random_state=42),
+        representation=PredictionRepresentation(method="hard", average=True),
+        loss=LeastSquaresLoss(),
+        cv=3,
     )
 
+    q.fit(X, y)
 
-@pytest.mark.parametrize("method_name", ["ACC", "PACC"])
-def test_compose_preconfigured_matches_qunfold_native_multiclass(
-    method_name,
-    multiclass_dataset,
-):
+    with config_context(prevalence_return_type="array"):
+        prevalence = q.predict(X)
+
+    _assert_valid_prevalence(prevalence, n_classes=2)
+
+
+def test_linear_compose_non_aggregative_histogram(multiclass_dataset):
     X, y = multiclass_dataset
-
-    learner_native = LogisticRegression(max_iter=1000, random_state=42)
-    learner_compose = LogisticRegression(max_iter=1000, random_state=42)
-
-    native = _make_qunfold_native(method_name, learner=learner_native)
-    composed = _make_compose_native(method_name, learner=learner_compose)
-
-    native.fit(X, y)
-    composed.fit(X, y, cv=5, random_state=42)
-
-    native_prevs = _as_array(native.predict(X))
-    composed_prevs = _as_array(composed.predict(X))
-
-    _assert_valid_prevalence(composed_prevs, n_classes=3)
-
-    np.testing.assert_allclose(
-        composed_prevs,
-        native_prevs,
-        atol=1e-5,
-        rtol=1e-5,
+    q = LinearComposeQuantifier(
+        representation=HistogramRepresentation(bins=[4], mode="histogram"),
+        loss="hellinger",
+        aggregative=False,
+        solver="slsqp",
     )
 
+    q.fit(X, y)
 
-@pytest.mark.parametrize(
-    ("compose_class_name", "native_method_name"),
-    [("AC", "ACC"), ("PAC", "PACC")],
-)
-def test_compose_mlquantify_names_match_qunfold_native_binary(
-    compose_class_name,
-    native_method_name,
-    binary_dataset,
-):
-    from mlquantify import compose
+    with config_context(prevalence_return_type="array"):
+        prevalence = q.predict(X)
 
+    _assert_valid_prevalence(prevalence, n_classes=3)
+
+
+def test_likelihood_compose_over_adjusted_posteriors(binary_dataset):
     X, y = binary_dataset
-
-    native = _make_qunfold_native(
-        native_method_name,
+    q = SoftLikelihoodCompose(
         learner=LogisticRegression(max_iter=1000, random_state=42),
-    )
-    composed = getattr(compose, compose_class_name)(
-        learner=LogisticRegression(max_iter=1000, random_state=42),
-        seed=42,
+        cv=3,
+        solver="slsqp",
     )
 
-    native.fit(X, y)
-    composed.fit(X, y, cv=5, random_state=42)
+    q.fit(X, y)
 
-    np.testing.assert_allclose(
-        _as_array(composed.predict(X)),
-        _as_array(native.predict(X)),
-        atol=1e-5,
-        rtol=1e-5,
-    )
+    with config_context(prevalence_return_type="array"):
+        prevalence = q.predict(X)
 
-
-def test_compose_preconfigured_supports_non_zero_based_labels(binary_dataset):
-    from mlquantify.compose import ACC
-    from mlquantify._config import config_context
-
-    X, y = binary_dataset
-    y = np.where(y == 0, 2, 4)
-
-    q = ACC(
-        learner=LogisticRegression(max_iter=1000, random_state=42),
-        seed=42,
-    )
-
-    with config_context(prevalence_return_type="dict"):
-        q.fit(X, y, cv=5, random_state=42)
-        prevalences = q.predict(X)
-
-    assert set(prevalences) == {2, 4}
-    _assert_valid_prevalence(prevalences, n_classes=2)
+    _assert_valid_prevalence(prevalence, n_classes=2)
+    assert q.best_distance_ is not None

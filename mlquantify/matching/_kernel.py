@@ -1,5 +1,6 @@
 import numpy as np
 
+from mlquantify.losses import LeastSquaresLoss
 from mlquantify.matching._base import BaseMatchingQuantifier
 from mlquantify.representations import KernelMeanRepresentation
 from mlquantify.solvers import minimize_prevalence
@@ -33,25 +34,24 @@ class MatchingKernelQuantifier(BaseMatchingQuantifier):
                 degree=degree,
                 coef0=coef0,
             ),
-            distance="sqEuclidean",
-            solver=solver,
             normalize=False,
         )
         self.kernel = kernel
         self.gamma = gamma
         self.degree = degree
         self.coef0 = coef0
+        self.solver = solver
 
     def _solve_prevalence(self, test_representation, train_representations):
         solver = "slsqp" if self.solver == "auto" else self.solver
 
         class_means = np.asarray(train_representations, dtype=float)
         test_mean = np.asarray(test_representation, dtype=float)
+        loss_function = LeastSquaresLoss()
 
         def objective(prevalence):
             mixture_mean = prevalence @ class_means
-            diff = mixture_mean - test_mean
-            return float(diff @ diff)
+            return loss_function(mixture_mean, test_mean)
 
         prevalence, loss = minimize_prevalence(
             objective=objective,

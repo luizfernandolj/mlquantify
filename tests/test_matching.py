@@ -3,7 +3,21 @@ import pytest
 from sklearn.linear_model import LogisticRegression
 
 from mlquantify._config import config_context
-from mlquantify.matching import DyS, HDx, HDy, KDEyCS, KDEyHD, KDEyML, MMD_RKHS, SORD
+from mlquantify.matching import (
+    DyS,
+    EDx,
+    EDy,
+    GHDy,
+    HDx,
+    HDy,
+    KDEyCS,
+    KDEyHD,
+    KDEyML,
+    MMD_RKHS,
+    SORD,
+)
+from mlquantify.matching._generalized import KDEyML as GeneralizedKDEyML
+from mlquantify.representations import PredictionRepresentation
 
 
 def _assert_valid_prevalence(prevalence, n_classes):
@@ -54,6 +68,33 @@ def test_kernel_matching_multiclass(multiclass_dataset):
     assert q.best_distance_ is not None
 
 
+def test_energy_distance_matching_binary(binary_dataset):
+    X, y = binary_dataset
+    q = EDx()
+
+    q.fit(X, y)
+    with config_context(prevalence_return_type="array"):
+        prevalence = q.predict(X)
+
+    _assert_valid_prevalence(prevalence, n_classes=2)
+    assert q.best_distance_ is not None
+
+
+def test_energy_distance_matching_aggregative_binary(binary_dataset):
+    X, y = binary_dataset
+    q = EDy(
+        learner=LogisticRegression(max_iter=1000, random_state=42),
+        cv=3,
+    )
+
+    q.fit(X, y)
+    with config_context(prevalence_return_type="array"):
+        prevalence = q.predict(X)
+
+    _assert_valid_prevalence(prevalence, n_classes=2)
+    assert q.best_distance_ is not None
+
+
 @pytest.mark.parametrize(
     "quantifier",
     [
@@ -76,6 +117,16 @@ def test_kde_matching_multiclass(quantifier, multiclass_dataset):
 
     _assert_valid_prevalence(prevalence, n_classes=3)
     assert quantifier.best_distance_ is not None
+
+
+def test_aggregative_generalized_matching_uses_prediction_representation():
+    g_hdy = GHDy(learner=LogisticRegression(max_iter=1000, random_state=42))
+    kde_ml = GeneralizedKDEyML(learner=LogisticRegression(max_iter=1000, random_state=42))
+
+    assert isinstance(g_hdy.representation, PredictionRepresentation)
+    assert g_hdy.representation.representation is not None
+    assert isinstance(kde_ml.representation, PredictionRepresentation)
+    assert kde_ml.representation.representation is not None
 
 
 def test_sord_score_matching_binary(binary_dataset):

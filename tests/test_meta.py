@@ -5,7 +5,15 @@ from sklearn.linear_model import LogisticRegression
 from mlquantify.meta import EnsembleQ, AggregativeBootstrap, QuaDapt
 from mlquantify.counting import CC, PCC, FM
 from mlquantify.likelihood import EMQ
-from mlquantify.mixture import DyS
+from mlquantify.matching import DyS
+
+
+def _assert_valid_prevalence(prevalence, n_classes):
+    prevalence = np.asarray(prevalence, dtype=float)
+    assert prevalence.shape == (n_classes,)
+    assert np.all(prevalence >= 0)
+    assert np.all(prevalence <= 1)
+    assert prevalence.sum() == pytest.approx(1.0)
 
 def test_ensembleq_fit_predict(binary_dataset):
     X, y = binary_dataset
@@ -16,8 +24,7 @@ def test_ensembleq_fit_predict(binary_dataset):
     meta_q = EnsembleQ(quantifier=base_q, size=5, n_jobs=-1)
     meta_q.fit(X, y)
     preds = meta_q.predict(X)
-    assert isinstance(preds, dict)
-    assert sum(preds.values()) == pytest.approx(1.0)
+    _assert_valid_prevalence(preds, n_classes=2)
 
 @pytest.mark.parametrize("protocol", ["artificial", "natural", "uniform"])
 def test_ensembleq_protocols(protocol, binary_dataset):
@@ -27,7 +34,7 @@ def test_ensembleq_protocols(protocol, binary_dataset):
     meta_q = EnsembleQ(quantifier=base_q, size=2, protocol=protocol)
     meta_q.fit(X, y)
     preds = meta_q.predict(X)
-    assert 1 - sum(preds.values()) < 1e-6
+    _assert_valid_prevalence(preds, n_classes=2)
 
 def test_aggregative_bootstrap(binary_dataset):
     X, y = binary_dataset
@@ -36,8 +43,7 @@ def test_aggregative_bootstrap(binary_dataset):
     meta_q = AggregativeBootstrap(quantifier=base_q, n_train_bootstraps=2, n_test_bootstraps=2)
     meta_q.fit(X, y)
     preds = meta_q.predict(X)
-    assert isinstance(preds, dict)
-    assert 1 - sum(preds.values()) < 1e-3
+    _assert_valid_prevalence(preds, n_classes=2)
 
 def test_quadapt_fit_predict(binary_dataset):
     X, y = binary_dataset
@@ -47,8 +53,7 @@ def test_quadapt_fit_predict(binary_dataset):
     meta_q = QuaDapt(quantifier=base_q)
     meta_q.fit(X, y)
     preds = meta_q.predict(X)
-    assert isinstance(preds, dict)
-    assert (1 - sum(preds.values())) < 1e-3
+    _assert_valid_prevalence(preds, n_classes=2)
 
 def test_quadapt_raises_hard_quantifier(binary_dataset):
     X, y = binary_dataset
@@ -58,4 +63,3 @@ def test_quadapt_raises_hard_quantifier(binary_dataset):
     meta_q = QuaDapt(quantifier=base_q)
     with pytest.raises(ValueError, match="not a soft"):
         meta_q.fit(X, y)
-

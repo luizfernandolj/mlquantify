@@ -2,21 +2,13 @@ import numpy as np
 from abc import abstractmethod
 
 from mlquantify.base import BaseQuantifier
+from mlquantify.losses import get_loss, normalize_distribution
 from mlquantify.utils._constraints import (
     Options,
 )
 
 
 from mlquantify.utils._validation import validate_data, validate_prevalences
-from mlquantify.metrics import (
-    hellinger,
-    topsoe,
-    probsymm,
-    sqEuclidean
-)
-
-
-EPS = 1e-12
 
 
 class BaseMatchingQuantifier(BaseQuantifier):
@@ -29,27 +21,29 @@ class BaseMatchingQuantifier(BaseQuantifier):
     """
 
     _parameter_constraints = {
-        "distance": [Options(["hellinger", "topsoe", "probsymm", "sqEuclidean", "euclidean"])],
+        "distance": [Options([
+            "hellinger",
+            "topsoe",
+            "probsymm",
+            "sqEuclidean",
+            "euclidean",
+            "least_squares",
+            "least-squares",
+            "least squares",
+            "ls",
+            "l2",
+            None,
+        ])],
         "solver": [Options(["auto", "grid", "ternary", "slsqp"])],
         "normalize": ["boolean", None],
     }
 
     def __init__(
         self, 
-        representation, 
-        distance="hellinger", 
-        solver="auto",
-        normalize=None
+        representation,  
+        normalize=False
         ):
-        if normalize is None:
-            normalize = distance in {
-                "hellinger",
-                "topsoe",
-                "probsymm",
-            }
         self.representation = representation
-        self.distance = distance
-        self.solver = solver
         self.normalize = normalize
 
     def _fit(self, X, y, sample_weight=None):
@@ -105,37 +99,15 @@ class BaseMatchingQuantifier(BaseQuantifier):
 
     @staticmethod
     def _normalize_distribution(values):
-        values = np.asarray(values, dtype=float)
-        values = np.maximum(values, EPS)
-        total = values.sum()
-        if total <= EPS:
-            return np.ones_like(values) / len(values)
-        return values / total
+        return normalize_distribution(values)
 
     def get_distance(self, dist_train, dist_test, distance="hellinger"):
         """Compute a distance between two normalized representations."""
-        dist_train = np.asarray(dist_train, dtype=float)
-        dist_test = np.asarray(dist_test, dtype=float)
-
-        if self.normalize:
-            dist_train = self._normalize_distribution(dist_train)
-            dist_test = self._normalize_distribution(dist_test)
-
-        if dist_train.shape != dist_test.shape:
-            raise ValueError("Distributions must have the same shape.")
-
-        if distance == "hellinger":
-            return float(hellinger(dist_train, dist_test))
-        if distance == "topsoe":
-            return float(topsoe(dist_train, dist_test))
-        if distance == "probsymm":
-            return float(probsymm(dist_train, dist_test))
-        if distance == "sqEuclidean":
-            return float(sqEuclidean(dist_train, dist_test))
-        if distance == "euclidean":
-            return float(np.sqrt(sqEuclidean(dist_train, dist_test)))
-
-        raise ValueError(f"Invalid distance: {distance}")
+        loss_function = get_loss(
+            loss=distance,
+            normalize=self.normalize,
+        )
+        return loss_function(dist_train, dist_test)
 
     
     @staticmethod

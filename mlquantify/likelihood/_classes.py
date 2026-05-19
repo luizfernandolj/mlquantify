@@ -1,7 +1,11 @@
 from mlquantify.base import BaseQuantifier
 from mlquantify.base_aggregative import AggregationMixin
 import numpy as np
-from mlquantify.base_aggregative import SoftLearnerQMixin, _get_learner_function
+from mlquantify.base_aggregative import (
+    SoftLearnerQMixin,
+    _get_learner_function,
+    get_aggregation_requirements,
+)
 from mlquantify.metrics._slq import MAE
 from mlquantify.utils import _fit_context, validate_data, check_classes_attribute, validate_predictions, validate_prevalences
 from mlquantify.utils._constraints import (
@@ -45,11 +49,22 @@ class BaseLikelihoodQuantifier(SoftLearnerQMixin, AggregationMixin, BaseQuantifi
         learner_function = _get_learner_function(self)
         predictions = getattr(self.learner, learner_function)(X)
 
-        return self.aggregate(
-            predictions=predictions,
-            train_predictions=self.train_predictions_,
-            train_labels=self.train_labels_,
-        )
+        requirements = get_aggregation_requirements(self)
+
+        if (
+            requirements.requires_train_proba
+            and requirements.requires_train_labels
+        ):
+            return self.aggregate(
+                predictions,
+                self.train_predictions_,
+                self.train_labels_,
+            )
+
+        if requirements.requires_train_labels:
+            return self.aggregate(predictions, self.train_labels_)
+
+        return self.aggregate(predictions)
 
     def _compute_priors(self, y):
         y = np.asarray(y)
@@ -183,6 +198,13 @@ class EMQ(BaseLikelihoodQuantifier):
         self.calib_function = calib_function
         self.criteria = criteria
         self.on_calib_error = on_calib_error
+
+    
+    def __mlquantify_tags__(self):
+        tags = super().__mlquantify_tags__()
+        tags.prediction_requirements.requires_train_proba = True
+        tags.prediction_requirements.requires_train_labels = True
+        return tags
 
     def aggregate(
         self,
@@ -346,6 +368,11 @@ class CDE(BaseLikelihoodQuantifier):
         self.init_cfp = float(init_cfp)
         self.strategy = strategy
         self.n_jobs = n_jobs
+
+    def __mlquantify_tags__(self):
+        tags = super().__mlquantify_tags__()
+        tags.prediction_requirements.requires_train_labels = True
+        return tags
 
     def aggregate(
         self,

@@ -1,8 +1,9 @@
 import numpy as np
 from sklearn.neighbors import KernelDensity
+from mlquantify.losses import MixtureNegativeLogLikelihoodLoss
 from mlquantify.representations import KDERepresentation
 from mlquantify.matching._base import BaseMatchingQuantifier
-from mlquantify.matching._utils import negative_log_likelihood, gaussian_kernel
+from mlquantify.matching._utils import gaussian_kernel
 from mlquantify.solvers import minimize_prevalence
 from mlquantify.utils._constraints import Interval, Options
 from mlquantify.utils._decorators import _fit_context
@@ -45,6 +46,7 @@ class KDEyQuantifier(
         self.learner = learner
         self.bandwidth = bandwidth
         self.kernel = kernel
+        self.solver = solver
         self.cv = cv
         self.stratified = stratified
         self.shuffle = shuffle
@@ -55,10 +57,14 @@ class KDEyQuantifier(
                 bandwidth=bandwidth,
                 kernel=kernel,
             ),
-            distance="density",
-            solver=solver,
             normalize=False,
         )
+
+    def __mlquantify_tags__(self):
+        tags = super().__mlquantify_tags__()
+        tags.prediction_requirements.requires_train_proba = True
+        tags.prediction_requirements.requires_train_labels = True
+        return tags
 
     @_fit_context(prefer_skip_nested_validation=True)
     def fit(self, X, y, learner_fitted=False, sample_weight=None):
@@ -133,10 +139,10 @@ class KDEyML(KDEyQuantifier):
             np.exp(kde.score_samples(test_representation)) + EPS
             for kde in class_kdes
         ])
+        loss_function = MixtureNegativeLogLikelihoodLoss(reduction="sum")
 
         def objective(prevalences):
-            mixture_likelihood = prevalences @ class_likelihoods
-            return negative_log_likelihood(mixture_likelihood)
+            return loss_function(prevalences, class_likelihoods)
 
         return minimize_prevalence(
             objective=objective,

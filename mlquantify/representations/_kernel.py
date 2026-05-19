@@ -1,52 +1,44 @@
-from mlquantify.representations._base import BaseRepresentation
+# representations/_kernel.py
+
 import numpy as np
+
 from sklearn.metrics.pairwise import pairwise_kernels
 
+from ._base import BaseRepresentation
+
+
 class KernelMeanRepresentation(BaseRepresentation):
-    def __init__(self, kernel="rbf", gamma=None, degree=3, coef0=0.0):
+    r"""Kernel mean embedding representation."""
+
+    def __init__(
+        self,
+        kernel="rbf",
+        gamma=None,
+        degree=3,
+        coef0=0.0,
+    ):
         self.kernel = kernel
         self.gamma = gamma
         self.degree = degree
         self.coef0 = coef0
 
-    def _fit(self, X, y, sample_weight=None):
-        self.X_train_ = np.asarray(X)
-        self.y_train_ = np.asarray(y)
-
-        K = pairwise_kernels(
-            self.X_train_,
-            self.X_train_,
-            metric=self.kernel,
-            **self._kernel_kwargs(),
-        )
-
-        class_means = []
-
-        for cls in self.classes_:
-            mask = self.y_train_ == cls
-
-            if sample_weight is None:
-                class_means.append(K[mask].mean(axis=0))
-            else:
-                weights = np.asarray(sample_weight)[mask]
-                class_means.append(np.average(K[mask], axis=0, weights=weights))
-
-        self.class_representations_ = np.vstack(class_means)
-
     def transform(self, X):
-        K_test_train = pairwise_kernels(
-            np.asarray(X),
-            self.X_train_,
-            metric=self.kernel,
-            **self._kernel_kwargs(),
-        )
+        X = np.asarray(X, dtype=float)
 
-        return K_test_train.mean(axis=0)
+        return X.mean(axis=0)
 
-    def _kernel_kwargs(self):
+    def _fit(self, X, y, sample_weight=None):
+        X = np.asarray(X, dtype=float)
+
+        self.class_representations_ = np.asarray([
+            self.transform(X[y == cls])
+            for cls in self.classes_
+        ])
+
+    def pairwise(self, X, Y):
         params = {}
 
-        if self.kernel == "rbf" and self.gamma is not None:
+        if self.kernel in {"rbf", "poly", "sigmoid"} and self.gamma is not None:
             params["gamma"] = self.gamma
 
         if self.kernel == "poly":
@@ -54,8 +46,11 @@ class KernelMeanRepresentation(BaseRepresentation):
             params["coef0"] = self.coef0
 
         if self.kernel == "sigmoid":
-            if self.gamma is not None:
-                params["gamma"] = self.gamma
             params["coef0"] = self.coef0
 
-        return params
+        return pairwise_kernels(
+            X,
+            Y,
+            metric=self.kernel,
+            **params,
+        )

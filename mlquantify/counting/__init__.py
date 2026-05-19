@@ -4,10 +4,6 @@ from ._counting import (
 )
 from ._adjustment import (
     ThresholdAdjustment,
-    MatrixAdjustment,
-    FM,
-    AC,
-    PAC,
     TAC,
     TX,
     TMAX,
@@ -15,7 +11,7 @@ from ._adjustment import (
     MS,
     MS2,
 )
-from ._generalized import GAC, GPAC
+from ._generalized import FM, GAC, GPAC
 from mlquantify.likelihood import CDE
 
 from ._utils import (
@@ -29,7 +25,6 @@ __all__ = [
     "CC",
     "PCC",
     "ThresholdAdjustment",
-    "MatrixAdjustment",
     "FM",
     "AC",
     "PAC",
@@ -47,3 +42,6 @@ __all__ = [
     "compute_tpr",
     "evaluate_thresholds",
 ]
+
+AC = GAC
+PAC = GPAC

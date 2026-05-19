@@ -7,8 +7,19 @@ class BaseRepresentation(ABC):
     """Base class for quantification representations."""
 
     def fit(self, X, y, classes=None, sample_weight=None):
-        X = self._validate_X(X)
+        X = np.asarray(X)
         y = np.asarray(y)
+
+        if X.ndim == 0:
+            raise ValueError("X must be array-like.")
+
+        if y.ndim != 1:
+            y = y.ravel()
+
+        if len(X) != len(y):
+            raise ValueError(
+                f"X and y have inconsistent lengths: {len(X)} and {len(y)}."
+            )
 
         self.classes_ = np.asarray(classes) if classes is not None else np.unique(y)
         self._fit(X, y, sample_weight=sample_weight)
@@ -27,13 +38,3 @@ class BaseRepresentation(ABC):
     @abstractmethod
     def _fit(self, X, y, sample_weight=None):
         """Fit representation internals."""
-
-    def _validate_X(self, X):
-        return self._as_2d(X)
-
-    @staticmethod
-    def _as_2d(X):
-        X = np.asarray(X, dtype=float)
-        if X.ndim == 1:
-            return X.reshape(-1, 1)
-        return X

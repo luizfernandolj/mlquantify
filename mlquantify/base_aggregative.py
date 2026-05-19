@@ -62,21 +62,38 @@ class AggregationMixin:
         return tags
     
     
-    def _fit_learner_predictions(self, X, y, learner_fitted=False):
+    def _fit_learner_predictions(
+        self,
+        X,
+        y,
+        learner_fitted=False,
+        cv=None,
+        stratified=None,
+        shuffle=None,
+        random_state=None,
+    ):
         learner_function = _get_learner_function(self)
 
         if learner_fitted:
             return getattr(self.learner, learner_function)(X), y
+
+        cv = self.cv if cv is None else cv
+        stratified = self.stratified if stratified is None else stratified
+        shuffle = self.shuffle if shuffle is None else shuffle
+        random_state = self.random_state if random_state is None else random_state
+
+        if cv is None:
+            cv = 5
 
         predictions, y_pred = apply_cross_validation(
             self.learner,
             X,
             y,
             function=learner_function,
-            cv=self.cv,
-            stratified=self.stratified,
-            shuffle=self.shuffle,
-            random_state=self.random_state,
+            cv=cv,
+            stratified=stratified,
+            shuffle=shuffle,
+            random_state=random_state,
         )
 
         self.learner.fit(X, y)
