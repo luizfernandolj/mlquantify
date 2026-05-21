@@ -1,5 +1,3 @@
-from abc import abstractmethod
-
 import numpy as np
 
 from mlquantify.base_aggregative import (
@@ -8,15 +6,12 @@ from mlquantify.base_aggregative import (
 )
 from mlquantify.utils._decorators import _fit_context
 from mlquantify.matching._base import BaseMatchingQuantifier
-from mlquantify.matching._utils import ternary_search
 from mlquantify.losses import get_loss
 from mlquantify.representations import HistogramRepresentation
 from mlquantify.multiclass import binary_quantifier
-from mlquantify.utils._constraints import Interval, Options
-from mlquantify.utils._get_scores import apply_cross_validation
+from mlquantify.utils._constraints import Options
 from mlquantify.utils._validation import validate_data
-from scipy.optimize import minimize, minimize_scalar
-from mlquantify.solvers import minimize_prevalence
+from mlquantify.solvers import minimize_prevalence, minimize_prevalence_blocks
 
 
 @binary_quantifier(strategy_attr="strategy")
@@ -34,6 +29,8 @@ class MatchingHistogramQuantifier(BaseMatchingQuantifier):
         distance="hellinger",
         solver="auto",
         strategy="ovr",
+        histogram_features=None,
+        bin_strategy=None,
     ):
         if bins_size is None:
             bins_size = np.append(np.linspace(2, 20, 10), 30).astype(int)
@@ -43,36 +40,83 @@ class MatchingHistogramQuantifier(BaseMatchingQuantifier):
         self.loss_function = get_loss(loss=distance, normalize=True)
         self.solver = solver
         self.strategy = strategy
+        self.histogram_features = histogram_features
+        self.bin_strategy = bin_strategy
         super().__init__(
-            representation=HistogramRepresentation(bins=bins_size, mode="histogram"),
-            normalize=True
+            representation=HistogramRepresentation(
+                bins=bins_size,
+                mode="histogram",
+                features=histogram_features,
+                partition_blocks=bin_strategy in {"median", "mean"},
+            ),
+            normalize=True,
         )
 
     def _solve_prevalence(self, test_representation, train_representations):
-        solver = self.solver
+        solver = self._resolve_solver()
 
-        if solver == "auto":
-            solver = "ternary" if self.distance in ["hellinger", "topsoe", "probsymm"] else "grid"
+        if self.bin_strategy in {"median", "mean"}:
+            return minimize_prevalence_blocks(
+                objective_factory=self._block_objective_factory,
+                test_representation=test_representation,
+                train_representations=train_representations,
+                block_slices=self._get_block_slices(),
+                n_classes=2,
+                solver=solver,
+                aggregate=self.bin_strategy,
+            )
 
-        neg_repr = train_representations[0]
-        pos_repr = train_representations[1]
+        return minimize_prevalence(
+            objective=self._make_objective(
+                test_representation,
+                train_representations,
+            ),
+            n_classes=2,
+            solver=solver,
+        )
+
+    def _resolve_solver(self):
+        if self.solver != "auto":
+            return self.solver
+
+        if self.distance in {"hellinger", "topsoe", "probsymm"}:
+            return "ternary"
+
+        return "grid"
+
+    def _make_objective(self, test_representation, train_representations):
+        train_representations = np.asarray(train_representations)
 
         def objective(alpha):
-            mix_representation = self._mixture([neg_repr, pos_repr], [1 - alpha, alpha])
+            prevalence = np.asarray([1.0 - alpha, alpha])
+            mix_representation = self._mixture(
+                train_representations,
+                prevalence,
+            )
             return self.loss_function(
                 mix_representation,
                 test_representation,
             )
 
-        return minimize_prevalence(
-            objective=objective,
-            n_classes=2,
-            solver=solver
+        return objective
+
+    def _block_objective_factory(self, test_block, train_block):
+        return self._make_objective(
+            test_representation=test_block,
+            train_representations=train_block,
         )
 
-    
-        
+    def _get_block_slices(self):
+        if not hasattr(self.representation, "block_slices_"):
+            raise AttributeError(
+                "HistogramRepresentation must define block_slices_ "
+                "to use bin_strategy='median' or 'mean'."
+            )
 
+        return self.representation.block_slices_
+
+
+@binary_quantifier(strategy_attr="strategy")
 class DyS(SoftLearnerQMixin, AggregationMixin, MatchingHistogramQuantifier):
     r"""Distribution y-Similarity with histogram score matching."""
 
@@ -91,15 +135,23 @@ class DyS(SoftLearnerQMixin, AggregationMixin, MatchingHistogramQuantifier):
             distance="hellinger",
             solver="grid",
             strategy=strategy,
+            histogram_features=1,
         )
         self.learner = learner
         self.cv = cv
         self.stratified = stratified
         self.shuffle = shuffle
         self.random_state = random_state
-        
+
     @_fit_context(prefer_skip_nested_validation=True)
-    def fit(self, X, y, learner_fitted=False, sample_weight=None):
+    def fit(
+        self,
+        X,
+        y,
+        learner_fitted=False,
+        sample_weight=None,
+        cv_prediction="refit",
+    ):
 
         X, y = validate_data(self, X, y)
         self.classes_ = np.unique(y)
@@ -108,6 +160,7 @@ class DyS(SoftLearnerQMixin, AggregationMixin, MatchingHistogramQuantifier):
             X,
             y,
             learner_fitted=learner_fitted,
+            cv_prediction=cv_prediction,
         )
 
         return self._fit(X, y, sample_weight=sample_weight)
@@ -116,17 +169,14 @@ class DyS(SoftLearnerQMixin, AggregationMixin, MatchingHistogramQuantifier):
         X = validate_data(self, X, ensure_2d=True)
         test_scores = self._predict_learner(X)
         return self._predict(test_scores)
-    
+
     def aggregate(self, test_scores, train_scores, y_train):
         if not getattr(self, "_precomputed", False):
             self._fit(train_scores, y_train)
         return self._predict(test_scores)
 
-    
 
-
-
-
+@binary_quantifier(strategy_attr="strategy")
 class HDy(SoftLearnerQMixin, AggregationMixin, MatchingHistogramQuantifier):
     r"""Distribution y-Similarity with histogram score matching."""
 
@@ -140,20 +190,32 @@ class HDy(SoftLearnerQMixin, AggregationMixin, MatchingHistogramQuantifier):
         shuffle=False,
         random_state=None,
     ):
+        if bins_size is None:
+            bins_size = np.linspace(10, 110, 11, dtype=int)
+
         super().__init__(
             bins_size=bins_size,
             distance="hellinger",
             solver="grid",
             strategy=strategy,
+            histogram_features=1,
+            bin_strategy="median",
         )
         self.learner = learner
         self.cv = cv
         self.stratified = stratified
         self.shuffle = shuffle
         self.random_state = random_state
-        
+
     @_fit_context(prefer_skip_nested_validation=True)
-    def fit(self, X, y, learner_fitted=False, sample_weight=None):
+    def fit(
+        self,
+        X,
+        y,
+        learner_fitted=False,
+        sample_weight=None,
+        cv_prediction="refit",
+    ):
 
         X, y = validate_data(self, X, y)
         self.classes_ = np.unique(y)
@@ -162,6 +224,7 @@ class HDy(SoftLearnerQMixin, AggregationMixin, MatchingHistogramQuantifier):
             X,
             y,
             learner_fitted=learner_fitted,
+            cv_prediction=cv_prediction,
         )
 
         return self._fit(X, y, sample_weight=sample_weight)
@@ -170,13 +233,14 @@ class HDy(SoftLearnerQMixin, AggregationMixin, MatchingHistogramQuantifier):
         X = validate_data(self, X, ensure_2d=True)
         test_scores = self._predict_learner(X)
         return self._predict(test_scores)
-    
+
     def aggregate(self, test_scores, train_scores, y_train):
         if not getattr(self, "_precomputed", False):
             self._fit(train_scores, y_train)
         return self._predict(test_scores)
 
 
+@binary_quantifier(strategy_attr="strategy")
 class HDx(MatchingHistogramQuantifier):
     r"""Distribution y-Similarity with histogram score matching."""
 

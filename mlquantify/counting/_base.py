@@ -206,7 +206,7 @@ class BaseAdjustCount(AggregationMixin, BaseQuantifier):
         self.random_state = random_state
 
     @_fit_context(prefer_skip_nested_validation=True)
-    def fit(self, X, y, learner_fitted=False):
+    def fit(self, X, y, learner_fitted=False, cv_prediction="refit"):
         """Fit the quantifier using the provided data and learner.
         
         Parameters
@@ -243,6 +243,7 @@ class BaseAdjustCount(AggregationMixin, BaseQuantifier):
             stratified=self.stratified,
             random_state=self.random_state,
             shuffle=self.shuffle,
+            cv_prediction=cv_prediction,
         )
         
         self.train_predictions = train_predictions

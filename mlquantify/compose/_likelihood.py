@@ -17,6 +17,7 @@ class LikelihoodComposeQuantifier(BaseComposeQuantifier):
         aggregative=True,
         tau_0=0.0,
         tau_1=0.0,
+        random_state=None,
     ):
         super().__init__(
             representation=representation,
@@ -26,15 +27,24 @@ class LikelihoodComposeQuantifier(BaseComposeQuantifier):
         )
         self.tau_0 = tau_0
         self.tau_1 = tau_1
+        self.random_state = random_state
 
     @_fit_context(prefer_skip_nested_validation=True)
-    def fit(self, X, y, learner_fitted=False, sample_weight=None):
+    def fit(
+        self,
+        X,
+        y,
+        learner_fitted=False,
+        sample_weight=None,
+        cv_prediction="refit",
+    ):
         if self.representation is not None:
             return super().fit(
                 X,
                 y,
                 learner_fitted=learner_fitted,
                 sample_weight=sample_weight,
+                cv_prediction=cv_prediction,
             )
 
         X, y = validate_data(self, X, y)
@@ -45,6 +55,7 @@ class LikelihoodComposeQuantifier(BaseComposeQuantifier):
                 X,
                 y,
                 learner_fitted=learner_fitted,
+                cv_prediction=cv_prediction,
             )
         else:
             X_rep, y_rep = X, y
@@ -92,6 +103,7 @@ class LikelihoodComposeQuantifier(BaseComposeQuantifier):
             objective=objective,
             n_classes=len(self.classes_),
             solver=self.solver,
+            random_state=self.random_state,
         )
 
     def _class_likelihoods(self, test_representation):

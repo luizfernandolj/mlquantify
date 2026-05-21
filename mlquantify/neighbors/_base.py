@@ -86,7 +86,16 @@ class BaseKDE(SoftLearnerQMixin, AggregationMixin, BaseQuantifier):
         self.best_distance = None
 
     @_fit_context(prefer_skip_nested_validation=True)
-    def fit(self, X, y, learner_fitted=False, cv=5, stratified=True, shuffle=False):
+    def fit(
+        self,
+        X,
+        y,
+        learner_fitted=False,
+        cv=5,
+        stratified=True,
+        shuffle=False,
+        cv_prediction="refit",
+    ):
         X, y = validate_data(self, X, y, ensure_2d=True, ensure_min_samples=2)
         validate_y(self, y)
         
@@ -95,15 +104,16 @@ class BaseKDE(SoftLearnerQMixin, AggregationMixin, BaseQuantifier):
         learner_function = _get_learner_function(self)
 
         if learner_fitted:
+            self.learner_ = self.learner
             train_predictions = getattr(self.learner, learner_function)(X)
             y_train = y
         else:
-            train_predictions, y_train = apply_cross_validation(
+            train_predictions, y_train, self.learner_ = apply_cross_validation(
                 self.learner, X, y,
                 function=learner_function, cv=cv,
-                stratified=stratified, shuffle=shuffle
+                stratified=stratified, shuffle=shuffle,
+                cv_prediction=cv_prediction,
             )
-            self.learner.fit(X, y)
  
         self.train_predictions = train_predictions
         self.y_train = y_train
@@ -126,7 +136,7 @@ class BaseKDE(SoftLearnerQMixin, AggregationMixin, BaseQuantifier):
         self._precomputed = True
 
     def predict(self, X):
-        predictions = getattr(self.learner, _get_learner_function(self))(X)
+        predictions = self._predict_learner(X)
         return self.aggregate(predictions, self.train_predictions, self.y_train)
     
     def aggregate(self, predictions, train_predictions, y_train):

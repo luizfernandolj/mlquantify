@@ -124,15 +124,20 @@ def _get_binary_strategy(quantifier):
 # ============================================================
 # Fitting strategies
 # ============================================================
-def _fit_binary_ovr(quantifier, X, y, cls):
+def _fit_binary_ovr(quantifier, X, y, cls, fit_args=None, fit_kwargs=None):
     """Helper function to fit a single binary quantifier for OvR."""
+    if fit_args is None:
+        fit_args = ()
+    if fit_kwargs is None:
+        fit_kwargs = {}
+
     qtf = deepcopy(quantifier)
     y_bin = (y == cls).astype(int)
-    qtf._original_fit(X, y_bin)
+    qtf._original_fit(X, y_bin, *fit_args, **fit_kwargs)
     return cls, qtf
 
 
-def _fit_ovr(quantifier, X, y, n_jobs=None):
+def _fit_ovr(quantifier, X, y, n_jobs=None, fit_args=None, fit_kwargs=None):
     """Fit using One-vs-Rest (OvR) strategy.
 
     Creates a binary quantifier for each class, trained to distinguish that class
@@ -156,22 +161,40 @@ def _fit_ovr(quantifier, X, y, n_jobs=None):
     """
     # Parallel execution for each class
     results = Parallel(n_jobs=n_jobs)(
-        delayed(_fit_binary_ovr)(quantifier, X, y, cls) 
+        delayed(_fit_binary_ovr)(
+            quantifier,
+            X,
+            y,
+            cls,
+            fit_args=fit_args,
+            fit_kwargs=fit_kwargs,
+        )
         for cls in np.unique(y)
     )
     return dict(results)
 
 
-def _fit_binary_ovo(quantifier, X, y, cls1, cls2):
+def _fit_binary_ovo(quantifier, X, y, cls1, cls2, fit_args=None, fit_kwargs=None):
     """Helper function to fit a single binary quantifier for OvO."""
+    if fit_args is None:
+        fit_args = ()
+    if fit_kwargs is None:
+        fit_kwargs = {}
+
     qtf = deepcopy(quantifier)
     mask = (y == cls1) | (y == cls2)
     y_bin = (y[mask] == cls1).astype(int)
-    qtf._original_fit(X[mask], y_bin)
+
+    fit_kwargs = dict(fit_kwargs)
+    sample_weight = fit_kwargs.get("sample_weight")
+    if sample_weight is not None and len(sample_weight) == len(y):
+        fit_kwargs["sample_weight"] = np.asarray(sample_weight)[mask]
+
+    qtf._original_fit(X[mask], y_bin, *fit_args, **fit_kwargs)
     return (cls1, cls2), qtf
 
 
-def _fit_ovo(quantifier, X, y, n_jobs=None):
+def _fit_ovo(quantifier, X, y, n_jobs=None, fit_args=None, fit_kwargs=None):
     """Fit using One-vs-One (OvO) strategy.
 
     Creates a binary quantifier for every pair of classes, trained to distinguish
@@ -195,7 +218,15 @@ def _fit_ovo(quantifier, X, y, n_jobs=None):
     """
     # Parallel execution for each pair of classes
     results = Parallel(n_jobs=n_jobs)(
-        delayed(_fit_binary_ovo)(quantifier, X, y, cls1, cls2) 
+        delayed(_fit_binary_ovo)(
+            quantifier,
+            X,
+            y,
+            cls1,
+            cls2,
+            fit_args=fit_args,
+            fit_kwargs=fit_kwargs,
+        )
         for cls1, cls2 in combinations(np.unique(y), 2)
     )
     return dict(results)
@@ -445,21 +476,36 @@ class BinaryQuantifier(MetaquantifierMixin, BaseQuantifier):
     """
 
     @_fit_context(prefer_skip_nested_validation=False)
-    def fit(qtf, X, y):
+    def fit(qtf, X, y, *args, **kwargs):
         """Fit the quantifier under a binary decomposition strategy."""
         if len(np.unique(y)) <= 2:
             qtf.binary = True
-            return qtf._original_fit(X, y)
+            return qtf._original_fit(X, y, *args, **kwargs)
 
         strategy = _get_binary_strategy(qtf)
         n_jobs = getattr(qtf, "n_jobs", None)  # Retrieve n_jobs if available
 
+        qtf.binary = False
         qtf.classes_ = np.unique(y)
 
         if strategy == "ovr":
-            qtf.qtfs_ = _fit_ovr(qtf, X, y, n_jobs=n_jobs)
+            qtf.qtfs_ = _fit_ovr(
+                qtf,
+                X,
+                y,
+                n_jobs=n_jobs,
+                fit_args=args,
+                fit_kwargs=kwargs,
+            )
         elif strategy == "ovo":
-            qtf.qtfs_ = _fit_ovo(qtf, X, y, n_jobs=n_jobs)
+            qtf.qtfs_ = _fit_ovo(
+                qtf,
+                X,
+                y,
+                n_jobs=n_jobs,
+                fit_args=args,
+                fit_kwargs=kwargs,
+            )
         else:
             raise ValueError("Strategy must be 'ovr' or 'ovo'")
 

@@ -67,13 +67,21 @@ class KDEyQuantifier(
         return tags
 
     @_fit_context(prefer_skip_nested_validation=True)
-    def fit(self, X, y, learner_fitted=False, sample_weight=None):
+    def fit(
+        self,
+        X,
+        y,
+        learner_fitted=False,
+        sample_weight=None,
+        cv_prediction="refit",
+    ):
         X, y = validate_data(self, X, y)
 
         train_scores, y_train = self._fit_learner_predictions(
             X,
             y,
             learner_fitted=learner_fitted,
+            cv_prediction=cv_prediction,
         )
 
         self._fit(
@@ -195,21 +203,16 @@ class KDEyHD(KDEyQuantifier):
         n_classes = len(self.classes_)
         samples_per_class = max(
             1,
-            int(np.ceil(self.montecarlo_trials / n_classes)),
+            int(self.montecarlo_trials // n_classes),
         )
 
         samples = []
 
-        for class_idx, kde in enumerate(train_representation):
-            random_state = self.random_state
-
-            if isinstance(random_state, (int, np.integer)):
-                random_state = int(random_state) + class_idx
-
+        for kde in train_representation:
             samples.append(
                 kde.sample(
                     samples_per_class,
-                    random_state=random_state,
+                    random_state=self.random_state,
                 )
             )
 

@@ -32,6 +32,7 @@ class GAC(CrispLearnerQMixin, AggregationMixin, LinearComposeQuantifier):
             solver=solver,
             aggregative=True,
             normalize=False,
+            random_state=random_state,
         )
         self.cv = cv
         self.stratified = stratified
@@ -62,6 +63,7 @@ class GPAC(SoftLearnerQMixin, AggregationMixin, LinearComposeQuantifier):
             solver=solver,
             aggregative=True,
             normalize=False,
+            random_state=random_state,
         )
         self.cv = cv
         self.stratified = stratified
@@ -92,6 +94,7 @@ class FM(SoftLearnerQMixin, AggregationMixin, LinearComposeQuantifier):
             solver=solver,
             aggregative=True,
             normalize=False,
+            random_state=random_state,
         )
         self.cv = cv
         self.stratified = stratified

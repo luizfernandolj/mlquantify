@@ -36,12 +36,14 @@ class GHDy(SoftLearnerQMixin, AggregationMixin, LinearComposeQuantifier):
                 representation=HistogramRepresentation(
                     bins=bins,
                     mode="onehot",
+                    bin_edges="auto",
                 ),
             ),
             loss=loss,
             solver=solver,
             aggregative=True,
             normalize=True,
+            random_state=random_state,
         )
         self.bins = bins
         self.cv = cv
@@ -58,6 +60,7 @@ class GHDx(LinearComposeQuantifier):
         bins=10,
         loss="hellinger",
         solver="slsqp",
+        random_state=None,
     ):
         super().__init__(
             learner=None,
@@ -69,11 +72,13 @@ class GHDx(LinearComposeQuantifier):
             solver=solver,
             aggregative=False,
             normalize=True,
+            random_state=random_state,
         )
         self.bins = bins
+        self.random_state = random_state
 
 
-class KDEyML(SoftLearnerQMixin, AggregationMixin, LikelihoodComposeQuantifier):
+class GKDEyML(SoftLearnerQMixin, AggregationMixin, LikelihoodComposeQuantifier):
     r"""KDEy with maximum-likelihood estimation."""
 
     def __init__(
@@ -99,6 +104,7 @@ class KDEyML(SoftLearnerQMixin, AggregationMixin, LikelihoodComposeQuantifier):
             ),
             solver=solver,
             aggregative=True,
+            random_state=random_state,
         )
 
         self.bandwidth = bandwidth
@@ -107,6 +113,9 @@ class KDEyML(SoftLearnerQMixin, AggregationMixin, LikelihoodComposeQuantifier):
         self.stratified = stratified
         self.shuffle = shuffle
         self.random_state = random_state
+
+
+KDEyML = GKDEyML
 
 
 class EDy(SoftLearnerQMixin, AggregationMixin, LinearComposeQuantifier):
@@ -133,6 +142,7 @@ class EDy(SoftLearnerQMixin, AggregationMixin, LinearComposeQuantifier):
             solver=solver,
             aggregative=True,
             normalize=False,
+            random_state=random_state,
         )
         self.cv = cv
         self.metric = metric
@@ -148,6 +158,7 @@ class EDx(LinearComposeQuantifier):
         self,
         metric="euclidean",
         solver="slsqp",
+        random_state=None,
     ):
         super().__init__(
             representation=DistanceRepresentation(metric=metric),
@@ -155,5 +166,7 @@ class EDx(LinearComposeQuantifier):
             solver=solver,
             aggregative=False,
             normalize=False,
+            random_state=random_state,
         )
         self.metric = metric
+        self.random_state = random_state

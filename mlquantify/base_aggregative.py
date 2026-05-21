@@ -3,6 +3,7 @@ from mlquantify.utils._tags import (
 )
 from mlquantify.utils._validation import validate_parameter_constraints, validate_learner_contraints
 from mlquantify.utils._get_scores import apply_cross_validation
+import numpy as np
 
 
 class AggregationMixin:
@@ -71,10 +72,12 @@ class AggregationMixin:
         stratified=None,
         shuffle=None,
         random_state=None,
+        cv_prediction="refit",
     ):
         learner_function = _get_learner_function(self)
 
         if learner_fitted:
+            self.learner_ = self.learner
             return getattr(self.learner, learner_function)(X), y
 
         cv = self.cv if cv is None else cv
@@ -85,7 +88,7 @@ class AggregationMixin:
         if cv is None:
             cv = 5
 
-        predictions, y_pred = apply_cross_validation(
+        predictions, y_pred, fitted_learner = apply_cross_validation(
             self.learner,
             X,
             y,
@@ -94,15 +97,87 @@ class AggregationMixin:
             stratified=stratified,
             shuffle=shuffle,
             random_state=random_state,
+            cv_prediction=cv_prediction,
         )
 
-        self.learner.fit(X, y)
+        self.learner_ = fitted_learner
 
         return predictions, y_pred
 
     def _predict_learner(self, X):
         learner_function = _get_learner_function(self)
-        return getattr(self.learner, learner_function)(X)
+        learner = getattr(self, "learner_", self.learner)
+
+        if isinstance(learner, list):
+            return self._predict_learner_ensemble(
+                learner,
+                X,
+                learner_function,
+            )
+
+        return getattr(learner, learner_function)(X)
+
+    def _predict_learner_ensemble(self, estimators, X, learner_function):
+        if not estimators:
+            raise ValueError("The learner ensemble is empty.")
+
+        if learner_function == "predict_proba":
+            return self._predict_proba_ensemble(estimators, X)
+
+        predictions = [
+            getattr(estimator, learner_function)(X)
+            for estimator in estimators
+        ]
+
+        if learner_function == "predict":
+            return self._majority_vote(predictions)
+
+        return np.mean(np.asarray(predictions, dtype=float), axis=0)
+
+    def _predict_proba_ensemble(self, estimators, X):
+        classes = np.asarray(getattr(self, "classes_", estimators[0].classes_))
+        aligned_predictions = []
+
+        for estimator in estimators:
+            probabilities = estimator.predict_proba(X)
+            estimator_classes = np.asarray(
+                getattr(estimator, "classes_", classes)
+            )
+
+            if (
+                probabilities.ndim != 2
+                or probabilities.shape[1] != estimator_classes.size
+            ):
+                aligned_predictions.append(probabilities)
+                continue
+
+            aligned = np.zeros(
+                (probabilities.shape[0], classes.size),
+                dtype=float,
+            )
+
+            for source_idx, cls in enumerate(estimator_classes):
+                target_idx = np.flatnonzero(classes == cls)
+                if target_idx.size:
+                    aligned[:, target_idx[0]] = probabilities[:, source_idx]
+
+            aligned_predictions.append(aligned)
+
+        return np.mean(np.asarray(aligned_predictions, dtype=float), axis=0)
+
+    @staticmethod
+    def _majority_vote(predictions):
+        predictions = np.asarray(predictions)
+        votes = []
+
+        for sample_predictions in predictions.T:
+            values, counts = np.unique(
+                sample_predictions,
+                return_counts=True,
+            )
+            votes.append(values[np.argmax(counts)])
+
+        return np.asarray(votes)
 
 
     def _validate_params(self):

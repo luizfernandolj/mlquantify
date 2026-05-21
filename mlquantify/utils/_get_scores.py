@@ -1,4 +1,5 @@
 import numpy as np
+from sklearn.base import clone
 from sklearn.model_selection import KFold, StratifiedKFold
 
 def apply_cross_validation(
@@ -9,7 +10,8 @@ def apply_cross_validation(
     function= 'predict_proba',
     stratified= True,
     random_state= None,
-    shuffle= True):
+    shuffle= True,
+    cv_prediction="refit"):
     """
     Perform cross-validation and return predictions with true labels for each fold.
     
@@ -32,11 +34,20 @@ def apply_cross_validation(
     shuffle : bool, default=True
         Whether to shuffle data before splitting
         
-    Returns:
-    --------
-    Tuple[np.ndarray, np.ndarray]
-        predictions, true_labels for all folds
+    cv_prediction : {'refit', 'ensemble'}, default='refit'
+        Strategy used for the fitted learner returned as the third value.
+        'refit' fits the original learner on all data. 'ensemble' returns the
+        list of fitted fold clones.
+
+    Returns
+    -------
+    tuple[np.ndarray, np.ndarray, object]
+        predictions, true_labels, fitted_learner. The fitted learner is a
+        single estimator for 'refit' and a list of fold estimators for
+        'ensemble'.
     """
+    if cv_prediction not in {"refit", "ensemble"}:
+        raise ValueError("cv_prediction must be either 'refit' or 'ensemble'.")
     
     if not shuffle:
         random_state = None
@@ -58,19 +69,21 @@ def apply_cross_validation(
     # Pre-allocate arrays
     all_predictions = []
     all_true_labels = []
+    estimators = []
     
     # Perform cross-validation
     for train_idx, test_idx in cv_splitter.split(X, y):
         X_train, X_test = X[train_idx], X[test_idx]
         y_train, y_test = y[train_idx], y[test_idx]
         
-        # Fit model
-        model.fit(X_train, y_train)
+        # Fit an independent clone for each fold.
+        estimator = clone(model)
+        estimator.fit(X_train, y_train)
         
         if type(function) is str:
-            if not hasattr(model, function):
+            if not hasattr(estimator, function):
                 raise AttributeError(f"The model does not have the method '{function}'.")
-            predictions = getattr(model, function)(X_test)
+            predictions = getattr(estimator, function)(X_test)
         elif callable(function):
             predictions = function(X_test)
         else:
@@ -78,12 +91,18 @@ def apply_cross_validation(
         
         all_predictions.append(predictions)
         all_true_labels.append(y_test)
+        estimators.append(estimator)
     
     # Concatenate all predictions and labels
     final_predictions = np.vstack(all_predictions) if function == 'predict_proba' else np.concatenate(all_predictions)
     final_true_labels = np.concatenate(all_true_labels)
-    
-    return final_predictions, final_true_labels
+
+    if cv_prediction == "ensemble":
+        fitted_learner = estimators
+    else:
+        fitted_learner = model.fit(X, y)
+
+    return final_predictions, final_true_labels, fitted_learner
 
 
 

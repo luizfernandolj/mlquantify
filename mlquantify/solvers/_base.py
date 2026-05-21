@@ -7,7 +7,9 @@ def minimize_prevalence(
     n_classes,
     solver="auto",
     grid_size=101,
-    tol=1e-6,
+    tol=1e-10,
+    x0=None,
+    random_state=None,
 ):
     if n_classes < 2:
         raise ValueError("n_classes must be >= 2.")
@@ -31,7 +33,9 @@ def minimize_prevalence(
         return solve_simplex(
             objective=objective,
             n_classes=n_classes,
+            x0=x0,
             tol=tol,
+            random_state=random_state,
         )
 
     raise ValueError(

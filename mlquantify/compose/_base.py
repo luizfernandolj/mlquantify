@@ -80,7 +80,14 @@ class BaseComposeQuantifier(
         return super()._validate_params()
 
     @_fit_context(prefer_skip_nested_validation=True)
-    def fit(self, X, y, learner_fitted=False, sample_weight=None):
+    def fit(
+        self,
+        X,
+        y,
+        learner_fitted=False,
+        sample_weight=None,
+        cv_prediction="refit",
+    ):
         X, y = validate_data(self, X, y)
         self.classes_ = np.unique(y)
 
@@ -89,6 +96,7 @@ class BaseComposeQuantifier(
                 X,
                 y,
                 learner_fitted=learner_fitted,
+                cv_prediction=cv_prediction,
             )
         else:
             X_rep, y_rep = X, y

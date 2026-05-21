@@ -33,6 +33,7 @@ class MLPE(SoftLearnerQMixin, AggregationMixin, LikelihoodComposeQuantifier):
             aggregative=True,
             tau_0=tau_0,
             tau_1=tau_1,
+            random_state=random_state,
         )
         self.cv = cv
         self.stratified = stratified

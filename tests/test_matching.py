@@ -56,6 +56,76 @@ def test_histogram_feature_matching_binary(binary_dataset):
     assert q.best_distance_ is not None
 
 
+def test_hdy_matches_quapy_median_grid_recipe():
+    train_scores = np.asarray(
+        [
+            [0.96, 0.04],
+            [0.86, 0.14],
+            [0.72, 0.28],
+            [0.32, 0.68],
+            [0.14, 0.86],
+            [0.05, 0.95],
+        ]
+    )
+    y_train = np.asarray([0, 0, 0, 1, 1, 1])
+    test_scores = np.asarray(
+        [
+            [0.92, 0.08],
+            [0.78, 0.22],
+            [0.40, 0.60],
+            [0.18, 0.82],
+            [0.08, 0.92],
+        ]
+    )
+    bins_size = [2, 4]
+
+    q = HDy(bins_size=bins_size)
+
+    with config_context(prevalence_return_type="array"):
+        prevalence = q.aggregate(test_scores, train_scores, y_train)
+
+    expected = _quapy_hdy_reference(test_scores, train_scores, y_train, bins_size)
+
+    assert prevalence == pytest.approx(expected)
+
+
+def _quapy_hdy_reference(test_scores, train_scores, y_train, bins_size):
+    train_positive = train_scores[:, 1]
+    test_positive = test_scores[:, 1]
+    estimates = []
+
+    for bins in bins_size:
+        neg_density = _quapy_hdy_train_hist(train_positive[y_train == 0], bins)
+        pos_density = _quapy_hdy_train_hist(train_positive[y_train == 1], bins)
+        test_density = np.histogram(
+            test_positive,
+            bins=bins,
+            range=(0, 1),
+            density=True,
+        )[0]
+
+        best_prev = None
+        best_distance = None
+        for prev in np.linspace(0.0, 1.0, 101):
+            mixture = prev * pos_density + (1.0 - prev) * neg_density
+            distance = np.sqrt(
+                np.sum((np.sqrt(mixture) - np.sqrt(test_density)) ** 2)
+            )
+            if best_distance is None or distance < best_distance:
+                best_prev = prev
+                best_distance = distance
+
+        estimates.append(best_prev)
+
+    positive_prevalence = np.median(estimates)
+    return np.asarray([1.0 - positive_prevalence, positive_prevalence])
+
+
+def _quapy_hdy_train_hist(values, bins):
+    hist = np.histogram(values, bins=bins, range=(0, 1), density=True)[0]
+    return hist / hist.sum()
+
+
 def test_kernel_matching_multiclass(multiclass_dataset):
     X, y = multiclass_dataset
     q = MMD_RKHS(kernel="rbf")

@@ -27,6 +27,43 @@ def test_histogram_representation_fits_classwise_histograms():
     )
 
 
+def test_histogram_representation_can_partition_blocks():
+    X = np.array([[0.1, 0.2], [0.2, 0.4], [0.8, 0.6], [0.9, 0.7]])
+
+    representation = HistogramRepresentation(
+        bins=[2, 4],
+        mode="histogram",
+        features=1,
+        partition_blocks=True,
+    )
+
+    transformed = representation.transform(X)
+
+    assert transformed.shape == (6,)
+    assert [(s.start, s.stop) for s in representation.block_slices_] == [
+        (0, 2),
+        (2, 6),
+    ]
+
+
+def test_histogram_representation_can_learn_bin_edges():
+    X = np.array([[10.0], [11.0], [12.0], [18.0], [19.0], [20.0]])
+    y = np.array([0, 0, 0, 1, 1, 1])
+
+    representation = HistogramRepresentation(
+        bins=[2],
+        mode="onehot",
+        bin_edges="auto",
+    )
+    representation.fit(X, y)
+
+    np.testing.assert_allclose(
+        representation.edges_[0][0],
+        np.histogram_bin_edges(X[:, 0], bins=2),
+    )
+    np.testing.assert_allclose(representation.transform([[9.0], [21.0]]), [0.5, 0.5])
+
+
 def test_prediction_representation_supports_average_and_sample_modes():
     X = np.array([[1.0, 0.0], [0.0, 1.0], [0.8, 0.2], [0.2, 0.8]])
     y = np.array([0, 0, 1, 1])

@@ -25,6 +25,7 @@ class LinearComposeQuantifier(BaseComposeQuantifier):
         solver="slsqp",
         aggregative=True,
         normalize=None,
+        random_state=None,
     ):
         super().__init__(
             representation=representation,
@@ -35,6 +36,7 @@ class LinearComposeQuantifier(BaseComposeQuantifier):
 
         self.loss = loss
         self.normalize = normalize
+        self.random_state = random_state
 
     def _solve_prevalence(self, test_representation, train_representation):
         M = class_representations_to_matrix(train_representation)
@@ -69,4 +71,5 @@ class LinearComposeQuantifier(BaseComposeQuantifier):
             objective=objective,
             n_classes=len(self.classes_),
             solver=self.solver,
+            random_state=self.random_state,
         )

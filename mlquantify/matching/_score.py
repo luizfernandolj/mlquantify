@@ -60,6 +60,7 @@ class MatchingScoreQuantifier(BaseMatchingQuantifier):
         return X.ravel()
 
 
+@binary_quantifier(strategy_attr="strategy")
 class SORD(SoftLearnerQMixin, AggregationMixin, MatchingScoreQuantifier):
     r"""Sample Ordinal Distance (SORD) quantification method.
 
@@ -110,7 +111,14 @@ class SORD(SoftLearnerQMixin, AggregationMixin, MatchingScoreQuantifier):
         self.random_state = random_state
         
     @_fit_context(prefer_skip_nested_validation=True)
-    def fit(self, X, y, learner_fitted=False, sample_weight=None):
+    def fit(
+        self,
+        X,
+        y,
+        learner_fitted=False,
+        sample_weight=None,
+        cv_prediction="refit",
+    ):
 
         X, y = validate_data(self, X, y)
         self.classes_ = np.unique(y)
@@ -119,6 +127,7 @@ class SORD(SoftLearnerQMixin, AggregationMixin, MatchingScoreQuantifier):
             X,
             y,
             learner_fitted=learner_fitted,
+            cv_prediction=cv_prediction,
         )
 
         return self._fit(X, y, sample_weight=sample_weight)
@@ -180,6 +189,7 @@ class SORD(SoftLearnerQMixin, AggregationMixin, MatchingScoreQuantifier):
         return prevalences, distance
 
 
+@binary_quantifier(strategy_attr="strategy")
 class SMM(SoftLearnerQMixin, AggregationMixin, MatchingScoreQuantifier):
     r"""Sample Mean Matching (SMM) quantification method.
 
@@ -235,7 +245,14 @@ class SMM(SoftLearnerQMixin, AggregationMixin, MatchingScoreQuantifier):
         self.random_state = random_state
 
     @_fit_context(prefer_skip_nested_validation=True)
-    def fit(self, X, y, learner_fitted=False, sample_weight=None):
+    def fit(
+        self,
+        X,
+        y,
+        learner_fitted=False,
+        sample_weight=None,
+        cv_prediction="refit",
+    ):
 
         X, y = validate_data(self, X, y)
         self.classes_ = np.unique(y)
@@ -244,6 +261,7 @@ class SMM(SoftLearnerQMixin, AggregationMixin, MatchingScoreQuantifier):
             X,
             y,
             learner_fitted=learner_fitted,
+            cv_prediction=cv_prediction,
         )
 
         return self._fit(X, y, sample_weight=sample_weight)
