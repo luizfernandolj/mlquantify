@@ -114,7 +114,7 @@ Adjusted Count (AC) and Probabilistic Adjusted Count (PAC)
 
    from mlquantify.counting import AC, PAC
    from sklearn.linear_model import LogisticRegression
-   q = AC(learner=LogisticRegression())
+   q = AC(estimator=LogisticRegression())
    q.fit(X_train, y_train)
    q.predict(X_test)
    # -> {0: 0.48, 1: 0.52}

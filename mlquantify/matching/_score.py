@@ -3,8 +3,8 @@ from abc import abstractmethod
 import numpy as np
 
 from mlquantify.base_aggregative import (
-    AggregationMixin,
-    SoftLearnerQMixin,
+    AggregativeMixin,
+    SoftPredictionMixin,
 )
 from mlquantify.representations import PredictionRepresentation
 from mlquantify.matching._base import BaseMatchingQuantifier
@@ -61,7 +61,7 @@ class MatchingScoreQuantifier(BaseMatchingQuantifier):
 
 
 @binary_quantifier(strategy_attr="strategy")
-class SORD(SoftLearnerQMixin, AggregationMixin, MatchingScoreQuantifier):
+class SORD(SoftPredictionMixin, AggregativeMixin, MatchingScoreQuantifier):
     r"""Sample Ordinal Distance (SORD) quantification method.
 
     Estimates prevalence by minimizing the weighted sum of absolute score differences
@@ -71,13 +71,14 @@ class SORD(SoftLearnerQMixin, AggregationMixin, MatchingScoreQuantifier):
 
     Parameters
     ----------
-    learner : estimator, optional
+    estimator : estimator, optional
         Base probabilistic classifier.
 
     References
     ----------
     .. [2] Esuli et al. (2023). Learning to Quantify. Springer.
     """
+
 
     _parameter_constraints = {
         "n_grid": [Interval(2, None)],
@@ -90,7 +91,7 @@ class SORD(SoftLearnerQMixin, AggregationMixin, MatchingScoreQuantifier):
 
     def __init__(
         self,
-        learner=None,
+        estimator=None,
         n_grid=101,
         strategy="ovr",
         cv=None,
@@ -104,7 +105,7 @@ class SORD(SoftLearnerQMixin, AggregationMixin, MatchingScoreQuantifier):
             solver="grid",
             strategy=strategy,
         )
-        self.learner = learner
+        self.estimator = estimator
         self.cv = cv
         self.stratified = stratified
         self.shuffle = shuffle
@@ -115,7 +116,7 @@ class SORD(SoftLearnerQMixin, AggregationMixin, MatchingScoreQuantifier):
         self,
         X,
         y,
-        learner_fitted=False,
+        estimator_fitted=False,
         sample_weight=None,
         cv_prediction="refit",
     ):
@@ -123,10 +124,10 @@ class SORD(SoftLearnerQMixin, AggregationMixin, MatchingScoreQuantifier):
         X, y = validate_data(self, X, y)
         self.classes_ = np.unique(y)
 
-        X, y = self._fit_learner_predictions(
+        X, y = self._fit_estimator_predictions(
             X,
             y,
-            learner_fitted=learner_fitted,
+            estimator_fitted=estimator_fitted,
             cv_prediction=cv_prediction,
         )
 
@@ -134,7 +135,7 @@ class SORD(SoftLearnerQMixin, AggregationMixin, MatchingScoreQuantifier):
 
     def predict(self, X):
         X = validate_data(self, X, ensure_2d=True)
-        test_scores = self._predict_learner(X)
+        test_scores = self._predict_estimator(X)
         return self._predict(test_scores)
     
     def aggregate(self, test_scores, train_scores, y_train):
@@ -190,7 +191,7 @@ class SORD(SoftLearnerQMixin, AggregationMixin, MatchingScoreQuantifier):
 
 
 @binary_quantifier(strategy_attr="strategy")
-class SMM(SoftLearnerQMixin, AggregationMixin, MatchingScoreQuantifier):
+class SMM(SoftPredictionMixin, AggregativeMixin, MatchingScoreQuantifier):
     r"""Sample Mean Matching (SMM) quantification method.
 
     Estimates class prevalence by matching the mean score of the test samples 
@@ -205,13 +206,14 @@ class SMM(SoftLearnerQMixin, AggregationMixin, MatchingScoreQuantifier):
 
     Parameters
     ----------
-    learner : estimator, optional
+    estimator : estimator, optional
         Base probabilistic classifier.
 
     References
     ----------
     .. [2] Esuli et al. (2023). Learning to Quantify. Springer.
     """
+
 
     _parameter_constraints = {
         "moment": [Interval(1, None)],
@@ -224,7 +226,7 @@ class SMM(SoftLearnerQMixin, AggregationMixin, MatchingScoreQuantifier):
 
     def __init__(
         self,
-        learner=None,
+        estimator=None,
         moment=1,
         strategy="ovr",
         cv=None,
@@ -238,7 +240,7 @@ class SMM(SoftLearnerQMixin, AggregationMixin, MatchingScoreQuantifier):
             solver="bounded",
             strategy=strategy,
         )
-        self.learner = learner
+        self.estimator = estimator
         self.cv = cv
         self.stratified = stratified
         self.shuffle = shuffle
@@ -249,7 +251,7 @@ class SMM(SoftLearnerQMixin, AggregationMixin, MatchingScoreQuantifier):
         self,
         X,
         y,
-        learner_fitted=False,
+        estimator_fitted=False,
         sample_weight=None,
         cv_prediction="refit",
     ):
@@ -257,10 +259,10 @@ class SMM(SoftLearnerQMixin, AggregationMixin, MatchingScoreQuantifier):
         X, y = validate_data(self, X, y)
         self.classes_ = np.unique(y)
 
-        X, y = self._fit_learner_predictions(
+        X, y = self._fit_estimator_predictions(
             X,
             y,
-            learner_fitted=learner_fitted,
+            estimator_fitted=estimator_fitted,
             cv_prediction=cv_prediction,
         )
 
@@ -268,7 +270,7 @@ class SMM(SoftLearnerQMixin, AggregationMixin, MatchingScoreQuantifier):
 
     def predict(self, X):
         X = validate_data(self, X, ensure_2d=True)
-        test_scores = self._predict_learner(X)
+        test_scores = self._predict_estimator(X)
         return self._predict(test_scores)
 
     def aggregate(self, test_scores, train_scores, y_train):

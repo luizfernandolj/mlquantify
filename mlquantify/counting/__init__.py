@@ -11,8 +11,7 @@ from ._adjustment import (
     MS,
     MS2,
 )
-from ._generalized import FM, GAC, GPAC
-from mlquantify.likelihood import CDE
+from ._generalized import FM, GACC, GPACC
 
 from ._utils import (
     compute_table,
@@ -26,22 +25,16 @@ __all__ = [
     "PCC",
     "ThresholdAdjustment",
     "FM",
-    "AC",
-    "PAC",
+    "GACC",
+    "GPACC",
     "TAC",
     "TX",
     "TMAX",
     "T50",
     "MS",
     "MS2",
-    "CDE",
-    "GAC",
-    "GPAC",
     "compute_table",
     "compute_fpr",
     "compute_tpr",
     "evaluate_thresholds",
 ]
-
-AC = GAC
-PAC = GPAC

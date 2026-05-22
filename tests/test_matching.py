@@ -32,7 +32,7 @@ def _assert_valid_prevalence(prevalence, n_classes):
 def test_histogram_score_matching_binary(quantifier_class, binary_dataset):
     X, y = binary_dataset
     q = quantifier_class(
-        learner=LogisticRegression(max_iter=1000, random_state=42),
+        estimator=LogisticRegression(max_iter=1000, random_state=42),
         bins_size=[5, 10],
     )
 
@@ -56,7 +56,7 @@ def test_histogram_feature_matching_binary(binary_dataset):
     assert q.best_distance_ is not None
 
 
-def test_hdy_matches_quapy_median_grid_recipe():
+def test_hdy_matches_median_grid_recipe():
     train_scores = np.asarray(
         [
             [0.96, 0.04],
@@ -84,19 +84,19 @@ def test_hdy_matches_quapy_median_grid_recipe():
     with config_context(prevalence_return_type="array"):
         prevalence = q.aggregate(test_scores, train_scores, y_train)
 
-    expected = _quapy_hdy_reference(test_scores, train_scores, y_train, bins_size)
+    expected = _hdy_median_grid_reference(test_scores, train_scores, y_train, bins_size)
 
     assert prevalence == pytest.approx(expected)
 
 
-def _quapy_hdy_reference(test_scores, train_scores, y_train, bins_size):
+def _hdy_median_grid_reference(test_scores, train_scores, y_train, bins_size):
     train_positive = train_scores[:, 1]
     test_positive = test_scores[:, 1]
     estimates = []
 
     for bins in bins_size:
-        neg_density = _quapy_hdy_train_hist(train_positive[y_train == 0], bins)
-        pos_density = _quapy_hdy_train_hist(train_positive[y_train == 1], bins)
+        neg_density = _hdy_train_hist(train_positive[y_train == 0], bins)
+        pos_density = _hdy_train_hist(train_positive[y_train == 1], bins)
         test_density = np.histogram(
             test_positive,
             bins=bins,
@@ -121,7 +121,7 @@ def _quapy_hdy_reference(test_scores, train_scores, y_train, bins_size):
     return np.asarray([1.0 - positive_prevalence, positive_prevalence])
 
 
-def _quapy_hdy_train_hist(values, bins):
+def _hdy_train_hist(values, bins):
     hist = np.histogram(values, bins=bins, range=(0, 1), density=True)[0]
     return hist / hist.sum()
 
@@ -153,7 +153,7 @@ def test_energy_distance_matching_binary(binary_dataset):
 def test_energy_distance_matching_aggregative_binary(binary_dataset):
     X, y = binary_dataset
     q = EDy(
-        learner=LogisticRegression(max_iter=1000, random_state=42),
+        estimator=LogisticRegression(max_iter=1000, random_state=42),
         cv=3,
     )
 
@@ -168,14 +168,14 @@ def test_energy_distance_matching_aggregative_binary(binary_dataset):
 @pytest.mark.parametrize(
     "quantifier",
     [
-        KDEyML(learner=LogisticRegression(max_iter=1000, random_state=42), bandwidth=0.2),
+        KDEyML(estimator=LogisticRegression(max_iter=1000, random_state=42), bandwidth=0.2),
         KDEyHD(
-            learner=LogisticRegression(max_iter=1000, random_state=42),
+            estimator=LogisticRegression(max_iter=1000, random_state=42),
             bandwidth=0.2,
             montecarlo_trials=90,
             random_state=42,
         ),
-        KDEyCS(learner=LogisticRegression(max_iter=1000, random_state=42), bandwidth=0.2),
+        KDEyCS(estimator=LogisticRegression(max_iter=1000, random_state=42), bandwidth=0.2),
     ],
 )
 def test_kde_matching_multiclass(quantifier, multiclass_dataset):
@@ -190,8 +190,8 @@ def test_kde_matching_multiclass(quantifier, multiclass_dataset):
 
 
 def test_aggregative_generalized_matching_uses_prediction_representation():
-    g_hdy = GHDy(learner=LogisticRegression(max_iter=1000, random_state=42))
-    kde_ml = GeneralizedKDEyML(learner=LogisticRegression(max_iter=1000, random_state=42))
+    g_hdy = GHDy(estimator=LogisticRegression(max_iter=1000, random_state=42))
+    kde_ml = GeneralizedKDEyML(estimator=LogisticRegression(max_iter=1000, random_state=42))
 
     assert isinstance(g_hdy.representation, PredictionRepresentation)
     assert g_hdy.representation.representation is not None
@@ -202,7 +202,7 @@ def test_aggregative_generalized_matching_uses_prediction_representation():
 def test_sord_score_matching_binary(binary_dataset):
     X, y = binary_dataset
     q = SORD(
-        learner=LogisticRegression(max_iter=1000, random_state=42),
+        estimator=LogisticRegression(max_iter=1000, random_state=42),
         n_grid=21,
     )
 
@@ -219,12 +219,12 @@ def test_histogram_matching_multiclass_ovr(quantifier_class, multiclass_dataset)
     X, y = multiclass_dataset
     if quantifier_class in (DyS, HDy):
         q = quantifier_class(
-            learner=LogisticRegression(max_iter=1000, random_state=42),
+            estimator=LogisticRegression(max_iter=1000, random_state=42),
             bins_size=[5],
         )
     elif quantifier_class is SORD:
         q = quantifier_class(
-            learner=LogisticRegression(max_iter=1000, random_state=42),
+            estimator=LogisticRegression(max_iter=1000, random_state=42),
             n_grid=21,
         )
     else:

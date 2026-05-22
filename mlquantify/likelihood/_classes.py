@@ -1,9 +1,10 @@
 from mlquantify.base import BaseQuantifier
-from mlquantify.base_aggregative import AggregationMixin
+from mlquantify.base_aggregative import AggregativeMixin
 import numpy as np
 from mlquantify.base_aggregative import (
-    SoftLearnerQMixin,
-    _get_learner_function,
+    SoftPredictionMixin,
+    _get_estimator,
+    _get_estimator_function,
     get_aggregation_requirements,
 )
 from mlquantify.metrics._slq import MAE
@@ -22,22 +23,24 @@ from abstention.calibration import (
 
 
 
-class BaseLikelihoodQuantifier(SoftLearnerQMixin, AggregationMixin, BaseQuantifier):
+class BaseLikelihoodQuantifier(SoftPredictionMixin, AggregativeMixin, BaseQuantifier):
     r"""Base class for likelihood/prior-adjustment quantifiers."""
 
-    def __init__(self, learner=None):
-        self.learner = learner
+    def __init__(self, estimator=None):
+        self.estimator = estimator
 
     @_fit_context(prefer_skip_nested_validation=True)
     def fit(self, X, y):
         X, y = validate_data(self, X, y)
 
         self.classes_ = np.unique(y)
-        self.learner.fit(X, y)
+        estimator = _get_estimator(self)
+        estimator.fit(X, y)
+        self.estimator_ = estimator
 
-        learner_function = _get_learner_function(self)
+        estimator_function = _get_estimator_function(self)
 
-        self.train_predictions_ = getattr(self.learner, learner_function)(X)
+        self.train_predictions_ = getattr(estimator, estimator_function)(X)
         self.train_labels_ = np.asarray(y)
         self.priors_ = self._compute_priors(y)
 
@@ -46,8 +49,8 @@ class BaseLikelihoodQuantifier(SoftLearnerQMixin, AggregationMixin, BaseQuantifi
     def predict(self, X):
         X = validate_data(self, X)
 
-        learner_function = _get_learner_function(self)
-        predictions = getattr(self.learner, learner_function)(X)
+        estimator_function = _get_estimator_function(self)
+        predictions = getattr(self.estimator_, estimator_function)(X)
 
         requirements = get_aggregation_requirements(self)
 
@@ -131,7 +134,7 @@ class EMQ(BaseLikelihoodQuantifier):
 
     Parameters
     ----------
-    learner : estimator, optional
+    estimator : estimator, optional
         Probabilistic classifier supporting predict_proba.
     tol : float, default=1e-4
         Convergence threshold.
@@ -159,18 +162,19 @@ class EMQ(BaseLikelihoodQuantifier):
     >>> from sklearn.datasets import make_classification
     >>> from sklearn.linear_model import LogisticRegression
     >>> X, y = make_classification(n_samples=200, n_features=10, random_state=7)
-    >>> q = EMQ(learner=LogisticRegression(max_iter=500), calib_function='ts')
+    >>> q = EMQ(estimator=LogisticRegression(max_iter=500), calib_function='ts')
     >>> q.fit(X[:150], y[:150])
     EMQ(...)
     >>> prev = q.predict(X[150:])
     >>> round(float(prev.sum()), 6)
     1.0
-    >>> probs_train = q.learner.predict_proba(X[:150])
-    >>> probs_test = q.learner.predict_proba(X[150:])
+    >>> probs_train = q.estimator.predict_proba(X[:150])
+    >>> probs_test = q.estimator.predict_proba(X[150:])
     >>> prev2 = q.aggregate(probs_test, probs_train, y[:150])
     >>> round(float(prev2.sum()), 6)
     1.0
     """
+
 
     _parameter_constraints = {
         "tol": [Interval(0, None, inclusive_left=False)],
@@ -185,14 +189,14 @@ class EMQ(BaseLikelihoodQuantifier):
 
     def __init__(
         self,
-        learner=None,
+        estimator=None,
         tol=1e-4,
         max_iter=100,
         calib_function=None,
         criteria=MAE,
         on_calib_error="backup",
     ):
-        self.learner = learner
+        self.estimator = estimator
         self.tol = tol
         self.max_iter = max_iter
         self.calib_function = calib_function
@@ -355,14 +359,14 @@ class CDE(BaseLikelihoodQuantifier):
 
     def __init__(
         self,
-        learner=None,
+        estimator=None,
         tol=1e-4,
         max_iter=100,
         init_cfp=1.0,
         strategy="ovr",
         n_jobs=None,
     ):
-        super().__init__(learner=learner)
+        super().__init__(estimator=estimator)
         self.tol = float(tol)
         self.max_iter = int(max_iter)
         self.init_cfp = float(init_cfp)

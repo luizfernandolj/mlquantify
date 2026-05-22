@@ -1,8 +1,8 @@
 import numpy as np
 
 from mlquantify.base_aggregative import (
-    SoftLearnerQMixin,
-    CrispLearnerQMixin
+    SoftPredictionMixin,
+    CrispPredictionMixin
 )
 
 from mlquantify.counting._base import BaseCount
@@ -11,7 +11,7 @@ from mlquantify.utils._constraints import Interval
         
 
 
-class CC(CrispLearnerQMixin, BaseCount):
+class CC(CrispPredictionMixin, BaseCount):
     r"""Classify and Count (CC) quantifier.
 
     Implements the Classify and Count method for quantification, describe as a
@@ -19,7 +19,7 @@ class CC(CrispLearnerQMixin, BaseCount):
 
     Parameters
     ----------
-    learner : estimator, optional
+    estimator : estimator, optional
         A supervised learning estimator with `fit` and `predict` methods.
         If None, it is expected that the aggregate method is used directly.
     threshold : float, default=0.5
@@ -28,7 +28,7 @@ class CC(CrispLearnerQMixin, BaseCount):
 
     Attributes
     ----------
-    learner : estimator
+    estimator : estimator
         Underlying classification model.
 
     Notes
@@ -47,7 +47,7 @@ class CC(CrispLearnerQMixin, BaseCount):
     >>> from sklearn.linear_model import LogisticRegression
     >>> X = np.random.randn(100, 5)
     >>> y = np.random.randint(0, 2, 100)
-    >>> q = CC(learner=LogisticRegression())
+    >>> q = CC(estimator=LogisticRegression())
     >>> q.fit(X, y)
     >>> q.predict(X)
     {0: 0.47, 1: 0.53}
@@ -69,8 +69,9 @@ class CC(CrispLearnerQMixin, BaseCount):
         ],
     }
 
-    def __init__(self, learner=None, threshold=0.5):
-        super().__init__(learner=learner)
+
+    def __init__(self, estimator=None, threshold=0.5):
+        super().__init__(estimator=estimator)
         self.threshold = threshold
 
     def aggregate(self, predictions, y_train=None):
@@ -79,7 +80,7 @@ class CC(CrispLearnerQMixin, BaseCount):
         Parameters
         ----------
         predictions : ndarray of shape (n_samples, n_classes)
-            Learner predictions on test data. Can be probabilities (n_samples, n_classes) or class labels (n_samples,).
+            Estimator predictions on test data. Can be probabilities (n_samples, n_classes) or class labels (n_samples,).
         y_train : ndarray of shape (n_samples,)
             True class labels of the training data. None by default.
         
@@ -110,7 +111,7 @@ class CC(CrispLearnerQMixin, BaseCount):
         return prevalences
 
 
-class PCC(SoftLearnerQMixin, BaseCount):
+class PCC(SoftPredictionMixin, BaseCount):
     r"""Probabilistic Classify and Count (PCC) quantifier.
     
     Implements the Probabilistic Classify and Count method for quantification as described in [1]_, [2]_:
@@ -118,14 +119,14 @@ class PCC(SoftLearnerQMixin, BaseCount):
         
     Parameters
     ----------
-    learner : estimator, optional
+    estimator : estimator, optional
         A supervised learning estimator with fit and predict_proba methods.
         If None, it is expected that will be used the aggregate method directly.
         
         
     Attributes
     ----------
-    learner : estimator
+    estimator : estimator
         Underlying classification model.
     classes : ndarray of shape (n_classes,)
         Unique class labels observed during training.
@@ -143,14 +144,15 @@ class PCC(SoftLearnerQMixin, BaseCount):
     >>> from sklearn.linear_model import LogisticRegression
     >>> X = np.random.randn(100, 5)
     >>> y = np.random.randint(0, 2, 100)
-    >>> q = PCC(learner=LogisticRegression())
+    >>> q = PCC(estimator=LogisticRegression())
     >>> q.fit(X, y)
     >>> q.predict(X)
     {0: 0.48, 1: 0.52}
     """
 
-    def __init__(self, learner=None):
-        super().__init__(learner=learner)
+
+    def __init__(self, estimator=None):
+        super().__init__(estimator=estimator)
 
     def aggregate(self, predictions, y_train=None):
         """Aggregate predictions into class prevalence estimates. 
@@ -158,7 +160,7 @@ class PCC(SoftLearnerQMixin, BaseCount):
         Parameters
         ----------
         predictions : ndarray of shape (n_samples, n_classes)
-            Learner predictions on test data. Can be probabilities (n_samples, n_classes) or class labels (n_samples,).
+            Estimator predictions on test data. Can be probabilities (n_samples, n_classes) or class labels (n_samples,).
         y_train : ndarray of shape (n_samples,)
             True class labels of the training data. None by default.
         

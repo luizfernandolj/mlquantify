@@ -5,7 +5,7 @@ Non Parameters Scenarios
 
 When dealing with new reasearch problems, it is common to have new scenarios that are not covered by the current quantifiers. In this case, there are problems when:
 
-- Learner (e.g. classifier) does not have :func:`fit`, :func:`predict` and :func:`predict_proba` methods, or it is an external learner that does not have a `sklearn` interface
+- Estimator (e.g. classifier) does not have :func:`fit`, :func:`predict` and :func:`predict_proba` methods, or it is an external estimator that does not have a `sklearn` interface
 - You already have the predictions of the mid task (e.g. classifier) and you don't want to remake the predictions.
 
 The solution for this is to use the :func:`~mlquantify.set_arguments` method to set the arguments of the quantifier.
@@ -13,7 +13,7 @@ The solution for this is to use the :func:`~mlquantify.set_arguments` method to 
 .. note::
     **Recommended Usage**
     
-    When using the set_parameters, you don't need to pass any learner when instantiating the quantifier, but you still need to use the `fit` and `predict` methods of the quantifier.
+    When using the set_parameters, you don't need to pass any estimator when instantiating the quantifier, but you still need to use the `fit` and `predict` methods of the quantifier.
 
 .. code-block:: python
 

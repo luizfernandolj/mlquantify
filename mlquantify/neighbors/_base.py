@@ -5,14 +5,13 @@ from sklearn.neighbors import KernelDensity
 from mlquantify.utils._decorators import _fit_context
 from mlquantify.base import BaseQuantifier
 from mlquantify.utils import validate_y, validate_predictions, validate_data, check_classes_attribute
-from mlquantify.base_aggregative import AggregationMixin, SoftLearnerQMixin, _get_learner_function
+from mlquantify.base_aggregative import AggregativeMixin, SoftPredictionMixin
 from mlquantify.utils._constraints import Interval, Options
-from mlquantify.utils._get_scores import apply_cross_validation
 from mlquantify.utils._validation import validate_prevalences
 
 EPS = 1e-12
 
-class BaseKDE(SoftLearnerQMixin, AggregationMixin, BaseQuantifier):
+class BaseKDE(SoftPredictionMixin, AggregativeMixin, BaseQuantifier):
     r"""Base class for KDEy quantification methods.
 
     KDEy models the class-conditional densities of posterior probabilities using Kernel Density Estimation (KDE)
@@ -45,7 +44,7 @@ class BaseKDE(SoftLearnerQMixin, AggregationMixin, BaseQuantifier):
 
     Attributes
     ----------
-    learner : estimator
+    estimator : estimator
         Probabilistic classifier generating posterior predictions.
     bandwidth : float
         KDE bandwidth (smoothing parameter).
@@ -78,8 +77,8 @@ class BaseKDE(SoftLearnerQMixin, AggregationMixin, BaseQuantifier):
         "kernel": [Options(["gaussian", "tophat", "epanechnikov", "exponential", "linear", "cosine"])],
     }
 
-    def __init__(self, learner=None, bandwidth: float = 0.1, kernel: str = "gaussian"):
-        self.learner = learner
+    def __init__(self, estimator=None, bandwidth: float = 0.1, kernel: str = "gaussian"):
+        self.estimator = estimator
         self.bandwidth = bandwidth
         self.kernel = kernel
         self._precomputed = False
@@ -90,7 +89,7 @@ class BaseKDE(SoftLearnerQMixin, AggregationMixin, BaseQuantifier):
         self,
         X,
         y,
-        learner_fitted=False,
+        estimator_fitted=False,
         cv=5,
         stratified=True,
         shuffle=False,
@@ -101,19 +100,15 @@ class BaseKDE(SoftLearnerQMixin, AggregationMixin, BaseQuantifier):
         
         self.classes_ = np.unique(y)
         
-        learner_function = _get_learner_function(self)
-
-        if learner_fitted:
-            self.learner_ = self.learner
-            train_predictions = getattr(self.learner, learner_function)(X)
-            y_train = y
-        else:
-            train_predictions, y_train, self.learner_ = apply_cross_validation(
-                self.learner, X, y,
-                function=learner_function, cv=cv,
-                stratified=stratified, shuffle=shuffle,
-                cv_prediction=cv_prediction,
-            )
+        train_predictions, y_train = self._fit_estimator_predictions(
+            X,
+            y,
+            estimator_fitted=estimator_fitted,
+            cv=cv,
+            stratified=stratified,
+            shuffle=shuffle,
+            cv_prediction=cv_prediction,
+        )
  
         self.train_predictions = train_predictions
         self.y_train = y_train
@@ -136,7 +131,7 @@ class BaseKDE(SoftLearnerQMixin, AggregationMixin, BaseQuantifier):
         self._precomputed = True
 
     def predict(self, X):
-        predictions = self._predict_learner(X)
+        predictions = self._predict_estimator(X)
         return self.aggregate(predictions, self.train_predictions, self.y_train)
     
     def aggregate(self, predictions, train_predictions, y_train):

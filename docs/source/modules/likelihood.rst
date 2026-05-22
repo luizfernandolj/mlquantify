@@ -80,7 +80,7 @@ The method starts at **Iteration 0**, where the initial estimated prevalence :ma
    from sklearn.linear_model import LogisticRegression
 
    # EMQ requires a probabilistic classifier (soft classifier)
-   q = EMQ(learner=LogisticRegression())
+   q = EMQ(estimator=LogisticRegression())
    q.fit(X_train, y_train)
    
    # Updates predictions based on the test distribution iteratively

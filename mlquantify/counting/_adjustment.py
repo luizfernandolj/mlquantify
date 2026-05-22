@@ -16,11 +16,11 @@ from mlquantify.utils import (
     check_classes_attribute
 )
 from mlquantify.base_aggregative import (
-    CrispLearnerQMixin,
-    SoftLearnerQMixin,
-    AggregationMixin,
+    CrispPredictionMixin,
+    SoftPredictionMixin,
+    AggregativeMixin,
     uses_soft_predictions, 
-    _get_learner_function
+    _get_estimator_function
 )
 from mlquantify.multiclass import binary_quantifier
 from mlquantify.utils._optimization import _optimize_on_simplex
@@ -29,7 +29,7 @@ from mlquantify.utils._constraints import Interval, Options
 
 
 @binary_quantifier(strategy_attr="strategy")
-class ThresholdAdjustment(SoftLearnerQMixin, BaseAdjustCount):
+class ThresholdAdjustment(SoftPredictionMixin, BaseAdjustCount):
     r"""Base Class for Threshold-based adjustment methods for quantification.
 
     This is the base class for methods such as ACC, X, MAX, T50, MS, and MS2, 
@@ -53,7 +53,7 @@ class ThresholdAdjustment(SoftLearnerQMixin, BaseAdjustCount):
 
     Parameters
     ----------
-    learner : estimator, optional
+    estimator : estimator, optional
         A supervised learning model with `fit` and `predict_proba` methods.
     threshold : float, default=0.5
         Classification threshold in [0, 1].
@@ -62,7 +62,7 @@ class ThresholdAdjustment(SoftLearnerQMixin, BaseAdjustCount):
 
     Attributes
     ----------
-    learner : estimator
+    estimator : estimator
         The underlying classification model.
     classes : ndarray of shape (n_classes,)
         Unique class labels observed during training.
@@ -85,7 +85,7 @@ class ThresholdAdjustment(SoftLearnerQMixin, BaseAdjustCount):
     ...         return thresholds[idx], tprs[idx], fprs[idx]
     >>> X = np.random.randn(100, 4)
     >>> y = np.random.randint(0, 2, 100)
-    >>> q = CustomThreshold(learner=LogisticRegression())
+    >>> q = CustomThreshold(estimator=LogisticRegression())
     >>> q.fit(X, y)
     >>> q.predict(X)
     {0: 0.49, 1: 0.51}
@@ -105,8 +105,9 @@ class ThresholdAdjustment(SoftLearnerQMixin, BaseAdjustCount):
         ],
     }
 
-    def __init__(self, learner=None, threshold=0.5, strategy="ovr", n_jobs=None):
-        super().__init__(learner=learner)
+
+    def __init__(self, estimator=None, threshold=0.5, strategy="ovr", n_jobs=None):
+        super().__init__(estimator=estimator)
         self.threshold = threshold
         self.strategy = strategy
         self.n_jobs = n_jobs
@@ -153,7 +154,7 @@ class TAC(ThresholdAdjustment):
     
     Parameters
     ----------
-    learner : estimator, optional
+    estimator : estimator, optional
         A supervised learning model with `fit` and `predict_proba` methods.
     threshold : float, default=0.5
         Classification threshold in [0, 1] for applying in the :class:`CC` output.
@@ -180,7 +181,7 @@ class TX(ThresholdAdjustment):
 
     Parameters
     ----------
-    learner : estimator, optional
+    estimator : estimator, optional
         A supervised learning model with `fit` and `predict_proba` methods.
     threshold : float, default=0.5
         Classification threshold in [0, 1] for applying in the :class:`CC` output.
@@ -205,7 +206,7 @@ class TMAX(ThresholdAdjustment):
 
     Parameters
     ----------
-    learner : estimator, optional
+    estimator : estimator, optional
         A supervised learning model with `fit` and `predict_proba` methods.
     threshold : float, default=0.5
         Classification threshold in [0, 1] for applying in the :class:`CC` output.
@@ -230,7 +231,7 @@ class T50(ThresholdAdjustment):
 
     Parameters
     ----------
-    learner : estimator, optional
+    estimator : estimator, optional
         A supervised learning model with `fit` and `predict_proba` methods.
     threshold : float, default=0.5
         Classification threshold in [0, 1] for applying in the :class:`CC` output.
@@ -259,7 +260,7 @@ class MS(ThresholdAdjustment):
     
     Parameters
     ----------
-    learner : estimator, optional
+    estimator : estimator, optional
         A supervised learning model with `fit` and `predict_proba` methods.
     threshold : float, default=0.5
         Classification threshold in [0, 1] for applying in the :class:`CC` output.
@@ -305,7 +306,7 @@ class MS2(MS):
 
     Parameters
     ----------
-    learner : estimator, optional
+    estimator : estimator, optional
         A supervised learning model with `fit` and `predict_proba` methods.
     threshold : float, default=0.5
         Classification threshold in [0, 1] for applying in the :class:`CC` output.

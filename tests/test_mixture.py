@@ -36,7 +36,7 @@ def test_matching_methods_fit_predict_binary(quantifier_class, binary_dataset):
         q = quantifier_class()
     else:
         q = quantifier_class(
-            learner=LogisticRegression(max_iter=1000, random_state=42),
+            estimator=LogisticRegression(max_iter=1000, random_state=42),
         )
 
     q.fit(X, y)
@@ -58,12 +58,12 @@ def test_binary_matching_methods_support_multiclass_ovr(
         q = quantifier_class(bins_size=[5])
     elif quantifier_class is SORD:
         q = quantifier_class(
-            learner=LogisticRegression(max_iter=1000, random_state=42),
+            estimator=LogisticRegression(max_iter=1000, random_state=42),
             n_grid=21,
         )
     else:
         q = quantifier_class(
-            learner=LogisticRegression(max_iter=1000, random_state=42),
+            estimator=LogisticRegression(max_iter=1000, random_state=42),
             bins_size=[5],
         )
 

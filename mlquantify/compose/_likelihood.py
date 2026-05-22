@@ -12,7 +12,7 @@ class LikelihoodComposeQuantifier(BaseComposeQuantifier):
     def __init__(
         self,
         representation=None,
-        learner=None,
+        estimator=None,
         solver="slsqp",
         aggregative=True,
         tau_0=0.0,
@@ -21,7 +21,7 @@ class LikelihoodComposeQuantifier(BaseComposeQuantifier):
     ):
         super().__init__(
             representation=representation,
-            learner=learner,
+            estimator=estimator,
             solver=solver,
             aggregative=aggregative,
         )
@@ -34,7 +34,7 @@ class LikelihoodComposeQuantifier(BaseComposeQuantifier):
         self,
         X,
         y,
-        learner_fitted=False,
+        estimator_fitted=False,
         sample_weight=None,
         cv_prediction="refit",
     ):
@@ -42,7 +42,7 @@ class LikelihoodComposeQuantifier(BaseComposeQuantifier):
             return super().fit(
                 X,
                 y,
-                learner_fitted=learner_fitted,
+                estimator_fitted=estimator_fitted,
                 sample_weight=sample_weight,
                 cv_prediction=cv_prediction,
             )
@@ -50,11 +50,11 @@ class LikelihoodComposeQuantifier(BaseComposeQuantifier):
         X, y = validate_data(self, X, y)
         self.classes_ = np.unique(y)
 
-        if self._uses_learner_predictions():
-            X_rep, y_rep = self._fit_learner_predictions(
+        if self._uses_estimator_predictions():
+            X_rep, y_rep = self._fit_estimator_predictions(
                 X,
                 y,
-                learner_fitted=learner_fitted,
+                estimator_fitted=estimator_fitted,
                 cv_prediction=cv_prediction,
             )
         else:
@@ -75,8 +75,8 @@ class LikelihoodComposeQuantifier(BaseComposeQuantifier):
             return super().predict(X)
 
         X = validate_data(self, X)
-        if self._uses_learner_predictions():
-            test_representation = self._predict_learner(X)
+        if self._uses_estimator_predictions():
+            test_representation = self._predict_estimator(X)
         else:
             test_representation = X
 

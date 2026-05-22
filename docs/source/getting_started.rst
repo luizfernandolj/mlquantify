@@ -51,7 +51,7 @@ All aggregative quantifiers in ``mlquantify`` support a consistent set of parame
 
 *   ``X``: The training input samples (array-like, sparse matrix).
 *   ``y``: The target values (class labels).
-*   ``learner_fitted`` (bool): If ``True``, assumes the provided estimator is already trained. If ``False`` (default), trains the estimator on the provided ``X`` and ``y``.
+*   ``estimator_fitted`` (bool): If ``True``, assumes the provided estimator is already trained. If ``False`` (default), trains the estimator on the provided ``X`` and ``y``.
 *   ``cv`` (int, cross-validation generator, or iterable): Determines the cross-validation splitting strategy for generating internal predictions (used by methods like ACC, PACC).
 *   ``stratified`` (bool): If ``True``, uses stratified folds for cross-validation.
 *   ``shuffle`` (bool): Whether to shuffle the data before splitting in cross-validation.

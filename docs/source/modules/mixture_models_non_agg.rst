@@ -38,7 +38,7 @@ The goal of HDx is to estimate the prevalence parameter \(\alpha\) that minimize
     - :math:`|S^+_{f,i}|`, :math:`|S^-_{f,i}|`: counts of positive/negative training samples in bin :math:`i` of feature :math:`f`,
     - :math:`n_f`: number of features.
 
-HDx, different from HDy, does not require a learner to estimate posterior probabilities, as it operates directly in the feature space, so it does not have a `aggregate` method.
+HDx, different from HDy, does not require a estimator to estimate posterior probabilities, as it operates directly in the feature space, so it does not have a `aggregate` method.
 
 .. code-block:: python
 

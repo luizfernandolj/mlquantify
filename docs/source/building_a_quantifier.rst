@@ -40,18 +40,18 @@ To build a custom quantifier, inherit from :class:`BaseQuantifier` and implement
 Aggregative Quantifiers
 ------------------------
 
-Aggregative quantifiers combine predictions from a base learner. Inherit from both :class:`AggregativeQuantifierMixin` and :class:`BaseQuantifier` to create one.
+Aggregative quantifiers combine predictions from a base estimator. Inherit from both :class:`AggregativeQuantifierMixin` and :class:`BaseQuantifier` to create one.
 
 **Required methods:**
 
-- :func:`fit`: Train the quantifier and its base learner
+- :func:`fit`: Train the quantifier and its base estimator
 - :func:`predict`: Generate individual predictions
 - :func:`aggregate`: Convert individual predictions into prevalence estimates
 
 .. important::
 
     - Place :class:`AggregativeQuantifierMixin` **first** in the inheritance list for proper method resolution
-    - Include a ``learner`` attribute for automatic parameter handling
+    - Include an ``estimator`` attribute for automatic parameter handling
 
 **Example:**
 
@@ -62,18 +62,18 @@ Aggregative quantifiers combine predictions from a base learner. Inherit from bo
     import numpy as np
     
     class MyAggregativeQuantifier(AggregativeQuantifierMixin, BaseQuantifier):
-        def __init__(self, learner, param1=42, param2='default'):
-            self.learner = learner
+        def __init__(self, estimator, param1=42, param2='default'):
+            self.estimator = estimator
             self.param1 = param1
             self.param2 = param2
         
         def fit(self, X, y):
             self.classes_ = np.unique(y)
-            self.learner.fit(X, y)
+            self.estimator.fit(X, y)
             return self
         
         def predict(self, X):
-            return self.learner.predict(X)
+            return self.estimator.predict(X)
         
         def aggregate(self, individual_predictions):
             _, counts = np.unique(individual_predictions, return_counts=True)
@@ -86,12 +86,12 @@ Aggregation Types
 
 Specify the prediction type by inheriting from one of these mixins:
 
-- :class:`CrispLearnerMixin`: For hard/crisp predictions (class labels)
-- :class:`SoftLearnerMixin`: For soft/probabilistic predictions (class probabilities)
+- :class:`CrispPredictionMixin`: For hard/crisp predictions (class labels)
+- :class:`SoftPredictionMixin`: For soft/probabilistic predictions (class probabilities)
 
 .. note::
 
-    These mixins only work with :class:`AggregativeQuantifierMixin` and require a ``learner`` attribute.
+    These mixins only work with :class:`AggregativeQuantifierMixin` and require a ``estimator`` attribute.
 
 
 Binary Quantifiers
@@ -134,7 +134,7 @@ The :mod:`mlquantify.utils` module provides validation functions to ensure data 
 
 - :func:`validate_data`: Validate input features and labels
 - :func:`validate_prevalences`: Validate prevalence estimates
-- :func:`validate_predictions`: Validate learner predictions (for aggregative quantifiers)
+- :func:`validate_predictions`: Validate estimator predictions (for aggregative quantifiers)
 - :func:`_fit_context`: Context manager for fitting with automatic parameter validation, with an option to skip multiple validations during fitting if in a loop.
 
 **Example:**
@@ -148,11 +148,11 @@ The :mod:`mlquantify.utils` module provides validation functions to ensure data 
         _fit_context
     )
     from mlquantify.base import BaseQuantifier
-    from mlquantify.mixins import SoftLearnerMixin, AggregativeQuantifierMixin
+    from mlquantify.mixins import SoftPredictionMixin, AggregativeQuantifierMixin
     
-    class MyQuantifier(SoftLearnerMixin, AggregativeQuantifierMixin, BaseQuantifier):
-        def __init__(self, learner, param1=42):
-            self.learner = learner
+    class MyQuantifier(SoftPredictionMixin, AggregativeQuantifierMixin, BaseQuantifier):
+        def __init__(self, estimator, param1=42):
+            self.estimator = estimator
             self.param1 = param1
 
         @_fit_context(prefer_skip_validation=True)

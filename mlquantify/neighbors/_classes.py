@@ -43,7 +43,7 @@ class PWK(BaseQuantifier):
     ----------
     cc : object
         Internally used Classify & Count quantifier wrapping PWKCLF.
-    learner : PWKCLF
+    estimator : PWKCLF
         Underlying probabilistic weighted k-NN classifier.
 
 
@@ -74,7 +74,7 @@ class PWK(BaseQuantifier):
                  p=2,
                  metric_params=None,
                  n_jobs=None):
-        learner = PWKCLF(alpha=alpha,
+        estimator = PWKCLF(alpha=alpha,
                          n_neighbors=n_neighbors,
                          algorithm=algorithm,
                          metric=metric,
@@ -90,7 +90,7 @@ class PWK(BaseQuantifier):
         self.p = p
         self.metric_params = metric_params
         self.n_jobs = n_jobs
-        self.learner = learner
+        self.estimator = estimator
         
     @_fit_context(prefer_skip_nested_validation=True)
     def fit(self, X, y):
@@ -111,7 +111,7 @@ class PWK(BaseQuantifier):
         """
         X, y = validate_data(self, X, y, ensure_2d=True, ensure_min_samples=2)
         self.classes_ = np.unique(y)
-        self.cc = CC(self.learner)
+        self.cc = CC(self.estimator)
         return self.cc.fit(X, y)
     
     def predict(self, X):
@@ -133,7 +133,7 @@ class PWK(BaseQuantifier):
         return prevalences
     
     def classify(self, X):
-        """Classify samples using the underlying learner.
+        """Classify samples using the underlying estimator.
         
         Parameters
         ----------
@@ -145,5 +145,5 @@ class PWK(BaseQuantifier):
         labels : array of shape (n_samples,)
             Predicted class labels.
         """
-        return self.learner.predict(X)
+        return self.estimator.predict(X)
         

@@ -21,7 +21,7 @@ def _assert_valid_prevalence(prevalence, n_classes):
 @pytest.mark.parametrize("quantifier_class", COUNTING_QUANTIFIERS)
 def test_counting_methods_fit_predict_binary(quantifier_class, binary_dataset):
     X, y = binary_dataset
-    q = quantifier_class(learner=LogisticRegression(max_iter=1000, random_state=42))
+    q = quantifier_class(estimator=LogisticRegression(max_iter=1000, random_state=42))
 
     q.fit(X, y)
 
@@ -34,7 +34,7 @@ def test_counting_methods_fit_predict_binary(quantifier_class, binary_dataset):
 @pytest.mark.parametrize("quantifier_class", [CC, PCC, AC, PAC, FM])
 def test_counting_methods_fit_predict_multiclass(quantifier_class, multiclass_dataset):
     X, y = multiclass_dataset
-    q = quantifier_class(learner=LogisticRegression(max_iter=1000, random_state=42))
+    q = quantifier_class(estimator=LogisticRegression(max_iter=1000, random_state=42))
 
     q.fit(X, y)
 
@@ -46,7 +46,7 @@ def test_counting_methods_fit_predict_multiclass(quantifier_class, multiclass_da
 
 def test_counting_respects_dict_output_config(binary_dataset):
     X, y = binary_dataset
-    q = CC(learner=LogisticRegression(max_iter=1000, random_state=42))
+    q = CC(estimator=LogisticRegression(max_iter=1000, random_state=42))
 
     q.fit(X, y)
 
@@ -59,7 +59,7 @@ def test_counting_respects_dict_output_config(binary_dataset):
 
 def test_counting_accepts_common_input_formats(binary_dataset_formats):
     X, y = binary_dataset_formats
-    q = PCC(learner=LogisticRegression(max_iter=1000, random_state=42))
+    q = PCC(estimator=LogisticRegression(max_iter=1000, random_state=42))
 
     q.fit(X, y)
 
@@ -73,12 +73,12 @@ def test_cc_threshold_parameter_validation(binary_dataset):
     X, y = binary_dataset
 
     CC(
-        learner=LogisticRegression(max_iter=1000, random_state=42),
+        estimator=LogisticRegression(max_iter=1000, random_state=42),
         threshold=0.8,
     ).fit(X, y)
 
     with pytest.raises(InvalidParameterError):
         CC(
-            learner=LogisticRegression(max_iter=1000, random_state=42),
+            estimator=LogisticRegression(max_iter=1000, random_state=42),
             threshold=1.5,
         ).fit(X, y)

@@ -50,8 +50,8 @@ API_REFERENCE = {
                 "title": None,
                 "autosummary": [
                     "AggregationMixin",
-                    "SoftLearnerQMixin",
-                    "CrispLearnerQMixin"
+                    "SoftPredictionMixin",
+                    "CrispPredictionMixin"
                 ],
             }
         ],

@@ -1,20 +1,26 @@
 from mlquantify.utils._tags import (
     get_tags
 )
-from mlquantify.utils._validation import validate_parameter_constraints, validate_learner_contraints
+from mlquantify.utils._validation import validate_parameter_constraints, validate_estimator_constraints
 from mlquantify.utils._get_scores import apply_cross_validation
 import numpy as np
+import inspect
 
 
-class AggregationMixin:
+def _get_estimator(quantifier):
+    """Return the estimator configured on a quantifier."""
+    return getattr(quantifier, "estimator", None)
+
+
+class AggregativeMixin:
     """Mixin class for all aggregative quantifiers.
     
     An aggregative quantifier is a quantifier that relies on an underlying
-    supervised learner to produce predictions on which the quantification 
+    supervised estimator to produce predictions on which the quantification 
     is then performed.
     
-    Inheriting from this mixin provides learner validation and setting 
-    parameters also for the learner (used by `GridSearchQ` and friends).
+    Inheriting from this mixin provides estimator validation and setting 
+    parameters also for the estimator (used by `GridSearchQ` and friends).
     
     This mixin also sets the `has_estimator` and `requires_fit`
     tags to `True`.
@@ -22,9 +28,9 @@ class AggregationMixin:
 
     Notes
     -----
-    - An aggregative quantifier must have a 'learner' attribute that is
+    - An aggregative quantifier must have a 'estimator' attribute that is
       a supervised learning estimator.
-    - Depending on the type of predictions required from the learner, 
+    - Depending on the type of predictions required from the estimator, 
       the quantifier can be further classified as a 'soft' or 'crisp' 
       aggregative quantifier. 
       
@@ -34,18 +40,19 @@ class AggregationMixin:
     
     Examples
     --------
-    >>> from mlquantify.base import BaseQuantifier, AggregationMixin
+    >>> from mlquantify.base import BaseQuantifier
+    >>> from mlquantify.base_aggregative import AggregativeMixin
     >>> from sklearn.linear_model import LogisticRegression
     >>> import numpy as np
-    >>> class MyAggregativeQuantifier(AggregationMixin, BaseQuantifier):
-    ...     def __init__(self, learner=None):
-    ...         self.learner = learner if learner is not None else LogisticRegression()
+    >>> class MyAggregativeQuantifier(AggregativeMixin, BaseQuantifier):
+    ...     def __init__(self, estimator=None):
+    ...         self.estimator = estimator if estimator is not None else LogisticRegression()
     ...     def fit(self, X, y):
-    ...         self.learner.fit(X, y)
+    ...         self.estimator.fit(X, y)
     ...         self.classes_ = np.unique(y)
     ...         return self
     ...     def predict(self, X):
-    ...         preds = self.learner.predict(X)
+    ...         preds = self.estimator.predict(X)
     ...         _, counts = np.unique(preds, return_counts=True)
     ...         prevalence = counts / counts.sum()
     ...         return prevalence
@@ -63,73 +70,75 @@ class AggregationMixin:
         return tags
     
     
-    def _fit_learner_predictions(
+    def _fit_estimator_predictions(
         self,
         X,
         y,
-        learner_fitted=False,
+        estimator_fitted=False,
         cv=None,
         stratified=None,
         shuffle=None,
         random_state=None,
         cv_prediction="refit",
     ):
-        learner_function = _get_learner_function(self)
+        estimator_function = _get_estimator_function(self)
+        estimator = _get_estimator(self)
 
-        if learner_fitted:
-            self.learner_ = self.learner
-            return getattr(self.learner, learner_function)(X), y
+        if estimator_fitted:
+            self.estimator_ = estimator
+            return getattr(estimator, estimator_function)(X), y
 
-        cv = self.cv if cv is None else cv
-        stratified = self.stratified if stratified is None else stratified
-        shuffle = self.shuffle if shuffle is None else shuffle
-        random_state = self.random_state if random_state is None else random_state
+        cv = getattr(self, "cv", None) if cv is None else cv
+        stratified = getattr(self, "stratified", True) if stratified is None else stratified
+        shuffle = getattr(self, "shuffle", True) if shuffle is None else shuffle
+        random_state = getattr(self, "random_state", None) if random_state is None else random_state
 
         if cv is None:
             cv = 5
 
-        predictions, y_pred, fitted_learner = apply_cross_validation(
-            self.learner,
+        predictions, y_pred, fitted_estimator = apply_cross_validation(
+            estimator,
             X,
             y,
-            function=learner_function,
+            function=estimator_function,
             cv=cv,
             stratified=stratified,
             shuffle=shuffle,
             random_state=random_state,
             cv_prediction=cv_prediction,
         )
-
-        self.learner_ = fitted_learner
+        self.estimator_ = fitted_estimator
 
         return predictions, y_pred
 
-    def _predict_learner(self, X):
-        learner_function = _get_learner_function(self)
-        learner = getattr(self, "learner_", self.learner)
+    def _predict_estimator(self, X):
+        estimator_function = _get_estimator_function(self)
+        estimator = getattr(self, "estimator_", None)
+        if estimator is None:
+            estimator = _get_estimator(self)
 
-        if isinstance(learner, list):
-            return self._predict_learner_ensemble(
-                learner,
+        if isinstance(estimator, list):
+            return self._predict_estimator_ensemble(
+                estimator,
                 X,
-                learner_function,
+                estimator_function,
             )
 
-        return getattr(learner, learner_function)(X)
+        return getattr(estimator, estimator_function)(X)
 
-    def _predict_learner_ensemble(self, estimators, X, learner_function):
+    def _predict_estimator_ensemble(self, estimators, X, estimator_function):
         if not estimators:
-            raise ValueError("The learner ensemble is empty.")
+            raise ValueError("The estimator ensemble is empty.")
 
-        if learner_function == "predict_proba":
+        if estimator_function == "predict_proba":
             return self._predict_proba_ensemble(estimators, X)
 
         predictions = [
-            getattr(estimator, learner_function)(X)
+            getattr(estimator, estimator_function)(X)
             for estimator in estimators
         ]
 
-        if learner_function == "predict":
+        if estimator_function == "predict":
             return self._majority_vote(predictions)
 
         return np.mean(np.asarray(predictions, dtype=float), axis=0)
@@ -182,37 +191,73 @@ class AggregationMixin:
 
     def _validate_params(self):
         """Validate the parameters of the quantifier instance,
-        including the learner's parameters.
+        including the estimator's parameters.
         
         The expected types and values must be defined in the `_parameter_constraints`
         class attribute as a dictionary. `param_name: list of constraints`. See
         the docstring of `validate_parameter_constraints` for more details.
         """
-        validate_learner_contraints(self, self.learner)
+        validate_estimator_constraints(self, _get_estimator(self))
         
         validate_parameter_constraints(
             self._parameter_constraints,
             self.get_params(deep=False),
             caller_name=self.__class__.__name__,
         )
+
+    def get_params(self, deep=True):
+        params = super().get_params(deep=deep)
+
+        if not self._accepts_estimator_parameter():
+            return params
+
+        estimator = _get_estimator(self)
+
+        params.pop("estimator", None)
+        for key in list(params):
+            if key.startswith("estimator__"):
+                params.pop(key)
+
+        params["estimator"] = estimator
+
+        if deep and estimator is not None and hasattr(estimator, "get_params"):
+            for key, value in estimator.get_params(deep=True).items():
+                params[f"estimator__{key}"] = value
+
+        return params
     
     def set_params(self, **params):
+        estimator_nested = {}
+        own_params = {}
         
-        # Model Params
         for key, value in params.items():
-            if hasattr(self, key):
+            if key.startswith("estimator__"):
+                estimator_nested[key.replace("estimator__", "", 1)] = value
+            else:
+                own_params[key] = value
+
+        for key, value in own_params.items():
+            if key == "estimator":
+                self.estimator = value
+            elif hasattr(self, key):
                 setattr(self, key, value)
 
-        # Learner Params
-        if self.learner is not None:
-            learner_params = {k.replace('learner__', ''): v for k, v in params.items() if 'learner__' in k}
-            if learner_params:
-                self.learner.set_params(**learner_params)
+        estimator = _get_estimator(self)
+        if estimator is not None and estimator_nested:
+            estimator.set_params(**estimator_nested)
         
         return self
+
+    def _accepts_estimator_parameter(self):
+        try:
+            signature = inspect.signature(self.__init__)
+        except (TypeError, ValueError):
+            return False
+
+        return "estimator" in signature.parameters
     
 
-class SoftLearnerQMixin:
+class SoftPredictionMixin:
     """Soft predictions mixin for aggregative quantifiers.
 
     This mixin provides the following change tags:
@@ -222,23 +267,24 @@ class SoftLearnerQMixin:
     
     Notes
     -----
-    - This mixin should be used alongside the `AggregationMixin`, in 
+    - This mixin should be used alongside the `AggregativeMixin`, in 
     the left of it in the inheritance order.
     
     Examples
     --------
-    >>> from mlquantify.base import BaseQuantifier, AggregationMixin, SoftLearnerQMixin
+    >>> from mlquantify.base import BaseQuantifier
+    >>> from mlquantify.base_aggregative import AggregativeMixin, SoftPredictionMixin
     >>> from sklearn.linear_model import LogisticRegression
     >>> import numpy as np
-    >>> class MySoftAggregativeQuantifier(SoftLearnerQMixin, AggregationMixin, BaseQuantifier):
-    ...     def __init__(self, learner=None):
-    ...         self.learner = learner if learner is not None else LogisticRegression()
+    >>> class MySoftAggregativeQuantifier(SoftPredictionMixin, AggregativeMixin, BaseQuantifier):
+    ...     def __init__(self, estimator=None):
+    ...         self.estimator = estimator if estimator is not None else LogisticRegression()
     ...     def fit(self, X, y):
-    ...         self.learner.fit(X, y)
+    ...         self.estimator.fit(X, y)
     ...         self.classes_ = np.unique(y)
     ...         return self
     ...     def predict(self, X):
-    ...         proba = self.learner.predict_proba(X)
+    ...         proba = self.estimator.predict_proba(X)
     ...         return proba.mean(axis=0)
     >>> quantifier = MySoftAggregativeQuantifier()
     >>> X = np.random.rand(100, 10)
@@ -254,7 +300,7 @@ class SoftLearnerQMixin:
         return tags
 
 
-class CrispLearnerQMixin:
+class CrispPredictionMixin:
     """Crisp predictions mixin for aggregative quantifiers.
     
     This mixin provides the following change tags:
@@ -264,24 +310,25 @@ class CrispLearnerQMixin:
     
     Notes
     -----
-    - This mixin should be used alongside the `AggregationMixin`, in
+    - This mixin should be used alongside the `AggregativeMixin`, in
     the left of it in the inheritance order.
     
     
     Examples
     --------
-    >>> from mlquantify.base import BaseQuantifier, AggregationMixin, CrispLearnerQMixin
+    >>> from mlquantify.base import BaseQuantifier
+    >>> from mlquantify.base_aggregative import AggregativeMixin, CrispPredictionMixin
     >>> from sklearn.linear_model import LogisticRegression
     >>> import numpy as np
-    >>> class MyCrispAggregativeQuantifier(CrispLearnerQMixin, AggregationMixin, BaseQuantifier):
-    ...     def __init__(self, learner=None):
-    ...         self.learner = learner if learner is not None else LogisticRegression()
+    >>> class MyCrispAggregativeQuantifier(CrispPredictionMixin, AggregativeMixin, BaseQuantifier):
+    ...     def __init__(self, estimator=None):
+    ...         self.estimator = estimator if estimator is not None else LogisticRegression()
     ...     def fit(self, X, y):
-    ...         self.learner.fit(X, y)
+    ...         self.estimator.fit(X, y)
     ...         self.classes_ = np.unique(y)
     ...         return self
     ...     def predict(self, X):
-    ...         preds = self.learner.predict(X)
+    ...         preds = self.estimator.predict(X)
     ...         _, counts = np.unique(preds, return_counts=True)
     ...         prevalence = counts / counts.sum()
     ...         return prevalence
@@ -297,6 +344,9 @@ class CrispLearnerQMixin:
         tags.estimator_function = "predict"
         tags.estimator_type= "crisp"
         return tags
+
+
+AggregationMixin = AggregativeMixin
 
 
 def uses_soft_predictions(quantifier):
@@ -317,12 +367,17 @@ def get_aggregation_requirements(quantifier):
     return tags.prediction_requirements
 
 
-def _get_learner_function(quantifier):
-    """Get the learner function name used by the aggregative quantifier."""
+def _get_estimator_function(quantifier):
+    """Get the estimator function name used by the aggregative quantifier."""
     tags = get_tags(quantifier)
     function_name = tags.estimator_function
     if function_name is None:
         raise ValueError(f"The quantifier {quantifier.__class__.__name__} does not specify an estimator function.")
-    if not hasattr(quantifier.learner, function_name):
-        raise AttributeError(f"The learner {quantifier.learner.__class__.__name__} does not have the method '{function_name}'.")
+    estimator = _get_estimator(quantifier)
+    if estimator is None:
+        raise AttributeError(
+            f"The quantifier {quantifier.__class__.__name__} does not have an estimator configured."
+        )
+    if not hasattr(estimator, function_name):
+        raise AttributeError(f"The estimator {estimator.__class__.__name__} does not have the method '{function_name}'.")
     return function_name

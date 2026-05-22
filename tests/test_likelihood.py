@@ -17,7 +17,7 @@ def _assert_valid_prevalence(prevalence, n_classes):
 @pytest.mark.parametrize("quantifier_class", [EMQ, CDE, MLPE])
 def test_likelihood_methods_fit_predict_binary(quantifier_class, binary_dataset):
     X, y = binary_dataset
-    q = quantifier_class(learner=LogisticRegression(max_iter=1000, random_state=42))
+    q = quantifier_class(estimator=LogisticRegression(max_iter=1000, random_state=42))
 
     q.fit(X, y)
 
@@ -29,7 +29,7 @@ def test_likelihood_methods_fit_predict_binary(quantifier_class, binary_dataset)
 
 def test_emq_multiclass(multiclass_dataset):
     X, y = multiclass_dataset
-    q = EMQ(learner=LogisticRegression(max_iter=1000, random_state=42))
+    q = EMQ(estimator=LogisticRegression(max_iter=1000, random_state=42))
 
     q.fit(X, y)
 
@@ -43,7 +43,7 @@ def test_emq_multiclass(multiclass_dataset):
 def test_emq_calibration(binary_dataset, calib_function):
     X, y = binary_dataset
     q = EMQ(
-        learner=LogisticRegression(max_iter=1000, random_state=42),
+        estimator=LogisticRegression(max_iter=1000, random_state=42),
         calib_function=calib_function,
     )
 
@@ -57,7 +57,7 @@ def test_emq_calibration(binary_dataset, calib_function):
 
 def test_likelihood_dict_output_config(binary_dataset):
     X, y = binary_dataset
-    q = EMQ(learner=LogisticRegression(max_iter=1000, random_state=42))
+    q = EMQ(estimator=LogisticRegression(max_iter=1000, random_state=42))
 
     q.fit(X, y)
 

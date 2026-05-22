@@ -4,7 +4,7 @@ from mlquantify.compose import (
     LinearComposeQuantifier,
     LikelihoodComposeQuantifier,
 )
-from mlquantify.base_aggregative import AggregationMixin, SoftLearnerQMixin
+from mlquantify.base_aggregative import AggregativeMixin, SoftPredictionMixin
 from mlquantify.losses import EnergyLoss
 from mlquantify.representations import (
     DistanceRepresentation,
@@ -14,12 +14,12 @@ from mlquantify.representations import (
 )
 
 
-class GHDy(SoftLearnerQMixin, AggregationMixin, LinearComposeQuantifier):
+class GHDy(SoftPredictionMixin, AggregativeMixin, LinearComposeQuantifier):
     r"""Generalized HDy using histogram representations over posterior probabilities."""
 
     def __init__(
         self,
-        learner=None,
+        estimator=None,
         bins=10,
         loss="hellinger",
         solver="slsqp",
@@ -29,7 +29,7 @@ class GHDy(SoftLearnerQMixin, AggregationMixin, LinearComposeQuantifier):
         random_state=None,
     ):
         super().__init__(
-            learner=learner,
+            estimator=estimator,
             representation=PredictionRepresentation(
                 method="soft",
                 average=False,
@@ -63,10 +63,11 @@ class GHDx(LinearComposeQuantifier):
         random_state=None,
     ):
         super().__init__(
-            learner=None,
+            estimator=None,
             representation=HistogramRepresentation(
                 bins=bins,
                 mode="onehot",
+                bin_edges="auto",
             ),
             loss=loss,
             solver=solver,
@@ -78,12 +79,12 @@ class GHDx(LinearComposeQuantifier):
         self.random_state = random_state
 
 
-class GKDEyML(SoftLearnerQMixin, AggregationMixin, LikelihoodComposeQuantifier):
+class GKDEyML(SoftPredictionMixin, AggregativeMixin, LikelihoodComposeQuantifier):
     r"""KDEy with maximum-likelihood estimation."""
 
     def __init__(
         self,
-        learner=None,
+        estimator=None,
         bandwidth=0.1,
         kernel="gaussian",
         solver="slsqp",
@@ -93,7 +94,7 @@ class GKDEyML(SoftLearnerQMixin, AggregationMixin, LikelihoodComposeQuantifier):
         random_state=None,
     ):
         super().__init__(
-            learner=learner,
+            estimator=estimator,
             representation=PredictionRepresentation(
                 method="soft",
                 average=False,
@@ -118,12 +119,12 @@ class GKDEyML(SoftLearnerQMixin, AggregationMixin, LikelihoodComposeQuantifier):
 KDEyML = GKDEyML
 
 
-class EDy(SoftLearnerQMixin, AggregationMixin, LinearComposeQuantifier):
+class EDy(SoftPredictionMixin, AggregativeMixin, LinearComposeQuantifier):
     r"""Energy distance over posterior probabilities."""
 
     def __init__(
         self,
-        learner=None,
+        estimator=None,
         metric="euclidean",
         solver="slsqp",
         cv=None,
@@ -132,7 +133,7 @@ class EDy(SoftLearnerQMixin, AggregationMixin, LinearComposeQuantifier):
         random_state=None,
     ):
         super().__init__(
-            learner=learner,
+            estimator=estimator,
             representation=PredictionRepresentation(
                 method="soft",
                 representation=DistanceRepresentation(metric=metric),

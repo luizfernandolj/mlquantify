@@ -1,8 +1,8 @@
 import numpy as np
 
 from mlquantify.base_aggregative import (
-    AggregationMixin,
-    SoftLearnerQMixin,
+    AggregativeMixin,
+    SoftPredictionMixin,
 )
 from mlquantify.utils._decorators import _fit_context
 from mlquantify.matching._base import BaseMatchingQuantifier
@@ -117,12 +117,12 @@ class MatchingHistogramQuantifier(BaseMatchingQuantifier):
 
 
 @binary_quantifier(strategy_attr="strategy")
-class DyS(SoftLearnerQMixin, AggregationMixin, MatchingHistogramQuantifier):
+class DyS(SoftPredictionMixin, AggregativeMixin, MatchingHistogramQuantifier):
     r"""Distribution y-Similarity with histogram score matching."""
 
     def __init__(
         self,
-        learner=None,
+        estimator=None,
         bins_size=None,
         strategy="ovr",
         cv=None,
@@ -137,7 +137,7 @@ class DyS(SoftLearnerQMixin, AggregationMixin, MatchingHistogramQuantifier):
             strategy=strategy,
             histogram_features=1,
         )
-        self.learner = learner
+        self.estimator = estimator
         self.cv = cv
         self.stratified = stratified
         self.shuffle = shuffle
@@ -148,7 +148,7 @@ class DyS(SoftLearnerQMixin, AggregationMixin, MatchingHistogramQuantifier):
         self,
         X,
         y,
-        learner_fitted=False,
+        estimator_fitted=False,
         sample_weight=None,
         cv_prediction="refit",
     ):
@@ -156,10 +156,10 @@ class DyS(SoftLearnerQMixin, AggregationMixin, MatchingHistogramQuantifier):
         X, y = validate_data(self, X, y)
         self.classes_ = np.unique(y)
 
-        X, y = self._fit_learner_predictions(
+        X, y = self._fit_estimator_predictions(
             X,
             y,
-            learner_fitted=learner_fitted,
+            estimator_fitted=estimator_fitted,
             cv_prediction=cv_prediction,
         )
 
@@ -167,7 +167,7 @@ class DyS(SoftLearnerQMixin, AggregationMixin, MatchingHistogramQuantifier):
 
     def predict(self, X):
         X = validate_data(self, X, ensure_2d=True)
-        test_scores = self._predict_learner(X)
+        test_scores = self._predict_estimator(X)
         return self._predict(test_scores)
 
     def aggregate(self, test_scores, train_scores, y_train):
@@ -177,12 +177,12 @@ class DyS(SoftLearnerQMixin, AggregationMixin, MatchingHistogramQuantifier):
 
 
 @binary_quantifier(strategy_attr="strategy")
-class HDy(SoftLearnerQMixin, AggregationMixin, MatchingHistogramQuantifier):
+class HDy(SoftPredictionMixin, AggregativeMixin, MatchingHistogramQuantifier):
     r"""Distribution y-Similarity with histogram score matching."""
 
     def __init__(
         self,
-        learner=None,
+        estimator=None,
         bins_size=None,
         strategy="ovr",
         cv=None,
@@ -201,7 +201,7 @@ class HDy(SoftLearnerQMixin, AggregationMixin, MatchingHistogramQuantifier):
             histogram_features=1,
             bin_strategy="median",
         )
-        self.learner = learner
+        self.estimator = estimator
         self.cv = cv
         self.stratified = stratified
         self.shuffle = shuffle
@@ -212,7 +212,7 @@ class HDy(SoftLearnerQMixin, AggregationMixin, MatchingHistogramQuantifier):
         self,
         X,
         y,
-        learner_fitted=False,
+        estimator_fitted=False,
         sample_weight=None,
         cv_prediction="refit",
     ):
@@ -220,10 +220,10 @@ class HDy(SoftLearnerQMixin, AggregationMixin, MatchingHistogramQuantifier):
         X, y = validate_data(self, X, y)
         self.classes_ = np.unique(y)
 
-        X, y = self._fit_learner_predictions(
+        X, y = self._fit_estimator_predictions(
             X,
             y,
-            learner_fitted=learner_fitted,
+            estimator_fitted=estimator_fitted,
             cv_prediction=cv_prediction,
         )
 
@@ -231,7 +231,7 @@ class HDy(SoftLearnerQMixin, AggregationMixin, MatchingHistogramQuantifier):
 
     def predict(self, X):
         X = validate_data(self, X, ensure_2d=True)
-        test_scores = self._predict_learner(X)
+        test_scores = self._predict_estimator(X)
         return self._predict(test_scores)
 
     def aggregate(self, test_scores, train_scores, y_train):

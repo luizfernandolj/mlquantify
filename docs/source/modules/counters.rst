@@ -26,7 +26,7 @@ It trains a hard classifier :math:`h` on labeled data :math:`L` , applies it to 
    import numpy as np
 
    X, y = np.random.randn(100, 5), np.random.randint(0, 2, 100)
-   q = CC(learner=LogisticRegression())
+   q = CC(estimator=LogisticRegression())
    q.fit(X, y)
    q.predict(X)
    # -> {0: 0.47, 1: 0.53}
@@ -54,7 +54,7 @@ This makes it less sensitive to uncertain predictions.
    import numpy as np
 
    X, y = np.random.randn(100, 5), np.random.randint(0, 2, 100)
-   q = PCC(learner=LogisticRegression())
+   q = PCC(estimator=LogisticRegression())
    q.fit(X, y)
    q.predict(X)
    # -> {0: 0.45, 1: 0.55}

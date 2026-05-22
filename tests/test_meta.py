@@ -17,9 +17,9 @@ def _assert_valid_prevalence(prevalence, n_classes):
 
 def test_ensembleq_fit_predict(binary_dataset):
     X, y = binary_dataset
-    learner = LogisticRegression()
+    estimator = LogisticRegression()
     # Use simple quantifier for speed
-    base_q = CC(learner=learner)
+    base_q = CC(estimator=estimator)
     # Smaller size for speed
     meta_q = EnsembleQ(quantifier=base_q, size=5, n_jobs=-1)
     meta_q.fit(X, y)
@@ -29,8 +29,8 @@ def test_ensembleq_fit_predict(binary_dataset):
 @pytest.mark.parametrize("protocol", ["artificial", "natural", "uniform"])
 def test_ensembleq_protocols(protocol, binary_dataset):
     X, y = binary_dataset
-    learner = LogisticRegression()
-    base_q = CC(learner=learner)
+    estimator = LogisticRegression()
+    base_q = CC(estimator=estimator)
     meta_q = EnsembleQ(quantifier=base_q, size=2, protocol=protocol)
     meta_q.fit(X, y)
     preds = meta_q.predict(X)
@@ -38,8 +38,8 @@ def test_ensembleq_protocols(protocol, binary_dataset):
 
 def test_aggregative_bootstrap(binary_dataset):
     X, y = binary_dataset
-    learner = LogisticRegression()
-    base_q = CC(learner=learner)
+    estimator = LogisticRegression()
+    base_q = CC(estimator=estimator)
     meta_q = AggregativeBootstrap(quantifier=base_q, n_train_bootstraps=2, n_test_bootstraps=2)
     meta_q.fit(X, y)
     preds = meta_q.predict(X)
@@ -47,9 +47,9 @@ def test_aggregative_bootstrap(binary_dataset):
 
 def test_quadapt_fit_predict(binary_dataset):
     X, y = binary_dataset
-    learner = LogisticRegression()
+    estimator = LogisticRegression()
     # QuaDapt requires soft predictions
-    base_q = DyS(learner=learner) 
+    base_q = DyS(estimator=estimator) 
     meta_q = QuaDapt(quantifier=base_q)
     meta_q.fit(X, y)
     preds = meta_q.predict(X)
@@ -57,9 +57,9 @@ def test_quadapt_fit_predict(binary_dataset):
 
 def test_quadapt_raises_hard_quantifier(binary_dataset):
     X, y = binary_dataset
-    learner = LogisticRegression()
+    estimator = LogisticRegression()
     # CC is hard (crisp) quantifier
-    base_q = CC(learner=learner)
+    base_q = CC(estimator=estimator)
     meta_q = QuaDapt(quantifier=base_q)
     with pytest.raises(ValueError, match="not a soft"):
         meta_q.fit(X, y)

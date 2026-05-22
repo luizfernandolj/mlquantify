@@ -9,15 +9,15 @@ from mlquantify.utils._constraints import Interval, Options
 from mlquantify.utils._decorators import _fit_context
 from mlquantify.utils._validation import validate_data, validate_prevalences
 from mlquantify.base_aggregative import (
-    AggregationMixin,
-    SoftLearnerQMixin,
+    AggregativeMixin,
+    SoftPredictionMixin,
 )
 
 EPS = 1e-12
 
 class KDEyQuantifier(
-    SoftLearnerQMixin,
-    AggregationMixin,
+    SoftPredictionMixin,
+    AggregativeMixin,
     BaseMatchingQuantifier,
 ):
     r"""Base class for KDEy density matching quantifiers."""
@@ -34,7 +34,7 @@ class KDEyQuantifier(
 
     def __init__(
         self,
-        learner=None,
+        estimator=None,
         bandwidth=0.1,
         kernel="gaussian",
         solver="slsqp",
@@ -43,7 +43,7 @@ class KDEyQuantifier(
         shuffle=False,
         random_state=None,
     ):
-        self.learner = learner
+        self.estimator = estimator
         self.bandwidth = bandwidth
         self.kernel = kernel
         self.solver = solver
@@ -71,16 +71,16 @@ class KDEyQuantifier(
         self,
         X,
         y,
-        learner_fitted=False,
+        estimator_fitted=False,
         sample_weight=None,
         cv_prediction="refit",
     ):
         X, y = validate_data(self, X, y)
 
-        train_scores, y_train = self._fit_learner_predictions(
+        train_scores, y_train = self._fit_estimator_predictions(
             X,
             y,
-            learner_fitted=learner_fitted,
+            estimator_fitted=estimator_fitted,
             cv_prediction=cv_prediction,
         )
 
@@ -100,7 +100,7 @@ class KDEyQuantifier(
 
     def predict(self, X):
         X = validate_data(self, X, ensure_2d=True)
-        test_scores = self._predict_learner(X)
+        test_scores = self._predict_estimator(X)
         return self._predict(test_scores)
 
     def aggregate(self, test_scores, train_scores=None, y_train=None):
@@ -171,7 +171,7 @@ class KDEyHD(KDEyQuantifier):
 
     def __init__(
         self,
-        learner=None,
+        estimator=None,
         bandwidth=0.1,
         kernel="gaussian",
         montecarlo_trials=10000,
@@ -184,7 +184,7 @@ class KDEyHD(KDEyQuantifier):
         self.montecarlo_trials = montecarlo_trials
 
         super().__init__(
-            learner=learner,
+            estimator=estimator,
             bandwidth=bandwidth,
             kernel=kernel,
             solver=solver,
@@ -266,7 +266,7 @@ class KDEyCS(KDEyQuantifier):
 
     def __init__(
         self,
-        learner=None,
+        estimator=None,
         bandwidth=0.1,
         kernel="gaussian",
         solver="slsqp",
@@ -279,7 +279,7 @@ class KDEyCS(KDEyQuantifier):
             raise ValueError("KDEyCS supports only gaussian KDE.")
 
         super().__init__(
-            learner=learner,
+            estimator=estimator,
             bandwidth=bandwidth,
             kernel=kernel,
             solver=solver,

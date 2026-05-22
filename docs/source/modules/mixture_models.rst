@@ -69,7 +69,7 @@ HDy: Hellinger Distance y-Similarity
    from mlquantify.mixture import HDy
    from sklearn.ensemble import RandomForestClassifier
 
-   q = HDy(learner=RandomForestClassifier(), bins=10)
+   q = HDy(estimator=RandomForestClassifier(), bins=10)
    q.fit(X_train, y_train)
    q.predict(X_test)
 
@@ -127,7 +127,7 @@ SMM: Sample Mean Matching
 .. code-block:: python
 
    from mlquantify.mixture import SMM
-   q = SMM(learner=LogisticRegression())
+   q = SMM(estimator=LogisticRegression())
    q.fit(X_train, y_train)
    q.predict(X_test)
 

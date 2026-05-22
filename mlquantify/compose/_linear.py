@@ -20,7 +20,7 @@ class LinearComposeQuantifier(BaseComposeQuantifier):
     def __init__(
         self,
         representation,
-        learner=None,
+        estimator=None,
         loss="hellinger",
         solver="slsqp",
         aggregative=True,
@@ -29,7 +29,7 @@ class LinearComposeQuantifier(BaseComposeQuantifier):
     ):
         super().__init__(
             representation=representation,
-            learner=learner,
+            estimator=estimator,
             solver=solver,
             aggregative=aggregative,
         )

@@ -26,12 +26,12 @@ class BaseComposeQuantifier(
     def __init__(
         self,
         representation,
-        learner=None,
+        estimator=None,
         solver="slsqp",
         aggregative=True,
     ):
         self.representation = representation
-        self.learner = learner
+        self.estimator = estimator
         self.solver = solver
         self.aggregative = aggregative
 
@@ -55,14 +55,14 @@ class BaseComposeQuantifier(
         if not is_aggregative_quantifier(self):
             raise ValueError(
                 f"{self.__class__.__name__} was configured with aggregative=True, "
-                "so the concrete method must inherit AggregationMixin."
+                "so the concrete method must inherit AggregativeMixin."
             )
 
         if not (uses_soft_predictions(self) or uses_crisp_predictions(self)):
             raise ValueError(
                 f"{self.__class__.__name__} was configured with aggregative=True, "
-                "so the concrete method must inherit either SoftLearnerQMixin "
-                "or CrispLearnerQMixin."
+                "so the concrete method must inherit either SoftPredictionMixin "
+                "or CrispPredictionMixin."
             )
 
         if not isinstance(self.representation, PredictionRepresentation):
@@ -71,7 +71,7 @@ class BaseComposeQuantifier(
                 "so its representation must be a PredictionRepresentation."
             )
 
-    def _uses_learner_predictions(self):
+    def _uses_estimator_predictions(self):
         self._check_aggregation_configuration()
         return self._is_configured_aggregative()
 
@@ -84,18 +84,18 @@ class BaseComposeQuantifier(
         self,
         X,
         y,
-        learner_fitted=False,
+        estimator_fitted=False,
         sample_weight=None,
         cv_prediction="refit",
     ):
         X, y = validate_data(self, X, y)
         self.classes_ = np.unique(y)
 
-        if self._uses_learner_predictions():
-            X_rep, y_rep = self._fit_learner_predictions(
+        if self._uses_estimator_predictions():
+            X_rep, y_rep = self._fit_estimator_predictions(
                 X,
                 y,
-                learner_fitted=learner_fitted,
+                estimator_fitted=estimator_fitted,
                 cv_prediction=cv_prediction,
             )
         else:
@@ -123,8 +123,8 @@ class BaseComposeQuantifier(
     def predict(self, X):
         X = validate_data(self, X)
 
-        if self._uses_learner_predictions():
-            X_rep = self._predict_learner(X)
+        if self._uses_estimator_predictions():
+            X_rep = self._predict_estimator(X)
         else:
             X_rep = X
 

@@ -1,6 +1,5 @@
 import numpy as np
-from sklearn.base import clone
-from sklearn.model_selection import KFold, StratifiedKFold
+from mlquantify.utils._cv_estimator import _CVEstimator
 
 def apply_cross_validation(
     model,
@@ -35,74 +34,28 @@ def apply_cross_validation(
         Whether to shuffle data before splitting
         
     cv_prediction : {'refit', 'ensemble'}, default='refit'
-        Strategy used for the fitted learner returned as the third value.
-        'refit' fits the original learner on all data. 'ensemble' returns the
+        Strategy used for the fitted estimator returned as the third value.
+        'refit' fits the original estimator on all data. 'ensemble' returns the
         list of fitted fold clones.
 
     Returns
     -------
     tuple[np.ndarray, np.ndarray, object]
-        predictions, true_labels, fitted_learner. The fitted learner is a
+        predictions, true_labels, fitted_estimator. The fitted estimator is a
         single estimator for 'refit' and a list of fold estimators for
         'ensemble'.
     """
-    if cv_prediction not in {"refit", "ensemble"}:
-        raise ValueError("cv_prediction must be either 'refit' or 'ensemble'.")
-    
-    if not shuffle:
-        random_state = None
+    cv_estimator = _CVEstimator(
+        estimator=model,
+        cv=cv,
+        function=function,
+        stratified=stratified,
+        random_state=random_state,
+        shuffle=shuffle,
+        cv_prediction=cv_prediction,
+    )
 
-    # Choose cross-validation strategy
-    if stratified:
-        cv_splitter = StratifiedKFold(
-            n_splits=cv, 
-            shuffle=shuffle, 
-            random_state=random_state
-        )
-    else:
-        cv_splitter = KFold(
-            n_splits=cv, 
-            shuffle=shuffle, 
-            random_state=random_state
-        )
-    
-    # Pre-allocate arrays
-    all_predictions = []
-    all_true_labels = []
-    estimators = []
-    
-    # Perform cross-validation
-    for train_idx, test_idx in cv_splitter.split(X, y):
-        X_train, X_test = X[train_idx], X[test_idx]
-        y_train, y_test = y[train_idx], y[test_idx]
-        
-        # Fit an independent clone for each fold.
-        estimator = clone(model)
-        estimator.fit(X_train, y_train)
-        
-        if type(function) is str:
-            if not hasattr(estimator, function):
-                raise AttributeError(f"The model does not have the method '{function}'.")
-            predictions = getattr(estimator, function)(X_test)
-        elif callable(function):
-            predictions = function(X_test)
-        else:
-            raise ValueError("The 'function' parameter must be a string or a callable.")
-        
-        all_predictions.append(predictions)
-        all_true_labels.append(y_test)
-        estimators.append(estimator)
-    
-    # Concatenate all predictions and labels
-    final_predictions = np.vstack(all_predictions) if function == 'predict_proba' else np.concatenate(all_predictions)
-    final_true_labels = np.concatenate(all_true_labels)
-
-    if cv_prediction == "ensemble":
-        fitted_learner = estimators
-    else:
-        fitted_learner = model.fit(X, y)
-
-    return final_predictions, final_true_labels, fitted_learner
+    return cv_estimator.fit_predict(X, y)
 
 
 

@@ -58,7 +58,7 @@ The :class:`KDEyML` class implements the Maximum Likelihood quantifier. It model
    from sklearn.ensemble import RandomForestClassifier
 
    # KDEy-ML uses Maximum Likelihood optimization
-   q = KDEyML(learner=RandomForestClassifier(), bandwidth=0.1)
+   q = KDEyML(estimator=RandomForestClassifier(), bandwidth=0.1)
    q.fit(X_train, y_train)
    q.predict(X_test)
 
@@ -90,7 +90,7 @@ The :class:`KDEyHD` class estimates class prevalences by minimizing the **Hellin
    from mlquantify.neighbors import KDEyHD
 
    # Uses Monte Carlo sampling (default trials=1000)
-   q = KDEyHD(learner=RandomForestClassifier(), montecarlo_trials=2000, random_state=42)
+   q = KDEyHD(estimator=RandomForestClassifier(), montecarlo_trials=2000, random_state=42)
    q.fit(X_train, y_train)
    q.predict(X_test)
 
@@ -125,7 +125,7 @@ The :class:`KDEyCS` class minimizes the **Cauchy-Schwarz (CS)** divergence.
    from mlquantify.neighbors import KDEyCS
 
    # Fast execution using closed-form solution
-   q = KDEyCS(learner=RandomForestClassifier(), bandwidth=0.1)
+   q = KDEyCS(estimator=RandomForestClassifier(), bandwidth=0.1)
    q.fit(X_train, y_train)
    q.predict(X_test)
 

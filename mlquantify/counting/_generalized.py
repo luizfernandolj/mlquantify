@@ -1,20 +1,24 @@
 import numpy as np
 
 from mlquantify.base_aggregative import (
-    AggregationMixin,
-    CrispLearnerQMixin,
-    SoftLearnerQMixin,
+    AggregativeMixin,
+    CrispPredictionMixin,
+    SoftPredictionMixin,
 )
 from mlquantify.compose import LinearComposeQuantifier
 from mlquantify.representations import PredictionRepresentation
 
 
-class GAC(CrispLearnerQMixin, AggregationMixin, LinearComposeQuantifier):
-    r"""Generalized Adjusted Count."""
+class GACC(CrispPredictionMixin, AggregativeMixin, LinearComposeQuantifier):
+    r"""Generalized Adjusted Classify and Count.
+    
+    This class implements a generalized version of the Adjusted Classify and Count (ACC) method for quantification.
+    """
+
 
     def __init__(
         self,
-        learner=None,
+        estimator=None,
         loss="ls",
         solver="slsqp",
         cv=None,
@@ -23,7 +27,7 @@ class GAC(CrispLearnerQMixin, AggregationMixin, LinearComposeQuantifier):
         random_state=None,
     ):
         super().__init__(
-            learner=learner,
+            estimator=estimator,
             representation=PredictionRepresentation(
                 method="hard",
                 average=True,
@@ -40,12 +44,12 @@ class GAC(CrispLearnerQMixin, AggregationMixin, LinearComposeQuantifier):
         self.random_state = random_state
 
 
-class GPAC(SoftLearnerQMixin, AggregationMixin, LinearComposeQuantifier):
+class GPACC(SoftPredictionMixin, AggregativeMixin, LinearComposeQuantifier):
     r"""Generalized Probabilistic Adjusted Count."""
 
     def __init__(
         self,
-        learner=None,
+        estimator=None,
         loss="ls",
         solver="slsqp",
         cv=None,
@@ -54,7 +58,7 @@ class GPAC(SoftLearnerQMixin, AggregationMixin, LinearComposeQuantifier):
         random_state=None,
     ):
         super().__init__(
-            learner=learner,
+            estimator=estimator,
             representation=PredictionRepresentation(
                 method="soft",
                 average=True,
@@ -71,12 +75,12 @@ class GPAC(SoftLearnerQMixin, AggregationMixin, LinearComposeQuantifier):
         self.random_state = random_state
 
 
-class FM(SoftLearnerQMixin, AggregationMixin, LinearComposeQuantifier):
+class FM(SoftPredictionMixin, AggregativeMixin, LinearComposeQuantifier):
     r"""Friedman Method."""
 
     def __init__(
         self,
-        learner=None,
+        estimator=None,
         loss="ls",
         solver="slsqp",
         cv=None,
@@ -85,7 +89,7 @@ class FM(SoftLearnerQMixin, AggregationMixin, LinearComposeQuantifier):
         random_state=None,
     ):
         super().__init__(
-            learner=learner,
+            estimator=estimator,
             representation=PredictionRepresentation(
                 func=self._friedman_prediction,
                 average=True,

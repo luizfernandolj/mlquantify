@@ -15,10 +15,10 @@ except ImportError:
 
 from mlquantify.base import BaseQuantifier
 from mlquantify.base_aggregative import (
-    AggregationMixin,
-    SoftLearnerQMixin,
+    AggregativeMixin,
+    SoftPredictionMixin,
     get_aggregation_requirements,
-    _get_learner_function
+    _get_estimator_function
 )
 from mlquantify.utils import (
     validate_y,
@@ -31,7 +31,7 @@ from mlquantify.utils import get_prev_from_labels
 from mlquantify.utils._constraints import Interval, Options
 from mlquantify.utils import _fit_context
 
-from mlquantify.counting import CC, AC, PCC, PAC
+from mlquantify.counting import CC, GACC, PCC, GPACC
 from mlquantify.likelihood import EMQ
 
 EPS = 1e-12
@@ -131,7 +131,7 @@ class QuaNetModule(nn.Module):
         Parameters
         ----------
         doc_embedding_size : int
-            Dimensionality of document embeddings (output of `learner.transform`).
+            Dimensionality of document embeddings (output of `estimator.transform`).
         n_classes : int
             Number of classes of the quantification problem.
         stats_size : int
@@ -230,7 +230,7 @@ class QuaNetModule(nn.Module):
 
         embeded_posteriors = torch.cat((doc_embeddings, doc_posteriors), dim=-1)
 
-        # the entire set represents only one instance in quapy contexts, and so the batch_size=1
+        # The entire set represents a single quantification instance, so batch_size=1.
         # the shape should be (1, number-of-instances, embedding-size + n_classes)
 
         embeded_posteriors = embeded_posteriors.unsqueeze(0)
@@ -252,12 +252,12 @@ class QuaNetModule(nn.Module):
         return prevalence
 
 
-class QuaNet(SoftLearnerQMixin, AggregationMixin, BaseQuantifier):
+class QuaNet(SoftPredictionMixin, AggregativeMixin, BaseQuantifier):
     r"""
     QuaNetQuantifier: a deep quantification method following the QuaNet architecture,
     implemented in the `mlquantify` style.
 
-    This class wraps a base probabilistic learner that:
+    This class wraps a base probabilistic estimator that:
       - can be trained on labeled instances,
       - can output posterior probabilities via `predict_proba(X)`,
       - can transform instances into embeddings via `transform(X)`.
@@ -270,13 +270,13 @@ class QuaNet(SoftLearnerQMixin, AggregationMixin, BaseQuantifier):
 
     Parameters
     ----------
-    learner : estimator
+    estimator : estimator
         Base probabilistic classifier. Must implement:
           - fit(X, y),
           - predict_proba(X) -> array-like (n_samples, n_classes),
           - transform(X) -> array-like (n_samples, emb_dim).
-    fit_learner : bool, default=True
-        If True, the learner is trained inside QuaNetQuantifier.fit.
+    fit_estimator : bool, default=True
+        If True, the estimator is trained inside QuaNetQuantifier.fit.
         If False, it is assumed to be already fitted.
     sample_size : int, default=100
         Bag size used by the APP protocol during QuaNet training.
@@ -309,7 +309,7 @@ class QuaNet(SoftLearnerQMixin, AggregationMixin, BaseQuantifier):
     """
 
     _parameter_constraints = {
-        "fit_learner": [Interval(0, None, inclusive_left=False), Options([None])],
+        "fit_estimator": [Interval(0, None, inclusive_left=False), Options([None])],
         "sample_size": [Interval(0, None, inclusive_left=False), Options([None])],
         "n_epochs": [Interval(0, None, inclusive_left=False), Options([None])],
         "tr_iter": [Interval(0, None, inclusive_left=False), Options([None])],
@@ -327,8 +327,8 @@ class QuaNet(SoftLearnerQMixin, AggregationMixin, BaseQuantifier):
 
     def __init__(
         self,
-        learner,
-        fit_learner: bool = True,
+        estimator,
+        fit_estimator: bool = True,
         sample_size: int = 100,
         n_epochs: int = 100,
         tr_iter: int = 500,
@@ -346,12 +346,12 @@ class QuaNet(SoftLearnerQMixin, AggregationMixin, BaseQuantifier):
         device: str = "cuda",
     ) -> None:
 
-        assert hasattr(learner, "transform"), ...
-        assert hasattr(learner, "predict_proba"), ...
+        assert hasattr(estimator, "transform"), ...
+        assert hasattr(estimator, "predict_proba"), ...
 
         # save hyperparameters as attributes
-        self.learner = learner
-        self.fit_learner = fit_learner
+        self.estimator = estimator
+        self.fit_estimator = fit_estimator
         self.sample_size = sample_size
         self.n_epochs = n_epochs
         self.tr_iter = tr_iter
@@ -402,7 +402,7 @@ class QuaNet(SoftLearnerQMixin, AggregationMixin, BaseQuantifier):
 
         os.makedirs(self.checkpointdir, exist_ok=True)
 
-        if self.fit_learner:
+        if self.fit_estimator:
             X_clf, X_rest, y_clf, y_rest = train_test_split(
                 X, y, test_size=0.4, random_state=self.random_state, stratify=y
             )
@@ -410,7 +410,7 @@ class QuaNet(SoftLearnerQMixin, AggregationMixin, BaseQuantifier):
                 X_rest, y_rest, test_size=0.2, random_state=self.random_state, stratify=y_rest
             )
 
-            self.learner.fit(X_clf, y_clf)
+            self.estimator.fit(X_clf, y_clf)
         else:
             X_train, X_val, y_train, y_val = train_test_split(
                 X, y, test_size=0.40, random_state=self.random_state, stratify=y
@@ -419,21 +419,21 @@ class QuaNet(SoftLearnerQMixin, AggregationMixin, BaseQuantifier):
         self.tr_prev = get_prev_from_labels(y, format="array")
 
         # **CORREÇÃO: Obter embeddings e suas dimensões**
-        X_train_embeddings = self.learner.transform(X_train)
-        X_val_embeddings = self.learner.transform(X_val)
+        X_train_embeddings = self.estimator.transform(X_train)
+        X_val_embeddings = self.estimator.transform(X_val)
         
-        valid_posteriors = self.learner.predict_proba(X_val)
-        train_posteriors = self.learner.predict_proba(X_train)
+        valid_posteriors = self.estimator.predict_proba(X_val)
+        train_posteriors = self.estimator.predict_proba(X_train)
 
         self.val_posteriors = valid_posteriors
         self.y_val = y_val
 
         self.quantifiers = {
-            "cc": CC(self.learner),
-            "acc": AC(self.learner),
-            "pcc": PCC(self.learner),
-            "pacc": PAC(self.learner),
-            "emq": EMQ(self.learner),
+            "cc": CC(self.estimator),
+            "acc": GACC(self.estimator),
+            "pcc": PCC(self.estimator),
+            "pacc": GPACC(self.estimator),
+            "emq": EMQ(self.estimator),
         }
 
         self.status = {
@@ -506,9 +506,9 @@ class QuaNet(SoftLearnerQMixin, AggregationMixin, BaseQuantifier):
     
     def predict(self, X):
         
-        learner_function = _get_learner_function(self)
-        posteriors = getattr(self.learner, learner_function)(X)
-        embeddings = self.learner.transform(X)
+        estimator_function = _get_estimator_function(self)
+        posteriors = getattr(self.estimator, estimator_function)(X)
+        embeddings = self.estimator.transform(X)
 
         qtf_estims = self._aggregate_qtf(posteriors, self.val_posteriors, self.y_val)
             
@@ -583,14 +583,14 @@ class QuaNet(SoftLearnerQMixin, AggregationMixin, BaseQuantifier):
                 self.status["va-loss"] = mse
             
 
-    def _check_params_colision(self, quanet_params, learner_params):
+    def _check_params_colision(self, quanet_params, estimator_params):
         quanet_keys = set(quanet_params.keys())
-        learner_keys = set(learner_params.keys())
+        estimator_keys = set(estimator_params.keys())
 
-        colision_keys = quanet_keys.intersection(learner_keys)
+        colision_keys = quanet_keys.intersection(estimator_keys)
 
         if colision_keys:
-            raise ValueError(f"Parameters {colision_keys} are present in both quanet_params and learner_params")
+            raise ValueError(f"Parameters {colision_keys} are present in both quanet_params and estimator_params")
 
     def clean_checkpoint(self):
         if os.path.exists(self.checkpoint):

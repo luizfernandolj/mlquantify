@@ -30,15 +30,15 @@ class MockEmbedder(BaseEstimator, TransformerMixin):
 @pytest.mark.skipif(not TORCH_AVAILABLE, reason="Torch not installed")
 def test_quanet_fit_predict(binary_dataset):
     X, y = binary_dataset
-    # QuaNet requires a learner that outputs embeddings AND probabilities
+    # QuaNet requires a estimator that outputs embeddings AND probabilities
     # We can mock this or use a pipeline if supported, but typically it expects specific methods
     # For now, let's use a MockEmbedder
     
-    learner = MockEmbedder()
+    estimator = MockEmbedder()
     
     # Use very small parameters for speed
     q = QuaNet(
-        learner=learner,
+        estimator=estimator,
         epoch_pre=1,
         epoch_opt=1,
         patience=1,

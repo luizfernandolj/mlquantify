@@ -37,7 +37,7 @@ from mlquantify.utils._validation import (
     validate_y,
     validate_predictions,
     validate_parameter_constraints,
-    validate_learner_contraints,
+    validate_estimator_constraints,
     _is_fitted,
     check_is_fitted,
     _is_arraylike_not_scalar,

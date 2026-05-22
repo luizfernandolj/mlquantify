@@ -197,8 +197,8 @@ def validate_parameter_constraints(parameter_constraints: dict[str, Any], params
         )
         
         
-def validate_learner_contraints(quantifier, learner) -> None:
-    """Validate the learner parameter of a quantifier."""
+def validate_estimator_constraints(quantifier, estimator) -> None:
+    """Validate the estimator parameter of a quantifier."""
     try:
         tags = get_tags(quantifier)
     except AttributeError as e:
@@ -207,23 +207,26 @@ def validate_learner_contraints(quantifier, learner) -> None:
         ) from e
 
     if not tags.has_estimator:
-        if learner is not None:
+        if estimator is not None:
             raise InvalidParameterError(
-                f"The quantifier {quantifier.__class__.__name__} does not support using a learner."
+                f"The quantifier {quantifier.__class__.__name__} does not support using an estimator."
             )
-        return  # No learner needed
-
+        return
 
     estimator_function = tags.estimator_function
-    
     if estimator_function is None:
-        raise InvalidParameterError(f"The quantifier {quantifier.__class__.__name__} does not specify a valid estimator_function in its tags.")
-    elif estimator_function == "predict":
-        if not hasattr(quantifier.learner, "predict"):
-            raise InvalidParameterError(f"The provided learner does not have a 'predict' method, which is required by the quantifier {quantifier.__class__.__name__}.")
-    elif estimator_function == "predict_proba":
-        if not hasattr(quantifier.learner, "predict_proba"):
-            raise InvalidParameterError(f"The provided learner does not have a 'predict_proba' method, which is required by the quantifier {quantifier.__class__.__name__}.")
+        raise InvalidParameterError(
+            f"The quantifier {quantifier.__class__.__name__} does not specify a valid estimator_function in its tags."
+        )
+    if estimator is None:
+        raise InvalidParameterError(
+            f"The quantifier {quantifier.__class__.__name__} requires an estimator."
+        )
+    if not hasattr(estimator, estimator_function):
+        raise InvalidParameterError(
+            f"The provided estimator does not have a '{estimator_function}' method, "
+            f"which is required by the quantifier {quantifier.__class__.__name__}."
+        )
 
 
 def _is_fitted(quantifier, attributes=None, all_or_any=all):

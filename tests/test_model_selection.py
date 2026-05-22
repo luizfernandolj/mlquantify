@@ -7,8 +7,8 @@ from mlquantify.counting import CC
 from mlquantify.metrics import MAE
 
 class MockQuantifier(CC):
-    def __init__(self, learner=None, threshold=0.5):
-        super().__init__(learner=learner, threshold=threshold)
+    def __init__(self, estimator=None, threshold=0.5):
+        super().__init__(estimator=estimator, threshold=threshold)
 
 
 def _assert_valid_prevalence(prevalence, n_classes):
@@ -21,11 +21,11 @@ def _assert_valid_prevalence(prevalence, n_classes):
 
 def test_gridsearchq_fit_predict(binary_dataset):
     X, y = binary_dataset
-    learner = LogisticRegression()
+    estimator = LogisticRegression()
     param_grid = {'threshold': [0.4, 0.6]}
     
     gs = GridSearchQ(
-        quantifier=lambda: MockQuantifier(learner=learner), # Factory or class
+        quantifier=lambda: MockQuantifier(estimator=estimator), # Factory or class
         param_grid=param_grid,
         protocol='app',
         samples_sizes=50,
@@ -40,17 +40,17 @@ def test_gridsearchq_fit_predict(binary_dataset):
 
 def test_gridsearchq_random_state(binary_dataset):
     X, y = binary_dataset
-    learner = LogisticRegression()
+    estimator = LogisticRegression()
     param_grid = {'threshold': [0.5]}
     
     gs1 = GridSearchQ(
-        quantifier=lambda: MockQuantifier(learner=learner),
+        quantifier=lambda: MockQuantifier(estimator=estimator),
         param_grid=param_grid,
         random_seed=42,
         n_repetitions=5
     )
     gs2 = GridSearchQ(
-        quantifier=lambda: MockQuantifier(learner=learner),
+        quantifier=lambda: MockQuantifier(estimator=estimator),
         param_grid=param_grid,
         random_seed=42,
         n_repetitions=5
@@ -61,23 +61,23 @@ def test_gridsearchq_random_state(binary_dataset):
     
     assert gs1.best_score == gs2.best_score
 
-def test_gridsearchq_learner_params(binary_dataset):
+def test_gridsearchq_estimator_params(binary_dataset):
     X, y = binary_dataset
-    # Test if can set learner params via grid if exposed or wrappers used
+    # Test if can set estimator params via grid if exposed or wrappers used
     # GridSearchQ uses set_params on the quantifier instance.
-    # If the quantifier exposes learner params (e.g. via sklearn delegation), checks this.
-    # CC doesn't typically expose learner params directly as its own, unless through specific design.
+    # If the quantifier exposes estimator params (e.g. via sklearn delegation), checks this.
+    # CC doesn't typically expose estimator params directly as its own, unless through specific design.
     # Assuming user wants to check if it CAN run.
     pass
 
 def test_protocols(binary_dataset):
     X, y = binary_dataset
-    learner = LogisticRegression()
+    estimator = LogisticRegression()
     param_grid = {'threshold': [0.5]}
     
     for protocol in ['app', 'npp', 'upp']:
         gs = GridSearchQ(
-            quantifier=lambda: MockQuantifier(learner=learner),
+            quantifier=lambda: MockQuantifier(estimator=estimator),
             param_grid=param_grid,
             protocol=protocol,
             n_repetitions=2

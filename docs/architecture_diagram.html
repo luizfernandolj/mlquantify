@@ -1,0 +1,592 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>mlquantify architecture diagram</title>
+  <style>
+    :root {
+      color-scheme: light;
+      --bg: #f8fafc;
+      --panel: #ffffff;
+      --text: #0f172a;
+      --muted: #475569;
+      --line: #cbd5e1;
+      --accent: #2563eb;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      background: var(--bg);
+      color: var(--text);
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    }
+
+    header {
+      position: sticky;
+      top: 0;
+      z-index: 10;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      padding: 14px 18px;
+      border-bottom: 1px solid var(--line);
+      background: rgba(255, 255, 255, 0.94);
+      backdrop-filter: blur(10px);
+    }
+
+    h1 {
+      margin: 0;
+      font-size: 18px;
+      font-weight: 700;
+      letter-spacing: 0;
+    }
+
+    .hint {
+      color: var(--muted);
+      font-size: 13px;
+    }
+
+    .controls {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
+    button {
+      border: 1px solid var(--line);
+      background: var(--panel);
+      color: var(--text);
+      border-radius: 8px;
+      padding: 7px 10px;
+      font: inherit;
+      font-size: 13px;
+      cursor: pointer;
+    }
+
+    button:hover {
+      border-color: var(--accent);
+      color: var(--accent);
+    }
+
+    .viewport {
+      position: relative;
+      height: calc(100vh - 62px);
+      overflow: hidden;
+      cursor: grab;
+      background:
+        linear-gradient(rgba(15, 23, 42, 0.04) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(15, 23, 42, 0.04) 1px, transparent 1px);
+      background-size: 24px 24px;
+    }
+
+    .viewport.dragging {
+      cursor: grabbing;
+    }
+
+    .canvas {
+      transform-origin: 0 0;
+      padding: 28px;
+      min-width: 2500px;
+      min-height: 1750px;
+    }
+
+    .mind-map {
+      position: relative;
+      width: 2400px;
+      height: 1650px;
+      border: 1px solid var(--line);
+      border-radius: 18px;
+      background:
+        radial-gradient(circle at center, rgba(37, 99, 235, 0.08), transparent 22%),
+        var(--panel);
+      box-shadow: 0 18px 45px rgba(15, 23, 42, 0.08);
+      overflow: visible;
+    }
+
+    .map-links {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      overflow: visible;
+    }
+
+    .map-links path {
+      fill: none;
+      stroke-width: 4;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+    }
+
+    .map-node {
+      position: absolute;
+      border: 3px solid var(--stroke);
+      border-radius: 18px;
+      background: var(--fill);
+      color: #0f172a;
+      box-shadow: 0 14px 28px rgba(15, 23, 42, 0.08);
+    }
+
+    .center-node {
+      position: absolute;
+      left: 1050px;
+      top: 725px;
+      width: 300px;
+      min-height: 180px;
+      padding: 24px;
+      display: grid;
+      place-items: center;
+      text-align: center;
+      border-width: 4px;
+      border-radius: 26px;
+      background: #eff6ff;
+      border-color: #2563eb;
+    }
+
+    .center-logo {
+      display: block;
+      width: 220px;
+      max-width: 100%;
+      height: auto;
+      margin: 0 auto;
+    }
+
+    .center-node p {
+      margin: 12px 0 0;
+      color: #334155;
+      font-size: 16px;
+      font-weight: 600;
+      line-height: 1.35;
+    }
+
+    .section-node {
+      padding: 20px;
+    }
+
+    .section-node h3 {
+      margin: 0 0 14px;
+      font-size: 22px;
+      line-height: 1.15;
+      letter-spacing: 0;
+    }
+
+    .section-node p,
+    .section-node li {
+      font-size: 15px;
+      line-height: 1.35;
+    }
+
+    .section-node ul {
+      margin: 0;
+      padding-left: 18px;
+    }
+
+    .module-grid {
+      display: grid;
+      gap: 14px;
+    }
+
+    .method-grid {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .core-grid {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+
+    .support-grid {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+
+    .mini-card {
+      min-height: 132px;
+      padding: 14px;
+      border: 2px solid var(--stroke);
+      border-radius: 14px;
+      background: var(--fill);
+      text-align: center;
+    }
+
+    .mini-card h4 {
+      margin: 0 0 8px;
+      font-size: 17px;
+      line-height: 1.15;
+      color: #0f172a;
+    }
+
+    .mini-card p {
+      margin: 0;
+      font-size: 14px;
+      line-height: 1.35;
+    }
+
+    .operation-estimator {
+      color: #059669;
+      font-weight: 700;
+    }
+
+    .operation-optimization {
+      color: #e11d48;
+      font-weight: 700;
+    }
+
+    .operation-specialized {
+      color: #0284c7;
+      font-weight: 700;
+    }
+
+    .operation-meta {
+      color: #db2777;
+      font-weight: 700;
+    }
+
+    .operation-support {
+      color: #64748b;
+      font-weight: 700;
+    }
+
+    .api {
+      left: 930px;
+      top: 90px;
+      width: 540px;
+    }
+
+    .methods {
+      left: 80px;
+      top: 430px;
+      width: 700px;
+      min-height: 595px;
+    }
+
+    .shared {
+      left: 1590px;
+      top: 130px;
+      width: 650px;
+      min-height: 390px;
+    }
+
+    .optimization {
+      left: 1580px;
+      top: 920px;
+      width: 670px;
+      min-height: 0;
+    }
+
+    .optimization .mini-card {
+      min-height: 108px;
+      padding: 12px;
+    }
+
+    .support {
+      left: 780px;
+      top: 1220px;
+      width: 840px;
+      min-height: 260px;
+    }
+
+    .diagram-legend {
+      position: absolute;
+      top: 18px;
+      right: 18px;
+      z-index: 6;
+      width: 260px;
+      padding: 14px 16px;
+      border: 1px solid #cbd5e1;
+      border-radius: 12px;
+      background: rgba(255, 255, 255, 0.94);
+      box-shadow: 0 14px 30px rgba(15, 23, 42, 0.12);
+      font-size: 12px;
+      line-height: 1.35;
+    }
+
+    .diagram-legend h2 {
+      margin: 0 0 8px;
+      font-size: 13px;
+      line-height: 1.2;
+    }
+
+    .legend-row {
+      display: grid;
+      grid-template-columns: 14px 1fr;
+      gap: 8px;
+      align-items: center;
+      margin-top: 6px;
+    }
+
+    .swatch {
+      width: 14px;
+      height: 14px;
+      border: 2px solid var(--stroke);
+      border-radius: 4px;
+      background: var(--fill);
+    }
+
+    .legend-note {
+      margin-top: 10px;
+      padding-top: 8px;
+      border-top: 1px solid #e2e8f0;
+      color: #475569;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div>
+      <h1>mlquantify architecture</h1>
+      <div class="hint">Drag to pan. Use the mouse wheel or buttons to zoom.</div>
+    </div>
+    <div class="controls">
+      <button type="button" id="zoom-out">-</button>
+      <button type="button" id="zoom-out-big">--</button>
+      <button type="button" id="zoom-reset">100%</button>
+      <button type="button" id="zoom-in-big">++</button>
+      <button type="button" id="zoom-in">+</button>
+      <button type="button" id="fit">Fit</button>
+    </div>
+  </header>
+
+  <main class="viewport" id="viewport">
+    <aside class="diagram-legend" aria-label="Diagram legend">
+      <h2>Legend</h2>
+      <div class="legend-row"><span class="swatch" style="--fill:#DCFCE7;--stroke:#16A34A"></span><span>counting module</span></div>
+      <div class="legend-row"><span class="swatch" style="--fill:#FFE4E6;--stroke:#E11D48"></span><span>matching / framework layer</span></div>
+      <div class="legend-row"><span class="swatch" style="--fill:#FEF3C7;--stroke:#D97706"></span><span>likelihood module</span></div>
+      <div class="legend-row"><span class="swatch" style="--fill:#E0E7FF;--stroke:#4F46E5"></span><span>generalized / composition</span></div>
+      <div class="legend-row"><span class="swatch" style="--fill:#E0F2FE;--stroke:#0284C7"></span><span>specialized families</span></div>
+      <div class="legend-row"><span class="swatch" style="--fill:#FCE7F3;--stroke:#DB2777"></span><span>metaquantifiers</span></div>
+      <div class="legend-row"><span class="swatch" style="--fill:#ECFCCB;--stroke:#65A30D"></span><span>metrics module</span></div>
+      <div class="legend-row"><span class="swatch" style="--fill:#F8FAFC;--stroke:#64748B"></span><span>runtime support</span></div>
+      <div class="legend-note">
+        Text color describes behavior: <b style="color:#059669">estimator-specific</b>,
+        <b style="color:#E11D48">optimization</b>,
+        <b style="color:#0284C7">specialized</b>,
+        <b style="color:#DB2777">meta</b>.
+      </div>
+    </aside>
+    <div class="canvas" id="canvas">
+      <section class="mind-map" id="mind-map" aria-label="mlquantify mind map">
+        <svg class="map-links" viewBox="0 0 2400 1650" aria-hidden="true">
+          <defs>
+            <marker id="arrow-cyan" markerWidth="12" markerHeight="12" refX="9" refY="5" orient="auto">
+              <path d="M0,0 L10,5 L0,10 Z" fill="#0891B2" />
+            </marker>
+            <marker id="arrow-slate" markerWidth="12" markerHeight="12" refX="9" refY="5" orient="auto">
+              <path d="M0,0 L10,5 L0,10 Z" fill="#0F172A" />
+            </marker>
+            <marker id="arrow-indigo" markerWidth="12" markerHeight="12" refX="9" refY="5" orient="auto">
+              <path d="M0,0 L10,5 L0,10 Z" fill="#4F46E5" />
+            </marker>
+            <marker id="arrow-rose" markerWidth="12" markerHeight="12" refX="9" refY="5" orient="auto">
+              <path d="M0,0 L10,5 L0,10 Z" fill="#E11D48" />
+            </marker>
+            <marker id="arrow-gray" markerWidth="12" markerHeight="12" refX="9" refY="5" orient="auto">
+              <path d="M0,0 L10,5 L0,10 Z" fill="#64748B" />
+            </marker>
+          </defs>
+          <path d="M1200,725 C1200,560 1200,390 1200,250" stroke="#0891B2" marker-end="url(#arrow-cyan)" />
+          <path d="M1050,815 C920,780 880,735 780,755" stroke="#0F172A" marker-end="url(#arrow-slate)" />
+          <path d="M1350,775 C1475,640 1510,430 1590,380" stroke="#4F46E5" marker-end="url(#arrow-indigo)" />
+          <path d="M1350,875 C1480,935 1510,1035 1580,1035" stroke="#E11D48" marker-end="url(#arrow-rose)" />
+          <path d="M1200,905 C1200,1020 1200,1110 1200,1220" stroke="#64748B" marker-end="url(#arrow-gray)" />
+        </svg>
+
+        <article class="center-node">
+          <div>
+            <img class="center-logo" src="../assets/logo_mlquantify.svg" alt="mlquantify" />
+            <p>python package for quantification</p>
+          </div>
+        </article>
+
+        <article class="map-node section-node api" style="--fill:#ECFEFF;--stroke:#0891B2">
+          <h3>Public Interface</h3>
+          <ul>
+            <li><b>__init__.py</b>: public exports</li>
+            <li><b>_config.py</b>: global configuration</li>
+            <li>User-facing <b>fit / predict / aggregate</b> workflow</li>
+          </ul>
+        </article>
+
+        <section class="map-node section-node methods" style="--fill:#F8FAFC;--stroke:#0F172A">
+          <h3>Quantification Method Families</h3>
+          <div class="module-grid method-grid">
+            <article class="mini-card" style="--fill:#DCFCE7;--stroke:#16A34A">
+              <h4>counting/</h4>
+              <p><span class="operation-estimator">Closed-form / estimator-specific</span><br />CC, PCC<br />AC, PAC, TX, TMAX, T50<br />MS, MS2</p>
+            </article>
+            <article class="mini-card" style="--fill:#FFE4E6;--stroke:#E11D48">
+              <h4>matching/</h4>
+              <p><span class="operation-optimization">Distribution matching</span><br />HDx, HDy, DyS<br />MMD_RKHS<br />KDEyHD, KDEyCS<br />SORD, SMM</p>
+            </article>
+            <article class="mini-card" style="--fill:#FEF3C7;--stroke:#D97706">
+              <h4>likelihood/</h4>
+              <p><span class="operation-estimator">Prior adjustment</span><br />EMQ, CDE</p>
+            </article>
+            <article class="mini-card" style="--fill:#E0E7FF;--stroke:#4F46E5">
+              <h4>generalized/</h4>
+              <p><span class="operation-optimization">Composition-based methods</span><br />GAC, GPAC, FM<br />GHDx, GHDy<br />EDx, EDy<br />GKDEyML / KDEyML<br />MLPE</p>
+            </article>
+            <article class="mini-card" style="--fill:#E0F2FE;--stroke:#0284C7">
+              <h4>specialized families</h4>
+              <p><span class="operation-specialized">neighbors/</span>: PWK<br /><span class="operation-specialized">neural/</span>: QuaNet</p>
+            </article>
+            <article class="mini-card" style="--fill:#FCE7F3;--stroke:#DB2777">
+              <h4>meta/</h4>
+              <p><span class="operation-meta">Metaquantifiers</span><br />use predictions from other quantifiers<br />EnsembleQ<br />AggregativeBootstrap<br />QuaDapt</p>
+            </article>
+          </div>
+        </section>
+
+        <section class="map-node section-node shared" style="--fill:#EEF2FF;--stroke:#4F46E5">
+          <h3>Shared Contracts And Composition</h3>
+          <div class="module-grid">
+            <article class="mini-card" style="--fill:#EDE9FE;--stroke:#7C3AED">
+              <h4>Contracts And Mixins</h4>
+              <p><b>base.py</b>: BaseQuantifier, MetaquantifierMixin, ProtocolMixin<br /><b>base_aggregative.py</b>: AggregativeMixin, SoftPredictionMixin, CrispPredictionMixin<br /><b>multiclass.py</b>: binary_quantifier, OVR, OVO</p>
+            </article>
+            <article class="mini-card" style="--fill:#E0E7FF;--stroke:#4F46E5">
+              <h4>Composition Layer</h4>
+              <p><b>BaseComposeQuantifier</b><br /><b>LinearComposeQuantifier</b>: q ~= M @ p<br /><b>LikelihoodComposeQuantifier</b>: mixture likelihood</p>
+            </article>
+          </div>
+        </section>
+
+        <section class="map-node section-node optimization" style="--fill:#FFF1F2;--stroke:#E11D48">
+          <h3>Composition And Distribution-Matching Framework</h3>
+          <div class="module-grid core-grid">
+            <article class="mini-card" style="--fill:#FFE4E6;--stroke:#E11D48">
+              <h4>representations/</h4>
+              <p>Prediction<br />Histogram, KDE<br />Distance, KernelMean</p>
+            </article>
+            <article class="mini-card" style="--fill:#FFE4E6;--stroke:#E11D48">
+              <h4>losses/</h4>
+              <p>DistanceLoss<br />LeastSquares<br />Energy, NLL</p>
+            </article>
+            <article class="mini-card" style="--fill:#FFE4E6;--stroke:#E11D48">
+              <h4>solvers/</h4>
+              <p>minimize_prevalence<br />simplex, binary, blocks<br />least_squares</p>
+            </article>
+          </div>
+        </section>
+
+        <section class="map-node section-node support" style="--fill:#F8FAFC;--stroke:#64748B">
+          <h3>Evaluation, Metrics And Runtime Support</h3>
+          <div class="module-grid support-grid">
+            <article class="mini-card" style="--fill:#F8FAFC;--stroke:#64748B">
+              <h4>Support And Runtime</h4>
+              <p><span class="operation-support">utils/</span>: validation, sampling, prevalence, constraints, random, parallel, load/save<br /><b>_CVEstimator</b>: OOF predictions, refit, ensemble<br />calibration.py and confidence.py</p>
+            </article>
+            <article class="mini-card" style="--fill:#ECFCCB;--stroke:#65A30D">
+              <h4>metrics/</h4>
+              <p><span class="operation-support">MAE, MSE</span><br />distances<br />OQ/RQ/SLQ</p>
+            </article>
+            <article class="mini-card" style="--fill:#FFEDD5;--stroke:#EA580C">
+              <h4>Evaluation And Model Selection</h4>
+              <p><b>model_selection/</b>: GridSearchQ, APP, NPP, UPP, PPP</p>
+            </article>
+          </div>
+        </section>
+      </section>
+    </div>
+  </main>
+
+  <script>
+    const viewport = document.getElementById("viewport");
+    const canvas = document.getElementById("canvas");
+    const zoomIn = document.getElementById("zoom-in");
+    const zoomOut = document.getElementById("zoom-out");
+    const zoomInBig = document.getElementById("zoom-in-big");
+    const zoomOutBig = document.getElementById("zoom-out-big");
+    const zoomReset = document.getElementById("zoom-reset");
+    const fit = document.getElementById("fit");
+
+    let scale = 1;
+    let x = 0;
+    let y = 0;
+    let dragging = false;
+    let startX = 0;
+    let startY = 0;
+
+    function applyTransform() {
+      canvas.style.transform = `translate(${x}px, ${y}px) scale(${scale})`;
+      zoomReset.textContent = `${Math.round(scale * 100)}%`;
+    }
+
+    function zoom(delta, centerX = viewport.clientWidth / 2, centerY = viewport.clientHeight / 2) {
+      const oldScale = scale;
+      scale = Math.min(12, Math.max(0.15, scale + delta));
+      const ratio = scale / oldScale;
+      x = centerX - (centerX - x) * ratio;
+      y = centerY - (centerY - y) * ratio;
+      applyTransform();
+    }
+
+    zoomIn.addEventListener("click", () => zoom(0.25));
+    zoomOut.addEventListener("click", () => zoom(-0.25));
+    zoomInBig.addEventListener("click", () => zoom(1.0));
+    zoomOutBig.addEventListener("click", () => zoom(-1.0));
+    zoomReset.addEventListener("click", () => {
+      scale = 1;
+      x = 0;
+      y = 0;
+      applyTransform();
+    });
+    function fitDiagram() {
+      const diagram = document.getElementById("mind-map");
+      const width = diagram.offsetWidth;
+      const height = diagram.offsetHeight;
+      const padding = 32;
+      scale = Math.min(
+        1.2,
+        Math.max(0.15, (viewport.clientWidth - padding) / width),
+        Math.max(0.15, (viewport.clientHeight - padding) / height)
+      );
+      x = 16;
+      y = 16;
+      applyTransform();
+    }
+
+    fit.addEventListener("click", fitDiagram);
+
+    viewport.addEventListener("wheel", (event) => {
+      event.preventDefault();
+      zoom(event.deltaY < 0 ? 0.2 : -0.2, event.clientX, event.clientY);
+    }, { passive: false });
+
+    viewport.addEventListener("dblclick", (event) => {
+      zoom(1.0, event.clientX, event.clientY);
+    });
+
+    viewport.addEventListener("pointerdown", (event) => {
+      dragging = true;
+      viewport.classList.add("dragging");
+      startX = event.clientX - x;
+      startY = event.clientY - y;
+      viewport.setPointerCapture(event.pointerId);
+    });
+
+    viewport.addEventListener("pointermove", (event) => {
+      if (!dragging) return;
+      x = event.clientX - startX;
+      y = event.clientY - startY;
+      applyTransform();
+    });
+
+    viewport.addEventListener("pointerup", (event) => {
+      dragging = false;
+      viewport.classList.remove("dragging");
+      viewport.releasePointerCapture(event.pointerId);
+    });
+
+    window.addEventListener("resize", fitDiagram);
+    fitDiagram();
+  </script>
+</body>
+</html>

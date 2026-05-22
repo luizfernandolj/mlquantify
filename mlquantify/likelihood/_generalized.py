@@ -1,20 +1,21 @@
 # likelihood/_generalized.py
 
-from mlquantify.base_aggregative import AggregationMixin, SoftLearnerQMixin
+from mlquantify.base_aggregative import AggregativeMixin, SoftPredictionMixin
 from mlquantify.compose import LikelihoodComposeQuantifier
 from mlquantify.representations import PredictionRepresentation
 
 
-class MLPE(SoftLearnerQMixin, AggregationMixin, LikelihoodComposeQuantifier):
+class MLPE(SoftPredictionMixin, AggregativeMixin, LikelihoodComposeQuantifier):
     r"""Maximum Likelihood Prior Estimation.
 
     This corresponds to a likelihood maximization method over adjusted
     posterior probabilities.
     """
 
+
     def __init__(
         self,
-        learner=None,
+        estimator=None,
         solver="slsqp",
         tau_0=0.0,
         tau_1=0.0,
@@ -24,7 +25,7 @@ class MLPE(SoftLearnerQMixin, AggregationMixin, LikelihoodComposeQuantifier):
         random_state=None,
     ):
         super().__init__(
-            learner=learner,
+            estimator=estimator,
             representation=PredictionRepresentation(
                 method="soft",
                 average=False,
