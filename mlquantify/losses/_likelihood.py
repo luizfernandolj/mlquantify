@@ -44,7 +44,7 @@ def _mixture_likelihood(prevalences, class_likelihoods):
 class NegativeLogLikelihoodLoss(BaseLoss):
     """Negative log-likelihood loss for mixture likelihoods.
 
-    Computes :math:`-\log p(x)` element-wise and then reduces the resulting
+    Computes :math:`-\\log p(x)` element-wise and then reduces the resulting
     values by mean or sum.
 
     Parameters

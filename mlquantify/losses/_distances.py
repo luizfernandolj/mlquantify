@@ -147,9 +147,9 @@ class DistanceLoss(BaseLoss):
 class LeastSquaresLoss(BaseLoss):
     """Squared Euclidean (least-squares) loss.
 
-    Computes :math:`\|target - M \cdot mixture\|_2^2`.  When no mixing
+    Computes :math:`\\|target - M \\cdot mixture\\|_2^2`.  When no mixing
     matrix ``M`` is provided the loss reduces to
-    :math:`\|target - mixture\|_2^2`.
+    :math:`\\|target - mixture\\|_2^2`.
 
     Examples
     --------
