@@ -143,12 +143,41 @@ class ConfidenceInterval(BaseConfidenceRegion):
         self.I_low, self.I_high = np.percentile(self.prev_estims, q=[low_perc, high_perc], axis=0)
 
     def get_region(self):
+        """Return the lower and upper confidence bounds.
+
+        Returns
+        -------
+        I_low : ndarray of shape (n_classes,)
+            Lower percentile bound for each class.
+        I_high : ndarray of shape (n_classes,)
+            Upper percentile bound for each class.
+        """
         return self.I_low, self.I_high
-    
+
     def get_point_estimate(self):
+        """Return the mean of the bootstrap prevalence estimates.
+
+        Returns
+        -------
+        mean : ndarray of shape (n_classes,)
+            Mean prevalence across bootstrap samples.
+        """
         return np.mean(self.prev_estims, axis=0)
 
     def contains(self, point):
+        """Check whether a prevalence vector falls inside the interval.
+
+        Parameters
+        ----------
+        point : array-like of shape (n_classes,)
+            The prevalence vector to test.
+
+        Returns
+        -------
+        inside : ndarray of shape (1, 1)
+            ``True`` if every component of ``point`` is within the
+            corresponding confidence interval.
+        """
         point = np.asarray(point)
         within = np.logical_and(self.I_low <= point, point <= self.I_high)
         return np.all(within, axis=-1, keepdims=True)
@@ -216,12 +245,44 @@ class ConfidenceEllipseSimplex(BaseConfidenceRegion):
         self.mean_ = np.mean(self.prev_estims, axis=0)
 
     def get_region(self):
+        """Return the ellipse parameters.
+
+        Returns
+        -------
+        mean_ : ndarray of shape (n_classes,)
+            Mean prevalence vector (ellipse centre).
+        precision_matrix : ndarray of shape (n_classes, n_classes) or None
+            Inverse covariance matrix.  ``None`` if the covariance is
+            singular.
+        chi2_val : float
+            Chi-squared threshold that defines the ellipse boundary.
+        """
         return self.mean_, self.precision_matrix, self.chi2_val
-    
+
     def get_point_estimate(self):
+        """Return the mean prevalence estimate.
+
+        Returns
+        -------
+        mean_ : ndarray of shape (n_classes,)
+            Mean of the bootstrap prevalence samples.
+        """
         return self.mean_
 
     def contains(self, point):
+        """Check whether a prevalence vector lies inside the ellipse.
+
+        Parameters
+        ----------
+        point : array-like of shape (n_classes,)
+            Prevalence vector to test.
+
+        Returns
+        -------
+        inside : bool
+            ``True`` if the Mahalanobis distance from ``point`` to
+            the ellipse centre is within the chi-squared threshold.
+        """
         if self.precision_matrix is None:
             return False
         diff = point - self.mean_
@@ -322,6 +383,48 @@ class ConfidenceEllipseCLR(ConfidenceEllipseSimplex):
 # ==========================================================
 
 def construct_confidence_region(prev_estims, confidence_level=0.95, method="intervals"):
+    """Instantiate a confidence region from bootstrap prevalence estimates.
+
+    Factory function that selects the appropriate confidence-region class
+    based on the chosen ``method`` and returns a fitted instance.
+
+    Parameters
+    ----------
+    prev_estims : array-like of shape (m, n_classes)
+        Collection of ``m`` bootstrap prevalence estimates.
+    confidence_level : float, default=0.95
+        Desired confidence level :math:`1 - \\alpha`.
+    method : {'intervals', 'ellipse', 'ellipse-clr', 'clr'}, \
+             default='intervals'
+        Confidence region type.
+
+        - ``'intervals'`` — :class:`ConfidenceInterval` (per-class
+          percentile intervals).
+        - ``'ellipse'`` — :class:`ConfidenceEllipseSimplex` (chi-squared
+          ellipse in simplex space).
+        - ``'ellipse-clr'`` or ``'clr'`` — :class:`ConfidenceEllipseCLR`
+          (ellipse in CLR-transformed space).
+
+    Returns
+    -------
+    region : BaseConfidenceRegion
+        Fitted confidence region object.
+
+    Raises
+    ------
+    NotImplementedError
+        If ``method`` is not one of the recognised identifiers.
+
+    Examples
+    --------
+    >>> import numpy as np
+    >>> from mlquantify.confidence import construct_confidence_region
+    >>> samples = np.random.dirichlet([2, 2, 2], size=200)
+    >>> cr = construct_confidence_region(samples, confidence_level=0.9,
+    ...                                  method="ellipse")
+    >>> cr.get_point_estimate().shape
+    (3,)
+    """
     method = method.lower()
     if method == "intervals":
         return ConfidenceInterval(prev_estims, confidence_level)

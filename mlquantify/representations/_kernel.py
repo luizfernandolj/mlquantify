@@ -23,6 +23,31 @@ class KernelMeanRepresentation(BaseRepresentation):
         self.coef0 = coef0
 
     def transform(self, X):
+        """Compute the empirical mean embedding of a set of instances.
+
+        Returns the column-wise mean of the feature matrix, which is the
+        kernel mean embedding under a linear kernel and an approximation
+        under non-linear kernels.
+
+        Parameters
+        ----------
+        X : array-like of shape (n_samples, n_features)
+            Feature matrix.
+
+        Returns
+        -------
+        embedding : ndarray of shape (n_features,)
+            Mean feature vector.
+
+        Examples
+        --------
+        >>> from mlquantify.representations._kernel import KernelMeanRepresentation
+        >>> import numpy as np
+        >>> rep = KernelMeanRepresentation()
+        >>> X = np.array([[1.0, 2.0], [3.0, 4.0], [5.0, 6.0]])
+        >>> rep.transform(X)
+        array([3., 4.])
+        """
         X = np.asarray(X, dtype=float)
 
         return X.mean(axis=0)
@@ -36,6 +61,33 @@ class KernelMeanRepresentation(BaseRepresentation):
         ])
 
     def pairwise(self, X, Y):
+        """Compute a pairwise kernel matrix between two arrays.
+
+        Dispatches to :func:`sklearn.metrics.pairwise.pairwise_kernels`
+        using the kernel and hyperparameters configured at construction.
+
+        Parameters
+        ----------
+        X : array-like of shape (n_x, n_features)
+            First set of samples.
+        Y : array-like of shape (n_y, n_features)
+            Second set of samples.
+
+        Returns
+        -------
+        K : ndarray of shape (n_x, n_y)
+            Kernel matrix where ``K[i, j] = k(X[i], Y[j])``.
+
+        Examples
+        --------
+        >>> from mlquantify.representations._kernel import KernelMeanRepresentation
+        >>> import numpy as np
+        >>> rep = KernelMeanRepresentation(kernel="rbf", gamma=1.0)
+        >>> X = np.array([[0.0], [1.0]])
+        >>> Y = np.array([[0.5]])
+        >>> rep.pairwise(X, Y).shape
+        (2, 1)
+        """
         params = {}
 
         if self.kernel in {"rbf", "poly", "sigmoid"} and self.gamma is not None:

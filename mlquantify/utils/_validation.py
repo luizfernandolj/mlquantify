@@ -341,14 +341,42 @@ from mlquantify._config import get_config
 from scipy.special import softmax
 
 def validate_prevalences(
-    quantifier, 
-    prevalences: np.ndarray | list | dict, 
-    classes: np.ndarray, 
-    return_type: str | None = None, 
-    normalize: bool | None = True, 
+    quantifier,
+    prevalences: np.ndarray | list | dict,
+    classes: np.ndarray,
+    return_type: str | None = None,
+    normalize: bool | None = True,
     normalization: str | None = None
 ) -> dict | np.ndarray:
-    
+    """Normalize a prevalence estimate and format it according to global config.
+
+    Converts a prevalence array, list, or dict into the configured output
+    format (``'dict'`` or array), applying the configured normalization.
+
+    Parameters
+    ----------
+    quantifier : BaseQuantifier
+        The quantifier whose output is being validated (used to read
+        global config defaults).
+    prevalences : array-like of shape (n_classes,) or dict
+        Raw prevalence estimates.  Dicts are keyed by class label.
+    classes : array-like of shape (n_classes,)
+        Class labels in the desired output order.
+    return_type : {'dict', 'array'} or None, default=None
+        Output format.  If ``None``, the global
+        ``prevalence_return_type`` config setting is used.
+    normalize : bool or None, default=True
+        Whether to normalize the output.  If ``None``, the global
+        ``prevalence_normalization`` config is used.
+    normalization : {'sum', 'l1', 'softmax', 'mean', 'median'} or None, \
+        default=None
+        Explicit normalization method.  Overrides ``normalize`` when set.
+
+    Returns
+    -------
+    prevalences : dict or ndarray of shape (n_classes,)
+        Normalized prevalence estimates in the requested format.
+    """
     conf = get_config()
     return_type = return_type or conf["prevalence_return_type"]
     

@@ -73,6 +73,18 @@ class BaseQuantifier(ABC, BaseEstimator):
 
         
     def __mlquantify_tags__(self):
+        """Return the default :class:`~mlquantify.utils._tags.Tags` for this quantifier.
+
+        Subclasses and mixins override this method to advertise their
+        capabilities (e.g., whether they use a classifier, whether they
+        accept soft predictions, the aggregation strategy, etc.).
+
+        Returns
+        -------
+        tags : Tags
+            A :class:`~mlquantify.utils._tags.Tags` dataclass with all
+            capability fields set to their base-class defaults.
+        """
         return Tags(
             has_estimator=None,
             estimation_type=None,

@@ -149,8 +149,7 @@ class PCC(SoftPredictionMixin, BaseCount):
 
         .. [1] Bella, A., Ferri, C., Hernández-Orallo, J., & Ramírez-Quintana, M. J. (2010).
                Quantification via Probability Estimators. *ICDM*, pp. 737–742.
-        .. [2] Forman, G. (2005). Counting Positives Accurately Despite Inaccurate
-               Classification. *ECML*, pp. 564–575.
+        .. [2] Forman, G. (2005). Counting Positives Accurately Despite Inaccurate Classification. *ECML*, pp. 564–575.
     """
 
 

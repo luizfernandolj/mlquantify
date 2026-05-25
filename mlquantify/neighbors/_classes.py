@@ -102,55 +102,88 @@ class PWK(BaseQuantifier):
     @_fit_context(prefer_skip_nested_validation=True)
     def fit(self, X, y):
         """Fit the PWK quantifier to the training data.
-        
+
+        Builds a :class:`~mlquantify.counting.CC` quantifier around the
+        underlying weighted k-NN classifier and fits it on the provided data.
+
         Parameters
         ----------
-        X_train : array-like of shape (n_samples, n_features)
-            Training features.
-        
-        y_train : array-like of shape (n_samples,)
-            Training labels.
-        
+        X : array-like of shape (n_samples, n_features)
+            Training feature matrix.
+        y : array-like of shape (n_samples,)
+            Training class labels.
+
         Returns
         -------
-        self : object
-            The fitted instance.
+        self : PWK
+            The fitted quantifier.
+
+        Examples
+        --------
+        >>> from mlquantify.neighbors import PWK
+        >>> from sklearn.datasets import make_classification
+        >>> X, y = make_classification(n_samples=200, random_state=42)
+        >>> q = PWK(alpha=1.5, n_neighbors=5).fit(X, y)
         """
         X, y = validate_data(self, X, y, ensure_2d=True, ensure_min_samples=2)
         self.classes_ = np.unique(y)
         self.cc = CC(self.estimator)
         return self.cc.fit(X, y)
-    
+
     def predict(self, X):
-        """Predict prevalences for the given data.
-        
+        """Predict class prevalences for the given test data.
+
+        Classifies each test instance with the fitted weighted k-NN classifier
+        and counts the fraction assigned to each class (Classify and Count).
+
         Parameters
         ----------
         X : array-like of shape (n_samples, n_features)
-            Features for which to predict prevalences.
-        
+            Test feature matrix.
+
         Returns
         -------
-        prevalences : array of shape (n_classes,)
-            Predicted class prevalences.
+        prevalences : dict or ndarray of shape (n_classes,)
+            Estimated class prevalences summing to 1.
+
+        Examples
+        --------
+        >>> from mlquantify.neighbors import PWK
+        >>> from sklearn.datasets import make_classification
+        >>> X, y = make_classification(n_samples=200, random_state=42)
+        >>> q = PWK(alpha=1.5, n_neighbors=5).fit(X, y)
+        >>> q.predict(X)
+        {0: 0.49, 1: 0.51}
         """
         X = validate_data(self, X, ensure_2d=True)
         prevalences = self.cc.predict(X)
         prevalences = validate_prevalences(self, prevalences, self.classes_)
         return prevalences
-    
+
     def classify(self, X):
-        """Classify samples using the underlying estimator.
-        
+        """Classify test instances using the underlying weighted k-NN estimator.
+
+        Returns hard class labels produced by :class:`PWKCLF` without any
+        prevalence-level aggregation.
+
         Parameters
         ----------
         X : array-like of shape (n_samples, n_features)
-            Features to classify.
-        
+            Test feature matrix.
+
         Returns
         -------
-        labels : array of shape (n_samples,)
-            Predicted class labels.
+        labels : ndarray of shape (n_samples,)
+            Predicted class label for each test instance.
+
+        Examples
+        --------
+        >>> from mlquantify.neighbors import PWK
+        >>> from sklearn.datasets import make_classification
+        >>> X, y = make_classification(n_samples=200, random_state=42)
+        >>> q = PWK(alpha=1.5, n_neighbors=5).fit(X, y)
+        >>> q.classify(X[:5])
+        array([0, 1, 0, 1, 0])
         """
         return self.estimator.predict(X)
         

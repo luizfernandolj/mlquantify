@@ -91,13 +91,18 @@ class EarlyStop:
         self.IMPROVED = False
 
     def __call__(self, watch_score, epoch):
-        """
-        Commits the new score found in epoch `epoch`. If the score improves over the best score found so far, then
-        the patiente counter gets reset. If otherwise, the patience counter is decreased, and in case it reachs 0,
-        the flag STOP becomes True.
+        """Commit the score for a given epoch and update the stopping state.
 
-        :param watch_score: the new score
-        :param epoch: the current epoch
+        If the score improves over the best score seen so far, the patience
+        counter is reset; otherwise it is decremented. When the counter reaches
+        zero, ``STOP`` is set to ``True``.
+
+        Parameters
+        ----------
+        watch_score : float
+            Metric value to evaluate for the current epoch.
+        epoch : int
+            Index of the current training epoch.
         """
         self.IMPROVED = (self.best_score is None or self.better(watch_score, self.best_score))
         if self.IMPROVED:
@@ -450,6 +455,32 @@ class QuaNet(SoftPredictionMixin, AggregativeMixin, BaseQuantifier):
 
     @_fit_context(prefer_skip_nested_validation=True)
     def fit(self, X, y):
+        """Fit QuaNet to the training data.
+
+        Optionally fits the base estimator, then trains the LSTM network
+        on artificially generated bags sampled with the UPP protocol.
+        Uses early stopping based on the validation loss.
+
+        Parameters
+        ----------
+        X : array-like of shape (n_samples, n_features)
+            Training feature matrix. Must be compatible with both
+            ``estimator.fit`` and ``estimator.transform``.
+        y : array-like of shape (n_samples,)
+            Training class labels.
+
+        Returns
+        -------
+        self : QuaNet
+            The fitted quantifier.
+
+        Notes
+        -----
+        When ``fit_estimator=True`` the data is internally split into a
+        classifier-training set (60 %), a network-training set (32 %), and
+        a validation set (8 %). When ``fit_estimator=False`` only the
+        train/validation split (80 %/20 %) is performed.
+        """
         y = validate_data(self, y=y)
         self.classes_ = check_classes_attribute(self, np.unique(y))
 
@@ -558,7 +589,24 @@ class QuaNet(SoftPredictionMixin, AggregativeMixin, BaseQuantifier):
 
     
     def predict(self, X):
-        
+        """Predict class prevalences for a test bag.
+
+        Computes posterior probabilities and document embeddings with the base
+        estimator, collects simple quantification statistics (CC, GACC, PCC,
+        GPACC, EMQ) as auxiliary inputs, and forwards everything through the
+        trained :class:`QuaNetModule`.
+
+        Parameters
+        ----------
+        X : array-like of shape (n_samples, n_features)
+            Test feature matrix.
+
+        Returns
+        -------
+        prevalences : ndarray of shape (n_classes,)
+            Estimated class prevalence vector for the test bag, normalised
+            to sum to 1.
+        """
         estimator_function = _get_estimator_function(self)
         posteriors = getattr(self.estimator, estimator_function)(X)
         embeddings = self.estimator.transform(X)
@@ -646,15 +694,31 @@ class QuaNet(SoftPredictionMixin, AggregativeMixin, BaseQuantifier):
             raise ValueError(f"Parameters {colision_keys} are present in both quanet_params and estimator_params")
 
     def clean_checkpoint(self):
+        """Remove the checkpoint file saved during training, if it exists."""
         if os.path.exists(self.checkpoint):
             os.remove(self.checkpoint)
 
     def clean_checkpoint_dir(self):
+        """Remove the entire checkpoint directory and all its contents."""
         import shutil
         shutil.rmtree(self.checkpointdir, ignore_errors=True)
 
 
 def mae_loss(y_true, y_pred):
+    """Compute mean absolute error between two tensors.
+
+    Parameters
+    ----------
+    y_true : torch.Tensor
+        Ground-truth prevalence vector(s).
+    y_pred : torch.Tensor
+        Predicted prevalence vector(s).
+
+    Returns
+    -------
+    loss : torch.Tensor
+        Scalar mean absolute error.
+    """
     return torch.mean(torch.abs(y_true - y_pred))
 
 

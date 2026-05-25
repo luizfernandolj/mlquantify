@@ -70,6 +70,14 @@ class KDEyQuantifier(
     >>> X, y = make_classification(n_samples=200, random_state=42)
     >>> MyKDEy(estimator=LogisticRegression()).fit(X, y).predict(X)
     {0: 0.49, 1: 0.51}
+
+    References
+    ----------
+    .. dropdown:: References
+
+        .. [1] Moreo, A., González, P., & del Coz, J. J. (2024).
+               Kernel Density Estimation for Multiclass Quantification.
+               *Machine Learning*, 113, 3075–3107.
     """
 
     _parameter_constraints = {

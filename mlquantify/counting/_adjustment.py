@@ -45,8 +45,8 @@ class ThresholdAdjustment(SoftPredictionMixin, BaseAdjustCount):
     estimator : estimator, optional
         A classifier with ``fit`` and ``predict_proba`` methods.
     threshold : float, default=0.5
-        Default classification threshold; used directly by :class:`TAC`.
-    strategy : {'ovr'}, default='ovr'
+        Default classification threshold.
+    strategy : {'ovr', 'ovo'}, default='ovr'
         Multiclass decomposition strategy.
     n_jobs : int or None, default=None
         Number of parallel jobs for multiclass decomposition.
@@ -154,8 +154,7 @@ class TAC(ThresholdAdjustment):
     ----------
     .. dropdown:: References
 
-        .. [1] Forman, G. (2005). Counting Positives Accurately Despite Inaccurate
-               Classification. *ECML*, pp. 564–575.
+        .. [1] Forman, G. (2005). Counting Positives Accurately Despite Inaccurate classification. *ECML*, pp. 564–575.
     """
 
     def get_best_threshold(self, thresholds, tprs, fprs):
@@ -192,8 +191,7 @@ class TX(ThresholdAdjustment):
     ----------
     .. dropdown:: References
 
-        .. [1] Forman, G. (2005). Counting Positives Accurately Despite Inaccurate
-               Classification. *ECML*, pp. 564–575.
+        .. [1] Forman, G. (2005). Counting Positives Accurately Despite Inaccurate classification. *ECML*, pp. 564–575.
     """
     def get_best_threshold(self, thresholds, tprs, fprs):
         idx = np.argmin(np.abs((1-tprs) - fprs))
@@ -228,8 +226,7 @@ class TMAX(ThresholdAdjustment):
     ----------
     .. dropdown:: References
 
-        .. [1] Forman, G. (2005). Counting Positives Accurately Despite Inaccurate
-               Classification. *ECML*, pp. 564–575.
+        .. [1] Forman, G. (2005). Counting Positives Accurately Despite Inaccurate classification. *ECML*, pp. 564–575.
     """
     def get_best_threshold(self, thresholds, tprs, fprs):
         idx = np.argmax(np.abs(tprs - fprs))
@@ -265,8 +262,7 @@ class T50(ThresholdAdjustment):
     ----------
     .. dropdown:: References
 
-        .. [1] Forman, G. (2005). Counting Positives Accurately Despite Inaccurate
-               Classification. *ECML*, pp. 564–575.
+        .. [1] Forman, G. (2005). Counting Positives Accurately Despite Inaccurate classification. *ECML*, pp. 564–575.
     """
     def get_best_threshold(self, thresholds, tprs, fprs):
         idx = np.argmin(np.abs(tprs - 0.5))
@@ -302,8 +298,7 @@ class MS(ThresholdAdjustment):
     ----------
     .. dropdown:: References
 
-        .. [1] Forman, G. (2008). Quantifying Counts and Costs via Classification.
-               *Data Mining and Knowledge Discovery*, 17(2), 164–206.
+        .. [1] Forman, G. (2008). Quantifying Counts and Costs via Classification. *Data Mining and Knowledge Discovery*, 17(2), 164–206.
     """
     def _adjust(self, predictions, train_y_scores, y_train):
         positive_scores = train_y_scores[:, 1]
@@ -366,8 +361,7 @@ class MS2(MS):
     ----------
     .. dropdown:: References
 
-        .. [1] Forman, G. (2008). Quantifying Counts and Costs via Classification.
-               *Data Mining and Knowledge Discovery*, 17(2), 164–206.
+        .. [1] Forman, G. (2008). Quantifying Counts and Costs via Classification. *Data Mining and Knowledge Discovery*, 17(2), 164–206.
     """
     def get_best_threshold(self, thresholds, tprs, fprs):
         if np.all(tprs == 0) or np.all(fprs == 0):

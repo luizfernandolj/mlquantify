@@ -218,11 +218,11 @@ class BaseAdjustCount(AggregativeMixin, BaseQuantifier):
 
         Examples
         --------
-        >>> from mlquantify.counting import AC
+        >>> from mlquantify.counting import FM
         >>> import numpy as np
         >>> q = FM()
         >>> predictions = np.random.rand(200)
-        >>> train_predictions = np.random.rand(200) # generated via cross-validation
+        >>> train_predictions = np.random.rand(200)
         >>> y_train = np.random.randint(0, 2, 200)
         >>> q.aggregate(predictions, train_predictions, y_train)
         {0: 0.51, 1: 0.49}

@@ -88,6 +88,32 @@ class BaseComposeQuantifier(
         sample_weight=None,
         cv_prediction="refit",
     ):
+        """Fit the compose quantifier.
+
+        Trains the estimator (when ``aggregative=True``) via
+        cross-validation to obtain OOF predictions, then fits the
+        configured representation on those predictions.
+
+        Parameters
+        ----------
+        X : array-like of shape (n_samples, n_features)
+            Training feature matrix.
+        y : array-like of shape (n_samples,)
+            Training class labels.
+        estimator_fitted : bool, default=False
+            If ``True``, skip fitting the estimator (assume it is already
+            fitted and use ``X`` directly as predictions).
+        sample_weight : array-like of shape (n_samples,) or None, \
+            default=None
+            Per-sample weights forwarded to the representation's fit.
+        cv_prediction : {'refit', 'ensemble'}, default='refit'
+            Cross-validation prediction strategy.
+
+        Returns
+        -------
+        self : BaseComposeQuantifier
+            The fitted quantifier.
+        """
         X, y = validate_data(self, X, y)
         self.classes_ = np.unique(y)
 
@@ -121,6 +147,22 @@ class BaseComposeQuantifier(
         return self
 
     def predict(self, X):
+        """Predict class prevalences for the test set.
+
+        Applies the estimator (when ``aggregative=True``), transforms the
+        predictions into the representation space, and solves for the
+        prevalence vector.
+
+        Parameters
+        ----------
+        X : array-like of shape (n_samples, n_features)
+            Test feature matrix.
+
+        Returns
+        -------
+        prevalences : dict or ndarray of shape (n_classes,)
+            Estimated class prevalences summing to 1.
+        """
         X = validate_data(self, X)
 
         if self._uses_estimator_predictions():
@@ -146,6 +188,33 @@ class BaseComposeQuantifier(
         train_labels=None,
         classes=None,
     ):
+        """Aggregate a pre-computed test representation into prevalences.
+
+        Allows calling the compose quantifier's solver directly when the
+        representation has already been computed externally, bypassing the
+        estimator step.
+
+        Parameters
+        ----------
+        test_representation : array-like of shape (representation_dim,)
+            Pre-computed test representation vector.
+        train_representation : array-like of shape \
+            (n_samples, representation_dim) or None, default=None
+            Training representation.  If provided together with
+            ``train_labels``, the representation is re-fitted.
+        train_labels : array-like of shape (n_samples,) or None, \
+            default=None
+            Training labels used to re-fit the representation when
+            ``train_representation`` is also provided.
+        classes : array-like of shape (n_classes,) or None, default=None
+            Class labels to use.  Inferred from ``train_labels`` when
+            ``None``.
+
+        Returns
+        -------
+        prevalences : dict or ndarray of shape (n_classes,)
+            Estimated class prevalences.
+        """
         if train_representation is not None and train_labels is not None:
             self.representation.fit(train_representation, train_labels)
 

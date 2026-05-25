@@ -36,6 +36,21 @@ from mlquantify.multiclass import binary_quantifier
 
 
 def getHist(values, n_bins):
+    """Compute a concatenated histogram over all columns of ``values``.
+
+    Parameters
+    ----------
+    values : array-like of shape (n_samples,) or (n_samples, n_features)
+        Score matrix. 1-D inputs are reshaped to a single column.
+    n_bins : int
+        Number of equal-width histogram bins.
+
+    Returns
+    -------
+    hist : ndarray
+        Concatenated histogram across all feature columns, normalised to
+        sum to 1 within each column.
+    """
     values = np.asarray(values, dtype=float)
 
     if values.ndim == 1:
@@ -218,19 +233,39 @@ class EnsembleQ(MetaquantifierMixin, BaseQuantifier):
 
     @_fit_context(prefer_skip_nested_validation=True)
     def fit(self, X, y):
-        """ Fits the ensemble model to the given training data.
+        """Fit the ensemble by training one base quantifier per sampled batch.
+
+        Batches are drawn from ``(X, y)`` according to the chosen ``protocol``
+        so that each member is trained on a subset with a different class
+        prevalence distribution, promoting diversity. When ``selection_metric``
+        is ``'ds'``, posterior probabilities are precomputed for later use
+        during prediction.
 
         Parameters
         ----------
         X : array-like of shape (n_samples, n_features)
-            The input data.
+            Training feature matrix.
         y : array-like of shape (n_samples,)
-            The target values.
+            Training class labels.
 
         Returns
         -------
-        self : Ensemble
-            The fitted ensemble model.
+        self : EnsembleQ
+            The fitted ensemble quantifier.
+
+        Raises
+        ------
+        ValueError
+            If ``selection_metric='ds'`` is used on a multiclass dataset.
+
+        Examples
+        --------
+        >>> from mlquantify.meta import EnsembleQ
+        >>> from mlquantify.matching import DyS
+        >>> from sklearn.linear_model import LogisticRegression
+        >>> from sklearn.datasets import make_classification
+        >>> X, y = make_classification(n_samples=300, random_state=42)
+        >>> q = EnsembleQ(DyS(estimator=LogisticRegression()), size=10).fit(X, y)
         """
         self.sout('Fit')
 
@@ -279,17 +314,33 @@ class EnsembleQ(MetaquantifierMixin, BaseQuantifier):
         return self
 
     def predict(self, X):
-        """ Predicts the class prevalences for the given test data.
+        """Predict class prevalences by aggregating all ensemble members.
+
+        Each fitted member produces a prevalence estimate; if a selection
+        metric (``'ptr'`` or ``'ds'``) was configured, only the most relevant
+        members are retained before computing the final ``mean`` or ``median``.
 
         Parameters
         ----------
         X : array-like of shape (n_samples, n_features)
-            The input data.
+            Test feature matrix.
 
         Returns
         -------
-        prevalences : array-like of shape (n_samples, n_classes)
-            The predicted class prevalences.
+        prevalences : dict or ndarray of shape (n_classes,)
+            Estimated class prevalences, aggregated across the selected
+            ensemble members.
+
+        Examples
+        --------
+        >>> from mlquantify.meta import EnsembleQ
+        >>> from mlquantify.matching import DyS
+        >>> from sklearn.linear_model import LogisticRegression
+        >>> from sklearn.datasets import make_classification
+        >>> X, y = make_classification(n_samples=300, random_state=42)
+        >>> q = EnsembleQ(DyS(estimator=LogisticRegression()), size=10).fit(X, y)
+        >>> q.predict(X)
+        {0: 0.49, 1: 0.51}
         """
         self.sout('Predict')
 
@@ -332,19 +383,24 @@ class EnsembleQ(MetaquantifierMixin, BaseQuantifier):
 
 
     def ptr_selection_metric(self, prevalences, train_prevalences):
-        r"""
-        Selects the prevalence estimates from models trained on samples whose prevalence is most similar
-        to an initial approximation of the test prevalence as estimated by all models in the ensemble.
+        r"""Select members whose training prevalence is closest to the test estimate.
+
+        Computes an initial test-prevalence estimate by averaging all member
+        predictions, then retains the top ``p_metric`` fraction of members
+        ranked by how closely their training prevalence matches that estimate.
 
         Parameters
         ----------
-        prevalences : numpy.ndarray
-            An array of prevalence estimates provided by each model in the ensemble.
+        prevalences : ndarray of shape (n_members, n_classes)
+            Prevalence estimates from each ensemble member.
+        train_prevalences : list of dict or ndarray
+            Training prevalences recorded for each ensemble member during
+            ``fit``.
 
         Returns
         -------
-        numpy.ndarray
-            The selected prevalence estimates after applying the PTR selection metric.
+        selected : list of ndarray
+            Prevalence estimates from the selected subset of members.
         """
         test_prev_estim = prevalences.mean(axis=0)
         ptr_differences = [MSE(test_prev_estim, ptr_i) for ptr_i in train_prevalences]
@@ -352,34 +408,33 @@ class EnsembleQ(MetaquantifierMixin, BaseQuantifier):
         return _select_k(prevalences, order, k=self.p_metric)
 
     def ds_get_posteriors(self, X, y):
-        r"""
-        Generate posterior probabilities using cross-validated logistic regression.
-        This method computes posterior probabilities for the training data via cross-validation,
-        using a logistic regression classifier with hyperparameters optimized through grid search.
-        It also returns a function to generate posterior probabilities for new data.
+        r"""Compute cross-validated posterior probabilities for the DS selection metric.
+
+        Fits a logistic regression classifier with hyperparameters tuned by
+        grid-search and returns out-of-fold posterior probabilities for the
+        training data together with a callable for new instances.
 
         Parameters
         ----------
         X : array-like of shape (n_samples, n_features)
-            The feature matrix representing the training data.
+            Training feature matrix.
         y : array-like of shape (n_samples,)
-            The target vector representing class labels for the training data.
+            Training class labels.
 
         Returns
         -------
         posteriors : ndarray of shape (n_samples, n_classes)
-            Posterior probabilities for the training data obtained through cross-validation.
+            Out-of-fold posterior probabilities for the training data.
         posteriors_generator : callable
-            A function that computes posterior probabilities for new input data.
+            ``predict_proba`` method of the best-fitted estimator, used to
+            generate posteriors for unseen test data during ``predict``.
 
         Notes
         -----
-        - In scenarios where the quantifier is not based on a probabilistic classifier, it's necessary
-            to train a separate probabilistic model to obtain posterior probabilities.
-        - Using cross-validation ensures that the posterior probabilities for the training data are unbiased,
-            as each data point is evaluated by a model not trained on that point.
-        - Hyperparameters for the logistic regression classifier are optimized using a grid search with
-            cross-validation to improve the model's performance.
+        Cross-validated posteriors ensure that no training sample is scored
+        by a model trained on it, preventing over-optimistic score distributions.
+        A separate logistic regression is used regardless of the base quantifier
+        so that soft scores are always available for the DS metric.
         """
         lr_base = LogisticRegression(class_weight='balanced', max_iter=1000)
 
@@ -396,21 +451,30 @@ class EnsembleQ(MetaquantifierMixin, BaseQuantifier):
 
 
     def ds_selection_metric(self, X, prevalences, train_distributions, posteriors_generator):
-        r"""
-        Selects the prevalence estimates from models trained on samples whose distribution of posterior
-        probabilities is most similar to the distribution of posterior probabilities for the test data.
+        r"""Select members whose training score distribution is closest to the test distribution.
+
+        Computes posterior-probability histograms for the test data and
+        retains the top ``p_metric`` fraction of ensemble members ranked by
+        Hellinger distance between their stored training histogram and the
+        test histogram.
 
         Parameters
         ----------
-        prevalences : numpy.ndarray
-            An array of prevalence estimates provided by each model in the ensemble.
-        test : array-like of shape (n_samples, n_features)
-            The feature matrix representing the test data.
+        X : array-like of shape (n_samples, n_features)
+            Test feature matrix used to compute the test score distribution.
+        prevalences : ndarray of shape (n_members, n_classes)
+            Prevalence estimates from each ensemble member.
+        train_distributions : list of ndarray
+            Posterior-probability histograms stored for each member during
+            ``fit``.
+        posteriors_generator : callable
+            Function that returns posterior probabilities for new data
+            (obtained from :meth:`ds_get_posteriors` during ``fit``).
 
         Returns
         -------
-        numpy.ndarray
-            The selected prevalence estimates after applying the DS selection metric.
+        selected : list of ndarray
+            Prevalence estimates from the selected subset of members.
         """
         test_posteriors = posteriors_generator(X)
         test_distribution = getHist(test_posteriors, 8)
@@ -529,24 +593,43 @@ class AggregativeBootstrap(MetaquantifierMixin, BaseQuantifier):
         self.confidence_level = confidence_level
 
     def fit(self, X, y, val_split=None):
-        r""" Fits the aggregative bootstrap model to the given training data.
+        r"""Fit the base classifier and store predictions for bootstrap resampling.
+
+        Trains only the base classifier (not the full aggregative quantifier),
+        then stores the resulting soft predictions for later use in
+        :meth:`aggregate`. Optionally holds out a validation split so the
+        stored predictions come from unseen data.
 
         Parameters
         ----------
         X : array-like of shape (n_samples, n_features)
-            The input data.
+            Training feature matrix.
         y : array-like of shape (n_samples,)
-            The target values.
+            Training class labels.
+        val_split : float or None, default=None
+            If given, the fraction of data held out as a validation set whose
+            predictions are stored. ``None`` uses the full training set.
 
         Returns
         -------
         self : AggregativeBootstrap
-            The fitted aggregative bootstrap model.
+            The fitted quantifier.
 
         Raises
         ------
         ValueError
-            If the provided quantifier is not an aggregative quantifier.
+            If the wrapped quantifier is not an aggregative quantifier.
+
+        Examples
+        --------
+        >>> from mlquantify.meta import AggregativeBootstrap
+        >>> from mlquantify.likelihood import EMQ
+        >>> from sklearn.linear_model import LogisticRegression
+        >>> from sklearn.datasets import make_classification
+        >>> X, y = make_classification(n_samples=200, random_state=42)
+        >>> q = AggregativeBootstrap(EMQ(LogisticRegression()),
+        ...                          n_train_bootstraps=10,
+        ...                          n_test_bootstraps=10).fit(X, y)
         """
         X, y = validate_data(self, X, y)
         self.classes = np.unique(y)
@@ -573,17 +656,34 @@ class AggregativeBootstrap(MetaquantifierMixin, BaseQuantifier):
         return self
 
     def predict(self, X):
-        r""" Predicts the class prevalences for the given test data.
+        r"""Predict class prevalences with bootstrap-derived confidence estimation.
+
+        Generates classifier predictions for ``X`` and delegates to
+        :meth:`aggregate` with the stored training predictions to produce a
+        bootstrap-based prevalence estimate.
 
         Parameters
         ----------
         X : array-like of shape (n_samples, n_features)
-            The input data.
+            Test feature matrix.
 
         Returns
         -------
-        prevalences : array-like of shape (n_samples, n_classes)
-            The predicted class prevalences.
+        prevalences : dict or ndarray of shape (n_classes,)
+            Point prevalence estimate extracted from the bootstrap distribution.
+
+        Examples
+        --------
+        >>> from mlquantify.meta import AggregativeBootstrap
+        >>> from mlquantify.likelihood import EMQ
+        >>> from sklearn.linear_model import LogisticRegression
+        >>> from sklearn.datasets import make_classification
+        >>> X, y = make_classification(n_samples=200, random_state=42)
+        >>> q = AggregativeBootstrap(EMQ(LogisticRegression()),
+        ...                          n_train_bootstraps=10,
+        ...                          n_test_bootstraps=10).fit(X, y)
+        >>> q.predict(X)
+        {0: 0.49, 1: 0.51}
         """
         X = validate_data(self, X, None)
         estimator_function = _get_estimator_function(self.quantifier_estimator)
@@ -595,21 +695,42 @@ class AggregativeBootstrap(MetaquantifierMixin, BaseQuantifier):
 
 
     def aggregate(self, predictions, train_predictions, y_train):
-        r""" Aggregates the predictions using bootstrap resampling.
+        r"""Aggregate predictions via bootstrap resampling into a prevalence estimate.
+
+        Resamples both the training and test predictions
+        ``n_train_bootstraps × n_test_bootstraps`` times, calls the base
+        quantifier's ``aggregate`` method on each combination, and summarises
+        the resulting distribution as a point estimate with a confidence region.
 
         Parameters
         ----------
-        predictions : array-like of shape (n_samples, n_classes)
-            The input data.
-        train_predictions : array-like of shape (n_samples, n_classes)
-            The training predictions.
-        y_train : array-like of shape (n_samples,)
-            The training target values.
+        predictions : ndarray of shape (n_test_samples, n_classes)
+            Soft predictions on the test set (e.g. posterior probabilities).
+        train_predictions : ndarray of shape (n_train_samples, n_classes)
+            Soft predictions stored from the training (or validation) set.
+        y_train : ndarray of shape (n_train_samples,)
+            Class labels corresponding to ``train_predictions``.
 
         Returns
         -------
-        prevalences : array-like of shape (n_samples, n_classes)
-            The predicted class prevalences.
+        prevalences : dict or ndarray of shape (n_classes,)
+            Point prevalence estimate extracted from the centre of the
+            bootstrap confidence region.
+
+        Examples
+        --------
+        >>> from mlquantify.meta import AggregativeBootstrap
+        >>> from mlquantify.likelihood import EMQ
+        >>> from sklearn.linear_model import LogisticRegression
+        >>> from sklearn.datasets import make_classification
+        >>> import numpy as np
+        >>> X, y = make_classification(n_samples=200, random_state=42)
+        >>> lr = LogisticRegression().fit(X, y)
+        >>> train_preds = lr.predict_proba(X)
+        >>> q = AggregativeBootstrap(EMQ(lr), n_train_bootstraps=5,
+        ...                          n_test_bootstraps=5).fit(X, y)
+        >>> q.aggregate(train_preds, train_preds, y)
+        {0: 0.49, 1: 0.51}
         """
         prevalences = []
 
@@ -737,6 +858,39 @@ class QuaDapt(MetaquantifierMixin, BaseQuantifier):
 
 
     def fit(self, X, y):
+        """Fit the base classifier of the wrapped quantifier.
+
+        Only the underlying estimator is trained here; the full aggregation
+        is deferred to :meth:`aggregate` so that the MoSS-based correction
+        can be applied at prediction time.
+
+        Parameters
+        ----------
+        X : array-like of shape (n_samples, n_features)
+            Training feature matrix.
+        y : array-like of shape (n_samples,)
+            Training class labels.
+
+        Returns
+        -------
+        self : QuaDapt
+            The fitted quantifier.
+
+        Raises
+        ------
+        ValueError
+            If the wrapped quantifier does not use soft (probabilistic)
+            predictions.
+
+        Examples
+        --------
+        >>> from mlquantify.meta import QuaDapt
+        >>> from mlquantify.matching import DyS
+        >>> from sklearn.linear_model import LogisticRegression
+        >>> from sklearn.datasets import make_classification
+        >>> X, y = make_classification(n_samples=200, random_state=42)
+        >>> q = QuaDapt(DyS(LogisticRegression())).fit(X, y)
+        """
         X, y = validate_data(self, X, y)
         self.classes_ = np.unique(y)
 
@@ -749,7 +903,33 @@ class QuaDapt(MetaquantifierMixin, BaseQuantifier):
         return self
 
     def predict(self, X):
+        """Predict class prevalences using the MoSS adaptive correction.
 
+        Generates posterior probabilities for ``X`` with the fitted classifier
+        and delegates to :meth:`aggregate`, which selects the best MoSS
+        merging factor and calls the base quantifier's ``aggregate``.
+
+        Parameters
+        ----------
+        X : array-like of shape (n_samples, n_features)
+            Test feature matrix.
+
+        Returns
+        -------
+        prevalences : dict or ndarray of shape (n_classes,)
+            Estimated class prevalences.
+
+        Examples
+        --------
+        >>> from mlquantify.meta import QuaDapt
+        >>> from mlquantify.matching import DyS
+        >>> from sklearn.linear_model import LogisticRegression
+        >>> from sklearn.datasets import make_classification
+        >>> X, y = make_classification(n_samples=200, random_state=42)
+        >>> q = QuaDapt(DyS(LogisticRegression())).fit(X, y)
+        >>> q.predict(X)
+        {0: 0.49, 1: 0.51}
+        """
         X = validate_data(self, X, None)
 
         model = self.quantifier.estimator
@@ -760,6 +940,37 @@ class QuaDapt(MetaquantifierMixin, BaseQuantifier):
 
 
     def aggregate(self, predictions, y_train):
+        """Aggregate posteriors into prevalences using MoSS score simulation.
+
+        Searches over ``merging_factors`` to find the synthetic score
+        distribution (generated by :meth:`MoSS`) whose histogram is closest
+        to the test score distribution, then passes that synthetic set as the
+        training reference to the base quantifier's ``aggregate``.
+
+        Parameters
+        ----------
+        predictions : ndarray of shape (n_samples, n_classes)
+            Posterior probabilities of the test instances.
+        y_train : ndarray of shape (n_train_samples,)
+            Training class labels used to resolve class ordering.
+
+        Returns
+        -------
+        prevalences : dict or ndarray of shape (n_classes,)
+            Estimated class prevalences.
+
+        Examples
+        --------
+        >>> from mlquantify.meta import QuaDapt
+        >>> from mlquantify.matching import DyS
+        >>> from sklearn.linear_model import LogisticRegression
+        >>> from sklearn.datasets import make_classification
+        >>> X, y = make_classification(n_samples=200, random_state=42)
+        >>> q = QuaDapt(DyS(LogisticRegression())).fit(X, y)
+        >>> proba = LogisticRegression().fit(X, y).predict_proba(X)
+        >>> q.aggregate(proba, y)
+        {0: 0.49, 1: 0.51}
+        """
         self.classes_ = check_classes_attribute(self, np.unique(y_train))
         _, _, best_m = self.best_mixture(predictions)
 
@@ -772,6 +983,27 @@ class QuaDapt(MetaquantifierMixin, BaseQuantifier):
 
 
     def best_mixture(self, predictions):
+        """Find the merging factor and prevalence that best match the test scores.
+
+        Evaluates each candidate value in ``merging_factors`` by generating a
+        synthetic score set with :meth:`MoSS` and measuring its distance to
+        the test distribution using the configured ``measure``. Returns the
+        merging factor, prevalence estimate, and distance for the best match.
+
+        Parameters
+        ----------
+        predictions : ndarray of shape (n_samples,) or (n_samples, 2)
+            Posterior probabilities or positive-class scores for the test set.
+
+        Returns
+        -------
+        best_alpha : float
+            Positive-class prevalence estimate under the best merging factor.
+        best_distance : float
+            Distance between the test distribution and the best synthetic mix.
+        best_m : float
+            Merging factor that achieved the lowest distance.
+        """
         predictions = np.asarray(predictions, dtype=float)
         if predictions.ndim == 2:
             predictions = predictions[:, 1]
@@ -878,48 +1110,85 @@ class QuaDapt(MetaquantifierMixin, BaseQuantifier):
         return float(prevalences[1]), float(distance)
 
     def get_best_distance(self, predictions):
+        """Return the minimum distribution distance achieved across all merging factors.
 
-        _, distance, _= self.get_best_merging_factor(predictions)
+        Parameters
+        ----------
+        predictions : ndarray of shape (n_samples,) or (n_samples, 2)
+            Posterior probabilities or positive-class scores for the test set.
+
+        Returns
+        -------
+        best_distance : float
+            Lowest distance between the test distribution and any synthetic mix.
+        """
+        _, distance, _ = self.best_mixture(predictions)
 
         return distance
 
 
     @classmethod
     def MoSS(cls, n, alpha, merging_factor, classes=None, random_state=None):
-        r"""Model for Score Simulation
+        r"""Generate a synthetic binary score set via the Model for Score Simulation.
+
+        Positive scores are sampled as :math:`U^{\mathfrak{m}}` and negative
+        scores as :math:`1 - U^{\mathfrak{m}}`, where :math:`U \sim
+        \mathrm{Uniform}(0,1)` and :math:`\mathfrak{m}` is the merging factor.
+        A higher ``merging_factor`` produces more overlapping positive and
+        negative score distributions.
 
         Parameters
         ----------
         n : int
-            Number of observations.
+            Total number of synthetic observations to generate.
         alpha : float
-            Class proportion, which defines the prevalence of the positive class.
-        m : float
-            Merging factor, which controls the overlap between positive and negative score distributions.
+            Prevalence of the positive class in the synthetic set.
+        merging_factor : float
+            Controls the overlap between positive and negative score
+            distributions. Values close to 0 produce well-separated scores;
+            values close to 1 produce heavily overlapping scores.
+        classes : array-like of length 2 or None, default=None
+            Class labels for the negative and positive class respectively.
+            If ``None``, labels ``0`` and ``1`` are used.
+        random_state : int or None, default=None
+            Unused; reserved for future reproducibility support.
 
         Returns
         -------
-        tuple
-            Tuple of score and label arrays.
+        scores : ndarray of shape (n, 2)
+            Synthetic soft predictions for each observation.
+        labels : ndarray of shape (n,)
+            Class labels for each synthetic observation.
 
         .. math::
 
-            \mathrm{moss}(n, \alpha, \mathfrak{m}) = \mathrm{syn}(\oplus, \lfloor \alpha n \rfloor, \mathfrak{m}) \cup \mathrm{syn}(\ominus , \lfloor (1 - \alpha) n \rfloor, \mathfrak{m})
+            \mathrm{MoSS}(n, \alpha, \mathfrak{m}) =
+            \mathrm{syn}(\oplus, \lfloor \alpha n \rfloor, \mathfrak{m})
+            \cup
+            \mathrm{syn}(\ominus, \lfloor (1-\alpha) n \rfloor, \mathfrak{m})
 
         Notes
         -----
-        The MoSS generates only binary scores, simulating positive and negative class scores.
+        Only binary score generation is supported. The method is used
+        internally by :meth:`aggregate` to build a synthetic training
+        reference for the base quantifier.
 
         Examples
         --------
-        >>> scores = QuaDapt.MoSS(n=1000, alpha=0.3, m=0.5)
-        >>> print(scores.shape)
-        (1000, 3)
+        >>> from mlquantify.meta import QuaDapt
+        >>> scores, labels = QuaDapt.MoSS(n=1000, alpha=0.3, merging_factor=0.5)
+        >>> scores.shape
+        (1000, 2)
+        >>> labels.shape
+        (1000,)
 
         References
         ----------
-        .. [1] Maletzke, A., Reis, D. dos, Hassan, W., & Batista, G. (2021).
-        Accurately Quantifying under Score Variability. 2021 IEEE International Conference on Data Mining (ICDM), 1228-1233. https://doi.org/10.1109/ICDM51629.2021.00149
+        .. dropdown:: References
+
+            .. [1] Maletzke, A., Reis, D., Hassan, W., & Batista, G. (2021).
+                   Accurately Quantifying under Score Variability.
+                   *ICDM 2021*, pp. 1228–1233.
         """
         if isinstance(alpha, list):
             alpha = float(alpha[1])

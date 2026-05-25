@@ -18,6 +18,48 @@ class BaseMatchingQuantifier(BaseQuantifier):
     distributions and the test distribution in a common space, then estimate
     class prevalences by matching the test representation with a convex
     combination of the training representations.
+
+    Parameters
+    ----------
+    representation : representation instance
+        A representation object that can be fitted to training data and then
+        used to transform both training and test data into a common space.
+        Must define a ``class_representations_`` attribute after fitting.
+    normalize : bool, default=False
+        Whether to normalize the representations to form valid probability
+        distributions before computing distances.
+
+    Attributes
+    ----------
+    representation : representation instance
+        The representation object used for fitting and transforming data.
+    classes_ : ndarray of shape (n_classes,)
+        Class labels seen during ``fit``.
+    tr_representation_ : ndarray of shape (n_classes, n_representation_features)
+        Class-conditional representations learned from the training data.
+    best_distance_ : float
+        The distance between the test representation and the best-matching
+        convex combination of the training representations.
+    distances_ : list of float
+        Distances computed during the optimization process (if applicable).
+
+    Examples
+    --------
+    >>> from mlquantify.matching import BaseMatchingQuantifier
+    >>> from mlquantify.representations import KDERepresentation
+    >>> import numpy as np
+    >>> class MyMatching(BaseMatchingQuantifier):
+    ...     def __init__(self):
+    ...         super().__init__(representation=KDERepresentation())
+    ...     def _solve_prevalence(self, test_representation, train_representations):
+    ...         # Dummy implementation for illustration
+    ...         prevalences = np.random.dirichlet(np.ones(len(train_representations)))
+    ...         distance = np.random.rand()
+    ...         return prevalences, distance
+    >>> X_train, y_train = np.random.randn(100, 5), np.random.randint(0, 2, 100)
+    >>> X_test = np.random.randn(50, 5)
+    >>> MyMatching().fit(X_train, y_train).predict(X_test)
+    {0: 0.6, 1: 0.4}
     """
 
     _parameter_constraints = {

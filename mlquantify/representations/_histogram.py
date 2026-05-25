@@ -23,6 +23,35 @@ class HistogramRepresentation(BaseRepresentation):
         self.bin_edges = bin_edges
 
     def transform(self, X):
+        """Compute the histogram representation for a set of instances.
+
+        Each feature (or selected subset) is binned independently, and the
+        bin frequencies are concatenated into a single vector.  When
+        ``partition_blocks=True``, the attribute ``block_slices_`` is
+        populated with the slice objects that identify each bin group in
+        the concatenated output.
+
+        Parameters
+        ----------
+        X : array-like of shape (n_samples, n_features) or (n_samples,)
+            Feature matrix or 1-D score array.
+
+        Returns
+        -------
+        representation : ndarray of shape (n_bins_total,)
+            Normalized histogram vector (sums to 1 per feature-bin group).
+
+        Examples
+        --------
+        >>> from mlquantify.representations._histogram import HistogramRepresentation
+        >>> import numpy as np
+        >>> rng = np.random.default_rng(0)
+        >>> scores = rng.uniform(0, 1, (200, 1))
+        >>> y = (scores[:, 0] > 0.5).astype(int)
+        >>> rep = HistogramRepresentation(bins=(8,)).fit(scores, y)
+        >>> rep.transform(scores[:10]).shape
+        (8,)
+        """
         X = self._as_2d(X)
         X = self._select_features(X)
 

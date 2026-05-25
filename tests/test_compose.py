@@ -20,7 +20,7 @@ from mlquantify.compose import (
     LikelihoodComposeQuantifier,
     LinearComposeQuantifier,
 )
-from mlquantify.counting import AC
+from mlquantify.counting import GACC
 from mlquantify.matching import GHDx
 from mlquantify.representations import HistogramRepresentation, PredictionRepresentation
 from mlquantify.utils._get_scores import apply_cross_validation
@@ -173,7 +173,7 @@ def test_compose_mixins_define_estimator_prediction_modes():
         representation=PredictionRepresentation(method="soft", average=True),
     )
     likelihood = SoftLikelihoodCompose(estimator=LogisticRegression())
-    crisp = AC(estimator=PredictOnlyEstimator())
+    crisp = GACC(estimator=PredictOnlyEstimator())
     non_aggregative = GHDx()
 
     assert not uses_soft_predictions(linear)
@@ -209,7 +209,7 @@ def test_aggregative_compose_requires_prediction_representation(binary_dataset):
 
 def test_crisp_compose_method_accepts_predict_only_estimator(binary_dataset):
     X, y = binary_dataset
-    q = AC(estimator=PredictOnlyEstimator(), cv=3)
+    q = GACC(estimator=PredictOnlyEstimator(), cv=3)
 
     q.fit(X, y)
 
@@ -225,7 +225,7 @@ def test_aggregation_mixin_name_remains_compatibility_alias():
 
 def test_aggregative_quantifier_exposes_estimator_as_canonical_param():
     estimator = LogisticRegression(C=0.5, max_iter=1000, random_state=42)
-    q = AC(estimator=estimator, cv=3)
+    q = GACC(estimator=estimator, cv=3)
 
     params = q.get_params(deep=True)
 
@@ -245,7 +245,7 @@ def test_aggregative_quantifier_exposes_estimator_as_canonical_param():
 def test_estimator_maps_to_sklearn_params(binary_dataset):
     X, y = binary_dataset
     estimator = LogisticRegression(max_iter=1000, random_state=42)
-    q = AC(estimator=estimator, cv=3)
+    q = GACC(estimator=estimator, cv=3)
 
     assert q.get_params(deep=False)["estimator"] is estimator
 
@@ -412,7 +412,7 @@ def test_aggregation_mixin_aligns_ensemble_probabilities():
 
 def test_aggregation_mixin_uses_majority_vote_for_predict_ensemble():
     X = np.zeros((4, 1))
-    q = AC(estimator=FixedPredictEstimator([0, 0, 0, 0]))
+    q = GACC(estimator=FixedPredictEstimator([0, 0, 0, 0]))
     q.classes_ = np.asarray([0, 1])
     q.estimator_ = [
         FixedPredictEstimator([0, 1, 1, 1]),

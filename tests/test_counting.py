@@ -3,11 +3,11 @@ import pytest
 from sklearn.linear_model import LogisticRegression
 
 from mlquantify._config import config_context
-from mlquantify.counting import CC, PCC, AC, PAC, TAC, TX, TMAX, FM
+from mlquantify.counting import CC, PCC, GACC, GPACC, TAC, TX, TMAX, FM
 from mlquantify.utils._exceptions import InvalidParameterError
 
 
-COUNTING_QUANTIFIERS = [CC, PCC, AC, PAC, TAC, TX, TMAX, FM]
+COUNTING_QUANTIFIERS = [CC, PCC, GACC, GPACC, TAC, TX, TMAX, FM]
 
 
 def _assert_valid_prevalence(prevalence, n_classes):
@@ -31,7 +31,7 @@ def test_counting_methods_fit_predict_binary(quantifier_class, binary_dataset):
     _assert_valid_prevalence(prevalence, n_classes=2)
 
 
-@pytest.mark.parametrize("quantifier_class", [CC, PCC, AC, PAC, FM])
+@pytest.mark.parametrize("quantifier_class", [CC, PCC, GACC, GPACC, FM])
 def test_counting_methods_fit_predict_multiclass(quantifier_class, multiclass_dataset):
     X, y = multiclass_dataset
     q = quantifier_class(estimator=LogisticRegression(max_iter=1000, random_state=42))

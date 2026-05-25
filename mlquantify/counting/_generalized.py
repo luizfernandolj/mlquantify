@@ -58,8 +58,7 @@ class GACC(CrispPredictionMixin, AggregativeMixin, LinearComposeQuantifier):
     .. dropdown:: References
 
         .. [1] Firat, A. (2016). Unified Framework for Quantification. *AAAI*.
-        .. [2] Esuli, A., Moreo, A., & Sebastiani, F. (2023).
-               *Learning to Quantify*. Springer.
+        .. [2] Esuli, A., Moreo, A., & Sebastiani, F. (2023). *Learning to Quantify*. Springer.
     """
 
 
@@ -138,8 +137,7 @@ class GPACC(SoftPredictionMixin, AggregativeMixin, LinearComposeQuantifier):
     .. dropdown:: References
 
         .. [1] Firat, A. (2016). Unified Framework for Quantification. *AAAI*.
-        .. [2] Esuli, A., Moreo, A., & Sebastiani, F. (2023).
-               *Learning to Quantify*. Springer.
+        .. [2] Esuli, A., Moreo, A., & Sebastiani, F. (2023). *Learning to Quantify*. Springer.
     """
 
     def __init__(
@@ -222,8 +220,7 @@ class FM(SoftPredictionMixin, AggregativeMixin, LinearComposeQuantifier):
 
         .. [1] Friedman, J. (2015). Detecting and Dealing with Concept Drift.
                Technical Report.
-        .. [2] Tasche, D. (2024). Comments on Friedman's Method for Class
-               Distribution Estimation. *LQ 2024 Workshop Proceedings*.
+        .. [2] Tasche, D. (2024). Comments on Friedman's Method for Class Distribution Estimation. *LQ 2024 Workshop Proceedings*.
     """
 
     def __init__(

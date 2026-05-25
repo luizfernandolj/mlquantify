@@ -9,6 +9,47 @@ from mlquantify.utils._validation import validate_data, validate_prevalences
 
 
 class LikelihoodComposeQuantifier(BaseComposeQuantifier):
+    r"""Compose quantifier based on mixture negative log-likelihood.
+
+    Minimizes the (optionally regularized) mixture negative log-likelihood
+    to estimate class prevalences.  When a nested representation is
+    provided, per-class likelihoods are obtained from that representation;
+    otherwise they are derived from the test posteriors and training
+    priors.
+
+    This class is the backbone of the KDEy quantifier family.
+
+    Parameters
+    ----------
+    representation : BaseRepresentation or None, default=None
+        Optional representation (e.g. :class:`KDERepresentation`) that
+        exposes ``class_likelihoods``.  When ``None``, the estimator's
+        posterior outputs are used directly.
+    estimator : classifier or None, default=None
+        Base classifier.  Required when ``aggregative=True``.
+    solver : str, default='slsqp'
+        Prevalence solver passed to
+        :func:`~mlquantify.solvers.minimize_prevalence`.
+    aggregative : bool, default=True
+        If ``True``, the estimator is used to obtain predictions before
+        computing the representation.
+    tau_0 : float, default=0.0
+        First-order ordinal smoothness regularization weight.
+    tau_1 : float, default=0.0
+        Second-order ordinal smoothness regularization weight.
+    random_state : int, RandomState instance, or None, default=None
+        Random seed for the SLSQP starting point.
+
+    Attributes
+    ----------
+    classes_ : ndarray of shape (n_classes,)
+        Class labels seen during fit.
+    train_priors_ : ndarray of shape (n_classes,)
+        Empirical class proportions in the training data.
+    best_distance_ : float or None
+        Objective value at the optimum after the last ``predict`` call.
+    """
+
     def __init__(
         self,
         representation=None,
@@ -38,6 +79,32 @@ class LikelihoodComposeQuantifier(BaseComposeQuantifier):
         sample_weight=None,
         cv_prediction="refit",
     ):
+        """Fit the likelihood compose quantifier.
+
+        When ``representation`` is provided the fitting is delegated to
+        the parent :class:`BaseComposeQuantifier`.  Otherwise, only the
+        estimator is trained (the likelihood is evaluated directly from
+        posteriors at prediction time).
+
+        Parameters
+        ----------
+        X : array-like of shape (n_samples, n_features)
+            Training feature matrix.
+        y : array-like of shape (n_samples,)
+            Training class labels.
+        estimator_fitted : bool, default=False
+            Skip fitting the estimator if already fitted.
+        sample_weight : array-like of shape (n_samples,) or None, \
+            default=None
+            Per-sample weights.
+        cv_prediction : {'refit', 'ensemble'}, default='refit'
+            Cross-validation strategy.
+
+        Returns
+        -------
+        self : LikelihoodComposeQuantifier
+            The fitted quantifier.
+        """
         if self.representation is not None:
             return super().fit(
                 X,
@@ -71,6 +138,22 @@ class LikelihoodComposeQuantifier(BaseComposeQuantifier):
         return self
 
     def predict(self, X):
+        """Predict class prevalences by minimizing mixture NLL.
+
+        When ``representation`` is set, delegates to the parent class.
+        Otherwise computes per-class likelihoods from the estimator's
+        posteriors and minimizes the (regularized) mixture NLL.
+
+        Parameters
+        ----------
+        X : array-like of shape (n_samples, n_features)
+            Test feature matrix.
+
+        Returns
+        -------
+        prevalences : dict or ndarray of shape (n_classes,)
+            Estimated class prevalences.
+        """
         if self.representation is not None:
             return super().predict(X)
 
@@ -90,6 +173,22 @@ class LikelihoodComposeQuantifier(BaseComposeQuantifier):
         return validate_prevalences(self, prevalences, self.classes_)
 
     def _solve_prevalence(self, test_representation, train_representation):
+        """Solve for prevalences by minimizing mixture NLL.
+
+        Parameters
+        ----------
+        test_representation : array-like of shape (n_samples, n_classes)
+            Per-class posteriors or likelihoods for each test instance.
+        train_representation : ignored
+            Not used; present for API compatibility.
+
+        Returns
+        -------
+        prevalence : ndarray of shape (n_classes,)
+            Estimated prevalence vector.
+        loss : float
+            Minimum NLL objective value.
+        """
         class_likelihoods = self._class_likelihoods(test_representation)
         loss_function = RegularizedMixtureNLLLoss(
             tau_0=self.tau_0,

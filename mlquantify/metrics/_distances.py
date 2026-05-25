@@ -1,6 +1,22 @@
 import numpy as np
 
 def topsoe_backend(p, q, xp):
+    """Backend implementation of the Topsoe distance.
+
+    Parameters
+    ----------
+    p : array-like
+        First probability distribution.
+    q : array-like
+        Second probability distribution.
+    xp : module
+        Array module (``numpy`` or ``jax.numpy``).
+
+    Returns
+    -------
+    distance : scalar
+        The Topsoe distance between ``p`` and ``q``.
+    """
     p = xp.asarray(p)
     q = xp.asarray(q)
 
@@ -35,11 +51,41 @@ def topsoe(p: np.ndarray, q: np.ndarray) -> float:
     return topsoe_backend(p, q, np)
 
 def topsoe_jax(p, q):
+    """JAX-accelerated Topsoe distance (delegates to :func:`topsoe_backend`).
+
+    Parameters
+    ----------
+    p : array-like
+        First probability distribution.
+    q : array-like
+        Second probability distribution.
+
+    Returns
+    -------
+    distance : scalar
+        The Topsoe distance computed with ``jax.numpy``.
+    """
     import jax.numpy as jnp
     return topsoe_backend(p, q, jnp)
 
 
 def probsymm_backend(p, q, xp):
+    """Backend implementation of the Probabilistic Symmetric distance.
+
+    Parameters
+    ----------
+    p : array-like
+        First probability distribution.
+    q : array-like
+        Second probability distribution.
+    xp : module
+        Array module (``numpy`` or ``jax.numpy``).
+
+    Returns
+    -------
+    distance : scalar
+        The Probabilistic Symmetric distance between ``p`` and ``q``.
+    """
     p = xp.maximum(p, 1e-20)
     q = xp.maximum(q, 1e-20)
     return xp.sum((p - q) * xp.log(p / q))
@@ -68,11 +114,41 @@ def probsymm(p: np.ndarray, q: np.ndarray) -> float:
     return probsymm_backend(p, q, np)
 
 def probsymm_jax(p, q):
+    """JAX-accelerated Probabilistic Symmetric distance.
+
+    Parameters
+    ----------
+    p : array-like
+        First probability distribution.
+    q : array-like
+        Second probability distribution.
+
+    Returns
+    -------
+    distance : scalar
+        The Probabilistic Symmetric distance computed with ``jax.numpy``.
+    """
     import jax.numpy as jnp
     return probsymm_backend(p, q, jnp)
 
 
 def hellinger_backend(p, q, xp):
+    """Backend implementation of the Hellinger distance.
+
+    Parameters
+    ----------
+    p : array-like
+        First probability distribution.
+    q : array-like
+        Second probability distribution.
+    xp : module
+        Array module (``numpy`` or ``jax.numpy``).
+
+    Returns
+    -------
+    distance : scalar
+        The Hellinger distance between ``p`` and ``q``.
+    """
     p = xp.maximum(p, 1e-20)
     q = xp.maximum(q, 1e-20)
     return xp.sqrt(0.5 * xp.sum((xp.sqrt(p) - xp.sqrt(q)) ** 2))
@@ -101,11 +177,41 @@ def hellinger(p: np.ndarray, q: np.ndarray) -> float:
     return hellinger_backend(p, q, np)
 
 def hellinger_jax(p, q):
+    """JAX-accelerated Hellinger distance.
+
+    Parameters
+    ----------
+    p : array-like
+        First probability distribution.
+    q : array-like
+        Second probability distribution.
+
+    Returns
+    -------
+    distance : scalar
+        The Hellinger distance computed with ``jax.numpy``.
+    """
     import jax.numpy as jnp
     return hellinger_backend(p, q, jnp)
 
 
 def sqEuclidean_backend(p, q, xp):
+    """Backend implementation of the squared Euclidean distance.
+
+    Parameters
+    ----------
+    p : array-like
+        First vector.
+    q : array-like
+        Second vector.
+    xp : module
+        Array module (``numpy`` or ``jax.numpy``).
+
+    Returns
+    -------
+    distance : scalar
+        The squared Euclidean distance between ``p`` and ``q``.
+    """
     p = xp.asarray(p)
     q = xp.asarray(q)
     return xp.sum((p - q) ** 2)
@@ -131,5 +237,19 @@ def sqEuclidean(p: np.ndarray, q: np.ndarray) -> float:
     return sqEuclidean_backend(p, q, np)
 
 def sqEuclidean_jax(p, q):
+    """JAX-accelerated squared Euclidean distance.
+
+    Parameters
+    ----------
+    p : array-like
+        First vector.
+    q : array-like
+        Second vector.
+
+    Returns
+    -------
+    distance : scalar
+        The squared Euclidean distance computed with ``jax.numpy``.
+    """
     import jax.numpy as jnp
     return sqEuclidean_backend(p, q, jnp)
