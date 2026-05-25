@@ -20,7 +20,7 @@ actively adapts them at prediction time [1]_.
    *QuaDapt: adaptive score simulation and distribution matching. Ortega et al., 2025*
 
 :class:`QuaDapt` is inspired by the principle behind **Distribution Matching (DM)** or
-**Mixture Model (MM)** quantifiers (see :ref:`mixture_models`), which estimate test prevalences by finding the
+**Distribution Matching (DM)** quantifiers (see :ref:`distribution_matching`), which estimate test prevalences by finding the
 mixture of class-conditional distributions that best fits the test data.  
 However, while classical MM methods rely on **empirical training distributions**,  
 **QuaDapt replaces them with synthetic score distributions** generated for multiple
@@ -29,7 +29,7 @@ hypothetical levels of class separability [1]_.
 The method evaluates several merging factors :math:`m` that control synthetic
 separability and selects the one producing the closest match to the test-score
 distribution.  
-The chosen synthetic model is then passed to an aggregative quantifier (e.g., :class:`ACC`,
+The chosen synthetic model is then passed to an aggregative quantifier (e.g., :class:`GACC`,
 :class:`T50`, :class:`DyS`, :class:`SORD`.) to compute final prevalence estimates.
 
 This makes QuaDapt a **meta-quantifier** capable of adapting to score drift without
@@ -66,11 +66,11 @@ relying on static training distributions.
 .. code-block:: python
 
    from mlquantify.meta import QuaDapt
-   from mlquantify.adjust_counting import ACC
+   from mlquantify.counting import GACC
    from sklearn.ensemble import RandomForestClassifier
 
    q = QuaDapt(
-       quantifier=ACC(RandomForestClassifier()),
+      quantifier=GACC(RandomForestClassifier()),
        merging_factors=[0.1, 0.5, 1.0],
        measure="topsoe"
    )

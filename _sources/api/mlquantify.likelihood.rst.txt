@@ -29,4 +29,6 @@ Likelihood Methods
   :template: base.rst
 
 
+  CDE
   EMQ
+  MLPE

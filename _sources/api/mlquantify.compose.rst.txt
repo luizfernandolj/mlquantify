@@ -29,4 +29,7 @@ Composable Methods
   :template: base.rst
 
 
+  BaseComposeQuantifier
+  LinearComposeQuantifier
+  LikelihoodComposeQuantifier
   ComposeQuantifier

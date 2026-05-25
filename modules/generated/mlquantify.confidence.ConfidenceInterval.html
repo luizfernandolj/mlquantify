@@ -36,8 +36,8 @@
   </noscript>
   
   <!-- Loaded before other Sphinx assets -->
-  <link href="../../_static/styles/theme.css?digest=55c26ed414f5f8a31ebb" rel="stylesheet" />
-<link href="../../_static/styles/pydata-sphinx-theme.css?digest=55c26ed414f5f8a31ebb" rel="stylesheet" />
+  <link href="../../_static/styles/theme.css?digest=0790524f97105ba85085" rel="stylesheet" />
+<link href="../../_static/styles/pydata-sphinx-theme.css?digest=0790524f97105ba85085" rel="stylesheet" />
 
     <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=8f2a1f02" />
     <link rel="stylesheet" type="text/css" href="../../_static/copybutton.css?v=76b2166b" />
@@ -48,10 +48,10 @@
     <link rel="stylesheet" type="text/css" href="../../_static/landing.css?v=e93fd00d" />
   
   <!-- So that users can add custom icons -->
-  <script defer src="../../_static/scripts/fontawesome.js?digest=55c26ed414f5f8a31ebb"></script>
+  <script defer src="../../_static/scripts/fontawesome.js?digest=0790524f97105ba85085"></script>
   <!-- Pre-loaded scripts that we'll load fully later -->
-  <link rel="preload" as="script" href="../../_static/scripts/bootstrap.js?digest=55c26ed414f5f8a31ebb" />
-<link rel="preload" as="script" href="../../_static/scripts/pydata-sphinx-theme.js?digest=55c26ed414f5f8a31ebb" />
+  <link rel="preload" as="script" href="../../_static/scripts/bootstrap.js?digest=0790524f97105ba85085" />
+<link rel="preload" as="script" href="../../_static/scripts/pydata-sphinx-theme.js?digest=0790524f97105ba85085" />
 
     <script src="../../_static/documentation_options.js?v=dc233e31"></script>
     <script src="../../_static/doctools.js?v=9bcbadda"></script>
@@ -210,11 +210,18 @@
       
         <div class="navbar-item">
 
-<button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button pst-js-only" aria-label="Color mode" data-bs-title="Color mode"  data-bs-placement="bottom" data-bs-toggle="tooltip">
-  <i class="theme-switch fa-solid fa-sun                fa-lg" data-mode="light" title="Light"></i>
-  <i class="theme-switch fa-solid fa-moon               fa-lg" data-mode="dark"  title="Dark"></i>
-  <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"  title="System Settings"></i>
-</button></div>
+<div class="theme-switch-container dropdown pst-js-only" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Color mode">
+  <button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button dropdown-toggle" aria-label="Color mode" data-bs-toggle="dropdown">
+    <i class="theme-switch fa-solid fa-sun fa-lg fa-fw" data-mode="light" title="Light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg fa-fw" data-mode="dark" title="Dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg fa-fw" data-mode="auto" title="System Settings"></i>
+  </button>
+  <ul class="dropdown-menu dropdown-menu-end">
+    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="auto"><i class="fa-solid fa-circle-half-stroke fa-lg fa-fw me-1"></i>System Settings</button></li>
+    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="light"><i class="fa-solid fa-sun fa-lg fa-fw me-1"></i>Light</button></li>
+    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="dark"><i class="fa-solid fa-moon fa-lg fa-fw me-1"></i>Dark</button></li>
+  </ul>
+</div></div>
       
         <div class="navbar-item"><ul class="navbar-icon-links"
     aria-label="Icon Links">
@@ -227,8 +234,7 @@
           
           
           
-          <a href="https://github.com/luizfernandolj/mlquantify/tree/master" title="GitHub" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><i class="fa-brands fa-square-github fa-lg" aria-hidden="true"></i>
-            <span class="sr-only">GitHub</span></a>
+          <a href="https://github.com/luizfernandolj/mlquantify/tree/master" title="GitHub" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><i class="fa-brands fa-square-github fa-lg" aria-hidden="true"></i><span class="visually-hidden">GitHub</span></a>
         </li>
 </ul></div>
       
@@ -322,11 +328,18 @@
         
           <div class="navbar-item">
 
-<button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button pst-js-only" aria-label="Color mode" data-bs-title="Color mode"  data-bs-placement="bottom" data-bs-toggle="tooltip">
-  <i class="theme-switch fa-solid fa-sun                fa-lg" data-mode="light" title="Light"></i>
-  <i class="theme-switch fa-solid fa-moon               fa-lg" data-mode="dark"  title="Dark"></i>
-  <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"  title="System Settings"></i>
-</button></div>
+<div class="theme-switch-container dropdown pst-js-only" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Color mode">
+  <button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button dropdown-toggle" aria-label="Color mode" data-bs-toggle="dropdown">
+    <i class="theme-switch fa-solid fa-sun fa-lg fa-fw" data-mode="light" title="Light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg fa-fw" data-mode="dark" title="Dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg fa-fw" data-mode="auto" title="System Settings"></i>
+  </button>
+  <ul class="dropdown-menu dropdown-menu-end">
+    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="auto"><i class="fa-solid fa-circle-half-stroke fa-lg fa-fw me-1"></i>System Settings</button></li>
+    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="light"><i class="fa-solid fa-sun fa-lg fa-fw me-1"></i>Light</button></li>
+    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="dark"><i class="fa-solid fa-moon fa-lg fa-fw me-1"></i>Dark</button></li>
+  </ul>
+</div></div>
         
           <div class="navbar-item"><ul class="navbar-icon-links"
     aria-label="Icon Links">
@@ -339,8 +352,7 @@
           
           
           
-          <a href="https://github.com/luizfernandolj/mlquantify/tree/master" title="GitHub" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><i class="fa-brands fa-square-github fa-lg" aria-hidden="true"></i>
-            <span class="sr-only">GitHub</span></a>
+          <a href="https://github.com/luizfernandolj/mlquantify/tree/master" title="GitHub" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><i class="fa-brands fa-square-github fa-lg" aria-hidden="true"></i><span class="visually-hidden">GitHub</span></a>
         </li>
 </ul></div>
         
@@ -367,25 +379,6 @@
 <li class="toctree-l2"><a class="reference internal" href="mlquantify.config_context.html">config_context</a></li>
 </ul>
 </details></li>
-<li class="toctree-l1 has-children"><a class="reference internal" href="../../api/mlquantify.adjust_counting.html">mlquantify.adjust_counting</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
-<li class="toctree-l2"><a class="reference internal" href="mlquantify.adjust_counting.CC.html">CC</a></li>
-<li class="toctree-l2"><a class="reference internal" href="mlquantify.adjust_counting.PCC.html">PCC</a></li>
-<li class="toctree-l2"><a class="reference internal" href="mlquantify.adjust_counting.FM.html">FM</a></li>
-<li class="toctree-l2"><a class="reference internal" href="mlquantify.adjust_counting.AC.html">AC</a></li>
-<li class="toctree-l2"><a class="reference internal" href="mlquantify.adjust_counting.PAC.html">PAC</a></li>
-<li class="toctree-l2"><a class="reference internal" href="mlquantify.adjust_counting.TAC.html">TAC</a></li>
-<li class="toctree-l2"><a class="reference internal" href="mlquantify.adjust_counting.TX.html">TX</a></li>
-<li class="toctree-l2"><a class="reference internal" href="mlquantify.adjust_counting.TMAX.html">TMAX</a></li>
-<li class="toctree-l2"><a class="reference internal" href="mlquantify.adjust_counting.T50.html">T50</a></li>
-<li class="toctree-l2"><a class="reference internal" href="mlquantify.adjust_counting.MS.html">MS</a></li>
-<li class="toctree-l2"><a class="reference internal" href="mlquantify.adjust_counting.MS2.html">MS2</a></li>
-<li class="toctree-l2"><a class="reference internal" href="mlquantify.adjust_counting.CDE.html">CDE</a></li>
-<li class="toctree-l2"><a class="reference internal" href="mlquantify.adjust_counting.evaluate_thresholds.html">evaluate_thresholds</a></li>
-<li class="toctree-l2"><a class="reference internal" href="mlquantify.adjust_counting.compute_tpr.html">compute_tpr</a></li>
-<li class="toctree-l2"><a class="reference internal" href="mlquantify.adjust_counting.compute_fpr.html">compute_fpr</a></li>
-<li class="toctree-l2"><a class="reference internal" href="mlquantify.adjust_counting.compute_table.html">compute_table</a></li>
-</ul>
-</details></li>
 <li class="toctree-l1 has-children"><a class="reference internal" href="../../api/mlquantify.base.html">mlquantify.base</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
 <li class="toctree-l2"><a class="reference internal" href="mlquantify.base.BaseQuantifier.html">BaseQuantifier</a></li>
 <li class="toctree-l2"><a class="reference internal" href="mlquantify.base.MetaquantifierMixin.html">MetaquantifierMixin</a></li>
@@ -394,11 +387,20 @@
 </details></li>
 <li class="toctree-l1 has-children"><a class="reference internal" href="../../api/mlquantify.base_aggregative.html">mlquantify.base_aggregative</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
 <li class="toctree-l2"><a class="reference internal" href="mlquantify.base_aggregative.AggregationMixin.html">AggregationMixin</a></li>
-<li class="toctree-l2"><a class="reference internal" href="mlquantify.base_aggregative.SoftLearnerQMixin.html">SoftLearnerQMixin</a></li>
-<li class="toctree-l2"><a class="reference internal" href="mlquantify.base_aggregative.CrispLearnerQMixin.html">CrispLearnerQMixin</a></li>
+<li class="toctree-l2"><a class="reference internal" href="mlquantify.base_aggregative.SoftPredictionMixin.html">SoftPredictionMixin</a></li>
+<li class="toctree-l2"><a class="reference internal" href="mlquantify.base_aggregative.CrispPredictionMixin.html">CrispPredictionMixin</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../../api/mlquantify.calibration.html">mlquantify.calibration</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="mlquantify.calibration.Calibrator.html">Calibrator</a></li>
+<li class="toctree-l2"><a class="reference internal" href="mlquantify.calibration.ClassifierCalibrator.html">ClassifierCalibrator</a></li>
+<li class="toctree-l2"><a class="reference internal" href="mlquantify.calibration.QuantifierCalibrator.html">QuantifierCalibrator</a></li>
 </ul>
 </details></li>
 <li class="toctree-l1 has-children"><a class="reference internal" href="../../api/mlquantify.compose.html">mlquantify.compose</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="mlquantify.compose.BaseComposeQuantifier.html">BaseComposeQuantifier</a></li>
+<li class="toctree-l2"><a class="reference internal" href="mlquantify.compose.LinearComposeQuantifier.html">LinearComposeQuantifier</a></li>
+<li class="toctree-l2"><a class="reference internal" href="mlquantify.compose.LikelihoodComposeQuantifier.html">LikelihoodComposeQuantifier</a></li>
 <li class="toctree-l2"><a class="reference internal" href="mlquantify.compose.ComposeQuantifier.html">ComposeQuantifier</a></li>
 </ul>
 </details></li>
@@ -410,8 +412,63 @@
 <li class="toctree-l2"><a class="reference internal" href="mlquantify.confidence.construct_confidence_region.html">construct_confidence_region</a></li>
 </ul>
 </details></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../../api/mlquantify.counting.html">mlquantify.counting</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="mlquantify.counting.CC.html">CC</a></li>
+<li class="toctree-l2"><a class="reference internal" href="mlquantify.counting.PCC.html">PCC</a></li>
+<li class="toctree-l2"><a class="reference internal" href="mlquantify.counting.ThresholdAdjustment.html">ThresholdAdjustment</a></li>
+<li class="toctree-l2"><a class="reference internal" href="mlquantify.counting.TAC.html">TAC</a></li>
+<li class="toctree-l2"><a class="reference internal" href="mlquantify.counting.TX.html">TX</a></li>
+<li class="toctree-l2"><a class="reference internal" href="mlquantify.counting.TMAX.html">TMAX</a></li>
+<li class="toctree-l2"><a class="reference internal" href="mlquantify.counting.T50.html">T50</a></li>
+<li class="toctree-l2"><a class="reference internal" href="mlquantify.counting.MS.html">MS</a></li>
+<li class="toctree-l2"><a class="reference internal" href="mlquantify.counting.MS2.html">MS2</a></li>
+<li class="toctree-l2"><a class="reference internal" href="mlquantify.counting.FM.html">FM</a></li>
+<li class="toctree-l2"><a class="reference internal" href="mlquantify.counting.GACC.html">GACC</a></li>
+<li class="toctree-l2"><a class="reference internal" href="mlquantify.counting.GPACC.html">GPACC</a></li>
+<li class="toctree-l2"><a class="reference internal" href="mlquantify.counting.evaluate_thresholds.html">evaluate_thresholds</a></li>
+<li class="toctree-l2"><a class="reference internal" href="mlquantify.counting.compute_tpr.html">compute_tpr</a></li>
+<li class="toctree-l2"><a class="reference internal" href="mlquantify.counting.compute_fpr.html">compute_fpr</a></li>
+<li class="toctree-l2"><a class="reference internal" href="mlquantify.counting.compute_table.html">compute_table</a></li>
+</ul>
+</details></li>
 <li class="toctree-l1 has-children"><a class="reference internal" href="../../api/mlquantify.likelihood.html">mlquantify.likelihood</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="mlquantify.likelihood.CDE.html">CDE</a></li>
 <li class="toctree-l2"><a class="reference internal" href="mlquantify.likelihood.EMQ.html">EMQ</a></li>
+<li class="toctree-l2"><a class="reference internal" href="mlquantify.likelihood.MLPE.html">MLPE</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../../api/mlquantify.losses.html">mlquantify.losses</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="mlquantify.losses.BaseLoss.html">BaseLoss</a></li>
+<li class="toctree-l2"><a class="reference internal" href="mlquantify.losses.DistanceLoss.html">DistanceLoss</a></li>
+<li class="toctree-l2"><a class="reference internal" href="mlquantify.losses.LeastSquaresLoss.html">LeastSquaresLoss</a></li>
+<li class="toctree-l2"><a class="reference internal" href="mlquantify.losses.HellingerSurrogateLoss.html">HellingerSurrogateLoss</a></li>
+<li class="toctree-l2"><a class="reference internal" href="mlquantify.losses.EnergyLoss.html">EnergyLoss</a></li>
+<li class="toctree-l2"><a class="reference internal" href="mlquantify.losses.NegativeLogLikelihoodLoss.html">NegativeLogLikelihoodLoss</a></li>
+<li class="toctree-l2"><a class="reference internal" href="mlquantify.losses.MixtureNegativeLogLikelihoodLoss.html">MixtureNegativeLogLikelihoodLoss</a></li>
+<li class="toctree-l2"><a class="reference internal" href="mlquantify.losses.RegularizedMixtureNLLLoss.html">RegularizedMixtureNLLLoss</a></li>
+<li class="toctree-l2"><a class="reference internal" href="mlquantify.losses.normalize_distribution.html">normalize_distribution</a></li>
+<li class="toctree-l2"><a class="reference internal" href="mlquantify.losses.get_loss.html">get_loss</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../../api/mlquantify.matching.html">mlquantify.matching</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="mlquantify.matching.BaseMatchingQuantifier.html">BaseMatchingQuantifier</a></li>
+<li class="toctree-l2"><a class="reference internal" href="mlquantify.matching.MatchingHistogramQuantifier.html">MatchingHistogramQuantifier</a></li>
+<li class="toctree-l2"><a class="reference internal" href="mlquantify.matching.DyS.html">DyS</a></li>
+<li class="toctree-l2"><a class="reference internal" href="mlquantify.matching.HDy.html">HDy</a></li>
+<li class="toctree-l2"><a class="reference internal" href="mlquantify.matching.HDx.html">HDx</a></li>
+<li class="toctree-l2"><a class="reference internal" href="mlquantify.matching.SORD.html">SORD</a></li>
+<li class="toctree-l2"><a class="reference internal" href="mlquantify.matching.MatchingKernelQuantifier.html">MatchingKernelQuantifier</a></li>
+<li class="toctree-l2"><a class="reference internal" href="mlquantify.matching.MMD_RKHS.html">MMD_RKHS</a></li>
+<li class="toctree-l2"><a class="reference internal" href="mlquantify.matching.KDEyQuantifier.html">KDEyQuantifier</a></li>
+<li class="toctree-l2"><a class="reference internal" href="mlquantify.matching.KDEyML.html">KDEyML</a></li>
+<li class="toctree-l2"><a class="reference internal" href="mlquantify.matching.KDEyHD.html">KDEyHD</a></li>
+<li class="toctree-l2"><a class="reference internal" href="mlquantify.matching.KDEyCS.html">KDEyCS</a></li>
+<li class="toctree-l2"><a class="reference internal" href="mlquantify.matching.GKDEyML.html">GKDEyML</a></li>
+<li class="toctree-l2"><a class="reference internal" href="mlquantify.matching.GHDx.html">GHDx</a></li>
+<li class="toctree-l2"><a class="reference internal" href="mlquantify.matching.GHDy.html">GHDy</a></li>
+<li class="toctree-l2"><a class="reference internal" href="mlquantify.matching.SMM.html">SMM</a></li>
+<li class="toctree-l2"><a class="reference internal" href="mlquantify.matching.EDy.html">EDy</a></li>
+<li class="toctree-l2"><a class="reference internal" href="mlquantify.matching.EDx.html">EDx</a></li>
 </ul>
 </details></li>
 <li class="toctree-l1 has-children"><a class="reference internal" href="../../api/mlquantify.meta.html">mlquantify.meta</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
@@ -436,15 +493,6 @@
 <li class="toctree-l2"><a class="reference internal" href="mlquantify.metrics.CvM_L1.html">CvM_L1</a></li>
 </ul>
 </details></li>
-<li class="toctree-l1 has-children"><a class="reference internal" href="../../api/mlquantify.mixture.html">mlquantify.mixture</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
-<li class="toctree-l2"><a class="reference internal" href="mlquantify.mixture.HDy.html">HDy</a></li>
-<li class="toctree-l2"><a class="reference internal" href="mlquantify.mixture.DyS.html">DyS</a></li>
-<li class="toctree-l2"><a class="reference internal" href="mlquantify.mixture.SMM.html">SMM</a></li>
-<li class="toctree-l2"><a class="reference internal" href="mlquantify.mixture.SORD.html">SORD</a></li>
-<li class="toctree-l2"><a class="reference internal" href="mlquantify.mixture.HDx.html">HDx</a></li>
-<li class="toctree-l2"><a class="reference internal" href="mlquantify.mixture.MMD_RKHS.html">MMD_RKHS</a></li>
-</ul>
-</details></li>
 <li class="toctree-l1 has-children"><a class="reference internal" href="../../api/mlquantify.model_selection.html">mlquantify.model_selection</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
 <li class="toctree-l2"><a class="reference internal" href="mlquantify.model_selection.GridSearchQ.html">GridSearchQ</a></li>
 <li class="toctree-l2"><a class="reference internal" href="mlquantify.model_selection.BaseProtocol.html">BaseProtocol</a></li>
@@ -455,19 +503,37 @@
 </ul>
 </details></li>
 <li class="toctree-l1 has-children"><a class="reference internal" href="../../api/mlquantify.multiclass.html">mlquantify.multiclass</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
-<li class="toctree-l2"><a class="reference internal" href="mlquantify.multiclass.define_binary.html">define_binary</a></li>
+<li class="toctree-l2"><a class="reference internal" href="mlquantify.multiclass.binary_quantifier.html">binary_quantifier</a></li>
 <li class="toctree-l2"><a class="reference internal" href="mlquantify.multiclass.BinaryQuantifier.html">BinaryQuantifier</a></li>
 </ul>
 </details></li>
 <li class="toctree-l1 has-children"><a class="reference internal" href="../../api/mlquantify.neighbors.html">mlquantify.neighbors</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
-<li class="toctree-l2"><a class="reference internal" href="mlquantify.neighbors.KDEyCS.html">KDEyCS</a></li>
-<li class="toctree-l2"><a class="reference internal" href="mlquantify.neighbors.KDEyHD.html">KDEyHD</a></li>
-<li class="toctree-l2"><a class="reference internal" href="mlquantify.neighbors.KDEyML.html">KDEyML</a></li>
 <li class="toctree-l2"><a class="reference internal" href="mlquantify.neighbors.PWK.html">PWK</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1"><a class="reference internal" href="../../api/mlquantify.neural.html">mlquantify.neural</a></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../../api/mlquantify.representations.html">mlquantify.representations</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="mlquantify.representations.BaseRepresentation.html">BaseRepresentation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="mlquantify.representations.HistogramRepresentation.html">HistogramRepresentation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="mlquantify.representations.KDERepresentation.html">KDERepresentation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="mlquantify.representations.DistanceRepresentation.html">DistanceRepresentation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="mlquantify.representations.KernelMeanRepresentation.html">KernelMeanRepresentation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="mlquantify.representations.PredictionRepresentation.html">PredictionRepresentation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="mlquantify.representations.HardPredictionRepresentation.html">HardPredictionRepresentation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="mlquantify.representations.SoftPredictionRepresentation.html">SoftPredictionRepresentation</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../../api/mlquantify.solvers.html">mlquantify.solvers</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="mlquantify.solvers.solve_binary.html">solve_binary</a></li>
+<li class="toctree-l2"><a class="reference internal" href="mlquantify.solvers.ternary_search.html">ternary_search</a></li>
+<li class="toctree-l2"><a class="reference internal" href="mlquantify.solvers.solve_simplex.html">solve_simplex</a></li>
+<li class="toctree-l2"><a class="reference internal" href="mlquantify.solvers.minimize_prevalence.html">minimize_prevalence</a></li>
+<li class="toctree-l2"><a class="reference internal" href="mlquantify.solvers.minimize_prevalence_blocks.html">minimize_prevalence_blocks</a></li>
 </ul>
 </details></li>
 <li class="toctree-l1 has-children"><a class="reference internal" href="../../api/mlquantify.utils.html">mlquantify.utils</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
 <li class="toctree-l2"><a class="reference internal" href="mlquantify.utils.get_prev_from_labels.html">get_prev_from_labels</a></li>
+<li class="toctree-l2"><a class="reference internal" href="mlquantify.utils.normalize_prevalence.html">normalize_prevalence</a></li>
 <li class="toctree-l2"><a class="reference internal" href="mlquantify.utils.load_quantifier.html">load_quantifier</a></li>
 <li class="toctree-l2"><a class="reference internal" href="mlquantify.utils.make_prevs.html">make_prevs</a></li>
 <li class="toctree-l2"><a class="reference internal" href="mlquantify.utils.apply_cross_validation.html">apply_cross_validation</a></li>
@@ -537,7 +603,7 @@
 <h1>ConfidenceInterval<a class="headerlink" href="#confidenceinterval" title="Link to this heading">#</a></h1>
 <dl class="py class">
 <dt class="sig sig-object py" id="mlquantify.confidence.ConfidenceInterval">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">mlquantify.confidence.</span></span><span class="sig-name descname"><span class="pre">ConfidenceInterval</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">prev_estims</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">confidence_level</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.95</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/luizfernandolj/mlquantify/tree/master/mlquantify/confidence.py#L90-L154"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mlquantify.confidence.ConfidenceInterval" title="Link to this definition">#</a></dt>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">mlquantify.confidence.</span></span><span class="sig-name descname"><span class="pre">ConfidenceInterval</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">prev_estims</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">confidence_level</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.95</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/luizfernandolj/mlquantify/tree/master/mlquantify/confidence.py#L90-L183"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mlquantify.confidence.ConfidenceInterval" title="Link to this definition">#</a></dt>
 <dd><p>Bootstrap confidence intervals for each class prevalence.</p>
 <p>Constructs independent percentile-based confidence intervals 
 for each class dimension from bootstrap samples.</p>
@@ -585,20 +651,53 @@ Section 3.3, Equation (1).</p>
 </div>
 <dl class="py method">
 <dt class="sig sig-object py" id="mlquantify.confidence.ConfidenceInterval.contains">
-<span class="sig-name descname"><span class="pre">contains</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">point</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/luizfernandolj/mlquantify/tree/master/mlquantify/confidence.py#L151-L154"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mlquantify.confidence.ConfidenceInterval.contains" title="Link to this definition">#</a></dt>
-<dd><p>Check whether a prevalence vector lies within the region.</p>
+<span class="sig-name descname"><span class="pre">contains</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">point</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/luizfernandolj/mlquantify/tree/master/mlquantify/confidence.py#L167-L183"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mlquantify.confidence.ConfidenceInterval.contains" title="Link to this definition">#</a></dt>
+<dd><p>Check whether a prevalence vector falls inside the interval.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>point</strong><span class="classifier">array-like of shape (n_classes,)</span></dt><dd><p>The prevalence vector to test.</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt><strong>inside</strong><span class="classifier">ndarray of shape (1, 1)</span></dt><dd><p><code class="docutils literal notranslate"><span class="pre">True</span></code> if every component of <code class="docutils literal notranslate"><span class="pre">point</span></code> is within the
+corresponding confidence interval.</p>
+</dd>
+</dl>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="mlquantify.confidence.ConfidenceInterval.get_point_estimate">
-<span class="sig-name descname"><span class="pre">get_point_estimate</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference external" href="https://github.com/luizfernandolj/mlquantify/tree/master/mlquantify/confidence.py#L148-L149"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mlquantify.confidence.ConfidenceInterval.get_point_estimate" title="Link to this definition">#</a></dt>
-<dd><p>Return the point estimate of prevalence (e.g., mean of bootstrap samples).</p>
+<span class="sig-name descname"><span class="pre">get_point_estimate</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference external" href="https://github.com/luizfernandolj/mlquantify/tree/master/mlquantify/confidence.py#L157-L165"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mlquantify.confidence.ConfidenceInterval.get_point_estimate" title="Link to this definition">#</a></dt>
+<dd><p>Return the mean of the bootstrap prevalence estimates.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>mean</strong><span class="classifier">ndarray of shape (n_classes,)</span></dt><dd><p>Mean prevalence across bootstrap samples.</p>
+</dd>
+</dl>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="mlquantify.confidence.ConfidenceInterval.get_region">
-<span class="sig-name descname"><span class="pre">get_region</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference external" href="https://github.com/luizfernandolj/mlquantify/tree/master/mlquantify/confidence.py#L145-L146"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mlquantify.confidence.ConfidenceInterval.get_region" title="Link to this definition">#</a></dt>
-<dd><p>Return the parameters defining the confidence region.</p>
+<span class="sig-name descname"><span class="pre">get_region</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference external" href="https://github.com/luizfernandolj/mlquantify/tree/master/mlquantify/confidence.py#L145-L155"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mlquantify.confidence.ConfidenceInterval.get_region" title="Link to this definition">#</a></dt>
+<dd><p>Return the lower and upper confidence bounds.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>I_low</strong><span class="classifier">ndarray of shape (n_classes,)</span></dt><dd><p>Lower percentile bound for each class.</p>
+</dd>
+<dt><strong>I_high</strong><span class="classifier">ndarray of shape (n_classes,)</span></dt><dd><p>Upper percentile bound for each class.</p>
+</dd>
+</dl>
+</dd>
+</dl>
 </dd></dl>
 
 </dd></dl>
@@ -691,8 +790,8 @@ Section 3.3, Equation (1).</p>
   </div>
   
   <!-- Scripts loaded after <body> so the DOM is not blocked -->
-  <script defer src="../../_static/scripts/bootstrap.js?digest=55c26ed414f5f8a31ebb"></script>
-<script defer src="../../_static/scripts/pydata-sphinx-theme.js?digest=55c26ed414f5f8a31ebb"></script>
+  <script defer src="../../_static/scripts/bootstrap.js?digest=0790524f97105ba85085"></script>
+<script defer src="../../_static/scripts/pydata-sphinx-theme.js?digest=0790524f97105ba85085"></script>
 
   <footer class="bd-footer">
   </footer>

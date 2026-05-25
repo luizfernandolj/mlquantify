@@ -6,7 +6,7 @@
 API Reference
 =============
 
-This is the class and function reference of scikit-learn. Please refer to the
+This is the class and function reference of mlquantify. Please refer to the
 :ref:`full user guide <user_guide>` for further details, as the raw specifications of
 classes and functions may not be enough to give full guidelines on their use. For
 reference on concepts repeated across the API, see :ref:`glossary`.
@@ -17,18 +17,23 @@ reference on concepts repeated across the API, see :ref:`glossary`.
 
 
   mlquantify
-  mlquantify.adjust_counting
   mlquantify.base
   mlquantify.base_aggregative
+  mlquantify.calibration
   mlquantify.compose
   mlquantify.confidence
+  mlquantify.counting
   mlquantify.likelihood
+  mlquantify.losses
+  mlquantify.matching
   mlquantify.meta
   mlquantify.metrics
-  mlquantify.mixture
   mlquantify.model_selection
   mlquantify.multiclass
   mlquantify.neighbors
+  mlquantify.neural
+  mlquantify.representations
+  mlquantify.solvers
   mlquantify.utils
 
 .. list-table::
@@ -88,266 +93,6 @@ reference on concepts repeated across the API, see :ref:`glossary`.
         .. div:: caption
 
           :mod:`mlquantify`
-
-
-
-
-
-
-
-
-
-  * - :obj:`~mlquantify.adjust_counting.CC`
-
-    - .. div:: sk-apisearch-desc
-
-        .. currentmodule:: mlquantify.adjust_counting
-
-        .. autoshortsummary:: mlquantify.adjust_counting.CC
-
-        .. div:: caption
-
-          :mod:`mlquantify.adjust_counting`
-
-
-
-
-
-  * - :obj:`~mlquantify.adjust_counting.PCC`
-
-    - .. div:: sk-apisearch-desc
-
-        .. currentmodule:: mlquantify.adjust_counting
-
-        .. autoshortsummary:: mlquantify.adjust_counting.PCC
-
-        .. div:: caption
-
-          :mod:`mlquantify.adjust_counting`
-
-
-
-
-
-  * - :obj:`~mlquantify.adjust_counting.FM`
-
-    - .. div:: sk-apisearch-desc
-
-        .. currentmodule:: mlquantify.adjust_counting
-
-        .. autoshortsummary:: mlquantify.adjust_counting.FM
-
-        .. div:: caption
-
-          :mod:`mlquantify.adjust_counting`
-
-
-
-
-
-  * - :obj:`~mlquantify.adjust_counting.AC`
-
-    - .. div:: sk-apisearch-desc
-
-        .. currentmodule:: mlquantify.adjust_counting
-
-        .. autoshortsummary:: mlquantify.adjust_counting.AC
-
-        .. div:: caption
-
-          :mod:`mlquantify.adjust_counting`
-
-
-
-
-
-  * - :obj:`~mlquantify.adjust_counting.PAC`
-
-    - .. div:: sk-apisearch-desc
-
-        .. currentmodule:: mlquantify.adjust_counting
-
-        .. autoshortsummary:: mlquantify.adjust_counting.PAC
-
-        .. div:: caption
-
-          :mod:`mlquantify.adjust_counting`
-
-
-
-
-
-  * - :obj:`~mlquantify.adjust_counting.TAC`
-
-    - .. div:: sk-apisearch-desc
-
-        .. currentmodule:: mlquantify.adjust_counting
-
-        .. autoshortsummary:: mlquantify.adjust_counting.TAC
-
-        .. div:: caption
-
-          :mod:`mlquantify.adjust_counting`
-
-
-
-
-
-  * - :obj:`~mlquantify.adjust_counting.TX`
-
-    - .. div:: sk-apisearch-desc
-
-        .. currentmodule:: mlquantify.adjust_counting
-
-        .. autoshortsummary:: mlquantify.adjust_counting.TX
-
-        .. div:: caption
-
-          :mod:`mlquantify.adjust_counting`
-
-
-
-
-
-  * - :obj:`~mlquantify.adjust_counting.TMAX`
-
-    - .. div:: sk-apisearch-desc
-
-        .. currentmodule:: mlquantify.adjust_counting
-
-        .. autoshortsummary:: mlquantify.adjust_counting.TMAX
-
-        .. div:: caption
-
-          :mod:`mlquantify.adjust_counting`
-
-
-
-
-
-  * - :obj:`~mlquantify.adjust_counting.T50`
-
-    - .. div:: sk-apisearch-desc
-
-        .. currentmodule:: mlquantify.adjust_counting
-
-        .. autoshortsummary:: mlquantify.adjust_counting.T50
-
-        .. div:: caption
-
-          :mod:`mlquantify.adjust_counting`
-
-
-
-
-
-  * - :obj:`~mlquantify.adjust_counting.MS`
-
-    - .. div:: sk-apisearch-desc
-
-        .. currentmodule:: mlquantify.adjust_counting
-
-        .. autoshortsummary:: mlquantify.adjust_counting.MS
-
-        .. div:: caption
-
-          :mod:`mlquantify.adjust_counting`
-
-
-
-
-
-  * - :obj:`~mlquantify.adjust_counting.MS2`
-
-    - .. div:: sk-apisearch-desc
-
-        .. currentmodule:: mlquantify.adjust_counting
-
-        .. autoshortsummary:: mlquantify.adjust_counting.MS2
-
-        .. div:: caption
-
-          :mod:`mlquantify.adjust_counting`
-
-
-
-
-
-  * - :obj:`~mlquantify.adjust_counting.CDE`
-
-    - .. div:: sk-apisearch-desc
-
-        .. currentmodule:: mlquantify.adjust_counting
-
-        .. autoshortsummary:: mlquantify.adjust_counting.CDE
-
-        .. div:: caption
-
-          :mod:`mlquantify.adjust_counting`
-
-
-
-
-
-  * - :obj:`~mlquantify.adjust_counting.evaluate_thresholds`
-
-    - .. div:: sk-apisearch-desc
-
-        .. currentmodule:: mlquantify.adjust_counting
-
-        .. autoshortsummary:: mlquantify.adjust_counting.evaluate_thresholds
-
-        .. div:: caption
-
-          :mod:`mlquantify.adjust_counting`
-
-
-
-
-
-  * - :obj:`~mlquantify.adjust_counting.compute_tpr`
-
-    - .. div:: sk-apisearch-desc
-
-        .. currentmodule:: mlquantify.adjust_counting
-
-        .. autoshortsummary:: mlquantify.adjust_counting.compute_tpr
-
-        .. div:: caption
-
-          :mod:`mlquantify.adjust_counting`
-
-
-
-
-
-  * - :obj:`~mlquantify.adjust_counting.compute_fpr`
-
-    - .. div:: sk-apisearch-desc
-
-        .. currentmodule:: mlquantify.adjust_counting
-
-        .. autoshortsummary:: mlquantify.adjust_counting.compute_fpr
-
-        .. div:: caption
-
-          :mod:`mlquantify.adjust_counting`
-
-
-
-
-
-  * - :obj:`~mlquantify.adjust_counting.compute_table`
-
-    - .. div:: sk-apisearch-desc
-
-        .. currentmodule:: mlquantify.adjust_counting
-
-        .. autoshortsummary:: mlquantify.adjust_counting.compute_table
-
-        .. div:: caption
-
-          :mod:`mlquantify.adjust_counting`
 
 
 
@@ -425,13 +170,13 @@ reference on concepts repeated across the API, see :ref:`glossary`.
 
 
 
-  * - :obj:`~mlquantify.base_aggregative.SoftLearnerQMixin`
+  * - :obj:`~mlquantify.base_aggregative.SoftPredictionMixin`
 
     - .. div:: sk-apisearch-desc
 
         .. currentmodule:: mlquantify.base_aggregative
 
-        .. autoshortsummary:: mlquantify.base_aggregative.SoftLearnerQMixin
+        .. autoshortsummary:: mlquantify.base_aggregative.SoftPredictionMixin
 
         .. div:: caption
 
@@ -441,13 +186,13 @@ reference on concepts repeated across the API, see :ref:`glossary`.
 
 
 
-  * - :obj:`~mlquantify.base_aggregative.CrispLearnerQMixin`
+  * - :obj:`~mlquantify.base_aggregative.CrispPredictionMixin`
 
     - .. div:: sk-apisearch-desc
 
         .. currentmodule:: mlquantify.base_aggregative
 
-        .. autoshortsummary:: mlquantify.base_aggregative.CrispLearnerQMixin
+        .. autoshortsummary:: mlquantify.base_aggregative.CrispPredictionMixin
 
         .. div:: caption
 
@@ -456,6 +201,106 @@ reference on concepts repeated across the API, see :ref:`glossary`.
 
 
 
+
+
+
+
+
+  * - :obj:`~mlquantify.calibration.Calibrator`
+
+    - .. div:: sk-apisearch-desc
+
+        .. currentmodule:: mlquantify.calibration
+
+        .. autoshortsummary:: mlquantify.calibration.Calibrator
+
+        .. div:: caption
+
+          :mod:`mlquantify.calibration`
+
+
+
+
+
+  * - :obj:`~mlquantify.calibration.ClassifierCalibrator`
+
+    - .. div:: sk-apisearch-desc
+
+        .. currentmodule:: mlquantify.calibration
+
+        .. autoshortsummary:: mlquantify.calibration.ClassifierCalibrator
+
+        .. div:: caption
+
+          :mod:`mlquantify.calibration`
+
+
+
+
+
+  * - :obj:`~mlquantify.calibration.QuantifierCalibrator`
+
+    - .. div:: sk-apisearch-desc
+
+        .. currentmodule:: mlquantify.calibration
+
+        .. autoshortsummary:: mlquantify.calibration.QuantifierCalibrator
+
+        .. div:: caption
+
+          :mod:`mlquantify.calibration`
+
+
+
+
+
+
+
+
+
+  * - :obj:`~mlquantify.compose.BaseComposeQuantifier`
+
+    - .. div:: sk-apisearch-desc
+
+        .. currentmodule:: mlquantify.compose
+
+        .. autoshortsummary:: mlquantify.compose.BaseComposeQuantifier
+
+        .. div:: caption
+
+          :mod:`mlquantify.compose`
+
+
+
+
+
+  * - :obj:`~mlquantify.compose.LinearComposeQuantifier`
+
+    - .. div:: sk-apisearch-desc
+
+        .. currentmodule:: mlquantify.compose
+
+        .. autoshortsummary:: mlquantify.compose.LinearComposeQuantifier
+
+        .. div:: caption
+
+          :mod:`mlquantify.compose`
+
+
+
+
+
+  * - :obj:`~mlquantify.compose.LikelihoodComposeQuantifier`
+
+    - .. div:: sk-apisearch-desc
+
+        .. currentmodule:: mlquantify.compose
+
+        .. autoshortsummary:: mlquantify.compose.LikelihoodComposeQuantifier
+
+        .. div:: caption
+
+          :mod:`mlquantify.compose`
 
 
 
@@ -565,6 +410,282 @@ reference on concepts repeated across the API, see :ref:`glossary`.
 
 
 
+  * - :obj:`~mlquantify.counting.CC`
+
+    - .. div:: sk-apisearch-desc
+
+        .. currentmodule:: mlquantify.counting
+
+        .. autoshortsummary:: mlquantify.counting.CC
+
+        .. div:: caption
+
+          :mod:`mlquantify.counting`
+
+
+
+
+
+  * - :obj:`~mlquantify.counting.PCC`
+
+    - .. div:: sk-apisearch-desc
+
+        .. currentmodule:: mlquantify.counting
+
+        .. autoshortsummary:: mlquantify.counting.PCC
+
+        .. div:: caption
+
+          :mod:`mlquantify.counting`
+
+
+
+
+
+  * - :obj:`~mlquantify.counting.ThresholdAdjustment`
+
+    - .. div:: sk-apisearch-desc
+
+        .. currentmodule:: mlquantify.counting
+
+        .. autoshortsummary:: mlquantify.counting.ThresholdAdjustment
+
+        .. div:: caption
+
+          :mod:`mlquantify.counting`
+
+
+
+
+
+  * - :obj:`~mlquantify.counting.TAC`
+
+    - .. div:: sk-apisearch-desc
+
+        .. currentmodule:: mlquantify.counting
+
+        .. autoshortsummary:: mlquantify.counting.TAC
+
+        .. div:: caption
+
+          :mod:`mlquantify.counting`
+
+
+
+
+
+  * - :obj:`~mlquantify.counting.TX`
+
+    - .. div:: sk-apisearch-desc
+
+        .. currentmodule:: mlquantify.counting
+
+        .. autoshortsummary:: mlquantify.counting.TX
+
+        .. div:: caption
+
+          :mod:`mlquantify.counting`
+
+
+
+
+
+  * - :obj:`~mlquantify.counting.TMAX`
+
+    - .. div:: sk-apisearch-desc
+
+        .. currentmodule:: mlquantify.counting
+
+        .. autoshortsummary:: mlquantify.counting.TMAX
+
+        .. div:: caption
+
+          :mod:`mlquantify.counting`
+
+
+
+
+
+  * - :obj:`~mlquantify.counting.T50`
+
+    - .. div:: sk-apisearch-desc
+
+        .. currentmodule:: mlquantify.counting
+
+        .. autoshortsummary:: mlquantify.counting.T50
+
+        .. div:: caption
+
+          :mod:`mlquantify.counting`
+
+
+
+
+
+  * - :obj:`~mlquantify.counting.MS`
+
+    - .. div:: sk-apisearch-desc
+
+        .. currentmodule:: mlquantify.counting
+
+        .. autoshortsummary:: mlquantify.counting.MS
+
+        .. div:: caption
+
+          :mod:`mlquantify.counting`
+
+
+
+
+
+  * - :obj:`~mlquantify.counting.MS2`
+
+    - .. div:: sk-apisearch-desc
+
+        .. currentmodule:: mlquantify.counting
+
+        .. autoshortsummary:: mlquantify.counting.MS2
+
+        .. div:: caption
+
+          :mod:`mlquantify.counting`
+
+
+
+
+
+  * - :obj:`~mlquantify.counting.FM`
+
+    - .. div:: sk-apisearch-desc
+
+        .. currentmodule:: mlquantify.counting
+
+        .. autoshortsummary:: mlquantify.counting.FM
+
+        .. div:: caption
+
+          :mod:`mlquantify.counting`
+
+
+
+
+
+  * - :obj:`~mlquantify.counting.GACC`
+
+    - .. div:: sk-apisearch-desc
+
+        .. currentmodule:: mlquantify.counting
+
+        .. autoshortsummary:: mlquantify.counting.GACC
+
+        .. div:: caption
+
+          :mod:`mlquantify.counting`
+
+
+
+
+
+  * - :obj:`~mlquantify.counting.GPACC`
+
+    - .. div:: sk-apisearch-desc
+
+        .. currentmodule:: mlquantify.counting
+
+        .. autoshortsummary:: mlquantify.counting.GPACC
+
+        .. div:: caption
+
+          :mod:`mlquantify.counting`
+
+
+
+
+
+  * - :obj:`~mlquantify.counting.evaluate_thresholds`
+
+    - .. div:: sk-apisearch-desc
+
+        .. currentmodule:: mlquantify.counting
+
+        .. autoshortsummary:: mlquantify.counting.evaluate_thresholds
+
+        .. div:: caption
+
+          :mod:`mlquantify.counting`
+
+
+
+
+
+  * - :obj:`~mlquantify.counting.compute_tpr`
+
+    - .. div:: sk-apisearch-desc
+
+        .. currentmodule:: mlquantify.counting
+
+        .. autoshortsummary:: mlquantify.counting.compute_tpr
+
+        .. div:: caption
+
+          :mod:`mlquantify.counting`
+
+
+
+
+
+  * - :obj:`~mlquantify.counting.compute_fpr`
+
+    - .. div:: sk-apisearch-desc
+
+        .. currentmodule:: mlquantify.counting
+
+        .. autoshortsummary:: mlquantify.counting.compute_fpr
+
+        .. div:: caption
+
+          :mod:`mlquantify.counting`
+
+
+
+
+
+  * - :obj:`~mlquantify.counting.compute_table`
+
+    - .. div:: sk-apisearch-desc
+
+        .. currentmodule:: mlquantify.counting
+
+        .. autoshortsummary:: mlquantify.counting.compute_table
+
+        .. div:: caption
+
+          :mod:`mlquantify.counting`
+
+
+
+
+
+
+
+
+
+  * - :obj:`~mlquantify.likelihood.CDE`
+
+    - .. div:: sk-apisearch-desc
+
+        .. currentmodule:: mlquantify.likelihood
+
+        .. autoshortsummary:: mlquantify.likelihood.CDE
+
+        .. div:: caption
+
+          :mod:`mlquantify.likelihood`
+
+
+
+
+
   * - :obj:`~mlquantify.likelihood.EMQ`
 
     - .. div:: sk-apisearch-desc
@@ -576,6 +697,478 @@ reference on concepts repeated across the API, see :ref:`glossary`.
         .. div:: caption
 
           :mod:`mlquantify.likelihood`
+
+
+
+
+
+  * - :obj:`~mlquantify.likelihood.MLPE`
+
+    - .. div:: sk-apisearch-desc
+
+        .. currentmodule:: mlquantify.likelihood
+
+        .. autoshortsummary:: mlquantify.likelihood.MLPE
+
+        .. div:: caption
+
+          :mod:`mlquantify.likelihood`
+
+
+
+
+
+
+
+
+
+  * - :obj:`~mlquantify.losses.BaseLoss`
+
+    - .. div:: sk-apisearch-desc
+
+        .. currentmodule:: mlquantify.losses
+
+        .. autoshortsummary:: mlquantify.losses.BaseLoss
+
+        .. div:: caption
+
+          :mod:`mlquantify.losses`
+
+
+
+
+
+  * - :obj:`~mlquantify.losses.DistanceLoss`
+
+    - .. div:: sk-apisearch-desc
+
+        .. currentmodule:: mlquantify.losses
+
+        .. autoshortsummary:: mlquantify.losses.DistanceLoss
+
+        .. div:: caption
+
+          :mod:`mlquantify.losses`
+
+
+
+
+
+  * - :obj:`~mlquantify.losses.LeastSquaresLoss`
+
+    - .. div:: sk-apisearch-desc
+
+        .. currentmodule:: mlquantify.losses
+
+        .. autoshortsummary:: mlquantify.losses.LeastSquaresLoss
+
+        .. div:: caption
+
+          :mod:`mlquantify.losses`
+
+
+
+
+
+  * - :obj:`~mlquantify.losses.HellingerSurrogateLoss`
+
+    - .. div:: sk-apisearch-desc
+
+        .. currentmodule:: mlquantify.losses
+
+        .. autoshortsummary:: mlquantify.losses.HellingerSurrogateLoss
+
+        .. div:: caption
+
+          :mod:`mlquantify.losses`
+
+
+
+
+
+  * - :obj:`~mlquantify.losses.EnergyLoss`
+
+    - .. div:: sk-apisearch-desc
+
+        .. currentmodule:: mlquantify.losses
+
+        .. autoshortsummary:: mlquantify.losses.EnergyLoss
+
+        .. div:: caption
+
+          :mod:`mlquantify.losses`
+
+
+
+
+
+  * - :obj:`~mlquantify.losses.NegativeLogLikelihoodLoss`
+
+    - .. div:: sk-apisearch-desc
+
+        .. currentmodule:: mlquantify.losses
+
+        .. autoshortsummary:: mlquantify.losses.NegativeLogLikelihoodLoss
+
+        .. div:: caption
+
+          :mod:`mlquantify.losses`
+
+
+
+
+
+  * - :obj:`~mlquantify.losses.MixtureNegativeLogLikelihoodLoss`
+
+    - .. div:: sk-apisearch-desc
+
+        .. currentmodule:: mlquantify.losses
+
+        .. autoshortsummary:: mlquantify.losses.MixtureNegativeLogLikelihoodLoss
+
+        .. div:: caption
+
+          :mod:`mlquantify.losses`
+
+
+
+
+
+  * - :obj:`~mlquantify.losses.RegularizedMixtureNLLLoss`
+
+    - .. div:: sk-apisearch-desc
+
+        .. currentmodule:: mlquantify.losses
+
+        .. autoshortsummary:: mlquantify.losses.RegularizedMixtureNLLLoss
+
+        .. div:: caption
+
+          :mod:`mlquantify.losses`
+
+
+
+
+
+  * - :obj:`~mlquantify.losses.normalize_distribution`
+
+    - .. div:: sk-apisearch-desc
+
+        .. currentmodule:: mlquantify.losses
+
+        .. autoshortsummary:: mlquantify.losses.normalize_distribution
+
+        .. div:: caption
+
+          :mod:`mlquantify.losses`
+
+
+
+
+
+  * - :obj:`~mlquantify.losses.get_loss`
+
+    - .. div:: sk-apisearch-desc
+
+        .. currentmodule:: mlquantify.losses
+
+        .. autoshortsummary:: mlquantify.losses.get_loss
+
+        .. div:: caption
+
+          :mod:`mlquantify.losses`
+
+
+
+
+
+
+
+
+
+  * - :obj:`~mlquantify.matching.BaseMatchingQuantifier`
+
+    - .. div:: sk-apisearch-desc
+
+        .. currentmodule:: mlquantify.matching
+
+        .. autoshortsummary:: mlquantify.matching.BaseMatchingQuantifier
+
+        .. div:: caption
+
+          :mod:`mlquantify.matching`
+
+
+
+
+
+  * - :obj:`~mlquantify.matching.MatchingHistogramQuantifier`
+
+    - .. div:: sk-apisearch-desc
+
+        .. currentmodule:: mlquantify.matching
+
+        .. autoshortsummary:: mlquantify.matching.MatchingHistogramQuantifier
+
+        .. div:: caption
+
+          :mod:`mlquantify.matching`
+
+
+
+
+
+  * - :obj:`~mlquantify.matching.DyS`
+
+    - .. div:: sk-apisearch-desc
+
+        .. currentmodule:: mlquantify.matching
+
+        .. autoshortsummary:: mlquantify.matching.DyS
+
+        .. div:: caption
+
+          :mod:`mlquantify.matching`
+
+
+
+
+
+  * - :obj:`~mlquantify.matching.HDy`
+
+    - .. div:: sk-apisearch-desc
+
+        .. currentmodule:: mlquantify.matching
+
+        .. autoshortsummary:: mlquantify.matching.HDy
+
+        .. div:: caption
+
+          :mod:`mlquantify.matching`
+
+
+
+
+
+  * - :obj:`~mlquantify.matching.HDx`
+
+    - .. div:: sk-apisearch-desc
+
+        .. currentmodule:: mlquantify.matching
+
+        .. autoshortsummary:: mlquantify.matching.HDx
+
+        .. div:: caption
+
+          :mod:`mlquantify.matching`
+
+
+
+
+
+  * - :obj:`~mlquantify.matching.SORD`
+
+    - .. div:: sk-apisearch-desc
+
+        .. currentmodule:: mlquantify.matching
+
+        .. autoshortsummary:: mlquantify.matching.SORD
+
+        .. div:: caption
+
+          :mod:`mlquantify.matching`
+
+
+
+
+
+  * - :obj:`~mlquantify.matching.MatchingKernelQuantifier`
+
+    - .. div:: sk-apisearch-desc
+
+        .. currentmodule:: mlquantify.matching
+
+        .. autoshortsummary:: mlquantify.matching.MatchingKernelQuantifier
+
+        .. div:: caption
+
+          :mod:`mlquantify.matching`
+
+
+
+
+
+  * - :obj:`~mlquantify.matching.MMD_RKHS`
+
+    - .. div:: sk-apisearch-desc
+
+        .. currentmodule:: mlquantify.matching
+
+        .. autoshortsummary:: mlquantify.matching.MMD_RKHS
+
+        .. div:: caption
+
+          :mod:`mlquantify.matching`
+
+
+
+
+
+  * - :obj:`~mlquantify.matching.KDEyQuantifier`
+
+    - .. div:: sk-apisearch-desc
+
+        .. currentmodule:: mlquantify.matching
+
+        .. autoshortsummary:: mlquantify.matching.KDEyQuantifier
+
+        .. div:: caption
+
+          :mod:`mlquantify.matching`
+
+
+
+
+
+  * - :obj:`~mlquantify.matching.KDEyML`
+
+    - .. div:: sk-apisearch-desc
+
+        .. currentmodule:: mlquantify.matching
+
+        .. autoshortsummary:: mlquantify.matching.KDEyML
+
+        .. div:: caption
+
+          :mod:`mlquantify.matching`
+
+
+
+
+
+  * - :obj:`~mlquantify.matching.KDEyHD`
+
+    - .. div:: sk-apisearch-desc
+
+        .. currentmodule:: mlquantify.matching
+
+        .. autoshortsummary:: mlquantify.matching.KDEyHD
+
+        .. div:: caption
+
+          :mod:`mlquantify.matching`
+
+
+
+
+
+  * - :obj:`~mlquantify.matching.KDEyCS`
+
+    - .. div:: sk-apisearch-desc
+
+        .. currentmodule:: mlquantify.matching
+
+        .. autoshortsummary:: mlquantify.matching.KDEyCS
+
+        .. div:: caption
+
+          :mod:`mlquantify.matching`
+
+
+
+
+
+  * - :obj:`~mlquantify.matching.GKDEyML`
+
+    - .. div:: sk-apisearch-desc
+
+        .. currentmodule:: mlquantify.matching
+
+        .. autoshortsummary:: mlquantify.matching.GKDEyML
+
+        .. div:: caption
+
+          :mod:`mlquantify.matching`
+
+
+
+
+
+  * - :obj:`~mlquantify.matching.GHDx`
+
+    - .. div:: sk-apisearch-desc
+
+        .. currentmodule:: mlquantify.matching
+
+        .. autoshortsummary:: mlquantify.matching.GHDx
+
+        .. div:: caption
+
+          :mod:`mlquantify.matching`
+
+
+
+
+
+  * - :obj:`~mlquantify.matching.GHDy`
+
+    - .. div:: sk-apisearch-desc
+
+        .. currentmodule:: mlquantify.matching
+
+        .. autoshortsummary:: mlquantify.matching.GHDy
+
+        .. div:: caption
+
+          :mod:`mlquantify.matching`
+
+
+
+
+
+  * - :obj:`~mlquantify.matching.SMM`
+
+    - .. div:: sk-apisearch-desc
+
+        .. currentmodule:: mlquantify.matching
+
+        .. autoshortsummary:: mlquantify.matching.SMM
+
+        .. div:: caption
+
+          :mod:`mlquantify.matching`
+
+
+
+
+
+  * - :obj:`~mlquantify.matching.EDy`
+
+    - .. div:: sk-apisearch-desc
+
+        .. currentmodule:: mlquantify.matching
+
+        .. autoshortsummary:: mlquantify.matching.EDy
+
+        .. div:: caption
+
+          :mod:`mlquantify.matching`
+
+
+
+
+
+  * - :obj:`~mlquantify.matching.EDx`
+
+    - .. div:: sk-apisearch-desc
+
+        .. currentmodule:: mlquantify.matching
+
+        .. autoshortsummary:: mlquantify.matching.EDx
+
+        .. div:: caption
+
+          :mod:`mlquantify.matching`
 
 
 
@@ -849,106 +1442,6 @@ reference on concepts repeated across the API, see :ref:`glossary`.
 
 
 
-  * - :obj:`~mlquantify.mixture.HDy`
-
-    - .. div:: sk-apisearch-desc
-
-        .. currentmodule:: mlquantify.mixture
-
-        .. autoshortsummary:: mlquantify.mixture.HDy
-
-        .. div:: caption
-
-          :mod:`mlquantify.mixture`
-
-
-
-
-
-  * - :obj:`~mlquantify.mixture.DyS`
-
-    - .. div:: sk-apisearch-desc
-
-        .. currentmodule:: mlquantify.mixture
-
-        .. autoshortsummary:: mlquantify.mixture.DyS
-
-        .. div:: caption
-
-          :mod:`mlquantify.mixture`
-
-
-
-
-
-  * - :obj:`~mlquantify.mixture.SMM`
-
-    - .. div:: sk-apisearch-desc
-
-        .. currentmodule:: mlquantify.mixture
-
-        .. autoshortsummary:: mlquantify.mixture.SMM
-
-        .. div:: caption
-
-          :mod:`mlquantify.mixture`
-
-
-
-
-
-  * - :obj:`~mlquantify.mixture.SORD`
-
-    - .. div:: sk-apisearch-desc
-
-        .. currentmodule:: mlquantify.mixture
-
-        .. autoshortsummary:: mlquantify.mixture.SORD
-
-        .. div:: caption
-
-          :mod:`mlquantify.mixture`
-
-
-
-
-
-  * - :obj:`~mlquantify.mixture.HDx`
-
-    - .. div:: sk-apisearch-desc
-
-        .. currentmodule:: mlquantify.mixture
-
-        .. autoshortsummary:: mlquantify.mixture.HDx
-
-        .. div:: caption
-
-          :mod:`mlquantify.mixture`
-
-
-
-
-
-  * - :obj:`~mlquantify.mixture.MMD_RKHS`
-
-    - .. div:: sk-apisearch-desc
-
-        .. currentmodule:: mlquantify.mixture
-
-        .. autoshortsummary:: mlquantify.mixture.MMD_RKHS
-
-        .. div:: caption
-
-          :mod:`mlquantify.mixture`
-
-
-
-
-
-
-
-
-
   * - :obj:`~mlquantify.model_selection.GridSearchQ`
 
     - .. div:: sk-apisearch-desc
@@ -1049,13 +1542,13 @@ reference on concepts repeated across the API, see :ref:`glossary`.
 
 
 
-  * - :obj:`~mlquantify.multiclass.define_binary`
+  * - :obj:`~mlquantify.multiclass.binary_quantifier`
 
     - .. div:: sk-apisearch-desc
 
         .. currentmodule:: mlquantify.multiclass
 
-        .. autoshortsummary:: mlquantify.multiclass.define_binary
+        .. autoshortsummary:: mlquantify.multiclass.binary_quantifier
 
         .. div:: caption
 
@@ -1085,54 +1578,6 @@ reference on concepts repeated across the API, see :ref:`glossary`.
 
 
 
-  * - :obj:`~mlquantify.neighbors.KDEyCS`
-
-    - .. div:: sk-apisearch-desc
-
-        .. currentmodule:: mlquantify.neighbors
-
-        .. autoshortsummary:: mlquantify.neighbors.KDEyCS
-
-        .. div:: caption
-
-          :mod:`mlquantify.neighbors`
-
-
-
-
-
-  * - :obj:`~mlquantify.neighbors.KDEyHD`
-
-    - .. div:: sk-apisearch-desc
-
-        .. currentmodule:: mlquantify.neighbors
-
-        .. autoshortsummary:: mlquantify.neighbors.KDEyHD
-
-        .. div:: caption
-
-          :mod:`mlquantify.neighbors`
-
-
-
-
-
-  * - :obj:`~mlquantify.neighbors.KDEyML`
-
-    - .. div:: sk-apisearch-desc
-
-        .. currentmodule:: mlquantify.neighbors
-
-        .. autoshortsummary:: mlquantify.neighbors.KDEyML
-
-        .. div:: caption
-
-          :mod:`mlquantify.neighbors`
-
-
-
-
-
   * - :obj:`~mlquantify.neighbors.PWK`
 
     - .. div:: sk-apisearch-desc
@@ -1153,6 +1598,242 @@ reference on concepts repeated across the API, see :ref:`glossary`.
 
 
 
+  * - :obj:`~mlquantify.neural.QuaNet`
+
+    - .. div:: sk-apisearch-desc
+
+        .. currentmodule:: mlquantify.neural
+
+        .. autoshortsummary:: mlquantify.neural.QuaNet
+
+        .. div:: caption
+
+          :mod:`mlquantify.neural`
+
+
+
+
+
+
+
+
+
+  * - :obj:`~mlquantify.representations.BaseRepresentation`
+
+    - .. div:: sk-apisearch-desc
+
+        .. currentmodule:: mlquantify.representations
+
+        .. autoshortsummary:: mlquantify.representations.BaseRepresentation
+
+        .. div:: caption
+
+          :mod:`mlquantify.representations`
+
+
+
+
+
+  * - :obj:`~mlquantify.representations.HistogramRepresentation`
+
+    - .. div:: sk-apisearch-desc
+
+        .. currentmodule:: mlquantify.representations
+
+        .. autoshortsummary:: mlquantify.representations.HistogramRepresentation
+
+        .. div:: caption
+
+          :mod:`mlquantify.representations`
+
+
+
+
+
+  * - :obj:`~mlquantify.representations.KDERepresentation`
+
+    - .. div:: sk-apisearch-desc
+
+        .. currentmodule:: mlquantify.representations
+
+        .. autoshortsummary:: mlquantify.representations.KDERepresentation
+
+        .. div:: caption
+
+          :mod:`mlquantify.representations`
+
+
+
+
+
+  * - :obj:`~mlquantify.representations.DistanceRepresentation`
+
+    - .. div:: sk-apisearch-desc
+
+        .. currentmodule:: mlquantify.representations
+
+        .. autoshortsummary:: mlquantify.representations.DistanceRepresentation
+
+        .. div:: caption
+
+          :mod:`mlquantify.representations`
+
+
+
+
+
+  * - :obj:`~mlquantify.representations.KernelMeanRepresentation`
+
+    - .. div:: sk-apisearch-desc
+
+        .. currentmodule:: mlquantify.representations
+
+        .. autoshortsummary:: mlquantify.representations.KernelMeanRepresentation
+
+        .. div:: caption
+
+          :mod:`mlquantify.representations`
+
+
+
+
+
+  * - :obj:`~mlquantify.representations.PredictionRepresentation`
+
+    - .. div:: sk-apisearch-desc
+
+        .. currentmodule:: mlquantify.representations
+
+        .. autoshortsummary:: mlquantify.representations.PredictionRepresentation
+
+        .. div:: caption
+
+          :mod:`mlquantify.representations`
+
+
+
+
+
+  * - :obj:`~mlquantify.representations.HardPredictionRepresentation`
+
+    - .. div:: sk-apisearch-desc
+
+        .. currentmodule:: mlquantify.representations
+
+        .. autoshortsummary:: mlquantify.representations.HardPredictionRepresentation
+
+        .. div:: caption
+
+          :mod:`mlquantify.representations`
+
+
+
+
+
+  * - :obj:`~mlquantify.representations.SoftPredictionRepresentation`
+
+    - .. div:: sk-apisearch-desc
+
+        .. currentmodule:: mlquantify.representations
+
+        .. autoshortsummary:: mlquantify.representations.SoftPredictionRepresentation
+
+        .. div:: caption
+
+          :mod:`mlquantify.representations`
+
+
+
+
+
+
+
+
+
+  * - :obj:`~mlquantify.solvers.solve_binary`
+
+    - .. div:: sk-apisearch-desc
+
+        .. currentmodule:: mlquantify.solvers
+
+        .. autoshortsummary:: mlquantify.solvers.solve_binary
+
+        .. div:: caption
+
+          :mod:`mlquantify.solvers`
+
+
+
+
+
+  * - :obj:`~mlquantify.solvers.ternary_search`
+
+    - .. div:: sk-apisearch-desc
+
+        .. currentmodule:: mlquantify.solvers
+
+        .. autoshortsummary:: mlquantify.solvers.ternary_search
+
+        .. div:: caption
+
+          :mod:`mlquantify.solvers`
+
+
+
+
+
+  * - :obj:`~mlquantify.solvers.solve_simplex`
+
+    - .. div:: sk-apisearch-desc
+
+        .. currentmodule:: mlquantify.solvers
+
+        .. autoshortsummary:: mlquantify.solvers.solve_simplex
+
+        .. div:: caption
+
+          :mod:`mlquantify.solvers`
+
+
+
+
+
+  * - :obj:`~mlquantify.solvers.minimize_prevalence`
+
+    - .. div:: sk-apisearch-desc
+
+        .. currentmodule:: mlquantify.solvers
+
+        .. autoshortsummary:: mlquantify.solvers.minimize_prevalence
+
+        .. div:: caption
+
+          :mod:`mlquantify.solvers`
+
+
+
+
+
+  * - :obj:`~mlquantify.solvers.minimize_prevalence_blocks`
+
+    - .. div:: sk-apisearch-desc
+
+        .. currentmodule:: mlquantify.solvers
+
+        .. autoshortsummary:: mlquantify.solvers.minimize_prevalence_blocks
+
+        .. div:: caption
+
+          :mod:`mlquantify.solvers`
+
+
+
+
+
+
+
+
+
   * - :obj:`~mlquantify.utils.get_prev_from_labels`
 
     - .. div:: sk-apisearch-desc
@@ -1160,6 +1841,22 @@ reference on concepts repeated across the API, see :ref:`glossary`.
         .. currentmodule:: mlquantify.utils
 
         .. autoshortsummary:: mlquantify.utils.get_prev_from_labels
+
+        .. div:: caption
+
+          :mod:`mlquantify.utils`
+
+
+
+
+
+  * - :obj:`~mlquantify.utils.normalize_prevalence`
+
+    - .. div:: sk-apisearch-desc
+
+        .. currentmodule:: mlquantify.utils
+
+        .. autoshortsummary:: mlquantify.utils.normalize_prevalence
 
         .. div:: caption
 

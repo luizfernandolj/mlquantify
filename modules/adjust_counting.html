@@ -7,19 +7,19 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
-<meta property="og:title" content="1.4. Adjust Counting" />
+<meta property="og:title" content="1.4. Adjusted Counting" />
 <meta property="og:type" content="website" />
 <meta property="og:url" content="modules/adjust_counting.html" />
 <meta property="og:site_name" content="mlquantify" />
 <meta property="og:description" content="Adjusted Counting methods improve upon simple “counting” quantifiers by correcting bias using what is known about the classifier’s errors on the training set. They aim to produce better estimates o..." />
 <meta property="og:image:width" content="1146" />
 <meta property="og:image:height" content="600" />
-<meta property="og:image" content="_images/social_previews/summary_modules_adjust_counting_60011317.png" />
+<meta property="og:image" content="_images/social_previews/summary_modules_adjust_counting_39c5f176.png" />
 <meta property="og:image:alt" content="Adjusted Counting methods improve upon simple “counting” quantifiers by correcting bias using what is known about the classifier’s errors on the training set. They aim to produce better estimates o..." />
 <meta name="description" content="Adjusted Counting methods improve upon simple “counting” quantifiers by correcting bias using what is known about the classifier’s errors on the training set. They aim to produce better estimates o..." />
 <meta name="twitter:card" content="summary_large_image" />
 
-    <title>1.4. Adjust Counting &#8212; mlquantify</title>
+    <title>1.4. Adjusted Counting &#8212; mlquantify</title>
   
   
   
@@ -38,8 +38,8 @@
   </noscript>
   
   <!-- Loaded before other Sphinx assets -->
-  <link href="../_static/styles/theme.css?digest=55c26ed414f5f8a31ebb" rel="stylesheet" />
-<link href="../_static/styles/pydata-sphinx-theme.css?digest=55c26ed414f5f8a31ebb" rel="stylesheet" />
+  <link href="../_static/styles/theme.css?digest=0790524f97105ba85085" rel="stylesheet" />
+<link href="../_static/styles/pydata-sphinx-theme.css?digest=0790524f97105ba85085" rel="stylesheet" />
 
     <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=8f2a1f02" />
     <link rel="stylesheet" type="text/css" href="../_static/copybutton.css?v=76b2166b" />
@@ -50,10 +50,10 @@
     <link rel="stylesheet" type="text/css" href="../_static/landing.css?v=e93fd00d" />
   
   <!-- So that users can add custom icons -->
-  <script defer src="../_static/scripts/fontawesome.js?digest=55c26ed414f5f8a31ebb"></script>
+  <script defer src="../_static/scripts/fontawesome.js?digest=0790524f97105ba85085"></script>
   <!-- Pre-loaded scripts that we'll load fully later -->
-  <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=55c26ed414f5f8a31ebb" />
-<link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=55c26ed414f5f8a31ebb" />
+  <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=0790524f97105ba85085" />
+<link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=0790524f97105ba85085" />
 
     <script src="../_static/documentation_options.js?v=dc233e31"></script>
     <script src="../_static/doctools.js?v=9bcbadda"></script>
@@ -212,11 +212,18 @@
       
         <div class="navbar-item">
 
-<button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button pst-js-only" aria-label="Color mode" data-bs-title="Color mode"  data-bs-placement="bottom" data-bs-toggle="tooltip">
-  <i class="theme-switch fa-solid fa-sun                fa-lg" data-mode="light" title="Light"></i>
-  <i class="theme-switch fa-solid fa-moon               fa-lg" data-mode="dark"  title="Dark"></i>
-  <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"  title="System Settings"></i>
-</button></div>
+<div class="theme-switch-container dropdown pst-js-only" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Color mode">
+  <button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button dropdown-toggle" aria-label="Color mode" data-bs-toggle="dropdown">
+    <i class="theme-switch fa-solid fa-sun fa-lg fa-fw" data-mode="light" title="Light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg fa-fw" data-mode="dark" title="Dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg fa-fw" data-mode="auto" title="System Settings"></i>
+  </button>
+  <ul class="dropdown-menu dropdown-menu-end">
+    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="auto"><i class="fa-solid fa-circle-half-stroke fa-lg fa-fw me-1"></i>System Settings</button></li>
+    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="light"><i class="fa-solid fa-sun fa-lg fa-fw me-1"></i>Light</button></li>
+    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="dark"><i class="fa-solid fa-moon fa-lg fa-fw me-1"></i>Dark</button></li>
+  </ul>
+</div></div>
       
         <div class="navbar-item"><ul class="navbar-icon-links"
     aria-label="Icon Links">
@@ -229,8 +236,7 @@
           
           
           
-          <a href="https://github.com/luizfernandolj/mlquantify/tree/master" title="GitHub" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><i class="fa-brands fa-square-github fa-lg" aria-hidden="true"></i>
-            <span class="sr-only">GitHub</span></a>
+          <a href="https://github.com/luizfernandolj/mlquantify/tree/master" title="GitHub" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><i class="fa-brands fa-square-github fa-lg" aria-hidden="true"></i><span class="visually-hidden">GitHub</span></a>
         </li>
 </ul></div>
       
@@ -324,11 +330,18 @@
         
           <div class="navbar-item">
 
-<button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button pst-js-only" aria-label="Color mode" data-bs-title="Color mode"  data-bs-placement="bottom" data-bs-toggle="tooltip">
-  <i class="theme-switch fa-solid fa-sun                fa-lg" data-mode="light" title="Light"></i>
-  <i class="theme-switch fa-solid fa-moon               fa-lg" data-mode="dark"  title="Dark"></i>
-  <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"  title="System Settings"></i>
-</button></div>
+<div class="theme-switch-container dropdown pst-js-only" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Color mode">
+  <button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button dropdown-toggle" aria-label="Color mode" data-bs-toggle="dropdown">
+    <i class="theme-switch fa-solid fa-sun fa-lg fa-fw" data-mode="light" title="Light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg fa-fw" data-mode="dark" title="Dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg fa-fw" data-mode="auto" title="System Settings"></i>
+  </button>
+  <ul class="dropdown-menu dropdown-menu-end">
+    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="auto"><i class="fa-solid fa-circle-half-stroke fa-lg fa-fw me-1"></i>System Settings</button></li>
+    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="light"><i class="fa-solid fa-sun fa-lg fa-fw me-1"></i>Light</button></li>
+    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="dark"><i class="fa-solid fa-moon fa-lg fa-fw me-1"></i>Dark</button></li>
+  </ul>
+</div></div>
         
           <div class="navbar-item"><ul class="navbar-icon-links"
     aria-label="Icon Links">
@@ -341,8 +354,7 @@
           
           
           
-          <a href="https://github.com/luizfernandolj/mlquantify/tree/master" title="GitHub" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><i class="fa-brands fa-square-github fa-lg" aria-hidden="true"></i>
-            <span class="sr-only">GitHub</span></a>
+          <a href="https://github.com/luizfernandolj/mlquantify/tree/master" title="GitHub" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><i class="fa-brands fa-square-github fa-lg" aria-hidden="true"></i><span class="visually-hidden">GitHub</span></a>
         </li>
 </ul></div>
         
@@ -363,36 +375,44 @@
      aria-label="Section Navigation">
   <p class="bd-links__title" role="heading" aria-level="1">Section Navigation</p>
   <div class="bd-toc-item navbar-nav"><ul class="current nav bd-sidenav">
-<li class="toctree-l1 current active has-children"><a class="reference internal" href="../aggregative_quantification.html">1.  Aggregative Quantification</a><details open="open"><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul class="current">
+<li class="toctree-l1 current active has-children"><a class="reference internal" href="../aggregative_quantification.html">1. Aggregative Quantification</a><details open="open"><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul class="current">
 <li class="toctree-l2"><a class="reference internal" href="using_aggregative.html">1.1. Using Aggregative Quantification Methods</a></li>
 
 <li class="toctree-l2"><a class="reference internal" href="counters.html">1.3. Counters For Quantification</a></li>
-<li class="toctree-l2 current active"><a class="current reference internal" href="#">1.4. Adjust Counting</a></li>
+<li class="toctree-l2 current active"><a class="current reference internal" href="#">1.4. Adjusted Counting</a></li>
 <li class="toctree-l2"><a class="reference internal" href="likelihood.html">1.5. Likelihood-Based Quantification</a></li>
-<li class="toctree-l2"><a class="reference internal" href="mixture_models.html">1.6. Mixture Models</a></li>
+<li class="toctree-l2"><a class="reference internal" href="distribution_matching.html">1.6. Distribution Matching</a></li>
 <li class="toctree-l2"><a class="reference internal" href="neighbors.html">1.7. Nearest Neighbors</a></li>
-<li class="toctree-l2"><a class="reference internal" href="density.html">1.8. Kernel Density Estimation</a></li>
 </ul>
 </details></li>
-<li class="toctree-l1 has-children"><a class="reference internal" href="../non_aggregative_quantification.html">2.  Non Aggregative Quantification</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../non_aggregative_quantification.html">2. Non Aggregative Quantification</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
 <li class="toctree-l2"><a class="reference internal" href="mixture_models_non_agg.html">2.1. Mixture Models for Non-Aggregative Quantification</a></li>
 </ul>
 </details></li>
-<li class="toctree-l1 has-children"><a class="reference internal" href="../meta_quantification.html">3.  Meta Quantification</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../meta_quantification.html">3. Meta Quantification</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
 <li class="toctree-l2"><a class="reference internal" href="ensemble.html">3.1. Ensemble for Quantification</a></li>
 <li class="toctree-l2"><a class="reference internal" href="bootstrap.html">3.2. Bootstrap in Quantification</a></li>
 <li class="toctree-l2"><a class="reference internal" href="scores_adaptation.html">3.3. QuaDapt: Drift-Resilient Score Adaptation</a></li>
 </ul>
 </details></li>
-<li class="toctree-l1 has-children"><a class="reference internal" href="../model_selection_evaluation.html">4.  Model Selection and Evaluation</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../model_selection_evaluation.html">4. Model Selection and Evaluation</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
 <li class="toctree-l2"><a class="reference internal" href="protocols.html">4.1. Protocols for Quantification</a></li>
 <li class="toctree-l2"><a class="reference internal" href="tuning_hyperparameters.html">4.2. Tuning Hyperparameters</a></li>
 <li class="toctree-l2"><a class="reference internal" href="evaluation_metrics.html">4.3. Evaluation Metrics</a></li>
 </ul>
 </details></li>
-<li class="toctree-l1"><a class="reference internal" href="confidence_intervals.html">5.  Confidence Intervals</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../building_a_quantifier.html">6.  Building a Quantifier</a></li>
-<li class="toctree-l1"><a class="reference internal" href="mlquantify_methods.html">7.  Mlquantify methods</a></li>
+<li class="toctree-l1"><a class="reference internal" href="confidence_intervals.html">5. Confidence Intervals</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../building_a_quantifier.html">6. Building a Quantifier</a></li>
+<li class="toctree-l1"><a class="reference internal" href="mlquantify_methods.html">7. Mlquantify methods</a></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../components.html">8. Core Components</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="compose.html">8.1. Composable Quantifiers</a></li>
+<li class="toctree-l2"><a class="reference internal" href="losses.html">8.2. Loss Functions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="representations.html">8.3. Representations</a></li>
+<li class="toctree-l2"><a class="reference internal" href="solvers.html">8.4. Solvers</a></li>
+<li class="toctree-l2"><a class="reference internal" href="calibration.html">8.5. Calibration</a></li>
+<li class="toctree-l2"><a class="reference internal" href="neural.html">8.6. Neural Quantifiers</a></li>
+</ul>
+</details></li>
 </ul>
 </div>
 </nav></div>
@@ -432,7 +452,7 @@
     
     <li class="breadcrumb-item"><a href="../aggregative_quantification.html" class="nav-link"><span class="section-number">1. </span>Aggregative Quantification</a></li>
     
-    <li class="breadcrumb-item active" aria-current="page"><span class="ellipsis"><span class="section-number">1.4. </span>Adjust Counting</span></li>
+    <li class="breadcrumb-item active" aria-current="page"><span class="ellipsis"><span class="section-number">1.4. </span>Adjusted Counting</span></li>
   </ul>
 </nav>
 </div>
@@ -449,19 +469,18 @@
 <div id="searchbox"></div>
                 <article class="bd-article">
                   
-  <section id="adjust-counting">
-<span id="id1"></span><h1><span class="section-number">1.4. </span>Adjust Counting<a class="headerlink" href="#adjust-counting" title="Link to this heading">#</a></h1>
+  <section id="adjusted-counting">
+<span id="counting"></span><h1><span class="section-number">1.4. </span>Adjusted Counting<a class="headerlink" href="#adjusted-counting" title="Link to this heading">#</a></h1>
 <p>Adjusted Counting methods improve upon simple “counting” quantifiers by correcting bias using what is known about the classifier’s errors on the training set.
 They aim to produce better estimates of class prevalence (how frequent each class is in a dataset) even when training and test distributions differ.</p>
 <p>see <a class="reference internal" href="counters.html#counters-module"><span class="std std-ref">Counters For Quantification</span></a> for an overview of the base counters for quantification.</p>
-<p>Currently, there are two types of adjustment methods implemented:</p>
-<ol class="arabic simple">
-<li><p><strong>Threshold Adjustment Methods</strong>: These methods adjust the decision threshold of the classifier to optimize prevalence estimation. Examples include Adjusted Count (TAC) and its threshold selection policies (TX, TMAX, T50, MS, MS2).</p></li>
-<li><p><strong>Matrix Adjustment Methods</strong>: These methods use a confusion matrix derived from the classifier’s performance on a validation set to adjust the estimated prevalences. Examples include the EM-based methods and other matrix inversion techniques.</p></li>
-</ol>
+<p>This page focuses on <strong>threshold adjustment methods</strong>, which adjust the decision
+threshold of a classifier to optimize prevalence estimation. Examples include
+Adjusted Count (TAC) and its threshold selection policies (TX, TMAX, T50, MS,
+MS2).</p>
 <section id="threshold-adjustment">
 <h2><span class="section-number">1.4.1. </span>Threshold Adjustment<a class="headerlink" href="#threshold-adjustment" title="Link to this heading">#</a></h2>
-<p>Threshold-based adjustment methods correct the bias of <a class="reference internal" href="generated/mlquantify.adjust_counting.CC.html#mlquantify.adjust_counting.CC" title="mlquantify.adjust_counting.CC"><code class="xref py py-class docutils literal notranslate"><span class="pre">CC</span></code></a> by using the classifier’s <strong>True Positive Rate (TPR)</strong> and <strong>False Positive Rate (FPR)</strong>.
+<p>Threshold-based adjustment methods correct the bias of <a class="reference internal" href="generated/mlquantify.counting.CC.html#mlquantify.counting.CC" title="mlquantify.counting.CC"><code class="xref py py-class docutils literal notranslate"><span class="pre">CC</span></code></a> by using the classifier’s <strong>True Positive Rate (TPR)</strong> and <strong>False Positive Rate (FPR)</strong>.
 They are mainly used for <code class="docutils literal notranslate"><span class="pre">binary</span></code> quantification tasks.</p>
 <p><strong>Threshold Adjusted Count (TAC) Equation</strong></p>
 <div class="math notranslate nohighlight">
@@ -472,16 +491,16 @@ They are mainly used for <code class="docutils literal notranslate"><span class=
 </dd>
 </dl>
 <p>The main idea is that by adjusting the observed rate of positive predictions, we can better approximate the real class distribution.</p>
-<figure class="align-center" id="id5">
+<figure class="align-center" id="id1">
 <a class="reference internal image-reference" href="../_images/threshold-selection-policies.png"><img alt="Threshold selection policies comparison" src="../_images/threshold-selection-policies.png" style="width: 80%;" />
 </a>
 <figcaption>
-<p><span class="caption-text"><em>Comparison of different threshold selection policies showing FPR and 1-TPR curves with optimal thresholds for each method [Adapted from Forman (2008)]</em></span><a class="headerlink" href="#id5" title="Link to this image">#</a></p>
+<p><span class="caption-text"><em>Comparison of different threshold selection policies showing FPR and 1-TPR curves with optimal thresholds for each method [Adapted from Forman (2008)]</em></span><a class="headerlink" href="#id1" title="Link to this image">#</a></p>
 </figcaption>
 </figure>
 <p>Different <em>threshold methods</em> vary in how they choose the classifier cutoff <span class="math notranslate nohighlight">\(\tau\)</span> for scores <span class="math notranslate nohighlight">\(s(x)\)</span> .</p>
-<p>All these methods have their <code class="docutils literal notranslate"><span class="pre">fit</span></code>, <code class="docutils literal notranslate"><span class="pre">predict</span></code> and <code class="docutils literal notranslate"><span class="pre">aggregate</span></code> functions, similar to other aggregative quantifiers. However, they also include a specialized method: <code class="docutils literal notranslate"><span class="pre">get_best_thresholds</span></code>, which identifies the optimal threshold, given <code class="docutils literal notranslate"><span class="pre">y</span></code> and predicted <code class="docutils literal notranslate"><span class="pre">probabilities</span></code>. Here is an example of how to use the <a class="reference internal" href="generated/mlquantify.adjust_counting.T50.html#mlquantify.adjust_counting.T50" title="mlquantify.adjust_counting.T50"><code class="xref py py-class docutils literal notranslate"><span class="pre">T50</span></code></a> method:</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">mlquantify.adjust_counting</span><span class="w"> </span><span class="kn">import</span> <span class="n">T50</span><span class="p">,</span> <span class="n">evaluate_thresholds</span>
+<p>All these methods have their <code class="docutils literal notranslate"><span class="pre">fit</span></code>, <code class="docutils literal notranslate"><span class="pre">predict</span></code> and <code class="docutils literal notranslate"><span class="pre">aggregate</span></code> functions, similar to other aggregative quantifiers. However, they also include a specialized method: <code class="docutils literal notranslate"><span class="pre">get_best_thresholds</span></code>, which identifies the optimal threshold, given <code class="docutils literal notranslate"><span class="pre">y</span></code> and predicted <code class="docutils literal notranslate"><span class="pre">probabilities</span></code>. Here is an example of how to use the <a class="reference internal" href="generated/mlquantify.counting.T50.html#mlquantify.counting.T50" title="mlquantify.counting.T50"><code class="xref py py-class docutils literal notranslate"><span class="pre">T50</span></code></a> method:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">mlquantify.counting</span><span class="w"> </span><span class="kn">import</span> <span class="n">T50</span><span class="p">,</span> <span class="n">evaluate_thresholds</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">sklearn.linear_model</span><span class="w"> </span><span class="kn">import</span> <span class="n">LogisticRegression</span>
 
 <span class="n">clf</span> <span class="o">=</span> <span class="n">LogisticRegression</span><span class="p">()</span>
@@ -497,85 +516,8 @@ They are mainly used for <code class="docutils literal notranslate"><span class=
 </div>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
-<p>Threshold adjustment methods like ACC are primarily designed for binary classification tasks,
-For multi-class problems, matrix adjustment methods are generally preferred.</p>
+<p>Threshold adjustment methods like <a class="reference internal" href="generated/mlquantify.counting.TAC.html#mlquantify.counting.TAC" title="mlquantify.counting.TAC"><code class="xref py py-class docutils literal notranslate"><span class="pre">TAC</span></code></a> are primarily designed for binary classification tasks.</p>
 </div>
-</section>
-<section id="matrix-adjustment">
-<h2><span class="section-number">1.4.2. </span>Matrix Adjustment<a class="headerlink" href="#matrix-adjustment" title="Link to this heading">#</a></h2>
-<p>Matrix-based adjustment methods use a <em>confusion matrix</em> or <em>generalized rate matrix</em> to adjust predictions for multi-class quantification.
-They treat quantification as solving a small linear system.</p>
-<p><strong>Matrix Equation</strong></p>
-<div class="math notranslate nohighlight">
-\[\mathbf{y = X \hat{\pi}_F + \epsilon}, \quad
-\text{subject to } \hat{\pi}_F \ge 0,\ \sum \hat{\pi}_F = 1\]</div>
-<dl class="field-list simple">
-<dt class="field-odd">caption<span class="colon">:</span></dt>
-<dd class="field-odd"><p><em>General linear system linking observed and true prevalences</em></p>
-</dd>
-</dl>
-<p>Here:</p>
-<ul class="simple">
-<li><p><span class="math notranslate nohighlight">\(\mathbf{y}\)</span>: average observed predictions in <span class="math notranslate nohighlight">\(U\)</span></p></li>
-<li><p><span class="math notranslate nohighlight">\(\mathbf{X}\)</span>: classifier behavior from training (mean conditional rates)</p></li>
-<li><p><span class="math notranslate nohighlight">\(\hat{\pi}_F\)</span>: corrected class prevalences in <span class="math notranslate nohighlight">\(U\)</span></p></li>
-</ul>
-<p>[Plot Idea: Matrix illustration showing how confusion corrections map to estimated prevalences]</p>
-<section id="adjusted-count-ac-and-probabilistic-adjusted-count-pac">
-<h3><span class="section-number">1.4.2.1. </span>Adjusted Count (AC) and Probabilistic Adjusted Count (PAC)<a class="headerlink" href="#adjusted-count-ac-and-probabilistic-adjusted-count-pac" title="Link to this heading">#</a></h3>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">mlquantify.adjust_counting</span><span class="w"> </span><span class="kn">import</span> <span class="n">AC</span><span class="p">,</span> <span class="n">PAC</span>
-<span class="kn">from</span><span class="w"> </span><span class="nn">sklearn.linear_model</span><span class="w"> </span><span class="kn">import</span> <span class="n">LogisticRegression</span>
-<span class="n">q</span> <span class="o">=</span> <span class="n">AC</span><span class="p">(</span><span class="n">learner</span><span class="o">=</span><span class="n">LogisticRegression</span><span class="p">())</span>
-<span class="n">q</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">X_train</span><span class="p">,</span> <span class="n">y_train</span><span class="p">)</span>
-<span class="n">q</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">X_test</span><span class="p">)</span>
-<span class="c1"># -&gt; {0: 0.48, 1: 0.52}</span>
-</pre></div>
-</div>
-<p>Both <a class="reference internal" href="generated/mlquantify.adjust_counting.AC.html#mlquantify.adjust_counting.AC" title="mlquantify.adjust_counting.AC"><code class="xref py py-class docutils literal notranslate"><span class="pre">AC</span></code></a> and <a class="reference internal" href="generated/mlquantify.adjust_counting.PAC.html#mlquantify.adjust_counting.PAC" title="mlquantify.adjust_counting.PAC"><code class="xref py py-class docutils literal notranslate"><span class="pre">PAC</span></code></a> are solved using this linear system:</p>
-<ul class="simple">
-<li><p>AC uses hard classifier decisions (confusion matrix).</p></li>
-<li><p>PAC uses soft probabilities <span class="math notranslate nohighlight">\(P(y=l|x)\)</span> .</p></li>
-</ul>
-</section>
-<section id="friedman-s-method-fm">
-<h3><span class="section-number">1.4.2.2. </span>Friedman’s Method (FM)<a class="headerlink" href="#friedman-s-method-fm" title="Link to this heading">#</a></h3>
-<p>The <a class="reference internal" href="generated/mlquantify.adjust_counting.FM.html#mlquantify.adjust_counting.FM" title="mlquantify.adjust_counting.FM"><code class="xref py py-class docutils literal notranslate"><span class="pre">FM</span></code></a> constructs its adjustment matrix <span class="math notranslate nohighlight">\(\mathbf{X}\)</span> based on a specialized feature transformation function <span class="math notranslate nohighlight">\(f_l(x)\)</span> that indicates whether the predicted class probability for an item exceeds that class’s proportion in the training data <span class="math notranslate nohighlight">\((\pi_l^T)\)</span> , a technique chosen because it theoretically minimizes the variance of the resulting prevalence estimates.</p>
-<details class="sd-sphinx-override sd-dropdown sd-card sd-mb-3">
-<summary class="sd-summary-title sd-card-header">
-<span class="sd-summary-text">Mathematical details - Friedman’s Method</span><span class="sd-summary-state-marker sd-summary-chevron-right"><svg version="1.1" width="1.5em" height="1.5em" class="sd-octicon sd-octicon-chevron-right" viewBox="0 0 24 24" aria-hidden="true"><path d="M8.72 18.78a.75.75 0 0 1 0-1.06L14.44 12 8.72 6.28a.751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018l6.25 6.25a.75.75 0 0 1 0 1.06l-6.25 6.25a.75.75 0 0 1-1.06 0Z"></path></svg></span></summary><div class="sd-summary-content sd-card-body docutils">
-<p class="sd-card-text">To improve stability, <strong>Friedman’s Method (FM)</strong> generates the adjustment matrix <span class="math notranslate nohighlight">\(\mathbf{X}\)</span> using a special transformation function applied to each class <span class="math notranslate nohighlight">\(l\)</span> and training sample <span class="math notranslate nohighlight">\(x\)</span> :</p>
-<div class="math notranslate nohighlight">
-\[f_l(x) = I \left[ \hat{P}_T(y = l \mid x) &gt; \pi_l^T \right]\]</div>
-<p class="sd-card-text">where:</p>
-<ul class="simple">
-<li><p class="sd-card-text"><span class="math notranslate nohighlight">\(I[\cdot]\)</span> is the indicator function, equal to 1 if the condition inside is true, 0 otherwise.</p></li>
-<li><p class="sd-card-text"><span class="math notranslate nohighlight">\(\hat{P}_T(y = l \mid x)\)</span> is the classifier’s estimated posterior probability for class <span class="math notranslate nohighlight">\(l\)</span> on training sample <span class="math notranslate nohighlight">\(x\)</span>.</p></li>
-<li><p class="sd-card-text"><span class="math notranslate nohighlight">\(\pi_l^T\)</span> is the prevalence of class <span class="math notranslate nohighlight">\(l\)</span> in the training set.</p></li>
-</ul>
-<p class="sd-card-text">The entry <span class="math notranslate nohighlight">\(X_{i,l}\)</span> of the matrix <span class="math notranslate nohighlight">\(\mathbf{X}\)</span> is computed as the average of <span class="math notranslate nohighlight">\(f_l(x)\)</span> over all <span class="math notranslate nohighlight">\(x\)</span> in class <span class="math notranslate nohighlight">\(i\)</span> of the training data:</p>
-<div class="math notranslate nohighlight">
-\[X_{i,l} = \frac{1}{|L_i|} \sum_{x \in L_i} f_l(x)\]</div>
-<p class="sd-card-text">where:</p>
-<ul class="simple">
-<li><p class="sd-card-text"><span class="math notranslate nohighlight">\(L_i\)</span> is the subset of training samples with true class <span class="math notranslate nohighlight">\(i\)</span>.</p></li>
-<li><p class="sd-card-text"><span class="math notranslate nohighlight">\(|L_i|\)</span> is the number of these samples.</p></li>
-</ul>
-<p class="sd-card-text">This matrix is then used in the constrained least squares optimization:</p>
-<div class="math notranslate nohighlight">
-\[\min_{\hat{\pi}_F} \frac{1}{2} \hat{\pi}_F^\top D \hat{\pi}_F + d^\top \hat{\pi}_F
-\quad \text{subject to} \quad \hat{\pi}_F \ge 0, \quad \sum \hat{\pi}_F = 1\]</div>
-<p class="sd-card-text">to estimate the corrected prevalences <span class="math notranslate nohighlight">\(\hat{\pi}_F\)</span> on the test set <a class="footnote-reference brackets" href="#id4" id="id2" role="doc-noteref"><span class="fn-bracket">[</span>3<span class="fn-bracket">]</span></a>.</p>
-<p class="sd-card-text">This thresholding on posterior probabilities ensures that the matrix <span class="math notranslate nohighlight">\(\mathbf{X}\)</span> highlights regions where the classifier consistently predicts a class more confidently than its baseline prevalence, improving statistical stability and reducing estimation variance <a class="footnote-reference brackets" href="#id4" id="id3" role="doc-noteref"><span class="fn-bracket">[</span>3<span class="fn-bracket">]</span></a>.</p>
-<p class="sd-card-text"><strong>References</strong></p>
-<aside class="footnote-list brackets">
-<aside class="footnote brackets" id="id4" role="doc-footnote">
-<span class="label"><span class="fn-bracket">[</span>3<span class="fn-bracket">]</span></span>
-<span class="backrefs">(<a role="doc-backlink" href="#id2">1</a>,<a role="doc-backlink" href="#id3">2</a>)</span>
-<p class="sd-card-text">Friedman, J. H. (2015). CLASS COUNTS IN FUTURE UNLABELED SAMPLES (Detecting and dealing with concept drift).</p>
-</aside>
-</aside>
-</div>
-</details></section>
 </section>
 </section>
 
@@ -631,11 +573,6 @@ They treat quantification as solving a small linear system.</p>
   <nav id="pst-page-toc-nav" class="page-toc" aria-labelledby="pst-page-navigation-heading-2">
     <ul class="pst-show_toc_level nav section-nav flex-column">
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#threshold-adjustment">1.4.1. Threshold Adjustment</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#matrix-adjustment">1.4.2. Matrix Adjustment</a><ul class="nav section-nav flex-column">
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#adjusted-count-ac-and-probabilistic-adjusted-count-pac">1.4.2.1. Adjusted Count (AC) and Probabilistic Adjusted Count (PAC)</a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#friedman-s-method-fm">1.4.2.2. Friedman’s Method (FM)</a></li>
-</ul>
-</li>
 </ul>
   </nav></div>
 
@@ -661,8 +598,8 @@ They treat quantification as solving a small linear system.</p>
   </div>
   
   <!-- Scripts loaded after <body> so the DOM is not blocked -->
-  <script defer src="../_static/scripts/bootstrap.js?digest=55c26ed414f5f8a31ebb"></script>
-<script defer src="../_static/scripts/pydata-sphinx-theme.js?digest=55c26ed414f5f8a31ebb"></script>
+  <script defer src="../_static/scripts/bootstrap.js?digest=0790524f97105ba85085"></script>
+<script defer src="../_static/scripts/pydata-sphinx-theme.js?digest=0790524f97105ba85085"></script>
 
   <footer class="bd-footer">
   </footer>

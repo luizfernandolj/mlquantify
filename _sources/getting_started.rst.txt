@@ -28,7 +28,7 @@ Most quantifiers in ``mlquantify`` behave like scikit-learn estimators. They imp
 .. code-block:: python
 
     from sklearn.linear_model import LogisticRegression
-    from mlquantify.adjust_counting import CC  # Classify & Count
+    from mlquantify.counting import CC  # Classify & Count
 
     # 1. Initialize a base classifier
     estimator = LogisticRegression()
@@ -51,7 +51,7 @@ All aggregative quantifiers in ``mlquantify`` support a consistent set of parame
 
 *   ``X``: The training input samples (array-like, sparse matrix).
 *   ``y``: The target values (class labels).
-*   ``learner_fitted`` (bool): If ``True``, assumes the provided estimator is already trained. If ``False`` (default), trains the estimator on the provided ``X`` and ``y``.
+*   ``estimator_fitted`` (bool): If ``True``, assumes the provided estimator is already trained. If ``False`` (default), trains the estimator on the provided ``X`` and ``y``.
 *   ``cv`` (int, cross-validation generator, or iterable): Determines the cross-validation splitting strategy for generating internal predictions (used by methods like ACC, PACC).
 *   ``stratified`` (bool): If ``True``, uses stratified folds for cross-validation.
 *   ``shuffle`` (bool): Whether to shuffle the data before splitting in cross-validation.
@@ -82,7 +82,7 @@ Fitting a model to some data does not entail that it will predict well on unseen
 
     from sklearn.datasets import make_classification
     from sklearn.model_selection import train_test_split
-    from mlquantify.adjust_counting import CC
+    from mlquantify.counting import CC
     from mlquantify.metrics import MAE
     from sklearn.linear_model import LogisticRegression
 
@@ -111,7 +111,7 @@ In quantification, a single test set is often insufficient because we want to ev
 
 .. code-block:: python
 
-    from mlquantify.protocols import APP
+    from mlquantify.model_selection import APP
     from mlquantify.utils import get_prev_from_labels
 
     # Create an APP generator:

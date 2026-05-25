@@ -19,9 +19,8 @@ The main aggregative quantification methods will be defined next, with details a
 
    modules/using_aggregative.rst
    modules/counters.rst
-   modules/adjust_counting.rst
+   Adjusted Counting <modules/adjust_counting.rst>
    modules/likelihood.rst
-   modules/mixture_models.rst
+   Distribution Matching <modules/distribution_matching.rst>
    modules/neighbors.rst
-   modules/density.rst
 

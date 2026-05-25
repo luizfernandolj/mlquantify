@@ -29,7 +29,4 @@ Neighbor-based Methods
   :template: base.rst
 
 
-  KDEyCS
-  KDEyHD
-  KDEyML
   PWK

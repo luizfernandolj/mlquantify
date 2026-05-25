@@ -25,6 +25,7 @@ mlquantify.utils
 
 
   get_prev_from_labels
+  normalize_prevalence
   load_quantifier
   make_prevs
   apply_cross_validation

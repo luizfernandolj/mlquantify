@@ -25,5 +25,5 @@ mlquantify.base_aggregative
 
 
   AggregationMixin
-  SoftLearnerQMixin
-  CrispLearnerQMixin
+  SoftPredictionMixin
+  CrispPredictionMixin
