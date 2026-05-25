@@ -99,81 +99,74 @@ def get_protocol_sampler(protocol_name, batch_size, n_prevalences, min_prev, max
     return protocol
 
 class EnsembleQ(MetaquantifierMixin, BaseQuantifier):
-    r"""Ensemble-based Quantifier combining multiple models trained on varied data samples
-    with controlled prevalence distributions to improve robustness and accuracy.
+    r"""Ensemble-based quantifier with prevalence-controlled diversity.
 
-    This quantifier constructs an ensemble of quantification models using batches of training
-    data sampled according to an evaluation protocol (e.g. 'artificial', 'natural', 'uniform', 'kraemer')
-    with specified prevalence constraints. Diverse models are trained on these subsamples,
-    and their prevalence estimates aggregated using various selection metrics and aggregation methods.
+    Constructs an ensemble of base quantifiers, each trained on a subsample
+    of the training data drawn according to a prevalence-sampling protocol.
+    At prediction time the ensemble members' estimates are aggregated, with
+    optional selection of the most relevant subset.
 
     Parameters
     ----------
     quantifier : BaseQuantifier
-        The quantifier model class to be used for ensemble members.
+        The base quantifier used for each ensemble member.
     size : int, default=50
-        Number of ensemble members (sub-models) to train.
-    min_prop, max_prop : float, default=(0.1, 1.0)
-        Minimum and maximum class prevalence proportions for generating training batches.
+        Number of ensemble members to train.
+    min_prop : float, default=0.1
+        Minimum class prevalence proportion for sampling batches.
+    max_prop : float, default=1.0
+        Maximum class prevalence proportion for sampling batches.
     selection_metric : {'all', 'ptr', 'ds'}, default='all'
-        Metric used to select or weight ensemble members during aggregation:
-        - 'all': uses all models equally,
-        - 'ptr': selects models with prevalences closest to initial test prevalence estimates,
-        - 'ds': selects models with score distributions similar to test data.
+        Member selection strategy. ``'all'`` uses every member; ``'ptr'``
+        selects members whose training prevalence is closest to the initial
+        test estimate; ``'ds'`` selects members whose training score
+        distribution is closest to the test distribution.
     p_metric : float, default=0.25
-        Proportion of ensemble members to select according to the selection metric.
+        Fraction of ensemble members to retain when applying a selection metric.
     protocol : {'artificial', 'natural', 'uniform', 'kraemer'}, default='uniform'
-        Sampling protocol used to generate training data for ensemble models.
+        Prevalence-sampling protocol for generating training batches.
     return_type : {'mean', 'median'}, default='mean'
-        Aggregation method for ensemble predictions.
-    max_sample_size : int or None, optional
-        Maximum number of samples per training batch; defaults to dataset size if None.
+        Aggregation function applied to the selected member estimates.
+    max_sample_size : int or None, default=None
+        Maximum samples per training batch; ``None`` uses the full dataset.
     max_trials : int, default=100
-        Maximum number of trials for sampling.
+        Maximum sampling attempts per batch.
     n_jobs : int, default=1
-        Number of parallel jobs for training ensemble members.
+        Number of parallel jobs for training.
     verbose : bool, default=False
-        Enable verbose output.
+        Print progress messages.
 
     Attributes
     ----------
     models : list
-        List of fitted quantifier ensemble members.
+        Fitted ensemble member quantifiers.
     train_prevalences : list
-        List of training prevalences corresponding to ensemble members.
-    train_distributions : list
-        List of historical training posterior histograms (used when selection_metric='ds').
-    posteriors_generator : callable or None
-        Function to generate posterior probabilities for new samples.
-
-
-    Notes
-    -----
-    - Ensemble diversity is controlled by sampling prevalences from the specified protocol.
-    - The 'ds' selection metric requires probabilistic quantifiers and computes distribution similarity.
-    - Uses sklearn's LogisticRegression and GridSearchCV internally for posterior computation within 'ds'.
+        Training prevalences for each ensemble member.
+    classes : ndarray of shape (n_classes,)
+        Class labels seen during ``fit``.
 
     Examples
     --------
-    >>> from mlquantify.ensemble import EnsembleQ
-    >>> from mlquantify.mixture import DyS
-    >>> from sklearn.ensemble import RandomForestClassifier
-    >>>
-    >>> ensemble = EnsembleQ(
-    ...     quantifier=DyS(RandomForestClassifier()),
-    ...     size=30,
-    ...     protocol='artificial', # APP protocol
-    ...     selection_metric='ptr'
-    ... )
-    >>> ensemble.fit(X_train, y_train)
-    >>> prevalence_estimates = ensemble.predict(X_test)
+    >>> from mlquantify.meta import EnsembleQ
+    >>> from mlquantify.matching import DyS
+    >>> from sklearn.linear_model import LogisticRegression
+    >>> from sklearn.datasets import make_classification
+    >>> X, y = make_classification(n_samples=300, random_state=42)
+    >>> q = EnsembleQ(DyS(estimator=LogisticRegression()), size=10).fit(X, y)
+    >>> q.predict(X)
+    {0: 0.49, 1: 0.51}
 
     References
     ----------
-    .. [1] Pérez-Gállego, P., Castaño, A., Ramón Quevedo, J., & José del Coz, J. (2019). Dynamic ensemble selection for quantification tasks. Information Fusion, 45, 1-15. https://doi.org/10.1016/j.inffus.2018.01.001
+    .. dropdown:: References
 
-    .. [2] Pérez-Gállego, P., Quevedo, J. R., & del Coz, J. J. (2017). Using ensembles for problems with characterizable changes in data distribution: A case study on quantification. Information Fusion, 34, 87-100. https://doi.org/10.1016/j.inffus.2016.07.001
-
+        .. [1] Pérez-Gállego, P., Quevedo, J. R., & del Coz, J. J. (2017).
+               Using Ensembles for Problems with Characterizable Changes in Data
+               Distribution: A Case Study on Quantification.
+               *Information Fusion*, 34, 87–100.
+        .. [2] Pérez-Gállego, P., Castaño, A., Quevedo, J. R., & del Coz, J. J.
+               (2019). Dynamic Ensemble Selection for Quantification Tasks.
+               *Information Fusion*, 45, 1–15.
     """
 
     _parameter_constraints = {
@@ -457,42 +450,59 @@ def _select_k(elements, order, k):
 
 
 class AggregativeBootstrap(MetaquantifierMixin, BaseQuantifier):
-    r"""
-    Aggregative Bootstrap Quantifier to compute prevalence confidence regions.
+    r"""Aggregative Bootstrap Quantifier for prevalence confidence regions.
 
-    This metaquantifier applies bootstrapping to both training and test data predictions
-    to generate multiple bootstrap prevalence estimates. These bootstrapped estimates
-    are used to construct confidence intervals or elliptical confidence regions for
-    prevalence predictions, improving uncertainty quantification.
+    Wraps any aggregative quantifier and applies bootstrap resampling to both
+    training and test predictions to produce a distribution of prevalence
+    estimates. The distribution is summarised as a point estimate together with
+    a confidence region (intervals, ellipse, or CLR-ellipse).
 
     Parameters
     ----------
     quantifier : BaseQuantifier
-        The base quantifier model, which must be aggregative.
+        The base aggregative quantifier to wrap.
     n_train_bootstraps : int, default=1
-        Number of bootstrap samples to generate from training predictions.
+        Number of bootstrap resamples from the training predictions.
     n_test_bootstraps : int, default=1
-        Number of bootstrap samples to generate from test predictions.
-    random_state : int or None, optional
+        Number of bootstrap resamples from the test predictions.
+    random_state : int or None, default=None
         Random seed for reproducibility.
     region_type : {'intervals', 'ellipse', 'ellipse-clr'}, default='intervals'
         Type of confidence region to construct.
-    confidence_level : float between 0 and 1, default=0.95
-        Confidence level for intervals or regions.
+    confidence_level : float, default=0.95
+        Confidence level for the region.
 
+    Attributes
+    ----------
+    train_predictions : ndarray
+        Predictions on the training (or validation) set.
+    y_train : ndarray
+        Labels corresponding to ``train_predictions``.
+    classes : ndarray of shape (n_classes,)
+        Class labels seen during ``fit``.
 
     Examples
     --------
-    >>> from mlquantify.ensemble import AggregativeBootstrap
-    >>> from mlquantify.neighbors import EMQ
-    >>> from sklearn.ensemble import RandomForestClassifier
-    >>> agg_boot = AggregativeBootstrap(
-    ...     quantifier=EMQ(RandomForestClassifier()),
-    ...     n_train_bootstraps=100,
-    ...     n_test_bootstraps=100
-    ... )
-    >>> agg_boot.fit(X_train, y_train)
-    >>> prevalence, conf_region = agg_boot.predict(X_test)
+    >>> from mlquantify.meta import AggregativeBootstrap
+    >>> from mlquantify.likelihood import EMQ
+    >>> from sklearn.linear_model import LogisticRegression
+    >>> from sklearn.datasets import make_classification
+    >>> X, y = make_classification(n_samples=200, random_state=42)
+    >>> q = AggregativeBootstrap(
+    ...     EMQ(LogisticRegression()),
+    ...     n_train_bootstraps=10,
+    ...     n_test_bootstraps=10,
+    ... ).fit(X, y)
+    >>> q.predict(X)
+    {0: 0.49, 1: 0.51}
+
+    References
+    ----------
+    .. dropdown:: References
+
+        .. [1] Moreo, A., & Salvati, A. (2025).
+               Uncertainty Quantification in Quantification.
+               *LQ 2025 Workshop Proceedings*.
     """
 
     _parameter_constraints = {
@@ -650,36 +660,56 @@ class AggregativeBootstrap(MetaquantifierMixin, BaseQuantifier):
 
 @binary_quantifier(strategy_attr="strategy")
 class QuaDapt(MetaquantifierMixin, BaseQuantifier):
-    r"""QuaDapt Metaquantifier: Adaptive quantification using synthetic scores.
+    r"""QuaDapt: Adaptive quantification using synthetic score simulation.
 
-    This metaquantifier improves prevalence estimation by merging training samples
-    with different score distributions using a merging factor :math: \( m \). It evaluates
-    candidate merging factors, chooses the best by minimizing a distribution distance
-    metric (Hellinger, Topsoe, ProbSymm, or SORD), and aggregates quantification accordingly.
+    Improves prevalence estimation by selecting the merging factor that produces
+    a synthetic score distribution (via MoSS) closest to the test distribution.
+    The best-matching synthetic set is then used as the training reference for
+    the base quantifier's ``aggregate`` call.
+
+    This is a **binary-only** method. Multiclass problems are handled with a
+    one-vs-rest (OvR) strategy by default.
 
     Parameters
     ----------
     quantifier : BaseQuantifier
-        The base quantifier model to adapt.
+        A soft (probabilistic) base aggregative quantifier.
     measure : {'hellinger', 'topsoe', 'probsymm', 'sord'}, default='topsoe'
-        The distribution distance metric used to select the best merging factor.
-    merging_factors : array-like
+        Distance metric used to select the best merging factor.
+    merging_factors : array-like, default=np.arange(0.1, 1.0, 0.2)
         Candidate merging factor values to evaluate.
+    strategy : {'ovr', 'ovo'}, default='ovr'
+        Multiclass decomposition strategy.
+
+    Attributes
+    ----------
+    classes_ : ndarray of shape (n_classes,)
+        Class labels seen during ``fit``.
+    y_train : ndarray of shape (n_samples,)
+        Training labels stored during ``fit``.
 
     Examples
     --------
     >>> from mlquantify.meta import QuaDapt
-    >>> from mlquantify.counting import AC
-    >>> from sklearn.ensemble import RandomForestClassifier
-    >>> quadapt_acc = QuaDapt(
-    ...     quantifier=AC(RandomForestClassifier()),
-    ...     merging_factor=[0.1, 0.5, 1.0],
-    ...     measure='sord'
-    ... )
-    >>> quadapt_acc.fit(X_train, y_train)
-    >>> prevalence = quadapt_acc.predict(X_test)
+    >>> from mlquantify.matching import DyS
+    >>> from sklearn.linear_model import LogisticRegression
+    >>> from sklearn.datasets import make_classification
+    >>> X, y = make_classification(n_samples=200, random_state=42)
+    >>> q = QuaDapt(DyS(LogisticRegression())).fit(X, y)
+    >>> q.predict(X)
+    {0: 0.49, 1: 0.51}
+    >>> # call aggregate with pre-computed posteriors
+    >>> proba = LogisticRegression().fit(X, y).predict_proba(X)
+    >>> q.aggregate(proba, y)
+    {0: 0.49, 1: 0.51}
 
+    References
+    ----------
+    .. dropdown:: References
 
+        .. [1] Maletzke, A., Reis, D., Hassan, W., & Batista, G. (2021).
+               Accurately Quantifying under Score Variability.
+               *ICDM 2021*, pp. 1228–1233.
     """
 
     _parameter_constraints = {

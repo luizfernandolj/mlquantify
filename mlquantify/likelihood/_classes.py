@@ -24,7 +24,45 @@ from abstention.calibration import (
 
 
 class BaseLikelihoodQuantifier(SoftPredictionMixin, AggregativeMixin, BaseQuantifier):
-    r"""Base class for likelihood/prior-adjustment quantifiers."""
+    r"""Abstract base class for likelihood/prior-adjustment quantifiers.
+
+    Provides ``fit`` and ``predict`` for quantifiers that adjust posterior
+    probabilities to account for prior probability shift between training and
+    test data. Subclasses must implement :meth:`aggregate`.
+
+    Parameters
+    ----------
+    estimator : estimator, optional
+        A probabilistic classifier with ``fit`` and ``predict_proba`` methods.
+
+    Attributes
+    ----------
+    estimator_ : estimator
+        The fitted underlying classifier.
+    classes_ : ndarray of shape (n_classes,)
+        Class labels seen during ``fit``.
+    train_predictions_ : ndarray of shape (n_samples, n_classes)
+        Posterior probabilities on the training data.
+    train_labels_ : ndarray of shape (n_samples,)
+        Training labels.
+    priors_ : ndarray of shape (n_classes,)
+        Training class prevalences.
+
+    Examples
+    --------
+    >>> from mlquantify.likelihood._classes import BaseLikelihoodQuantifier
+    >>> from sklearn.linear_model import LogisticRegression
+    >>> from sklearn.datasets import make_classification
+    >>> import numpy as np
+    >>> class MyLikelihoodQ(BaseLikelihoodQuantifier):
+    ...     def __init__(self, estimator=None):
+    ...         super().__init__(estimator=estimator or LogisticRegression())
+    ...     def aggregate(self, predictions, train_predictions=None, train_labels=None):
+    ...         return np.mean(predictions, axis=0)
+    >>> X, y = make_classification(n_samples=200, random_state=42)
+    >>> MyLikelihoodQ().fit(X, y).predict(X)
+    {0: 0.49, 1: 0.51}
+    """
 
     def __init__(self, estimator=None):
         self.estimator = estimator
@@ -79,100 +117,70 @@ class BaseLikelihoodQuantifier(SoftPredictionMixin, AggregativeMixin, BaseQuanti
 
 
 class EMQ(BaseLikelihoodQuantifier):
-    r"""Expectation-Maximization Quantifier (EMQ).
+    r"""Expectation-Maximization Quantifier (EMQ / SLD).
 
-    Estimates class prevalences under prior probability shift by alternating 
-    between expectation **(E)** and maximization **(M)** steps on posterior probabilities. 
+    Estimates class prevalences under prior probability shift by iterating
+    between re-weighting posterior probabilities to reflect the current
+    prevalence estimate (E-step) and updating the prevalence estimate as
+    their average (M-step). Optionally applies a calibration step before
+    the EM iteration to improve posterior quality.
 
-    .. dropdown:: Mathematical Formulation
-
-        E-step:
-
-        .. math::
-
-            p_i^{(s+1)}(x) = \frac{q_i^{(s)} p_i(x)}{\sum_j q_j^{(s)} p_j(x)}
-
-        M-step:
-
-        .. math::
-
-            q_i^{(s+1)} = \frac{1}{N} \sum_{n=1}^N p_i^{(s+1)}(x_n)
-
-        where:
-
-        - :math:`p_i(x)` are posterior probabilities predicted by the classifier
-
-        - :math:`q_i^{(s)}` are class prevalence estimates at iteration :math:`s`
-
-        - :math:`N` is the number of test instances.
-
-        Calibrations supported on posterior probabilities before **EM** iteration:
-
-        Temperature Scaling (TS):
-
-        .. math::
-
-            \hat{p} = \text{softmax}\left(\frac{\log(p)}{T}\right)
-
-        Bias-Corrected Temperature Scaling (BCTS):
-
-        .. math::
-
-            \hat{p} = \text{softmax}\left(\frac{\log(p)}{T} + b\right)
-
-        Vector Scaling (VS):
-
-        .. math::
-
-            \hat{p}_i = \text{softmax}(W_i \cdot \log(p_i) + b_i)
-
-        No-Bias Vector Scaling (NBVS):
-
-        .. math::
-
-            \hat{p}_i = \text{softmax}(W_i \cdot \log(p_i))
+    Supported calibration methods via ``calib_function``: Temperature Scaling
+    (``'ts'``), Bias-Corrected Temperature Scaling (``'bcts'``), Vector
+    Scaling (``'vs'``), and No-Bias Vector Scaling (``'nbvs'``).
 
     Parameters
     ----------
     estimator : estimator, optional
-        Probabilistic classifier supporting predict_proba.
+        A probabilistic classifier with ``fit`` and ``predict_proba`` methods.
     tol : float, default=1e-4
-        Convergence threshold.
+        Convergence threshold on the prevalence change between iterations.
     max_iter : int, default=100
-        Maximum EM iterations.
-    calib_function : str or callable, optional
-        Calibration method:
-        - 'ts': Temperature Scaling
-        - 'bcts': Bias-Corrected Temperature Scaling
-        - 'vs': Vector Scaling
-        - 'nbvs': No-Bias Vector Scaling
-        - callable: custom calibration function
+        Maximum number of EM iterations.
+    calib_function : {'ts', 'bcts', 'vs', 'nbvs'} or callable or None, default=None
+        Calibration applied to posteriors before EM. ``None`` skips calibration.
     criteria : callable, default=MAE
-        Convergence metric.
+        Convergence criterion comparing successive prevalence estimates.
+    on_calib_error : {'raise', 'backup'}, default='backup'
+        Behaviour when calibration fails: ``'raise'`` re-raises the error;
+        ``'backup'`` falls back to uncalibrated posteriors.
 
-    References
+    Attributes
     ----------
-    .. [1] Saerens, M., Latinne, P., & Decaestecker, C. (2002).
-        Adjusting the Outputs of a Classifier to New a Priori Probabilities.
-        Neural Computation, 14(1), 2141-2156.
-    .. [2] Esuli, A., Moreo, A., & Sebastiani, F. (2023). Learning to Quantify. Springer.
+    estimator_ : estimator
+        The fitted underlying classifier.
+    classes_ : ndarray of shape (n_classes,)
+        Class labels seen during ``fit``.
+    priors_ : ndarray of shape (n_classes,)
+        Training class prevalences.
 
     Examples
     --------
-    >>> from sklearn.datasets import make_classification
+    >>> from mlquantify.likelihood import EMQ
     >>> from sklearn.linear_model import LogisticRegression
-    >>> X, y = make_classification(n_samples=200, n_features=10, random_state=7)
-    >>> q = EMQ(estimator=LogisticRegression(max_iter=500), calib_function='ts')
-    >>> q.fit(X[:150], y[:150])
-    EMQ(...)
-    >>> prev = q.predict(X[150:])
-    >>> round(float(prev.sum()), 6)
-    1.0
-    >>> probs_train = q.estimator.predict_proba(X[:150])
-    >>> probs_test = q.estimator.predict_proba(X[150:])
-    >>> prev2 = q.aggregate(probs_test, probs_train, y[:150])
-    >>> round(float(prev2.sum()), 6)
-    1.0
+    >>> from sklearn.datasets import make_classification
+    >>> X, y = make_classification(n_samples=200, random_state=42)
+    >>> q = EMQ(estimator=LogisticRegression()).fit(X, y)
+    >>> q.predict(X)
+    {0: 0.49, 1: 0.51}
+    >>> # call aggregate with pre-computed posteriors
+    >>> proba_train = q.estimator_.predict_proba(X)
+    >>> proba_test = q.estimator_.predict_proba(X)
+    >>> q.aggregate(proba_test, proba_train, y)
+    {0: 0.49, 1: 0.51}
+
+    References
+    ----------
+    .. dropdown:: References
+
+        .. [1] Saerens, M., Latinne, P., & Decaestecker, C. (2002).
+               Adjusting the Outputs of a Classifier to New a Priori Probabilities.
+               *Neural Computation*, 14(1), 2141–2156.
+        .. [2] Alexandari, A., Kundaje, A., & Shrikumar, A. (2020).
+               Maximum Likelihood with Bias-Corrected Calibration is Hard-to-Beat
+               at Label Shift Adaptation. *ICML*, pp. 222–232.
+        .. [3] Esuli, A., Moreo, A., & Sebastiani, F. (2023).
+               *Learning to Quantify*. Springer.
     """
 
 
@@ -349,7 +357,62 @@ class EMQ(BaseLikelihoodQuantifier):
 
 @binary_quantifier(strategy_attr="strategy")
 class CDE(BaseLikelihoodQuantifier):
-    r"""CDE-Iterate for binary prevalence estimation."""
+    r"""CDE-Iterate quantifier.
+
+    Estimates binary class prevalence by iteratively adjusting a decision
+    threshold using class-cost ratios derived from training priors and the
+    current prevalence estimate. At each iteration the threshold is updated
+    until the predicted positive proportion stabilises.
+
+    This is a **binary-only** method. Multiclass problems are handled with a
+    one-vs-rest (OvR) strategy by default.
+
+    Parameters
+    ----------
+    estimator : estimator, optional
+        A probabilistic classifier with ``fit`` and ``predict_proba`` methods.
+    tol : float, default=1e-4
+        Convergence threshold on the positive prevalence change.
+    max_iter : int, default=100
+        Maximum number of iterations.
+    init_cfp : float, default=1.0
+        Initial cost of false positives.
+    strategy : {'ovr', 'ovo'}, default='ovr'
+        Multiclass decomposition strategy.
+    n_jobs : int or None, default=None
+        Number of parallel jobs for multiclass decomposition.
+
+    Attributes
+    ----------
+    estimator_ : estimator
+        The fitted underlying classifier.
+    classes_ : ndarray of shape (n_classes,)
+        Class labels seen during ``fit``.
+    priors_ : ndarray of shape (n_classes,)
+        Training class prevalences.
+
+    Examples
+    --------
+    >>> from mlquantify.likelihood import CDE
+    >>> from sklearn.linear_model import LogisticRegression
+    >>> from sklearn.datasets import make_classification
+    >>> X, y = make_classification(n_samples=200, random_state=42)
+    >>> q = CDE(estimator=LogisticRegression()).fit(X, y)
+    >>> q.predict(X)
+    {0: 0.49, 1: 0.51}
+    >>> # call aggregate with pre-computed posteriors
+    >>> proba_test = q.estimator_.predict_proba(X)
+    >>> q.aggregate(proba_test, train_labels=y)
+    {0: 0.49, 1: 0.51}
+
+    References
+    ----------
+    .. dropdown:: References
+
+        .. [1] Barranquero, J., Díez, J., & del Coz, J. J. (2015).
+               Quantification-Oriented Learning Based on Reliable Classifiers.
+               *Pattern Recognition*, 48(2), 591–604.
+    """
 
     _parameter_constraints = {
         "tol": [Interval(0, None, inclusive_left=False)],

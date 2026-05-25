@@ -20,7 +20,57 @@ class KDEyQuantifier(
     AggregativeMixin,
     BaseMatchingQuantifier,
 ):
-    r"""Base class for KDEy density matching quantifiers."""
+    r"""Abstract base class for KDE-based density matching quantifiers.
+
+    Fits kernel density estimates (KDEs) over classifier posterior probabilities
+    for each class and estimates test prevalence by finding the mixture of class
+    densities that best matches the test density.
+
+    Parameters
+    ----------
+    estimator : estimator, optional
+        A probabilistic classifier with ``fit`` and ``predict_proba`` methods.
+    bandwidth : float, default=0.1
+        Bandwidth of the kernel density estimator.
+    kernel : str, default='gaussian'
+        Kernel type for the KDE. See ``sklearn.neighbors.KernelDensity``.
+    solver : str, default='slsqp'
+        Optimization solver.
+    cv : int or None, default=None
+        Cross-validation folds for computing training scores.
+    stratified : bool, default=True
+        Whether to stratify CV splits.
+    shuffle : bool, default=False
+        Whether to shuffle data before splitting.
+    random_state : int or None, default=None
+        Random seed for reproducibility.
+
+    Attributes
+    ----------
+    estimator_ : estimator
+        The fitted underlying classifier.
+    classes_ : ndarray of shape (n_classes,)
+        Class labels seen during ``fit``.
+
+    Examples
+    --------
+    >>> from mlquantify.matching._density import KDEyQuantifier
+    >>> from mlquantify.base_aggregative import SoftPredictionMixin, AggregativeMixin
+    >>> from mlquantify.matching._base import BaseMatchingQuantifier
+    >>> from sklearn.linear_model import LogisticRegression
+    >>> from sklearn.datasets import make_classification
+    >>> import numpy as np
+    >>> class MyKDEy(KDEyQuantifier):
+    ...     def _precompute_density_terms(self, train_scores=None,
+    ...                                   train_labels=None, train_representation=None):
+    ...         pass  # no precomputation needed
+    ...     def _solve_prevalence(self, test_representation, train_representations):
+    ...         alpha = np.mean(test_representation)
+    ...         return np.array([1 - alpha, alpha]), None
+    >>> X, y = make_classification(n_samples=200, random_state=42)
+    >>> MyKDEy(estimator=LogisticRegression()).fit(X, y).predict(X)
+    {0: 0.49, 1: 0.51}
+    """
 
     _parameter_constraints = {
         "bandwidth": [Interval(0, None, inclusive_left=False)],
@@ -129,7 +179,60 @@ class KDEyQuantifier(
     
     
 class KDEyML(KDEyQuantifier):
-    r"""KDEy with maximum likelihood density matching."""
+    r"""KDEy Maximum Likelihood (KDEy-ML) quantifier.
+
+    Estimates class prevalences by maximising the mixture log-likelihood of
+    the test posterior-probability scores under class-conditional KDE densities.
+
+    Parameters
+    ----------
+    estimator : estimator, optional
+        A probabilistic classifier with ``fit`` and ``predict_proba`` methods.
+    bandwidth : float, default=0.1
+        Bandwidth of the kernel density estimator.
+    kernel : str, default='gaussian'
+        Kernel type for the KDE.
+    solver : str, default='slsqp'
+        Optimization solver.
+    cv : int or None, default=None
+        Cross-validation folds for computing training scores.
+    stratified : bool, default=True
+        Whether to stratify CV splits.
+    shuffle : bool, default=False
+        Whether to shuffle data before splitting.
+    random_state : int or None, default=None
+        Random seed for reproducibility.
+
+    Attributes
+    ----------
+    estimator_ : estimator
+        The fitted underlying classifier.
+    classes_ : ndarray of shape (n_classes,)
+        Class labels seen during ``fit``.
+
+    Examples
+    --------
+    >>> from mlquantify.matching import KDEyML
+    >>> from sklearn.linear_model import LogisticRegression
+    >>> from sklearn.datasets import make_classification
+    >>> X, y = make_classification(n_samples=200, random_state=42)
+    >>> q = KDEyML(estimator=LogisticRegression()).fit(X, y)
+    >>> q.predict(X)
+    {0: 0.49, 1: 0.51}
+    >>> # call aggregate with pre-computed scores
+    >>> import numpy as np
+    >>> train_scores = LogisticRegression().fit(X, y).predict_proba(X)
+    >>> q.aggregate(X, train_scores, y)
+    {0: 0.49, 1: 0.51}
+
+    References
+    ----------
+    .. dropdown:: References
+
+        .. [1] Moreo, A., González, P., & del Coz, J. J. (2024).
+               Kernel Density Estimation for Multiclass Quantification.
+               *Machine Learning*, 113, 3075–3107.
+    """
 
 
     def _precompute_density_terms(
@@ -160,7 +263,58 @@ class KDEyML(KDEyQuantifier):
     
     
 class KDEyHD(KDEyQuantifier):
-    r"""KDEy with Monte Carlo Hellinger distance approximation."""
+    r"""KDEy Hellinger Distance (KDEy-HD) quantifier.
+
+    Estimates class prevalences by approximating the Hellinger distance between
+    the test density and the mixture of class-conditional KDE densities using
+    Monte Carlo sampling from the reference distribution.
+
+    Parameters
+    ----------
+    estimator : estimator, optional
+        A probabilistic classifier with ``fit`` and ``predict_proba`` methods.
+    bandwidth : float, default=0.1
+        Bandwidth of the kernel density estimator.
+    kernel : str, default='gaussian'
+        Kernel type for the KDE.
+    montecarlo_trials : int, default=10000
+        Number of Monte Carlo samples for approximating the Hellinger distance.
+    solver : str, default='slsqp'
+        Optimization solver.
+    cv : int or None, default=None
+        Cross-validation folds for computing training scores.
+    stratified : bool, default=True
+        Whether to stratify CV splits.
+    shuffle : bool, default=False
+        Whether to shuffle data before splitting.
+    random_state : int or None, default=None
+        Random seed for reproducibility.
+
+    Attributes
+    ----------
+    estimator_ : estimator
+        The fitted underlying classifier.
+    classes_ : ndarray of shape (n_classes,)
+        Class labels seen during ``fit``.
+
+    Examples
+    --------
+    >>> from mlquantify.matching import KDEyHD
+    >>> from sklearn.linear_model import LogisticRegression
+    >>> from sklearn.datasets import make_classification
+    >>> X, y = make_classification(n_samples=200, random_state=42)
+    >>> q = KDEyHD(estimator=LogisticRegression()).fit(X, y)
+    >>> q.predict(X)
+    {0: 0.49, 1: 0.51}
+
+    References
+    ----------
+    .. dropdown:: References
+
+        .. [1] Moreo, A., González, P., & del Coz, J. J. (2024).
+               Kernel Density Estimation for Multiclass Quantification.
+               *Machine Learning*, 113, 3075–3107.
+    """
 
     _parameter_constraints = {
         "bandwidth": [Interval(0, None, inclusive_left=False)],
@@ -257,7 +411,56 @@ class KDEyHD(KDEyQuantifier):
     
     
 class KDEyCS(KDEyQuantifier):
-    r"""KDEy with closed-form Cauchy-Schwarz divergence."""
+    r"""KDEy Cauchy-Schwarz (KDEy-CS) quantifier.
+
+    Estimates class prevalences by minimising a closed-form Cauchy-Schwarz
+    divergence between the test density and the mixture of Gaussian
+    class-conditional KDE densities. Only the Gaussian kernel is supported.
+
+    Parameters
+    ----------
+    estimator : estimator, optional
+        A probabilistic classifier with ``fit`` and ``predict_proba`` methods.
+    bandwidth : float, default=0.1
+        Bandwidth of the Gaussian kernel density estimator.
+    kernel : str, default='gaussian'
+        Must be ``'gaussian'``; other kernels are not supported.
+    solver : str, default='slsqp'
+        Optimization solver.
+    cv : int or None, default=None
+        Cross-validation folds for computing training scores.
+    stratified : bool, default=True
+        Whether to stratify CV splits.
+    shuffle : bool, default=False
+        Whether to shuffle data before splitting.
+    random_state : int or None, default=None
+        Random seed for reproducibility.
+
+    Attributes
+    ----------
+    estimator_ : estimator
+        The fitted underlying classifier.
+    classes_ : ndarray of shape (n_classes,)
+        Class labels seen during ``fit``.
+
+    Examples
+    --------
+    >>> from mlquantify.matching import KDEyCS
+    >>> from sklearn.linear_model import LogisticRegression
+    >>> from sklearn.datasets import make_classification
+    >>> X, y = make_classification(n_samples=200, random_state=42)
+    >>> q = KDEyCS(estimator=LogisticRegression()).fit(X, y)
+    >>> q.predict(X)
+    {0: 0.49, 1: 0.51}
+
+    References
+    ----------
+    .. dropdown:: References
+
+        .. [1] Moreo, A., González, P., & del Coz, J. J. (2024).
+               Kernel Density Estimation for Multiclass Quantification.
+               *Machine Learning*, 113, 3075–3107.
+    """
 
     _parameter_constraints = {
         "bandwidth": [Interval(0, None, inclusive_left=False)],

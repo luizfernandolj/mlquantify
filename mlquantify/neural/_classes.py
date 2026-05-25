@@ -39,28 +39,45 @@ EPS = 1e-12
 
 
 class EarlyStop:
-    """
-    A class implementing the early-stopping condition typically used for training neural networks.
+    r"""Early stopping condition for neural network training.
 
-    >>> earlystop = EarlyStop(patience=2, lower_is_better=True)
-    >>> earlystop(0.9, epoch=0)
-    >>> earlystop(0.7, epoch=1)
-    >>> earlystop.IMPROVED  # is True
-    >>> earlystop(1.0, epoch=2)
-    >>> earlystop.STOP  # is False (patience=1)
-    >>> earlystop(1.0, epoch=3)
-    >>> earlystop.STOP  # is True (patience=0)
-    >>> earlystop.best_epoch  # is 1
-    >>> earlystop.best_score  # is 0.7
+    Tracks a monitored metric across epochs and sets ``STOP = True`` when
+    the metric fails to improve for ``patience`` consecutive calls.
 
-    :param patience: the number of (consecutive) times that a monitored evaluation metric (typically obtaind in a
-        held-out validation split) can be found to be worse than the best one obtained so far, before flagging the
-        stopping condition. An instance of this class is `callable`, and is to be used as follows:
-    :param lower_is_better: if True (default) the metric is to be minimized.
-    :ivar best_score: keeps track of the best value seen so far
-    :ivar best_epoch: keeps track of the epoch in which the best score was set
-    :ivar STOP: flag (boolean) indicating the stopping condition
-    :ivar IMPROVED: flag (boolean) indicating whether there was an improvement in the last call
+    Parameters
+    ----------
+    patience : int
+        Number of consecutive non-improving epochs before stopping.
+    lower_is_better : bool, default=True
+        If ``True``, a lower metric value is considered better.
+
+    Attributes
+    ----------
+    best_score : float or None
+        Best metric value seen so far.
+    best_epoch : int or None
+        Epoch at which the best score was recorded.
+    STOP : bool
+        ``True`` when the stopping condition has been triggered.
+    IMPROVED : bool
+        ``True`` if the last call improved the best score.
+
+    Examples
+    --------
+    >>> from mlquantify.neural._classes import EarlyStop
+    >>> es = EarlyStop(patience=2, lower_is_better=True)
+    >>> es(0.9, epoch=0)
+    >>> es(0.7, epoch=1)
+    >>> es.IMPROVED
+    True
+    >>> es(1.0, epoch=2)
+    >>> es.STOP
+    False
+    >>> es(1.0, epoch=3)
+    >>> es.STOP
+    True
+    >>> es.best_epoch
+    1
     """
 
     def __init__(self, patience, lower_is_better=True):
@@ -95,24 +112,43 @@ class EarlyStop:
 
 
 class QuaNetModule(nn.Module):
-    r"""
-    PyTorch module implementing the forward pass of QuaNet, as described in
-    Esuli et al. (2018) "A Recurrent Neural Network for Sentiment Quantification". [file:1][file:3]
+    r"""PyTorch module implementing the QuaNet forward pass.
 
-    This module takes as input:
-      - the document embeddings of a bag,
-      - the posterior probabilities for each document in the bag,
-      - a fixed-size vector of quantification statistics (e.g., CC/ACC/PCC/PACC outputs),
+    Takes as input a bag of document embeddings, their posterior probabilities,
+    and a vector of simple quantification statistics (e.g. CC, PCC, EMQ outputs).
+    Passes the (embedding, posterior) sequence through a bidirectional LSTM,
+    concatenates the final hidden state with the statistics vector, and produces
+    a class-prevalence estimate through fully connected layers with softmax output.
 
-    and outputs a class-prevalence vector for the bag.
+    Parameters
+    ----------
+    doc_embedding_size : int
+        Dimensionality of document embeddings.
+    n_classes : int
+        Number of target classes.
+    stats_size : int
+        Size of the statistics vector concatenated after the LSTM.
+    lstm_hidden_size : int, default=64
+        Hidden size of the LSTM.
+    lstm_nlayers : int, default=1
+        Number of stacked LSTM layers.
+    ff_layers : sequence of int, default=(1024, 512)
+        Sizes of fully connected layers after the LSTM embedding.
+    bidirectional : bool, default=True
+        Whether to use a bidirectional LSTM.
+    qdrop_p : float, default=0.5
+        Dropout probability in the LSTM and FC layers.
+    order_by : int or None, default=0
+        Class index used to sort the input sequence by posterior probability.
+        ``None`` disables sorting.
 
-    Core idea:
-      - Concatenate document embeddings and posterior probabilities.
-      - Sort the sequence by the posterior probability of a selected class (optional).
-      - Pass the sequence through an LSTM (possibly bidirectional).
-      - Take the final hidden state(s) as a "quantification embedding".
-      - Concatenate this embedding with the quantification statistics.
-      - Pass through one or more fully connected layers and a final softmax to obtain prevalences.
+    References
+    ----------
+    .. dropdown:: References
+
+        .. [1] Esuli, A., Moreo, A., & Sebastiani, F. (2018).
+               A Recurrent Neural Network for Sentiment Quantification.
+               *CIKM*, pp. 1775–1778.
     """
 
     def __init__(
@@ -253,59 +289,76 @@ class QuaNetModule(nn.Module):
 
 
 class QuaNet(SoftPredictionMixin, AggregativeMixin, BaseQuantifier):
-    r"""
-    QuaNetQuantifier: a deep quantification method following the QuaNet architecture,
-    implemented in the `mlquantify` style.
+    r"""QuaNet: deep neural quantification with an LSTM architecture.
 
-    This class wraps a base probabilistic estimator that:
-      - can be trained on labeled instances,
-      - can output posterior probabilities via `predict_proba(X)`,
-      - can transform instances into embeddings via `transform(X)`.
+    Learns a mapping from bags of instances to class-prevalence vectors using
+    an LSTM network. During training, artificial bags are generated via the APP
+    protocol; for each bag the network receives document embeddings, posterior
+    probabilities, and simple quantification statistics (CC, PCC, EMQ …) and
+    is trained to minimise the MSE against the true bag prevalences.
 
-    QuaNet then learns a mapping from bags of instances to class-prevalence vectors by:
-      - generating artificial bags using the APP protocol (APP: Artificial Prevalence Protocol),
-      - computing simple quantification estimates (CC, ACC, PCC, PACC, ...) on each bag,
-      - feeding the sequence of (embedding, posterior) pairs and the statistics vector into an LSTM-based network,
-      - minimizing a bag-level quantification loss (MSE between predicted and true prevalences).[file:1][file:3]
+    Requires a base estimator that implements ``fit``, ``predict_proba``, and
+    ``transform`` (the last to produce document embeddings). PyTorch must be
+    installed.
 
     Parameters
     ----------
     estimator : estimator
-        Base probabilistic classifier. Must implement:
-          - fit(X, y),
-          - predict_proba(X) -> array-like (n_samples, n_classes),
-          - transform(X) -> array-like (n_samples, emb_dim).
+        Base probabilistic classifier with ``fit``, ``predict_proba``, and
+        ``transform`` methods.
     fit_estimator : bool, default=True
-        If True, the estimator is trained inside QuaNetQuantifier.fit.
-        If False, it is assumed to be already fitted.
+        If ``True``, fit the estimator inside :meth:`fit`.
     sample_size : int, default=100
-        Bag size used by the APP protocol during QuaNet training.
+        Bag size used by the APP protocol during training.
     n_epochs : int, default=100
-        Maximum number of QuaNet training epochs.
+        Maximum number of training epochs.
     tr_iter : int, default=500
-        Number of APP samplings (training iterations) per epoch.
+        Training APP samplings per epoch.
     va_iter : int, default=100
-        Number of APP samplings (validation iterations) per epoch.
+        Validation APP samplings per epoch.
     lr : float, default=1e-3
-        Learning rate for the Adam optimizer.
+        Learning rate for the Adam optimiser.
     lstm_hidden_size : int, default=64
-        Hidden size of the QuaNet LSTM.
+        Hidden size of the LSTM.
     lstm_nlayers : int, default=1
-        Number of layers in the QuaNet LSTM.
+        Number of LSTM layers.
     ff_layers : sequence of int, default=(1024, 512)
-        Sizes of the fully connected layers on top of the LSTM quantification embedding.
+        Sizes of the fully connected layers above the LSTM embedding.
     bidirectional : bool, default=True
         Whether to use a bidirectional LSTM.
     qdrop_p : float, default=0.5
-        Dropout probability used in QuaNet.
+        Dropout probability in the network.
     patience : int, default=10
-        Early-stopping patience in number of epochs without validation improvement.
-    checkpointdir : str, default="./checkpoint_quanet"
-        Directory where intermediate QuaNet weights are stored.
+        Early-stopping patience (epochs without validation improvement).
+    checkpointdir : str, default='./checkpoint_quanet'
+        Directory for saving intermediate model weights.
     checkpointname : str or None, default=None
-        Name of the saved checkpoint file. If None, a random name is generated.
-    device : {"cpu", "cuda"}, default="cuda"
-        Device on which to run the QuaNet model.
+        Checkpoint filename. ``None`` generates a random name.
+    device : {'cpu', 'cuda'}, default='cuda'
+        Device used for PyTorch computations.
+
+    Attributes
+    ----------
+    classes_ : ndarray of shape (n_classes,)
+        Class labels seen during ``fit``.
+
+    Examples
+    --------
+    .. code-block:: python
+
+        # Requires PyTorch and an estimator with a transform() method
+        from mlquantify.neural import QuaNet
+        q = QuaNet(estimator=my_embedding_classifier, device='cpu')
+        q.fit(X_train, y_train)
+        q.predict(X_test)
+
+    References
+    ----------
+    .. dropdown:: References
+
+        .. [1] Esuli, A., Moreo, A., & Sebastiani, F. (2018).
+               A Recurrent Neural Network for Sentiment Quantification.
+               *CIKM*, pp. 1775–1778.
     """
 
     _parameter_constraints = {

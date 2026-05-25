@@ -13,7 +13,7 @@ def _get_estimator(quantifier):
 
 
 class AggregativeMixin:
-    """Mixin class for all aggregative quantifiers.
+    r"""Mixin class for all aggregative quantifiers.
     
     An aggregative quantifier is a quantifier that relies on an underlying
     supervised estimator to produce predictions on which the quantification 
@@ -258,7 +258,7 @@ class AggregativeMixin:
     
 
 class SoftPredictionMixin:
-    """Soft predictions mixin for aggregative quantifiers.
+    r"""Soft predictions mixin for aggregative quantifiers.
 
     This mixin provides the following change tags:
     - `estimator_function`: "predict_proba"
@@ -301,7 +301,7 @@ class SoftPredictionMixin:
 
 
 class CrispPredictionMixin:
-    """Crisp predictions mixin for aggregative quantifiers.
+    r"""Crisp predictions mixin for aggregative quantifiers.
     
     This mixin provides the following change tags:
     - `estimator_function`: "predict"

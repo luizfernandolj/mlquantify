@@ -11,7 +11,7 @@ from mlquantify.utils._validation import validate_parameter_constraints
 
 
 class BaseQuantifier(ABC, BaseEstimator):
-    """Base class for all quantifiers in mlquantify.
+    r"""Base class for all quantifiers in mlquantify.
     
     Inhering from this class provides default implementations for
     
@@ -99,7 +99,7 @@ class BaseQuantifier(ABC, BaseEstimator):
     
 
 class MetaquantifierMixin:
-    """Mixin class for meta-quantifiers.
+    r"""Mixin class for meta-quantifiers.
     
     This mixin is empty, and only exists to indicate that the quantifier is 
     a meta quantifier
@@ -127,7 +127,7 @@ class MetaquantifierMixin:
 
 
 class ProtocolMixin:
-    """Mixin class for protocol-based quantifiers.
+    r"""Mixin class for protocol-based quantifiers.
     
     This mixin indicates that the quantifier follows a specific protocol,
     by setting the estimation_type tag to "sample" and requires_fit to False.

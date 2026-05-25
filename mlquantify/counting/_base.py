@@ -16,79 +16,43 @@ from mlquantify.utils._validation import check_classes_attribute, validate_predi
 class BaseCount(AggregativeMixin, BaseQuantifier):
     r"""Base class for count-based quantifiers.
 
-    Implements the foundation for *count-based quantification* methods,
-    where class prevalences are estimated directly from classifier outputs
-    without any correction.
-
-    The method assumes a classifier :math:`f(x)` producing either hard or
-    probabilistic predictions. The prevalence of each class :math:`c` in
-    the unlabeled test set is estimated as:
-
-    .. math::
-        \hat{\pi}_c = \frac{1}{N} \sum_{i=1}^{N} I(f(x_i) = c)
-
-    for *hard* classifiers, or equivalently as:
-
-    .. math::
-        \hat{\pi}_c = \frac{1}{N} \sum_{i=1}^{N} f_c(x_i)
-
-    for *soft* classifiers where :math:`f_c(x)` denotes the posterior
-    probability of class :math:`c`.
-
-    This is the classical *Classify and Count (CC)* and *Probabilistic
-    Classify and Count (PCC)* approach, introduced by Forman (2005, 2008)
-    and unified in the constrained regression framework of Firat et al. (2016).
+    Provides ``fit`` and ``predict`` for :class:`~mlquantify.counting.CC` and
+    :class:`~mlquantify.counting.PCC`. Subclasses must implement :meth:`aggregate`.
 
     Parameters
     ----------
-    estimator : object, optional
-        A supervised learning model implementing `fit` and `predict`
-        or `predict_proba`.
+    estimator : estimator, optional
+        A supervised learning model with ``fit`` and ``predict`` or
+        ``predict_proba``, depending on the subclass.
 
     Attributes
     ----------
-    estimator : object
-        Underlying classification model.
-    classes : ndarray of shape (n_classes,)
-        Unique class labels observed during training.
+    estimator_ : estimator
+        The fitted underlying estimator.
+    classes_ : ndarray of shape (n_classes,)
+        Class labels seen during ``fit``.
 
     Examples
     --------
-    >>> from mlquantify.base_count import BaseCount
-    >>> from mlquantify.utils.validation import validate_prevalences
-    >>> import numpy as np
-
-    >>> class CC(CrispPredictionMixin, BaseCount):
-    ...     def __init__(self, estimator=None, threshold=0.5):
-    ...         super().__init__(estimator)
-    ...         self.threshold = threshold
-    ...     def aggregate(self, predictions):
-    ...         predictions = validate_predictions(self, predictions)
-    ...         self.classes = self.classes if hasattr(self, 'classes') else np.unique(predictions)
-    ...         counts = np.array([np.count_nonzero(predictions == c) for c in self.classes])
-    ...         prevalences = counts / len(predictions)
-    ...         return validate_prevalences(self, prevalences, self.classes)
-
+    >>> from mlquantify.counting._base import BaseCount
+    >>> from mlquantify.base_aggregative import CrispPredictionMixin
     >>> from sklearn.linear_model import LogisticRegression
-    >>> X = np.random.randn(100, 5)
-    >>> y = np.random.randint(0, 2, 100)
-    >>> q = CC(estimator=LogisticRegression())
-    >>> q.fit(X, y)
-    >>> q.predict(X).round(3)
-    array([0.47, 0.53])
-
-    References
-    ----------
-    [1] Forman, G. (2005). *Counting Positives Accurately Despite Inaccurate Classification.*
-        ECML, pp. 564-575.
-    [2] Forman, G. (2008). *Quantifying Counts and Costs via Classification.*
-        Data Mining and Knowledge Discovery, 17(2), 164-206.
+    >>> import numpy as np
+    >>> class MyCC(CrispPredictionMixin, BaseCount):
+    ...     def __init__(self, estimator=None):
+    ...         self.estimator = estimator or LogisticRegression()
+    ...     def aggregate(self, predictions, y_train=None):
+    ...         classes, counts = np.unique(predictions, return_counts=True)
+    ...         return dict(zip(classes, counts / len(predictions)))
+    >>> X, y = np.random.randn(100, 5), np.random.randint(0, 2, 100)
+    >>> MyCC().fit(X, y).predict(X)
+    {0: 0.47, 1: 0.53}
     """
 
     @abstractmethod
     def __init__(self, estimator=None):
         self.estimator = estimator
-        
+
     def __mlquantify_tags__(self):
         tags = super().__mlquantify_tags__()
         tags.prediction_requirements.requires_train_proba = False
@@ -97,7 +61,7 @@ class BaseCount(AggregativeMixin, BaseQuantifier):
 
     @_fit_context(prefer_skip_nested_validation=True)
     def fit(self, X, y, estimator_fitted=False, *args, **kwargs):
-        """Fit the quantifier using the provided data and estimator."""
+        r"""Fit the quantifier using the provided data and estimator."""
         X, y = validate_data(self, X, y)
         self.classes_ = np.unique(y)
         estimator = _get_estimator(self)
@@ -107,7 +71,7 @@ class BaseCount(AggregativeMixin, BaseQuantifier):
         return self
     
     def predict(self, X):
-        """Predict class prevalences for the given data."""
+        r"""Predict class prevalences for the given data."""
         predictions = self._predict_estimator(X)
         prevalences = self.aggregate(predictions)
         return prevalences
@@ -120,81 +84,57 @@ class BaseCount(AggregativeMixin, BaseQuantifier):
 class BaseAdjustCount(AggregativeMixin, BaseQuantifier):
     r"""Base class for adjustment-based quantifiers.
 
-    This class generalizes *adjusted count* quantification methods,
-    providing a framework for correcting bias in raw classifier outputs
-    based on estimated confusion matrices or rate statistics.
-
-    Following Forman (2005, 2008), in the binary case the correction
-    uses true positive (TPR) and false positive (FPR) rates to adjust
-    the observed positive proportion :math:`\hat{p}'_{+}`:
-
-    .. math::
-        \hat{p}_{+} = \frac{\hat{p}'_{+} - \text{FPR}}{\text{TPR} - \text{FPR}}
-
-    In the multiclass extension (Firat et al., 2016), the same principle
-    can be expressed using matrix algebra. Let :math:`C` denote the
-    normalized confusion matrix where :math:`C_{ij} = P(\hat{y}=i|y=j)`
-    estimated via cross-validation. Then, given the observed distribution
-    of predictions :math:`\hat{\pi}'`, the corrected prevalence vector
-    :math:`\hat{\pi}` is obtained as:
-
-    .. math::
-        \hat{\pi}' = C \hat{\pi}
-        \quad \Rightarrow \quad
-        \hat{\pi} = C^{-1} \hat{\pi}'
-
-    subject to non-negativity and unit-sum constraints:
-
-    .. math::
-        \hat{\pi}_c \ge 0, \quad \sum_c \hat{\pi}_c = 1
-
-    This formulation can be solved via constrained least squares
-    (L2), least absolute deviation (L1), or Hellinger divergence
-    minimization, as discussed by Firat et al. (2016).
+    Fits the underlying estimator with cross-validation to produce
+    out-of-fold predictions (``train_predictions``) used for bias
+    correction in :meth:`aggregate`. Subclasses must implement
+    :meth:`_adjust`.
 
     Parameters
     ----------
-    estimator : object, optional
-        Supervised estimator implementing `fit` and (`predict` or `predict_proba`) depending on the quantifier.
+    estimator : estimator, optional
+        A supervised learning model.
+    cv : int, default=5
+        Number of cross-validation folds.
+    stratified : bool, default=True
+        Whether to use stratified CV splits.
+    shuffle : bool, default=False
+        Whether to shuffle data before splitting.
+    random_state : int or None, default=None
+        Random seed for reproducibility.
 
     Attributes
     ----------
-    estimator : object
-        Underlying classification model.
-    train_predictions : ndarray of shape (n_samples_train, n_classes)
-        Predictions on training data from cross-validation.
-    y_train : ndarray of shape (n_samples_train,)
-        True labels corresponding to training predictions.
-    classes : ndarray of shape (n_classes,)
-        Unique class labels.
+    estimator_ : estimator
+        The fitted underlying estimator.
+    classes_ : ndarray of shape (n_classes,)
+        Class labels seen during ``fit``.
+    train_predictions : ndarray
+        Cross-validated predictions on the training data.
+    y_train : ndarray of shape (n_samples,)
+        Labels corresponding to ``train_predictions``.
 
     Examples
     --------
-    >>> from mlquantify.base_count import BaseAdjustCount
-    >>> import numpy as np
+    >>> from mlquantify.counting._base import BaseAdjustCount
+    >>> from mlquantify.base_aggregative import CrispPredictionMixin
     >>> from sklearn.linear_model import LogisticRegression
-    >>> class ACC(CrispPredictionMixin, BaseAdjustCount):
-    ...     def _adjust(self, preds, train_preds, y_train):
-    ...         tpr = np.mean(train_preds[y_train == 1])
-    ...         fpr = np.mean(train_preds[y_train == 0])
-    ...         p_obs = np.mean(preds)
-    ...         p_adj = (p_obs - fpr) / (tpr - fpr)
-    ...         return np.clip([1 - p_adj, p_adj], 0, 1)
-    >>> X = np.random.randn(100, 5)
-    >>> y = np.random.randint(0, 2, 100)
-    >>> q = ACC(estimator=LogisticRegression())
-    >>> q.fit(X, y)
-    >>> q.predict(X).round(3)
-    array([0.52, 0.48])
-
-    References
-    ----------
-    [1] Forman, G. (2005). *Counting Positives Accurately Despite Inaccurate Classification.*
-        ECML 2005, LNAI 3720, pp. 564-575.
-    [2] Forman, G. (2008). *Quantifying Counts and Costs via Classification.*
-        Data Mining and Knowledge Discovery, 17(2), 164-206.
-    [3] Firat, A. (2016). *Unified Framework for Quantification.*
-        Proceedings of the AAAI Conference on Artificial Intelligence, Sections 3.2-3.3.
+    >>> import numpy as np
+    >>> class MyAdjusted(CrispPredictionMixin, BaseAdjustCount):
+    ...     def __init__(self, estimator=None):
+    ...         self.estimator = estimator or LogisticRegression()
+    ...         self.cv = 5
+    ...         self.stratified = True
+    ...         self.shuffle = False
+    ...         self.random_state = None
+    ...     def _adjust(self, predictions, train_predictions, y_train):
+    ...         tpr = np.mean(train_predictions[y_train == 1] > 0.5)
+    ...         fpr = np.mean(train_predictions[y_train == 0] > 0.5)
+    ...         p = np.mean(predictions > 0.5)
+    ...         p_adj = np.clip((p - fpr) / max(tpr - fpr, 1e-8), 0, 1)
+    ...         return np.array([1 - p_adj, p_adj])
+    >>> X, y = np.random.randn(100, 5), np.random.randint(0, 2, 100)
+    >>> MyAdjusted().fit(X, y).predict(X)
+    {0: 0.48, 1: 0.52}
     """
 
     @abstractmethod
@@ -207,7 +147,7 @@ class BaseAdjustCount(AggregativeMixin, BaseQuantifier):
 
     @_fit_context(prefer_skip_nested_validation=True)
     def fit(self, X, y, estimator_fitted=False, cv_prediction="refit"):
-        """Fit the quantifier using the provided data and estimator.
+        r"""Fit the quantifier using the provided data and estimator.
         
         Parameters
         ----------
@@ -251,7 +191,7 @@ class BaseAdjustCount(AggregativeMixin, BaseQuantifier):
         return self
     
     def predict(self, X):
-        """Predict class prevalences for the given data."""
+        r"""Predict class prevalences for the given data."""
         X = validate_data(self, X)
         
         predictions = self._predict_estimator(X)
@@ -260,7 +200,7 @@ class BaseAdjustCount(AggregativeMixin, BaseQuantifier):
         return prevalences
 
     def aggregate(self, predictions, train_predictions, y_train):
-        """Aggregate predictions and apply matrix- or rate-based bias correction. 
+        r"""Aggregate predictions and apply matrix- or rate-based bias correction. 
         
         Parameters
         ----------

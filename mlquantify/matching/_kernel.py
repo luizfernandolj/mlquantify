@@ -9,7 +9,47 @@ from mlquantify.utils._validation import validate_data
 
 
 class MatchingKernelQuantifier(BaseMatchingQuantifier):
-    r"""Abstract base class for kernel mean matching quantifiers."""
+    r"""Abstract base class for kernel mean matching quantifiers.
+
+    Estimates class prevalences by minimising the distance between the kernel
+    mean embedding of the test data and the mixture of class-conditional kernel
+    mean embeddings computed on training data.
+
+    Parameters
+    ----------
+    kernel : str, default='rbf'
+        Kernel function to use. One of ``'rbf'``, ``'linear'``, ``'poly'``,
+        ``'sigmoid'``, ``'cosine'``.
+    gamma : float or None, default=None
+        Kernel coefficient for ``'rbf'``, ``'poly'``, and ``'sigmoid'``.
+        If ``None``, uses ``1 / n_features``.
+    degree : int, default=3
+        Polynomial degree for the ``'poly'`` kernel.
+    coef0 : float, default=0.0
+        Independent term for ``'poly'`` and ``'sigmoid'`` kernels.
+    solver : str, default='slsqp'
+        Optimization solver.
+
+    Attributes
+    ----------
+    classes_ : ndarray of shape (n_classes,)
+        Class labels seen during ``fit``.
+
+    Examples
+    --------
+    >>> from mlquantify.matching._kernel import MatchingKernelQuantifier
+    >>> from sklearn.datasets import make_classification
+    >>> import numpy as np
+    >>> class MyKernelQ(MatchingKernelQuantifier):
+    ...     def fit(self, X, y):
+    ...         self.classes_ = np.unique(y)
+    ...         return self._fit(X, y)
+    ...     def predict(self, X):
+    ...         return self._predict(X)
+    >>> X, y = make_classification(n_samples=200, random_state=42)
+    >>> MyKernelQ().fit(X, y).predict(X)
+    {0: 0.49, 1: 0.51}
+    """
 
     _parameter_constraints = {
         "kernel": [Options(["rbf", "linear", "poly", "sigmoid", "cosine"])],
@@ -62,7 +102,48 @@ class MatchingKernelQuantifier(BaseMatchingQuantifier):
         return prevalence, loss
 
 class MMD_RKHS(MatchingKernelQuantifier):
-    r"""Maximum Mean Discrepancy in RKHS for class-ratio estimation."""
+    r"""Maximum Mean Discrepancy in RKHS (MMD-RKHS) quantifier.
+
+    Estimates class prevalences by minimising the squared distance between the
+    kernel mean embedding of the test sample and the mixture of class-conditional
+    kernel mean embeddings in a reproducing kernel Hilbert space.
+
+    Parameters
+    ----------
+    kernel : str, default='rbf'
+        Kernel function to use. One of ``'rbf'``, ``'linear'``, ``'poly'``,
+        ``'sigmoid'``, ``'cosine'``.
+    gamma : float or None, default=None
+        Kernel coefficient for ``'rbf'``, ``'poly'``, and ``'sigmoid'``.
+    degree : int, default=3
+        Polynomial degree for the ``'poly'`` kernel.
+    coef0 : float, default=0.0
+        Independent term for ``'poly'`` and ``'sigmoid'`` kernels.
+    solver : str, default='slsqp'
+        Optimization solver.
+
+    Attributes
+    ----------
+    classes_ : ndarray of shape (n_classes,)
+        Class labels seen during ``fit``.
+
+    Examples
+    --------
+    >>> from mlquantify.matching import MMD_RKHS
+    >>> from sklearn.datasets import make_classification
+    >>> X, y = make_classification(n_samples=200, random_state=42)
+    >>> q = MMD_RKHS().fit(X, y)
+    >>> q.predict(X)
+    {0: 0.49, 1: 0.51}
+
+    References
+    ----------
+    .. dropdown:: References
+
+        .. [1] Zhang, K., Schölkopf, B., Muandet, K., & Wang, Z. (2013).
+               Domain Adaptation under Target and Conditional Shift.
+               *ICML*, pp. 819–827.
+    """
 
     def __init__(
         self,

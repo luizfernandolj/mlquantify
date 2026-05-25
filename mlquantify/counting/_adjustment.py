@@ -30,72 +30,61 @@ from mlquantify.utils._constraints import Interval, Options
 
 @binary_quantifier(strategy_attr="strategy")
 class ThresholdAdjustment(SoftPredictionMixin, BaseAdjustCount):
-    r"""Base Class for Threshold-based adjustment methods for quantification.
+    r"""Abstract base class for ROC-threshold adjustment quantifiers.
 
-    This is the base class for methods such as ACC, X, MAX, T50, MS, and MS2, 
-    which adjust prevalence estimates based on the classifier's ROC curve, 
-    as proposed by [1]_.
+    Corrects the bias in :class:`CC` estimates by selecting a threshold
+    on the ROC curve and adjusting the observed positive proportion using
+    the corresponding TPR and FPR. Subclasses implement
+    :meth:`get_best_threshold` to define the selection strategy.
 
-    These methods correct the bias in *Classify & Count (CC)* estimates caused 
-    by differences in class distributions between the training and test datasets.
-    
-    The adjusted prevalence is calculated using the following formula:
-
-    .. math::
-
-        \hat{p} = \frac{p' - \text{FPR}}{\text{TPR} - \text{FPR}}
-
-    where:
-        - :math:`p'` is the observed positive proportion from CC,
-        - :math:`\text{TPR} = P(\hat{y}=1|y=1)` is the True Positive Rate,
-        - :math:`\text{FPR} = P(\hat{y}=1|y=0)` is the False Positive Rate.
-    
+    This is a **binary-only** method. When applied to multiclass problems,
+    a one-vs-rest (OvR) strategy is applied automatically.
 
     Parameters
     ----------
     estimator : estimator, optional
-        A supervised learning model with `fit` and `predict_proba` methods.
+        A classifier with ``fit`` and ``predict_proba`` methods.
     threshold : float, default=0.5
-        Classification threshold in [0, 1].
+        Default classification threshold; used directly by :class:`TAC`.
     strategy : {'ovr'}, default='ovr'
-        Strategy used for multiclass adaptation.
+        Multiclass decomposition strategy.
+    n_jobs : int or None, default=None
+        Number of parallel jobs for multiclass decomposition.
 
     Attributes
     ----------
-    estimator : estimator
-        The underlying classification model.
-    classes : ndarray of shape (n_classes,)
-        Unique class labels observed during training.
-
-    Notes
-    -----
-    - Defined only for binary quantification tasks.
-    - When applied to multiclass problems, the one-vs-rest strategy (`ovr`) 
-    is used automatically.
-    
-
+    estimator_ : estimator
+        The fitted underlying classifier.
+    classes_ : ndarray of shape (n_classes,)
+        Class labels seen during ``fit``.
+    train_predictions : ndarray
+        Cross-validated soft predictions used for TPR/FPR estimation.
+    y_train : ndarray of shape (n_samples,)
+        Training labels corresponding to ``train_predictions``.
+        
     Examples
     --------
-    >>> from sklearn.linear_model import LogisticRegression
     >>> from mlquantify.counting import ThresholdAdjustment
-    >>> import numpy as np
-    >>> class CustomThreshold(ThresholdAdjustment):
+    >>> from sklearn.ensemble import RandomForestClassifier
+    >>> from sklearn.datasets import make_classification
+    >>> class CustomTA(ThresholdAdjustment):
     ...     def get_best_threshold(self, thresholds, tprs, fprs):
-    ...         idx = np.argmax(tprs - fprs)
+    ...         idx = np.argmin(np.abs(tprs - 0.5))
     ...         return thresholds[idx], tprs[idx], fprs[idx]
-    >>> X = np.random.randn(100, 4)
-    >>> y = np.random.randint(0, 2, 100)
-    >>> q = CustomThreshold(estimator=LogisticRegression())
-    >>> q.fit(X, y)
-    >>> q.predict(X)
-    {0: 0.49, 1: 0.51}
-
+    >>> X, y = make_classification(n_samples=100, n_classes=2, n_informative=5, random_state=42)
+    >>> quantifier = CustomTA(estimator=RandomForestClassifier(random_state=42))
+    >>> quantifier.fit(X, y)
+    >>> quantifier.predict(X)
+    array([[0.3, 0.7]])
+    
     References
     ----------
-    .. [1] Forman, G. (2005). "Counting Positives Accurately Despite Inaccurate 
-        Classification", *Proceedings of ECML*, pp. 564-575.
-    .. [2] Forman, G. (2008). "Quantifying Counts and Costs via Classification", 
-        *Data Mining and Knowledge Discovery*, 17(2), 164-206.
+    .. dropdown:: References
+
+        .. [1] Forman, G. (2005). Counting Positives Accurately Despite Inaccurate
+               Classification. *ECML*, pp. 564–575.
+        .. [2] Forman, G. (2008). Quantifying Counts and Costs via Classification.
+               *Data Mining and Knowledge Discovery*, 17(2), 164–206.
     """
 
     _parameter_constraints = {
@@ -113,7 +102,7 @@ class ThresholdAdjustment(SoftPredictionMixin, BaseAdjustCount):
         self.n_jobs = n_jobs
 
     def _adjust(self, predictions, train_y_scores, y_train):
-        """Internal adjustment computation based on selected ROC threshold."""
+        r"""Internal adjustment computation based on selected ROC threshold."""
         positive_scores = train_y_scores[:, 1]
         
         thresholds, tprs, fprs = evaluate_thresholds(y_train, positive_scores)
@@ -132,37 +121,41 @@ class ThresholdAdjustment(SoftPredictionMixin, BaseAdjustCount):
     
     @abstractmethod
     def get_best_threshold(self, thresholds, tprs, fprs):
-        """Select the best threshold according to the specific method."""
+        r"""Select the best threshold according to the specific method."""
         ...
 
 
 class TAC(ThresholdAdjustment):
-    r"""Threshold Adjusted Count (TAC) — baseline threshold correction.
+    r"""Threshold Adjusted Count (TAC).
 
-    This method corrects the bias in class prevalence estimates caused by imperfect 
-    classification accuracy, by adjusting the observed positive count using estimates 
-    of the classifier's true positive rate (TPR) and false positive rate (FPR).
+    Applies the threshold adjustment correction at a fixed classification
+    threshold. TPR and FPR are estimated from cross-validated predictions
+    at the specified ``threshold`` value.
 
-    It uses a fixed classification threshold and applies the formula:
-
-    .. math::
-
-        p = \frac{p' - \text{FPR}}{\text{TPR} - \text{FPR}}
-
-    where :math:`p'` is the observed positive proportion from :class:`CC`,
-    
-    
     Parameters
     ----------
     estimator : estimator, optional
-        A supervised learning model with `fit` and `predict_proba` methods.
+        A classifier with ``fit`` and ``predict_proba`` methods.
     threshold : float, default=0.5
-        Classification threshold in [0, 1] for applying in the :class:`CC` output.
+        The classification threshold at which TPR and FPR are evaluated.
+        
+    Examples
+    --------
+    >>> from mlquantify.counting import TAC
+    >>> from sklearn.ensemble import RandomForestClassifier
+    >>> from sklearn.datasets import make_classification
+    >>> X, y = make_classification(n_samples=100, n_classes=2, n_informative=5, random_state=42)
+    >>> quantifier = TAC(threshold=0.3, estimator=RandomForestClassifier(random_state=42))
+    >>> quantifier.fit(X, y)
+    >>> quantifier.predict(X)
+    array([[0.4, 0.6]])
 
     References
     ----------
-    .. [1] Forman, G. (2005). "Counting Positives Accurately Despite Inaccurate Classification",
-           *ECML*, pp. 564-575.
+    .. dropdown:: References
+
+        .. [1] Forman, G. (2005). Counting Positives Accurately Despite Inaccurate
+               Classification. *ECML*, pp. 564–575.
     """
 
     def get_best_threshold(self, thresholds, tprs, fprs):
@@ -172,24 +165,35 @@ class TAC(ThresholdAdjustment):
 
 
 class TX(ThresholdAdjustment):
-    r"""Threshold X method — threshold where :math:`\text{TPR} + \text{FPR} = 1`.
+    r"""Threshold X (TX).
 
-    This method selects the classification threshold at which the sum of the true positive
-    rate (TPR) and false positive rate (FPR) equals one. This threshold choice balances 
-    errors in a specific way improving quantification.
-
+    Selects the threshold where ``TPR + FPR = 1``, balancing the two
+    error rates symmetrically around the ROC diagonal.
 
     Parameters
     ----------
     estimator : estimator, optional
-        A supervised learning model with `fit` and `predict_proba` methods.
+        A classifier with ``fit`` and ``predict_proba`` methods.
     threshold : float, default=0.5
-        Classification threshold in [0, 1] for applying in the :class:`CC` output.
+        Unused by this subclass; kept for API consistency.
+        
+    Examples
+    --------
+    >>> from mlquantify.counting import TX
+    >>> from sklearn.ensemble import RandomForestClassifier
+    >>> from sklearn.datasets import make_classification
+    >>> X, y = make_classification(n_samples=100, n_classes=2, n_informative=5, random_state=42)
+    >>> quantifier = TX(estimator=RandomForestClassifier(random_state=42))
+    >>> quantifier.fit(X, y)
+    >>> quantifier.predict(X)
+    array([[0.4, 0.6]])
 
     References
     ----------
-    .. [1] Forman, G. (2005). "Counting Positives Accurately Despite Inaccurate Classification",
-           *ECML*, pp. 564-575.
+    .. dropdown:: References
+
+        .. [1] Forman, G. (2005). Counting Positives Accurately Despite Inaccurate
+               Classification. *ECML*, pp. 564–575.
     """
     def get_best_threshold(self, thresholds, tprs, fprs):
         idx = np.argmin(np.abs((1-tprs) - fprs))
@@ -197,25 +201,35 @@ class TX(ThresholdAdjustment):
 
 
 class TMAX(ThresholdAdjustment):
-    r"""Threshold MAX method — threshold maximizing :math:`\text{TPR} - \text{FPR}`.
+    r"""Threshold MAX (TMAX).
 
-    This method selects the threshold that maximizes the difference between the true positive
-    rate (TPR) and the false positive rate (FPR), effectively optimizing classification
-    performance for quantification.
-
+    Selects the threshold that maximizes ``|TPR - FPR|``, which corresponds
+    to the most discriminative operating point on the ROC curve.
 
     Parameters
     ----------
     estimator : estimator, optional
-        A supervised learning model with `fit` and `predict_proba` methods.
+        A classifier with ``fit`` and ``predict_proba`` methods.
     threshold : float, default=0.5
-        Classification threshold in [0, 1] for applying in the :class:`CC` output.
-
+        Unused by this subclass; kept for API consistency.
+        
+    Examples
+    --------
+    >>> from mlquantify.counting import TMAX
+    >>> from sklearn.ensemble import RandomForestClassifier
+    >>> from sklearn.datasets import make_classification
+    >>> X, y = make_classification(n_samples=100, n_classes=2, n_informative=5, random_state=42)
+    >>> quantifier = TMAX(estimator=RandomForestClassifier(random_state=42))
+    >>> quantifier.fit(X, y)
+    >>> quantifier.predict(X)
+    array([[0.4, 0.6]])
 
     References
     ----------
-    .. [1] Forman, G. (2005). "Counting Positives Accurately Despite Inaccurate Classification",
-           *ECML*, pp. 564-575.
+    .. dropdown:: References
+
+        .. [1] Forman, G. (2005). Counting Positives Accurately Despite Inaccurate
+               Classification. *ECML*, pp. 564–575.
     """
     def get_best_threshold(self, thresholds, tprs, fprs):
         idx = np.argmax(np.abs(tprs - fprs))
@@ -223,24 +237,36 @@ class TMAX(ThresholdAdjustment):
 
 
 class T50(ThresholdAdjustment):
-    r"""T50 — selects threshold where :math:`\text{TPR} = 0.5`.
+    r"""T50 — threshold where TPR is closest to 0.5.
 
-    This method chooses the classification threshold such that the true positive rate (TPR)
-    equals 0.5, avoiding regions with unreliable estimates at extreme thresholds.
-
+    Selects the classification threshold at which the true positive rate
+    (TPR) is approximately 0.5, avoiding the extreme ends of the ROC
+    curve where estimates tend to be unstable.
 
     Parameters
     ----------
     estimator : estimator, optional
-        A supervised learning model with `fit` and `predict_proba` methods.
+        A classifier with ``fit`` and ``predict_proba`` methods.
     threshold : float, default=0.5
-        Classification threshold in [0, 1] for applying in the :class:`CC` output.
-
+        Unused by this subclass; kept for API consistency.
+        
+    Examples
+    --------
+    >>> from mlquantify.counting import T50
+    >>> from sklearn.ensemble import RandomForestClassifier
+    >>> from sklearn.datasets import make_classification
+    >>> X, y = make_classification(n_samples=100, n_classes=2, n_informative=5, random_state=42)
+    >>> quantifier = T50(estimator=RandomForestClassifier(random_state=42))
+    >>> quantifier.fit(X, y)
+    >>> quantifier.predict(X)
+    array([[0.4, 0.6]])
 
     References
     ----------
-    .. [1] Forman, G. (2005). "Counting Positives Accurately Despite Inaccurate Classification",
-           *ECML*, pp. 564-575.
+    .. dropdown:: References
+
+        .. [1] Forman, G. (2005). Counting Positives Accurately Despite Inaccurate
+               Classification. *ECML*, pp. 564–575.
     """
     def get_best_threshold(self, thresholds, tprs, fprs):
         idx = np.argmin(np.abs(tprs - 0.5))
@@ -248,28 +274,36 @@ class T50(ThresholdAdjustment):
 
 
 class MS(ThresholdAdjustment):
-    r"""Median Sweep (MS) — median prevalence estimate across all thresholds.
+    r"""Median Sweep (MS).
 
-    This method computes class prevalence estimates at multiple classification thresholds,
-    using the adjusted count formula for each, then returns the median of these estimates,
-    reducing variance caused by any single threshold selection.
+    Applies the threshold adjustment formula at every threshold on the
+    ROC curve and returns the median prevalence estimate. This reduces
+    variance compared to any single-threshold method.
 
-    It thus leverages the strengths of bootstrap-like variance reduction without heavy
-    computation.
-    
-    
     Parameters
     ----------
     estimator : estimator, optional
-        A supervised learning model with `fit` and `predict_proba` methods.
+        A classifier with ``fit`` and ``predict_proba`` methods.
     threshold : float, default=0.5
-        Classification threshold in [0, 1] for applying in the :class:`CC` output.
-    
+        Unused by this subclass; kept for API consistency.
+
+    Examples
+    --------
+    >>> from mlquantify.counting import MS
+    >>> from sklearn.ensemble import RandomForestClassifier
+    >>> from sklearn.datasets import make_classification
+    >>> X, y = make_classification(n_samples=100, n_classes=2, n_informative=5, random_state=42)
+    >>> quantifier = MS(estimator=RandomForestClassifier(random_state=42))
+    >>> quantifier.fit(X, y)
+    >>> quantifier.predict(X)
+    array([[0.4, 0.6]])
 
     References
     ----------
-    .. [1] Forman, G. (2008). "Quantifying Counts and Costs via Classification",
-           *Data Mining and Knowledge Discovery*, 17(2), 164-206.
+    .. dropdown:: References
+
+        .. [1] Forman, G. (2008). Quantifying Counts and Costs via Classification.
+               *Data Mining and Knowledge Discovery*, 17(2), 164–206.
     """
     def _adjust(self, predictions, train_y_scores, y_train):
         positive_scores = train_y_scores[:, 1]
@@ -297,30 +331,43 @@ class MS(ThresholdAdjustment):
 
 
 class MS2(MS):
-    r"""MS2 — Median Sweep variant constraining :math:`|\text{TPR} - \text{FPR}| > 0.25`.
+    r"""Median Sweep 2 (MS2).
 
-    This variant of Median Sweep excludes thresholds where the absolute difference
-    between true positive rate (TPR) and false positive rate (FPR) is below 0.25,
-    improving stability by avoiding ambiguous threshold regions.
-
+    A constrained variant of :class:`MS` that only sweeps thresholds
+    where ``|TPR - FPR| > 0.25``, discarding ambiguous regions of the
+    ROC curve. Falls back to all thresholds if no qualifying threshold
+    exists.
 
     Parameters
     ----------
     estimator : estimator, optional
-        A supervised learning model with `fit` and `predict_proba` methods.
+        A classifier with ``fit`` and ``predict_proba`` methods.
     threshold : float, default=0.5
-        Classification threshold in [0, 1] for applying in the :class:`CC` output.
+        Unused by this subclass; kept for API consistency.
 
-
-    Warnings
+    Warns
+    -----
+    UserWarning
+        If all TPR or FPR values are zero, or if no threshold satisfies
+        the ``|TPR - FPR| > 0.25`` constraint.
+        
+    Examples
     --------
-    - Warns if all TPR or FPR values are zero.
-    - Warns if no thresholds satisfy the constraint.
+    >>> from mlquantify.counting import MS2
+    >>> from sklearn.ensemble import RandomForestClassifier
+    >>> from sklearn.datasets import make_classification
+    >>> X, y = make_classification(n_samples=100, n_classes=2, n_informative=5, random_state=42)
+    >>> quantifier = MS2(estimator=RandomForestClassifier(random_state=42))
+    >>> quantifier.fit(X, y)
+    >>> quantifier.predict(X)
+    array([[0.4, 0.6]])
 
     References
     ----------
-    .. [1] Forman, G. (2008). "Quantifying Counts and Costs via Classification",
-           *Data Mining and Knowledge Discovery*, 17(2), 164-206.
+    .. dropdown:: References
+
+        .. [1] Forman, G. (2008). Quantifying Counts and Costs via Classification.
+               *Data Mining and Knowledge Discovery*, 17(2), 164–206.
     """
     def get_best_threshold(self, thresholds, tprs, fprs):
         if np.all(tprs == 0) or np.all(fprs == 0):

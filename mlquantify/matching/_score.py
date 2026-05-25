@@ -20,10 +20,43 @@ EPS = 1e-12
 
 @binary_quantifier(strategy_attr="strategy")
 class MatchingScoreQuantifier(BaseMatchingQuantifier):
-    r"""Base class for binary score-based matching quantifiers.
+    r"""Abstract base class for binary score-based distribution matching.
 
     Subclasses estimate the positive-class prevalence by comparing the test
     score distribution with a mixture of positive and negative training scores.
+
+    This is a **binary-only** method. When applied to multiclass problems,
+    a one-vs-rest (OvR) strategy is applied automatically.
+
+    Parameters
+    ----------
+    solver : str, default='auto'
+        Optimization solver for prevalence estimation.
+    strategy : {'ovr', 'ovo'}, default='ovr'
+        Multiclass decomposition strategy.
+
+    Attributes
+    ----------
+    classes_ : ndarray of shape (n_classes,)
+        Class labels seen during ``fit``.
+
+    Examples
+    --------
+    >>> from mlquantify.matching._score import MatchingScoreQuantifier
+    >>> from mlquantify.base_aggregative import SoftPredictionMixin, AggregativeMixin
+    >>> from sklearn.linear_model import LogisticRegression
+    >>> from sklearn.datasets import make_classification
+    >>> import numpy as np
+    >>> class MyScoreQ(SoftPredictionMixin, AggregativeMixin, MatchingScoreQuantifier):
+    ...     def __init__(self, estimator=None):
+    ...         super().__init__(solver='bounded')
+    ...         self.estimator = estimator or LogisticRegression()
+    ...     def _solve_prevalence(self, test_representation, train_representations):
+    ...         alpha = np.clip(np.mean(test_representation), 0, 1)
+    ...         return np.array([1 - alpha, alpha]), None
+    >>> X, y = make_classification(n_samples=200, random_state=42)
+    >>> MyScoreQ().fit(X, y).predict(X)
+    {0: 0.49, 1: 0.51}
     """
 
     _parameter_constraints = {
@@ -62,21 +95,62 @@ class MatchingScoreQuantifier(BaseMatchingQuantifier):
 
 @binary_quantifier(strategy_attr="strategy")
 class SORD(SoftPredictionMixin, AggregativeMixin, MatchingScoreQuantifier):
-    r"""Sample Ordinal Distance (SORD) quantification method.
+    r"""Sample Ordinal Distance (SORD) quantifier.
 
-    Estimates prevalence by minimizing the weighted sum of absolute score differences
-    between test data and training classes. The method creates weighted score 
-    vectors for positive, negative, and test samples, sorts them, and computes
-    a cumulative absolute difference as the distance measure.
+    Estimates binary prevalence by finding the mixture proportion that minimises
+    a cumulative absolute-difference distance between the test score distribution
+    and the weighted mixture of positive and negative training score distributions.
+
+    This is a **binary-only** method. Multiclass problems are handled with a
+    one-vs-rest (OvR) strategy by default.
 
     Parameters
     ----------
     estimator : estimator, optional
-        Base probabilistic classifier.
+        A probabilistic classifier with ``fit`` and ``predict_proba`` methods.
+    n_grid : int, default=101
+        Number of grid points for the prevalence search.
+    strategy : {'ovr', 'ovo'}, default='ovr'
+        Multiclass decomposition strategy.
+    cv : int or None, default=None
+        Cross-validation folds for computing training scores.
+    stratified : bool, default=True
+        Whether to stratify CV splits.
+    shuffle : bool, default=False
+        Whether to shuffle data before splitting.
+    random_state : int or None, default=None
+        Random seed for reproducibility.
+
+    Attributes
+    ----------
+    estimator_ : estimator
+        The fitted underlying classifier.
+    classes_ : ndarray of shape (n_classes,)
+        Class labels seen during ``fit``.
+
+    Examples
+    --------
+    >>> from mlquantify.matching import SORD
+    >>> from sklearn.linear_model import LogisticRegression
+    >>> from sklearn.datasets import make_classification
+    >>> X, y = make_classification(n_samples=200, random_state=42)
+    >>> q = SORD(estimator=LogisticRegression()).fit(X, y)
+    >>> q.predict(X)
+    {0: 0.49, 1: 0.51}
+    >>> # call aggregate with pre-computed scores
+    >>> import numpy as np
+    >>> train_scores = np.random.rand(200)
+    >>> test_scores = np.random.rand(100)
+    >>> y_train = np.random.randint(0, 2, 200)
+    >>> q.aggregate(test_scores, train_scores, y_train)
+    {0: 0.48, 1: 0.52}
 
     References
     ----------
-    .. [2] Esuli et al. (2023). Learning to Quantify. Springer.
+    .. dropdown:: References
+
+        .. [1] Esuli, A., Moreo, A., & Sebastiani, F. (2023).
+               *Learning to Quantify*. Springer.
     """
 
 
@@ -192,26 +266,62 @@ class SORD(SoftPredictionMixin, AggregativeMixin, MatchingScoreQuantifier):
 
 @binary_quantifier(strategy_attr="strategy")
 class SMM(SoftPredictionMixin, AggregativeMixin, MatchingScoreQuantifier):
-    r"""Sample Mean Matching (SMM) quantification method.
+    r"""Sample Mean Matching (SMM) quantifier.
 
-    Estimates class prevalence by matching the mean score of the test samples 
-    to a convex combination of positive and negative training scores. The mixture 
-    weight :math:`\alpha` is computed as:
+    Estimates binary prevalence by matching the mean score of the test samples
+    to a convex combination of positive and negative training score means.
+    The prevalence is solved analytically in closed form.
 
-    .. math::
-
-        \alpha = \frac{\bar{s}_{test} - \bar{s}_{neg}}{\bar{s}_{pos} - \bar{s}_{neg}}
-
-    where :math:`\bar{s}` denotes the sample mean.
+    This is a **binary-only** method. Multiclass problems are handled with a
+    one-vs-rest (OvR) strategy by default.
 
     Parameters
     ----------
     estimator : estimator, optional
-        Base probabilistic classifier.
+        A probabilistic classifier with ``fit`` and ``predict_proba`` methods.
+    moment : int, default=1
+        Score moment used for matching (1 = mean).
+    strategy : {'ovr', 'ovo'}, default='ovr'
+        Multiclass decomposition strategy.
+    cv : int or None, default=None
+        Cross-validation folds for computing training scores.
+    stratified : bool, default=True
+        Whether to stratify CV splits.
+    shuffle : bool, default=False
+        Whether to shuffle data before splitting.
+    random_state : int or None, default=None
+        Random seed for reproducibility.
+
+    Attributes
+    ----------
+    estimator_ : estimator
+        The fitted underlying classifier.
+    classes_ : ndarray of shape (n_classes,)
+        Class labels seen during ``fit``.
+
+    Examples
+    --------
+    >>> from mlquantify.matching import SMM
+    >>> from sklearn.linear_model import LogisticRegression
+    >>> from sklearn.datasets import make_classification
+    >>> X, y = make_classification(n_samples=200, random_state=42)
+    >>> q = SMM(estimator=LogisticRegression()).fit(X, y)
+    >>> q.predict(X)
+    {0: 0.49, 1: 0.51}
+    >>> # call aggregate with pre-computed scores
+    >>> import numpy as np
+    >>> train_scores = np.random.rand(200)
+    >>> test_scores = np.random.rand(100)
+    >>> y_train = np.random.randint(0, 2, 200)
+    >>> q.aggregate(test_scores, train_scores, y_train)
+    {0: 0.48, 1: 0.52}
 
     References
     ----------
-    .. [2] Esuli et al. (2023). Learning to Quantify. Springer.
+    .. dropdown:: References
+
+        .. [1] Esuli, A., Moreo, A., & Sebastiani, F. (2023).
+               *Learning to Quantify*. Springer.
     """
 
 

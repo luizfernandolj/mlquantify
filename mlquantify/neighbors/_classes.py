@@ -9,49 +9,56 @@ from mlquantify.utils._validation import validate_prevalences
 
 
 class PWK(BaseQuantifier):
-    r"""
-    Probabilistic Weighted k-Nearest Neighbor (PWK) Quantifier.
+    r"""Probabilistic Weighted k-Nearest Neighbour (PWK) quantifier.
 
-    This quantifier leverages the PWKCLF classifier to perform quantification by estimating 
-    class prevalences through a probabilistically weighted k-nearest neighbor approach.
-
-    The method internally uses a weighted k-NN classifier where neighbors' contributions 
-    are adjusted by class-specific weights designed to correct for class imbalance,
-    controlled by the hyperparameter alpha.
+    Estimates class prevalences using a k-nearest neighbour classifier with
+    class-imbalance-aware weighting. Each neighbour's contribution is scaled
+    by a class-specific weight that corrects for the imbalance between class
+    sizes, controlled by the ``alpha`` exponent.
 
     Parameters
     ----------
     alpha : float, default=1
-        Imbalance correction exponent for class weights. Higher values increase 
-        the influence of minority classes.
+        Imbalance correction exponent. Higher values amplify the influence of
+        minority-class neighbours.
     n_neighbors : int, default=10
-        Number of nearest neighbors considered.
+        Number of nearest neighbours considered for each test instance.
     algorithm : {'auto', 'ball_tree', 'kd_tree', 'brute'}, default='auto'
-        Algorithm used to compute nearest neighbors.
+        Algorithm used to find nearest neighbours.
     metric : str, default='euclidean'
-        Distance metric for nearest neighbor search.
+        Distance metric for the neighbour search.
     leaf_size : int, default=30
-        Leaf size for tree-based neighbors algorithms.
+        Leaf size for tree-based algorithms.
     p : int, default=2
-        Power parameter for the Minkowski metric (when metric='minkowski').
+        Power parameter for the Minkowski metric.
     metric_params : dict or None, default=None
-        Additional parameters for the metric function.
+        Additional keyword arguments for the metric function.
     n_jobs : int or None, default=None
-        Number of parallel jobs for neighbors search.
+        Number of parallel jobs for the neighbour search.
 
     Attributes
     ----------
-    cc : object
-        Internally used Classify & Count quantifier wrapping PWKCLF.
     estimator : PWKCLF
-        Underlying probabilistic weighted k-NN classifier.
-
+        Fitted underlying weighted k-NN classifier.
+    classes_ : ndarray of shape (n_classes,)
+        Class labels seen during ``fit``.
 
     Examples
     --------
-    >>> q = PWK(alpha=1.5, n_neighbors=5)
-    >>> q.fit(X_train, y_train)
-    >>> prevalences = q.predict(X_test)
+    >>> from mlquantify.neighbors import PWK
+    >>> from sklearn.datasets import make_classification
+    >>> X, y = make_classification(n_samples=200, random_state=42)
+    >>> q = PWK(alpha=1.5, n_neighbors=5).fit(X, y)
+    >>> q.predict(X)
+    {0: 0.49, 1: 0.51}
+
+    References
+    ----------
+    .. dropdown:: References
+
+        .. [1] Barranquero, J., Díez, J., & del Coz, J. J. (2013).
+               Quantification-Oriented Learning Based on Reliable Classifiers.
+               *Pattern Recognition*, 48(2), 591–604.
     """
     
     _parameter_constraints = {

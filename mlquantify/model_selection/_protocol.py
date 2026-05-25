@@ -16,40 +16,38 @@ import numpy as np
 
     
 class BaseProtocol(ProtocolMixin, BaseQuantifier):
-    r"""Base class for evaluation protocols.
-    
+    r"""Abstract base class for evaluation protocols.
+
+    Provides the :meth:`split` interface that yields sample indices for
+    evaluating a quantifier across varying prevalence conditions. Subclasses
+    implement :meth:`_iter_indices` to define the specific sampling strategy.
+
     Parameters
     ----------
     batch_size : int or list of int
-        The size of the batches to be used in the evaluation.
-    random_state : int, optional
-        The random seed for reproducibility.
+        Size(s) of the evaluation batches.
+    random_state : int or None, default=None
+        Random seed for reproducibility.
 
     Attributes
     ----------
     n_combinations : int
+        Total number of batches this protocol will generate.
 
-    Raises
-    ------
-    ValueError
-        If the batch size is not a positive integer or list of positive integers.
-
-    Notes
-    -----
-    This class serves as a base class for different evaluation protocols, each with its own strategy for splitting the data into batches.
-    
     Examples
     --------
-    >>> class MyCustomProtocol(Protocol):
-    ...     def _iter_indices(self, X: np.ndarray, y: np.ndarray):
-    ...         for batch_size in self.batch_size:
-    ...             yield np.random.choice(X.shape[0], batch_size, replace=True)
-    ...
-    >>> protocol = MyCustomProtocol(batch_size=100, random_state=42)
-    >>> for idx in protocol.split(X, y):
-    ...     # Train and evaluate model
-    ...     pass
-
+    >>> from mlquantify.model_selection._protocol import BaseProtocol
+    >>> import numpy as np
+    >>> class MyProtocol(BaseProtocol):
+    ...     def _iter_indices(self, X, y):
+    ...         rng = np.random.default_rng(self.random_state)
+    ...         for bs in self.batch_size:
+    ...             yield rng.choice(len(X), bs, replace=True)
+    >>> X, y = np.random.randn(200, 5), np.random.randint(0, 2, 200)
+    >>> proto = MyProtocol(batch_size=50, random_state=0)
+    >>> idx = next(proto.split(X, y))
+    >>> len(idx)
+    50
     """
     
     _parameter_constraints = {
@@ -118,39 +116,56 @@ class BaseProtocol(ProtocolMixin, BaseQuantifier):
 
 
 class APP(BaseProtocol):
-    r"""
-    Artificial Prevalence Protocol (APP) for exhaustive prevalent batch evaluation.
-    
-    Generates batches with artificially imposed prevalences across all possible 
-    combinations within specified bounds. This allows comprehensive evaluation
-    over a range of prevalence scenarios.
+    r"""Artificial Prevalence Protocol (APP).
+
+    Generates evaluation batches with artificially imposed prevalences sampled
+    on a regular grid over the probability simplex within ``[min_prev, max_prev]``.
+    Covers all combinations of prevalence levels for comprehensive evaluation.
 
     Parameters
     ----------
     batch_size : int or list of int
         Size(s) of the evaluation batches.
     n_prevalences : int
-        Number of artificial prevalence levels to sample per class dimension.
-    repeats : int, optional (default=1)
-        Number of repetitions for each prevalence sampling.
-    random_state : int, optional
+        Number of prevalence grid points per class dimension.
+    repeats : int, default=1
+        Number of repetitions for each prevalence combination.
+    random_state : int or None, default=None
         Random seed for reproducibility.
-    min_prev : float, optional (default=0.0)
-        Minimum possible prevalence for any class.
-    max_prev : float, optional (default=1.0)
-        Maximum possible prevalence for any class.
+    min_prev : float, default=0.0
+        Minimum class prevalence.
+    max_prev : float, default=1.0
+        Maximum class prevalence.
+
+    Attributes
+    ----------
+    n_combinations : int
+        Total number of batches generated.
 
     Notes
     -----
-    For multiclass problems, this protocol may have high computational complexity
-    due to combinatorial explosion in prevalence combinations.
+    For multiclass problems the grid grows combinatorially; prefer :class:`UPP`
+    for large class counts.
 
     Examples
     --------
-    >>> protocol = APP(batch_size=[100, 200], n_prevalences=5, repeats=3, random_state=42)
-    >>> for idx in protocol.split(X, y):
-    ...     # Train and evaluate
-    ...     pass
+    >>> from mlquantify.model_selection import APP
+    >>> import numpy as np
+    >>> X, y = np.random.randn(200, 5), np.random.randint(0, 2, 200)
+    >>> proto = APP(batch_size=50, n_prevalences=5, random_state=0)
+    >>> batches = list(proto.split(X, y))
+    >>> len(batches)
+    6
+
+    References
+    ----------
+    .. dropdown:: References
+
+        .. [1] Forman, G. (2008). Quantifying Counts and Costs via Classification.
+               *Data Mining and Knowledge Discovery*, 17(2), 164–206.
+        .. [2] Sebastiani, F., et al. (2020). A Critical Reassessment of the
+               Evaluation of Machine Learning Approaches for Quantification.
+               *ArXiv preprint*.
     """
     
     _parameter_constraints = {
@@ -187,29 +202,36 @@ class APP(BaseProtocol):
             
 
 class NPP(BaseProtocol):
-    r"""
-    Natural Prevalence Protocol (NPP) that samples data without imposing prevalence constraints.
-    
-    This protocol simply samples batches randomly with replacement, 
-    ignoring prevalence distributions.
+    r"""Natural Prevalence Protocol (NPP).
+
+    Samples evaluation batches uniformly at random from the dataset, preserving
+    the natural class distribution without imposing any prevalence constraints.
 
     Parameters
     ----------
     batch_size : int or list of int
         Size(s) of the evaluation batches.
-    n_samples : int, optional (default=1)
+    n_samples : int, default=1
         Number of distinct batch samples per batch size.
-    repeats : int, optional (default=1)
-        Number of repetitions for each batch sample.
-    random_state : int, optional
+    repeats : int, default=1
+        Number of repetitions for each sample.
+    random_state : int or None, default=None
         Random seed for reproducibility.
+
+    Attributes
+    ----------
+    n_combinations : int
+        Total number of batches generated.
 
     Examples
     --------
-    >>> protocol = NPP(batch_size=100, random_state=42)
-    >>> for idx in protocol.split(X, y):
-    ...     # Train and evaluate
-    ...     pass
+    >>> from mlquantify.model_selection import NPP
+    >>> import numpy as np
+    >>> X, y = np.random.randn(200, 5), np.random.randint(0, 2, 200)
+    >>> proto = NPP(batch_size=50, n_samples=3, random_state=0)
+    >>> batches = list(proto.split(X, y))
+    >>> len(batches)
+    3
     """
     
     _parameter_constraints = {
@@ -232,36 +254,44 @@ class NPP(BaseProtocol):
             
 
 class UPP(BaseProtocol):
-    r"""
-    Uniform Prevalence Protocol (UPP) for uniform sampling of artificial prevalences.
-    
-    Similar to APP, but uses uniform prevalence distribution generation
-    methods such as Kraemer or uniform simplex sampling to generate batches
-    with uniformly sampled class prevalences.
+    r"""Uniform Prevalence Protocol (UPP).
+
+    Similar to :class:`APP`, but samples prevalences uniformly over the
+    probability simplex rather than on a regular grid, avoiding bias towards
+    the simplex corners. Supports Kraemer or uniform simplex sampling.
 
     Parameters
     ----------
     batch_size : int or list of int
         Batch size(s) for evaluation.
     n_prevalences : int
-        Number of prevalence samples per class.
-    repeats : int
-        Number of evaluation repeats with different samples.
-    random_state : int, optional
+        Number of prevalence points to sample.
+    repeats : int, default=1
+        Number of repetitions for each prevalence point.
+    random_state : int or None, default=None
         Random seed for reproducibility.
-    min_prev : float, optional (default=0.0)
-        Minimum prevalence limit.
-    max_prev : float, optional (default=1.0)
-        Maximum prevalence limit.
-    algorithm : {'kraemer', 'uniform'}, optional (default='kraemer')
-        Sampling algorithm used to generate artificial prevalences.
+    min_prev : float, default=0.0
+        Minimum class prevalence.
+    max_prev : float, default=1.0
+        Maximum class prevalence.
+    algorithm : {'kraemer', 'uniform'}, default='kraemer'
+        Simplex sampling algorithm. ``'kraemer'`` uses the Kraemer method;
+        ``'uniform'`` uses uniform Dirichlet sampling.
+
+    Attributes
+    ----------
+    n_combinations : int
+        Total number of batches generated.
 
     Examples
     --------
-    >>> protocol = UPP(batch_size=100, n_prevalences=5, repeats=3, random_state=42)
-    >>> for idx in protocol.split(X, y):
-    ...     # Train and evaluate
-    ...     pass
+    >>> from mlquantify.model_selection import UPP
+    >>> import numpy as np
+    >>> X, y = np.random.randn(200, 5), np.random.randint(0, 2, 200)
+    >>> proto = UPP(batch_size=50, n_prevalences=5, random_state=0)
+    >>> batches = list(proto.split(X, y))
+    >>> len(batches)
+    5
     """
     
     _parameter_constraints = {
@@ -315,29 +345,37 @@ class UPP(BaseProtocol):
 
 
 class PPP(BaseProtocol):
-    r"""
-    Personalized Prevalence Protocol (PPP) for targeted prevalence batch generation.
-    
-    Generates batches with user-specified prevalence distributions, allowing for
-    controlled evaluation on specific scenarios.
+    r"""Personalized Prevalence Protocol (PPP).
+
+    Generates evaluation batches with explicitly specified class prevalences,
+    enabling controlled evaluation at exact target operating points.
 
     Parameters
     ----------
     batch_size : int or list of int
         Batch sizes to generate.
-    prevalences : list of floats or array-like
-        Custom target prevalences per class to generate evaluation batches.
-    repeats : int, optional (default=1)
-        Number of evaluation repetitions with different batches.
-    random_state : int, optional
+    prevalences : list of float or array-like
+        Target class prevalences. A single float is interpreted as the positive
+        class prevalence in binary problems (negative = 1 - float).
+    repeats : int, default=1
+        Number of repetitions per prevalence point.
+    random_state : int or None, default=None
         Random seed for reproducibility.
+
+    Attributes
+    ----------
+    n_combinations : int
+        Total number of batches generated.
 
     Examples
     --------
-    >>> protocol = PPP(batch_size=100, prevalences=[0.1, 0.9], repeats=3, random_state=42)
-    >>> for idx in protocol.split(X, y):
-    ...     # Train and evaluate
-    ...     pass
+    >>> from mlquantify.model_selection import PPP
+    >>> import numpy as np
+    >>> X, y = np.random.randn(200, 5), np.random.randint(0, 2, 200)
+    >>> proto = PPP(batch_size=50, prevalences=[[0.2, 0.8], [0.5, 0.5]], random_state=0)
+    >>> batches = list(proto.split(X, y))
+    >>> len(batches)
+    2
     """
     
     _parameter_constraints = {

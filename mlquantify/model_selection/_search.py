@@ -18,84 +18,65 @@ from mlquantify.model_selection import (
 )
 
 class GridSearchQ(MetaquantifierMixin, BaseQuantifier):
-    r"""
-    Grid Search for Quantifiers with evaluation protocols.
+    r"""Grid search over quantifier hyperparameters with evaluation protocols.
 
-    This class automates the hyperparameter search over a grid of parameter
-    combinations for a given quantifier. It evaluates each combination using
-    a specified evaluation protocol (e.g., APP, NPP, UPP), over multiple splits
-    of the validation data, and selects the best-performing parameters based on
-    a chosen scoring metric such as Mean Absolute Error (MAE).
+    Evaluates all combinations in ``param_grid`` using a held-out validation
+    split and a sampling protocol (:class:`APP`, :class:`NPP`, or :class:`UPP`).
+    Selects the combination with the lowest score on the chosen metric, then
+    optionally refits on the full training data.
 
     Parameters
     ----------
     quantifier : BaseQuantifier
-        Quantifier class (not instance). It must implement fit and predict.
+        Quantifier instance whose hyperparameters are searched.
     param_grid : dict
-        Dictionary where keys are parameter names and values are lists of parameter
-        values to try.
+        Mapping of parameter names to lists of values to try.
     protocol : {'app', 'npp', 'upp'}, default='app'
-        Evaluation protocol to use for splitting the validation data.
+        Evaluation protocol used to generate validation batches.
     samples_sizes : int or list of int, default=100
-        Batch size(s) for evaluation splits.
+        Batch size(s) for protocol evaluation.
     n_repetitions : int, default=10
-        Number of random repetitions per evaluation.
+        Number of repetitions per evaluation batch.
     scoring : callable, default=MAE
-        Scoring function to evaluate prevalence prediction quality.
-        Must accept (true_prevalences, predicted_prevalences) arrays.
+        Scoring function ``(true_prev, predicted_prev) -> float``.
     refit : bool, default=True
-        If True, refits the quantifier on the whole data using best parameters.
+        If ``True``, refit the quantifier on the full data after search.
     val_split : float, default=0.4
-        Fraction of data reserved for validation during parameter search.
+        Fraction of data held out for validation.
     n_jobs : int or None, default=1
-        Number of parallel jobs for evaluation.
-    random_seed : int, default=42
+        Number of parallel evaluation jobs.
+    random_seed : int or None, default=42
         Random seed for reproducibility.
     verbose : bool, default=False
-        Enable verbose output during evaluation.
+        Print progress messages.
 
     Attributes
     ----------
-    best_score : float
-        Best score (lowest loss) found during grid search.
-    best_params : dict
-        Parameter combination corresponding to best_score.
+    best_score_ : float
+        Lowest score found during the search.
+    best_params_ : dict
+        Hyperparameter combination that achieved ``best_score_``.
     best_model_ : BaseQuantifier
-        Refitted quantifier instance with best parameters after search.
-
-    Methods
-    -------
-    fit(X, y)
-        Runs grid search over param_grid, evaluates with the selected protocol,
-        and stores best found parameters and model.
-    predict(X)
-        Predicts prevalences using the best fitted model after search.
-    best_params()
-        Returns the best parameter dictionary after fitting.
-    best_model()
-        Returns the best refitted quantifier after fitting.
-    sout(msg)
-        Utility method to print messages if verbose is enabled.
+        Quantifier refitted with ``best_params_`` on the full training data.
 
     Examples
     --------
-    >>> from mlquantify.quantifiers import SomeQuantifier
-    >>> param_grid = {'alpha': [0.1, 1.0], 'beta': [10, 20]}
-    >>> grid_search = GridSearchQ(quantifier=SomeQuantifier,
-    ...                          param_grid=param_grid,
-    ...                          protocol='app',
-    ...                          samples_sizes=100,
-    ...                          n_repetitions=5,
-    ...                          scoring=MAE,
-    ...                          refit=True,
-    ...                          val_split=0.3,
-    ...                          n_jobs=2,
-    ...                          random_seed=123,
-    ...                          verbose=True)
-    >>> grid_search.fit(X_train, y_train)
-    >>> y_pred = grid_search.predict(X_test)
-    >>> best_params = grid_search.best_params()
-    >>> best_model = grid_search.best_model()
+    >>> from mlquantify.model_selection import GridSearchQ
+    >>> from mlquantify.counting import CC
+    >>> from sklearn.linear_model import LogisticRegression
+    >>> from sklearn.datasets import make_classification
+    >>> X, y = make_classification(n_samples=300, random_state=42)
+    >>> param_grid = {'threshold': [0.3, 0.5, 0.7]}
+    >>> gs = GridSearchQ(
+    ...     CC(LogisticRegression()),
+    ...     param_grid=param_grid,
+    ...     protocol='npp',
+    ...     n_repetitions=3,
+    ... ).fit(X, y)
+    >>> gs.best_params_
+    {'threshold': 0.5}
+    >>> gs.predict(X)
+    {0: 0.49, 1: 0.51}
     """
     
     _parameter_constraints = {

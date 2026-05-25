@@ -12,54 +12,51 @@ from mlquantify.utils._constraints import Interval
 
 
 class CC(CrispPredictionMixin, BaseCount):
-    r"""Classify and Count (CC) quantifier.
+    """Classify and Count (CC) quantifier.
 
-    Implements the Classify and Count method for quantification, describe as a
-    baseline approach in the literature [1]_, [2]_.
+    Estimates class prevalences by classifying each test instance and
+    counting the proportion assigned to each class. This is the simplest
+    quantification baseline and tends to be biased when the class
+    distribution differs between training and test data.
 
     Parameters
     ----------
     estimator : estimator, optional
-        A supervised learning estimator with `fit` and `predict` methods.
-        If None, it is expected that the aggregate method is used directly.
+        A classifier with ``fit`` and ``predict`` methods.
+        If ``None``, call :meth:`aggregate` directly with pre-computed predictions.
     threshold : float, default=0.5
-        Decision threshold for converting predicted probabilities into class labels.
-        Must be in the interval [0.0, 1.0].
+        Decision threshold applied to soft scores to produce hard labels.
+        Must be in ``[0.0, 1.0]``.
 
     Attributes
     ----------
-    estimator : estimator
-        Underlying classification model.
-
-    Notes
-    -----
-    The Classify and Count approach performs quantification by classifying each instance 
-    using the classifier's predicted labels at a given threshold, then counting the 
-    prevalence of each class.
-
-    This method can be biased when class distributions differ between training and test sets,
-    motivating further adjustment methods.
+    estimator_ : estimator
+        The fitted underlying classifier.
+    classes_ : ndarray of shape (n_classes,)
+        Class labels seen during ``fit``.
 
     Examples
     --------
     >>> from mlquantify.counting import CC
-    >>> import numpy as np
     >>> from sklearn.linear_model import LogisticRegression
-    >>> X = np.random.randn(100, 5)
-    >>> y = np.random.randint(0, 2, 100)
-    >>> q = CC(estimator=LogisticRegression())
-    >>> q.fit(X, y)
+    >>> import numpy as np
+    >>> X, y = np.random.randn(100, 5), np.random.randint(0, 2, 100)
+    >>> q = CC(LogisticRegression()).fit(X, y)
     >>> q.predict(X)
+    {0: 0.47, 1: 0.53}
+    >>> # call aggregate directly with pre-computed hard predictions
+    >>> preds = q.estimator_.predict(X)
+    >>> q.aggregate(preds, y_train=y)
     {0: 0.47, 1: 0.53}
 
     References
     ----------
     .. dropdown:: References
 
-        .. [1] Forman, G. (2005). "Counting Positives Accurately Despite Inaccurate Classification",
-            *ECML*, pp. 564-575.
-        .. [2] Forman, G. (2008). "Quantifying Counts and Costs via Classification",
-            *Data Mining and Knowledge Discovery*, 17(2), 164-206.
+        .. [1] Forman, G. (2005). Counting Positives Accurately Despite Inaccurate
+               Classification. *ECML*, pp. 564–575.
+        .. [2] Forman, G. (2008). Quantifying Counts and Costs via Classification.
+               *Data Mining and Knowledge Discovery*, 17(2), 164–206.
     """
     
     _parameter_constraints = {
@@ -112,42 +109,48 @@ class CC(CrispPredictionMixin, BaseCount):
 
 
 class PCC(SoftPredictionMixin, BaseCount):
-    r"""Probabilistic Classify and Count (PCC) quantifier.
-    
-    Implements the Probabilistic Classify and Count method for quantification as described in [1]_, [2]_:
-    
-        
+    """Probabilistic Classify and Count (PCC) quantifier.
+
+    Estimates class prevalences by averaging the posterior probabilities
+    returned by a probabilistic classifier over all test instances.
+    Generally less biased than :class:`CC` but still not fully corrected
+    for prior shift.
+
     Parameters
     ----------
     estimator : estimator, optional
-        A supervised learning estimator with fit and predict_proba methods.
-        If None, it is expected that will be used the aggregate method directly.
-        
-        
+        A classifier with ``fit`` and ``predict_proba`` methods.
+        If ``None``, call :meth:`aggregate` directly.
+
     Attributes
     ----------
-    estimator : estimator
-        Underlying classification model.
-    classes : ndarray of shape (n_classes,)
-        Unique class labels observed during training.
+    estimator_ : estimator
+        The fitted underlying classifier.
+    classes_ : ndarray of shape (n_classes,)
+        Class labels seen during ``fit``.
 
-    .. dropdown:: References
-    
-        .. [1] Forman, G. (2005). *Counting Positives Accurately Despite Inaccurate Classification.* ECML, pp. 564-575.
-        .. [2] Forman, G. (2008). *Quantifying Counts and Costs via Classification.* Data Mining and Knowledge Discovery, 17(2), 164-206.
-        
-        
     Examples
     --------
     >>> from mlquantify.counting import PCC
-    >>> import numpy as np
     >>> from sklearn.linear_model import LogisticRegression
-    >>> X = np.random.randn(100, 5)
-    >>> y = np.random.randint(0, 2, 100)
-    >>> q = PCC(estimator=LogisticRegression())
-    >>> q.fit(X, y)
+    >>> import numpy as np
+    >>> X, y = np.random.randn(100, 5), np.random.randint(0, 2, 100)
+    >>> q = PCC(LogisticRegression()).fit(X, y)
     >>> q.predict(X)
     {0: 0.48, 1: 0.52}
+    >>> # call aggregate directly with pre-computed posterior probabilities
+    >>> proba = q.estimator_.predict_proba(X)
+    >>> q.aggregate(proba)
+    {0: 0.48, 1: 0.52}
+
+    References
+    ----------
+    .. dropdown:: References
+
+        .. [1] Bella, A., Ferri, C., Hernández-Orallo, J., & Ramírez-Quintana, M. J. (2010).
+               Quantification via Probability Estimators. *ICDM*, pp. 737–742.
+        .. [2] Forman, G. (2005). Counting Positives Accurately Despite Inaccurate
+               Classification. *ECML*, pp. 564–575.
     """
 
 
