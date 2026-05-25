@@ -25,9 +25,9 @@ The main aggregative quantification methods will be defined next, with details a
 
 .. warning::
 
-    All methods in this library can work with different types of prediction inputs.
-    For example, :class:`CC` accepts either hard class labels or soft class probabilities, while :class:`PCC` requires soft probabilities only.
-    In contrast, :class:`AC` uses soft probabilities together with the class prior probabilities and the true training labels.
+   All methods in this library can work with different types of prediction inputs.
+   For example, :class:`CC` accepts either hard class labels or soft class probabilities, while :class:`PCC` requires soft probabilities only.
+   In contrast, :class:`GACC` and :class:`GPACC` use training labels and either hard or soft predictions to estimate corrected prevalences.
 
 
 Examples
@@ -36,32 +36,23 @@ Examples
 .. code-block:: python
 
    from sklearn.linear_model import LogisticRegression
-   from mlquantify.counters import AC
+   from mlquantify.counting import GACC
 
    # Create a classifier
    clf = LogisticRegression()
 
-   ac = AC(clf)
+   gacc = GACC(clf)
 
    # used when you just have the sample to predict
-   ac.fit(X_train, y_train)
-   prevalence = ac.predict(X_test)
+   gacc.fit(X_train, y_train)
+   prevalence = gacc.predict(X_test)
 
    # used when you already have the sample predictions (usually from cross-validation for training predictions)
-   ac2 = AC()
-   prevalence = ac2.aggregate(posteriors, train_posteriors, y_train)
+   gacc2 = GACC()
+   prevalence = gacc2.aggregate(posteriors, train_posteriors, y_train)
 
 
 
 
 
 
-.. toctree::
-   :maxdepth: 2
-
-   modules/counters.rst
-   modules/counting.rst
-   modules/likelihood.rst
-   modules/mixture_models.rst
-   modules/neighbors.rst
-   modules/density.rst

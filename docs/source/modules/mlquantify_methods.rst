@@ -25,12 +25,12 @@ The table below lists all the quantification methods available in the ``mlquanti
      - Yes
      - Aggregative
      - :mod:`~mlquantify.counting`
-   * - :class:`~mlquantify.counting.AC`
+   * - :class:`~mlquantify.counting.GACC`
      - `Firat (2016) <https://arxiv.org/abs/1606.00868>`_
      - Yes
      - Aggregative
      - :mod:`~mlquantify.counting`
-   * - :class:`~mlquantify.counting.PAC`
+   * - :class:`~mlquantify.counting.GPACC`
      - `Firat (2016) <https://arxiv.org/abs/1606.00868>`_
      - Yes
      - Aggregative
@@ -70,61 +70,66 @@ The table below lists all the quantification methods available in the ``mlquanti
      - Yes
      - Aggregative
      - :mod:`~mlquantify.counting`
-   * - :class:`~mlquantify.counting.CDE`
+   * - :class:`~mlquantify.likelihood.CDE`
      - `Xue & Weiss (2009) <https://dl.acm.org/doi/abs/10.1145/1557019.1557117>`_
      - No
      - Aggregative
-     - :mod:`~mlquantify.counting`
+     - :mod:`~mlquantify.likelihood`
+   * - :class:`~mlquantify.likelihood.MLPE`
+     - `Saerens et al. (2002) <https://ieeexplore.ieee.org/abstract/document/6789744>`_
+     - Yes
+     - Aggregative
+     - :mod:`~mlquantify.likelihood`
    * - :class:`~mlquantify.likelihood.EMQ`
      - `Saerens et al. (2002) <https://ieeexplore.ieee.org/abstract/document/6789744>`_
      - Yes
      - Aggregative
      - :mod:`~mlquantify.likelihood`
-   * - :class:`~mlquantify.mixture.DyS`
+   * - :class:`~mlquantify.matching.DyS`
      - `Maletzke et al. (2019) <https://ojs.aaai.org/index.php/AAAI/article/view/4376>`_
      - No
      - Aggregative
-     - :mod:`~mlquantify.mixture`
-   * - :class:`~mlquantify.mixture.HDy`
+     - :mod:`~mlquantify.matching`
+   * - :class:`~mlquantify.matching.HDy`
      - `Gonzalez et al. (2012) <https://www.sciencedirect.com/science/article/pii/S0020025512004069>`_
      - No
      - Aggregative
-     - :mod:`~mlquantify.mixture`
-   * - :class:`~mlquantify.mixture.SMM`
+     - :mod:`~mlquantify.matching`
+   * - :class:`~mlquantify.matching.SMM`
      - `Hassan et al. (2020) <https://ieeexplore.ieee.org/abstract/document/9260028>`_
      - No
      - Aggregative
-     - :mod:`~mlquantify.mixture`
-   * - :class:`~mlquantify.mixture.SORD`
+     - :mod:`~mlquantify.matching`
+   * - :class:`~mlquantify.matching.SORD`
      - `Maletzke et al. (2019) <https://ojs.aaai.org/index.php/AAAI/article/view/4376>`_
      - No
      - Aggregative
-     - :mod:`~mlquantify.mixture`
-   * - :class:`~mlquantify.mixture.HDx`
+     - :mod:`~mlquantify.matching`
+   * - :class:`~mlquantify.matching.HDx`
      - `Gonzalez et al. (2012) <https://www.sciencedirect.com/science/article/pii/S0020025512004069>`_
      - No
      - Non-aggregative
-     - :mod:`~mlquantify.mixture`
-   * - :class:`~mlquantify.mixture.MMD_RKHS`
+     - :mod:`~mlquantify.matching`
+   * - :class:`~mlquantify.matching.MMD_RKHS`
      - `Iyer et al. (2014) <https://proceedings.mlr.press/v32/iyer14.html>`_
      - No
      - Non-aggregative
-     - :mod:`~mlquantify.mixture`
-   * - :class:`~mlquantify.neighbors.KDEyML`
+     - :mod:`~mlquantify.matching`
+   * - :class:`~mlquantify.matching.KDEyML`
      - `Moreo et al. (2025) <https://link.springer.com/article/10.1007/s10994-024-06726-5>`_
      - Yes
      - Aggregative
-     - :mod:`~mlquantify.neighbors`
-   * - :class:`~mlquantify.neighbors.KDEyHD`
+     - :mod:`~mlquantify.matching`
+   * - :class:`~mlquantify.matching.KDEyHD`
      - `Moreo et al. (2025) <https://link.springer.com/article/10.1007/s10994-024-06726-5>`_
      - Yes
      - Aggregative
-     - :mod:`~mlquantify.neighbors`
-   * - :class:`~mlquantify.neighbors.KDEyCS`
+     - :mod:`~mlquantify.matching`
+   * - :class:`~mlquantify.matching.KDEyCS`
      - `Moreo et al. (2025) <https://link.springer.com/article/10.1007/s10994-024-06726-5>`_
      - Yes
      - Aggregative
-     - :mod:`~mlquantify.neighbors`
+     - :mod:`~mlquantify.matching`
    * - :class:`~mlquantify.neighbors.PWK`
      - `Barraquero et al. (2013) <https://www.sciencedirect.com/science/article/pii/S0031320312003391>`_
      - Yes
@@ -145,3 +150,8 @@ The table below lists all the quantification methods available in the ``mlquanti
      - Method dependent
      - Meta
      - :mod:`~mlquantify.meta`
+   * - :class:`~mlquantify.neural.QuaNet`
+     - `Esuli et al. (2018) <https://doi.org/10.1016/j.patrec.2019.11.012>`_
+     - Yes
+     - Neural
+     - :mod:`~mlquantify.neural`

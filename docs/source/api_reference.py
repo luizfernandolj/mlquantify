@@ -94,20 +94,20 @@ API_REFERENCE = {
                 "autosummary": [
                     "CC",
                     "PCC",
-                    "FM",
-                    "AC",
-                    "PAC",
+                    "ThresholdAdjustment",
                     "TAC",
                     "TX",
                     "TMAX",
                     "T50",
                     "MS",
                     "MS2",
-                    "CDE",
+                    "FM",
+                    "GACC",
+                    "GPACC",
                     "evaluate_thresholds",
                     "compute_tpr",
                     "compute_fpr",
-                    "compute_table"
+                    "compute_table",
                 ],
             }
         ],
@@ -119,24 +119,9 @@ API_REFERENCE = {
             {
                 "title": "Likelihood Methods",
                 "autosummary": [
-                    "EMQ"
-                ],
-            }
-        ],
-    },
-    "mlquantify.mixture": {
-        "short_summary": "Mixture Models for quantification.",
-        "description": None,
-        "sections": [
-            {
-                "title": "Mixture Models",
-                "autosummary": [
-                    "HDy",
-                    "DyS",
-                    "SMM",
-                    "SORD",
-                    "HDx",
-                    "MMD_RKHS"
+                    "CDE",
+                    "EMQ",
+                    "MLPE",
                 ],
             }
         ],
@@ -149,17 +134,23 @@ API_REFERENCE = {
                 "title": "Matching Methods",
                 "autosummary": [
                     "BaseMatchingQuantifier",
-                    "HistogramQuantifier",
+                    "MatchingHistogramQuantifier",
                     "DyS",
                     "HDy",
                     "HDx",
                     "SORD",
-                    "KernelQuantifier",
+                    "MatchingKernelQuantifier",
                     "MMD_RKHS",
                     "KDEyQuantifier",
                     "KDEyML",
                     "KDEyHD",
                     "KDEyCS",
+                    "GKDEyML",
+                    "GHDx",
+                    "GHDy",
+                    "SMM",
+                    "EDy",
+                    "EDx",
                 ],
             }
         ],
@@ -171,10 +162,7 @@ API_REFERENCE = {
             {
                 "title": "Neighbor-based Methods",
                 "autosummary": [
-                    "KDEyCS",
-                    "KDEyHD",
-                    "KDEyML",
-                    "PWK"
+                    "PWK",
                 ],
             }
         ],
@@ -186,13 +174,92 @@ API_REFERENCE = {
             {
                 "title": "Composable Methods",
                 "autosummary": [
+                    "BaseComposeQuantifier",
+                    "LinearComposeQuantifier",
+                    "LikelihoodComposeQuantifier",
                     "ComposeQuantifier",
-                    "ACC",
-                    "PACC",
-                    "AC",
-                    "PAC",
-                    "ClassRepresentation",
+                ],
+            }
+        ],
+    },
+    "mlquantify.losses": {
+        "short_summary": "Loss functions used by quantifiers.",
+        "description": None,
+        "sections": [
+            {
+                "title": "Loss Functions",
+                "autosummary": [
+                    "BaseLoss",
+                    "DistanceLoss",
                     "LeastSquaresLoss",
+                    "HellingerSurrogateLoss",
+                    "EnergyLoss",
+                    "NegativeLogLikelihoodLoss",
+                    "MixtureNegativeLogLikelihoodLoss",
+                    "RegularizedMixtureNLLLoss",
+                    "normalize_distribution",
+                    "get_loss",
+                ],
+            }
+        ],
+    },
+    "mlquantify.representations": {
+        "short_summary": "Representation strategies for quantification.",
+        "description": None,
+        "sections": [
+            {
+                "title": "Representations",
+                "autosummary": [
+                    "BaseRepresentation",
+                    "HistogramRepresentation",
+                    "KDERepresentation",
+                    "DistanceRepresentation",
+                    "KernelMeanRepresentation",
+                    "PredictionRepresentation",
+                    "HardPredictionRepresentation",
+                    "SoftPredictionRepresentation",
+                ],
+            }
+        ],
+    },
+    "mlquantify.solvers": {
+        "short_summary": "Optimization helpers for prevalence estimation.",
+        "description": None,
+        "sections": [
+            {
+                "title": "Solvers",
+                "autosummary": [
+                    "solve_binary",
+                    "ternary_search",
+                    "solve_simplex",
+                    "minimize_prevalence",
+                    "minimize_prevalence_blocks",
+                ],
+            }
+        ],
+    },
+    "mlquantify.calibration": {
+        "short_summary": "Calibration utilities.",
+        "description": None,
+        "sections": [
+            {
+                "title": "Calibration",
+                "autosummary": [
+                    "Calibrator",
+                    "ClassifierCalibrator",
+                    "QuantifierCalibrator",
+                ],
+            }
+        ],
+    },
+    "mlquantify.neural": {
+        "short_summary": "Neural quantification methods.",
+        "description": None,
+        "sections": [
+            {
+                "title": "Neural Methods",
+                "autosummary": [
+                    "QuaNet",
                 ],
             }
         ],
@@ -260,6 +327,7 @@ API_REFERENCE = {
                 "title": None,
                 "autosummary": [
                     "get_prev_from_labels",
+                    "normalize_prevalence",
                     "load_quantifier",
                     "make_prevs",
                     "apply_cross_validation",

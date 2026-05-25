@@ -111,7 +111,7 @@ In quantification, a single test set is often insufficient because we want to ev
 
 .. code-block:: python
 
-    from mlquantify.protocols import APP
+    from mlquantify.model_selection import APP
     from mlquantify.utils import get_prev_from_labels
 
     # Create an APP generator:

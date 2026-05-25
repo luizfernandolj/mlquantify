@@ -11,7 +11,20 @@ try:
     from torch.nn import MSELoss
     from torch.nn.functional import relu
 except ImportError:
-    pass
+    torch = None
+
+    class _TorchStub:
+        class Module:
+            pass
+
+    nn = _TorchStub()
+
+    def relu(*_args, **_kwargs):
+        raise ImportError("PyTorch is required to use mlquantify.neural.")
+
+    class MSELoss:
+        def __init__(self, *_args, **_kwargs):
+            raise ImportError("PyTorch is required to use mlquantify.neural.")
 
 from mlquantify.base import BaseQuantifier
 from mlquantify.base_aggregative import (
@@ -403,6 +416,9 @@ class QuaNet(SoftPredictionMixin, AggregativeMixin, BaseQuantifier):
         checkpointname: str | None = None,
         device: str = "cuda",
     ) -> None:
+
+        if torch is None:
+            raise ImportError("PyTorch is required to use QuaNet.")
 
         assert hasattr(estimator, "transform"), ...
         assert hasattr(estimator, "predict_proba"), ...

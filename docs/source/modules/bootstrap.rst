@@ -32,8 +32,8 @@ The :class:`AggregativeBootstrap` class implements these strategies for aggregat
 
 .. code-block:: python
 
-    from mlquantify.ensemble import AggregativeBootstrap
-    from mlquantify.neighbors import EMQ
+    from mlquantify.meta import AggregativeBootstrap
+    from mlquantify.likelihood import EMQ
     from sklearn.ensemble import RandomForestClassifier
 
     agg_boot = AggregativeBootstrap(

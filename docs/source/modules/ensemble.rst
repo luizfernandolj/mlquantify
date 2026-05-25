@@ -58,8 +58,8 @@ Advantages include risk reduction, correction of instability in base quantifiers
 
 .. code-block:: python
 
-    from mlquantify.ensemble import EnsembleQ
-    from mlquantify.mixture import DyS
+    from mlquantify.meta import EnsembleQ
+    from mlquantify.matching import DyS
     from sklearn.ensemble import RandomForestClassifier
 
     ensemble = EnsembleQ(

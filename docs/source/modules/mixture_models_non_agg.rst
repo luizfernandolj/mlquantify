@@ -1,6 +1,6 @@
 .. _mixture_models_non_agg:
 
-.. currentmodule:: mlquantify.mixture
+.. currentmodule:: mlquantify.matching
 
 ========================================================
 Mixture Models for Non-Aggregative Quantification
@@ -42,7 +42,7 @@ HDx, different from HDy, does not require a estimator to estimate posterior prob
 
 .. code-block:: python
 
-   from mlquantify.mixture import HDx
+   from mlquantify.matching import HDx
    from sklearn.ensemble import RandomForestClassifier
 
    q = HDx(bins_size=[10, 20, 30])

@@ -1,6 +1,6 @@
 .. _quantification_protocols:
 
-.. currentmodule:: mlquantify.protocols
+.. currentmodule:: mlquantify.model_selection
 
 ==============================
 Protocols for Quantification
@@ -23,7 +23,7 @@ The :class:`APP` is the most commonly used protocol, leveraging widely available
 
 .. code-block:: python
 
-    from mlquantify.protocols import APP
+    from mlquantify.model_selection import APP
     from mlquantify.utils import get_prev_from_labels
 
     # Initialize protocol
@@ -52,7 +52,7 @@ The NPP uses naturally occurring prevalence variations by partitioning a large t
 
 .. code-block:: python
 
-    from mlquantify.protocols import NPP
+    from mlquantify.model_selection import NPP
     from mlquantify.utils import get_prev_from_labels
 
     # Initialize protocol
@@ -78,7 +78,7 @@ The :class:`UPP` is a variant of the APP that ensures uniform sampling of class 
 
 .. code-block:: python
 
-    from mlquantify.protocols import UPP
+    from mlquantify.model_selection import UPP
     from mlquantify.utils import get_prev_from_labels
 
     # Initialize protocol
@@ -107,7 +107,7 @@ The :class:`PPP` is another APP variant that allows users to specify desired cla
 
 .. code-block:: python
 
-    from mlquantify.protocols import PPP
+    from mlquantify.model_selection import PPP
     from mlquantify.utils import get_prev_from_labels
 
     # Initialize protocol with desired prevalences

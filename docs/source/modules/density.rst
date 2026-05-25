@@ -1,6 +1,6 @@
 .. _density:
 
-.. currentmodule:: mlquantify.neighbors
+.. currentmodule:: mlquantify.matching
 
 =========================
 Kernel Density Estimation
@@ -54,7 +54,7 @@ The :class:`KDEyML` class implements the Maximum Likelihood quantifier. It model
 
 .. code-block:: python
 
-   from mlquantify.neighbors import KDEyML
+    from mlquantify.matching import KDEyML
    from sklearn.ensemble import RandomForestClassifier
 
    # KDEy-ML uses Maximum Likelihood optimization
@@ -87,7 +87,7 @@ The :class:`KDEyHD` class estimates class prevalences by minimizing the **Hellin
 
 .. code-block:: python
 
-   from mlquantify.neighbors import KDEyHD
+    from mlquantify.matching import KDEyHD
 
    # Uses Monte Carlo sampling (default trials=1000)
    q = KDEyHD(estimator=RandomForestClassifier(), montecarlo_trials=2000, random_state=42)
@@ -122,7 +122,7 @@ The :class:`KDEyCS` class minimizes the **Cauchy-Schwarz (CS)** divergence.
 
 .. code-block:: python
 
-   from mlquantify.neighbors import KDEyCS
+    from mlquantify.matching import KDEyCS
 
    # Fast execution using closed-form solution
    q = KDEyCS(estimator=RandomForestClassifier(), bandwidth=0.1)
