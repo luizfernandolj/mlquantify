@@ -95,8 +95,24 @@ class ThresholdAdjustment(SoftPredictionMixin, BaseAdjustCount):
     }
 
 
-    def __init__(self, estimator=None, threshold=0.5, strategy="ovr", n_jobs=None):
-        super().__init__(estimator=estimator)
+    def __init__(
+        self,
+        estimator=None,
+        threshold=0.5,
+        strategy="ovr",
+        n_jobs=None,
+        cv=5,
+        stratified=True,
+        shuffle=False,
+        random_state=None,
+    ):
+        super().__init__(
+            estimator=estimator,
+            cv=cv,
+            stratified=stratified,
+            shuffle=shuffle,
+            random_state=random_state,
+        )
         self.threshold = threshold
         self.strategy = strategy
         self.n_jobs = n_jobs
@@ -345,7 +361,7 @@ class MS2(MS):
     UserWarning
         If all TPR or FPR values are zero, or if no threshold satisfies
         the ``|TPR - FPR| > 0.25`` constraint.
-        
+
     Examples
     --------
     >>> from mlquantify.counting import MS2
@@ -371,3 +387,98 @@ class MS2(MS):
             warnings.warn("No cases satisfy |TPR - FPR| > 0.25.")
             indices = np.where(np.abs(tprs - fprs) >= 0)[0]
         return thresholds[indices], tprs[indices], fprs[indices]
+
+
+@binary_quantifier(strategy_attr="strategy")
+class ACC(CrispPredictionMixin, BaseAdjustCount):
+    r"""Adjusted Classify and Count (ACC) using argmax hard predictions.
+
+    Matches the reference QoT paper ACC implementation. TPR, FPR, and the
+    CC count are all derived from the classifier's argmax hard prediction
+    rather than a soft-probability threshold.
+
+    When combined with the ``_OvRBinaryWrapper`` applied in
+    ``_fit_binary_ovr`` (for ``estimator_fitted=True``), each OvR
+    sub-problem's ``predict()`` returns 1 if the multiclass classifier's
+    argmax equals the target class, 0 otherwise — exactly the binary
+    decision used by the reference.
+
+    This is a **binary-only** method. Multiclass problems are handled with
+    a one-vs-rest (OvR) strategy.
+
+    Parameters
+    ----------
+    estimator : estimator, optional
+        A classifier with ``fit``, ``predict_proba``, and ``predict`` methods.
+    strategy : {'ovr', 'ovo'}, default='ovr'
+        Multiclass decomposition strategy.
+    n_jobs : int or None, default=None
+        Number of parallel jobs for multiclass decomposition.
+    cv : int, default=5
+        Cross-validation folds used when ``estimator_fitted=False``.
+    stratified : bool, default=True
+        Whether to stratify CV splits.
+    shuffle : bool, default=False
+        Whether to shuffle data before splitting.
+    random_state : int or None, default=None
+        Random seed for reproducibility.
+
+    Attributes
+    ----------
+    estimator_ : estimator
+        The fitted underlying classifier.
+    classes_ : ndarray of shape (n_classes,)
+        Class labels seen during ``fit``.
+
+    References
+    ----------
+    .. dropdown:: References
+
+        .. [1] Forman, G. (2005). Counting Positives Accurately Despite
+               Inaccurate Classification. *ECML*, pp. 564–575.
+    """
+
+    def __init__(
+        self,
+        estimator=None,
+        strategy="ovr",
+        n_jobs=None,
+        cv=5,
+        stratified=True,
+        shuffle=False,
+        random_state=None,
+    ):
+        super().__init__(
+            estimator=estimator,
+            cv=cv,
+            stratified=stratified,
+            shuffle=shuffle,
+            random_state=random_state,
+        )
+        self.strategy = strategy
+        self.n_jobs = n_jobs
+
+    def _adjust(self, predictions, train_predictions, y_train):
+        # Both predictions and train_predictions are 1-D arrays of 0/1 hard
+        # binary labels coming from CrispPredictionMixin → estimator.predict().
+        # With _OvRBinaryWrapper, predict() returns (argmax == cls_idx).
+        pos_mask = (y_train == 1)
+        neg_mask = (y_train == 0)
+
+        tpr = train_predictions[pos_mask].mean() if pos_mask.any() else 0.0
+        fpr = train_predictions[neg_mask].mean() if neg_mask.any() else 0.0
+
+        # CC: fraction of test samples predicted as positive by argmax
+        cc = predictions.mean()
+
+        diff = tpr - fpr
+        if abs(diff) < 1e-10:
+            prevalence = cc
+        else:
+            prevalence = float(np.clip((cc - fpr) / diff, 0.0, 1.0))
+
+        return np.asarray([1 - prevalence, prevalence])
+
+    def get_best_threshold(self, thresholds, tprs, fprs):
+        # Not used — _adjust is fully overridden and does not call this.
+        pass

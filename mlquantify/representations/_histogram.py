@@ -14,6 +14,7 @@ class HistogramRepresentation(BaseRepresentation):
         features=None,
         partition_blocks=False,
         bin_edges="fixed",
+        laplace_smoothing=False,
     ):
         self.bins = np.atleast_1d(bins)
         self.range = range
@@ -21,6 +22,7 @@ class HistogramRepresentation(BaseRepresentation):
         self.features = features
         self.partition_blocks = partition_blocks
         self.bin_edges = bin_edges
+        self.laplace_smoothing = laplace_smoothing
 
     def transform(self, X):
         """Compute the histogram representation for a set of instances.
@@ -107,9 +109,7 @@ class HistogramRepresentation(BaseRepresentation):
             )
 
             hist = hist.astype(float)
-            hist /= max(hist.sum(), 1.0)
-
-            return hist
+            return self._normalize(hist)
 
         if self.mode == "histogram":
             hist, _ = np.histogram(
@@ -120,9 +120,7 @@ class HistogramRepresentation(BaseRepresentation):
             )
 
             hist = hist.astype(float)
-            hist /= max(hist.sum(), 1.0)
-
-            return hist
+            return self._normalize(hist)
 
         if self.mode == "onehot":
             edges = np.linspace(
@@ -137,6 +135,13 @@ class HistogramRepresentation(BaseRepresentation):
 
             return onehot.mean(axis=0)
         raise ValueError(f"Unknown mode: {self.mode!r}")
+
+    def _normalize(self, hist):
+        n = max(hist.sum(), 1.0)
+        if self.laplace_smoothing:
+            k = hist.shape[0]
+            return (hist + 1.0 / k) / (n + 1)
+        return hist / n
 
     def _fit_edges(self, X):
         if self.bin_edges == "fixed":

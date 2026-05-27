@@ -71,6 +71,7 @@ class MatchingHistogramQuantifier(BaseMatchingQuantifier):
         strategy="ovr",
         histogram_features=None,
         bin_strategy=None,
+        laplace_smoothing=False,
     ):
         if bins_size is None:
             bins_size = np.append(np.linspace(2, 20, 10), 30).astype(int)
@@ -82,12 +83,14 @@ class MatchingHistogramQuantifier(BaseMatchingQuantifier):
         self.strategy = strategy
         self.histogram_features = histogram_features
         self.bin_strategy = bin_strategy
+        self.laplace_smoothing = laplace_smoothing
         super().__init__(
             representation=HistogramRepresentation(
                 bins=bins_size,
                 mode="histogram",
                 features=histogram_features,
                 partition_blocks=bin_strategy in {"median", "mean"},
+                laplace_smoothing=laplace_smoothing,
             ),
             normalize=True,
         )
@@ -227,13 +230,19 @@ class DyS(SoftPredictionMixin, AggregativeMixin, MatchingHistogramQuantifier):
         stratified=True,
         shuffle=False,
         random_state=None,
+        distance="topsoe",
+        solver="auto",
+        bin_strategy=None,
+        laplace_smoothing=False,
     ):
         super().__init__(
             bins_size=bins_size,
-            distance="hellinger",
-            solver="grid",
+            distance=distance,
+            solver=solver,
             strategy=strategy,
             histogram_features=1,
+            bin_strategy=bin_strategy,
+            laplace_smoothing=laplace_smoothing,
         )
         self.estimator = estimator
         self.cv = cv
@@ -345,17 +354,22 @@ class HDy(SoftPredictionMixin, AggregativeMixin, MatchingHistogramQuantifier):
         stratified=True,
         shuffle=False,
         random_state=None,
+        distance="hellinger",
+        solver="grid",
+        bin_strategy="median",
+        laplace_smoothing=False,
     ):
         if bins_size is None:
             bins_size = np.linspace(10, 110, 11, dtype=int)
 
         super().__init__(
             bins_size=bins_size,
-            distance="hellinger",
-            solver="grid",
+            distance=distance,
+            solver=solver,
             strategy=strategy,
             histogram_features=1,
-            bin_strategy="median",
+            bin_strategy=bin_strategy,
+            laplace_smoothing=laplace_smoothing,
         )
         self.estimator = estimator
         self.cv = cv

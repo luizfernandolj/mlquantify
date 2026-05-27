@@ -21,6 +21,43 @@ from mlquantify.utils._validation import validate_prevalences, check_has_method
 
 
 # ============================================================
+# OvR binary wrapper for pre-fitted multiclass estimators
+# ============================================================
+class _OvRBinaryWrapper:
+    """Wraps a multiclass estimator to present a binary interface for one OvR class.
+
+    When a pre-fitted multiclass estimator is reused across OvR sub-problems,
+    ``predict_proba`` returns ``n_classes`` columns.  This wrapper selects the
+    column for the target class and returns a proper 2-column binary output, so
+    all downstream quantifiers (histogram, threshold, etc.) work correctly.
+
+    Parameters
+    ----------
+    estimator : fitted sklearn-compatible classifier
+        The original multiclass estimator.
+    cls_idx : int
+        Index of the target class in ``estimator.classes_`` (= column in
+        ``predict_proba``).
+    """
+
+    def __init__(self, estimator, cls_idx):
+        self.estimator = estimator
+        self.cls_idx = cls_idx
+        self.classes_ = np.array([0, 1])
+
+    def predict_proba(self, X):
+        proba = self.estimator.predict_proba(X)
+        pos = proba[:, self.cls_idx]
+        return np.column_stack([1 - pos, pos])
+
+    def predict(self, X):
+        # A sample is positive only if cls is the argmax class,
+        # consistent with how a multiclass classifier makes hard predictions.
+        proba = self.estimator.predict_proba(X)
+        return (np.argmax(proba, axis=1) == self.cls_idx).astype(int)
+
+
+# ============================================================
 # Decorator for enabling binary quantification behavior
 # ============================================================
 def binary_quantifier(_cls=None, *, strategy_attr="strategy"):
@@ -133,6 +170,15 @@ def _fit_binary_ovr(quantifier, X, y, cls, fit_args=None, fit_kwargs=None):
 
     qtf = deepcopy(quantifier)
     y_bin = (y == cls).astype(int)
+
+    # When the estimator is pre-fitted as a multiclass classifier,
+    # predict_proba returns n_classes columns.  Wrap it so every downstream
+    # quantifier sees a proper 2-column binary interface for this OvR class.
+    fit_kwargs = dict(fit_kwargs)  # don't mutate the caller's dict
+    if fit_kwargs.get("estimator_fitted", False) and hasattr(qtf, "estimator"):
+        cls_idx = int(np.searchsorted(np.unique(y), cls))
+        qtf.estimator = _OvRBinaryWrapper(qtf.estimator, cls_idx)
+
     qtf._original_fit(X, y_bin, *fit_args, **fit_kwargs)
     return cls, qtf
 
