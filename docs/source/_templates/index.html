@@ -1,14 +1,12 @@
 {% extends "layout.html" %}
-{% set title = 'mlquantify | Premier Quantification Methods for Python' %}
+{% set title = 'mlquantify | Python package for Quantification' %}
 
 {% block extrahead %}
   {{ super() }}
-  <!-- SEO Optimization -->
   <meta name="description" content="mlquantify is the state-of-the-art Python library for quantification (class prevalence estimation). Explore aggregative, non-aggregative, and meta methods with comprehensive evaluation metrics.">
   <meta name="keywords" content="mlquantify, quantification, class priors, prevalence estimation, machine learning, python library, data science, aggregative quantification">
   <meta name="author" content="Luiz Fernando">
   
-  <!-- Open Graph / Facebook -->
   <meta property="og:type" content="website">
   <meta property="og:url" content="https://luizfernandolj.github.io/mlquantify/">
   <meta property="og:image" content="{{ pathto('_static/logos/logo_mlquantify.svg', 1) }}">
@@ -18,7 +16,6 @@
   <meta property="og:description" content="{{ og_description }}">
   <meta property="og:image" content="{{ og_image }}">
 
-  <!-- Twitter -->
   <meta property="twitter:card" content="summary_large_image">
   <meta property="twitter:title" content="mlquantify | Quantification in Python">
   <meta property="twitter:description" content="Master class prevalence estimation with mlquantify. The comprehensive toolkit for quantification methods and evaluation.">
@@ -33,11 +30,10 @@
 {% endblock docs_navbar %}
 
 {% block docs_main %}
-<!-- Hero Section -->
 <div class="hero-container">
     <div class="container">
       <img src="{{ pathto('_static/logo_mlquantify-white.svg', 1) }}" alt="mlquantify" style="height: 180px; margin-bottom: 2rem; filter: drop-shadow(0 0 20px rgba(168, 85, 247, 0.4));">
-      <h1 class="hero-title">A Python package for Quantification</h1>
+      <h1 class="hero-title">mlquantify: A Python package for Quantification</h1>
       <p class="hero-subtitle">
         The ultimate Python toolkit for class prevalence estimation. 
         Robust methods, advanced metrics, and seamless scikit-learn integration.
@@ -53,11 +49,9 @@
     </div>
 </div>
 
-<!-- Features Grid -->
 <div class="container py-5">
   <div class="row g-4">
     
-    <!-- Aggregative -->
     <div class="col-md-4">
       <div class="feature-card">
         <div class="card-icon-wrapper">
@@ -69,7 +63,6 @@
       </div>
     </div>
 
-    <!-- Non-Aggregative -->
     <div class="col-md-4">
       <div class="feature-card">
         <div class="card-icon-wrapper">
@@ -81,7 +74,6 @@
       </div>
     </div>
 
-    <!-- Meta -->
     <div class="col-md-4">
       <div class="feature-card">
         <div class="card-icon-wrapper">
@@ -93,7 +85,6 @@
       </div>
     </div>
 
-    <!-- Metrics -->
     <div class="col-md-4">
       <div class="feature-card">
         <div class="card-icon-wrapper">
@@ -105,7 +96,6 @@
       </div>
     </div>
 
-    <!-- Confidence -->
     <div class="col-md-4">
       <div class="feature-card">
         <div class="card-icon-wrapper">
@@ -117,7 +107,6 @@
       </div>
     </div>
 
-    <!-- Model Selection -->
     <div class="col-md-4">
       <div class="feature-card">
         <div class="card-icon-wrapper">
