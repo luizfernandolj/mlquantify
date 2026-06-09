@@ -11,12 +11,12 @@
 <meta property="og:type" content="website" />
 <meta property="og:url" content="user_guide.html" />
 <meta property="og:site_name" content="mlquantify" />
-<meta property="og:description" content="Aggregative Quantification- Using Aggregative Quantification Methods, General Concept- Examples., Counters For Quantification- Classify and Count, Probabilistic Classify and Count., Adjusted Counti..." />
+<meta property="og:description" content="Foundations- What Is Quantification?- When Is Quantification the Right Tool?., Why Not Just Classify and Count?- The CC Bias., Dataset Shift- Prior Probability Shift (Label Shift), Covariate Shift,..." />
 <meta property="og:image:width" content="1146" />
 <meta property="og:image:height" content="600" />
-<meta property="og:image" content="_images/social_previews/summary_user_guide_7d8272fe.png" />
-<meta property="og:image:alt" content="Aggregative Quantification- Using Aggregative Quantification Methods, General Concept- Examples., Counters For Quantification- Classify and Count, Probabilistic Classify and Count., Adjusted Counti..." />
-<meta name="description" content="Aggregative Quantification- Using Aggregative Quantification Methods, General Concept- Examples., Counters For Quantification- Classify and Count, Probabilistic Classify and Count., Adjusted Counti..." />
+<meta property="og:image" content="_images/social_previews/summary_user_guide_37ae50e9.png" />
+<meta property="og:image:alt" content="Foundations- What Is Quantification?- When Is Quantification the Right Tool?., Why Not Just Classify and Count?- The CC Bias., Dataset Shift- Prior Probability Shift (Label Shift), Covariate Shift,..." />
+<meta name="description" content="Foundations- What Is Quantification?- When Is Quantification the Right Tool?., Why Not Just Classify and Count?- The CC Bias., Dataset Shift- Prior Probability Shift (Label Shift), Covariate Shift,..." />
 <meta name="twitter:card" content="summary_large_image" />
 
     <title>User Guide &#8212; mlquantify</title>
@@ -66,7 +66,7 @@
     <script>DOCUMENTATION_OPTIONS.search_as_you_type = false;</script>
     <link rel="canonical" href="https://luizfernandolj.github.io/mlquantify/user_guide.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="next" title="1. Aggregative Quantification" href="aggregative_quantification.html" />
+    <link rel="next" title="1. Quantification Foundations" href="modules/quantification_foundations.html" />
     <link rel="prev" title="Installing mlquantify" href="install.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
@@ -374,42 +374,47 @@
      aria-label="Section Navigation">
   <p class="bd-links__title" role="heading" aria-level="1">Section Navigation</p>
   <div class="bd-toc-item navbar-nav"><ul class="nav bd-sidenav">
-<li class="toctree-l1 has-children"><a class="reference internal" href="aggregative_quantification.html">1. Aggregative Quantification</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
-<li class="toctree-l2"><a class="reference internal" href="modules/using_aggregative.html">1.1. Using Aggregative Quantification Methods</a></li>
+<li class="toctree-l1"><a class="reference internal" href="modules/quantification_foundations.html">1. Foundations</a></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="aggregative_quantification.html">2. Aggregative Quantification</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="modules/using_aggregative.html">2.1. Using Aggregative Quantification Methods</a></li>
 
-<li class="toctree-l2"><a class="reference internal" href="modules/counters.html">1.3. Counters For Quantification</a></li>
-<li class="toctree-l2"><a class="reference internal" href="modules/adjust_counting.html">1.4. Adjusted Counting</a></li>
-<li class="toctree-l2"><a class="reference internal" href="modules/likelihood.html">1.5. Likelihood-Based Quantification</a></li>
-<li class="toctree-l2"><a class="reference internal" href="modules/distribution_matching.html">1.6. Distribution Matching</a></li>
-<li class="toctree-l2"><a class="reference internal" href="modules/neighbors.html">1.7. Nearest Neighbors</a></li>
+<li class="toctree-l2"><a class="reference internal" href="modules/counters.html">2.3. Counting-Based Quantifiers</a></li>
+
+<li class="toctree-l2"><a class="reference internal" href="modules/adjust_counting.html">2.5. Adjusted Counting</a></li>
+<li class="toctree-l2"><a class="reference internal" href="modules/likelihood.html">2.6. Likelihood Methods</a></li>
+<li class="toctree-l2"><a class="reference internal" href="modules/distribution_matching.html">2.7. Distribution Matching</a></li>
+<li class="toctree-l2"><a class="reference internal" href="modules/neighbors.html">2.8. Nearest Neighbours</a></li>
 </ul>
 </details></li>
-<li class="toctree-l1 has-children"><a class="reference internal" href="non_aggregative_quantification.html">2. Non Aggregative Quantification</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
-<li class="toctree-l2"><a class="reference internal" href="modules/mixture_models_non_agg.html">2.1. Mixture Models for Non-Aggregative Quantification</a></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="non_aggregative_quantification.html">3. Non Aggregative Quantification</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="modules/mixture_models_non_agg.html">3.1. Mixture Models for Non-Aggregative Quantification</a></li>
 </ul>
 </details></li>
-<li class="toctree-l1 has-children"><a class="reference internal" href="meta_quantification.html">3. Meta Quantification</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
-<li class="toctree-l2"><a class="reference internal" href="modules/ensemble.html">3.1. Ensemble for Quantification</a></li>
-<li class="toctree-l2"><a class="reference internal" href="modules/bootstrap.html">3.2. Bootstrap in Quantification</a></li>
-<li class="toctree-l2"><a class="reference internal" href="modules/scores_adaptation.html">3.3. QuaDapt: Drift-Resilient Score Adaptation</a></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="meta_quantification.html">4. Meta Quantification</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="modules/ensemble.html">4.1. Ensembles and Adaptation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="modules/bootstrap.html">4.2. Bootstrap in Quantification</a></li>
+<li class="toctree-l2"><a class="reference internal" href="modules/scores_adaptation.html">4.3. QuaDapt: Drift-Resilient Score Adaptation</a></li>
 </ul>
 </details></li>
-<li class="toctree-l1 has-children"><a class="reference internal" href="model_selection_evaluation.html">4. Model Selection and Evaluation</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
-<li class="toctree-l2"><a class="reference internal" href="modules/protocols.html">4.1. Protocols for Quantification</a></li>
-<li class="toctree-l2"><a class="reference internal" href="modules/tuning_hyperparameters.html">4.2. Tuning Hyperparameters</a></li>
-<li class="toctree-l2"><a class="reference internal" href="modules/evaluation_metrics.html">4.3. Evaluation Metrics</a></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="model_selection_evaluation.html">5. Model Selection and Evaluation</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="modules/protocols.html">5.1. Evaluation Protocols</a></li>
+<li class="toctree-l2"><a class="reference internal" href="modules/tuning_hyperparameters.html">5.2. Hyperparameter Tuning</a></li>
+<li class="toctree-l2"><a class="reference internal" href="modules/evaluation_metrics.html">5.3. Evaluation Metrics</a></li>
+
+
+
 </ul>
 </details></li>
-<li class="toctree-l1"><a class="reference internal" href="modules/confidence_intervals.html">5. Confidence Intervals</a></li>
-<li class="toctree-l1"><a class="reference internal" href="building_a_quantifier.html">6. Building a Quantifier</a></li>
-<li class="toctree-l1"><a class="reference internal" href="modules/mlquantify_methods.html">7. Mlquantify methods</a></li>
-<li class="toctree-l1 has-children"><a class="reference internal" href="components.html">8. Core Components</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
-<li class="toctree-l2"><a class="reference internal" href="modules/compose.html">8.1. Composable Quantifiers</a></li>
-<li class="toctree-l2"><a class="reference internal" href="modules/losses.html">8.2. Loss Functions</a></li>
-<li class="toctree-l2"><a class="reference internal" href="modules/representations.html">8.3. Representations</a></li>
-<li class="toctree-l2"><a class="reference internal" href="modules/solvers.html">8.4. Solvers</a></li>
-<li class="toctree-l2"><a class="reference internal" href="modules/calibration.html">8.5. Calibration</a></li>
-<li class="toctree-l2"><a class="reference internal" href="modules/neural.html">8.6. Neural Quantifiers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="modules/confidence_intervals.html">6. Confidence Intervals</a></li>
+<li class="toctree-l1"><a class="reference internal" href="building_a_quantifier.html">7. Building a Quantifier</a></li>
+<li class="toctree-l1"><a class="reference internal" href="modules/mlquantify_methods.html">8. Mlquantify methods</a></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="components.html">9. Core Components</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="modules/compose.html">9.1. Composable Quantifiers</a></li>
+<li class="toctree-l2"><a class="reference internal" href="modules/losses.html">9.2. Loss Functions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="modules/representations.html">9.3. Representations</a></li>
+<li class="toctree-l2"><a class="reference internal" href="modules/solvers.html">9.4. Solvers</a></li>
+<li class="toctree-l2"><a class="reference internal" href="modules/calibration.html">9.5. Calibration</a></li>
+<li class="toctree-l2"><a class="reference internal" href="modules/neural.html">9.6. Neural Quantifiers</a></li>
 </ul>
 </details></li>
 </ul>
@@ -466,123 +471,218 @@
 <span id="id1"></span><h1>User Guide<a class="headerlink" href="#user-guide" title="Link to this heading">#</a></h1>
 <div class="toctree-wrapper compound">
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="aggregative_quantification.html">1. Aggregative Quantification</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="modules/using_aggregative.html">1.1. Using Aggregative Quantification Methods</a></li>
-<li class="toctree-l2"><a class="reference internal" href="modules/using_aggregative.html#general-concept">1.2. General Concept</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="modules/using_aggregative.html#examples">1.2.1. Examples</a></li>
+<li class="toctree-l1"><a class="reference internal" href="modules/quantification_foundations.html">1. Foundations</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="modules/quantification_foundations.html#what-is-quantification">1.1. What Is Quantification?</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="modules/quantification_foundations.html#when-is-quantification-the-right-tool">1.1.1. When Is Quantification the Right Tool?</a></li>
 </ul>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="modules/counters.html">1.3. Counters For Quantification</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="modules/counters.html#classify-and-count">1.3.1. Classify and Count</a></li>
-<li class="toctree-l3"><a class="reference internal" href="modules/counters.html#probabilistic-classify-and-count">1.3.2. Probabilistic Classify and Count</a></li>
+<li class="toctree-l2"><a class="reference internal" href="modules/quantification_foundations.html#why-not-just-classify-and-count">1.2. Why Not Just Classify and Count?</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="modules/quantification_foundations.html#the-cc-bias">1.2.1. The CC Bias</a></li>
 </ul>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="modules/adjust_counting.html">1.4. Adjusted Counting</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="modules/adjust_counting.html#threshold-adjustment">1.4.1. Threshold Adjustment</a></li>
+<li class="toctree-l2"><a class="reference internal" href="modules/quantification_foundations.html#dataset-shift">1.3. Dataset Shift</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="modules/quantification_foundations.html#prior-probability-shift-label-shift">1.3.1. Prior Probability Shift (Label Shift)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="modules/quantification_foundations.html#covariate-shift">1.3.2. Covariate Shift</a></li>
+<li class="toctree-l3"><a class="reference internal" href="modules/quantification_foundations.html#concept-shift-concept-drift">1.3.3. Concept Shift (Concept Drift)</a></li>
 </ul>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="modules/likelihood.html">1.5. Likelihood-Based Quantification</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="modules/likelihood.html#maximum-likelihood-prevalence-estimation-mlpe">1.5.1. Maximum Likelihood Prevalence Estimation (MLPE)</a></li>
-<li class="toctree-l3"><a class="reference internal" href="modules/likelihood.html#expectation-maximization-for-quantification-emq">1.5.2. Expectation Maximization for Quantification (EMQ)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="modules/quantification_foundations.html#the-aggregative-quantification-framework">1.4. The Aggregative Quantification Framework</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="modules/quantification_foundations.html#the-role-of-cross-validation-in-fit">1.4.1. The Role of Cross-Validation in <code class="docutils literal notranslate"><span class="pre">fit</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="modules/quantification_foundations.html#the-estimator-fitted-parameter">1.4.2. The <code class="docutils literal notranslate"><span class="pre">estimator_fitted</span></code> parameter</a></li>
 </ul>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="modules/distribution_matching.html">1.6. Distribution Matching</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="modules/distribution_matching.html#histogram">1.6.1. Histogram</a></li>
-<li class="toctree-l3"><a class="reference internal" href="modules/distribution_matching.html#density">1.6.2. Density</a></li>
-<li class="toctree-l3"><a class="reference internal" href="modules/distribution_matching.html#kernel">1.6.3. Kernel</a></li>
-<li class="toctree-l3"><a class="reference internal" href="modules/distribution_matching.html#scores">1.6.4. Scores</a></li>
+<li class="toctree-l2"><a class="reference internal" href="modules/quantification_foundations.html#method-families-at-a-glance">1.5. Method Families at a Glance</a></li>
+<li class="toctree-l2"><a class="reference internal" href="modules/quantification_foundations.html#choosing-the-right-evaluation-protocol">1.6. Choosing the Right Evaluation Protocol</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="modules/quantification_foundations.html#choosing-the-right-evaluation-metric">1.6.1. Choosing the Right Evaluation Metric</a></li>
 </ul>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="modules/neighbors.html">1.7. Nearest Neighbors</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="modules/neighbors.html#pwk-pair-wise-weighted-k-nearest-neighbors">1.7.1. PWK: Pair-wise Weighted K-Nearest Neighbors</a></li>
+<li class="toctree-l2"><a class="reference internal" href="modules/quantification_foundations.html#multiclass-quantification">1.7. Multiclass Quantification</a></li>
+<li class="toctree-l2"><a class="reference internal" href="modules/quantification_foundations.html#further-reading">1.8. Further Reading</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="aggregative_quantification.html">2. Aggregative Quantification</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="modules/using_aggregative.html">2.1. Using Aggregative Quantification Methods</a></li>
+<li class="toctree-l2"><a class="reference internal" href="modules/using_aggregative.html#general-concept">2.2. General Concept</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="modules/using_aggregative.html#examples">2.2.1. Examples</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="modules/counters.html">2.3. Counting-Based Quantifiers</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="modules/counters.html#cc-classify-and-count">2.3.1. CC — Classify and Count</a></li>
+<li class="toctree-l3"><a class="reference internal" href="modules/counters.html#pcc-probabilistic-classify-and-count">2.3.2. PCC — Probabilistic Classify and Count</a></li>
+<li class="toctree-l3"><a class="reference internal" href="modules/counters.html#gacc-generalised-adjusted-classify-and-count">2.3.3. GACC — Generalised Adjusted Classify and Count</a></li>
+<li class="toctree-l3"><a class="reference internal" href="modules/counters.html#gpacc-generalised-probabilistic-adjusted-classify-and-count">2.3.4. GPACC — Generalised Probabilistic Adjusted Classify and Count</a></li>
+<li class="toctree-l3"><a class="reference internal" href="modules/counters.html#choosing-among-cc-pcc-gacc-and-gpacc">2.3.5. Choosing Among CC, PCC, GACC, and GPACC</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="modules/counters.html#counters-for-quantification">2.4. Counters For Quantification</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="modules/counters.html#classify-and-count">2.4.1. Classify and Count</a></li>
+<li class="toctree-l3"><a class="reference internal" href="modules/counters.html#probabilistic-classify-and-count">2.4.2. Probabilistic Classify and Count</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="modules/adjust_counting.html">2.5. Adjusted Counting</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="modules/adjust_counting.html#the-adjustment-formula">2.5.1. The Adjustment Formula</a></li>
+<li class="toctree-l3"><a class="reference internal" href="modules/adjust_counting.html#acc-adjusted-classify-and-count-hard-predictions">2.5.2. ACC — Adjusted Classify and Count (hard predictions)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="modules/adjust_counting.html#thresholdadjustment-base-class-for-roc-threshold-methods">2.5.3. ThresholdAdjustment — Base Class for ROC-Threshold Methods</a></li>
+<li class="toctree-l3"><a class="reference internal" href="modules/adjust_counting.html#tac-threshold-adjusted-count-fixed-threshold">2.5.4. TAC — Threshold Adjusted Count (fixed threshold)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="modules/adjust_counting.html#tx-threshold-x-symmetric-roc-point">2.5.5. TX — Threshold X (symmetric ROC point)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="modules/adjust_counting.html#tmax-maximum-tprfpr-separation">2.5.6. TMAX — Maximum TPR−FPR Separation</a></li>
+<li class="toctree-l3"><a class="reference internal" href="modules/adjust_counting.html#t50-tpr-0-5-threshold">2.5.7. T50 — TPR ≈ 0.5 Threshold</a></li>
+<li class="toctree-l3"><a class="reference internal" href="modules/adjust_counting.html#ms-median-sweep">2.5.8. MS — Median Sweep</a></li>
+<li class="toctree-l3"><a class="reference internal" href="modules/adjust_counting.html#ms2-median-sweep-with-constraint">2.5.9. MS2 — Median Sweep with Constraint</a></li>
+<li class="toctree-l3"><a class="reference internal" href="modules/adjust_counting.html#comparing-threshold-adjustment-methods">2.5.10. Comparing Threshold-Adjustment Methods</a></li>
+<li class="toctree-l3"><a class="reference internal" href="modules/adjust_counting.html#threshold-adjustment">2.5.11. Threshold Adjustment</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="modules/likelihood.html">2.6. Likelihood Methods</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="modules/likelihood.html#prior-probability-shift-the-core-assumption">2.6.1. Prior Probability Shift — The Core Assumption</a></li>
+<li class="toctree-l3"><a class="reference internal" href="modules/likelihood.html#mlpe-maximum-likelihood-prevalence-estimation-trivial-baseline">2.6.2. MLPE — Maximum Likelihood Prevalence Estimation (trivial baseline)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="modules/likelihood.html#emq-expectation-maximization-quantifier-sld">2.6.3. EMQ — Expectation-Maximization Quantifier (SLD)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="modules/likelihood.html#cde-cde-iterate-threshold-adjustment-via-cost-ratios">2.6.4. CDE — CDE-Iterate (threshold-adjustment via cost ratios)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="modules/likelihood.html#method-comparison">2.6.5. Method Comparison</a></li>
+<li class="toctree-l3"><a class="reference internal" href="modules/likelihood.html#maximum-likelihood-prevalence-estimation-mlpe">2.6.6. Maximum Likelihood Prevalence Estimation (MLPE)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="modules/likelihood.html#expectation-maximization-for-quantification-emq">2.6.7. Expectation Maximization for Quantification (EMQ)</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="modules/distribution_matching.html">2.7. Distribution Matching</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="modules/distribution_matching.html#histogram-methods">2.7.1. Histogram Methods</a></li>
+<li class="toctree-l3"><a class="reference internal" href="modules/distribution_matching.html#density-methods-kdey">2.7.2. Density Methods — KDEy</a></li>
+<li class="toctree-l3"><a class="reference internal" href="modules/distribution_matching.html#kernel-methods-mmd">2.7.3. Kernel Methods — MMD</a></li>
+<li class="toctree-l3"><a class="reference internal" href="modules/distribution_matching.html#score-methods-sord">2.7.4. Score Methods — SORD</a></li>
+<li class="toctree-l3"><a class="reference internal" href="modules/distribution_matching.html#choosing-a-distribution-matching-method">2.7.5. Choosing a Distribution Matching Method</a></li>
+<li class="toctree-l3"><a class="reference internal" href="modules/distribution_matching.html#histogram">2.7.6. Histogram</a></li>
+<li class="toctree-l3"><a class="reference internal" href="modules/distribution_matching.html#density">2.7.7. Density</a></li>
+<li class="toctree-l3"><a class="reference internal" href="modules/distribution_matching.html#kernel">2.7.8. Kernel</a></li>
+<li class="toctree-l3"><a class="reference internal" href="modules/distribution_matching.html#scores">2.7.9. Scores</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="modules/neighbors.html">2.8. Nearest Neighbours</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="modules/neighbors.html#pwk-probabilistic-weighted-k-nearest-neighbours">2.8.1. PWK — Probabilistic Weighted k-Nearest Neighbours</a></li>
+<li class="toctree-l3"><a class="reference internal" href="modules/neighbors.html#id1">2.8.2. Nearest Neighbors</a></li>
+<li class="toctree-l3"><a class="reference internal" href="modules/neighbors.html#pwk-pair-wise-weighted-k-nearest-neighbors">2.8.3. PWK: Pair-wise Weighted K-Nearest Neighbors</a></li>
 </ul>
 </li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="non_aggregative_quantification.html">2. Non Aggregative Quantification</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="modules/mixture_models_non_agg.html">2.1. Mixture Models for Non-Aggregative Quantification</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="modules/mixture_models_non_agg.html#hdx-hellinger-distance-x-similarity">2.1.1. HDx: Hellinger Distance x-Similarity</a></li>
+<li class="toctree-l1"><a class="reference internal" href="non_aggregative_quantification.html">3. Non Aggregative Quantification</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="modules/mixture_models_non_agg.html">3.1. Mixture Models for Non-Aggregative Quantification</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="modules/mixture_models_non_agg.html#hdx-hellinger-distance-x-similarity">3.1.1. HDx: Hellinger Distance x-Similarity</a></li>
 </ul>
 </li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="meta_quantification.html">3. Meta Quantification</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="modules/ensemble.html">3.1. Ensemble for Quantification</a></li>
-<li class="toctree-l2"><a class="reference internal" href="modules/bootstrap.html">3.2. Bootstrap in Quantification</a></li>
-<li class="toctree-l2"><a class="reference internal" href="modules/scores_adaptation.html">3.3. QuaDapt: Drift-Resilient Score Adaptation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="meta_quantification.html">4. Meta Quantification</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="modules/ensemble.html">4.1. Ensembles and Adaptation</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="modules/ensemble.html#ensembleq-ensemble-of-quantifiers">4.1.1. EnsembleQ — Ensemble of Quantifiers</a></li>
+<li class="toctree-l3"><a class="reference internal" href="modules/ensemble.html#quadapt-adaptive-score-simulation">4.1.2. QuaDapt — Adaptive Score Simulation</a></li>
+<li class="toctree-l3"><a class="reference internal" href="modules/ensemble.html#aggregativebootstrap-confidence-intervals-via-bootstrap">4.1.3. AggregativeBootstrap — Confidence Intervals via Bootstrap</a></li>
+<li class="toctree-l3"><a class="reference internal" href="modules/ensemble.html#choosing-a-meta-quantifier">4.1.4. Choosing a Meta-Quantifier</a></li>
+<li class="toctree-l3"><a class="reference internal" href="modules/ensemble.html#ensemble-for-quantification">4.1.5. Ensemble for Quantification</a></li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="model_selection_evaluation.html">4. Model Selection and Evaluation</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="modules/protocols.html">4.1. Protocols for Quantification</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="modules/protocols.html#artificial-prevalence-protocol-app">4.1.1. Artificial-Prevalence Protocol (APP)</a></li>
-<li class="toctree-l3"><a class="reference internal" href="modules/protocols.html#natural-prevalence-protocol-npp">4.1.2. Natural-Prevalence Protocol (NPP)</a></li>
-<li class="toctree-l3"><a class="reference internal" href="modules/protocols.html#uniform-prevalence-protocol-upp">4.1.3. Uniform Prevalence Protocol (UPP)</a></li>
-<li class="toctree-l3"><a class="reference internal" href="modules/protocols.html#personalized-prevalence-protocol-ppp">4.1.4. Personalized Prevalence Protocol (PPP)</a></li>
-<li class="toctree-l3"><a class="reference internal" href="modules/protocols.html#references">4.1.5. References</a></li>
+<li class="toctree-l2"><a class="reference internal" href="modules/bootstrap.html">4.2. Bootstrap in Quantification</a></li>
+<li class="toctree-l2"><a class="reference internal" href="modules/scores_adaptation.html">4.3. QuaDapt: Drift-Resilient Score Adaptation</a></li>
 </ul>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="modules/tuning_hyperparameters.html">4.2. Tuning Hyperparameters</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="modules/tuning_hyperparameters.html#references">4.2.1. References</a></li>
+<li class="toctree-l1"><a class="reference internal" href="model_selection_evaluation.html">5. Model Selection and Evaluation</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="modules/protocols.html">5.1. Evaluation Protocols</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="modules/protocols.html#app-artificial-prevalence-protocol">5.1.1. APP — Artificial Prevalence Protocol</a></li>
+<li class="toctree-l3"><a class="reference internal" href="modules/protocols.html#npp-natural-prevalence-protocol">5.1.2. NPP — Natural Prevalence Protocol</a></li>
+<li class="toctree-l3"><a class="reference internal" href="modules/protocols.html#upp-uniform-prevalence-protocol">5.1.3. UPP — Uniform Prevalence Protocol</a></li>
+<li class="toctree-l3"><a class="reference internal" href="modules/protocols.html#choosing-a-protocol">5.1.4. Choosing a Protocol</a></li>
+<li class="toctree-l3"><a class="reference internal" href="modules/protocols.html#id3">5.1.5. Protocols for Quantification</a></li>
+<li class="toctree-l3"><a class="reference internal" href="modules/protocols.html#artificial-prevalence-protocol-app">5.1.6. Artificial-Prevalence Protocol (APP)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="modules/protocols.html#natural-prevalence-protocol-npp">5.1.7. Natural-Prevalence Protocol (NPP)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="modules/protocols.html#uniform-prevalence-protocol-upp">5.1.8. Uniform Prevalence Protocol (UPP)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="modules/protocols.html#personalized-prevalence-protocol-ppp">5.1.9. Personalized Prevalence Protocol (PPP)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="modules/protocols.html#references">5.1.10. References</a></li>
 </ul>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="modules/evaluation_metrics.html">4.3. Evaluation Metrics</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="modules/evaluation_metrics.html#single-label-quantification-slq-metrics">4.3.1. Single Label Quantification (SLQ) Metrics</a></li>
-<li class="toctree-l3"><a class="reference internal" href="modules/evaluation_metrics.html#regression-based-quantification-rq-metrics">4.3.2. Regression-Based Quantification (RQ) Metrics</a></li>
-<li class="toctree-l3"><a class="reference internal" href="modules/evaluation_metrics.html#ordinal-quantification-oq-metrics">4.3.3. Ordinal Quantification (OQ) Metrics</a></li>
+<li class="toctree-l2"><a class="reference internal" href="modules/tuning_hyperparameters.html">5.2. Hyperparameter Tuning</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="modules/tuning_hyperparameters.html#references">5.2.1. References</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="modules/evaluation_metrics.html">5.3. Evaluation Metrics</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="modules/evaluation_metrics.html#absolute-error-metrics">5.3.1. Absolute Error Metrics</a></li>
+<li class="toctree-l3"><a class="reference internal" href="modules/evaluation_metrics.html#relative-error-metrics">5.3.2. Relative Error Metrics</a></li>
+<li class="toctree-l3"><a class="reference internal" href="modules/evaluation_metrics.html#divergence-metrics">5.3.3. Divergence Metrics</a></li>
+<li class="toctree-l3"><a class="reference internal" href="modules/evaluation_metrics.html#ordinal-metrics">5.3.4. Ordinal Metrics</a></li>
+<li class="toctree-l3"><a class="reference internal" href="modules/evaluation_metrics.html#distribution-distance-metrics">5.3.5. Distribution Distance Metrics</a></li>
+<li class="toctree-l3"><a class="reference internal" href="modules/evaluation_metrics.html#choosing-a-metric">5.3.6. Choosing a Metric</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="modules/evaluation_metrics.html#single-label-quantification-slq-metrics">5.4. Single Label Quantification (SLQ) Metrics</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="modules/evaluation_metrics.html#ae-absolute-error">5.4.1. AE (Absolute Error)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="modules/evaluation_metrics.html#se-squared-error">5.4.2. SE (Squared Error)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="modules/evaluation_metrics.html#mae-mean-absolute-error">5.4.3. MAE (Mean Absolute Error)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="modules/evaluation_metrics.html#mse-mean-squared-error">5.4.4. MSE (Mean Squared Error)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="modules/evaluation_metrics.html#kld-kullback-leibler-divergence">5.4.5. KLD (Kullback-Leibler Divergence)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="modules/evaluation_metrics.html#rae-relative-absolute-error">5.4.6. RAE (Relative Absolute Error)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="modules/evaluation_metrics.html#nae-normalized-absolute-error">5.4.7. NAE (Normalized Absolute Error)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="modules/evaluation_metrics.html#nrae-normalized-relative-absolute-error">5.4.8. NRAE (Normalized Relative Absolute Error)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="modules/evaluation_metrics.html#nkld-normalized-kullback-leibler-divergence">5.4.9. NKLD (Normalized Kullback-Leibler Divergence)</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="modules/evaluation_metrics.html#regression-based-quantification-rq-metrics">5.5. Regression-Based Quantification (RQ) Metrics</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="modules/evaluation_metrics.html#vse-variance-shift-error">5.5.1. VSE (Variance Shift Error)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="modules/evaluation_metrics.html#cvm-l1-cramer-von-mises-l1-distance">5.5.2. CvM_L1 (Cramér-von Mises L1 Distance)</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="modules/evaluation_metrics.html#ordinal-quantification-oq-metrics">5.6. Ordinal Quantification (OQ) Metrics</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="modules/evaluation_metrics.html#nmd-normalized-match-distance">5.6.1. NMD (Normalized Match Distance)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="modules/evaluation_metrics.html#rnod-relative-normalized-overall-deviation">5.6.2. RNOD (Relative Normalized Overall Deviation)</a></li>
 </ul>
 </li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="modules/confidence_intervals.html">5. Confidence Intervals</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="modules/confidence_intervals.html#general-concept">5.1. General Concept</a></li>
-<li class="toctree-l2"><a class="reference internal" href="modules/confidence_intervals.html#percentile-based-confidence-intervals">5.2. Percentile-Based Confidence Intervals</a></li>
-<li class="toctree-l2"><a class="reference internal" href="modules/confidence_intervals.html#confidence-ellipse-in-simplex">5.3. Confidence Ellipse in Simplex</a></li>
-<li class="toctree-l2"><a class="reference internal" href="modules/confidence_intervals.html#confidence-ellipse-in-clr-space">5.4. Confidence Ellipse in CLR Space</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="modules/confidence_intervals.html#references">5.4.1. References</a></li>
+<li class="toctree-l1"><a class="reference internal" href="modules/confidence_intervals.html">6. Confidence Intervals</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="modules/confidence_intervals.html#general-concept">6.1. General Concept</a></li>
+<li class="toctree-l2"><a class="reference internal" href="modules/confidence_intervals.html#percentile-based-confidence-intervals">6.2. Percentile-Based Confidence Intervals</a></li>
+<li class="toctree-l2"><a class="reference internal" href="modules/confidence_intervals.html#confidence-ellipse-in-simplex">6.3. Confidence Ellipse in Simplex</a></li>
+<li class="toctree-l2"><a class="reference internal" href="modules/confidence_intervals.html#confidence-ellipse-in-clr-space">6.4. Confidence Ellipse in CLR Space</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="modules/confidence_intervals.html#references">6.4.1. References</a></li>
 </ul>
 </li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="building_a_quantifier.html">6. Building a Quantifier</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="building_a_quantifier.html#general-quantifiers">6.1. General Quantifiers</a></li>
-<li class="toctree-l2"><a class="reference internal" href="building_a_quantifier.html#aggregative-quantifiers">6.2. Aggregative Quantifiers</a></li>
-<li class="toctree-l2"><a class="reference internal" href="building_a_quantifier.html#aggregation-types">6.3. Aggregation Types</a></li>
-<li class="toctree-l2"><a class="reference internal" href="building_a_quantifier.html#binary-quantifiers">6.4. Binary Quantifiers</a></li>
-<li class="toctree-l2"><a class="reference internal" href="building_a_quantifier.html#validation-utilities">6.5. Validation Utilities</a></li>
-<li class="toctree-l2"><a class="reference internal" href="building_a_quantifier.html#parameter-constraints">6.6. Parameter Constraints</a></li>
+<li class="toctree-l1"><a class="reference internal" href="building_a_quantifier.html">7. Building a Quantifier</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="building_a_quantifier.html#general-quantifiers">7.1. General Quantifiers</a></li>
+<li class="toctree-l2"><a class="reference internal" href="building_a_quantifier.html#aggregative-quantifiers">7.2. Aggregative Quantifiers</a></li>
+<li class="toctree-l2"><a class="reference internal" href="building_a_quantifier.html#aggregation-types">7.3. Aggregation Types</a></li>
+<li class="toctree-l2"><a class="reference internal" href="building_a_quantifier.html#binary-quantifiers">7.4. Binary Quantifiers</a></li>
+<li class="toctree-l2"><a class="reference internal" href="building_a_quantifier.html#validation-utilities">7.5. Validation Utilities</a></li>
+<li class="toctree-l2"><a class="reference internal" href="building_a_quantifier.html#parameter-constraints">7.6. Parameter Constraints</a></li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="modules/mlquantify_methods.html">7. Mlquantify methods</a></li>
-<li class="toctree-l1"><a class="reference internal" href="components.html">8. Core Components</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="modules/compose.html">8.1. Composable Quantifiers</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="modules/compose.html#key-classes">8.1.1. Key classes</a></li>
-<li class="toctree-l3"><a class="reference internal" href="modules/compose.html#linear-compose-example">8.1.2. Linear compose example</a></li>
-<li class="toctree-l3"><a class="reference internal" href="modules/compose.html#likelihood-compose-example">8.1.3. Likelihood compose example</a></li>
+<li class="toctree-l1"><a class="reference internal" href="modules/mlquantify_methods.html">8. Mlquantify methods</a></li>
+<li class="toctree-l1"><a class="reference internal" href="components.html">9. Core Components</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="modules/compose.html">9.1. Composable Quantifiers</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="modules/compose.html#key-classes">9.1.1. Key classes</a></li>
+<li class="toctree-l3"><a class="reference internal" href="modules/compose.html#linear-compose-example">9.1.2. Linear compose example</a></li>
+<li class="toctree-l3"><a class="reference internal" href="modules/compose.html#likelihood-compose-example">9.1.3. Likelihood compose example</a></li>
 </ul>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="modules/losses.html">8.2. Loss Functions</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="modules/losses.html#available-losses">8.2.1. Available losses</a></li>
-<li class="toctree-l3"><a class="reference internal" href="modules/losses.html#example">8.2.2. Example</a></li>
+<li class="toctree-l2"><a class="reference internal" href="modules/losses.html">9.2. Loss Functions</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="modules/losses.html#available-losses">9.2.1. Available losses</a></li>
+<li class="toctree-l3"><a class="reference internal" href="modules/losses.html#example">9.2.2. Example</a></li>
 </ul>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="modules/representations.html">8.3. Representations</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="modules/representations.html#core-representations">8.3.1. Core representations</a></li>
-<li class="toctree-l3"><a class="reference internal" href="modules/representations.html#example">8.3.2. Example</a></li>
+<li class="toctree-l2"><a class="reference internal" href="modules/representations.html">9.3. Representations</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="modules/representations.html#core-representations">9.3.1. Core representations</a></li>
+<li class="toctree-l3"><a class="reference internal" href="modules/representations.html#example">9.3.2. Example</a></li>
 </ul>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="modules/solvers.html">8.4. Solvers</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="modules/solvers.html#available-solvers">8.4.1. Available solvers</a></li>
-<li class="toctree-l3"><a class="reference internal" href="modules/solvers.html#example">8.4.2. Example</a></li>
+<li class="toctree-l2"><a class="reference internal" href="modules/solvers.html">9.4. Solvers</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="modules/solvers.html#available-solvers">9.4.1. Available solvers</a></li>
+<li class="toctree-l3"><a class="reference internal" href="modules/solvers.html#example">9.4.2. Example</a></li>
 </ul>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="modules/calibration.html">8.5. Calibration</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="modules/calibration.html#available-classes">8.5.1. Available classes</a></li>
-<li class="toctree-l3"><a class="reference internal" href="modules/calibration.html#example-skeleton">8.5.2. Example skeleton</a></li>
+<li class="toctree-l2"><a class="reference internal" href="modules/calibration.html">9.5. Calibration</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="modules/calibration.html#available-classes">9.5.1. Available classes</a></li>
+<li class="toctree-l3"><a class="reference internal" href="modules/calibration.html#example-skeleton">9.5.2. Example skeleton</a></li>
 </ul>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="modules/neural.html">8.6. Neural Quantifiers</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="modules/neural.html#available-methods">8.6.1. Available methods</a></li>
-<li class="toctree-l3"><a class="reference internal" href="modules/neural.html#example">8.6.2. Example</a></li>
+<li class="toctree-l2"><a class="reference internal" href="modules/neural.html">9.6. Neural Quantifiers</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="modules/neural.html#quanet-quantification-network">9.6.1. QuaNet — Quantification Network</a></li>
 </ul>
 </li>
 </ul>
@@ -611,11 +711,11 @@
       </div>
     </a>
     <a class="right-next"
-       href="aggregative_quantification.html"
+       href="modules/quantification_foundations.html"
        title="next page">
       <div class="prev-next-info">
         <p class="prev-next-subtitle">next</p>
-        <p class="prev-next-title"><span class="section-number">1. </span>Aggregative Quantification</p>
+        <p class="prev-next-title"><span class="section-number">1. </span>Quantification Foundations</p>
       </div>
       <i class="fa-solid fa-angle-right"></i>
     </a>

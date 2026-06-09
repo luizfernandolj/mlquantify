@@ -7,19 +7,19 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
-<meta property="og:title" content="4.1. Protocols for Quantification" />
+<meta property="og:title" content="5.1. Protocols for Quantification" />
 <meta property="og:type" content="website" />
 <meta property="og:url" content="modules/protocols.html" />
 <meta property="og:site_name" content="mlquantify" />
-<meta property="og:description" content="Quantification protocols are designed to evaluate quantifiers by generating multiple test samples with varying class prevalences. These protocols ensure robust assessment of quantification methods ..." />
+<meta property="og:description" content="Evaluating a quantifier on a single test set is misleading — the test prevalence is fixed, so you only see performance at one operating point. Quantification protocols address this by generating ma..." />
 <meta property="og:image:width" content="1146" />
 <meta property="og:image:height" content="600" />
-<meta property="og:image" content="_images/social_previews/summary_modules_protocols_7614f5bb.png" />
-<meta property="og:image:alt" content="Quantification protocols are designed to evaluate quantifiers by generating multiple test samples with varying class prevalences. These protocols ensure robust assessment of quantification methods ..." />
-<meta name="description" content="Quantification protocols are designed to evaluate quantifiers by generating multiple test samples with varying class prevalences. These protocols ensure robust assessment of quantification methods ..." />
+<meta property="og:image" content="_images/social_previews/summary_modules_protocols_7548251c.png" />
+<meta property="og:image:alt" content="Evaluating a quantifier on a single test set is misleading — the test prevalence is fixed, so you only see performance at one operating point. Quantification protocols address this by generating ma..." />
+<meta name="description" content="Evaluating a quantifier on a single test set is misleading — the test prevalence is fixed, so you only see performance at one operating point. Quantification protocols address this by generating ma..." />
 <meta name="twitter:card" content="summary_large_image" />
 
-    <title>4.1. Protocols for Quantification &#8212; mlquantify</title>
+    <title>5.1. Protocols for Quantification &#8212; mlquantify</title>
   
   
   
@@ -66,8 +66,8 @@
     <script>DOCUMENTATION_OPTIONS.search_as_you_type = false;</script>
     <link rel="canonical" href="https://luizfernandolj.github.io/mlquantify/modules/protocols.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="4.2. Tuning Hyperparameters" href="tuning_hyperparameters.html" />
-    <link rel="prev" title="4. Model Selection and Evaluation" href="../model_selection_evaluation.html" />
+    <link rel="next" title="5.2. Tuning Hyperparameters" href="tuning_hyperparameters.html" />
+    <link rel="prev" title="5. Model Selection and Evaluation" href="../model_selection_evaluation.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
   <meta name="docsearch:version" content="" />
@@ -374,42 +374,47 @@
      aria-label="Section Navigation">
   <p class="bd-links__title" role="heading" aria-level="1">Section Navigation</p>
   <div class="bd-toc-item navbar-nav"><ul class="current nav bd-sidenav">
-<li class="toctree-l1 has-children"><a class="reference internal" href="../aggregative_quantification.html">1. Aggregative Quantification</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
-<li class="toctree-l2"><a class="reference internal" href="using_aggregative.html">1.1. Using Aggregative Quantification Methods</a></li>
+<li class="toctree-l1"><a class="reference internal" href="quantification_foundations.html">1. Foundations</a></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../aggregative_quantification.html">2. Aggregative Quantification</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="using_aggregative.html">2.1. Using Aggregative Quantification Methods</a></li>
 
-<li class="toctree-l2"><a class="reference internal" href="counters.html">1.3. Counters For Quantification</a></li>
-<li class="toctree-l2"><a class="reference internal" href="adjust_counting.html">1.4. Adjusted Counting</a></li>
-<li class="toctree-l2"><a class="reference internal" href="likelihood.html">1.5. Likelihood-Based Quantification</a></li>
-<li class="toctree-l2"><a class="reference internal" href="distribution_matching.html">1.6. Distribution Matching</a></li>
-<li class="toctree-l2"><a class="reference internal" href="neighbors.html">1.7. Nearest Neighbors</a></li>
+<li class="toctree-l2"><a class="reference internal" href="counters.html">2.3. Counting-Based Quantifiers</a></li>
+
+<li class="toctree-l2"><a class="reference internal" href="adjust_counting.html">2.5. Adjusted Counting</a></li>
+<li class="toctree-l2"><a class="reference internal" href="likelihood.html">2.6. Likelihood Methods</a></li>
+<li class="toctree-l2"><a class="reference internal" href="distribution_matching.html">2.7. Distribution Matching</a></li>
+<li class="toctree-l2"><a class="reference internal" href="neighbors.html">2.8. Nearest Neighbours</a></li>
 </ul>
 </details></li>
-<li class="toctree-l1 has-children"><a class="reference internal" href="../non_aggregative_quantification.html">2. Non Aggregative Quantification</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
-<li class="toctree-l2"><a class="reference internal" href="mixture_models_non_agg.html">2.1. Mixture Models for Non-Aggregative Quantification</a></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../non_aggregative_quantification.html">3. Non Aggregative Quantification</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="mixture_models_non_agg.html">3.1. Mixture Models for Non-Aggregative Quantification</a></li>
 </ul>
 </details></li>
-<li class="toctree-l1 has-children"><a class="reference internal" href="../meta_quantification.html">3. Meta Quantification</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
-<li class="toctree-l2"><a class="reference internal" href="ensemble.html">3.1. Ensemble for Quantification</a></li>
-<li class="toctree-l2"><a class="reference internal" href="bootstrap.html">3.2. Bootstrap in Quantification</a></li>
-<li class="toctree-l2"><a class="reference internal" href="scores_adaptation.html">3.3. QuaDapt: Drift-Resilient Score Adaptation</a></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../meta_quantification.html">4. Meta Quantification</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="ensemble.html">4.1. Ensembles and Adaptation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="bootstrap.html">4.2. Bootstrap in Quantification</a></li>
+<li class="toctree-l2"><a class="reference internal" href="scores_adaptation.html">4.3. QuaDapt: Drift-Resilient Score Adaptation</a></li>
 </ul>
 </details></li>
-<li class="toctree-l1 current active has-children"><a class="reference internal" href="../model_selection_evaluation.html">4. Model Selection and Evaluation</a><details open="open"><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul class="current">
-<li class="toctree-l2 current active"><a class="current reference internal" href="#">4.1. Protocols for Quantification</a></li>
-<li class="toctree-l2"><a class="reference internal" href="tuning_hyperparameters.html">4.2. Tuning Hyperparameters</a></li>
-<li class="toctree-l2"><a class="reference internal" href="evaluation_metrics.html">4.3. Evaluation Metrics</a></li>
+<li class="toctree-l1 current active has-children"><a class="reference internal" href="../model_selection_evaluation.html">5. Model Selection and Evaluation</a><details open="open"><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul class="current">
+<li class="toctree-l2 current active"><a class="current reference internal" href="#">5.1. Evaluation Protocols</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tuning_hyperparameters.html">5.2. Hyperparameter Tuning</a></li>
+<li class="toctree-l2"><a class="reference internal" href="evaluation_metrics.html">5.3. Evaluation Metrics</a></li>
+
+
+
 </ul>
 </details></li>
-<li class="toctree-l1"><a class="reference internal" href="confidence_intervals.html">5. Confidence Intervals</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../building_a_quantifier.html">6. Building a Quantifier</a></li>
-<li class="toctree-l1"><a class="reference internal" href="mlquantify_methods.html">7. Mlquantify methods</a></li>
-<li class="toctree-l1 has-children"><a class="reference internal" href="../components.html">8. Core Components</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
-<li class="toctree-l2"><a class="reference internal" href="compose.html">8.1. Composable Quantifiers</a></li>
-<li class="toctree-l2"><a class="reference internal" href="losses.html">8.2. Loss Functions</a></li>
-<li class="toctree-l2"><a class="reference internal" href="representations.html">8.3. Representations</a></li>
-<li class="toctree-l2"><a class="reference internal" href="solvers.html">8.4. Solvers</a></li>
-<li class="toctree-l2"><a class="reference internal" href="calibration.html">8.5. Calibration</a></li>
-<li class="toctree-l2"><a class="reference internal" href="neural.html">8.6. Neural Quantifiers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="confidence_intervals.html">6. Confidence Intervals</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../building_a_quantifier.html">7. Building a Quantifier</a></li>
+<li class="toctree-l1"><a class="reference internal" href="mlquantify_methods.html">8. Mlquantify methods</a></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../components.html">9. Core Components</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="compose.html">9.1. Composable Quantifiers</a></li>
+<li class="toctree-l2"><a class="reference internal" href="losses.html">9.2. Loss Functions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="representations.html">9.3. Representations</a></li>
+<li class="toctree-l2"><a class="reference internal" href="solvers.html">9.4. Solvers</a></li>
+<li class="toctree-l2"><a class="reference internal" href="calibration.html">9.5. Calibration</a></li>
+<li class="toctree-l2"><a class="reference internal" href="neural.html">9.6. Neural Quantifiers</a></li>
 </ul>
 </details></li>
 </ul>
@@ -449,9 +454,9 @@
     <li class="breadcrumb-item"><a href="../user_guide.html" class="nav-link">User Guide</a></li>
     
     
-    <li class="breadcrumb-item"><a href="../model_selection_evaluation.html" class="nav-link"><span class="section-number">4. </span>Model Selection and Evaluation</a></li>
+    <li class="breadcrumb-item"><a href="../model_selection_evaluation.html" class="nav-link"><span class="section-number">5. </span>Model Selection and Evaluation</a></li>
     
-    <li class="breadcrumb-item active" aria-current="page"><span class="ellipsis"><span class="section-number">4.1. </span>Protocols for Quantification</span></li>
+    <li class="breadcrumb-item active" aria-current="page"><span class="ellipsis"><span class="section-number">5.1. </span>Protocols for Quantification</span></li>
   </ul>
 </nav>
 </div>
@@ -469,11 +474,380 @@
                 <article class="bd-article">
                   
   <section id="protocols-for-quantification">
-<span id="quantification-protocols"></span><h1><span class="section-number">4.1. </span>Protocols for Quantification<a class="headerlink" href="#protocols-for-quantification" title="Link to this heading">#</a></h1>
+<span id="quantification-protocols"></span><h1><span class="section-number">5.1. </span>Protocols for Quantification<a class="headerlink" href="#protocols-for-quantification" title="Link to this heading">#</a></h1>
+<p>Evaluating a quantifier on a single test set is misleading — the test
+prevalence is fixed, so you only see performance at one operating point.
+Quantification protocols address this by generating <strong>many test batches</strong>
+with varying prevalences from the same data, giving a fuller picture of
+method behaviour across the entire prevalence spectrum.</p>
+<div class="admonition-why-protocols-matter admonition">
+<p class="admonition-title">Why protocols matter</p>
+<p>A quantifier that looks excellent at 50/50 prevalence may fail badly at
+5/95. Forman (2005) noted that the choice of evaluation protocol is as
+important as the choice of method. Standard practice in quantification
+research is to evaluate across a grid of prevalences (APP) and report the
+mean error over all samples.</p>
+</div>
+<nav class="contents local" id="contents">
+<p class="topic-title">Contents</p>
+<ul class="simple">
+<li><p><a class="reference internal" href="#app-artificial-prevalence-protocol" id="id6">APP — Artificial Prevalence Protocol</a></p>
+<ul>
+<li><p><a class="reference internal" href="#parameters" id="id7">Parameters</a></p></li>
+<li><p><a class="reference internal" href="#examples" id="id8">Examples</a></p></li>
+</ul>
+</li>
+<li><p><a class="reference internal" href="#npp-natural-prevalence-protocol" id="id9">NPP — Natural Prevalence Protocol</a></p>
+<ul>
+<li><p><a class="reference internal" href="#id1" id="id10">Parameters</a></p></li>
+</ul>
+</li>
+<li><p><a class="reference internal" href="#upp-uniform-prevalence-protocol" id="id11">UPP — Uniform Prevalence Protocol</a></p>
+<ul>
+<li><p><a class="reference internal" href="#id2" id="id12">Parameters</a></p></li>
+</ul>
+</li>
+<li><p><a class="reference internal" href="#choosing-a-protocol" id="id13">Choosing a Protocol</a></p></li>
+<li><p><a class="reference internal" href="#id3" id="id14">Protocols for Quantification</a></p></li>
+<li><p><a class="reference internal" href="#artificial-prevalence-protocol-app" id="id15">Artificial-Prevalence Protocol (APP)</a></p></li>
+<li><p><a class="reference internal" href="#natural-prevalence-protocol-npp" id="id16">Natural-Prevalence Protocol (NPP)</a></p></li>
+<li><p><a class="reference internal" href="#uniform-prevalence-protocol-upp" id="id17">Uniform Prevalence Protocol (UPP)</a></p></li>
+<li><p><a class="reference internal" href="#personalized-prevalence-protocol-ppp" id="id18">Personalized Prevalence Protocol (PPP)</a></p></li>
+<li><p><a class="reference internal" href="#references" id="id19">References</a></p></li>
+</ul>
+</nav>
+<hr class="docutils" />
+<section id="app-artificial-prevalence-protocol">
+<h2><a class="toc-backref" href="#id6" role="doc-backlink"><span class="section-number">5.1.1. </span>APP — Artificial Prevalence Protocol</a><a class="headerlink" href="#app-artificial-prevalence-protocol" title="Link to this heading">#</a></h2>
+<p><a class="reference internal" href="generated/mlquantify.model_selection.APP.html#mlquantify.model_selection.APP" title="mlquantify.model_selection.APP"><code class="xref py py-class docutils literal notranslate"><span class="pre">APP</span></code></a> is the most widely used evaluation protocol. It draws samples
+from the test set at each prevalence in a uniform grid
+<span class="math notranslate nohighlight">\(\{0, \frac{1}{n-1}, \frac{2}{n-1}, \ldots, 1\}\)</span> for the positive
+class, repeating each prevalence <code class="docutils literal notranslate"><span class="pre">repeats</span></code> times.</p>
+<p><strong>Why it is standard:</strong> APP ensures every method is evaluated at many
+prevalence values, not just the natural one. It exposes systematic biases
+(e.g. methods that only work near 50/50) and gives a fair cross-method
+comparison. González et al. (2017) review papers routinely use APP as the
+evaluation backbone.</p>
+<section id="parameters">
+<h3><a class="toc-backref" href="#id7" role="doc-backlink"><span class="section-number">5.1.1.1. </span>Parameters</a><a class="headerlink" href="#parameters" title="Link to this heading">#</a></h3>
+<div class="pst-scrollable-table-container"><table class="table">
+<colgroup>
+<col style="width: 22.0%" />
+<col style="width: 15.0%" />
+<col style="width: 63.0%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Parameter</p></th>
+<th class="head"><p>Default</p></th>
+<th class="head"><p>Explanation</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">batch_size</span></code></p></td>
+<td><p>required</p></td>
+<td><p>Number of instances per test sample. Larger batches give more stable
+prevalence estimates but require a larger test set. A typical choice is
+100–500.</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">n_prevalences</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">21</span></code></p></td>
+<td><p>Number of equally-spaced prevalence points from <code class="docutils literal notranslate"><span class="pre">min_prev</span></code> to
+<code class="docutils literal notranslate"><span class="pre">max_prev</span></code>. <code class="docutils literal notranslate"><span class="pre">21</span></code> gives a step of 0.05 (i.e. 0%, 5%, 10%, …, 100%).</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">repeats</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">10</span></code></p></td>
+<td><p>How many independent samples to draw at each prevalence level. More
+repeats reduce variance in the average error estimate. Use ≥ 5 for
+reliable results.</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">min_prev</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">0.0</span></code></p></td>
+<td><p>Minimum positive class prevalence in the grid. Leave at 0 to include
+the all-negative case.</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">max_prev</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">1.0</span></code></p></td>
+<td><p>Maximum positive class prevalence. Leave at 1 to include the
+all-positive case.</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">random_state</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">None</span></code></p></td>
+<td><p>Seed for reproducible sampling.</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<figure class="align-center" id="id5">
+<a class="reference internal image-reference" href="../_images/app_protocol.png"><img alt="APP vs NPP protocol comparison" src="../_images/app_protocol.png" style="width: 90%;" />
+</a>
+<figcaption>
+<p><span class="caption-text"><em>Left: APP generates test samples at every point on a regular prevalence grid
+(blue dots), giving systematic coverage from 0% to 100% positive class.
+Right: NPP draws random sub-samples that cluster near the natural training
+prevalence (~50%), providing realistic but narrower coverage.</em></span><a class="headerlink" href="#id5" title="Link to this image">#</a></p>
+</figcaption>
+</figure>
+</section>
+<section id="examples">
+<h3><a class="toc-backref" href="#id8" role="doc-backlink"><span class="section-number">5.1.1.2. </span>Examples</a><a class="headerlink" href="#examples" title="Link to this heading">#</a></h3>
+<p>Standard evaluation loop:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">mlquantify.model_selection</span><span class="w"> </span><span class="kn">import</span> <span class="n">APP</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">mlquantify.metrics</span><span class="w"> </span><span class="kn">import</span> <span class="n">MAE</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">mlquantify.utils</span><span class="w"> </span><span class="kn">import</span> <span class="n">get_prev_from_labels</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">mlquantify.likelihood</span><span class="w"> </span><span class="kn">import</span> <span class="n">EMQ</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">sklearn.linear_model</span><span class="w"> </span><span class="kn">import</span> <span class="n">LogisticRegression</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">sklearn.datasets</span><span class="w"> </span><span class="kn">import</span> <span class="n">make_classification</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">sklearn.model_selection</span><span class="w"> </span><span class="kn">import</span> <span class="n">train_test_split</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+
+<span class="n">X</span><span class="p">,</span> <span class="n">y</span> <span class="o">=</span> <span class="n">make_classification</span><span class="p">(</span><span class="n">n_samples</span><span class="o">=</span><span class="mi">2000</span><span class="p">,</span> <span class="n">weights</span><span class="o">=</span><span class="p">[</span><span class="mf">0.7</span><span class="p">,</span> <span class="mf">0.3</span><span class="p">],</span>
+                           <span class="n">random_state</span><span class="o">=</span><span class="mi">42</span><span class="p">)</span>
+<span class="n">X_train</span><span class="p">,</span> <span class="n">X_test</span><span class="p">,</span> <span class="n">y_train</span><span class="p">,</span> <span class="n">y_test</span> <span class="o">=</span> <span class="n">train_test_split</span><span class="p">(</span>
+    <span class="n">X</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">test_size</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span> <span class="n">random_state</span><span class="o">=</span><span class="mi">42</span><span class="p">)</span>
+
+<span class="n">q</span> <span class="o">=</span> <span class="n">EMQ</span><span class="p">(</span><span class="n">LogisticRegression</span><span class="p">())</span>
+<span class="n">q</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">X_train</span><span class="p">,</span> <span class="n">y_train</span><span class="p">)</span>
+
+<span class="n">protocol</span> <span class="o">=</span> <span class="n">APP</span><span class="p">(</span><span class="n">batch_size</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> <span class="n">n_prevalences</span><span class="o">=</span><span class="mi">21</span><span class="p">,</span> <span class="n">repeats</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span>
+               <span class="n">random_state</span><span class="o">=</span><span class="mi">42</span><span class="p">)</span>
+<span class="n">errors</span> <span class="o">=</span> <span class="p">[]</span>
+<span class="k">for</span> <span class="n">idx</span> <span class="ow">in</span> <span class="n">protocol</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="n">X_test</span><span class="p">,</span> <span class="n">y_test</span><span class="p">):</span>
+    <span class="n">X_sample</span><span class="p">,</span> <span class="n">y_sample</span> <span class="o">=</span> <span class="n">X_test</span><span class="p">[</span><span class="n">idx</span><span class="p">],</span> <span class="n">y_test</span><span class="p">[</span><span class="n">idx</span><span class="p">]</span>
+    <span class="n">true_prev</span> <span class="o">=</span> <span class="n">get_prev_from_labels</span><span class="p">(</span><span class="n">y_sample</span><span class="p">)</span>
+    <span class="n">pred_prev</span> <span class="o">=</span> <span class="n">q</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">X_sample</span><span class="p">)</span>
+    <span class="n">errors</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">MAE</span><span class="p">(</span><span class="n">true_prev</span><span class="p">,</span> <span class="n">pred_prev</span><span class="p">))</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Mean MAE over </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">errors</span><span class="p">)</span><span class="si">}</span><span class="s2"> samples: </span><span class="si">{</span><span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">errors</span><span class="p">)</span><span class="si">:</span><span class="s2">.4f</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Comparing multiple quantifiers:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">mlquantify.counting</span><span class="w"> </span><span class="kn">import</span> <span class="n">CC</span><span class="p">,</span> <span class="n">PCC</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">mlquantify.likelihood</span><span class="w"> </span><span class="kn">import</span> <span class="n">EMQ</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">mlquantify.matching</span><span class="w"> </span><span class="kn">import</span> <span class="n">DyS</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">sklearn.linear_model</span><span class="w"> </span><span class="kn">import</span> <span class="n">LogisticRegression</span>
+
+<span class="n">quantifiers</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="s1">&#39;CC&#39;</span><span class="p">:</span>  <span class="n">CC</span><span class="p">(</span><span class="n">LogisticRegression</span><span class="p">()),</span>
+    <span class="s1">&#39;PCC&#39;</span><span class="p">:</span> <span class="n">PCC</span><span class="p">(</span><span class="n">LogisticRegression</span><span class="p">()),</span>
+    <span class="s1">&#39;EMQ&#39;</span><span class="p">:</span> <span class="n">EMQ</span><span class="p">(</span><span class="n">LogisticRegression</span><span class="p">()),</span>
+    <span class="s1">&#39;DyS&#39;</span><span class="p">:</span> <span class="n">DyS</span><span class="p">(</span><span class="n">LogisticRegression</span><span class="p">()),</span>
+<span class="p">}</span>
+
+<span class="k">for</span> <span class="n">name</span><span class="p">,</span> <span class="n">q</span> <span class="ow">in</span> <span class="n">quantifiers</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+    <span class="n">q</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">X_train</span><span class="p">,</span> <span class="n">y_train</span><span class="p">)</span>
+
+<span class="n">protocol</span> <span class="o">=</span> <span class="n">APP</span><span class="p">(</span><span class="n">batch_size</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> <span class="n">n_prevalences</span><span class="o">=</span><span class="mi">21</span><span class="p">,</span> <span class="n">repeats</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span>
+               <span class="n">random_state</span><span class="o">=</span><span class="mi">42</span><span class="p">)</span>
+
+<span class="n">results</span> <span class="o">=</span> <span class="p">{</span><span class="n">name</span><span class="p">:</span> <span class="p">[]</span> <span class="k">for</span> <span class="n">name</span> <span class="ow">in</span> <span class="n">quantifiers</span><span class="p">}</span>
+<span class="k">for</span> <span class="n">idx</span> <span class="ow">in</span> <span class="n">protocol</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="n">X_test</span><span class="p">,</span> <span class="n">y_test</span><span class="p">):</span>
+    <span class="n">X_s</span><span class="p">,</span> <span class="n">y_s</span> <span class="o">=</span> <span class="n">X_test</span><span class="p">[</span><span class="n">idx</span><span class="p">],</span> <span class="n">y_test</span><span class="p">[</span><span class="n">idx</span><span class="p">]</span>
+    <span class="n">true_prev</span> <span class="o">=</span> <span class="n">get_prev_from_labels</span><span class="p">(</span><span class="n">y_s</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">name</span><span class="p">,</span> <span class="n">q</span> <span class="ow">in</span> <span class="n">quantifiers</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+        <span class="n">results</span><span class="p">[</span><span class="n">name</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">MAE</span><span class="p">(</span><span class="n">true_prev</span><span class="p">,</span> <span class="n">q</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">X_s</span><span class="p">)))</span>
+
+<span class="k">for</span> <span class="n">name</span><span class="p">,</span> <span class="n">errs</span> <span class="ow">in</span> <span class="n">results</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">name</span><span class="si">:</span><span class="s2">5s</span><span class="si">}</span><span class="s2">  MAE=</span><span class="si">{</span><span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">errs</span><span class="p">)</span><span class="si">:</span><span class="s2">.4f</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</section>
+</section>
+<hr class="docutils" />
+<section id="npp-natural-prevalence-protocol">
+<h2><a class="toc-backref" href="#id9" role="doc-backlink"><span class="section-number">5.1.2. </span>NPP — Natural Prevalence Protocol</a><a class="headerlink" href="#npp-natural-prevalence-protocol" title="Link to this heading">#</a></h2>
+<p><a class="reference internal" href="generated/mlquantify.model_selection.NPP.html#mlquantify.model_selection.NPP" title="mlquantify.model_selection.NPP"><code class="xref py py-class docutils literal notranslate"><span class="pre">NPP</span></code></a> draws random sub-samples from the test set without altering
+the natural class distribution. Each sample has a slightly different
+prevalence due to random variation, but no artificial manipulation is
+performed.</p>
+<p><strong>Why it exists:</strong> NPP evaluates quantifiers under <em>real</em> prevalence
+variation — how they perform when deployed on random sub-populations drawn
+from the same underlying distribution as the test set. It is less controlled
+than APP but more realistic.</p>
+<p><strong>Limitation:</strong> Because NPP cannot produce extreme prevalences (e.g. 2%
+positive) without a very large test set, it gives a narrower view of method
+behaviour than APP.</p>
+<section id="id1">
+<h3><a class="toc-backref" href="#id10" role="doc-backlink"><span class="section-number">5.1.2.1. </span>Parameters</a><a class="headerlink" href="#id1" title="Link to this heading">#</a></h3>
+<div class="pst-scrollable-table-container"><table class="table">
+<colgroup>
+<col style="width: 22.0%" />
+<col style="width: 15.0%" />
+<col style="width: 63.0%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Parameter</p></th>
+<th class="head"><p>Default</p></th>
+<th class="head"><p>Explanation</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">batch_size</span></code></p></td>
+<td><p>required</p></td>
+<td><p>Size of each random sub-sample.</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">n_samples</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">100</span></code></p></td>
+<td><p>Number of random sub-samples to draw.</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">random_state</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">None</span></code></p></td>
+<td><p>Seed for reproducibility.</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">mlquantify.model_selection</span><span class="w"> </span><span class="kn">import</span> <span class="n">NPP</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">mlquantify.utils</span><span class="w"> </span><span class="kn">import</span> <span class="n">get_prev_from_labels</span>
+
+<span class="n">protocol</span> <span class="o">=</span> <span class="n">NPP</span><span class="p">(</span><span class="n">batch_size</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> <span class="n">n_samples</span><span class="o">=</span><span class="mi">50</span><span class="p">,</span> <span class="n">random_state</span><span class="o">=</span><span class="mi">42</span><span class="p">)</span>
+<span class="k">for</span> <span class="n">idx</span> <span class="ow">in</span> <span class="n">protocol</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="n">X_test</span><span class="p">,</span> <span class="n">y_test</span><span class="p">):</span>
+    <span class="n">X_s</span><span class="p">,</span> <span class="n">y_s</span> <span class="o">=</span> <span class="n">X_test</span><span class="p">[</span><span class="n">idx</span><span class="p">],</span> <span class="n">y_test</span><span class="p">[</span><span class="n">idx</span><span class="p">]</span>
+    <span class="n">true_prev</span> <span class="o">=</span> <span class="n">get_prev_from_labels</span><span class="p">(</span><span class="n">y_s</span><span class="p">)</span>
+    <span class="n">pred_prev</span> <span class="o">=</span> <span class="n">q</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">X_s</span><span class="p">)</span>
+</pre></div>
+</div>
+</section>
+</section>
+<hr class="docutils" />
+<section id="upp-uniform-prevalence-protocol">
+<h2><a class="toc-backref" href="#id11" role="doc-backlink"><span class="section-number">5.1.3. </span>UPP — Uniform Prevalence Protocol</a><a class="headerlink" href="#upp-uniform-prevalence-protocol" title="Link to this heading">#</a></h2>
+<p><a class="reference internal" href="generated/mlquantify.model_selection.UPP.html#mlquantify.model_selection.UPP" title="mlquantify.model_selection.UPP"><code class="xref py py-class docutils literal notranslate"><span class="pre">UPP</span></code></a> samples prevalence vectors uniformly from the <strong>probability
+simplex</strong>. For binary problems it is similar to APP, but for
+<strong>multiclass</strong> problems it avoids the combinatorial explosion of sweeping
+all class-prevalence combinations independently.</p>
+<p><strong>Why it exists:</strong> For <span class="math notranslate nohighlight">\(k\)</span> classes, a grid approach like APP grows as
+<span class="math notranslate nohighlight">\(O(n^{k-1})\)</span> which quickly becomes intractable. UPP samples <span class="math notranslate nohighlight">\(n\)</span>
+random vectors from the simplex, covering the multiclass prevalence space
+efficiently without a rigid grid. Maletzke et al. (2020) recommend UPP for
+multiclass evaluation.</p>
+<section id="id2">
+<h3><a class="toc-backref" href="#id12" role="doc-backlink"><span class="section-number">5.1.3.1. </span>Parameters</a><a class="headerlink" href="#id2" title="Link to this heading">#</a></h3>
+<div class="pst-scrollable-table-container"><table class="table">
+<colgroup>
+<col style="width: 22.0%" />
+<col style="width: 15.0%" />
+<col style="width: 63.0%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Parameter</p></th>
+<th class="head"><p>Default</p></th>
+<th class="head"><p>Explanation</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">batch_size</span></code></p></td>
+<td><p>required</p></td>
+<td><p>Size of each sample.</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">n_prevalences</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">100</span></code></p></td>
+<td><p>Number of prevalence vectors to sample from the simplex.</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">algorithm</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">'uniform'</span></code></p></td>
+<td><p>Sampling algorithm:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">'uniform'</span></code> — samples from the flat Dirichlet distribution
+(<span class="math notranslate nohighlight">\(\text{Dir}(\mathbf{1})\)</span>). All prevalence combinations are
+equally likely.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">'kraemer'</span></code> — generates prevalences with a fixed step size,
+analogous to APP for multiclass. More systematic, fewer samples.</p></li>
+</ul>
+</td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">min_prev</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">0.0</span></code></p></td>
+<td><p>Minimum per-class prevalence. Raise (e.g. to <code class="docutils literal notranslate"><span class="pre">0.01</span></code>) to avoid
+near-zero classes that are hard to sample from small datasets.</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">max_prev</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">1.0</span></code></p></td>
+<td><p>Maximum per-class prevalence.</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">random_state</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">None</span></code></p></td>
+<td><p>Seed.</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">mlquantify.model_selection</span><span class="w"> </span><span class="kn">import</span> <span class="n">UPP</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">mlquantify.utils</span><span class="w"> </span><span class="kn">import</span> <span class="n">get_prev_from_labels</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">sklearn.datasets</span><span class="w"> </span><span class="kn">import</span> <span class="n">make_classification</span>
+
+<span class="n">X</span><span class="p">,</span> <span class="n">y</span> <span class="o">=</span> <span class="n">make_classification</span><span class="p">(</span><span class="n">n_samples</span><span class="o">=</span><span class="mi">2000</span><span class="p">,</span> <span class="n">n_classes</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span>
+                           <span class="n">n_informative</span><span class="o">=</span><span class="mi">6</span><span class="p">,</span> <span class="n">n_redundant</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>
+                           <span class="n">random_state</span><span class="o">=</span><span class="mi">42</span><span class="p">)</span>
+<span class="n">X_train</span><span class="p">,</span> <span class="n">X_test</span> <span class="o">=</span> <span class="n">X</span><span class="p">[:</span><span class="mi">1500</span><span class="p">],</span> <span class="n">X</span><span class="p">[</span><span class="mi">1500</span><span class="p">:]</span>
+<span class="n">y_train</span><span class="p">,</span> <span class="n">y_test</span> <span class="o">=</span> <span class="n">y</span><span class="p">[:</span><span class="mi">1500</span><span class="p">],</span> <span class="n">y</span><span class="p">[</span><span class="mi">1500</span><span class="p">:]</span>
+
+<span class="n">protocol</span> <span class="o">=</span> <span class="n">UPP</span><span class="p">(</span><span class="n">batch_size</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> <span class="n">n_prevalences</span><span class="o">=</span><span class="mi">200</span><span class="p">,</span> <span class="n">algorithm</span><span class="o">=</span><span class="s1">&#39;uniform&#39;</span><span class="p">,</span>
+               <span class="n">random_state</span><span class="o">=</span><span class="mi">42</span><span class="p">)</span>
+<span class="n">errors</span> <span class="o">=</span> <span class="p">[]</span>
+<span class="k">for</span> <span class="n">idx</span> <span class="ow">in</span> <span class="n">protocol</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="n">X_test</span><span class="p">,</span> <span class="n">y_test</span><span class="p">):</span>
+    <span class="n">X_s</span><span class="p">,</span> <span class="n">y_s</span> <span class="o">=</span> <span class="n">X_test</span><span class="p">[</span><span class="n">idx</span><span class="p">],</span> <span class="n">y_test</span><span class="p">[</span><span class="n">idx</span><span class="p">]</span>
+    <span class="n">true_prev</span> <span class="o">=</span> <span class="n">get_prev_from_labels</span><span class="p">(</span><span class="n">y_s</span><span class="p">)</span>
+    <span class="n">pred_prev</span> <span class="o">=</span> <span class="n">q</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">X_s</span><span class="p">)</span>
+    <span class="n">errors</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">MAE</span><span class="p">(</span><span class="n">true_prev</span><span class="p">,</span> <span class="n">pred_prev</span><span class="p">))</span>
+</pre></div>
+</div>
+</section>
+</section>
+<hr class="docutils" />
+<section id="choosing-a-protocol">
+<h2><a class="toc-backref" href="#id13" role="doc-backlink"><span class="section-number">5.1.4. </span>Choosing a Protocol</a><a class="headerlink" href="#choosing-a-protocol" title="Link to this heading">#</a></h2>
+<div class="pst-scrollable-table-container"><table class="table">
+<colgroup>
+<col style="width: 15.0%" />
+<col style="width: 20.0%" />
+<col style="width: 65.0%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Protocol</p></th>
+<th class="head"><p>Problem type</p></th>
+<th class="head"><p>Use when</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>APP</p></td>
+<td><p>Binary</p></td>
+<td><p><strong>Default for binary problems.</strong> Systematic sweep; standard in
+quantification research. Forman (2005) introduced the concept.</p></td>
+</tr>
+<tr class="row-odd"><td><p>NPP</p></td>
+<td><p>Binary / multiclass</p></td>
+<td><p>You want realistic evaluation under natural prevalence variation.</p></td>
+</tr>
+<tr class="row-even"><td><p>UPP (uniform)</p></td>
+<td><p>Multiclass</p></td>
+<td><p><strong>Default for multiclass.</strong> Efficient random coverage of the simplex.</p></td>
+</tr>
+<tr class="row-odd"><td><p>UPP (kraemer)</p></td>
+<td><p>Multiclass</p></td>
+<td><p>You need a deterministic grid equivalent to APP for multiclass.</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="admonition tip">
+<p class="admonition-title">Tip</p>
+<p>Always fix <code class="docutils literal notranslate"><span class="pre">random_state</span></code> in protocols when comparing methods so that
+all quantifiers are evaluated on exactly the same test samples.</p>
+</div>
+<div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<p><a class="reference internal" href="quantification_foundations.html#quantification-foundations"><span class="std std-ref">Quantification Foundations</span></a> for a conceptual overview of why
+protocols are necessary. <a class="reference internal" href="../model_selection_evaluation.html#model-selection"><span class="std std-ref">Model Selection and Evaluation</span></a> for hyperparameter
+tuning with <code class="docutils literal notranslate"><span class="pre">GridSearchQ</span></code>.</p>
+</div>
+</section>
+<section id="id3">
+<h2><a class="toc-backref" href="#id14" role="doc-backlink"><span class="section-number">5.1.5. </span>Protocols for Quantification</a><a class="headerlink" href="#id3" title="Link to this heading">#</a></h2>
 <p>Quantification protocols are designed to evaluate quantifiers by generating multiple test samples with varying class prevalences. These protocols ensure robust assessment of quantification methods under different distributional shifts.</p>
 <p>Experimental evaluation primarily uses two main protocols:</p>
+</section>
 <section id="artificial-prevalence-protocol-app">
-<h2><span class="section-number">4.1.1. </span>Artificial-Prevalence Protocol (APP)<a class="headerlink" href="#artificial-prevalence-protocol-app" title="Link to this heading">#</a></h2>
+<h2><a class="toc-backref" href="#id15" role="doc-backlink"><span class="section-number">5.1.6. </span>Artificial-Prevalence Protocol (APP)</a><a class="headerlink" href="#artificial-prevalence-protocol-app" title="Link to this heading">#</a></h2>
 <p>The <a class="reference internal" href="generated/mlquantify.model_selection.APP.html#mlquantify.model_selection.APP" title="mlquantify.model_selection.APP"><code class="xref py py-class docutils literal notranslate"><span class="pre">APP</span></code></a> is the most commonly used protocol, leveraging widely available classification datasets to artificially vary class prevalences in test samples.</p>
 <ul class="simple">
 <li><p>Generates multiple test samples by subsampling the original test set to produce varying class prevalences.</p></li>
@@ -500,7 +874,7 @@
 </div>
 </section>
 <section id="natural-prevalence-protocol-npp">
-<h2><span class="section-number">4.1.2. </span>Natural-Prevalence Protocol (NPP)<a class="headerlink" href="#natural-prevalence-protocol-npp" title="Link to this heading">#</a></h2>
+<h2><a class="toc-backref" href="#id16" role="doc-backlink"><span class="section-number">5.1.7. </span>Natural-Prevalence Protocol (NPP)</a><a class="headerlink" href="#natural-prevalence-protocol-npp" title="Link to this heading">#</a></h2>
 <p>The NPP uses naturally occurring prevalence variations by partitioning a large test set into random sub-samples, preserving their inherent class distributions.</p>
 <ul class="simple">
 <li><p>Preserves real-world prevalence distributions without artificial manipulation.</p></li>
@@ -521,7 +895,7 @@
 </div>
 </section>
 <section id="uniform-prevalence-protocol-upp">
-<h2><span class="section-number">4.1.3. </span>Uniform Prevalence Protocol (UPP)<a class="headerlink" href="#uniform-prevalence-protocol-upp" title="Link to this heading">#</a></h2>
+<h2><a class="toc-backref" href="#id17" role="doc-backlink"><span class="section-number">5.1.8. </span>Uniform Prevalence Protocol (UPP)</a><a class="headerlink" href="#uniform-prevalence-protocol-upp" title="Link to this heading">#</a></h2>
 <p>The <a class="reference internal" href="generated/mlquantify.model_selection.UPP.html#mlquantify.model_selection.UPP" title="mlquantify.model_selection.UPP"><code class="xref py py-class docutils literal notranslate"><span class="pre">UPP</span></code></a> is a variant of the APP that ensures uniform sampling of class prevalences across the entire range [0, 1].</p>
 <ul class="simple">
 <li><p>Guarantees that all possible prevalence values are equally represented in the test samples.</p></li>
@@ -548,7 +922,7 @@
 </div>
 </section>
 <section id="personalized-prevalence-protocol-ppp">
-<h2><span class="section-number">4.1.4. </span>Personalized Prevalence Protocol (PPP)<a class="headerlink" href="#personalized-prevalence-protocol-ppp" title="Link to this heading">#</a></h2>
+<h2><a class="toc-backref" href="#id18" role="doc-backlink"><span class="section-number">5.1.9. </span>Personalized Prevalence Protocol (PPP)</a><a class="headerlink" href="#personalized-prevalence-protocol-ppp" title="Link to this heading">#</a></h2>
 <p>The <a class="reference internal" href="generated/mlquantify.model_selection.PPP.html#mlquantify.model_selection.PPP" title="mlquantify.model_selection.PPP"><code class="xref py py-class docutils literal notranslate"><span class="pre">PPP</span></code></a> is another APP variant that allows users to specify desired class prevalences for generating test samples, since APP sample all possible prevalences uniformly.</p>
 <ul class="simple">
 <li><p>Enables targeted evaluation of quantifiers at specific prevalence levels.</p></li>
@@ -569,9 +943,9 @@
 </div>
 </section>
 <section id="references">
-<h2><span class="section-number">4.1.5. </span>References<a class="headerlink" href="#references" title="Link to this heading">#</a></h2>
+<h2><a class="toc-backref" href="#id19" role="doc-backlink"><span class="section-number">5.1.10. </span>References</a><a class="headerlink" href="#references" title="Link to this heading">#</a></h2>
 <aside class="footnote-list brackets">
-<aside class="footnote brackets" id="id1" role="doc-footnote">
+<aside class="footnote brackets" id="id4" role="doc-footnote">
 <span class="label"><span class="fn-bracket">[</span>1<span class="fn-bracket">]</span></span>
 <p>Esuli, A., Fabris, A., Moreo, A., &amp; Sebastiani, F. (n.d.). Learning to Quantify The Information Retrieval Series.</p>
 </aside>
@@ -595,7 +969,7 @@
       <i class="fa-solid fa-angle-left"></i>
       <div class="prev-next-info">
         <p class="prev-next-subtitle">previous</p>
-        <p class="prev-next-title"><span class="section-number">4. </span>Model Selection and Evaluation</p>
+        <p class="prev-next-title"><span class="section-number">5. </span>Model Selection and Evaluation</p>
       </div>
     </a>
     <a class="right-next"
@@ -603,7 +977,7 @@
        title="next page">
       <div class="prev-next-info">
         <p class="prev-next-subtitle">next</p>
-        <p class="prev-next-title"><span class="section-number">4.2. </span>Tuning Hyperparameters</p>
+        <p class="prev-next-title"><span class="section-number">5.2. </span>Tuning Hyperparameters</p>
       </div>
       <i class="fa-solid fa-angle-right"></i>
     </a>
@@ -630,11 +1004,26 @@
   </div>
   <nav id="pst-page-toc-nav" class="page-toc" aria-labelledby="pst-page-navigation-heading-2">
     <ul class="pst-show_toc_level nav section-nav flex-column">
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#artificial-prevalence-protocol-app">4.1.1. Artificial-Prevalence Protocol (APP)</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#natural-prevalence-protocol-npp">4.1.2. Natural-Prevalence Protocol (NPP)</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#uniform-prevalence-protocol-upp">4.1.3. Uniform Prevalence Protocol (UPP)</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#personalized-prevalence-protocol-ppp">4.1.4. Personalized Prevalence Protocol (PPP)</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#references">4.1.5. References</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#app-artificial-prevalence-protocol">5.1.1. APP — Artificial Prevalence Protocol</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#parameters">5.1.1.1. Parameters</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#examples">5.1.1.2. Examples</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#npp-natural-prevalence-protocol">5.1.2. NPP — Natural Prevalence Protocol</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id1">5.1.2.1. Parameters</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#upp-uniform-prevalence-protocol">5.1.3. UPP — Uniform Prevalence Protocol</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id2">5.1.3.1. Parameters</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#choosing-a-protocol">5.1.4. Choosing a Protocol</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#id3">5.1.5. Protocols for Quantification</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#artificial-prevalence-protocol-app">5.1.6. Artificial-Prevalence Protocol (APP)</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#natural-prevalence-protocol-npp">5.1.7. Natural-Prevalence Protocol (NPP)</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#uniform-prevalence-protocol-upp">5.1.8. Uniform Prevalence Protocol (UPP)</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#personalized-prevalence-protocol-ppp">5.1.9. Personalized Prevalence Protocol (PPP)</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#references">5.1.10. References</a></li>
 </ul>
   </nav></div>
 

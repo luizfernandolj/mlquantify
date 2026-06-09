@@ -7,19 +7,19 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
-<meta property="og:title" content="1.6. Distribution Matching" />
+<meta property="og:title" content="2.7. Distribution Matching" />
 <meta property="og:type" content="website" />
 <meta property="og:url" content="modules/distribution_matching.html" />
 <meta property="og:site_name" content="mlquantify" />
-<meta property="og:description" content="Distribution Matching (DM) methods estimate prevalences by matching the test distribution to a mixture of class-conditional distributions learned on the training data. In practice, the matching str..." />
+<meta property="og:description" content="Distribution matching (DM) methods estimate prevalences without inverting a confusion matrix or re-weighting posteriors. Instead, they find the mixture proportion of class-conditional distributions..." />
 <meta property="og:image:width" content="1146" />
 <meta property="og:image:height" content="600" />
-<meta property="og:image" content="_images/social_previews/summary_modules_distribution_matching_d578aa40.png" />
-<meta property="og:image:alt" content="Distribution Matching (DM) methods estimate prevalences by matching the test distribution to a mixture of class-conditional distributions learned on the training data. In practice, the matching str..." />
-<meta name="description" content="Distribution Matching (DM) methods estimate prevalences by matching the test distribution to a mixture of class-conditional distributions learned on the training data. In practice, the matching str..." />
+<meta property="og:image" content="_images/social_previews/summary_modules_distribution_matching_4916dfb6.png" />
+<meta property="og:image:alt" content="Distribution matching (DM) methods estimate prevalences without inverting a confusion matrix or re-weighting posteriors. Instead, they find the mixture proportion of class-conditional distributions..." />
+<meta name="description" content="Distribution matching (DM) methods estimate prevalences without inverting a confusion matrix or re-weighting posteriors. Instead, they find the mixture proportion of class-conditional distributions..." />
 <meta name="twitter:card" content="summary_large_image" />
 
-    <title>1.6. Distribution Matching &#8212; mlquantify</title>
+    <title>2.7. Distribution Matching &#8212; mlquantify</title>
   
   
   
@@ -66,8 +66,8 @@
     <script>DOCUMENTATION_OPTIONS.search_as_you_type = false;</script>
     <link rel="canonical" href="https://luizfernandolj.github.io/mlquantify/modules/distribution_matching.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="1.7. Nearest Neighbors" href="neighbors.html" />
-    <link rel="prev" title="1.5. Likelihood-Based Quantification" href="likelihood.html" />
+    <link rel="next" title="2.8. Nearest Neighbours" href="neighbors.html" />
+    <link rel="prev" title="2.6. Likelihood-Based Quantification" href="likelihood.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
   <meta name="docsearch:version" content="" />
@@ -374,42 +374,47 @@
      aria-label="Section Navigation">
   <p class="bd-links__title" role="heading" aria-level="1">Section Navigation</p>
   <div class="bd-toc-item navbar-nav"><ul class="current nav bd-sidenav">
-<li class="toctree-l1 current active has-children"><a class="reference internal" href="../aggregative_quantification.html">1. Aggregative Quantification</a><details open="open"><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul class="current">
-<li class="toctree-l2"><a class="reference internal" href="using_aggregative.html">1.1. Using Aggregative Quantification Methods</a></li>
+<li class="toctree-l1"><a class="reference internal" href="quantification_foundations.html">1. Foundations</a></li>
+<li class="toctree-l1 current active has-children"><a class="reference internal" href="../aggregative_quantification.html">2. Aggregative Quantification</a><details open="open"><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="using_aggregative.html">2.1. Using Aggregative Quantification Methods</a></li>
 
-<li class="toctree-l2"><a class="reference internal" href="counters.html">1.3. Counters For Quantification</a></li>
-<li class="toctree-l2"><a class="reference internal" href="adjust_counting.html">1.4. Adjusted Counting</a></li>
-<li class="toctree-l2"><a class="reference internal" href="likelihood.html">1.5. Likelihood-Based Quantification</a></li>
-<li class="toctree-l2 current active"><a class="current reference internal" href="#">1.6. Distribution Matching</a></li>
-<li class="toctree-l2"><a class="reference internal" href="neighbors.html">1.7. Nearest Neighbors</a></li>
+<li class="toctree-l2"><a class="reference internal" href="counters.html">2.3. Counting-Based Quantifiers</a></li>
+
+<li class="toctree-l2"><a class="reference internal" href="adjust_counting.html">2.5. Adjusted Counting</a></li>
+<li class="toctree-l2"><a class="reference internal" href="likelihood.html">2.6. Likelihood Methods</a></li>
+<li class="toctree-l2 current active"><a class="current reference internal" href="#">2.7. Distribution Matching</a></li>
+<li class="toctree-l2"><a class="reference internal" href="neighbors.html">2.8. Nearest Neighbours</a></li>
 </ul>
 </details></li>
-<li class="toctree-l1 has-children"><a class="reference internal" href="../non_aggregative_quantification.html">2. Non Aggregative Quantification</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
-<li class="toctree-l2"><a class="reference internal" href="mixture_models_non_agg.html">2.1. Mixture Models for Non-Aggregative Quantification</a></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../non_aggregative_quantification.html">3. Non Aggregative Quantification</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="mixture_models_non_agg.html">3.1. Mixture Models for Non-Aggregative Quantification</a></li>
 </ul>
 </details></li>
-<li class="toctree-l1 has-children"><a class="reference internal" href="../meta_quantification.html">3. Meta Quantification</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
-<li class="toctree-l2"><a class="reference internal" href="ensemble.html">3.1. Ensemble for Quantification</a></li>
-<li class="toctree-l2"><a class="reference internal" href="bootstrap.html">3.2. Bootstrap in Quantification</a></li>
-<li class="toctree-l2"><a class="reference internal" href="scores_adaptation.html">3.3. QuaDapt: Drift-Resilient Score Adaptation</a></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../meta_quantification.html">4. Meta Quantification</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="ensemble.html">4.1. Ensembles and Adaptation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="bootstrap.html">4.2. Bootstrap in Quantification</a></li>
+<li class="toctree-l2"><a class="reference internal" href="scores_adaptation.html">4.3. QuaDapt: Drift-Resilient Score Adaptation</a></li>
 </ul>
 </details></li>
-<li class="toctree-l1 has-children"><a class="reference internal" href="../model_selection_evaluation.html">4. Model Selection and Evaluation</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
-<li class="toctree-l2"><a class="reference internal" href="protocols.html">4.1. Protocols for Quantification</a></li>
-<li class="toctree-l2"><a class="reference internal" href="tuning_hyperparameters.html">4.2. Tuning Hyperparameters</a></li>
-<li class="toctree-l2"><a class="reference internal" href="evaluation_metrics.html">4.3. Evaluation Metrics</a></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../model_selection_evaluation.html">5. Model Selection and Evaluation</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="protocols.html">5.1. Evaluation Protocols</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tuning_hyperparameters.html">5.2. Hyperparameter Tuning</a></li>
+<li class="toctree-l2"><a class="reference internal" href="evaluation_metrics.html">5.3. Evaluation Metrics</a></li>
+
+
+
 </ul>
 </details></li>
-<li class="toctree-l1"><a class="reference internal" href="confidence_intervals.html">5. Confidence Intervals</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../building_a_quantifier.html">6. Building a Quantifier</a></li>
-<li class="toctree-l1"><a class="reference internal" href="mlquantify_methods.html">7. Mlquantify methods</a></li>
-<li class="toctree-l1 has-children"><a class="reference internal" href="../components.html">8. Core Components</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
-<li class="toctree-l2"><a class="reference internal" href="compose.html">8.1. Composable Quantifiers</a></li>
-<li class="toctree-l2"><a class="reference internal" href="losses.html">8.2. Loss Functions</a></li>
-<li class="toctree-l2"><a class="reference internal" href="representations.html">8.3. Representations</a></li>
-<li class="toctree-l2"><a class="reference internal" href="solvers.html">8.4. Solvers</a></li>
-<li class="toctree-l2"><a class="reference internal" href="calibration.html">8.5. Calibration</a></li>
-<li class="toctree-l2"><a class="reference internal" href="neural.html">8.6. Neural Quantifiers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="confidence_intervals.html">6. Confidence Intervals</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../building_a_quantifier.html">7. Building a Quantifier</a></li>
+<li class="toctree-l1"><a class="reference internal" href="mlquantify_methods.html">8. Mlquantify methods</a></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../components.html">9. Core Components</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="compose.html">9.1. Composable Quantifiers</a></li>
+<li class="toctree-l2"><a class="reference internal" href="losses.html">9.2. Loss Functions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="representations.html">9.3. Representations</a></li>
+<li class="toctree-l2"><a class="reference internal" href="solvers.html">9.4. Solvers</a></li>
+<li class="toctree-l2"><a class="reference internal" href="calibration.html">9.5. Calibration</a></li>
+<li class="toctree-l2"><a class="reference internal" href="neural.html">9.6. Neural Quantifiers</a></li>
 </ul>
 </details></li>
 </ul>
@@ -449,9 +454,9 @@
     <li class="breadcrumb-item"><a href="../user_guide.html" class="nav-link">User Guide</a></li>
     
     
-    <li class="breadcrumb-item"><a href="../aggregative_quantification.html" class="nav-link"><span class="section-number">1. </span>Aggregative Quantification</a></li>
+    <li class="breadcrumb-item"><a href="../aggregative_quantification.html" class="nav-link"><span class="section-number">2. </span>Aggregative Quantification</a></li>
     
-    <li class="breadcrumb-item active" aria-current="page"><span class="ellipsis"><span class="section-number">1.6. </span>Distribution Matching</span></li>
+    <li class="breadcrumb-item active" aria-current="page"><span class="ellipsis"><span class="section-number">2.7. </span>Distribution Matching</span></li>
   </ul>
 </nav>
 </div>
@@ -469,7 +474,597 @@
                 <article class="bd-article">
                   
   <section id="distribution-matching">
-<span id="id1"></span><h1><span class="section-number">1.6. </span>Distribution Matching<a class="headerlink" href="#distribution-matching" title="Link to this heading">#</a></h1>
+<span id="id1"></span><h1><span class="section-number">2.7. </span>Distribution Matching<a class="headerlink" href="#distribution-matching" title="Link to this heading">#</a></h1>
+<p>Distribution matching (DM) methods estimate prevalences without inverting a
+confusion matrix or re-weighting posteriors. Instead, they find the mixture
+proportion of class-conditional distributions that best <strong>reproduces</strong> the
+observed test distribution. This makes them highly versatile: they can handle
+non-standard classifiers, non-linear shift, and multiclass problems natively.</p>
+<p><strong>Core idea:</strong> During training, DM methods learn a <em>representation</em>
+<span class="math notranslate nohighlight">\(r_c\)</span> of each class’s distribution (a histogram, density, kernel mean,
+…). At test time, they find the prevalence vector <span class="math notranslate nohighlight">\(\hat{p}\)</span> such that
+the mixture</p>
+<div class="math notranslate nohighlight">
+\[\sum_c \hat{p}(c) \cdot r_c \;\approx\; r_U\]</div>
+<p>is as close as possible to the test representation <span class="math notranslate nohighlight">\(r_U\)</span>, under some
+dissimilarity measure. This is solved as a constrained optimisation over the
+probability simplex.</p>
+<p><code class="docutils literal notranslate"><span class="pre">mlquantify</span></code> organises distribution matching into four representation
+families — <strong>histogram</strong>, <strong>density (KDE)</strong>, <strong>kernel</strong>, and <strong>scores</strong> — all
+exposed through <a class="reference internal" href="../api/mlquantify.matching.html#module-mlquantify.matching" title="mlquantify.matching"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mlquantify.matching</span></code></a>.</p>
+<nav class="contents local" id="contents">
+<p class="topic-title">Contents</p>
+<ul class="simple">
+<li><p><a class="reference internal" href="#histogram-methods" id="id29">Histogram Methods</a></p>
+<ul>
+<li><p><a class="reference internal" href="#dys-distribution-y-similarity" id="id30">DyS — Distribution y-Similarity</a></p></li>
+<li><p><a class="reference internal" href="#parameters" id="id31">Parameters</a></p></li>
+<li><p><a class="reference internal" href="#examples" id="id32">Examples</a></p></li>
+<li><p><a class="reference internal" href="#hdy-hellinger-distance-y-similarity" id="id33">HDy — Hellinger Distance y-Similarity</a></p></li>
+<li><p><a class="reference internal" href="#id2" id="id34">Parameters</a></p></li>
+<li><p><a class="reference internal" href="#hdx-hellinger-distance-x-similarity-classifier-free" id="id35">HDx — Hellinger Distance x-Similarity (classifier-free)</a></p></li>
+<li><p><a class="reference internal" href="#id3" id="id36">Parameters</a></p></li>
+<li><p><a class="reference internal" href="#smm-score-mixture-model" id="id37">SMM — Score Mixture Model</a></p></li>
+</ul>
+</li>
+<li><p><a class="reference internal" href="#density-methods-kdey" id="id38">Density Methods — KDEy</a></p>
+<ul>
+<li><p><a class="reference internal" href="#kdey-hd-kdey-cs-kdey-ml" id="id39">KDEy-HD, KDEy-CS, KDEy-ML</a></p></li>
+<li><p><a class="reference internal" href="#id4" id="id40">Parameters</a></p></li>
+<li><p><a class="reference internal" href="#id5" id="id41">Examples</a></p></li>
+</ul>
+</li>
+<li><p><a class="reference internal" href="#kernel-methods-mmd" id="id42">Kernel Methods — MMD</a></p>
+<ul>
+<li><p><a class="reference internal" href="#id6" id="id43">Parameters</a></p></li>
+</ul>
+</li>
+<li><p><a class="reference internal" href="#score-methods-sord" id="id44">Score Methods — SORD</a></p></li>
+<li><p><a class="reference internal" href="#choosing-a-distribution-matching-method" id="id45">Choosing a Distribution Matching Method</a></p></li>
+<li><p><a class="reference internal" href="#histogram" id="id46">Histogram</a></p>
+<ul>
+<li><p><a class="reference internal" href="#dys-distribution-y-similarity-framework" id="id47">DyS: Distribution y-Similarity Framework</a></p></li>
+<li><p><a class="reference internal" href="#id9" id="id48">HDy: Hellinger Distance y-Similarity</a></p></li>
+<li><p><a class="reference internal" href="#smm-sample-mean-matching" id="id49">SMM: Sample Mean Matching</a></p></li>
+</ul>
+</li>
+<li><p><a class="reference internal" href="#density" id="id50">Density</a></p>
+<ul>
+<li><p><a class="reference internal" href="#kdey-kernel-density-estimation-y-similarity" id="id51">KDEy: Kernel Density Estimation y-Similarity</a></p></li>
+<li><p><a class="reference internal" href="#kdey-ml-maximum-likelihood" id="id52">KDEy-ML (Maximum Likelihood)</a></p></li>
+<li><p><a class="reference internal" href="#kdey-hd-hellinger-distance" id="id53">KDEy-HD (Hellinger Distance)</a></p></li>
+<li><p><a class="reference internal" href="#kdey-cs-cauchy-schwarz" id="id54">KDEy-CS (Cauchy-Schwarz)</a></p></li>
+</ul>
+</li>
+<li><p><a class="reference internal" href="#kernel" id="id55">Kernel</a></p></li>
+<li><p><a class="reference internal" href="#scores" id="id56">Scores</a></p></li>
+</ul>
+</nav>
+<hr class="docutils" />
+<section id="histogram-methods">
+<h2><a class="toc-backref" href="#id29" role="doc-backlink"><span class="section-number">2.7.1. </span>Histogram Methods</a><a class="headerlink" href="#histogram-methods" title="Link to this heading">#</a></h2>
+<p>Histogram methods discretise the classifier’s score distribution into bins.
+They are the oldest DM family and remain competitive on binary problems.</p>
+<div class="admonition-binary-only-unless-noted admonition">
+<p class="admonition-title">Binary-only (unless noted)</p>
+<p>Histogram methods are fundamentally binary. <code class="docutils literal notranslate"><span class="pre">mlquantify</span></code> applies OvR
+decomposition automatically for multiclass datasets.</p>
+</div>
+<section id="dys-distribution-y-similarity">
+<h3><a class="toc-backref" href="#id30" role="doc-backlink"><span class="section-number">2.7.1.1. </span>DyS — Distribution y-Similarity</a><a class="headerlink" href="#dys-distribution-y-similarity" title="Link to this heading">#</a></h3>
+<p><a class="reference internal" href="generated/mlquantify.matching.DyS.html#mlquantify.matching.DyS" title="mlquantify.matching.DyS"><code class="xref py py-class docutils literal notranslate"><span class="pre">DyS</span></code></a> (Maletzke et al., 2019) builds a histogram of classifier scores
+for each class from cross-validated predictions. At test time it searches for
+the mixture proportion <span class="math notranslate nohighlight">\(\alpha \in [0,1]\)</span> that minimises a dissimilarity
+measure between the test score histogram and the mixture of class histograms:</p>
+<div class="math notranslate nohighlight">
+\[\hat{p}^{DyS}(\oplus) = \arg\min_{\alpha \in [0,1]}
+D\!\left( \alpha \cdot H_+ + (1-\alpha) \cdot H_- ,\; H_U \right)\]</div>
+<p><strong>Why it excels:</strong> DyS is a <em>framework</em> that separates the representation
+(histogram), the dissimilarity measure, and the solver. It can be configured
+with any distance and bin size. Maletzke et al. (2019) showed it beats
+threshold-adjustment methods and matches EMQ on many benchmarks.</p>
+</section>
+<section id="parameters">
+<h3><a class="toc-backref" href="#id31" role="doc-backlink"><span class="section-number">2.7.1.2. </span>Parameters</a><a class="headerlink" href="#parameters" title="Link to this heading">#</a></h3>
+<div class="pst-scrollable-table-container"><table class="table">
+<colgroup>
+<col style="width: 22.0%" />
+<col style="width: 15.0%" />
+<col style="width: 63.0%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Parameter</p></th>
+<th class="head"><p>Default</p></th>
+<th class="head"><p>Explanation</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">estimator</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">None</span></code></p></td>
+<td><p>Probabilistic classifier (<code class="docutils literal notranslate"><span class="pre">predict_proba</span></code>). Its cross-validated scores
+are used to build the class histograms.</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">bins_size</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">None</span></code></p></td>
+<td><p>Number of histogram bins, or an array of bin counts to sweep. If
+<code class="docutils literal notranslate"><span class="pre">None</span></code>, a default logarithmic grid is used. Larger bins give a
+coarser representation (more stable but less expressive); smaller bins
+capture more detail but are noisier with limited training data.</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">distance</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">'topsoe'</span></code></p></td>
+<td><p>Dissimilarity measure between histograms. Options:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">'topsoe'</span></code> (default) — Jensen–Shannon-like, recommended for DyS.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">'hellinger'</span></code> — square root of half the chi-squared distance.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">'probsymm'</span></code> — probabilistic symmetric chi-squared.</p></li>
+</ul>
+<p>The distance choice affects which solver is optimal (see <code class="docutils literal notranslate"><span class="pre">solver</span></code>).</p>
+</td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">solver</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">'auto'</span></code></p></td>
+<td><p>Optimisation algorithm for the mixture search:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">'auto'</span></code> — chooses <code class="docutils literal notranslate"><span class="pre">'ternary'</span></code> for Hellinger/TopSoe/ProbSymm
+(these have a single minimum), <code class="docutils literal notranslate"><span class="pre">'grid'</span></code> otherwise.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">'ternary'</span></code> — faster for unimodal objectives.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">'grid'</span></code> — exhaustive search over a fine grid; always finds the
+global minimum but slower.</p></li>
+</ul>
+</td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">bin_strategy</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">None</span></code></p></td>
+<td><p>How to aggregate results across multiple bin sizes. <code class="docutils literal notranslate"><span class="pre">None</span></code> uses a
+single bin count; <code class="docutils literal notranslate"><span class="pre">'median'</span></code> or <code class="docutils literal notranslate"><span class="pre">'mean'</span></code> averages across all bin
+sizes in <code class="docutils literal notranslate"><span class="pre">bins_size</span></code> (more robust).</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">laplace_smoothing</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">False</span></code></p></td>
+<td><p>Add Laplace (add-one) smoothing to histogram counts. Prevents zero-bin
+issues when training data is scarce.</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">cv</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">None</span></code></p></td>
+<td><p>Cross-validation folds for computing training scores. <code class="docutils literal notranslate"><span class="pre">None</span></code> uses 5.</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">stratified</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">True</span></code></p></td>
+<td><p>Stratified folds.</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">strategy</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">'ovr'</span></code></p></td>
+<td><p>Multiclass decomposition.</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<figure class="align-center" id="id19">
+<a class="reference internal image-reference" href="../_images/histogram_matching.png"><img alt="DyS histogram matching concept" src="../_images/histogram_matching.png" style="width: 95%;" />
+</a>
+<figcaption>
+<p><span class="caption-text"><em>Left: class-conditional score histograms learned from training data.
+Centre: test score histogram (unlabelled — unknown prevalence).
+Right: DyS searches for the mixture proportion α that makes
+α·H⁺ + (1−α)·H⁻ (red step line) match the test histogram (green bars)
+as closely as possible.</em></span><a class="headerlink" href="#id19" title="Link to this image">#</a></p>
+</figcaption>
+</figure>
+</section>
+<section id="examples">
+<h3><a class="toc-backref" href="#id32" role="doc-backlink"><span class="section-number">2.7.1.3. </span>Examples</a><a class="headerlink" href="#examples" title="Link to this heading">#</a></h3>
+<p>Basic binary usage:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">mlquantify.matching</span><span class="w"> </span><span class="kn">import</span> <span class="n">DyS</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">sklearn.linear_model</span><span class="w"> </span><span class="kn">import</span> <span class="n">LogisticRegression</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">sklearn.datasets</span><span class="w"> </span><span class="kn">import</span> <span class="n">make_classification</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">sklearn.model_selection</span><span class="w"> </span><span class="kn">import</span> <span class="n">train_test_split</span>
+
+<span class="n">X</span><span class="p">,</span> <span class="n">y</span> <span class="o">=</span> <span class="n">make_classification</span><span class="p">(</span><span class="n">n_samples</span><span class="o">=</span><span class="mi">1000</span><span class="p">,</span> <span class="n">weights</span><span class="o">=</span><span class="p">[</span><span class="mf">0.8</span><span class="p">,</span> <span class="mf">0.2</span><span class="p">],</span>
+                           <span class="n">random_state</span><span class="o">=</span><span class="mi">42</span><span class="p">)</span>
+<span class="n">X_train</span><span class="p">,</span> <span class="n">X_test</span><span class="p">,</span> <span class="n">y_train</span><span class="p">,</span> <span class="n">y_test</span> <span class="o">=</span> <span class="n">train_test_split</span><span class="p">(</span>
+    <span class="n">X</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">test_size</span><span class="o">=</span><span class="mf">0.3</span><span class="p">,</span> <span class="n">random_state</span><span class="o">=</span><span class="mi">42</span><span class="p">)</span>
+
+<span class="n">q</span> <span class="o">=</span> <span class="n">DyS</span><span class="p">(</span><span class="n">estimator</span><span class="o">=</span><span class="n">LogisticRegression</span><span class="p">())</span>
+<span class="n">q</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">X_train</span><span class="p">,</span> <span class="n">y_train</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">q</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">X_test</span><span class="p">))</span>
+<span class="c1"># {0: 0.79, 1: 0.21}</span>
+</pre></div>
+</div>
+<p>Customising bins and distance:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">mlquantify.matching</span><span class="w"> </span><span class="kn">import</span> <span class="n">DyS</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">sklearn.linear_model</span><span class="w"> </span><span class="kn">import</span> <span class="n">LogisticRegression</span>
+
+<span class="n">q</span> <span class="o">=</span> <span class="n">DyS</span><span class="p">(</span>
+    <span class="n">estimator</span><span class="o">=</span><span class="n">LogisticRegression</span><span class="p">(),</span>
+    <span class="n">bins_size</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">32</span><span class="p">,</span> <span class="mi">2</span><span class="p">),</span>   <span class="c1"># sweep 2,4,6,...,30 bins</span>
+    <span class="n">distance</span><span class="o">=</span><span class="s1">&#39;hellinger&#39;</span><span class="p">,</span>
+    <span class="n">bin_strategy</span><span class="o">=</span><span class="s1">&#39;median&#39;</span><span class="p">,</span>           <span class="c1"># median across all bin sizes</span>
+    <span class="n">laplace_smoothing</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+<span class="p">)</span>
+<span class="n">q</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">X_train</span><span class="p">,</span> <span class="n">y_train</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">q</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">X_test</span><span class="p">))</span>
+</pre></div>
+</div>
+<p>Using <code class="xref py py-meth docutils literal notranslate"><span class="pre">aggregate</span></code> with pre-computed scores:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">mlquantify.matching</span><span class="w"> </span><span class="kn">import</span> <span class="n">DyS</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">sklearn.linear_model</span><span class="w"> </span><span class="kn">import</span> <span class="n">LogisticRegression</span>
+
+<span class="n">clf</span> <span class="o">=</span> <span class="n">LogisticRegression</span><span class="p">()</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">X_train</span><span class="p">,</span> <span class="n">y_train</span><span class="p">)</span>
+<span class="c1"># Positive-class scores (column 1)</span>
+<span class="n">train_scores</span> <span class="o">=</span> <span class="n">clf</span><span class="o">.</span><span class="n">predict_proba</span><span class="p">(</span><span class="n">X_train</span><span class="p">)[:,</span> <span class="mi">1</span><span class="p">]</span>
+<span class="n">test_scores</span>  <span class="o">=</span> <span class="n">clf</span><span class="o">.</span><span class="n">predict_proba</span><span class="p">(</span><span class="n">X_test</span><span class="p">)[:,</span> <span class="mi">1</span><span class="p">]</span>
+
+<span class="n">q</span> <span class="o">=</span> <span class="n">DyS</span><span class="p">(</span><span class="n">clf</span><span class="p">)</span>
+<span class="n">q</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">X_train</span><span class="p">,</span> <span class="n">y_train</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">q</span><span class="o">.</span><span class="n">aggregate</span><span class="p">(</span><span class="n">test_scores</span><span class="p">,</span> <span class="n">train_scores</span><span class="p">,</span> <span class="n">y_train</span><span class="p">))</span>
+</pre></div>
+</div>
+</section>
+<hr class="docutils" />
+<section id="hdy-hellinger-distance-y-similarity">
+<h3><a class="toc-backref" href="#id33" role="doc-backlink"><span class="section-number">2.7.1.4. </span>HDy — Hellinger Distance y-Similarity</a><a class="headerlink" href="#hdy-hellinger-distance-y-similarity" title="Link to this heading">#</a></h3>
+<p><a class="reference internal" href="generated/mlquantify.matching.HDy.html#mlquantify.matching.HDy" title="mlquantify.matching.HDy"><code class="xref py py-class docutils literal notranslate"><span class="pre">HDy</span></code></a> (González-Castro et al., 2013) is a specific instantiation of
+the DyS framework that sweeps over multiple bin sizes
+(<span class="math notranslate nohighlight">\(10, 20, \ldots, 110\)</span> by default) and returns the <strong>median</strong> prevalence
+across all bin sizes. It uses the Hellinger distance as the dissimilarity.</p>
+<p><strong>Why it exists:</strong> HDy was the original paper that introduced the idea of
+comparing score histograms for quantification. The multi-bin median strategy
+reduces sensitivity to the bin count hyperparameter, making HDy robust without
+tuning.</p>
+</section>
+<section id="id2">
+<h3><a class="toc-backref" href="#id34" role="doc-backlink"><span class="section-number">2.7.1.5. </span>Parameters</a><a class="headerlink" href="#id2" title="Link to this heading">#</a></h3>
+<p>Same structure as <a class="reference internal" href="generated/mlquantify.matching.DyS.html#mlquantify.matching.DyS" title="mlquantify.matching.DyS"><code class="xref py py-class docutils literal notranslate"><span class="pre">DyS</span></code></a>. Key defaults:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">distance='hellinger'</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">bin_strategy='median'</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">bins_size=np.linspace(10,</span> <span class="pre">110,</span> <span class="pre">11,</span> <span class="pre">dtype=int)</span></code></p></li>
+</ul>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">mlquantify.matching</span><span class="w"> </span><span class="kn">import</span> <span class="n">HDy</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">sklearn.linear_model</span><span class="w"> </span><span class="kn">import</span> <span class="n">LogisticRegression</span>
+
+<span class="n">q</span> <span class="o">=</span> <span class="n">HDy</span><span class="p">(</span><span class="n">estimator</span><span class="o">=</span><span class="n">LogisticRegression</span><span class="p">())</span>
+<span class="n">q</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">X_train</span><span class="p">,</span> <span class="n">y_train</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">q</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">X_test</span><span class="p">))</span>
+</pre></div>
+</div>
+</section>
+<hr class="docutils" />
+<section id="hdx-hellinger-distance-x-similarity-classifier-free">
+<h3><a class="toc-backref" href="#id35" role="doc-backlink"><span class="section-number">2.7.1.6. </span>HDx — Hellinger Distance x-Similarity (classifier-free)</a><a class="headerlink" href="#hdx-hellinger-distance-x-similarity-classifier-free" title="Link to this heading">#</a></h3>
+<p><a class="reference internal" href="generated/mlquantify.matching.HDx.html#mlquantify.matching.HDx" title="mlquantify.matching.HDx"><code class="xref py py-class docutils literal notranslate"><span class="pre">HDx</span></code></a> (González-Castro et al., 2013) compares class-conditional
+<strong>feature histograms</strong> directly, without using a classifier. For each
+feature, it builds a histogram for each class; the mixture of feature
+histograms that best matches the test histogram gives the prevalence estimate.</p>
+<p><strong>Why it exists:</strong> HDx is a <em>non-aggregative</em> histogram method — it does not
+need a classifier at all. It is useful when no reliable classifier is
+available, or as a sanity check. Performance is generally below HDy/DyS
+(which use a classifier’s summary score), but it is a zero-cost baseline.</p>
+</section>
+<section id="id3">
+<h3><a class="toc-backref" href="#id36" role="doc-backlink"><span class="section-number">2.7.1.7. </span>Parameters</a><a class="headerlink" href="#id3" title="Link to this heading">#</a></h3>
+<div class="pst-scrollable-table-container"><table class="table">
+<colgroup>
+<col style="width: 22.0%" />
+<col style="width: 15.0%" />
+<col style="width: 63.0%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Parameter</p></th>
+<th class="head"><p>Default</p></th>
+<th class="head"><p>Explanation</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">bins_size</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">None</span></code></p></td>
+<td><p>Array of bin counts to sweep (default: <code class="docutils literal notranslate"><span class="pre">[2,4,6,...,20,30]</span></code>).</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">strategy</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">'ovr'</span></code></p></td>
+<td><p>Multiclass decomposition.</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">mlquantify.matching</span><span class="w"> </span><span class="kn">import</span> <span class="n">HDx</span>
+
+<span class="n">q</span> <span class="o">=</span> <span class="n">HDx</span><span class="p">()</span>
+<span class="n">q</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">X_train</span><span class="p">,</span> <span class="n">y_train</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">q</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">X_test</span><span class="p">))</span>
+<span class="c1"># No classifier needed</span>
+</pre></div>
+</div>
+</section>
+<hr class="docutils" />
+<section id="smm-score-mixture-model">
+<h3><a class="toc-backref" href="#id37" role="doc-backlink"><span class="section-number">2.7.1.8. </span>SMM — Score Mixture Model</a><a class="headerlink" href="#smm-score-mixture-model" title="Link to this heading">#</a></h3>
+<p><a class="reference internal" href="generated/mlquantify.matching.SMM.html#mlquantify.matching.SMM" title="mlquantify.matching.SMM"><code class="xref py py-class docutils literal notranslate"><span class="pre">SMM</span></code></a> extends DyS to use a more flexible representation of the
+score distribution. Parameters match <a class="reference internal" href="generated/mlquantify.matching.DyS.html#mlquantify.matching.DyS" title="mlquantify.matching.DyS"><code class="xref py py-class docutils literal notranslate"><span class="pre">DyS</span></code></a>.</p>
+</section>
+</section>
+<hr class="docutils" />
+<section id="density-methods-kdey">
+<h2><a class="toc-backref" href="#id38" role="doc-backlink"><span class="section-number">2.7.2. </span>Density Methods — KDEy</a><a class="headerlink" href="#density-methods-kdey" title="Link to this heading">#</a></h2>
+<p>KDE-based methods replace histograms with smooth <strong>kernel density estimates</strong>
+(KDE), avoiding bin-count sensitivity while still matching distributions.</p>
+<section id="kdey-hd-kdey-cs-kdey-ml">
+<h3><a class="toc-backref" href="#id39" role="doc-backlink"><span class="section-number">2.7.2.1. </span>KDEy-HD, KDEy-CS, KDEy-ML</a><a class="headerlink" href="#kdey-hd-kdey-cs-kdey-ml" title="Link to this heading">#</a></h3>
+<p>The three KDEy variants (Moreo et al., 2024) share the same architecture:
+they build a KDE over classifier posteriors on the training data (for each
+class) and minimise a dissimilarity to the test KDE at prediction time. They
+differ in the dissimilarity used:</p>
+<ul class="simple">
+<li><p><a class="reference internal" href="generated/mlquantify.matching.KDEyHD.html#mlquantify.matching.KDEyHD" title="mlquantify.matching.KDEyHD"><code class="xref py py-class docutils literal notranslate"><span class="pre">KDEyHD</span></code></a> — Hellinger distance between KDEs.</p></li>
+<li><p><a class="reference internal" href="generated/mlquantify.matching.KDEyCS.html#mlquantify.matching.KDEyCS" title="mlquantify.matching.KDEyCS"><code class="xref py py-class docutils literal notranslate"><span class="pre">KDEyCS</span></code></a> — squared cosine distance between KDEs.</p></li>
+<li><p><a class="reference internal" href="generated/mlquantify.matching.KDEyML.html#mlquantify.matching.KDEyML" title="mlquantify.matching.KDEyML"><code class="xref py py-class docutils literal notranslate"><span class="pre">KDEyML</span></code></a> — maximises the mixture log-likelihood (equivalent to
+minimising negative log-likelihood).</p></li>
+</ul>
+<p><strong>Why they exist:</strong> KDEy methods are <strong>natively multiclass</strong> (unlike DyS/HDy)
+and avoid the histogram bin-count hyperparameter. Moreo et al. (2024) showed
+they are state-of-the-art for multiclass quantification.</p>
+</section>
+<section id="id4">
+<h3><a class="toc-backref" href="#id40" role="doc-backlink"><span class="section-number">2.7.2.2. </span>Parameters</a><a class="headerlink" href="#id4" title="Link to this heading">#</a></h3>
+<div class="pst-scrollable-table-container"><table class="table">
+<colgroup>
+<col style="width: 22.0%" />
+<col style="width: 15.0%" />
+<col style="width: 63.0%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Parameter</p></th>
+<th class="head"><p>Default</p></th>
+<th class="head"><p>Explanation</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">estimator</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">None</span></code></p></td>
+<td><p>Probabilistic classifier.</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">bandwidth</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">0.1</span></code></p></td>
+<td><p>KDE bandwidth (smoothing). Smaller values give sharper densities
+(more variance), larger values smooth them out (more bias). Use
+cross-validation to tune: try <code class="docutils literal notranslate"><span class="pre">[0.01,</span> <span class="pre">0.05,</span> <span class="pre">0.1,</span> <span class="pre">0.2,</span> <span class="pre">0.5]</span></code>.</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">kernel</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">'gaussian'</span></code></p></td>
+<td><p>KDE kernel type. <code class="docutils literal notranslate"><span class="pre">'gaussian'</span></code> works well for probability scores in
+<span class="math notranslate nohighlight">\([0,1]\)</span>. Matches <code class="docutils literal notranslate"><span class="pre">sklearn.neighbors.KernelDensity</span></code> options.</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">solver</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">'slsqp'</span></code></p></td>
+<td><p>Optimisation solver for the simplex-constrained mixture problem.</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">cv</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">None</span></code></p></td>
+<td><p>Cross-validation folds.</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">stratified</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">True</span></code></p></td>
+<td><p>Stratified folds.</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+<section id="id5">
+<h3><a class="toc-backref" href="#id41" role="doc-backlink"><span class="section-number">2.7.2.3. </span>Examples</a><a class="headerlink" href="#id5" title="Link to this heading">#</a></h3>
+<p>Binary with KDEyHD:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">mlquantify.matching</span><span class="w"> </span><span class="kn">import</span> <span class="n">KDEyHD</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">sklearn.linear_model</span><span class="w"> </span><span class="kn">import</span> <span class="n">LogisticRegression</span>
+
+<span class="n">q</span> <span class="o">=</span> <span class="n">KDEyHD</span><span class="p">(</span><span class="n">estimator</span><span class="o">=</span><span class="n">LogisticRegression</span><span class="p">(),</span> <span class="n">bandwidth</span><span class="o">=</span><span class="mf">0.1</span><span class="p">)</span>
+<span class="n">q</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">X_train</span><span class="p">,</span> <span class="n">y_train</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">q</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">X_test</span><span class="p">))</span>
+</pre></div>
+</div>
+<p>Multiclass with KDEyML (best accuracy):</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">mlquantify.matching</span><span class="w"> </span><span class="kn">import</span> <span class="n">KDEyML</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">sklearn.linear_model</span><span class="w"> </span><span class="kn">import</span> <span class="n">LogisticRegression</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">sklearn.datasets</span><span class="w"> </span><span class="kn">import</span> <span class="n">make_classification</span>
+
+<span class="n">X</span><span class="p">,</span> <span class="n">y</span> <span class="o">=</span> <span class="n">make_classification</span><span class="p">(</span><span class="n">n_samples</span><span class="o">=</span><span class="mi">800</span><span class="p">,</span> <span class="n">n_classes</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span>
+                           <span class="n">n_informative</span><span class="o">=</span><span class="mi">6</span><span class="p">,</span> <span class="n">n_redundant</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>
+                           <span class="n">random_state</span><span class="o">=</span><span class="mi">42</span><span class="p">)</span>
+<span class="n">X_train</span><span class="p">,</span> <span class="n">X_test</span> <span class="o">=</span> <span class="n">X</span><span class="p">[:</span><span class="mi">600</span><span class="p">],</span> <span class="n">X</span><span class="p">[</span><span class="mi">600</span><span class="p">:]</span>
+<span class="n">y_train</span> <span class="o">=</span> <span class="n">y</span><span class="p">[:</span><span class="mi">600</span><span class="p">]</span>
+
+<span class="n">q</span> <span class="o">=</span> <span class="n">KDEyML</span><span class="p">(</span><span class="n">LogisticRegression</span><span class="p">(),</span> <span class="n">bandwidth</span><span class="o">=</span><span class="mf">0.05</span><span class="p">)</span>
+<span class="n">q</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">X_train</span><span class="p">,</span> <span class="n">y_train</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">q</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">X_test</span><span class="p">))</span>
+</pre></div>
+</div>
+<p>Tuning bandwidth with grid search:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">mlquantify.model_selection</span><span class="w"> </span><span class="kn">import</span> <span class="n">GridSearchQ</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">mlquantify.matching</span><span class="w"> </span><span class="kn">import</span> <span class="n">KDEyHD</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">mlquantify.model_selection</span><span class="w"> </span><span class="kn">import</span> <span class="n">APP</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">mlquantify.metrics</span><span class="w"> </span><span class="kn">import</span> <span class="n">MAE</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">sklearn.linear_model</span><span class="w"> </span><span class="kn">import</span> <span class="n">LogisticRegression</span>
+
+<span class="n">protocol</span> <span class="o">=</span> <span class="n">APP</span><span class="p">(</span><span class="n">batch_size</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> <span class="n">n_prevalences</span><span class="o">=</span><span class="mi">21</span><span class="p">,</span> <span class="n">repeats</span><span class="o">=</span><span class="mi">5</span><span class="p">)</span>
+<span class="n">gs</span> <span class="o">=</span> <span class="n">GridSearchQ</span><span class="p">(</span>
+    <span class="n">quantifier</span><span class="o">=</span><span class="n">KDEyHD</span><span class="p">(</span><span class="n">LogisticRegression</span><span class="p">()),</span>
+    <span class="n">param_grid</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;bandwidth&#39;</span><span class="p">:</span> <span class="p">[</span><span class="mf">0.01</span><span class="p">,</span> <span class="mf">0.05</span><span class="p">,</span> <span class="mf">0.1</span><span class="p">,</span> <span class="mf">0.2</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">]},</span>
+    <span class="n">protocol</span><span class="o">=</span><span class="n">protocol</span><span class="p">,</span>
+    <span class="n">error</span><span class="o">=</span><span class="n">MAE</span><span class="p">,</span>
+<span class="p">)</span>
+<span class="n">gs</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">X_train</span><span class="p">,</span> <span class="n">y_train</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">gs</span><span class="o">.</span><span class="n">best_params_</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="admonition tip">
+<p class="admonition-title">Tip</p>
+<p>Use <strong>KDEyML</strong> for multiclass problems — it is consistently the most
+accurate KDE variant in Moreo et al. (2024)’s benchmark. Use <strong>KDEyHD</strong>
+for binary problems if you want a fast alternative to DyS.</p>
+</div>
+</section>
+</section>
+<hr class="docutils" />
+<section id="kernel-methods-mmd">
+<h2><a class="toc-backref" href="#id42" role="doc-backlink"><span class="section-number">2.7.3. </span>Kernel Methods — MMD</a><a class="headerlink" href="#kernel-methods-mmd" title="Link to this heading">#</a></h2>
+<p><a class="reference internal" href="generated/mlquantify.matching.MMD_RKHS.html#mlquantify.matching.MMD_RKHS" title="mlquantify.matching.MMD_RKHS"><code class="xref py py-class docutils literal notranslate"><span class="pre">MMD_RKHS</span></code></a> (Maximum Mean Discrepancy in Reproducing Kernel Hilbert
+Space) matches class-conditional <strong>kernel mean embeddings</strong> of the raw
+feature vectors, rather than classifier scores. It directly computes the
+kernel mean of each class in feature space and finds the mixture that
+minimises the MMD to the test kernel mean.</p>
+<p><strong>Why it exists:</strong> MMD_RKHS is a <strong>non-aggregative</strong> method (no classifier
+needed) that works directly on the feature space via a kernel trick. It is
+useful when features are naturally compared with a kernel (e.g. strings,
+graphs, or dense embeddings). Iyer et al. (2014) showed strong convergence
+guarantees for kernel quantification.</p>
+<section id="id6">
+<h3><a class="toc-backref" href="#id43" role="doc-backlink"><span class="section-number">2.7.3.1. </span>Parameters</a><a class="headerlink" href="#id6" title="Link to this heading">#</a></h3>
+<div class="pst-scrollable-table-container"><table class="table">
+<colgroup>
+<col style="width: 22.0%" />
+<col style="width: 15.0%" />
+<col style="width: 63.0%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Parameter</p></th>
+<th class="head"><p>Default</p></th>
+<th class="head"><p>Explanation</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">kernel</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">'rbf'</span></code></p></td>
+<td><p>Kernel function for computing the RKHS mean embedding. Options:
+<code class="docutils literal notranslate"><span class="pre">'rbf'</span></code>, <code class="docutils literal notranslate"><span class="pre">'linear'</span></code>, <code class="docutils literal notranslate"><span class="pre">'poly'</span></code>, <code class="docutils literal notranslate"><span class="pre">'sigmoid'</span></code>, <code class="docutils literal notranslate"><span class="pre">'cosine'</span></code>.
+<code class="docutils literal notranslate"><span class="pre">'rbf'</span></code> works well for continuous features.</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">gamma</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">None</span></code></p></td>
+<td><p>RBF/poly/sigmoid bandwidth. <code class="docutils literal notranslate"><span class="pre">None</span></code> uses <code class="docutils literal notranslate"><span class="pre">1/n_features</span></code>. Tune this
+if features are on very different scales (consider normalising first).</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">degree</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">3</span></code></p></td>
+<td><p>Polynomial degree for <code class="docutils literal notranslate"><span class="pre">'poly'</span></code> kernel.</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">coef0</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">0.0</span></code></p></td>
+<td><p>Independent term for poly/sigmoid kernels.</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">solver</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">'slsqp'</span></code></p></td>
+<td><p>Optimisation solver.</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">mlquantify.matching</span><span class="w"> </span><span class="kn">import</span> <span class="n">MMD_RKHS</span>
+
+<span class="n">q</span> <span class="o">=</span> <span class="n">MMD_RKHS</span><span class="p">(</span><span class="n">kernel</span><span class="o">=</span><span class="s1">&#39;rbf&#39;</span><span class="p">,</span> <span class="n">gamma</span><span class="o">=</span><span class="mf">0.1</span><span class="p">)</span>
+<span class="n">q</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">X_train</span><span class="p">,</span> <span class="n">y_train</span><span class="p">)</span>      <span class="c1"># No classifier — works on raw features</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">q</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">X_test</span><span class="p">))</span>
+</pre></div>
+</div>
+</section>
+</section>
+<hr class="docutils" />
+<section id="score-methods-sord">
+<h2><a class="toc-backref" href="#id44" role="doc-backlink"><span class="section-number">2.7.4. </span>Score Methods — SORD</a><a class="headerlink" href="#score-methods-sord" title="Link to this heading">#</a></h2>
+<p><a class="reference internal" href="generated/mlquantify.matching.SORD.html#mlquantify.matching.SORD" title="mlquantify.matching.SORD"><code class="xref py py-class docutils literal notranslate"><span class="pre">SORD</span></code></a> (Score-based Optimal Ranking Distribution) estimates prevalence
+by comparing the <em>ranked order</em> of classifier scores between the test set
+and the mixture of class-conditional training scores, using an earth-mover-style
+distance.</p>
+<p><strong>Why it exists:</strong> SORD operates on the continuous score values without
+discretisation (no bins needed) and without density estimation. It is fast,
+parameter-free (beyond the classifier), and competitive with histogram methods.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">mlquantify.matching</span><span class="w"> </span><span class="kn">import</span> <span class="n">SORD</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">sklearn.linear_model</span><span class="w"> </span><span class="kn">import</span> <span class="n">LogisticRegression</span>
+
+<span class="n">q</span> <span class="o">=</span> <span class="n">SORD</span><span class="p">(</span><span class="n">estimator</span><span class="o">=</span><span class="n">LogisticRegression</span><span class="p">())</span>
+<span class="n">q</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">X_train</span><span class="p">,</span> <span class="n">y_train</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">q</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">X_test</span><span class="p">))</span>
+</pre></div>
+</div>
+</section>
+<hr class="docutils" />
+<section id="choosing-a-distribution-matching-method">
+<h2><a class="toc-backref" href="#id45" role="doc-backlink"><span class="section-number">2.7.5. </span>Choosing a Distribution Matching Method</a><a class="headerlink" href="#choosing-a-distribution-matching-method" title="Link to this heading">#</a></h2>
+<div class="pst-scrollable-table-container"><table class="table">
+<colgroup>
+<col style="width: 12.0%" />
+<col style="width: 12.0%" />
+<col style="width: 12.0%" />
+<col style="width: 18.0%" />
+<col style="width: 46.0%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Method</p></th>
+<th class="head"><p>Multiclass</p></th>
+<th class="head"><p>Needs clf</p></th>
+<th class="head"><p>Key hyperparameter</p></th>
+<th class="head"><p>Best for</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>DyS</p></td>
+<td><p>✗ (OvR)</p></td>
+<td><p>✓</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">bins_size</span></code>, <code class="docutils literal notranslate"><span class="pre">distance</span></code></p></td>
+<td><p>Binary; strong with median-sweep bins.</p></td>
+</tr>
+<tr class="row-odd"><td><p>HDy</p></td>
+<td><p>✗ (OvR)</p></td>
+<td><p>✓</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">bins_size</span></code></p></td>
+<td><p>Binary; tuning-free median-sweep baseline.</p></td>
+</tr>
+<tr class="row-even"><td><p>HDx</p></td>
+<td><p>✗ (OvR)</p></td>
+<td><p>✗</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">bins_size</span></code></p></td>
+<td><p>No classifier available; sanity check.</p></td>
+</tr>
+<tr class="row-odd"><td><p>KDEyHD</p></td>
+<td><p>✓</p></td>
+<td><p>✓</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">bandwidth</span></code></p></td>
+<td><p>Binary &amp; multiclass; smooth density matching.</p></td>
+</tr>
+<tr class="row-even"><td><p>KDEyML</p></td>
+<td><p>✓</p></td>
+<td><p>✓</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">bandwidth</span></code></p></td>
+<td><p><strong>Multiclass; best overall accuracy.</strong></p></td>
+</tr>
+<tr class="row-odd"><td><p>MMD_RKHS</p></td>
+<td><p>✓</p></td>
+<td><p>✗</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">kernel</span></code>, <code class="docutils literal notranslate"><span class="pre">gamma</span></code></p></td>
+<td><p>Kernel-based features; no classifier needed.</p></td>
+</tr>
+<tr class="row-even"><td><p>SORD</p></td>
+<td><p>✗ (OvR)</p></td>
+<td><p>✓</p></td>
+<td><p>None</p></td>
+<td><p>Binary; parameter-free, fast.</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<p><strong>Practical recommendation:</strong></p>
+<ul class="simple">
+<li><p>For <strong>binary</strong> problems: <strong>DyS</strong> or <strong>MS</strong> (threshold-adjustment) are strong.</p></li>
+<li><p>For <strong>multiclass</strong> problems: <strong>KDEyML</strong> is the recommended starting point.</p></li>
+<li><p>When no classifier is available: <strong>HDx</strong> or <strong>MMD_RKHS</strong>.</p></li>
+<li><p>For a parameter-free binary option: <strong>SORD</strong>.</p></li>
+</ul>
+<div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<p><a class="reference internal" href="likelihood.html#likelihood"><span class="std std-ref">Likelihood-Based Quantification</span></a> for EMQ, which is often as good as or better than DM
+methods under pure prior probability shift.</p>
+</div>
 <p>Distribution Matching (DM) methods estimate prevalences by matching the test
 distribution to a mixture of class-conditional distributions learned on the
 training data. In practice, the matching strategy depends on how distributions
@@ -494,7 +1089,7 @@ a chosen dissimilarity between the test distribution and the mixture.</p>
 <summary class="sd-summary-title sd-card-header">
 <span class="sd-summary-text">References</span><span class="sd-summary-state-marker sd-summary-chevron-right"><svg version="1.1" width="1.5em" height="1.5em" class="sd-octicon sd-octicon-chevron-right" viewBox="0 0 24 24" aria-hidden="true"><path d="M8.72 18.78a.75.75 0 0 1 0-1.06L14.44 12 8.72 6.28a.751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018l6.25 6.25a.75.75 0 0 1 0 1.06l-6.25 6.25a.75.75 0 0 1-1.06 0Z"></path></svg></span></summary><div class="sd-summary-content sd-card-body docutils">
 <aside class="footnote-list brackets">
-<aside class="footnote brackets" id="id2" role="doc-footnote">
+<aside class="footnote brackets" id="id7" role="doc-footnote">
 <span class="label"><span class="fn-bracket">[</span>1<span class="fn-bracket">]</span></span>
 <p class="sd-card-text">Forman, G. (2008). Quantifying counts and costs via classification.
 Data Mining and Knowledge Discovery, 17(2), 164-206.
@@ -502,16 +1097,17 @@ Data Mining and Knowledge Discovery, 17(2), 164-206.
 </aside>
 </aside>
 </div>
-</details><section id="histogram">
-<h2><span class="section-number">1.6.1. </span>Histogram<a class="headerlink" href="#histogram" title="Link to this heading">#</a></h2>
+</details></section>
+<section id="histogram">
+<h2><a class="toc-backref" href="#id46" role="doc-backlink"><span class="section-number">2.7.6. </span>Histogram</a><a class="headerlink" href="#histogram" title="Link to this heading">#</a></h2>
 <p>Histogram-based DM builds class-conditional histograms of posterior scores and
 fits the test histogram as a mixture of those class histograms. These methods
 are <strong>binary-first</strong> and default to one-vs-rest for multiclass settings.</p>
 <section id="dys-distribution-y-similarity-framework">
-<h3><span class="section-number">1.6.1.1. </span>DyS: Distribution y-Similarity Framework<a class="headerlink" href="#dys-distribution-y-similarity-framework" title="Link to this heading">#</a></h3>
+<h3><a class="toc-backref" href="#id47" role="doc-backlink"><span class="section-number">2.7.6.1. </span>DyS: Distribution y-Similarity Framework</a><a class="headerlink" href="#dys-distribution-y-similarity-framework" title="Link to this heading">#</a></h3>
 <p><strong>DyS</strong> is a generic framework that formalizes histogram-based matching. It
 selects the prevalence <span class="math notranslate nohighlight">\(\alpha\)</span> that minimizes a dissimilarity between
-the test score histogram and the mixture of training histograms <a class="footnote-reference brackets" href="#id5" id="id3" role="doc-noteref"><span class="fn-bracket">[</span>2<span class="fn-bracket">]</span></a>.</p>
+the test score histogram and the mixture of training histograms <a class="footnote-reference brackets" href="#id11" id="id8" role="doc-noteref"><span class="fn-bracket">[</span>2<span class="fn-bracket">]</span></a>.</p>
 <details class="sd-sphinx-override sd-dropdown sd-card sd-mb-3">
 <summary class="sd-summary-title sd-card-header">
 <span class="sd-summary-text">Mathematical details - DyS Optimization</span><span class="sd-summary-state-marker sd-summary-chevron-right"><svg version="1.1" width="1.5em" height="1.5em" class="sd-octicon sd-octicon-chevron-right" viewBox="0 0 24 24" aria-hidden="true"><path d="M8.72 18.78a.75.75 0 0 1 0-1.06L14.44 12 8.72 6.28a.751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018l6.25 6.25a.75.75 0 0 1 0 1.06l-6.25 6.25a.75.75 0 0 1-1.06 0Z"></path></svg></span></summary><div class="sd-summary-content sd-card-body docutils">
@@ -520,8 +1116,8 @@ the test score histogram and the mixture of training histograms <a class="footno
 \{ DS(\alpha f_{L^{\oplus}} + (1-\alpha) f_{L^{\ominus}}, f_U) \}\]</div>
 </div>
 </details></section>
-<section id="hdy-hellinger-distance-y-similarity">
-<h3><span class="section-number">1.6.1.2. </span>HDy: Hellinger Distance y-Similarity<a class="headerlink" href="#hdy-hellinger-distance-y-similarity" title="Link to this heading">#</a></h3>
+<section id="id9">
+<h3><a class="toc-backref" href="#id48" role="doc-backlink"><span class="section-number">2.7.6.2. </span>HDy: Hellinger Distance y-Similarity</a><a class="headerlink" href="#id9" title="Link to this heading">#</a></h3>
 <p><strong>HDy</strong> is a popular instance of DyS that uses the Hellinger distance over
 histograms of posterior probabilities.</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">mlquantify.matching</span><span class="w"> </span><span class="kn">import</span> <span class="n">HDy</span>
@@ -541,9 +1137,9 @@ histograms of posterior probabilities.</p>
 </div>
 </details></section>
 <section id="smm-sample-mean-matching">
-<h3><span class="section-number">1.6.1.3. </span>SMM: Sample Mean Matching<a class="headerlink" href="#smm-sample-mean-matching" title="Link to this heading">#</a></h3>
+<h3><a class="toc-backref" href="#id49" role="doc-backlink"><span class="section-number">2.7.6.3. </span>SMM: Sample Mean Matching</a><a class="headerlink" href="#smm-sample-mean-matching" title="Link to this heading">#</a></h3>
 <p><strong>SMM</strong> replaces histograms with a single statistic: the mean score. It solves
-the mixture matching problem in closed form and is equivalent to PACC <a class="footnote-reference brackets" href="#id7" id="id4" role="doc-noteref"><span class="fn-bracket">[</span>4<span class="fn-bracket">]</span></a>.</p>
+the mixture matching problem in closed form and is equivalent to PACC <a class="footnote-reference brackets" href="#id13" id="id10" role="doc-noteref"><span class="fn-bracket">[</span>4<span class="fn-bracket">]</span></a>.</p>
 <details class="sd-sphinx-override sd-dropdown sd-card sd-mb-3">
 <summary class="sd-summary-title sd-card-header">
 <span class="sd-summary-text">Mathematical details - SMM Closed Form</span><span class="sd-summary-state-marker sd-summary-chevron-right"><svg version="1.1" width="1.5em" height="1.5em" class="sd-octicon sd-octicon-chevron-right" viewBox="0 0 24 24" aria-hidden="true"><path d="M8.72 18.78a.75.75 0 0 1 0-1.06L14.44 12 8.72 6.28a.751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018l6.25 6.25a.75.75 0 0 1 0 1.06l-6.25 6.25a.75.75 0 0 1-1.06 0Z"></path></svg></span></summary><div class="sd-summary-content sd-card-body docutils">
@@ -551,30 +1147,30 @@ the mixture matching problem in closed form and is equivalent to PACC <a class="
 \[\alpha = \frac{\mu[S_U] - \mu[S_{\ominus}]}{\mu[S_{\oplus}] - \mu[S_{\ominus}]}\]</div>
 </div>
 </details><p>(<a class="reference download internal" download="" href="../_downloads/e324f0d1ca96ccfbe27860c0347cf4fb/distribution_matching-1.py"><code class="xref download docutils literal notranslate"><span class="pre">Source</span> <span class="pre">code</span></code></a>, <a class="reference download internal" download="" href="../_downloads/39e85d3ba124f2c61dc28de3982d3133/distribution_matching-1.png"><code class="xref download docutils literal notranslate"><span class="pre">png</span></code></a>, <a class="reference download internal" download="" href="../_downloads/a0dc95f15062feb0839348b0d4bfb57e/distribution_matching-1.hires.png"><code class="xref download docutils literal notranslate"><span class="pre">hires.png</span></code></a>, <a class="reference download internal" download="" href="../_downloads/7487a30e779baf31aac3ff85bb36f0f3/distribution_matching-1.pdf"><code class="xref download docutils literal notranslate"><span class="pre">pdf</span></code></a>)</p>
-<figure class="align-center" id="id13">
+<figure class="align-center" id="id20">
 <img alt="../_images/distribution_matching-1.png" class="plot-directive" src="../_images/distribution_matching-1.png" />
 <figcaption>
-<p><span class="caption-text">Histogram mixtures used by DyS/HDy-like methods.</span><a class="headerlink" href="#id13" title="Link to this image">#</a></p>
+<p><span class="caption-text">Histogram mixtures used by DyS/HDy-like methods.</span><a class="headerlink" href="#id20" title="Link to this image">#</a></p>
 </figcaption>
 </figure>
 <details class="sd-sphinx-override sd-dropdown sd-card sd-mb-3">
 <summary class="sd-summary-title sd-card-header">
 <span class="sd-summary-text">References</span><span class="sd-summary-state-marker sd-summary-chevron-right"><svg version="1.1" width="1.5em" height="1.5em" class="sd-octicon sd-octicon-chevron-right" viewBox="0 0 24 24" aria-hidden="true"><path d="M8.72 18.78a.75.75 0 0 1 0-1.06L14.44 12 8.72 6.28a.751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018l6.25 6.25a.75.75 0 0 1 0 1.06l-6.25 6.25a.75.75 0 0 1-1.06 0Z"></path></svg></span></summary><div class="sd-summary-content sd-card-body docutils">
 <aside class="footnote-list brackets">
-<aside class="footnote brackets" id="id5" role="doc-footnote">
-<span class="label"><span class="fn-bracket">[</span><a role="doc-backlink" href="#id3">2</a><span class="fn-bracket">]</span></span>
+<aside class="footnote brackets" id="id11" role="doc-footnote">
+<span class="label"><span class="fn-bracket">[</span><a role="doc-backlink" href="#id8">2</a><span class="fn-bracket">]</span></span>
 <p class="sd-card-text">Maletzke, A., dos Reis, D., Cherman, E., &amp; Batista, G. (2019).
 DyS: A Framework for Mixture Models in Quantification. AAAI.</p>
 </aside>
-<aside class="footnote brackets" id="id6" role="doc-footnote">
+<aside class="footnote brackets" id="id12" role="doc-footnote">
 <span class="label"><span class="fn-bracket">[</span>3<span class="fn-bracket">]</span></span>
 <p class="sd-card-text">González-Castro, V., Alaiz-Rodríguez, R., &amp; Alegre, E. (2013).
 Class distribution estimation based on the Hellinger distance.
 Information Sciences, 218, 146-164.
 <a class="reference external" href="https://doi.org/10.1016/j.ins.2012.05.028">https://doi.org/10.1016/j.ins.2012.05.028</a></p>
 </aside>
-<aside class="footnote brackets" id="id7" role="doc-footnote">
-<span class="label"><span class="fn-bracket">[</span><a role="doc-backlink" href="#id4">4</a><span class="fn-bracket">]</span></span>
+<aside class="footnote brackets" id="id13" role="doc-footnote">
+<span class="label"><span class="fn-bracket">[</span><a role="doc-backlink" href="#id10">4</a><span class="fn-bracket">]</span></span>
 <p class="sd-card-text">Hassan, W., Maletzke, A., &amp; Batista, G. (2020).
 Accurately quantifying a billion instances per second. IEEE DSAA.</p>
 </aside>
@@ -583,22 +1179,22 @@ Accurately quantifying a billion instances per second. IEEE DSAA.</p>
 </details></section>
 </section>
 <section id="density">
-<h2><span class="section-number">1.6.2. </span>Density<a class="headerlink" href="#density" title="Link to this heading">#</a></h2>
+<h2><a class="toc-backref" href="#id50" role="doc-backlink"><span class="section-number">2.7.7. </span>Density</a><a class="headerlink" href="#density" title="Link to this heading">#</a></h2>
 <section id="kdey-kernel-density-estimation-y-similarity">
-<h3><span class="section-number">1.6.2.1. </span>KDEy: Kernel Density Estimation y-Similarity<a class="headerlink" href="#kdey-kernel-density-estimation-y-similarity" title="Link to this heading">#</a></h3>
+<h3><a class="toc-backref" href="#id51" role="doc-backlink"><span class="section-number">2.7.7.1. </span>KDEy: Kernel Density Estimation y-Similarity</a><a class="headerlink" href="#kdey-kernel-density-estimation-y-similarity" title="Link to this heading">#</a></h3>
 <p><strong>KDEy</strong> is a multi-class DM approach that replaces histograms with continuous
 densities over the probability simplex, allowing it to model inter-class
-interactions and avoid binning artifacts <a class="footnote-reference brackets" href="#id11" id="id8" role="doc-noteref"><span class="fn-bracket">[</span>5<span class="fn-bracket">]</span></a>.</p>
-<figure class="align-center" id="id15">
+interactions and avoid binning artifacts <a class="footnote-reference brackets" href="#id17" id="id14" role="doc-noteref"><span class="fn-bracket">[</span>5<span class="fn-bracket">]</span></a>.</p>
+<figure class="align-center" id="id22">
 <a class="reference internal image-reference" href="../_images/kdey-concept.png"><img alt="KDEy Concept Illustration" src="../_images/kdey-concept.png" style="width: 80%;" />
 </a>
 <figcaption>
-<p><span class="caption-text"><em>Illustration of KDEy modeling class-conditional densities on the probability simplex.</em></span><a class="headerlink" href="#id15" title="Link to this image">#</a></p>
+<p><span class="caption-text"><em>Illustration of KDEy modeling class-conditional densities on the probability simplex.</em></span><a class="headerlink" href="#id22" title="Link to this image">#</a></p>
 </figcaption>
 </figure>
 </section>
 <section id="kdey-ml-maximum-likelihood">
-<h3><span class="section-number">1.6.2.2. </span>KDEy-ML (Maximum Likelihood)<a class="headerlink" href="#kdey-ml-maximum-likelihood" title="Link to this heading">#</a></h3>
+<h3><a class="toc-backref" href="#id52" role="doc-backlink"><span class="section-number">2.7.7.2. </span>KDEy-ML (Maximum Likelihood)</a><a class="headerlink" href="#kdey-ml-maximum-likelihood" title="Link to this heading">#</a></h3>
 <p>The <a class="reference internal" href="generated/mlquantify.matching.KDEyML.html#mlquantify.matching.KDEyML" title="mlquantify.matching.KDEyML"><code class="xref py py-class docutils literal notranslate"><span class="pre">KDEyML</span></code></a> class maximizes the likelihood of the test scores under the
 mixture of KDE class-conditional densities.</p>
 <details class="sd-sphinx-override sd-dropdown sd-card sd-mb-3">
@@ -610,42 +1206,42 @@ mixture of KDE class-conditional densities.</p>
 </div>
 </details></section>
 <section id="kdey-hd-hellinger-distance">
-<h3><span class="section-number">1.6.2.3. </span>KDEy-HD (Hellinger Distance)<a class="headerlink" href="#kdey-hd-hellinger-distance" title="Link to this heading">#</a></h3>
+<h3><a class="toc-backref" href="#id53" role="doc-backlink"><span class="section-number">2.7.7.3. </span>KDEy-HD (Hellinger Distance)</a><a class="headerlink" href="#kdey-hd-hellinger-distance" title="Link to this heading">#</a></h3>
 <p>The <a class="reference internal" href="generated/mlquantify.matching.KDEyHD.html#mlquantify.matching.KDEyHD" title="mlquantify.matching.KDEyHD"><code class="xref py py-class docutils literal notranslate"><span class="pre">KDEyHD</span></code></a> class minimizes the Hellinger distance between the test KDE
 and the mixture of class-conditional KDEs using Monte Carlo approximation.</p>
 </section>
 <section id="kdey-cs-cauchy-schwarz">
-<h3><span class="section-number">1.6.2.4. </span>KDEy-CS (Cauchy-Schwarz)<a class="headerlink" href="#kdey-cs-cauchy-schwarz" title="Link to this heading">#</a></h3>
+<h3><a class="toc-backref" href="#id54" role="doc-backlink"><span class="section-number">2.7.7.4. </span>KDEy-CS (Cauchy-Schwarz)</a><a class="headerlink" href="#kdey-cs-cauchy-schwarz" title="Link to this heading">#</a></h3>
 <p>The <a class="reference internal" href="generated/mlquantify.matching.KDEyCS.html#mlquantify.matching.KDEyCS" title="mlquantify.matching.KDEyCS"><code class="xref py py-class docutils literal notranslate"><span class="pre">KDEyCS</span></code></a> class minimizes the Cauchy-Schwarz divergence with a closed
 form that leverages kernel Gram matrices.</p>
 <p>(<a class="reference download internal" download="" href="../_downloads/77b3df67398aa4700dd8937018652f44/distribution_matching-2.py"><code class="xref download docutils literal notranslate"><span class="pre">Source</span> <span class="pre">code</span></code></a>, <a class="reference download internal" download="" href="../_downloads/6fec3daf6c0acb755666aa1c66465ca2/distribution_matching-2.png"><code class="xref download docutils literal notranslate"><span class="pre">png</span></code></a>, <a class="reference download internal" download="" href="../_downloads/c043c12feb7f716becca02092f4f1913/distribution_matching-2.hires.png"><code class="xref download docutils literal notranslate"><span class="pre">hires.png</span></code></a>, <a class="reference download internal" download="" href="../_downloads/3300d27a660362256deb50bdd04bb427/distribution_matching-2.pdf"><code class="xref download docutils literal notranslate"><span class="pre">pdf</span></code></a>)</p>
-<figure class="align-center" id="id16">
+<figure class="align-center" id="id23">
 <img alt="../_images/distribution_matching-2.png" class="plot-directive" src="../_images/distribution_matching-2.png" />
 <figcaption>
-<p><span class="caption-text">KDE-based density matching over the simplex (illustrative).</span><a class="headerlink" href="#id16" title="Link to this image">#</a></p>
+<p><span class="caption-text">KDE-based density matching over the simplex (illustrative).</span><a class="headerlink" href="#id23" title="Link to this image">#</a></p>
 </figcaption>
 </figure>
 </section>
 </section>
 <section id="kernel">
-<h2><span class="section-number">1.6.3. </span>Kernel<a class="headerlink" href="#kernel" title="Link to this heading">#</a></h2>
+<h2><a class="toc-backref" href="#id55" role="doc-backlink"><span class="section-number">2.7.8. </span>Kernel</a><a class="headerlink" href="#kernel" title="Link to this heading">#</a></h2>
 <p>Kernel matching minimizes the distance between the kernel mean embedding of
 the test sample and the mixture of class-conditional kernel mean embeddings.
 The <a class="reference internal" href="generated/mlquantify.matching.MatchingKernelQuantifier.html#mlquantify.matching.MatchingKernelQuantifier" title="mlquantify.matching.MatchingKernelQuantifier"><code class="xref py py-class docutils literal notranslate"><span class="pre">MatchingKernelQuantifier</span></code></a> base class implements this strategy and
-the <a class="reference internal" href="generated/mlquantify.matching.MMD_RKHS.html#mlquantify.matching.MMD_RKHS" title="mlquantify.matching.MMD_RKHS"><code class="xref py py-class docutils literal notranslate"><span class="pre">MMD_RKHS</span></code></a> quantifier provides the standard RKHS formulation <a class="footnote-reference brackets" href="#id10" id="id9" role="doc-noteref"><span class="fn-bracket">[</span>6<span class="fn-bracket">]</span></a>.</p>
+the <a class="reference internal" href="generated/mlquantify.matching.MMD_RKHS.html#mlquantify.matching.MMD_RKHS" title="mlquantify.matching.MMD_RKHS"><code class="xref py py-class docutils literal notranslate"><span class="pre">MMD_RKHS</span></code></a> quantifier provides the standard RKHS formulation <a class="footnote-reference brackets" href="#id16" id="id15" role="doc-noteref"><span class="fn-bracket">[</span>6<span class="fn-bracket">]</span></a>.</p>
 <p>(<a class="reference download internal" download="" href="../_downloads/2735a378db8aa83302c81d4ccb4ed3c8/distribution_matching-3.py"><code class="xref download docutils literal notranslate"><span class="pre">Source</span> <span class="pre">code</span></code></a>, <a class="reference download internal" download="" href="../_downloads/7809ee29fa1ecaa0ea62b534c30098d7/distribution_matching-3.png"><code class="xref download docutils literal notranslate"><span class="pre">png</span></code></a>, <a class="reference download internal" download="" href="../_downloads/5737fec94e6782d4aca44b36e3b27ddf/distribution_matching-3.hires.png"><code class="xref download docutils literal notranslate"><span class="pre">hires.png</span></code></a>, <a class="reference download internal" download="" href="../_downloads/08f2717a5de33806427360b8fd2e80c1/distribution_matching-3.pdf"><code class="xref download docutils literal notranslate"><span class="pre">pdf</span></code></a>)</p>
-<figure class="align-center" id="id18">
+<figure class="align-center" id="id25">
 <img alt="../_images/distribution_matching-3.png" class="plot-directive" src="../_images/distribution_matching-3.png" />
 <figcaption>
-<p><span class="caption-text">Kernel similarities used for mean matching.</span><a class="headerlink" href="#id18" title="Link to this image">#</a></p>
+<p><span class="caption-text">Kernel similarities used for mean matching.</span><a class="headerlink" href="#id25" title="Link to this image">#</a></p>
 </figcaption>
 </figure>
 <details class="sd-sphinx-override sd-dropdown sd-card sd-mb-3">
 <summary class="sd-summary-title sd-card-header">
 <span class="sd-summary-text">References</span><span class="sd-summary-state-marker sd-summary-chevron-right"><svg version="1.1" width="1.5em" height="1.5em" class="sd-octicon sd-octicon-chevron-right" viewBox="0 0 24 24" aria-hidden="true"><path d="M8.72 18.78a.75.75 0 0 1 0-1.06L14.44 12 8.72 6.28a.751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018l6.25 6.25a.75.75 0 0 1 0 1.06l-6.25 6.25a.75.75 0 0 1-1.06 0Z"></path></svg></span></summary><div class="sd-summary-content sd-card-body docutils">
 <aside class="footnote-list brackets">
-<aside class="footnote brackets" id="id10" role="doc-footnote">
-<span class="label"><span class="fn-bracket">[</span><a role="doc-backlink" href="#id9">6</a><span class="fn-bracket">]</span></span>
+<aside class="footnote brackets" id="id16" role="doc-footnote">
+<span class="label"><span class="fn-bracket">[</span><a role="doc-backlink" href="#id15">6</a><span class="fn-bracket">]</span></span>
 <p class="sd-card-text">Zhang, K., Schölkopf, B., Muandet, K., &amp; Wang, Z. (2013).
 Domain Adaptation under Target and Conditional Shift. ICML.</p>
 </aside>
@@ -653,28 +1249,28 @@ Domain Adaptation under Target and Conditional Shift. ICML.</p>
 </div>
 </details></section>
 <section id="scores">
-<h2><span class="section-number">1.6.4. </span>Scores<a class="headerlink" href="#scores" title="Link to this heading">#</a></h2>
+<h2><a class="toc-backref" href="#id56" role="doc-backlink"><span class="section-number">2.7.9. </span>Scores</a><a class="headerlink" href="#scores" title="Link to this heading">#</a></h2>
 <p>Score-based matching works directly on the score samples rather than binned
 histograms. The <a class="reference internal" href="generated/mlquantify.matching.SORD.html#mlquantify.matching.SORD" title="mlquantify.matching.SORD"><code class="xref py py-class docutils literal notranslate"><span class="pre">SORD</span></code></a> quantifier minimizes a cumulative distance
 between the test score distribution and the weighted mixture of train scores.</p>
 <p>(<a class="reference download internal" download="" href="../_downloads/17fa31b781caf90b155fe09121c535d6/distribution_matching-4.py"><code class="xref download docutils literal notranslate"><span class="pre">Source</span> <span class="pre">code</span></code></a>, <a class="reference download internal" download="" href="../_downloads/a5165f72f30cdad23c3327f08f5a4212/distribution_matching-4.png"><code class="xref download docutils literal notranslate"><span class="pre">png</span></code></a>, <a class="reference download internal" download="" href="../_downloads/e318bd557eef929dfadbcf461b4662a9/distribution_matching-4.hires.png"><code class="xref download docutils literal notranslate"><span class="pre">hires.png</span></code></a>, <a class="reference download internal" download="" href="../_downloads/e7fee1342487ccd9ec89726c87a21e0d/distribution_matching-4.pdf"><code class="xref download docutils literal notranslate"><span class="pre">pdf</span></code></a>)</p>
-<figure class="align-center" id="id20">
+<figure class="align-center" id="id27">
 <img alt="../_images/distribution_matching-4.png" class="plot-directive" src="../_images/distribution_matching-4.png" />
 <figcaption>
-<p><span class="caption-text">Sample-based matching with cumulative score distances.</span><a class="headerlink" href="#id20" title="Link to this image">#</a></p>
+<p><span class="caption-text">Sample-based matching with cumulative score distances.</span><a class="headerlink" href="#id27" title="Link to this image">#</a></p>
 </figcaption>
 </figure>
 <details class="sd-sphinx-override sd-dropdown sd-card sd-mb-3">
 <summary class="sd-summary-title sd-card-header">
 <span class="sd-summary-text">References</span><span class="sd-summary-state-marker sd-summary-chevron-right"><svg version="1.1" width="1.5em" height="1.5em" class="sd-octicon sd-octicon-chevron-right" viewBox="0 0 24 24" aria-hidden="true"><path d="M8.72 18.78a.75.75 0 0 1 0-1.06L14.44 12 8.72 6.28a.751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018l6.25 6.25a.75.75 0 0 1 0 1.06l-6.25 6.25a.75.75 0 0 1-1.06 0Z"></path></svg></span></summary><div class="sd-summary-content sd-card-body docutils">
 <aside class="footnote-list brackets">
-<aside class="footnote brackets" id="id11" role="doc-footnote">
-<span class="label"><span class="fn-bracket">[</span><a role="doc-backlink" href="#id8">5</a><span class="fn-bracket">]</span></span>
+<aside class="footnote brackets" id="id17" role="doc-footnote">
+<span class="label"><span class="fn-bracket">[</span><a role="doc-backlink" href="#id14">5</a><span class="fn-bracket">]</span></span>
 <p class="sd-card-text">Moreo, A., González, P., &amp; del Coz, J. J. (2024).
 Kernel Density Estimation for Multiclass Quantification.
 <a class="reference external" href="http://arxiv.org/abs/2401.00490">http://arxiv.org/abs/2401.00490</a></p>
 </aside>
-<aside class="footnote brackets" id="id12" role="doc-footnote">
+<aside class="footnote brackets" id="id18" role="doc-footnote">
 <span class="label"><span class="fn-bracket">[</span>7<span class="fn-bracket">]</span></span>
 <p class="sd-card-text">Maletzke, A., dos Reis, D., Hassan, W., &amp; Batista, G. (2021).
 Accurately Quantifying under Score Variability.</p>
@@ -700,7 +1296,7 @@ Accurately Quantifying under Score Variability.</p>
       <i class="fa-solid fa-angle-left"></i>
       <div class="prev-next-info">
         <p class="prev-next-subtitle">previous</p>
-        <p class="prev-next-title"><span class="section-number">1.5. </span>Likelihood-Based Quantification</p>
+        <p class="prev-next-title"><span class="section-number">2.6. </span>Likelihood-Based Quantification</p>
       </div>
     </a>
     <a class="right-next"
@@ -708,7 +1304,7 @@ Accurately Quantifying under Score Variability.</p>
        title="next page">
       <div class="prev-next-info">
         <p class="prev-next-subtitle">next</p>
-        <p class="prev-next-title"><span class="section-number">1.7. </span>Nearest Neighbors</p>
+        <p class="prev-next-title"><span class="section-number">2.8. </span>Nearest Neighbours</p>
       </div>
       <i class="fa-solid fa-angle-right"></i>
     </a>
@@ -735,21 +1331,44 @@ Accurately Quantifying under Score Variability.</p>
   </div>
   <nav id="pst-page-toc-nav" class="page-toc" aria-labelledby="pst-page-navigation-heading-2">
     <ul class="pst-show_toc_level nav section-nav flex-column">
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#histogram">1.6.1. Histogram</a><ul class="nav section-nav flex-column">
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#dys-distribution-y-similarity-framework">1.6.1.1. DyS: Distribution y-Similarity Framework</a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#hdy-hellinger-distance-y-similarity">1.6.1.2. HDy: Hellinger Distance y-Similarity</a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#smm-sample-mean-matching">1.6.1.3. SMM: Sample Mean Matching</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#histogram-methods">2.7.1. Histogram Methods</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#dys-distribution-y-similarity">2.7.1.1. DyS — Distribution y-Similarity</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#parameters">2.7.1.2. Parameters</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#examples">2.7.1.3. Examples</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#hdy-hellinger-distance-y-similarity">2.7.1.4. HDy — Hellinger Distance y-Similarity</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id2">2.7.1.5. Parameters</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#hdx-hellinger-distance-x-similarity-classifier-free">2.7.1.6. HDx — Hellinger Distance x-Similarity (classifier-free)</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id3">2.7.1.7. Parameters</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#smm-score-mixture-model">2.7.1.8. SMM — Score Mixture Model</a></li>
 </ul>
 </li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#density">1.6.2. Density</a><ul class="nav section-nav flex-column">
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#kdey-kernel-density-estimation-y-similarity">1.6.2.1. KDEy: Kernel Density Estimation y-Similarity</a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#kdey-ml-maximum-likelihood">1.6.2.2. KDEy-ML (Maximum Likelihood)</a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#kdey-hd-hellinger-distance">1.6.2.3. KDEy-HD (Hellinger Distance)</a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#kdey-cs-cauchy-schwarz">1.6.2.4. KDEy-CS (Cauchy-Schwarz)</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#density-methods-kdey">2.7.2. Density Methods — KDEy</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#kdey-hd-kdey-cs-kdey-ml">2.7.2.1. KDEy-HD, KDEy-CS, KDEy-ML</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id4">2.7.2.2. Parameters</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id5">2.7.2.3. Examples</a></li>
 </ul>
 </li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#kernel">1.6.3. Kernel</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#scores">1.6.4. Scores</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#kernel-methods-mmd">2.7.3. Kernel Methods — MMD</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id6">2.7.3.1. Parameters</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#score-methods-sord">2.7.4. Score Methods — SORD</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#choosing-a-distribution-matching-method">2.7.5. Choosing a Distribution Matching Method</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#histogram">2.7.6. Histogram</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#dys-distribution-y-similarity-framework">2.7.6.1. DyS: Distribution y-Similarity Framework</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id9">2.7.6.2. HDy: Hellinger Distance y-Similarity</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#smm-sample-mean-matching">2.7.6.3. SMM: Sample Mean Matching</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#density">2.7.7. Density</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#kdey-kernel-density-estimation-y-similarity">2.7.7.1. KDEy: Kernel Density Estimation y-Similarity</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#kdey-ml-maximum-likelihood">2.7.7.2. KDEy-ML (Maximum Likelihood)</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#kdey-hd-hellinger-distance">2.7.7.3. KDEy-HD (Hellinger Distance)</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#kdey-cs-cauchy-schwarz">2.7.7.4. KDEy-CS (Cauchy-Schwarz)</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#kernel">2.7.8. Kernel</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#scores">2.7.9. Scores</a></li>
 </ul>
   </nav></div>
 

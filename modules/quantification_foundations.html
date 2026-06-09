@@ -1,0 +1,1045 @@
+
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="../" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+<meta property="og:title" content="1. Quantification Foundations" />
+<meta property="og:type" content="website" />
+<meta property="og:url" content="modules/quantification_foundations.html" />
+<meta property="og:site_name" content="mlquantify" />
+<meta property="og:description" content="This page introduces the core theory behind quantification — what the problem is, why it differs from classification, how dataset shift motivates it, and how the main method families address it. Re..." />
+<meta property="og:image:width" content="1146" />
+<meta property="og:image:height" content="600" />
+<meta property="og:image" content="_images/social_previews/summary_modules_quantification_foundations_71a24696.png" />
+<meta property="og:image:alt" content="This page introduces the core theory behind quantification — what the problem is, why it differs from classification, how dataset shift motivates it, and how the main method families address it. Re..." />
+<meta name="description" content="This page introduces the core theory behind quantification — what the problem is, why it differs from classification, how dataset shift motivates it, and how the main method families address it. Re..." />
+<meta name="twitter:card" content="summary_large_image" />
+
+    <title>1. Quantification Foundations &#8212; mlquantify</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
+  </script>
+  <!--
+    this give us a css class that will be invisible only if js is disabled
+  -->
+  <noscript>
+    <style>
+      .pst-js-only { display: none !important; }
+
+    </style>
+  </noscript>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../_static/styles/theme.css?digest=0790524f97105ba85085" rel="stylesheet" />
+<link href="../_static/styles/pydata-sphinx-theme.css?digest=0790524f97105ba85085" rel="stylesheet" />
+
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=8f2a1f02" />
+    <link rel="stylesheet" type="text/css" href="../_static/copybutton.css?v=76b2166b" />
+    <link rel="stylesheet" type="text/css" href="../_static/plot_directive.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinx-design.min.css?v=95c83b7e" />
+    <link rel="stylesheet" type="text/css" href="../_static/variables.css?v=fded66fe" />
+    <link rel="stylesheet" type="text/css" href="../_static/theme_overrides.css?v=dec63a3c" />
+    <link rel="stylesheet" type="text/css" href="../_static/landing.css?v=e93fd00d" />
+  
+  <!-- So that users can add custom icons -->
+  <script defer src="../_static/scripts/fontawesome.js?digest=0790524f97105ba85085"></script>
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=0790524f97105ba85085" />
+<link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=0790524f97105ba85085" />
+
+    <script src="../_static/documentation_options.js?v=dc233e31"></script>
+    <script src="../_static/doctools.js?v=9bcbadda"></script>
+    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../_static/clipboard.min.js?v=a7894cd8"></script>
+    <script src="../_static/copybutton.js?v=f281be69"></script>
+    <script src="../_static/design-tabs.js?v=f930bc37"></script>
+    <script async="async" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'modules/quantification_foundations';</script>
+    <script>DOCUMENTATION_OPTIONS.search_as_you_type = false;</script>
+    <link rel="canonical" href="https://luizfernandolj.github.io/mlquantify/modules/quantification_foundations.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="2. Aggregative Quantification" href="../aggregative_quantification.html" />
+    <link rel="prev" title="User Guide" href="../user_guide.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  <meta name="docsearch:version" content="" />
+  
+    
+    <script src="../_static/searchtools.js"></script>
+    <script src="../_static/language_data.js"></script>
+    <script src="../searchindex.js"></script>
+  
+  </head>
+  <body data-default-mode="">
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+  
+  
+  
+  
+  <dialog id="pst-search-dialog">
+    
+<form class="bd-search d-flex align-items-center"
+      action="../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         placeholder="Search the docs ..."
+         aria-label="Search the docs ..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form>
+  </dialog>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
+  
+    <header id="pst-header" class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+<div class="bd-header__inner bd-page-width">
+  <button class="pst-navbar-icon sidebar-toggle primary-toggle" aria-label="Site navigation">
+    <span class="fa-solid fa-bars"></span>
+  </button>
+  
+  
+  <div class=" navbar-header-items__start">
+    
+      <div class="navbar-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="../index.html">
+  
+  
+  
+  
+  
+    
+    
+      
+    
+    
+    <img src="../_static/logo_mlquantify.svg" class="logo__image only-light" alt="mlquantify homepage"/>
+    <img src="../_static/logo_mlquantify-white.svg" class="logo__image only-dark pst-js-only" alt="mlquantify homepage"/>
+  
+  
+</a></div>
+    
+  </div>
+  
+  <div class=" navbar-header-items">
+    
+    <div class="me-auto navbar-header-items__center">
+      
+        <div class="navbar-item">
+<nav>
+  <ul class="bd-navbar-elements navbar-nav">
+    
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../install.html">
+    Install
+  </a>
+</li>
+
+
+<li class="nav-item current active">
+  <a class="nav-link nav-internal" href="../user_guide.html">
+    User Guide
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../api/index.html">
+    API
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../getting_started.html">
+    Getting Started
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../about_us.html">
+    About Us
+  </a>
+</li>
+
+  </ul>
+</nav></div>
+      
+    </div>
+    
+    
+    <div class="navbar-header-items__end">
+      
+        <div class="navbar-item navbar-persistent--container">
+          
+
+<button class="btn btn-sm pst-navbar-icon search-button search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass fa-lg"></i>
+</button>
+        </div>
+      
+      
+        <div class="navbar-item">
+
+<div class="theme-switch-container dropdown pst-js-only" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Color mode">
+  <button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button dropdown-toggle" aria-label="Color mode" data-bs-toggle="dropdown">
+    <i class="theme-switch fa-solid fa-sun fa-lg fa-fw" data-mode="light" title="Light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg fa-fw" data-mode="dark" title="Dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg fa-fw" data-mode="auto" title="System Settings"></i>
+  </button>
+  <ul class="dropdown-menu dropdown-menu-end">
+    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="auto"><i class="fa-solid fa-circle-half-stroke fa-lg fa-fw me-1"></i>System Settings</button></li>
+    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="light"><i class="fa-solid fa-sun fa-lg fa-fw me-1"></i>Light</button></li>
+    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="dark"><i class="fa-solid fa-moon fa-lg fa-fw me-1"></i>Dark</button></li>
+  </ul>
+</div></div>
+      
+        <div class="navbar-item"><ul class="navbar-icon-links"
+    aria-label="Icon Links">
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://github.com/luizfernandolj/mlquantify/tree/master" title="GitHub" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><i class="fa-brands fa-square-github fa-lg" aria-hidden="true"></i><span class="visually-hidden">GitHub</span></a>
+        </li>
+</ul></div>
+      
+    </div>
+    
+  </div>
+  
+  
+    <div class="navbar-persistent--mobile">
+
+<button class="btn btn-sm pst-navbar-icon search-button search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass fa-lg"></i>
+</button>
+    </div>
+  
+
+  
+    <button class="pst-navbar-icon sidebar-toggle secondary-toggle" aria-label="On this page">
+      <span class="fa-solid fa-outdent"></span>
+    </button>
+  
+</div>
+
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+      <dialog id="pst-primary-sidebar-modal"></dialog>
+      <div id="pst-primary-sidebar" class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+      <div class="sidebar-header-items__center">
+        
+          
+          
+            <div class="navbar-item">
+<nav>
+  <ul class="bd-navbar-elements navbar-nav">
+    
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../install.html">
+    Install
+  </a>
+</li>
+
+
+<li class="nav-item current active">
+  <a class="nav-link nav-internal" href="../user_guide.html">
+    User Guide
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../api/index.html">
+    API
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../getting_started.html">
+    Getting Started
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../about_us.html">
+    About Us
+  </a>
+</li>
+
+  </ul>
+</nav></div>
+          
+        
+      </div>
+    
+    
+    
+      <div class="sidebar-header-items__end">
+        
+          <div class="navbar-item">
+
+<div class="theme-switch-container dropdown pst-js-only" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Color mode">
+  <button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button dropdown-toggle" aria-label="Color mode" data-bs-toggle="dropdown">
+    <i class="theme-switch fa-solid fa-sun fa-lg fa-fw" data-mode="light" title="Light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg fa-fw" data-mode="dark" title="Dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg fa-fw" data-mode="auto" title="System Settings"></i>
+  </button>
+  <ul class="dropdown-menu dropdown-menu-end">
+    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="auto"><i class="fa-solid fa-circle-half-stroke fa-lg fa-fw me-1"></i>System Settings</button></li>
+    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="light"><i class="fa-solid fa-sun fa-lg fa-fw me-1"></i>Light</button></li>
+    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="dark"><i class="fa-solid fa-moon fa-lg fa-fw me-1"></i>Dark</button></li>
+  </ul>
+</div></div>
+        
+          <div class="navbar-item"><ul class="navbar-icon-links"
+    aria-label="Icon Links">
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://github.com/luizfernandolj/mlquantify/tree/master" title="GitHub" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><i class="fa-brands fa-square-github fa-lg" aria-hidden="true"></i><span class="visually-hidden">GitHub</span></a>
+        </li>
+</ul></div>
+        
+      </div>
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item pst-sidebar-collapse"><button id="pst-collapse-sidebar-button" aria-expanded="true" aria-controls="pst-primary-sidebar"><svg class="pst-icon svg-inline--fa" role="img" aria-hidden="true" focusable="false" viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg">
+    <path fill="currentColor" d="M3 15.5C2.36232 15.5 1.74874 15.2564 1.28478 14.8189C0.820828 14.3815 0.541576 13.7832 0.504167 13.1467L0.5 13L0.5 3C0.499965 2.36232 0.743605 1.74874 1.18107 1.28478C1.61854 0.820828 2.21676 0.541576 2.85333 0.504167L3 0.5L13 0.5C13.6377 0.499965 14.2513 0.743605 14.7152 1.18107C15.1792 1.61854 15.4584 2.21676 15.4958 2.85333L15.5 3L15.5 13C15.5 13.6377 15.2564 14.2513 14.8189 14.7152C14.3815 15.1792 13.7832 15.4584 13.1467 15.4958L13 15.5L3 15.5ZM3 13.8333L10.5 13.8333L10.5 2.16667L3 2.16667C2.79589 2.16669 2.59889 2.24163 2.44636 2.37726C2.29383 2.5129 2.19638 2.69979 2.1725 2.9025L2.16667 3L2.16667 13C2.16669 13.2041 2.24163 13.4011 2.37726 13.5536C2.5129 13.7062 2.69979 13.8036 2.9025 13.8275L3 13.8333ZM6.65583 10.325L6.5775 10.2558L4.91083 8.58917C4.76735 8.44567 4.68116 8.25476 4.66843 8.05223C4.65569 7.84971 4.71729 7.6495 4.84167 7.48917L4.91083 7.41083L6.5775 5.74417C6.72747 5.59471 6.9287 5.50794 7.14032 5.50148C7.35194 5.49502 7.55809 5.56935 7.7169 5.70937C7.8757 5.8494 7.97525 6.04463 7.99533 6.25539C8.01541 6.46616 7.95451 6.67667 7.825 6.84417L7.75583 6.9225L6.67917 8L7.75583 9.0775C7.89931 9.22099 7.98551 9.41191 7.99824 9.61443C8.01097 9.81695 7.94938 10.0172 7.825 10.1775L7.75583 10.2558C7.61234 10.3993 7.42142 10.4855 7.2189 10.4982C7.01638 10.511 6.81617 10.4494 6.65583 10.325Z"/>
+  </svg>
+  <span class="pst-collapse-sidebar-label">Collapse Sidebar</span>
+  <span class="pst-expand-sidebar-label">Expand Sidebar</span>
+</button></div>
+        <div class="sidebar-primary-item">
+
+<nav class="bd-docs-nav bd-links"
+     aria-label="Section Navigation">
+  <p class="bd-links__title" role="heading" aria-level="1">Section Navigation</p>
+  <div class="bd-toc-item navbar-nav"><ul class="current nav bd-sidenav">
+<li class="toctree-l1 current active"><a class="current reference internal" href="#">1. Foundations</a></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../aggregative_quantification.html">2. Aggregative Quantification</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="using_aggregative.html">2.1. Using Aggregative Quantification Methods</a></li>
+
+<li class="toctree-l2"><a class="reference internal" href="counters.html">2.3. Counting-Based Quantifiers</a></li>
+
+<li class="toctree-l2"><a class="reference internal" href="adjust_counting.html">2.5. Adjusted Counting</a></li>
+<li class="toctree-l2"><a class="reference internal" href="likelihood.html">2.6. Likelihood Methods</a></li>
+<li class="toctree-l2"><a class="reference internal" href="distribution_matching.html">2.7. Distribution Matching</a></li>
+<li class="toctree-l2"><a class="reference internal" href="neighbors.html">2.8. Nearest Neighbours</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../non_aggregative_quantification.html">3. Non Aggregative Quantification</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="mixture_models_non_agg.html">3.1. Mixture Models for Non-Aggregative Quantification</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../meta_quantification.html">4. Meta Quantification</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="ensemble.html">4.1. Ensembles and Adaptation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="bootstrap.html">4.2. Bootstrap in Quantification</a></li>
+<li class="toctree-l2"><a class="reference internal" href="scores_adaptation.html">4.3. QuaDapt: Drift-Resilient Score Adaptation</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../model_selection_evaluation.html">5. Model Selection and Evaluation</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="protocols.html">5.1. Evaluation Protocols</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tuning_hyperparameters.html">5.2. Hyperparameter Tuning</a></li>
+<li class="toctree-l2"><a class="reference internal" href="evaluation_metrics.html">5.3. Evaluation Metrics</a></li>
+
+
+
+</ul>
+</details></li>
+<li class="toctree-l1"><a class="reference internal" href="confidence_intervals.html">6. Confidence Intervals</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../building_a_quantifier.html">7. Building a Quantifier</a></li>
+<li class="toctree-l1"><a class="reference internal" href="mlquantify_methods.html">8. Mlquantify methods</a></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../components.html">9. Core Components</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="compose.html">9.1. Composable Quantifiers</a></li>
+<li class="toctree-l2"><a class="reference internal" href="losses.html">9.2. Loss Functions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="representations.html">9.3. Representations</a></li>
+<li class="toctree-l2"><a class="reference internal" href="solvers.html">9.4. Solvers</a></li>
+<li class="toctree-l2"><a class="reference internal" href="calibration.html">9.5. Calibration</a></li>
+<li class="toctree-l2"><a class="reference internal" href="neural.html">9.6. Neural Quantifiers</a></li>
+</ul>
+</details></li>
+</ul>
+</div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+  </div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item">
+
+<nav aria-label="Breadcrumb" class="d-print-none">
+  <ul class="bd-breadcrumbs">
+    
+    <li class="breadcrumb-item breadcrumb-home">
+      <a href="../index.html" class="nav-link" aria-label="Home">
+        <i class="fa-solid fa-home"></i>
+      </a>
+    </li>
+    
+    <li class="breadcrumb-item"><a href="../user_guide.html" class="nav-link">User Guide</a></li>
+    
+    <li class="breadcrumb-item active" aria-current="page"><span class="ellipsis"><span class="section-number">1. </span>Quantification Foundations</span></li>
+  </ul>
+</nav>
+</div>
+      
+    </div>
+  
+  
+</div>
+</div>
+              
+              
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <section id="quantification-foundations">
+<span id="id1"></span><h1><span class="section-number">1. </span>Quantification Foundations<a class="headerlink" href="#quantification-foundations" title="Link to this heading">#</a></h1>
+<p>This page introduces the core theory behind quantification — what the problem is,
+why it differs from classification, how dataset shift motivates it, and how the
+main method families address it. Reading this page will help you understand
+<strong>why</strong> every parameter in every quantifier exists.</p>
+<nav class="contents local" id="contents">
+<p class="topic-title">Contents</p>
+<ul class="simple">
+<li><p><a class="reference internal" href="#what-is-quantification" id="id5">What Is Quantification?</a></p>
+<ul>
+<li><p><a class="reference internal" href="#when-is-quantification-the-right-tool" id="id6">When Is Quantification the Right Tool?</a></p></li>
+</ul>
+</li>
+<li><p><a class="reference internal" href="#why-not-just-classify-and-count" id="id7">Why Not Just Classify and Count?</a></p>
+<ul>
+<li><p><a class="reference internal" href="#the-cc-bias" id="id8">The CC Bias</a></p></li>
+</ul>
+</li>
+<li><p><a class="reference internal" href="#dataset-shift" id="id9">Dataset Shift</a></p>
+<ul>
+<li><p><a class="reference internal" href="#prior-probability-shift-label-shift" id="id10">Prior Probability Shift (Label Shift)</a></p></li>
+<li><p><a class="reference internal" href="#covariate-shift" id="id11">Covariate Shift</a></p></li>
+<li><p><a class="reference internal" href="#concept-shift-concept-drift" id="id12">Concept Shift (Concept Drift)</a></p></li>
+</ul>
+</li>
+<li><p><a class="reference internal" href="#the-aggregative-quantification-framework" id="id13">The Aggregative Quantification Framework</a></p>
+<ul>
+<li><p><a class="reference internal" href="#the-role-of-cross-validation-in-fit" id="id14">The Role of Cross-Validation in <code class="docutils literal notranslate"><span class="pre">fit</span></code></a></p></li>
+<li><p><a class="reference internal" href="#the-estimator-fitted-parameter" id="id15">The <code class="docutils literal notranslate"><span class="pre">estimator_fitted</span></code> parameter</a></p></li>
+</ul>
+</li>
+<li><p><a class="reference internal" href="#method-families-at-a-glance" id="id16">Method Families at a Glance</a></p></li>
+<li><p><a class="reference internal" href="#choosing-the-right-evaluation-protocol" id="id17">Choosing the Right Evaluation Protocol</a></p>
+<ul>
+<li><p><a class="reference internal" href="#choosing-the-right-evaluation-metric" id="id18">Choosing the Right Evaluation Metric</a></p></li>
+</ul>
+</li>
+<li><p><a class="reference internal" href="#multiclass-quantification" id="id19">Multiclass Quantification</a></p></li>
+<li><p><a class="reference internal" href="#further-reading" id="id20">Further Reading</a></p></li>
+</ul>
+</nav>
+<hr class="docutils" />
+<section id="what-is-quantification">
+<h2><a class="toc-backref" href="#id5" role="doc-backlink"><span class="section-number">1.1. </span>What Is Quantification?</a><a class="headerlink" href="#what-is-quantification" title="Link to this heading">#</a></h2>
+<p><strong>Quantification</strong> (also called <em>class prevalence estimation</em> or <em>class prior
+estimation</em>) is the task of estimating the <strong>proportion</strong> — or <em>prevalence</em> — of
+each class in an unlabelled dataset, rather than labelling individual instances.</p>
+<p>Given:</p>
+<ul class="simple">
+<li><p>A labelled training set <span class="math notranslate nohighlight">\(L = \{(x_i, y_i)\}_{i=1}^{n}\)</span> with
+<span class="math notranslate nohighlight">\(y_i \in \{c_1, \ldots, c_k\}\)</span>,</p></li>
+<li><p>An unlabelled test set <span class="math notranslate nohighlight">\(U = \{x_j\}_{j=1}^{m}\)</span>,</p></li>
+</ul>
+<p>the goal is to estimate the vector of class prevalences</p>
+<div class="math notranslate nohighlight">
+\[\hat{p}(c) = \frac{|\{x \in U : y = c\}|}{|U|}, \quad \forall c \in \mathcal{Y}.\]</div>
+<p>The output is a probability vector <span class="math notranslate nohighlight">\(\hat{p} \in \Delta^{k-1}\)</span> (the
+probability simplex), where <span class="math notranslate nohighlight">\(\hat{p}(c) \ge 0\)</span> and
+<span class="math notranslate nohighlight">\(\sum_c \hat{p}(c) = 1\)</span>.</p>
+<div class="admonition-quickstart-analogy admonition">
+<p class="admonition-title">Quickstart analogy</p>
+<p>Imagine a hospital receives a batch of 1,000 blood samples. A pathologist does
+<strong>not</strong> need to diagnose every single patient — they need to know <em>how many</em>
+samples belong to each disease category to allocate resources. Quantification
+answers this aggregate question directly.</p>
+</div>
+<section id="when-is-quantification-the-right-tool">
+<h3><a class="toc-backref" href="#id6" role="doc-backlink"><span class="section-number">1.1.1. </span>When Is Quantification the Right Tool?</a><a class="headerlink" href="#when-is-quantification-the-right-tool" title="Link to this heading">#</a></h3>
+<p>Quantification is the right tool when:</p>
+<ul class="simple">
+<li><p>The final decision is about a <strong>population</strong>, not an individual (e.g. “how many
+tweets are about a product complaint?”).</p></li>
+<li><p>Labelling every instance is too expensive, but estimating proportions is
+sufficient.</p></li>
+<li><p>The class distribution is expected to <strong>shift</strong> between training and deployment.</p></li>
+<li><p>Evaluation uses aggregate metrics (e.g. proportion of defective items in a
+production batch).</p></li>
+</ul>
+<p>If you need a label for <em>each</em> instance, use a classifier. If you need the
+proportions of a batch, use a quantifier.</p>
+</section>
+</section>
+<hr class="docutils" />
+<section id="why-not-just-classify-and-count">
+<h2><a class="toc-backref" href="#id7" role="doc-backlink"><span class="section-number">1.2. </span>Why Not Just Classify and Count?</a><a class="headerlink" href="#why-not-just-classify-and-count" title="Link to this heading">#</a></h2>
+<p>The simplest approach — train a classifier, predict labels, count how many fall
+into each class — is called <strong>Classify and Count (CC)</strong>. It is a valid baseline,
+but it is systematically biased whenever the class distribution in the test set
+differs from training.</p>
+<section id="the-cc-bias">
+<h3><a class="toc-backref" href="#id8" role="doc-backlink"><span class="section-number">1.2.1. </span>The CC Bias</a><a class="headerlink" href="#the-cc-bias" title="Link to this heading">#</a></h3>
+<p>Suppose a binary classifier is trained on a balanced dataset (50% positive, 50%
+negative) and achieves 90% accuracy. Now consider deploying it on a batch where
+only 5% of instances are truly positive.</p>
+<figure class="align-center" id="id2">
+<a class="reference internal image-reference" href="../_images/cc_bias.png"><img alt="CC and PCC bias across prevalences" src="../_images/cc_bias.png" style="width: 75%;" />
+</a>
+<figcaption>
+<p><span class="caption-text"><em>CC (red) systematically overshoots at low prevalence and undershoots at high
+prevalence. PCC (orange) is less biased but still not corrected. The dashed
+grey line is the ideal unbiased estimator.</em></span><a class="headerlink" href="#id2" title="Link to this image">#</a></p>
+</figcaption>
+</figure>
+<p>The classifier will generate:</p>
+<ul class="simple">
+<li><p>True positives: <span class="math notranslate nohighlight">\(0.90 \times 0.05 = 0.045\)</span> (from 5% positives it gets
+right)</p></li>
+<li><p>False positives: <span class="math notranslate nohighlight">\(0.10 \times 0.95 = 0.095\)</span> (from 95% negatives it
+misclassifies)</p></li>
+</ul>
+<p>CC’s estimated positive prevalence is <span class="math notranslate nohighlight">\(0.045 + 0.095 = 0.14\)</span>, while the
+true value is <span class="math notranslate nohighlight">\(0.05\)</span> — an error of <strong>9 percentage points</strong>, even with a
+very accurate classifier!</p>
+<p>Forman (2005) showed empirically that CC consistently overestimates the minority
+class when the test prevalence is low and underestimates it when high, regardless
+of classifier accuracy. The bias is <em>systematic</em> and does not vanish with more
+data. (Forman, 2005)</p>
+<div class="admonition-key-insight admonition">
+<p class="admonition-title">Key insight</p>
+<p>A classifier optimises <em>instance-level</em> accuracy, not <em>aggregate-level</em>
+accuracy. The two objectives are different. Specialised quantification methods
+optimise directly for the latter.</p>
+</div>
+</section>
+</section>
+<hr class="docutils" />
+<section id="dataset-shift">
+<h2><a class="toc-backref" href="#id9" role="doc-backlink"><span class="section-number">1.3. </span>Dataset Shift</a><a class="headerlink" href="#dataset-shift" title="Link to this heading">#</a></h2>
+<p>Quantification is intimately linked to <strong>dataset shift</strong> — the phenomenon where
+the distribution of data changes between training and deployment.
+(Moreno-Torres et al., 2012)</p>
+<figure class="align-center" id="id3">
+<a class="reference internal image-reference" href="../_images/dataset_shift.png"><img alt="Prior probability shift illustration" src="../_images/dataset_shift.png" style="width: 90%;" />
+</a>
+<figcaption>
+<p><span class="caption-text"><em>Prior probability shift: the feature distributions within each class (the
+histogram shapes) are identical between training and test, but the class
+proportions differ — 30% positive in training, 80% positive at test time.</em></span><a class="headerlink" href="#id3" title="Link to this image">#</a></p>
+</figcaption>
+</figure>
+<p>The three most relevant shift types for quantification are:</p>
+<section id="prior-probability-shift-label-shift">
+<h3><a class="toc-backref" href="#id10" role="doc-backlink"><span class="section-number">1.3.1. </span>Prior Probability Shift (Label Shift)</a><a class="headerlink" href="#prior-probability-shift-label-shift" title="Link to this heading">#</a></h3>
+<p>The class-conditional distribution stays the same, but class priors change:</p>
+<div class="math notranslate nohighlight">
+\[P_U(X \mid Y) = P_L(X \mid Y), \quad P_U(Y) \neq P_L(Y).\]</div>
+<p>This is the <em>primary assumption</em> for most quantification methods. A sentiment
+classifier trained in January may face a burst of positive reviews after a product
+launch — the features of “positive review” have not changed, but the proportion
+has.</p>
+<p><strong>Methods that assume this shift:</strong> CC, ACC, PCC, PACC, EMQ/SLD, DyS, HDy, KDEy.</p>
+</section>
+<section id="covariate-shift">
+<h3><a class="toc-backref" href="#id11" role="doc-backlink"><span class="section-number">1.3.2. </span>Covariate Shift</a><a class="headerlink" href="#covariate-shift" title="Link to this heading">#</a></h3>
+<p>The input distribution changes, but the conditional label distribution is stable:</p>
+<div class="math notranslate nohighlight">
+\[P_U(Y \mid X) = P_L(Y \mid X), \quad P_U(X) \neq P_L(X).\]</div>
+<p>This occurs when the input features come from a different domain (e.g. a model
+trained on news articles applied to social media posts).</p>
+</section>
+<section id="concept-shift-concept-drift">
+<h3><a class="toc-backref" href="#id12" role="doc-backlink"><span class="section-number">1.3.3. </span>Concept Shift (Concept Drift)</a><a class="headerlink" href="#concept-shift-concept-drift" title="Link to this heading">#</a></h3>
+<p>The relationship between features and labels changes:</p>
+<div class="math notranslate nohighlight">
+\[P_U(Y \mid X) \neq P_L(Y \mid X).\]</div>
+<p>This is the hardest case. Most standard quantification methods cannot fully correct
+for concept shift. Monitoring for drift and retraining are necessary.</p>
+<div class="admonition tip">
+<p class="admonition-title">Tip</p>
+<p>When you are unsure which shift applies, start with methods that assume <strong>prior
+probability shift</strong> (the most common case). If performance is poor, check
+whether the feature distribution has also shifted.</p>
+</div>
+</section>
+</section>
+<hr class="docutils" />
+<section id="the-aggregative-quantification-framework">
+<h2><a class="toc-backref" href="#id13" role="doc-backlink"><span class="section-number">1.4. </span>The Aggregative Quantification Framework</a><a class="headerlink" href="#the-aggregative-quantification-framework" title="Link to this heading">#</a></h2>
+<p>Most quantification methods in <code class="docutils literal notranslate"><span class="pre">mlquantify</span></code> follow the <strong>aggregative framework</strong>
+introduced by (Esuli et al., 2023):</p>
+<ol class="arabic simple">
+<li><p><strong>Fit</strong> — Train an underlying classifier (estimator) on labelled data, obtaining
+a <em>representation</em> of the training class distributions (confusion matrix,
+score histograms, density estimates, …).</p></li>
+<li><p><strong>Predict</strong> — Apply the estimator to each test instance to obtain predictions
+(hard labels or soft probabilities).</p></li>
+<li><p><strong>Aggregate</strong> — Combine the individual predictions into a single prevalence
+estimate for the batch.</p></li>
+</ol>
+<p>This design mirrors <code class="docutils literal notranslate"><span class="pre">scikit-learn</span></code>’s <em>estimator</em> API: every aggregative
+quantifier exposes <code class="docutils literal notranslate"><span class="pre">fit(X,</span> <span class="pre">y)</span></code>, <code class="docutils literal notranslate"><span class="pre">predict(X)</span></code>, and an additional <code class="docutils literal notranslate"><span class="pre">aggregate</span></code>
+method for when predictions are already available.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">mlquantify.counting</span><span class="w"> </span><span class="kn">import</span> <span class="n">PCC</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">sklearn.linear_model</span><span class="w"> </span><span class="kn">import</span> <span class="n">LogisticRegression</span>
+
+<span class="c1"># 1. Build and fit</span>
+<span class="n">q</span> <span class="o">=</span> <span class="n">PCC</span><span class="p">(</span><span class="n">LogisticRegression</span><span class="p">())</span>
+<span class="n">q</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">X_train</span><span class="p">,</span> <span class="n">y_train</span><span class="p">)</span>
+
+<span class="c1"># 2 &amp; 3 combined — predict on new data</span>
+<span class="n">prevalences</span> <span class="o">=</span> <span class="n">q</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">X_test</span><span class="p">)</span>
+
+<span class="c1"># Or use aggregate if you already have posteriors</span>
+<span class="n">proba</span> <span class="o">=</span> <span class="n">q</span><span class="o">.</span><span class="n">estimator_</span><span class="o">.</span><span class="n">predict_proba</span><span class="p">(</span><span class="n">X_test</span><span class="p">)</span>
+<span class="n">prevalences</span> <span class="o">=</span> <span class="n">q</span><span class="o">.</span><span class="n">aggregate</span><span class="p">(</span><span class="n">proba</span><span class="p">)</span>
+</pre></div>
+</div>
+<section id="the-role-of-cross-validation-in-fit">
+<span id="cross-validation-role"></span><h3><a class="toc-backref" href="#id14" role="doc-backlink"><span class="section-number">1.4.1. </span>The Role of Cross-Validation in <code class="docutils literal notranslate"><span class="pre">fit</span></code></a><a class="headerlink" href="#the-role-of-cross-validation-in-fit" title="Link to this heading">#</a></h3>
+<p>Many aggregative methods need to estimate <em>how the classifier behaves on unseen
+data</em> (e.g. to estimate TPR/FPR for ACC, or score histograms for DyS/HDy). Using
+training-set predictions directly would give over-optimistic estimates.</p>
+<p>To avoid this, <code class="docutils literal notranslate"><span class="pre">mlquantify</span></code> uses <strong>cross-validated predictions</strong> (also called
+<em>hold-out predictions</em> or <em>calibrated predictions</em>) obtained by fitting the
+estimator on a subset of the training data and predicting the held-out subset.
+This is controlled by the <code class="docutils literal notranslate"><span class="pre">cv</span></code> parameter in <code class="docutils literal notranslate"><span class="pre">fit</span></code>:</p>
+<div class="pst-scrollable-table-container"><table class="table">
+<colgroup>
+<col style="width: 20.0%" />
+<col style="width: 80.0%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p><code class="docutils literal notranslate"><span class="pre">cv</span></code></p></th>
+<th class="head"><p>Behaviour</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">int</span></code> (e.g. 5)</p></td>
+<td><p>K-fold cross-validation; predictions are assembled from K non-overlapping folds. Recommended.</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">None</span></code></p></td>
+<td><p>The method uses its own default (usually 5-fold). Safe choice.</p></td>
+</tr>
+<tr class="row-even"><td><p>Cross-validator object</p></td>
+<td><p>E.g. <code class="docutils literal notranslate"><span class="pre">StratifiedKFold(n_splits=10)</span></code>. Full control.</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">mlquantify.counting</span><span class="w"> </span><span class="kn">import</span> <span class="n">ACC</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">sklearn.svm</span><span class="w"> </span><span class="kn">import</span> <span class="n">SVC</span>
+
+<span class="c1"># Use 10-fold stratified CV to estimate TPR/FPR</span>
+<span class="n">q</span> <span class="o">=</span> <span class="n">ACC</span><span class="p">(</span><span class="n">SVC</span><span class="p">(</span><span class="n">probability</span><span class="o">=</span><span class="kc">True</span><span class="p">),</span> <span class="n">cv</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">stratified</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="n">q</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">X_train</span><span class="p">,</span> <span class="n">y_train</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>Setting <code class="docutils literal notranslate"><span class="pre">cv</span></code> to a very small value (e.g. 2) on a small dataset can
+produce noisy TPR/FPR or histogram estimates and hurt performance. The
+default of 5 is a safe balance between bias and variance.</p>
+</div>
+</section>
+<section id="the-estimator-fitted-parameter">
+<h3><a class="toc-backref" href="#id15" role="doc-backlink"><span class="section-number">1.4.2. </span>The <code class="docutils literal notranslate"><span class="pre">estimator_fitted</span></code> parameter</a><a class="headerlink" href="#the-estimator-fitted-parameter" title="Link to this heading">#</a></h3>
+<p>If you have already trained your classifier (e.g. in a pipeline), pass
+<code class="docutils literal notranslate"><span class="pre">estimator_fitted=True</span></code> to <code class="docutils literal notranslate"><span class="pre">fit</span></code> so <code class="docutils literal notranslate"><span class="pre">mlquantify</span></code> skips retraining and uses
+the existing model:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">sklearn.ensemble</span><span class="w"> </span><span class="kn">import</span> <span class="n">GradientBoostingClassifier</span>
+
+<span class="n">clf</span> <span class="o">=</span> <span class="n">GradientBoostingClassifier</span><span class="p">()</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">X_train</span><span class="p">,</span> <span class="n">y_train</span><span class="p">)</span>
+
+<span class="c1"># Skip refitting — use the already-trained clf</span>
+<span class="n">q</span> <span class="o">=</span> <span class="n">PCC</span><span class="p">(</span><span class="n">clf</span><span class="p">)</span>
+<span class="n">q</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">X_train</span><span class="p">,</span> <span class="n">y_train</span><span class="p">,</span> <span class="n">estimator_fitted</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</pre></div>
+</div>
+</section>
+</section>
+<hr class="docutils" />
+<section id="method-families-at-a-glance">
+<h2><a class="toc-backref" href="#id16" role="doc-backlink"><span class="section-number">1.5. </span>Method Families at a Glance</a><a class="headerlink" href="#method-families-at-a-glance" title="Link to this heading">#</a></h2>
+<figure class="align-center" id="id4">
+<a class="reference internal image-reference" href="../_images/method_comparison.png"><img alt="Illustrative error profiles of main quantification method families" src="../_images/method_comparison.png" style="width: 85%;" />
+</a>
+<figcaption>
+<p><span class="caption-text"><em>Illustrative error profile across positive-class prevalence levels (synthetic
+data — for concept illustration only). CC and PCC are most biased at extreme
+prevalences. Adjusted counting (ACC/MS) partially corrects this. EMQ, DyS and
+KDEy achieve consistently low error across the full prevalence range.</em></span><a class="headerlink" href="#id4" title="Link to this image">#</a></p>
+</figcaption>
+</figure>
+<p><code class="docutils literal notranslate"><span class="pre">mlquantify</span></code> organises methods into families based on the <strong>representation</strong>
+they build during training and the <strong>correction strategy</strong> they apply.</p>
+<div class="pst-scrollable-table-container"><table class="table">
+<colgroup>
+<col style="width: 20.0%" />
+<col style="width: 25.0%" />
+<col style="width: 25.0%" />
+<col style="width: 30.0%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Family</p></th>
+<th class="head"><p>Representation</p></th>
+<th class="head"><p>Correction</p></th>
+<th class="head"><p>When to use</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><a class="reference internal" href="counters.html#counters-module"><span class="std std-ref">Counting</span></a> (CC, PCC)</p></td>
+<td><p>Hard / soft labels</p></td>
+<td><p>None</p></td>
+<td><p>Baseline; when training/test distributions are similar.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="counting.html#counting"><span class="std std-ref">Adjusted Counting</span></a> (ACC, TAC, …)</p></td>
+<td><p>Confusion matrix / ROC curve</p></td>
+<td><p>Linear bias correction</p></td>
+<td><p>Binary problems with known classifier error rates.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="likelihood.html#likelihood"><span class="std std-ref">Likelihood</span></a> (EMQ, CDE)</p></td>
+<td><p>Posterior probabilities</p></td>
+<td><p>EM-based prior correction</p></td>
+<td><p>Best single method under prior probability shift.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="distribution_matching.html#distribution-matching"><span class="std std-ref">Distribution Matching</span></a> (DyS, HDy, KDEy)</p></td>
+<td><p>Score histograms / densities</p></td>
+<td><p>Mixture optimisation</p></td>
+<td><p>Strong performance; good for binary and multiclass.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="neighbors.html#nearest-neighbors"><span class="std std-ref">Nearest Neighbours</span></a> (PWK)</p></td>
+<td><p>Feature space</p></td>
+<td><p>Imbalance-aware k-NN</p></td>
+<td><p>When a simple, interpretable baseline is needed.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="neural.html#neural-quantifiers"><span class="std std-ref">Neural</span></a> (QuaNet)</p></td>
+<td><p>Deep embeddings</p></td>
+<td><p>Direct prevalence learning</p></td>
+<td><p>Large datasets with rich feature representations.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="ensemble.html#ensemble"><span class="std std-ref">Ensemble</span></a> (EnsembleQ, QuaDapt)</p></td>
+<td><p>Any base quantifier</p></td>
+<td><p>Diversity + selection</p></td>
+<td><p>Robustness; when test prevalence is highly variable.</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="admonition tip">
+<p class="admonition-title">Tip</p>
+<p>If you are just getting started, try <a class="reference internal" href="generated/mlquantify.likelihood.EMQ.html#mlquantify.likelihood.EMQ" title="mlquantify.likelihood.EMQ"><code class="xref py py-class docutils literal notranslate"><span class="pre">EMQ</span></code></a>
+with <code class="docutils literal notranslate"><span class="pre">LogisticRegression</span></code> — it is consistently among the top performers
+and requires minimal tuning. (Saerens et al., 2002) (Esuli et al., 2023)</p>
+</div>
+</section>
+<hr class="docutils" />
+<section id="choosing-the-right-evaluation-protocol">
+<h2><a class="toc-backref" href="#id17" role="doc-backlink"><span class="section-number">1.6. </span>Choosing the Right Evaluation Protocol</a><a class="headerlink" href="#choosing-the-right-evaluation-protocol" title="Link to this heading">#</a></h2>
+<p>A single train/test split is often misleading for quantification because the
+test prevalence is fixed. Dedicated protocols generate many test samples with
+<strong>different prevalences</strong> from the same dataset:</p>
+<ul class="simple">
+<li><p><strong>APP (Artificial Prevalence Protocol)</strong> — sweeps prevalences from 0 to 1 in
+uniform steps. Standard in quantification research. Use this by default.</p></li>
+<li><p><strong>UPP (Uniform Prevalence Protocol)</strong> — samples prevalences uniformly from the
+simplex. Preferred for multiclass problems.</p></li>
+<li><p><strong>NPP (Natural Prevalence Protocol)</strong> — draws random subsets preserving
+natural class proportions. Less controlled, more realistic.</p></li>
+</ul>
+<p>See <a class="reference internal" href="protocols.html#quantification-protocols"><span class="std std-ref">Protocols for Quantification</span></a> for full details and code examples.</p>
+<section id="choosing-the-right-evaluation-metric">
+<h3><a class="toc-backref" href="#id18" role="doc-backlink"><span class="section-number">1.6.1. </span>Choosing the Right Evaluation Metric</a><a class="headerlink" href="#choosing-the-right-evaluation-metric" title="Link to this heading">#</a></h3>
+<p>Quantification metrics penalise deviation between the estimated and true
+prevalence vectors. The most important ones in <code class="docutils literal notranslate"><span class="pre">mlquantify</span></code> are:</p>
+<div class="pst-scrollable-table-container"><table class="table">
+<colgroup>
+<col style="width: 15.0%" />
+<col style="width: 30.0%" />
+<col style="width: 55.0%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Metric</p></th>
+<th class="head"><p>Import</p></th>
+<th class="head"><p>When to use</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>MAE</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">mlquantify.metrics.MAE</span></code></p></td>
+<td><p>Default. Mean absolute difference per class. Interpretable.</p></td>
+</tr>
+<tr class="row-odd"><td><p>RAE</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">mlquantify.metrics.RAE</span></code></p></td>
+<td><p>When errors at low prevalences should be amplified (relative AE).</p></td>
+</tr>
+<tr class="row-even"><td><p>KLD</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">mlquantify.metrics.KLD</span></code></p></td>
+<td><p>When probabilistic calibration of prevalences matters.</p></td>
+</tr>
+<tr class="row-odd"><td><p>NKLD</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">mlquantify.metrics.NKLD</span></code></p></td>
+<td><p>Normalised KLD; comparable across different class counts.</p></td>
+</tr>
+<tr class="row-even"><td><p>MSE</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">mlquantify.metrics.MSE</span></code></p></td>
+<td><p>Squared error; penalises large deviations more heavily.</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">mlquantify.metrics</span><span class="w"> </span><span class="kn">import</span> <span class="n">MAE</span><span class="p">,</span> <span class="n">RAE</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">mlquantify.utils</span><span class="w"> </span><span class="kn">import</span> <span class="n">get_prev_from_labels</span>
+
+<span class="n">true_prev</span>  <span class="o">=</span> <span class="n">get_prev_from_labels</span><span class="p">(</span><span class="n">y_test</span><span class="p">)</span>
+<span class="n">pred_prev</span>  <span class="o">=</span> <span class="n">quantifier</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">X_test</span><span class="p">)</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;MAE:  </span><span class="si">{</span><span class="n">MAE</span><span class="p">(</span><span class="n">true_prev</span><span class="p">,</span><span class="w"> </span><span class="n">pred_prev</span><span class="p">)</span><span class="si">:</span><span class="s2">.4f</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;RAE:  </span><span class="si">{</span><span class="n">RAE</span><span class="p">(</span><span class="n">true_prev</span><span class="p">,</span><span class="w"> </span><span class="n">pred_prev</span><span class="p">)</span><span class="si">:</span><span class="s2">.4f</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</section>
+</section>
+<hr class="docutils" />
+<section id="multiclass-quantification">
+<h2><a class="toc-backref" href="#id19" role="doc-backlink"><span class="section-number">1.7. </span>Multiclass Quantification</a><a class="headerlink" href="#multiclass-quantification" title="Link to this heading">#</a></h2>
+<p>All methods in <code class="docutils literal notranslate"><span class="pre">mlquantify</span></code> that are marked as <em>binary-only</em> are automatically
+extended to multiclass problems via a <strong>decomposition strategy</strong>:</p>
+<ul class="simple">
+<li><p><strong>One-vs-Rest (OvR)</strong> — for each class <span class="math notranslate nohighlight">\(c\)</span>, train a binary quantifier
+that estimates <span class="math notranslate nohighlight">\(\hat{p}(c)\)</span> vs. <span class="math notranslate nohighlight">\(1 - \hat{p}(c)\)</span>, then renormalise.
+This is the default (<code class="docutils literal notranslate"><span class="pre">strategy='ovr'</span></code>).</p></li>
+<li><p><strong>One-vs-One (OvO)</strong> — train a binary quantifier for every pair of classes
+<span class="math notranslate nohighlight">\((c_i, c_j)\)</span>, then combine estimates. Less common, set
+<code class="docutils literal notranslate"><span class="pre">strategy='ovo'</span></code>.</p></li>
+</ul>
+<p>Natively multiclass methods (CC, PCC, GACC, GPACC, EMQ, KDEy) operate directly
+on <span class="math notranslate nohighlight">\(k\)</span> classes without decomposition.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">mlquantify.counting</span><span class="w"> </span><span class="kn">import</span> <span class="n">ACC</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">sklearn.linear_model</span><span class="w"> </span><span class="kn">import</span> <span class="n">LogisticRegression</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">sklearn.datasets</span><span class="w"> </span><span class="kn">import</span> <span class="n">make_classification</span>
+
+<span class="n">X</span><span class="p">,</span> <span class="n">y</span> <span class="o">=</span> <span class="n">make_classification</span><span class="p">(</span><span class="n">n_samples</span><span class="o">=</span><span class="mi">500</span><span class="p">,</span> <span class="n">n_classes</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span>
+                           <span class="n">n_informative</span><span class="o">=</span><span class="mi">6</span><span class="p">,</span> <span class="n">n_redundant</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>
+                           <span class="n">random_state</span><span class="o">=</span><span class="mi">42</span><span class="p">)</span>
+
+<span class="c1"># OvR decomposition is applied automatically</span>
+<span class="n">q</span> <span class="o">=</span> <span class="n">ACC</span><span class="p">(</span><span class="n">LogisticRegression</span><span class="p">(),</span> <span class="n">strategy</span><span class="o">=</span><span class="s1">&#39;ovr&#39;</span><span class="p">)</span>
+<span class="n">q</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">X</span><span class="p">[:</span><span class="mi">400</span><span class="p">],</span> <span class="n">y</span><span class="p">[:</span><span class="mi">400</span><span class="p">])</span>
+<span class="n">q</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">X</span><span class="p">[</span><span class="mi">400</span><span class="p">:])</span>
+</pre></div>
+</div>
+</section>
+<hr class="docutils" />
+<section id="further-reading">
+<h2><a class="toc-backref" href="#id20" role="doc-backlink"><span class="section-number">1.8. </span>Further Reading</a><a class="headerlink" href="#further-reading" title="Link to this heading">#</a></h2>
+<p>For a comprehensive treatment of quantification theory, the canonical reference is:</p>
+<ul class="simple">
+<li><p><strong>Esuli, A., Fabris, A., Moreo, A., &amp; Sebastiani, F. (2023).</strong> <em>Learning to
+Quantify.</em> Springer. Open access at <a class="reference external" href="https://doi.org/10.1007/978-3-031-20467-8">https://doi.org/10.1007/978-3-031-20467-8</a></p></li>
+</ul>
+<p>For the original CC/AC paper:</p>
+<ul class="simple">
+<li><p><strong>Forman, G. (2005).</strong> Counting Positives Accurately Despite Inaccurate
+Classification. <em>ECML 2005</em>, pp. 564–575.</p></li>
+</ul>
+<p>For a comprehensive survey of quantification methods:</p>
+<ul class="simple">
+<li><p><strong>González, J., Díez, J., Chawla, N., &amp; del Coz, J. J. (2017).</strong> A Review on
+Quantification Learning. <em>ACM Computing Surveys</em>, 50(5), 1–40.</p></li>
+</ul>
+</section>
+</section>
+
+
+                </article>
+              
+              
+              
+                <footer class="bd-footer-article">
+                  <div class="footer-article-items footer-article__inner">
+  
+    <div class="footer-article-item">
+<div class="prev-next-area">
+    <a class="left-prev"
+       href="../user_guide.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title">User Guide</p>
+      </div>
+    </a>
+    <a class="right-next"
+       href="../aggregative_quantification.html"
+       title="next page">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title"><span class="section-number">2. </span>Aggregative Quantification</p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
+    </a>
+</div></div>
+  
+</div>
+                </footer>
+              
+              
+              
+            </div>
+            
+            
+              
+                <dialog id="pst-secondary-sidebar-modal"></dialog>
+                <div id="pst-secondary-sidebar" class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item">
+<div
+    id="pst-page-navigation-heading-2"
+    class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> On this page
+  </div>
+  <nav id="pst-page-toc-nav" class="page-toc" aria-labelledby="pst-page-navigation-heading-2">
+    <ul class="pst-show_toc_level nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#what-is-quantification">1.1. What Is Quantification?</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#when-is-quantification-the-right-tool">1.1.1. When Is Quantification the Right Tool?</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#why-not-just-classify-and-count">1.2. Why Not Just Classify and Count?</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#the-cc-bias">1.2.1. The CC Bias</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#dataset-shift">1.3. Dataset Shift</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#prior-probability-shift-label-shift">1.3.1. Prior Probability Shift (Label Shift)</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#covariate-shift">1.3.2. Covariate Shift</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#concept-shift-concept-drift">1.3.3. Concept Shift (Concept Drift)</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#the-aggregative-quantification-framework">1.4. The Aggregative Quantification Framework</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#the-role-of-cross-validation-in-fit">1.4.1. The Role of Cross-Validation in <code class="docutils literal notranslate"><span class="pre">fit</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#the-estimator-fitted-parameter">1.4.2. The <code class="docutils literal notranslate"><span class="pre">estimator_fitted</span></code> parameter</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#method-families-at-a-glance">1.5. Method Families at a Glance</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#choosing-the-right-evaluation-protocol">1.6. Choosing the Right Evaluation Protocol</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#choosing-the-right-evaluation-metric">1.6.1. Choosing the Right Evaluation Metric</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#multiclass-quantification">1.7. Multiclass Quantification</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#further-reading">1.8. Further Reading</a></li>
+</ul>
+  </nav></div>
+
+  <div class="sidebar-secondary-item">
+
+  <div class="tocsection sourcelink">
+    <a href="../_sources/modules/quantification_foundations.rst.txt">
+      <i class="fa-solid fa-file-lines"></i> Show Source
+    </a>
+  </div>
+</div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+          </footer>
+        
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script defer src="../_static/scripts/bootstrap.js?digest=0790524f97105ba85085"></script>
+<script defer src="../_static/scripts/pydata-sphinx-theme.js?digest=0790524f97105ba85085"></script>
+
+  <footer class="bd-footer">
+  </footer>
+  </body>
+</html>

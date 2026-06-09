@@ -7,19 +7,19 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
-<meta property="og:title" content="1.7. Nearest Neighbors" />
+<meta property="og:title" content="2.8. Nearest Neighbours" />
 <meta property="og:type" content="website" />
 <meta property="og:url" content="modules/neighbors.html" />
 <meta property="og:site_name" content="mlquantify" />
-<meta property="og:description" content="PWK: Pair-wise Weighted K-Nearest Neighbors: PWK and PWK\alpha are neighbor-based algorithms (k-Nearest Neighbors - NN) that apply class weighting techniques to estimate prevalence in binary proble..." />
+<meta property="og:description" content="Nearest-neighbour quantifiers estimate class prevalences by leveraging the local structure of the feature space. They are non-parametric, require no distributional assumptions, and are naturally ro..." />
 <meta property="og:image:width" content="1146" />
 <meta property="og:image:height" content="600" />
-<meta property="og:image" content="_images/social_previews/summary_modules_neighbors_f0ddf2bb.png" />
-<meta property="og:image:alt" content="PWK: Pair-wise Weighted K-Nearest Neighbors: PWK and PWK\alpha are neighbor-based algorithms (k-Nearest Neighbors - NN) that apply class weighting techniques to estimate prevalence in binary proble..." />
-<meta name="description" content="PWK: Pair-wise Weighted K-Nearest Neighbors: PWK and PWK\alpha are neighbor-based algorithms (k-Nearest Neighbors - NN) that apply class weighting techniques to estimate prevalence in binary proble..." />
+<meta property="og:image" content="_images/social_previews/summary_modules_neighbors_f3923e54.png" />
+<meta property="og:image:alt" content="Nearest-neighbour quantifiers estimate class prevalences by leveraging the local structure of the feature space. They are non-parametric, require no distributional assumptions, and are naturally ro..." />
+<meta name="description" content="Nearest-neighbour quantifiers estimate class prevalences by leveraging the local structure of the feature space. They are non-parametric, require no distributional assumptions, and are naturally ro..." />
 <meta name="twitter:card" content="summary_large_image" />
 
-    <title>1.7. Nearest Neighbors &#8212; mlquantify</title>
+    <title>2.8. Nearest Neighbours &#8212; mlquantify</title>
   
   
   
@@ -66,8 +66,8 @@
     <script>DOCUMENTATION_OPTIONS.search_as_you_type = false;</script>
     <link rel="canonical" href="https://luizfernandolj.github.io/mlquantify/modules/neighbors.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="2. Non-Aggregative Quantification" href="../non_aggregative_quantification.html" />
-    <link rel="prev" title="1.6. Distribution Matching" href="distribution_matching.html" />
+    <link rel="next" title="3. Non-Aggregative Quantification" href="../non_aggregative_quantification.html" />
+    <link rel="prev" title="2.7. Distribution Matching" href="distribution_matching.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
   <meta name="docsearch:version" content="" />
@@ -374,42 +374,47 @@
      aria-label="Section Navigation">
   <p class="bd-links__title" role="heading" aria-level="1">Section Navigation</p>
   <div class="bd-toc-item navbar-nav"><ul class="current nav bd-sidenav">
-<li class="toctree-l1 current active has-children"><a class="reference internal" href="../aggregative_quantification.html">1. Aggregative Quantification</a><details open="open"><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul class="current">
-<li class="toctree-l2"><a class="reference internal" href="using_aggregative.html">1.1. Using Aggregative Quantification Methods</a></li>
+<li class="toctree-l1"><a class="reference internal" href="quantification_foundations.html">1. Foundations</a></li>
+<li class="toctree-l1 current active has-children"><a class="reference internal" href="../aggregative_quantification.html">2. Aggregative Quantification</a><details open="open"><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="using_aggregative.html">2.1. Using Aggregative Quantification Methods</a></li>
 
-<li class="toctree-l2"><a class="reference internal" href="counters.html">1.3. Counters For Quantification</a></li>
-<li class="toctree-l2"><a class="reference internal" href="adjust_counting.html">1.4. Adjusted Counting</a></li>
-<li class="toctree-l2"><a class="reference internal" href="likelihood.html">1.5. Likelihood-Based Quantification</a></li>
-<li class="toctree-l2"><a class="reference internal" href="distribution_matching.html">1.6. Distribution Matching</a></li>
-<li class="toctree-l2 current active"><a class="current reference internal" href="#">1.7. Nearest Neighbors</a></li>
+<li class="toctree-l2"><a class="reference internal" href="counters.html">2.3. Counting-Based Quantifiers</a></li>
+
+<li class="toctree-l2"><a class="reference internal" href="adjust_counting.html">2.5. Adjusted Counting</a></li>
+<li class="toctree-l2"><a class="reference internal" href="likelihood.html">2.6. Likelihood Methods</a></li>
+<li class="toctree-l2"><a class="reference internal" href="distribution_matching.html">2.7. Distribution Matching</a></li>
+<li class="toctree-l2 current active"><a class="current reference internal" href="#">2.8. Nearest Neighbours</a></li>
 </ul>
 </details></li>
-<li class="toctree-l1 has-children"><a class="reference internal" href="../non_aggregative_quantification.html">2. Non Aggregative Quantification</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
-<li class="toctree-l2"><a class="reference internal" href="mixture_models_non_agg.html">2.1. Mixture Models for Non-Aggregative Quantification</a></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../non_aggregative_quantification.html">3. Non Aggregative Quantification</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="mixture_models_non_agg.html">3.1. Mixture Models for Non-Aggregative Quantification</a></li>
 </ul>
 </details></li>
-<li class="toctree-l1 has-children"><a class="reference internal" href="../meta_quantification.html">3. Meta Quantification</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
-<li class="toctree-l2"><a class="reference internal" href="ensemble.html">3.1. Ensemble for Quantification</a></li>
-<li class="toctree-l2"><a class="reference internal" href="bootstrap.html">3.2. Bootstrap in Quantification</a></li>
-<li class="toctree-l2"><a class="reference internal" href="scores_adaptation.html">3.3. QuaDapt: Drift-Resilient Score Adaptation</a></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../meta_quantification.html">4. Meta Quantification</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="ensemble.html">4.1. Ensembles and Adaptation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="bootstrap.html">4.2. Bootstrap in Quantification</a></li>
+<li class="toctree-l2"><a class="reference internal" href="scores_adaptation.html">4.3. QuaDapt: Drift-Resilient Score Adaptation</a></li>
 </ul>
 </details></li>
-<li class="toctree-l1 has-children"><a class="reference internal" href="../model_selection_evaluation.html">4. Model Selection and Evaluation</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
-<li class="toctree-l2"><a class="reference internal" href="protocols.html">4.1. Protocols for Quantification</a></li>
-<li class="toctree-l2"><a class="reference internal" href="tuning_hyperparameters.html">4.2. Tuning Hyperparameters</a></li>
-<li class="toctree-l2"><a class="reference internal" href="evaluation_metrics.html">4.3. Evaluation Metrics</a></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../model_selection_evaluation.html">5. Model Selection and Evaluation</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="protocols.html">5.1. Evaluation Protocols</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tuning_hyperparameters.html">5.2. Hyperparameter Tuning</a></li>
+<li class="toctree-l2"><a class="reference internal" href="evaluation_metrics.html">5.3. Evaluation Metrics</a></li>
+
+
+
 </ul>
 </details></li>
-<li class="toctree-l1"><a class="reference internal" href="confidence_intervals.html">5. Confidence Intervals</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../building_a_quantifier.html">6. Building a Quantifier</a></li>
-<li class="toctree-l1"><a class="reference internal" href="mlquantify_methods.html">7. Mlquantify methods</a></li>
-<li class="toctree-l1 has-children"><a class="reference internal" href="../components.html">8. Core Components</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
-<li class="toctree-l2"><a class="reference internal" href="compose.html">8.1. Composable Quantifiers</a></li>
-<li class="toctree-l2"><a class="reference internal" href="losses.html">8.2. Loss Functions</a></li>
-<li class="toctree-l2"><a class="reference internal" href="representations.html">8.3. Representations</a></li>
-<li class="toctree-l2"><a class="reference internal" href="solvers.html">8.4. Solvers</a></li>
-<li class="toctree-l2"><a class="reference internal" href="calibration.html">8.5. Calibration</a></li>
-<li class="toctree-l2"><a class="reference internal" href="neural.html">8.6. Neural Quantifiers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="confidence_intervals.html">6. Confidence Intervals</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../building_a_quantifier.html">7. Building a Quantifier</a></li>
+<li class="toctree-l1"><a class="reference internal" href="mlquantify_methods.html">8. Mlquantify methods</a></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../components.html">9. Core Components</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="compose.html">9.1. Composable Quantifiers</a></li>
+<li class="toctree-l2"><a class="reference internal" href="losses.html">9.2. Loss Functions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="representations.html">9.3. Representations</a></li>
+<li class="toctree-l2"><a class="reference internal" href="solvers.html">9.4. Solvers</a></li>
+<li class="toctree-l2"><a class="reference internal" href="calibration.html">9.5. Calibration</a></li>
+<li class="toctree-l2"><a class="reference internal" href="neural.html">9.6. Neural Quantifiers</a></li>
 </ul>
 </details></li>
 </ul>
@@ -449,9 +454,9 @@
     <li class="breadcrumb-item"><a href="../user_guide.html" class="nav-link">User Guide</a></li>
     
     
-    <li class="breadcrumb-item"><a href="../aggregative_quantification.html" class="nav-link"><span class="section-number">1. </span>Aggregative Quantification</a></li>
+    <li class="breadcrumb-item"><a href="../aggregative_quantification.html" class="nav-link"><span class="section-number">2. </span>Aggregative Quantification</a></li>
     
-    <li class="breadcrumb-item active" aria-current="page"><span class="ellipsis"><span class="section-number">1.7. </span>Nearest Neighbors</span></li>
+    <li class="breadcrumb-item active" aria-current="page"><span class="ellipsis"><span class="section-number">2.8. </span>Nearest Neighbours</span></li>
   </ul>
 </nav>
 </div>
@@ -468,14 +473,191 @@
 <div id="searchbox"></div>
                 <article class="bd-article">
                   
-  <section id="nearest-neighbors">
-<span id="id1"></span><h1><span class="section-number">1.7. </span>Nearest Neighbors<a class="headerlink" href="#nearest-neighbors" title="Link to this heading">#</a></h1>
+  <section id="nearest-neighbours">
+<span id="nearest-neighbors"></span><h1><span class="section-number">2.8. </span>Nearest Neighbours<a class="headerlink" href="#nearest-neighbours" title="Link to this heading">#</a></h1>
+<p>Nearest-neighbour quantifiers estimate class prevalences by leveraging the
+local structure of the feature space. They are non-parametric, require no
+distributional assumptions, and are naturally robust to non-linear decision
+boundaries.</p>
+<nav class="contents local" id="contents">
+<p class="topic-title">Contents</p>
+<ul class="simple">
+<li><p><a class="reference internal" href="#pwk-probabilistic-weighted-k-nearest-neighbours" id="id10">PWK — Probabilistic Weighted k-Nearest Neighbours</a></p>
+<ul>
+<li><p><a class="reference internal" href="#parameters" id="id11">Parameters</a></p></li>
+<li><p><a class="reference internal" href="#examples" id="id12">Examples</a></p></li>
+<li><p><a class="reference internal" href="#when-to-use-pwk" id="id13">When to Use PWK</a></p></li>
+</ul>
+</li>
+<li><p><a class="reference internal" href="#id1" id="id14">Nearest Neighbors</a></p></li>
+<li><p><a class="reference internal" href="#pwk-pair-wise-weighted-k-nearest-neighbors" id="id15">PWK: Pair-wise Weighted K-Nearest Neighbors</a></p>
+<ul>
+<li><p><a class="reference internal" href="#pwk-proportion-weighted-k-nearest-neighbor" id="id16">PWK (Proportion-Weighted K-Nearest Neighbor)</a></p></li>
+<li><p><a class="reference internal" href="#pwk-alpha-alpha-adjusted-pwk" id="id17">PWK<span class="math notranslate nohighlight">\(\alpha\)</span> (Alpha-Adjusted PWK)</a></p></li>
+</ul>
+</li>
+</ul>
+</nav>
+<hr class="docutils" />
+<section id="pwk-probabilistic-weighted-k-nearest-neighbours">
+<h2><a class="toc-backref" href="#id10" role="doc-backlink"><span class="section-number">2.8.1. </span>PWK — Probabilistic Weighted k-Nearest Neighbours</a><a class="headerlink" href="#pwk-probabilistic-weighted-k-nearest-neighbours" title="Link to this heading">#</a></h2>
+<p><a class="reference internal" href="generated/mlquantify.neighbors.PWK.html#mlquantify.neighbors.PWK" title="mlquantify.neighbors.PWK"><code class="xref py py-class docutils literal notranslate"><span class="pre">PWK</span></code></a> (Barranquero et al., 2013) wraps a k-NN classifier with a
+<strong>class-imbalance-aware weighting scheme</strong> and then applies Classify and
+Count (CC) on its predictions. Each neighbour’s vote is multiplied by a
+class-specific weight that corrects for the size difference between classes,
+so that the minority class is not drowned out by the majority.</p>
+<p>The weight for class <span class="math notranslate nohighlight">\(c\)</span> is:</p>
+<div class="math notranslate nohighlight">
+\[w_c(\alpha) = \left(\frac{M}{m_c}\right)^{1/\alpha}\]</div>
+<p>where <span class="math notranslate nohighlight">\(M = \min_c m_c\)</span> is the smallest class size and <span class="math notranslate nohighlight">\(\alpha\)</span>
+is the imbalance-correction exponent.</p>
+<p>Special cases:</p>
+<ul class="simple">
+<li><p><span class="math notranslate nohighlight">\(\alpha = 1\)</span> → standard PWK (weights proportional to inverse class size).</p></li>
+<li><p><span class="math notranslate nohighlight">\(\alpha \to \infty\)</span> → all weights equal to 1 (standard k-NN).</p></li>
+</ul>
+<p><strong>Why it exists:</strong> A standard k-NN classifier biases predictions towards
+the majority class. PWK’s weighting neutralises this bias, producing more
+accurate CC estimates under class imbalance. Barranquero et al. (2013) showed
+PWK outperforms standard CC + k-NN by a wide margin on imbalanced datasets.</p>
+<section id="parameters">
+<h3><a class="toc-backref" href="#id11" role="doc-backlink"><span class="section-number">2.8.1.1. </span>Parameters</a><a class="headerlink" href="#parameters" title="Link to this heading">#</a></h3>
+<div class="pst-scrollable-table-container"><table class="table">
+<colgroup>
+<col style="width: 22.0%" />
+<col style="width: 15.0%" />
+<col style="width: 63.0%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Parameter</p></th>
+<th class="head"><p>Default</p></th>
+<th class="head"><p>Explanation</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">alpha</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">1</span></code></p></td>
+<td><p>Imbalance-correction exponent. Higher values reduce the penalty on
+larger classes:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">alpha=1</span></code> — standard PWK weighting (most aggressive correction).</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">alpha=2</span></code> — gentler correction.</p></li>
+<li><p>Very large <code class="docutils literal notranslate"><span class="pre">alpha</span></code> (e.g. 100) approaches standard k-NN.</p></li>
+</ul>
+<p>Tune by cross-validation if you are unsure; <code class="docutils literal notranslate"><span class="pre">alpha=1</span></code> is a good
+starting point.</p>
+</td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">n_neighbors</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">10</span></code></p></td>
+<td><p>Number of neighbours <span class="math notranslate nohighlight">\(k\)</span>. Larger <span class="math notranslate nohighlight">\(k\)</span> gives smoother
+(lower variance) prevalence estimates. Use larger values on bigger
+datasets. Common choices: 5, 10, 20.</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">algorithm</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">'auto'</span></code></p></td>
+<td><p>k-NN search algorithm. <code class="docutils literal notranslate"><span class="pre">'auto'</span></code> selects the fastest available
+(ball_tree/kd_tree for low-dim data, brute-force for high-dim).</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">metric</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">'euclidean'</span></code></p></td>
+<td><p>Distance metric for neighbour search. Use <code class="docutils literal notranslate"><span class="pre">'euclidean'</span></code> for
+continuous normalised features; <code class="docutils literal notranslate"><span class="pre">'cosine'</span></code> for sparse text/embedding
+vectors; <code class="docutils literal notranslate"><span class="pre">'manhattan'</span></code> for count data.</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">leaf_size</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">30</span></code></p></td>
+<td><p>Leaf size for tree-based algorithms. Affects speed, not accuracy.</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">p</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">2</span></code></p></td>
+<td><p>Minkowski distance parameter. <code class="docutils literal notranslate"><span class="pre">p=2</span></code> → Euclidean, <code class="docutils literal notranslate"><span class="pre">p=1</span></code> →
+Manhattan.</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">metric_params</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">None</span></code></p></td>
+<td><p>Extra keyword arguments for custom metric functions.</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">n_jobs</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">None</span></code></p></td>
+<td><p>Parallel jobs for neighbour search. <code class="docutils literal notranslate"><span class="pre">-1</span></code> uses all cores.</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+<section id="examples">
+<h3><a class="toc-backref" href="#id12" role="doc-backlink"><span class="section-number">2.8.1.2. </span>Examples</a><a class="headerlink" href="#examples" title="Link to this heading">#</a></h3>
+<p>Basic usage:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">mlquantify.neighbors</span><span class="w"> </span><span class="kn">import</span> <span class="n">PWK</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">sklearn.datasets</span><span class="w"> </span><span class="kn">import</span> <span class="n">make_classification</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">sklearn.model_selection</span><span class="w"> </span><span class="kn">import</span> <span class="n">train_test_split</span>
+
+<span class="n">X</span><span class="p">,</span> <span class="n">y</span> <span class="o">=</span> <span class="n">make_classification</span><span class="p">(</span><span class="n">n_samples</span><span class="o">=</span><span class="mi">1000</span><span class="p">,</span> <span class="n">weights</span><span class="o">=</span><span class="p">[</span><span class="mf">0.8</span><span class="p">,</span> <span class="mf">0.2</span><span class="p">],</span>
+                           <span class="n">random_state</span><span class="o">=</span><span class="mi">42</span><span class="p">)</span>
+<span class="n">X_train</span><span class="p">,</span> <span class="n">X_test</span><span class="p">,</span> <span class="n">y_train</span><span class="p">,</span> <span class="n">y_test</span> <span class="o">=</span> <span class="n">train_test_split</span><span class="p">(</span>
+    <span class="n">X</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">test_size</span><span class="o">=</span><span class="mf">0.3</span><span class="p">,</span> <span class="n">random_state</span><span class="o">=</span><span class="mi">42</span><span class="p">)</span>
+
+<span class="n">q</span> <span class="o">=</span> <span class="n">PWK</span><span class="p">(</span><span class="n">alpha</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">n_neighbors</span><span class="o">=</span><span class="mi">10</span><span class="p">)</span>
+<span class="n">q</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">X_train</span><span class="p">,</span> <span class="n">y_train</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">q</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">X_test</span><span class="p">))</span>
+<span class="c1"># {0: 0.80, 1: 0.20}</span>
+</pre></div>
+</div>
+<p>Tuning alpha and k:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">mlquantify.model_selection</span><span class="w"> </span><span class="kn">import</span> <span class="n">GridSearchQ</span><span class="p">,</span> <span class="n">APP</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">mlquantify.metrics</span><span class="w"> </span><span class="kn">import</span> <span class="n">MAE</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">mlquantify.neighbors</span><span class="w"> </span><span class="kn">import</span> <span class="n">PWK</span>
+
+<span class="n">protocol</span> <span class="o">=</span> <span class="n">APP</span><span class="p">(</span><span class="n">batch_size</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> <span class="n">n_prevalences</span><span class="o">=</span><span class="mi">21</span><span class="p">,</span> <span class="n">repeats</span><span class="o">=</span><span class="mi">5</span><span class="p">)</span>
+<span class="n">gs</span> <span class="o">=</span> <span class="n">GridSearchQ</span><span class="p">(</span>
+    <span class="n">quantifier</span><span class="o">=</span><span class="n">PWK</span><span class="p">(),</span>
+    <span class="n">param_grid</span><span class="o">=</span><span class="p">{</span>
+        <span class="s1">&#39;alpha&#39;</span><span class="p">:</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">5</span><span class="p">],</span>
+        <span class="s1">&#39;n_neighbors&#39;</span><span class="p">:</span> <span class="p">[</span><span class="mi">5</span><span class="p">,</span> <span class="mi">10</span><span class="p">,</span> <span class="mi">20</span><span class="p">],</span>
+    <span class="p">},</span>
+    <span class="n">protocol</span><span class="o">=</span><span class="n">protocol</span><span class="p">,</span>
+    <span class="n">error</span><span class="o">=</span><span class="n">MAE</span><span class="p">,</span>
+<span class="p">)</span>
+<span class="n">gs</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">X_train</span><span class="p">,</span> <span class="n">y_train</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">gs</span><span class="o">.</span><span class="n">best_params_</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Getting per-instance classifications:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">q</span> <span class="o">=</span> <span class="n">PWK</span><span class="p">(</span><span class="n">alpha</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">n_neighbors</span><span class="o">=</span><span class="mi">10</span><span class="p">)</span>
+<span class="n">q</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">X_train</span><span class="p">,</span> <span class="n">y_train</span><span class="p">)</span>
+<span class="n">labels</span> <span class="o">=</span> <span class="n">q</span><span class="o">.</span><span class="n">classify</span><span class="p">(</span><span class="n">X_test</span><span class="p">)</span>   <span class="c1"># hard labels from the weighted k-NN</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">labels</span><span class="p">[:</span><span class="mi">10</span><span class="p">])</span>
+</pre></div>
+</div>
+</section>
+<section id="when-to-use-pwk">
+<h3><a class="toc-backref" href="#id13" role="doc-backlink"><span class="section-number">2.8.1.3. </span>When to Use PWK</a><a class="headerlink" href="#when-to-use-pwk" title="Link to this heading">#</a></h3>
+<ul class="simple">
+<li><p>When you want a simple, non-parametric quantifier without tuning a
+full probabilistic classifier.</p></li>
+<li><p>When feature space distances are meaningful (normalised continuous features).</p></li>
+<li><p>For imbalanced binary problems where a standard classifier would be biased.</p></li>
+</ul>
+<p><strong>Limitation:</strong> PWK applies CC on top of the k-NN classifier; it inherits
+CC’s bias under distributional shift. It does not apply any adjustment like
+ACC or EMQ. For strong shift correction, use EMQ or DyS instead.</p>
+<div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<p><a class="reference internal" href="counters.html#counters-module"><span class="std std-ref">Counting-Based Quantifiers</span></a> for CC (which PWK builds on top of).
+<a class="reference internal" href="likelihood.html#likelihood"><span class="std std-ref">Likelihood-Based Quantification</span></a> for EMQ (stronger shift correction).</p>
+</div>
+</section>
+</section>
+<section id="id1">
+<h2><a class="toc-backref" href="#id14" role="doc-backlink"><span class="section-number">2.8.2. </span>Nearest Neighbors</a><a class="headerlink" href="#id1" title="Link to this heading">#</a></h2>
+</section>
 <section id="pwk-pair-wise-weighted-k-nearest-neighbors">
-<h2><span class="section-number">1.7.1. </span>PWK: Pair-wise Weighted K-Nearest Neighbors<a class="headerlink" href="#pwk-pair-wise-weighted-k-nearest-neighbors" title="Link to this heading">#</a></h2>
+<h2><a class="toc-backref" href="#id15" role="doc-backlink"><span class="section-number">2.8.3. </span>PWK: Pair-wise Weighted K-Nearest Neighbors</a><a class="headerlink" href="#pwk-pair-wise-weighted-k-nearest-neighbors" title="Link to this heading">#</a></h2>
 <p><a class="reference internal" href="generated/mlquantify.neighbors.PWK.html#mlquantify.neighbors.PWK" title="mlquantify.neighbors.PWK"><code class="xref py py-class docutils literal notranslate"><span class="pre">PWK</span></code></a> and <strong>PWK</strong><span class="math notranslate nohighlight">\(\alpha\)</span> are neighbor-based algorithms (k-Nearest Neighbors - NN) that apply class weighting techniques to estimate prevalence in binary problems <a class="footnote-reference brackets" href="#id9" id="id2" role="doc-noteref"><span class="fn-bracket">[</span>2<span class="fn-bracket">]</span></a>. They can be seen as aggregative quantification methods that adjust a k-NN classifier to account for class imbalance.</p>
 <p>PWK methods focus on simplicity and stability, offering competitive quantification that balances effectiveness with interpretability. By exploring the topology of the data through proximity-based analysis, these algorithms are robust to distribution changes and retain local structure better than global classifiers <a class="footnote-reference brackets" href="#id9" id="id3" role="doc-noteref"><span class="fn-bracket">[</span>2<span class="fn-bracket">]</span></a>. The methods complement k-NN with class weighting policies designed to neutralize the bias toward majority classes inherent in imbalanced datasets <a class="footnote-reference brackets" href="#id9" id="id4" role="doc-noteref"><span class="fn-bracket">[</span>2<span class="fn-bracket">]</span></a>.</p>
 <section id="pwk-proportion-weighted-k-nearest-neighbor">
-<h3><span class="section-number">1.7.1.1. </span>PWK (Proportion-Weighted K-Nearest Neighbor)<a class="headerlink" href="#pwk-proportion-weighted-k-nearest-neighbor" title="Link to this heading">#</a></h3>
+<h3><a class="toc-backref" href="#id16" role="doc-backlink"><span class="section-number">2.8.3.1. </span>PWK (Proportion-Weighted K-Nearest Neighbor)</a><a class="headerlink" href="#pwk-proportion-weighted-k-nearest-neighbor" title="Link to this heading">#</a></h3>
 <p>This is the simplest version of the algorithm.</p>
 <ul class="simple">
 <li><p><strong>Mechanism:</strong> The weight <span class="math notranslate nohighlight">\(w_c\)</span> is defined to be <strong>inversely proportional</strong> to the size of class <span class="math notranslate nohighlight">\(c\)</span> relative to the total training set size <a class="footnote-reference brackets" href="#id9" id="id5" role="doc-noteref"><span class="fn-bracket">[</span>2<span class="fn-bracket">]</span></a>.</p></li>
@@ -491,7 +673,7 @@
 </div>
 </details></section>
 <section id="pwk-alpha-alpha-adjusted-pwk">
-<h3><span class="section-number">1.7.1.2. </span>PWK<span class="math notranslate nohighlight">\(\alpha\)</span> (Alpha-Adjusted PWK)<a class="headerlink" href="#pwk-alpha-alpha-adjusted-pwk" title="Link to this heading">#</a></h3>
+<h3><a class="toc-backref" href="#id17" role="doc-backlink"><span class="section-number">2.8.3.2. </span>PWK<span class="math notranslate nohighlight">\(\alpha\)</span> (Alpha-Adjusted PWK)</a><a class="headerlink" href="#pwk-alpha-alpha-adjusted-pwk" title="Link to this heading">#</a></h3>
 <p><strong>PWK</strong><span class="math notranslate nohighlight">\(\alpha\)</span> is a general structure that encompasses both standard KNN and PWK as special cases <a class="footnote-reference brackets" href="#id9" id="id6" role="doc-noteref"><span class="fn-bracket">[</span>2<span class="fn-bracket">]</span></a>.</p>
 <ul class="simple">
 <li><p><strong>Mechanism:</strong> It introduces a tunable parameter <span class="math notranslate nohighlight">\(\alpha\)</span> into the weighting formula.</p></li>
@@ -553,7 +735,7 @@
       <i class="fa-solid fa-angle-left"></i>
       <div class="prev-next-info">
         <p class="prev-next-subtitle">previous</p>
-        <p class="prev-next-title"><span class="section-number">1.6. </span>Distribution Matching</p>
+        <p class="prev-next-title"><span class="section-number">2.7. </span>Distribution Matching</p>
       </div>
     </a>
     <a class="right-next"
@@ -561,7 +743,7 @@
        title="next page">
       <div class="prev-next-info">
         <p class="prev-next-subtitle">next</p>
-        <p class="prev-next-title"><span class="section-number">2. </span>Non-Aggregative Quantification</p>
+        <p class="prev-next-title"><span class="section-number">3. </span>Non-Aggregative Quantification</p>
       </div>
       <i class="fa-solid fa-angle-right"></i>
     </a>
@@ -588,9 +770,16 @@
   </div>
   <nav id="pst-page-toc-nav" class="page-toc" aria-labelledby="pst-page-navigation-heading-2">
     <ul class="pst-show_toc_level nav section-nav flex-column">
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#pwk-pair-wise-weighted-k-nearest-neighbors">1.7.1. PWK: Pair-wise Weighted K-Nearest Neighbors</a><ul class="nav section-nav flex-column">
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pwk-proportion-weighted-k-nearest-neighbor">1.7.1.1. PWK (Proportion-Weighted K-Nearest Neighbor)</a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pwk-alpha-alpha-adjusted-pwk">1.7.1.2. PWK<span class="math notranslate nohighlight">\(\alpha\)</span> (Alpha-Adjusted PWK)</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#pwk-probabilistic-weighted-k-nearest-neighbours">2.8.1. PWK — Probabilistic Weighted k-Nearest Neighbours</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#parameters">2.8.1.1. Parameters</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#examples">2.8.1.2. Examples</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#when-to-use-pwk">2.8.1.3. When to Use PWK</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#id1">2.8.2. Nearest Neighbors</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#pwk-pair-wise-weighted-k-nearest-neighbors">2.8.3. PWK: Pair-wise Weighted K-Nearest Neighbors</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pwk-proportion-weighted-k-nearest-neighbor">2.8.3.1. PWK (Proportion-Weighted K-Nearest Neighbor)</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pwk-alpha-alpha-adjusted-pwk">2.8.3.2. PWK<span class="math notranslate nohighlight">\(\alpha\)</span> (Alpha-Adjusted PWK)</a></li>
 </ul>
 </li>
 </ul>

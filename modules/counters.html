@@ -7,19 +7,19 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
-<meta property="og:title" content="1.3. Counters For Quantification" />
+<meta property="og:title" content="2.3. Counting-Based Quantifiers" />
 <meta property="og:type" content="website" />
 <meta property="og:url" content="modules/counters.html" />
 <meta property="og:site_name" content="mlquantify" />
-<meta property="og:description" content="To deal with problems of quantification, a straightforward approach is to count the number of items predicted to belong to each class in the unlabeled set. This is the basis of the Classify and Cou..." />
+<meta property="og:description" content="Counting-based quantifiers are the simplest family of aggregative methods: train a classifier, apply it to the test set, and count the fraction of instances assigned to each class. They are cheap, ..." />
 <meta property="og:image:width" content="1146" />
 <meta property="og:image:height" content="600" />
-<meta property="og:image" content="_images/social_previews/summary_modules_counters_7527dc7d.png" />
-<meta property="og:image:alt" content="To deal with problems of quantification, a straightforward approach is to count the number of items predicted to belong to each class in the unlabeled set. This is the basis of the Classify and Cou..." />
-<meta name="description" content="To deal with problems of quantification, a straightforward approach is to count the number of items predicted to belong to each class in the unlabeled set. This is the basis of the Classify and Cou..." />
+<meta property="og:image" content="_images/social_previews/summary_modules_counters_92b92598.png" />
+<meta property="og:image:alt" content="Counting-based quantifiers are the simplest family of aggregative methods: train a classifier, apply it to the test set, and count the fraction of instances assigned to each class. They are cheap, ..." />
+<meta name="description" content="Counting-based quantifiers are the simplest family of aggregative methods: train a classifier, apply it to the test set, and count the fraction of instances assigned to each class. They are cheap, ..." />
 <meta name="twitter:card" content="summary_large_image" />
 
-    <title>1.3. Counters For Quantification &#8212; mlquantify</title>
+    <title>2.3. Counting-Based Quantifiers &#8212; mlquantify</title>
   
   
   
@@ -66,8 +66,8 @@
     <script>DOCUMENTATION_OPTIONS.search_as_you_type = false;</script>
     <link rel="canonical" href="https://luizfernandolj.github.io/mlquantify/modules/counters.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="1.4. Adjusted Counting" href="adjust_counting.html" />
-    <link rel="prev" title="1.1. Using Aggregative Quantification Methods" href="using_aggregative.html" />
+    <link rel="next" title="2.5. Adjusted Counting" href="adjust_counting.html" />
+    <link rel="prev" title="2.1. Using Aggregative Quantification Methods" href="using_aggregative.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
   <meta name="docsearch:version" content="" />
@@ -374,42 +374,47 @@
      aria-label="Section Navigation">
   <p class="bd-links__title" role="heading" aria-level="1">Section Navigation</p>
   <div class="bd-toc-item navbar-nav"><ul class="current nav bd-sidenav">
-<li class="toctree-l1 current active has-children"><a class="reference internal" href="../aggregative_quantification.html">1. Aggregative Quantification</a><details open="open"><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul class="current">
-<li class="toctree-l2"><a class="reference internal" href="using_aggregative.html">1.1. Using Aggregative Quantification Methods</a></li>
+<li class="toctree-l1"><a class="reference internal" href="quantification_foundations.html">1. Foundations</a></li>
+<li class="toctree-l1 current active has-children"><a class="reference internal" href="../aggregative_quantification.html">2. Aggregative Quantification</a><details open="open"><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="using_aggregative.html">2.1. Using Aggregative Quantification Methods</a></li>
 
-<li class="toctree-l2 current active"><a class="current reference internal" href="#">1.3. Counters For Quantification</a></li>
-<li class="toctree-l2"><a class="reference internal" href="adjust_counting.html">1.4. Adjusted Counting</a></li>
-<li class="toctree-l2"><a class="reference internal" href="likelihood.html">1.5. Likelihood-Based Quantification</a></li>
-<li class="toctree-l2"><a class="reference internal" href="distribution_matching.html">1.6. Distribution Matching</a></li>
-<li class="toctree-l2"><a class="reference internal" href="neighbors.html">1.7. Nearest Neighbors</a></li>
+<li class="toctree-l2 current active"><a class="current reference internal" href="#">2.3. Counting-Based Quantifiers</a></li>
+
+<li class="toctree-l2"><a class="reference internal" href="adjust_counting.html">2.5. Adjusted Counting</a></li>
+<li class="toctree-l2"><a class="reference internal" href="likelihood.html">2.6. Likelihood Methods</a></li>
+<li class="toctree-l2"><a class="reference internal" href="distribution_matching.html">2.7. Distribution Matching</a></li>
+<li class="toctree-l2"><a class="reference internal" href="neighbors.html">2.8. Nearest Neighbours</a></li>
 </ul>
 </details></li>
-<li class="toctree-l1 has-children"><a class="reference internal" href="../non_aggregative_quantification.html">2. Non Aggregative Quantification</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
-<li class="toctree-l2"><a class="reference internal" href="mixture_models_non_agg.html">2.1. Mixture Models for Non-Aggregative Quantification</a></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../non_aggregative_quantification.html">3. Non Aggregative Quantification</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="mixture_models_non_agg.html">3.1. Mixture Models for Non-Aggregative Quantification</a></li>
 </ul>
 </details></li>
-<li class="toctree-l1 has-children"><a class="reference internal" href="../meta_quantification.html">3. Meta Quantification</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
-<li class="toctree-l2"><a class="reference internal" href="ensemble.html">3.1. Ensemble for Quantification</a></li>
-<li class="toctree-l2"><a class="reference internal" href="bootstrap.html">3.2. Bootstrap in Quantification</a></li>
-<li class="toctree-l2"><a class="reference internal" href="scores_adaptation.html">3.3. QuaDapt: Drift-Resilient Score Adaptation</a></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../meta_quantification.html">4. Meta Quantification</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="ensemble.html">4.1. Ensembles and Adaptation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="bootstrap.html">4.2. Bootstrap in Quantification</a></li>
+<li class="toctree-l2"><a class="reference internal" href="scores_adaptation.html">4.3. QuaDapt: Drift-Resilient Score Adaptation</a></li>
 </ul>
 </details></li>
-<li class="toctree-l1 has-children"><a class="reference internal" href="../model_selection_evaluation.html">4. Model Selection and Evaluation</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
-<li class="toctree-l2"><a class="reference internal" href="protocols.html">4.1. Protocols for Quantification</a></li>
-<li class="toctree-l2"><a class="reference internal" href="tuning_hyperparameters.html">4.2. Tuning Hyperparameters</a></li>
-<li class="toctree-l2"><a class="reference internal" href="evaluation_metrics.html">4.3. Evaluation Metrics</a></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../model_selection_evaluation.html">5. Model Selection and Evaluation</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="protocols.html">5.1. Evaluation Protocols</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tuning_hyperparameters.html">5.2. Hyperparameter Tuning</a></li>
+<li class="toctree-l2"><a class="reference internal" href="evaluation_metrics.html">5.3. Evaluation Metrics</a></li>
+
+
+
 </ul>
 </details></li>
-<li class="toctree-l1"><a class="reference internal" href="confidence_intervals.html">5. Confidence Intervals</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../building_a_quantifier.html">6. Building a Quantifier</a></li>
-<li class="toctree-l1"><a class="reference internal" href="mlquantify_methods.html">7. Mlquantify methods</a></li>
-<li class="toctree-l1 has-children"><a class="reference internal" href="../components.html">8. Core Components</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
-<li class="toctree-l2"><a class="reference internal" href="compose.html">8.1. Composable Quantifiers</a></li>
-<li class="toctree-l2"><a class="reference internal" href="losses.html">8.2. Loss Functions</a></li>
-<li class="toctree-l2"><a class="reference internal" href="representations.html">8.3. Representations</a></li>
-<li class="toctree-l2"><a class="reference internal" href="solvers.html">8.4. Solvers</a></li>
-<li class="toctree-l2"><a class="reference internal" href="calibration.html">8.5. Calibration</a></li>
-<li class="toctree-l2"><a class="reference internal" href="neural.html">8.6. Neural Quantifiers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="confidence_intervals.html">6. Confidence Intervals</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../building_a_quantifier.html">7. Building a Quantifier</a></li>
+<li class="toctree-l1"><a class="reference internal" href="mlquantify_methods.html">8. Mlquantify methods</a></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../components.html">9. Core Components</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="compose.html">9.1. Composable Quantifiers</a></li>
+<li class="toctree-l2"><a class="reference internal" href="losses.html">9.2. Loss Functions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="representations.html">9.3. Representations</a></li>
+<li class="toctree-l2"><a class="reference internal" href="solvers.html">9.4. Solvers</a></li>
+<li class="toctree-l2"><a class="reference internal" href="calibration.html">9.5. Calibration</a></li>
+<li class="toctree-l2"><a class="reference internal" href="neural.html">9.6. Neural Quantifiers</a></li>
 </ul>
 </details></li>
 </ul>
@@ -449,9 +454,9 @@
     <li class="breadcrumb-item"><a href="../user_guide.html" class="nav-link">User Guide</a></li>
     
     
-    <li class="breadcrumb-item"><a href="../aggregative_quantification.html" class="nav-link"><span class="section-number">1. </span>Aggregative Quantification</a></li>
+    <li class="breadcrumb-item"><a href="../aggregative_quantification.html" class="nav-link"><span class="section-number">2. </span>Aggregative Quantification</a></li>
     
-    <li class="breadcrumb-item active" aria-current="page"><span class="ellipsis"><span class="section-number">1.3. </span>Counters For Quantification</span></li>
+    <li class="breadcrumb-item active" aria-current="page"><span class="ellipsis"><span class="section-number">2.3. </span>Counting-Based Quantifiers</span></li>
   </ul>
 </nav>
 </div>
@@ -468,11 +473,415 @@
 <div id="searchbox"></div>
                 <article class="bd-article">
                   
-  <section id="counters-for-quantification">
-<span id="counters-module"></span><h1><span class="section-number">1.3. </span>Counters For Quantification<a class="headerlink" href="#counters-for-quantification" title="Link to this heading">#</a></h1>
+  <section id="counting-based-quantifiers">
+<span id="counters-module"></span><h1><span class="section-number">2.3. </span>Counting-Based Quantifiers<a class="headerlink" href="#counting-based-quantifiers" title="Link to this heading">#</a></h1>
+<p>Counting-based quantifiers are the simplest family of aggregative methods:
+train a classifier, apply it to the test set, and count the fraction of
+instances assigned to each class. They are cheap, easy to understand, and
+serve as essential baselines.</p>
+<p>See <a class="reference internal" href="quantification_foundations.html#quantification-foundations"><span class="std std-ref">Quantification Foundations</span></a> for the theoretical background on <em>why</em>
+counting alone is biased and <em>when</em> you need a stronger correction.</p>
+<nav class="contents local" id="contents">
+<p class="topic-title">Contents</p>
+<ul class="simple">
+<li><p><a class="reference internal" href="#cc-classify-and-count" id="id8">CC — Classify and Count</a></p>
+<ul>
+<li><p><a class="reference internal" href="#parameters" id="id9">Parameters</a></p></li>
+<li><p><a class="reference internal" href="#examples" id="id10">Examples</a></p></li>
+</ul>
+</li>
+<li><p><a class="reference internal" href="#pcc-probabilistic-classify-and-count" id="id11">PCC — Probabilistic Classify and Count</a></p>
+<ul>
+<li><p><a class="reference internal" href="#id1" id="id12">Parameters</a></p></li>
+<li><p><a class="reference internal" href="#id2" id="id13">Examples</a></p></li>
+</ul>
+</li>
+<li><p><a class="reference internal" href="#gacc-generalised-adjusted-classify-and-count" id="id14">GACC — Generalised Adjusted Classify and Count</a></p>
+<ul>
+<li><p><a class="reference internal" href="#id3" id="id15">Parameters</a></p></li>
+<li><p><a class="reference internal" href="#id4" id="id16">Examples</a></p></li>
+</ul>
+</li>
+<li><p><a class="reference internal" href="#gpacc-generalised-probabilistic-adjusted-classify-and-count" id="id17">GPACC — Generalised Probabilistic Adjusted Classify and Count</a></p>
+<ul>
+<li><p><a class="reference internal" href="#id5" id="id18">Parameters</a></p></li>
+<li><p><a class="reference internal" href="#id6" id="id19">Examples</a></p></li>
+</ul>
+</li>
+<li><p><a class="reference internal" href="#choosing-among-cc-pcc-gacc-and-gpacc" id="id20">Choosing Among CC, PCC, GACC, and GPACC</a></p></li>
+</ul>
+</nav>
+<hr class="docutils" />
+<section id="cc-classify-and-count">
+<h2><a class="toc-backref" href="#id8" role="doc-backlink"><span class="section-number">2.3.1. </span>CC — Classify and Count</a><a class="headerlink" href="#cc-classify-and-count" title="Link to this heading">#</a></h2>
+<p><a class="reference internal" href="generated/mlquantify.counting.CC.html#mlquantify.counting.CC" title="mlquantify.counting.CC"><code class="xref py py-class docutils literal notranslate"><span class="pre">CC</span></code></a> is the simplest quantification baseline. It trains a hard
+classifier <span class="math notranslate nohighlight">\(h\)</span> on labelled data <span class="math notranslate nohighlight">\(L\)</span>, applies it to an unlabelled
+set <span class="math notranslate nohighlight">\(U\)</span>, and counts the proportion of predictions for each class:</p>
+<div class="math notranslate nohighlight">
+\[\hat{p}^{CC}(c) = \frac{|\{x \in U : h(x) = c\}|}{|U|}\]</div>
+<p><strong>Why it exists:</strong> CC is the <em>reference baseline</em> for every quantification
+study. Despite being biased under distributional shift (Forman, 2005), it is
+fast, interpretable, and competitive when training and test prevalences are
+close. Always include it as a point of comparison.</p>
+<figure class="align-center" id="id7">
+<a class="reference internal image-reference" href="../_images/cc_bias.png"><img alt="CC and PCC prevalence estimation bias" src="../_images/cc_bias.png" style="width: 75%;" />
+</a>
+<figcaption>
+<p><span class="caption-text"><em>A classifier trained on 50/50 balanced data is evaluated on test sets with
+varying true prevalences. CC (red) consistently overestimates at low prevalences
+and underestimates at high ones. PCC (orange) is less biased but still distorted.
+The dashed line is the ideal unbiased estimator.</em></span><a class="headerlink" href="#id7" title="Link to this image">#</a></p>
+</figcaption>
+</figure>
+<div class="admonition-when-cc-fails admonition">
+<p class="admonition-title">When CC fails</p>
+<p>Suppose a classifier trained on balanced data (50 % positive) achieves
+90 % accuracy, but the test set has only 5 % positives. CC estimates
+<span class="math notranslate nohighlight">\(\approx 14\%\)</span> positives — nearly 3× the truth — because the
+false positives from the 95 % negatives dominate the count. The bias
+does not vanish with more data; it vanishes only when the distributions
+match.</p>
+</div>
+<section id="parameters">
+<h3><a class="toc-backref" href="#id9" role="doc-backlink"><span class="section-number">2.3.1.1. </span>Parameters</a><a class="headerlink" href="#parameters" title="Link to this heading">#</a></h3>
+<div class="pst-scrollable-table-container"><table class="table">
+<colgroup>
+<col style="width: 20.0%" />
+<col style="width: 15.0%" />
+<col style="width: 65.0%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Parameter</p></th>
+<th class="head"><p>Default</p></th>
+<th class="head"><p>Explanation</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">estimator</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">None</span></code></p></td>
+<td><p>Any scikit-learn-compatible classifier with <code class="docutils literal notranslate"><span class="pre">fit</span></code> and <code class="docutils literal notranslate"><span class="pre">predict</span></code>
+methods. If <code class="docutils literal notranslate"><span class="pre">None</span></code>, skip fitting and call <code class="xref py py-meth docutils literal notranslate"><span class="pre">aggregate</span></code> directly
+with pre-computed hard labels.</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">threshold</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">0.5</span></code></p></td>
+<td><p>Decision threshold applied to soft scores when the estimator exposes
+<code class="docutils literal notranslate"><span class="pre">predict_proba</span></code>. Values above the threshold are labelled positive.
+Rarely needs tuning here — use <a class="reference internal" href="generated/mlquantify.counting.TAC.html#mlquantify.counting.TAC" title="mlquantify.counting.TAC"><code class="xref py py-class docutils literal notranslate"><span class="pre">TAC</span></code></a>, <a class="reference internal" href="generated/mlquantify.counting.T50.html#mlquantify.counting.T50" title="mlquantify.counting.T50"><code class="xref py py-class docutils literal notranslate"><span class="pre">T50</span></code></a>, or
+<a class="reference internal" href="generated/mlquantify.counting.TMAX.html#mlquantify.counting.TMAX" title="mlquantify.counting.TMAX"><code class="xref py py-class docutils literal notranslate"><span class="pre">TMAX</span></code></a> if threshold selection matters for your problem.</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+<section id="examples">
+<h3><a class="toc-backref" href="#id10" role="doc-backlink"><span class="section-number">2.3.1.2. </span>Examples</a><a class="headerlink" href="#examples" title="Link to this heading">#</a></h3>
+<p>Basic usage:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">mlquantify.counting</span><span class="w"> </span><span class="kn">import</span> <span class="n">CC</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">sklearn.linear_model</span><span class="w"> </span><span class="kn">import</span> <span class="n">LogisticRegression</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">sklearn.datasets</span><span class="w"> </span><span class="kn">import</span> <span class="n">make_classification</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">sklearn.model_selection</span><span class="w"> </span><span class="kn">import</span> <span class="n">train_test_split</span>
+
+<span class="n">X</span><span class="p">,</span> <span class="n">y</span> <span class="o">=</span> <span class="n">make_classification</span><span class="p">(</span><span class="n">n_samples</span><span class="o">=</span><span class="mi">1000</span><span class="p">,</span> <span class="n">weights</span><span class="o">=</span><span class="p">[</span><span class="mf">0.8</span><span class="p">,</span> <span class="mf">0.2</span><span class="p">],</span>
+                           <span class="n">random_state</span><span class="o">=</span><span class="mi">42</span><span class="p">)</span>
+<span class="n">X_train</span><span class="p">,</span> <span class="n">X_test</span><span class="p">,</span> <span class="n">y_train</span><span class="p">,</span> <span class="n">y_test</span> <span class="o">=</span> <span class="n">train_test_split</span><span class="p">(</span>
+    <span class="n">X</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">test_size</span><span class="o">=</span><span class="mf">0.3</span><span class="p">,</span> <span class="n">random_state</span><span class="o">=</span><span class="mi">42</span><span class="p">)</span>
+
+<span class="n">q</span> <span class="o">=</span> <span class="n">CC</span><span class="p">(</span><span class="n">LogisticRegression</span><span class="p">())</span>
+<span class="n">q</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">X_train</span><span class="p">,</span> <span class="n">y_train</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">q</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">X_test</span><span class="p">))</span>
+<span class="c1"># {0: 0.82, 1: 0.18}</span>
+</pre></div>
+</div>
+<p>Using <code class="xref py py-meth docutils literal notranslate"><span class="pre">aggregate</span></code> with pre-computed hard labels:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">mlquantify.counting</span><span class="w"> </span><span class="kn">import</span> <span class="n">CC</span>
+
+<span class="n">q</span> <span class="o">=</span> <span class="n">CC</span><span class="p">()</span>
+<span class="n">hard_labels</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">])</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">q</span><span class="o">.</span><span class="n">aggregate</span><span class="p">(</span><span class="n">hard_labels</span><span class="p">))</span>
+<span class="c1"># {0: 0.6, 1: 0.4}</span>
+</pre></div>
+</div>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>CC is consistently biased when the test class distribution differs from
+training. For any real deployment scenario with distribution shift, use
+<code class="xref py py-class docutils literal notranslate"><span class="pre">ACC</span></code>, <a class="reference internal" href="generated/mlquantify.likelihood.EMQ.html#mlquantify.likelihood.EMQ" title="mlquantify.likelihood.EMQ"><code class="xref py py-class docutils literal notranslate"><span class="pre">EMQ</span></code></a>, or a
+distribution-matching method instead.</p>
+</div>
+</section>
+</section>
+<hr class="docutils" />
+<section id="pcc-probabilistic-classify-and-count">
+<h2><a class="toc-backref" href="#id11" role="doc-backlink"><span class="section-number">2.3.2. </span>PCC — Probabilistic Classify and Count</a><a class="headerlink" href="#pcc-probabilistic-classify-and-count" title="Link to this heading">#</a></h2>
+<p><a class="reference internal" href="generated/mlquantify.counting.PCC.html#mlquantify.counting.PCC" title="mlquantify.counting.PCC"><code class="xref py py-class docutils literal notranslate"><span class="pre">PCC</span></code></a> replaces hard decisions with <strong>posterior probabilities</strong> and
+estimates prevalence as their average over the test set:</p>
+<div class="math notranslate nohighlight">
+\[\hat{p}^{PCC}(c) = \frac{1}{|U|} \sum_{x \in U} P(Y = c \mid x)\]</div>
+<p>where <span class="math notranslate nohighlight">\(P(Y=c \mid x)\)</span> is the soft output of a probabilistic classifier.</p>
+<p><strong>Why it exists:</strong> PCC smooths out the hard-thresholding noise in CC. By
+averaging probabilities instead of counting hard predictions, it reduces
+variance and often reduces bias too — especially when the classifier is
+well-calibrated. However, Forman (2005) showed that uncalibrated posteriors
+under prior-probability shift are still biased, so PCC is not a complete
+solution. It is the best quick upgrade from CC.</p>
+<section id="id1">
+<h3><a class="toc-backref" href="#id12" role="doc-backlink"><span class="section-number">2.3.2.1. </span>Parameters</a><a class="headerlink" href="#id1" title="Link to this heading">#</a></h3>
+<div class="pst-scrollable-table-container"><table class="table">
+<colgroup>
+<col style="width: 20.0%" />
+<col style="width: 15.0%" />
+<col style="width: 65.0%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Parameter</p></th>
+<th class="head"><p>Default</p></th>
+<th class="head"><p>Explanation</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">estimator</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">None</span></code></p></td>
+<td><p>A probabilistic classifier with <code class="docutils literal notranslate"><span class="pre">fit</span></code> and <code class="docutils literal notranslate"><span class="pre">predict_proba</span></code> methods.
+Required for soft probability outputs. If <code class="docutils literal notranslate"><span class="pre">None</span></code>, call
+<code class="xref py py-meth docutils literal notranslate"><span class="pre">aggregate</span></code> directly with a pre-computed probability matrix of
+shape <code class="docutils literal notranslate"><span class="pre">(n_samples,</span> <span class="pre">n_classes)</span></code>.</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+<section id="id2">
+<h3><a class="toc-backref" href="#id13" role="doc-backlink"><span class="section-number">2.3.2.2. </span>Examples</a><a class="headerlink" href="#id2" title="Link to this heading">#</a></h3>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">mlquantify.counting</span><span class="w"> </span><span class="kn">import</span> <span class="n">PCC</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">sklearn.ensemble</span><span class="w"> </span><span class="kn">import</span> <span class="n">RandomForestClassifier</span>
+
+<span class="n">q</span> <span class="o">=</span> <span class="n">PCC</span><span class="p">(</span><span class="n">RandomForestClassifier</span><span class="p">(</span><span class="n">n_estimators</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> <span class="n">random_state</span><span class="o">=</span><span class="mi">42</span><span class="p">))</span>
+<span class="n">q</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">X_train</span><span class="p">,</span> <span class="n">y_train</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">q</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">X_test</span><span class="p">))</span>
+<span class="c1"># {0: 0.80, 1: 0.20}</span>
+</pre></div>
+</div>
+<p>Using <code class="xref py py-meth docutils literal notranslate"><span class="pre">aggregate</span></code> with pre-computed posteriors:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">mlquantify.counting</span><span class="w"> </span><span class="kn">import</span> <span class="n">PCC</span>
+
+<span class="c1"># Shape: (n_samples, n_classes)</span>
+<span class="n">proba</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([[</span><span class="mf">0.9</span><span class="p">,</span> <span class="mf">0.1</span><span class="p">],</span>
+                  <span class="p">[</span><span class="mf">0.3</span><span class="p">,</span> <span class="mf">0.7</span><span class="p">],</span>
+                  <span class="p">[</span><span class="mf">0.6</span><span class="p">,</span> <span class="mf">0.4</span><span class="p">]])</span>
+<span class="n">q</span> <span class="o">=</span> <span class="n">PCC</span><span class="p">()</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">q</span><span class="o">.</span><span class="n">aggregate</span><span class="p">(</span><span class="n">proba</span><span class="p">))</span>
+<span class="c1"># {0: 0.6, 1: 0.4}</span>
+</pre></div>
+</div>
+</section>
+</section>
+<hr class="docutils" />
+<section id="gacc-generalised-adjusted-classify-and-count">
+<h2><a class="toc-backref" href="#id14" role="doc-backlink"><span class="section-number">2.3.3. </span>GACC — Generalised Adjusted Classify and Count</a><a class="headerlink" href="#gacc-generalised-adjusted-classify-and-count" title="Link to this heading">#</a></h2>
+<p><a class="reference internal" href="generated/mlquantify.counting.GACC.html#mlquantify.counting.GACC" title="mlquantify.counting.GACC"><code class="xref py py-class docutils literal notranslate"><span class="pre">GACC</span></code></a> extends the binary ACC correction to <strong>native multiclass</strong>
+problems. During training, it builds a confusion matrix <span class="math notranslate nohighlight">\(M\)</span> via
+cross-validation (where <span class="math notranslate nohighlight">\(M_{ij}\)</span> is the fraction of class-<span class="math notranslate nohighlight">\(i\)</span>
+samples predicted as class <span class="math notranslate nohighlight">\(j\)</span>). At prediction time it solves the
+constrained linear system:</p>
+<div class="math notranslate nohighlight">
+\[\hat{p} = \arg\min_{\hat{p} \in \Delta^{k-1}} \| M\hat{p} - \hat{c} \|\]</div>
+<p>where <span class="math notranslate nohighlight">\(\hat{c}\)</span> is the vector of CC proportions on the test set.</p>
+<p><strong>Why it exists:</strong> Binary ACC cannot handle more than two classes directly,
+because the 2×2 confusion-matrix correction becomes underdetermined for
+<span class="math notranslate nohighlight">\(k&gt;2\)</span>. GACC provides the proper multiclass generalisation via
+constrained optimisation, as introduced by Firat (2016).</p>
+<section id="id3">
+<h3><a class="toc-backref" href="#id15" role="doc-backlink"><span class="section-number">2.3.3.1. </span>Parameters</a><a class="headerlink" href="#id3" title="Link to this heading">#</a></h3>
+<div class="pst-scrollable-table-container"><table class="table">
+<colgroup>
+<col style="width: 20.0%" />
+<col style="width: 15.0%" />
+<col style="width: 65.0%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Parameter</p></th>
+<th class="head"><p>Default</p></th>
+<th class="head"><p>Explanation</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">estimator</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">None</span></code></p></td>
+<td><p>Hard-prediction classifier (<code class="docutils literal notranslate"><span class="pre">fit</span></code> + <code class="docutils literal notranslate"><span class="pre">predict</span></code>). Does not need to be
+probabilistic.</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">loss</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">'ls'</span></code></p></td>
+<td><p>Loss used to solve the linear system. <code class="docutils literal notranslate"><span class="pre">'ls'</span></code> (least squares) is the
+standard choice. <code class="docutils literal notranslate"><span class="pre">'l1'</span></code> adds robustness against outlier confusion-matrix
+entries at the cost of a slower solve.</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">solver</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">'slsqp'</span></code></p></td>
+<td><p>Optimisation algorithm. <code class="docutils literal notranslate"><span class="pre">'slsqp'</span></code> handles the simplex constraint
+(<span class="math notranslate nohighlight">\(\hat{p} \ge 0\)</span>, <span class="math notranslate nohighlight">\(\sum \hat{p}=1\)</span>) natively and is the
+recommended choice.</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">cv</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">None</span></code> (→ 5)</p></td>
+<td><p>Cross-validation folds for building the confusion matrix. More folds give
+a more accurate estimate of the confusion matrix at the cost of extra
+training time. 5 is a good default; use 10 on larger datasets.</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">stratified</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">True</span></code></p></td>
+<td><p>Stratify folds to ensure every class appears in every fold — essential
+when classes are imbalanced. Leave <code class="docutils literal notranslate"><span class="pre">True</span></code> unless you have a specific
+reason not to.</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">shuffle</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">False</span></code></p></td>
+<td><p>Whether to shuffle data before splitting. Set <code class="docutils literal notranslate"><span class="pre">True</span></code> if the dataset has
+temporal ordering that could make consecutive samples very similar.</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">random_state</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">None</span></code></p></td>
+<td><p>Seed for reproducibility of the cross-validation split.</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+<section id="id4">
+<h3><a class="toc-backref" href="#id16" role="doc-backlink"><span class="section-number">2.3.3.2. </span>Examples</a><a class="headerlink" href="#id4" title="Link to this heading">#</a></h3>
+<p>Three-class quantification:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">mlquantify.counting</span><span class="w"> </span><span class="kn">import</span> <span class="n">GACC</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">sklearn.svm</span><span class="w"> </span><span class="kn">import</span> <span class="n">SVC</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">sklearn.datasets</span><span class="w"> </span><span class="kn">import</span> <span class="n">make_classification</span>
+
+<span class="n">X</span><span class="p">,</span> <span class="n">y</span> <span class="o">=</span> <span class="n">make_classification</span><span class="p">(</span><span class="n">n_samples</span><span class="o">=</span><span class="mi">600</span><span class="p">,</span> <span class="n">n_classes</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span>
+                           <span class="n">n_informative</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">n_redundant</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>
+                           <span class="n">random_state</span><span class="o">=</span><span class="mi">42</span><span class="p">)</span>
+<span class="n">X_train</span><span class="p">,</span> <span class="n">X_test</span> <span class="o">=</span> <span class="n">X</span><span class="p">[:</span><span class="mi">450</span><span class="p">],</span> <span class="n">X</span><span class="p">[</span><span class="mi">450</span><span class="p">:]</span>
+<span class="n">y_train</span><span class="p">,</span> <span class="n">y_test</span> <span class="o">=</span> <span class="n">y</span><span class="p">[:</span><span class="mi">450</span><span class="p">],</span> <span class="n">y</span><span class="p">[</span><span class="mi">450</span><span class="p">:]</span>
+
+<span class="n">q</span> <span class="o">=</span> <span class="n">GACC</span><span class="p">(</span><span class="n">SVC</span><span class="p">(),</span> <span class="n">cv</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">stratified</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="n">q</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">X_train</span><span class="p">,</span> <span class="n">y_train</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">q</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">X_test</span><span class="p">))</span>
+<span class="c1"># {0: 0.33, 1: 0.34, 2: 0.33}</span>
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>GACC needs at least <code class="docutils literal notranslate"><span class="pre">cv</span></code> training samples per class. If a class is very
+rare, reduce <code class="docutils literal notranslate"><span class="pre">cv</span></code> or use stratified splits to prevent empty folds.</p>
+</div>
+</section>
+</section>
+<hr class="docutils" />
+<section id="gpacc-generalised-probabilistic-adjusted-classify-and-count">
+<h2><a class="toc-backref" href="#id17" role="doc-backlink"><span class="section-number">2.3.4. </span>GPACC — Generalised Probabilistic Adjusted Classify and Count</a><a class="headerlink" href="#gpacc-generalised-probabilistic-adjusted-classify-and-count" title="Link to this heading">#</a></h2>
+<p><a class="reference internal" href="generated/mlquantify.counting.GPACC.html#mlquantify.counting.GPACC" title="mlquantify.counting.GPACC"><code class="xref py py-class docutils literal notranslate"><span class="pre">GPACC</span></code></a> is the soft analogue of <a class="reference internal" href="generated/mlquantify.counting.GACC.html#mlquantify.counting.GACC" title="mlquantify.counting.GACC"><code class="xref py py-class docutils literal notranslate"><span class="pre">GACC</span></code></a>. Instead of a hard
+confusion matrix, it builds a <strong>soft confusion matrix</strong> from posterior
+probabilities:</p>
+<div class="math notranslate nohighlight">
+\[M_{ij} = \frac{1}{|L_i|} \sum_{x \in L_i} P(Y = c_j \mid x)\]</div>
+<p>where <span class="math notranslate nohighlight">\(L_i\)</span> is the set of training examples with true class <span class="math notranslate nohighlight">\(c_i\)</span>.
+The prevalence is then estimated by solving the same constrained system as GACC.</p>
+<p><strong>Why it exists:</strong> Soft matrices preserve more information than hard ones (no
+thresholding artefacts). GPACC is usually more accurate than GACC when the
+classifier is well-calibrated and typically outperforms plain PCC. It is the
+recommended native-multiclass counting method.</p>
+<section id="id5">
+<h3><a class="toc-backref" href="#id18" role="doc-backlink"><span class="section-number">2.3.4.1. </span>Parameters</a><a class="headerlink" href="#id5" title="Link to this heading">#</a></h3>
+<p>Same as <a class="reference internal" href="generated/mlquantify.counting.GACC.html#mlquantify.counting.GACC" title="mlquantify.counting.GACC"><code class="xref py py-class docutils literal notranslate"><span class="pre">GACC</span></code></a>. The <code class="docutils literal notranslate"><span class="pre">estimator</span></code> must support <code class="docutils literal notranslate"><span class="pre">predict_proba</span></code>.</p>
+</section>
+<section id="id6">
+<h3><a class="toc-backref" href="#id19" role="doc-backlink"><span class="section-number">2.3.4.2. </span>Examples</a><a class="headerlink" href="#id6" title="Link to this heading">#</a></h3>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">mlquantify.counting</span><span class="w"> </span><span class="kn">import</span> <span class="n">GPACC</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">sklearn.linear_model</span><span class="w"> </span><span class="kn">import</span> <span class="n">LogisticRegression</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">sklearn.datasets</span><span class="w"> </span><span class="kn">import</span> <span class="n">make_classification</span>
+
+<span class="n">X</span><span class="p">,</span> <span class="n">y</span> <span class="o">=</span> <span class="n">make_classification</span><span class="p">(</span><span class="n">n_samples</span><span class="o">=</span><span class="mi">600</span><span class="p">,</span> <span class="n">n_classes</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span>
+                           <span class="n">n_informative</span><span class="o">=</span><span class="mi">6</span><span class="p">,</span> <span class="n">n_redundant</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>
+                           <span class="n">random_state</span><span class="o">=</span><span class="mi">42</span><span class="p">)</span>
+<span class="n">X_train</span><span class="p">,</span> <span class="n">X_test</span> <span class="o">=</span> <span class="n">X</span><span class="p">[:</span><span class="mi">450</span><span class="p">],</span> <span class="n">X</span><span class="p">[</span><span class="mi">450</span><span class="p">:]</span>
+<span class="n">y_train</span><span class="p">,</span> <span class="n">y_test</span> <span class="o">=</span> <span class="n">y</span><span class="p">[:</span><span class="mi">450</span><span class="p">],</span> <span class="n">y</span><span class="p">[</span><span class="mi">450</span><span class="p">:]</span>
+
+<span class="n">q</span> <span class="o">=</span> <span class="n">GPACC</span><span class="p">(</span><span class="n">LogisticRegression</span><span class="p">(),</span> <span class="n">cv</span><span class="o">=</span><span class="mi">5</span><span class="p">)</span>
+<span class="n">q</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">X_train</span><span class="p">,</span> <span class="n">y_train</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">q</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">X_test</span><span class="p">))</span>
+<span class="c1"># {0: 0.25, 1: 0.26, 2: 0.24, 3: 0.25}</span>
+</pre></div>
+</div>
+</section>
+</section>
+<hr class="docutils" />
+<section id="choosing-among-cc-pcc-gacc-and-gpacc">
+<h2><a class="toc-backref" href="#id20" role="doc-backlink"><span class="section-number">2.3.5. </span>Choosing Among CC, PCC, GACC, and GPACC</a><a class="headerlink" href="#choosing-among-cc-pcc-gacc-and-gpacc" title="Link to this heading">#</a></h2>
+<div class="pst-scrollable-table-container"><table class="table">
+<colgroup>
+<col style="width: 21.2%" />
+<col style="width: 17.6%" />
+<col style="width: 21.2%" />
+<col style="width: 23.5%" />
+<col style="width: 16.5%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Method</p></th>
+<th class="head"><p>Shift correction</p></th>
+<th class="head"><p>Native multiclass</p></th>
+<th class="head"><p>Needs <code class="docutils literal notranslate"><span class="pre">predict_proba</span></code></p></th>
+<th class="head"><p>Extra fit cost</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>CC</p></td>
+<td><p>✗</p></td>
+<td><p>✓</p></td>
+<td><p>✗</p></td>
+<td><p>None</p></td>
+</tr>
+<tr class="row-odd"><td><p>PCC</p></td>
+<td><p>✗</p></td>
+<td><p>✓</p></td>
+<td><p>✓</p></td>
+<td><p>None</p></td>
+</tr>
+<tr class="row-even"><td><p>GACC</p></td>
+<td><p>✓ (linear)</p></td>
+<td><p>✓</p></td>
+<td><p>✗</p></td>
+<td><p>CV folds</p></td>
+</tr>
+<tr class="row-odd"><td><p>GPACC</p></td>
+<td><p>✓ (linear)</p></td>
+<td><p>✓</p></td>
+<td><p>✓</p></td>
+<td><p>CV folds</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<p><strong>Practical recommendation:</strong></p>
+<ul class="simple">
+<li><p>Use <strong>CC</strong> only as a sanity-check baseline.</p></li>
+<li><p>Use <strong>GPACC</strong> as your primary counting-family method: the soft matrix
+and simplex constraint make it noticeably better than CC/PCC under shift.</p></li>
+<li><p>If probabilities are unavailable, fall back to <strong>GACC</strong>.</p></li>
+<li><p>For large distributional shifts, graduate to <a class="reference internal" href="generated/mlquantify.likelihood.EMQ.html#mlquantify.likelihood.EMQ" title="mlquantify.likelihood.EMQ"><code class="xref py py-class docutils literal notranslate"><span class="pre">EMQ</span></code></a>
+or a distribution-matching method from <a class="reference internal" href="../api/mlquantify.matching.html#module-mlquantify.matching" title="mlquantify.matching"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mlquantify.matching</span></code></a>.</p></li>
+</ul>
+<div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<p><a class="reference internal" href="counting.html#counting"><span class="std std-ref">Adjusted Counting</span></a> for threshold-adjustment methods (<code class="xref py py-class docutils literal notranslate"><span class="pre">ACC</span></code>,
+<a class="reference internal" href="generated/mlquantify.counting.TAC.html#mlquantify.counting.TAC" title="mlquantify.counting.TAC"><code class="xref py py-class docutils literal notranslate"><span class="pre">TAC</span></code></a>, <a class="reference internal" href="generated/mlquantify.counting.TX.html#mlquantify.counting.TX" title="mlquantify.counting.TX"><code class="xref py py-class docutils literal notranslate"><span class="pre">TX</span></code></a>, …) which offer stronger binary-specific correction.</p>
+</div>
+</section>
+</section>
+<section id="counters-for-quantification">
+<h1><span class="section-number">2.4. </span>Counters For Quantification<a class="headerlink" href="#counters-for-quantification" title="Link to this heading">#</a></h1>
 <p>To deal with problems of quantification, a straightforward approach is to count the number of items predicted to belong to each class in the unlabeled set. This is the basis of the <strong>Classify and Count</strong> family of methods.</p>
 <section id="classify-and-count">
-<h2><span class="section-number">1.3.1. </span>Classify and Count<a class="headerlink" href="#classify-and-count" title="Link to this heading">#</a></h2>
+<h2><span class="section-number">2.4.1. </span>Classify and Count<a class="headerlink" href="#classify-and-count" title="Link to this heading">#</a></h2>
 <p>The <strong>Classify and Count</strong> method, or <a class="reference internal" href="generated/mlquantify.counting.CC.html#mlquantify.counting.CC" title="mlquantify.counting.CC"><code class="xref py py-class docutils literal notranslate"><span class="pre">CC</span></code></a> is the simplest baseline.
 It trains a hard classifier <span class="math notranslate nohighlight">\(h\)</span> on labeled data <span class="math notranslate nohighlight">\(L\)</span> , applies it to an unlabeled set <span class="math notranslate nohighlight">\(U\)</span> , and counts how many samples belong to each predicted class.</p>
 <p><strong>Example</strong></p>
@@ -493,7 +902,7 @@ It trains a hard classifier <span class="math notranslate nohighlight">\(h\)</sp
 </div>
 </section>
 <section id="probabilistic-classify-and-count">
-<h2><span class="section-number">1.3.2. </span>Probabilistic Classify and Count<a class="headerlink" href="#probabilistic-classify-and-count" title="Link to this heading">#</a></h2>
+<h2><span class="section-number">2.4.2. </span>Probabilistic Classify and Count<a class="headerlink" href="#probabilistic-classify-and-count" title="Link to this heading">#</a></h2>
 <p>The <strong>Probabilistic Classify and Count</strong> or <a class="reference internal" href="generated/mlquantify.counting.PCC.html#mlquantify.counting.PCC" title="mlquantify.counting.PCC"><code class="xref py py-class docutils literal notranslate"><span class="pre">PCC</span></code></a> variant uses the <em>predicted probabilities</em> from a soft classifier instead of hard labels.
 This makes it less sensitive to uncertain predictions.</p>
 <p>[Plot Idea: A plot comparing probabilities per sample and their averaged mean per class]</p>
@@ -529,7 +938,7 @@ This makes it less sensitive to uncertain predictions.</p>
       <i class="fa-solid fa-angle-left"></i>
       <div class="prev-next-info">
         <p class="prev-next-subtitle">previous</p>
-        <p class="prev-next-title"><span class="section-number">1.1. </span>Using Aggregative Quantification Methods</p>
+        <p class="prev-next-title"><span class="section-number">2.1. </span>Using Aggregative Quantification Methods</p>
       </div>
     </a>
     <a class="right-next"
@@ -537,7 +946,7 @@ This makes it less sensitive to uncertain predictions.</p>
        title="next page">
       <div class="prev-next-info">
         <p class="prev-next-subtitle">next</p>
-        <p class="prev-next-title"><span class="section-number">1.4. </span>Adjusted Counting</p>
+        <p class="prev-next-title"><span class="section-number">2.5. </span>Adjusted Counting</p>
       </div>
       <i class="fa-solid fa-angle-right"></i>
     </a>
@@ -564,9 +973,37 @@ This makes it less sensitive to uncertain predictions.</p>
   </div>
   <nav id="pst-page-toc-nav" class="page-toc" aria-labelledby="pst-page-navigation-heading-2">
     <ul class="pst-show_toc_level nav section-nav flex-column">
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#classify-and-count">1.3.1. Classify and Count</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#probabilistic-classify-and-count">1.3.2. Probabilistic Classify and Count</a></li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#">2.3. Counting-Based Quantifiers</a><ul class="pst-show_toc_level nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#cc-classify-and-count">2.3.1. CC — Classify and Count</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#parameters">2.3.1.1. Parameters</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#examples">2.3.1.2. Examples</a></li>
 </ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#pcc-probabilistic-classify-and-count">2.3.2. PCC — Probabilistic Classify and Count</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id1">2.3.2.1. Parameters</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id2">2.3.2.2. Examples</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#gacc-generalised-adjusted-classify-and-count">2.3.3. GACC — Generalised Adjusted Classify and Count</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id3">2.3.3.1. Parameters</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id4">2.3.3.2. Examples</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#gpacc-generalised-probabilistic-adjusted-classify-and-count">2.3.4. GPACC — Generalised Probabilistic Adjusted Classify and Count</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id5">2.3.4.1. Parameters</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id6">2.3.4.2. Examples</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#choosing-among-cc-pcc-gacc-and-gpacc">2.3.5. Choosing Among CC, PCC, GACC, and GPACC</a></li>
+</ul>
+</li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#counters-for-quantification">2.4. Counters For Quantification</a><ul class="pst-show_toc_level nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#classify-and-count">2.4.1. Classify and Count</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#probabilistic-classify-and-count">2.4.2. Probabilistic Classify and Count</a></li>
+</ul>
+</li>
+</ul>
+
   </nav></div>
 
   <div class="sidebar-secondary-item">
