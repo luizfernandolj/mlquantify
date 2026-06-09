@@ -8,6 +8,7 @@ User Guide
    :numbered:
    :maxdepth: 3
 
+   Foundations <modules/quantification_foundations.rst>
    Aggregative Quantification <aggregative_quantification.rst>
    Non Aggregative Quantification <non_aggregative_quantification.rst>
    Meta Quantification <meta_quantification.rst>

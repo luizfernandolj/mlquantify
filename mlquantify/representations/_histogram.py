@@ -4,7 +4,58 @@ from ._base import BaseRepresentation
 
 
 class HistogramRepresentation(BaseRepresentation):
-    r"""Histogram-based representation."""
+    r"""Histogram-based representation.
+    
+    This representation computes histograms for each feature (or selected subset) independently, and concatenates the bin frequencies into a single vector. When ``partition_blocks=True``, the attribute ``block_slices_`` is populated with the slice objects that identify each bin group in the concatenated output.
+
+    Parameters
+    ----------
+    bins : int or array-like of shape (n_features,), default=(10,)
+        The number of bins for each feature. If an integer, the same number of bins is used for all features.
+    range : tuple of shape (2,), default=(0.0, 1.0)
+        The lower and upper bounds for the histogram range.
+    mode : str, default="histogram"
+        The mode of the histogram. Options are:
+        - "histogram": Compute the histogram counts.
+        - "onehot": Compute a one-hot encoding of the histogram. In this mode, the output is a binary vector indicating which bin each value falls into, averaged over all samples.
+    features : array-like of shape (n_features,), default=None
+        The indices of the features to use. If None, all features are used to compute the histogram representation.
+    partition_blocks : bool, default=False
+        Whether to partition the output into contiguous blocks corresponding to each
+        feature's bins. When ``partition_blocks=True``, the returned representation is
+        still a single 1-D concatenated vector, but it is organized in feature-wise blocks:
+        all bins for the first selected feature appear first, then all bins for the
+        second selected feature, etc. In this case the attribute ``block_slices_`` is
+        populated with a tuple of slice objects that identify the start/stop indices for
+        each block, allowing easy extraction of per-feature bin groups from the
+        concatenated vector. When ``partition_blocks=False``, the same concatenation is
+        returned but no ``block_slices_`` metadata is stored.
+
+        Example
+        -------
+        Suppose two features are selected and the bins parameter is (3, 4). The
+        concatenated representation will have 3 + 4 = 7 entries. With
+        ``partition_blocks=True``, ``block_slices_`` will be something like
+        ``(slice(0, 3), slice(3, 7))``. To extract the second feature's block from a
+        representation ``rep`` you can use ``rep[block_slices_[1]]`` which returns the
+        4-element histogram for that feature.
+        The method for determining bin edges. Options are:
+        - "fixed": Use fixed bin edges based on the ``range`` parameter.
+        - "quantile": Use quantile-based bin edges.
+    laplace_smoothing : bool, default=False
+        Whether to apply Laplace smoothing to the histogram counts.
+
+    Examples
+    --------
+    >>> from mlquantify.representations._histogram import HistogramRepresentation
+    >>> import numpy as np
+    >>> rng = np.random.default_rng(0)
+    >>> scores = rng.uniform(0, 1, (200, 1))
+    >>> y = (scores[:, 0] > 0.5).astype(int)
+    >>> rep = HistogramRepresentation(bins=(8,)).fit(scores, y)
+    >>> rep.transform(scores[:10]).shape
+    (8,)
+    """
 
     def __init__(
         self,

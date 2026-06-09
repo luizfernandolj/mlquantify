@@ -4,7 +4,25 @@ from abc import ABC, abstractmethod
 import numpy as np
 
 class BaseRepresentation(ABC):
-    """Base class for quantification representations."""
+    """Base class for quantification representations.
+    
+    Subclasses must implement :meth:`transform` and :meth:`_fit`.  The latter must set the ``class_representations_`` attribute to an array of shape (n_classes, n_representation_features) containing the representations for each class.
+
+    Examples
+    --------
+    >>> from mlquantify.representations import BaseRepresentation
+    >>> class DummyRepresentation(BaseRepresentation):
+    ...     def _fit(self, X, y, sample_weight=None):
+    ...         self.class_representations_ = np.array([[0], [1]])
+    ...     def transform(self, X):
+    ...         return X
+    >>> X = [[0], [1], [0], [1]]
+    >>> y = [0, 1, 0, 1]
+    >>> rep = DummyRepresentation().fit(X, y)
+    >>> rep.class_representations_
+    array([[0],
+           [1]])
+    """
 
     def fit(self, X, y, classes=None, sample_weight=None):
         """Fit the representation to labelled training data.
