@@ -4,24 +4,44 @@ on:
   push:
     branches:
       - master
+    tags:
+      - 'v*'
+
+permissions:
+  contents: write
 
 jobs:
   build:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout do código
+      - name: Checkout code
         uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
 
-      - name: Configurar Python
+      - name: Set up Python
         uses: actions/setup-python@v4
         with:
           python-version: "3.10"
 
-      - name: Gerar arquivo de versão
-        run: echo "0.0.0-dev" > VERSION.txt
+      - name: Resolve version
+        id: version
+        run: |
+          if [[ "${GITHUB_REF}" == refs/tags/v* ]]; then
+            VERSION="${GITHUB_REF##*/}"
+            VERSION="${VERSION#v}"
+            echo "version=${VERSION}" >> $GITHUB_OUTPUT
+            echo "is_release=true" >> $GITHUB_OUTPUT
+          else
+            echo "version=dev" >> $GITHUB_OUTPUT
+            echo "is_release=false" >> $GITHUB_OUTPUT
+          fi
 
-      - name: Instalar dependências
+      - name: Generate VERSION.txt
+        run: echo "${{ steps.version.outputs.version }}" > VERSION.txt
+
+      - name: Install dependencies
         run: |
           python -m pip install --upgrade pip
           pip install .
@@ -30,19 +50,82 @@ jobs:
                       matplotlib sphinxcontrib-sass sphinx_remove_toctrees \
                       sphinx_design numpydoc sphinx_sitemap
 
-      - name: Conferir pacotes instalados
-        run: |
-          pip list
-          pip show mlquantify
-          python -c "import mlquantify; print(mlquantify.__file__)"
+      - name: Build docs
+        env:
+          DOCS_VERSION: ${{ steps.version.outputs.version }}
+        run: sphinx-build docs/source docs/build/html
 
-      - name: Construir documentação
+      - name: Deploy to gh-pages
         run: |
-          sphinx-build docs/source docs/build/html
+          VERSION="${{ steps.version.outputs.version }}"
+          IS_RELEASE="${{ steps.version.outputs.is_release }}"
 
-      - name: Publicar no GitHub Pages
-        uses: JamesIves/github-pages-deploy-action@v4
-        with:
-          branch: gh-pages
-          folder: docs/build/html
-          clean: true
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+
+          git fetch origin gh-pages
+          git worktree add /tmp/gh-pages origin/gh-pages
+
+          # Deploy built docs into the versioned subfolder
+          rm -rf /tmp/gh-pages/${VERSION}
+          cp -r docs/build/html /tmp/gh-pages/${VERSION}
+
+          # On a release tag: update stable/ and regenerate switcher.json
+          if [ "$IS_RELEASE" = "true" ]; then
+            rm -rf /tmp/gh-pages/stable
+            cp -r docs/build/html /tmp/gh-pages/stable
+
+            python3 - <<EOF
+          import json, os
+
+          pages_dir = "/tmp/gh-pages"
+          base_url = "https://luizfernandolj.github.io/mlquantify"
+
+          # Read existing switcher to preserve older versions
+          switcher_path = os.path.join(pages_dir, "switcher.json")
+          if os.path.exists(switcher_path):
+              with open(switcher_path) as f:
+                  existing = {e["version"]: e for e in json.load(f)}
+          else:
+              existing = {}
+
+          # Add / update current version
+          existing["${VERSION}"] = {
+              "name": "v${VERSION} (stable)",
+              "version": "${VERSION}",
+              "url": f"{base_url}/${VERSION}/"
+          }
+          # Mark all others as non-stable
+          for v, entry in existing.items():
+              if v != "${VERSION}":
+                  entry["name"] = entry["name"].replace(" (stable)", "")
+
+          # dev entry always present
+          existing.setdefault("dev", {
+              "name": "dev",
+              "version": "dev",
+              "url": f"{base_url}/dev/"
+          })
+
+          # Stable first, then versions descending, dev last
+          def sort_key(e):
+              v = e["version"]
+              if v == "dev":
+                  return (1, [])
+              try:
+                  return (0, [-int(x) for x in v.split(".")])
+              except ValueError:
+                  return (0, [v])
+
+          ordered = sorted(existing.values(), key=sort_key)
+
+          with open(switcher_path, "w") as f:
+              json.dump(ordered, f, indent=2)
+          print("switcher.json updated")
+          EOF
+          fi
+
+          cd /tmp/gh-pages
+          git add -A
+          git diff --cached --quiet || git commit -m "deploy docs ${VERSION}"
+          git push origin HEAD:gh-pages
