@@ -7,7 +7,7 @@
 
 ___
 
- **mlquantify** is a Python library for quantification, also known as supervised prevalence estimation, designed to estimate the distribution of classes within datasets. It offers a range of tools for various quantification methods, model selection tailored for quantification tasks, evaluation metrics, and protocols to assess quantification performance. Additionally, mlquantify includes popular datasets and visualization tools to help analyze and interpret results.
+ **mlquantify** is a Python library for quantification, also known as supervised prevalence estimation, designed to estimate the distribution of classes within datasets. It offers a range of tools for various quantification methods, model selection tailored for quantification tasks, evaluation metrics, and protocols to assess quantification performance. Additionally, mlquantify includes calibration tools, confidence region estimation, pluggable solvers and representations, and visualization utilities to help analyze and interpret results.
 
  Website: https://luizfernandolj.github.io/mlquantify/
 
@@ -33,12 +33,16 @@ ___
 
 | Section | Description |
 |---|---|
-| **21 Quantification Methods** | Methods for quantification, such as classify & Count Correct methods, Threshold Optimization, Mixture Models and more.|
-| **Dynamic class management** | All methods are dynamic, and handles multiclass and binary problems, in case of binary it makes One-Vs-All (OVA) automatically. |
-| **Model Selection** | Criteria and processes used to select the best model, such as grid-search for the case of quantification|
-| **Evaluation Metrics** | Specific metrics used to evaluate quantification performance, (e.g., AE, MAE, NAE, SE, KLD, etc.). |
-| **Evaluation Protocols** | Evaluation protocols used, based on sampling generation (e.g., APP, NPP, etc.).. |
-| **Comprehensive Documentation** | Complete documentation of the project, including code, data, and results. |
+| **33 Quantification Methods** | Counting (CC, PCC, ACC, TAC, TX, TMAX, T50, MS, MS2, FM, GACC, GPACC), Matching (DyS, HDy, HDx, SORD, SMM, MMD_RKHS, KDEyML, KDEyHD, KDEyCS, GHDy, GHDx, GKDEyML, EDy, EDx), Likelihood (EMQ, CDE, MLPE), Neighbors (PWK), Meta (EnsembleQ, AggregativeBootstrap, QuaDapt). |
+| **Dynamic class management** | All methods are dynamic, and handle multiclass and binary problems; in the binary case, One-Vs-All (OVA) is applied automatically. |
+| **Solvers** | Modular optimization backends: `BinarySolver`, `LeastSquaresSolver`, `SimplexSolver`. |
+| **Representations** | Pluggable feature representations: `HistogramRepresentation`, `KDERepresentation`, `DistanceRepresentation`, `KernelMeanRepresentation`, `PredictionRepresentation`. |
+| **Losses** | Composable loss functions (distance-based and likelihood-based) shared across quantifier families. |
+| **Calibration** | `ClassifierCalibrator` and `QuantifierCalibrator` for post-hoc calibration of classifiers and quantifiers. |
+| **Confidence Regions** | `ConfidenceInterval`, `ConfidenceEllipseSimplex`, `ConfidenceEllipseCLR` for uncertainty estimation on prevalence predictions. |
+| **Model Selection** | `GridSearchQ` and evaluation protocols (APP, NPP, UPP, PPP) tailored for quantification tasks. |
+| **Evaluation Metrics** | Metrics for quantification performance: AE, MAE, NAE, SE, MSE, KLD, RAE, NRAE, NKLD, NMD, RNOD, VSE, CvM_L1. |
+| **Comprehensive Documentation** | Full API reference and user guide covering all modules and methods. |
 
 ___
 
@@ -47,7 +51,7 @@ ___
 This code first loads the breast cancer dataset from _sklearn_, which is then split into training and testing sets. It uses the _Expectation Maximisation Quantifier (EMQ)_ with a RandomForest classifier to predict class prevalence. After training the model, it evaluates performance by calculating and printing the absolute error and bias between the real and predicted prevalences.
 
 ```python
-from mlquantify.methods import EMQ
+from mlquantify.likelihood import EMQ
 from mlquantify.metrics import MAE, NRAE
 from mlquantify.utils import get_prev_from_labels
 
@@ -85,10 +89,12 @@ ___
 
 ## Requirements
 
-- Scikit-learn
-- pandas
+- scikit-learn
 - numpy
+- scipy
+- pandas
 - joblib
 - tqdm
 - matplotlib
 - xlrd
+- abstention
