@@ -1,0 +1,166 @@
+/* Global Overrides for Premium Feel */
+body {
+  background-color: var(--bg-deep) !important;
+  color: var(--text-primary) !important;
+  font-family: 'Inter', system-ui, -apple-system, sans-serif;
+}
+
+/* Footer & Extras */
+footer {
+    background: #0b1120 !important;
+    border-top: 1px solid var(--glass-border);
+}
+
+/* Sidebar Fixes for Dark Mode */
+.bd-sidebar-primary, .bd-sidebar-secondary, .bd-toc, .bd-sidebar {
+    background: rgba(15, 23, 42, 0.6) !important; /* Semi-transparent dark */
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    border-right: 1px solid var(--glass-border);
+    border-left: 1px solid var(--glass-border);
+}
+
+.bd-sidebar-primary__label, .bd-toc-item.active > .bd-toc-link {
+    color: var(--text-primary) !important;
+}
+
+/* Navbar Active State Overrides - NUCLEAR OPTION */
+/* 1. Force the correct text color and border */
+.navbar-nav li.active > .nav-link,
+.navbar-nav .nav-link.active,
+.bd-navbar .navbar-nav .nav-link.active,
+.bd-navbar .navbar-nav .nav-link.current,
+.navbar-expand-lg .navbar-nav .nav-link.active {
+    color: var(--brand-magenta) !important;
+    border-bottom: 3px solid var(--brand-magenta) !important;
+    box-shadow: none !important;
+    background: transparent !important;
+    font-weight: 700 !important;
+}
+
+/* 2. KILL ALL PSEUDO-ELEMENTS that usually create the "other" bar */
+.navbar-nav li.active > .nav-link::after,
+.navbar-nav .nav-link.active::after,
+.navbar-nav li.active > .nav-link::before,
+.navbar-nav .nav-link.active::before,
+.bd-navbar .nav-item.active > .nav-link::after, 
+.bd-navbar .nav-item.active > .nav-link::before {
+    display: none !important;
+    content: none !important;
+    border: none !important;
+    height: 0 !important;
+    width: 0 !important;
+    background: transparent !important;
+    opacity: 0 !important;
+}
+
+/* Sidebar Active State Overrides */
+.bd-sidenav li.active > a,
+.bd-sidenav .current > a,
+.bd-toc .active > a,
+.bd-toc li.active > a {
+    color: var(--brand-magenta) !important;
+    border-color: var(--brand-magenta) !important;
+    background: transparent !important; /* Remove blue background if present */
+    box-shadow: none !important;
+}
+
+/* Left Sidebar Vertical Indicator */
+.bd-sidenav .current {
+    border-left: 2px solid var(--brand-magenta) !important;
+    box-shadow: none !important;
+}
+
+/* Handle PyData Theme specific 'active' class on li that might use box-shadow */
+.bd-sidenav li.active, .bd-sidenav li.current {
+    box-shadow: none !important;
+    border: none !important; /* prevent double borders on container */
+}
+
+/* Right Sidebar (TOC) Active Indicator */
+.bd-toc nav ul li.active > a {
+    border-left: 2px solid var(--brand-magenta) !important;
+    color: var(--brand-magenta) !important;
+    box-shadow: none !important;
+}
+
+/* Scroll Spy Active State (Right Sidebar) */
+.bd-toc .nav-link.active {
+    color: var(--brand-magenta) !important;
+    border-left-color: var(--brand-magenta) !important;
+    box-shadow: none !important;
+}
+
+/* Fix for potential 'border-inline-start' conflict in some browsers/themes */
+.bd-sidenav li.active > a,
+.bd-sidenav .current > a {
+    border-inline-start: 2px solid var(--brand-magenta) !important;
+}
+
+/* Focus rings/outlines */
+a:focus, button:focus {
+    outline-color: var(--brand-violet) !important;
+}
+
+/* Premium Table Styling */
+.bd-content table.docutils {
+    width: 100%;
+    border-collapse: separate; /* Required for rounded corners */
+    border-spacing: 0;
+    border-radius: 12px;
+    overflow: hidden;
+    margin: 2rem 0;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+    border: 1px solid var(--glass-border);
+    background: var(--bg-card); /* Glassmorphism background */
+    backdrop-filter: blur(5px);
+}
+
+.bd-content table.docutils th {
+    background: linear-gradient(90deg, #1e1b4b, #312e81); /* Deep Indigo */
+    color: var(--text-primary);
+    font-weight: 700;
+    padding: 1rem 1.5rem;
+    text-align: left;
+    border-bottom: 2px solid var(--brand-violet);
+    text-transform: uppercase;
+    font-size: 0.85rem;
+    letter-spacing: 1px;
+}
+
+.bd-content table.docutils td {
+    padding: 1rem 1.5rem;
+    color: var(--text-secondary);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+    vertical-align: middle;
+    transition: color 0.2s ease;
+}
+
+.bd-content table.docutils tr:last-child td {
+    border-bottom: none;
+}
+
+.bd-content table.docutils tr {
+    transition: background-color 0.2s ease;
+}
+
+.bd-content table.docutils tr:hover {
+    background-color: rgba(217, 70, 239, 0.05); /* Very subtle magenta tint */
+}
+
+.bd-content table.docutils tr:hover td {
+    color: var(--text-primary);
+}
+
+/* Link styling inside tables */
+.bd-content table.docutils td a {
+    color: var(--brand-violet);
+    font-weight: 600;
+    text-decoration: none;
+    transition: all 0.2s ease;
+}
+
+.bd-content table.docutils td a:hover {
+    color: var(--brand-magenta);
+    text-shadow: 0 0 10px rgba(217, 70, 239, 0.4);
+}

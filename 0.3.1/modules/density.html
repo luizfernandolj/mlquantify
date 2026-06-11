@@ -1,0 +1,642 @@
+
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="../" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+<meta property="og:title" content="Kernel Density Estimation" />
+<meta property="og:type" content="website" />
+<meta property="og:url" content="modules/density.html" />
+<meta property="og:site_name" content="mlquantify" />
+<meta property="og:description" content="KDEy: Kernel Density Estimation y-Similarity: KDEy is a multi-class quantification approach based on Mixture Models (Distribution Matching - DM) that proposes a novel representation mechanism to mo..." />
+<meta property="og:image:width" content="1146" />
+<meta property="og:image:height" content="600" />
+<meta property="og:image" content="_images/social_previews/summary_modules_density_a002a1fd.png" />
+<meta property="og:image:alt" content="KDEy: Kernel Density Estimation y-Similarity: KDEy is a multi-class quantification approach based on Mixture Models (Distribution Matching - DM) that proposes a novel representation mechanism to mo..." />
+<meta name="description" content="KDEy: Kernel Density Estimation y-Similarity: KDEy is a multi-class quantification approach based on Mixture Models (Distribution Matching - DM) that proposes a novel representation mechanism to mo..." />
+<meta name="twitter:card" content="summary_large_image" />
+
+    <title>Kernel Density Estimation &#8212; mlquantify</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
+  </script>
+  <!--
+    this give us a css class that will be invisible only if js is disabled
+  -->
+  <noscript>
+    <style>
+      .pst-js-only { display: none !important; }
+
+    </style>
+  </noscript>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../_static/styles/theme.css?digest=0790524f97105ba85085" rel="stylesheet" />
+<link href="../_static/styles/pydata-sphinx-theme.css?digest=0790524f97105ba85085" rel="stylesheet" />
+
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=8f2a1f02" />
+    <link rel="stylesheet" type="text/css" href="../_static/copybutton.css?v=76b2166b" />
+    <link rel="stylesheet" type="text/css" href="../_static/plot_directive.css?v=7f9a90b1" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinx-design.min.css?v=95c83b7e" />
+    <link rel="stylesheet" type="text/css" href="../_static/variables.css?v=fded66fe" />
+    <link rel="stylesheet" type="text/css" href="../_static/theme_overrides.css?v=dec63a3c" />
+    <link rel="stylesheet" type="text/css" href="../_static/landing.css?v=e93fd00d" />
+  
+  <!-- So that users can add custom icons -->
+  <script defer src="../_static/scripts/fontawesome.js?digest=0790524f97105ba85085"></script>
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=0790524f97105ba85085" />
+<link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=0790524f97105ba85085" />
+
+    <script src="../_static/documentation_options.js?v=dc233e31"></script>
+    <script src="../_static/doctools.js?v=fd6eb6e6"></script>
+    <script src="../_static/sphinx_highlight.js?v=6ffebe34"></script>
+    <script src="../_static/clipboard.min.js?v=a7894cd8"></script>
+    <script src="../_static/copybutton.js?v=f281be69"></script>
+    <script src="../_static/design-tabs.js?v=f930bc37"></script>
+    <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@4/tex-mml-chtml.js"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'modules/density';</script>
+    <script>
+        DOCUMENTATION_OPTIONS.theme_version = '0.18.0';
+        DOCUMENTATION_OPTIONS.theme_switcher_json_url = 'https://luizfernandolj.github.io/mlquantify/switcher.json';
+        DOCUMENTATION_OPTIONS.theme_switcher_version_match = '0.3.1';
+        DOCUMENTATION_OPTIONS.show_version_warning_banner =
+            true;
+        </script>
+    <script>DOCUMENTATION_OPTIONS.search_as_you_type = false;</script>
+    <link rel="canonical" href="https://luizfernandolj.github.io/mlquantify/modules/density.html" />
+    <link rel="search" title="Search" href="../search.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  <meta name="docsearch:version" content="" />
+  
+    
+    <script src="../_static/searchtools.js"></script>
+    <script src="../_static/language_data.js"></script>
+    <script src="../searchindex.js"></script>
+  
+  </head>
+  <body data-default-mode="">
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+  
+  
+  
+  
+  <dialog id="pst-search-dialog">
+    
+<form class="bd-search d-flex align-items-center"
+      action="../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         placeholder="Search the docs ..."
+         aria-label="Search the docs ..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form>
+  </dialog>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
+  
+    <header id="pst-header" class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+<div class="bd-header__inner bd-page-width">
+  <button class="pst-navbar-icon sidebar-toggle primary-toggle" aria-label="Site navigation">
+    <span class="fa-solid fa-bars"></span>
+  </button>
+  
+  
+  <div class=" navbar-header-items__start">
+    
+      <div class="navbar-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="../index.html">
+  
+  
+  
+  
+  
+    
+    
+      
+    
+    
+    <img src="../_static/logo_mlquantify.svg" class="logo__image only-light" alt="mlquantify homepage"/>
+    <img src="../_static/logo_mlquantify-white.svg" class="logo__image only-dark pst-js-only" alt="mlquantify homepage"/>
+  
+  
+</a></div>
+    
+  </div>
+  
+  <div class=" navbar-header-items">
+    
+    <div class="me-auto navbar-header-items__center">
+      
+        <div class="navbar-item">
+<div class="version-switcher__container dropdown pst-js-only">
+  <button id="pst-version-switcher-button-2"
+    type="button"
+    class="version-switcher__button btn btn-sm dropdown-toggle"
+    data-bs-toggle="dropdown"
+    aria-haspopup="listbox"
+    aria-controls="pst-version-switcher-list-2"
+    aria-label="Version switcher list"
+  >
+    Choose version  <!-- this text may get changed later by javascript -->
+    <span class="caret"></span>
+  </button>
+  <div id="pst-version-switcher-list-2"
+    class="version-switcher__menu dropdown-menu list-group-flush py-0"
+    role="listbox" aria-labelledby="pst-version-switcher-button-2">
+    <!-- dropdown will be populated by javascript on page load -->
+  </div>
+</div></div>
+      
+        <div class="navbar-item">
+<nav>
+  <ul class="bd-navbar-elements navbar-nav">
+    
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../install.html">
+    Install
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../user_guide.html">
+    User Guide
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../api/index.html">
+    API
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../getting_started.html">
+    Getting Started
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../about_us.html">
+    About Us
+  </a>
+</li>
+
+  </ul>
+</nav></div>
+      
+    </div>
+    
+    
+    <div class="navbar-header-items__end">
+      
+        <div class="navbar-item navbar-persistent--container">
+          
+
+<button class="btn btn-sm pst-navbar-icon search-button search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass fa-lg"></i>
+</button>
+        </div>
+      
+      
+        <div class="navbar-item">
+
+<div class="theme-switch-container dropdown pst-js-only" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Color mode">
+  <button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button dropdown-toggle" aria-label="Color mode" data-bs-toggle="dropdown">
+    <i class="theme-switch fa-solid fa-sun fa-lg fa-fw" data-mode="light" title="Light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg fa-fw" data-mode="dark" title="Dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg fa-fw" data-mode="auto" title="System Settings"></i>
+  </button>
+  <ul class="dropdown-menu dropdown-menu-end">
+    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="auto"><i class="fa-solid fa-circle-half-stroke fa-lg fa-fw me-1"></i>System Settings</button></li>
+    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="light"><i class="fa-solid fa-sun fa-lg fa-fw me-1"></i>Light</button></li>
+    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="dark"><i class="fa-solid fa-moon fa-lg fa-fw me-1"></i>Dark</button></li>
+  </ul>
+</div></div>
+      
+        <div class="navbar-item"><ul class="navbar-icon-links"
+    aria-label="Icon Links">
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://github.com/luizfernandolj/mlquantify/tree/master" title="GitHub" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><i class="fa-brands fa-square-github fa-lg" aria-hidden="true"></i><span class="visually-hidden">GitHub</span></a>
+        </li>
+</ul></div>
+      
+    </div>
+    
+  </div>
+  
+  
+    <div class="navbar-persistent--mobile">
+
+<button class="btn btn-sm pst-navbar-icon search-button search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass fa-lg"></i>
+</button>
+    </div>
+  
+
+  
+    <button class="pst-navbar-icon sidebar-toggle secondary-toggle" aria-label="On this page">
+      <span class="fa-solid fa-outdent"></span>
+    </button>
+  
+</div>
+
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+        
+      
+      <dialog id="pst-primary-sidebar-modal"></dialog>
+      <div id="pst-primary-sidebar" class="bd-sidebar-primary bd-sidebar hide-on-wide">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+      <div class="sidebar-header-items__center">
+        
+          
+          
+            <div class="navbar-item">
+<div class="version-switcher__container dropdown pst-js-only">
+  <button id="pst-version-switcher-button-3"
+    type="button"
+    class="version-switcher__button btn btn-sm dropdown-toggle"
+    data-bs-toggle="dropdown"
+    aria-haspopup="listbox"
+    aria-controls="pst-version-switcher-list-3"
+    aria-label="Version switcher list"
+  >
+    Choose version  <!-- this text may get changed later by javascript -->
+    <span class="caret"></span>
+  </button>
+  <div id="pst-version-switcher-list-3"
+    class="version-switcher__menu dropdown-menu list-group-flush py-0"
+    role="listbox" aria-labelledby="pst-version-switcher-button-3">
+    <!-- dropdown will be populated by javascript on page load -->
+  </div>
+</div></div>
+          
+        
+          
+          
+            <div class="navbar-item">
+<nav>
+  <ul class="bd-navbar-elements navbar-nav">
+    
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../install.html">
+    Install
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../user_guide.html">
+    User Guide
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../api/index.html">
+    API
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../getting_started.html">
+    Getting Started
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../about_us.html">
+    About Us
+  </a>
+</li>
+
+  </ul>
+</nav></div>
+          
+        
+      </div>
+    
+    
+    
+      <div class="sidebar-header-items__end">
+        
+          <div class="navbar-item">
+
+<div class="theme-switch-container dropdown pst-js-only" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Color mode">
+  <button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button dropdown-toggle" aria-label="Color mode" data-bs-toggle="dropdown">
+    <i class="theme-switch fa-solid fa-sun fa-lg fa-fw" data-mode="light" title="Light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg fa-fw" data-mode="dark" title="Dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg fa-fw" data-mode="auto" title="System Settings"></i>
+  </button>
+  <ul class="dropdown-menu dropdown-menu-end">
+    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="auto"><i class="fa-solid fa-circle-half-stroke fa-lg fa-fw me-1"></i>System Settings</button></li>
+    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="light"><i class="fa-solid fa-sun fa-lg fa-fw me-1"></i>Light</button></li>
+    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="dark"><i class="fa-solid fa-moon fa-lg fa-fw me-1"></i>Dark</button></li>
+  </ul>
+</div></div>
+        
+          <div class="navbar-item"><ul class="navbar-icon-links"
+    aria-label="Icon Links">
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://github.com/luizfernandolj/mlquantify/tree/master" title="GitHub" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><i class="fa-brands fa-square-github fa-lg" aria-hidden="true"></i><span class="visually-hidden">GitHub</span></a>
+        </li>
+</ul></div>
+        
+      </div>
+    
+  </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+  </div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item">
+
+<nav aria-label="Breadcrumb" class="d-print-none">
+  <ul class="bd-breadcrumbs">
+    
+    <li class="breadcrumb-item breadcrumb-home">
+      <a href="../index.html" class="nav-link" aria-label="Home">
+        <i class="fa-solid fa-home"></i>
+      </a>
+    </li>
+    <li class="breadcrumb-item active" aria-current="page"><span class="ellipsis">Kernel Density Estimation</span></li>
+  </ul>
+</nav>
+</div>
+      
+    </div>
+  
+  
+</div>
+</div>
+              
+              
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <section id="kernel-density-estimation">
+<span id="density"></span><h1>Kernel Density Estimation<a class="headerlink" href="#kernel-density-estimation" title="Link to this heading">#</a></h1>
+<section id="kdey-kernel-density-estimation-y-similarity">
+<h2>KDEy: Kernel Density Estimation y-Similarity<a class="headerlink" href="#kdey-kernel-density-estimation-y-similarity" title="Link to this heading">#</a></h2>
+<p><strong>KDEy</strong> is a multi-class quantification approach based on Mixture Models (Distribution Matching - DM) that proposes a novel representation mechanism to model the distribution of posterior probabilities (y-scores) generated by a soft classifier <a class="footnote-reference brackets" href="#id5" id="id1" role="doc-noteref"><span class="fn-bracket">[</span>1<span class="fn-bracket">]</span></a>.</p>
+<p><strong>The Limitations of Histograms</strong>
+The core argument of KDEy is that traditional DM approaches relying on histograms are suboptimal in multi-class scenarios. Histograms tend to become specific to each class, losing the opportunity to model <strong>inter-class interactions</strong> that may exist in the data. Furthermore, binning strategies can lose critical information regarding the shape of the distribution <a class="footnote-reference brackets" href="#id5" id="id2" role="doc-noteref"><span class="fn-bracket">[</span>1<span class="fn-bracket">]</span></a>.</p>
+<p><strong>The KDEy Solution</strong>
+KDEy resolves this by replacing discrete, univariate histograms with <strong>continuous, multivariate Probability Density Functions (PDFs)</strong> modeled via Kernel Density Estimation (KDE). These PDFs are represented as Gaussian Mixture Models (GMMs) operating on the unit simplex (<span class="math notranslate nohighlight">\(\Delta_{n-1}\)</span>), effectively preserving inter-class correlations <a class="footnote-reference brackets" href="#id5" id="id3" role="doc-noteref"><span class="fn-bracket">[</span>1<span class="fn-bracket">]</span></a>.</p>
+<p>For example, in a 3-class problem (<span class="math notranslate nohighlight">\(L1, L2, L3\)</span>), instead of using three separate histograms for each class’s posterior probabilities, KDEy models a single 2D density over the simplex defined by the three classes. This allows it to capture how the probabilities for different classes relate to each other.</p>
+<figure class="align-center" id="id6">
+<a class="reference internal image-reference" href="../_images/kdey-concept.png"><img alt="KDEy Concept Illustration" src="../_images/kdey-concept.png" style="width: 80%;" />
+</a>
+<figcaption>
+<p><span class="caption-text"><em>Illustration of KDEy modeling class-conditional densities on the probability simplex, figure from Moreo et al., 2023</em></span><a class="headerlink" href="#id6" title="Link to this image">#</a></p>
+</figcaption>
+</figure>
+<p>KDEy serves as a prefix for variants that fall under different optimization frameworks. Next , we describe the three main KDEy quantifiers described in <a class="footnote-reference brackets" href="#id5" id="id4" role="doc-noteref"><span class="fn-bracket">[</span>1<span class="fn-bracket">]</span></a>.</p>
+<p>The library provides three main variants of KDEy, depending on the optimization framework and the divergence function utilized.</p>
+<section id="kdey-ml-maximum-likelihood">
+<h3>KDEy-ML (Maximum Likelihood)<a class="headerlink" href="#kdey-ml-maximum-likelihood" title="Link to this heading">#</a></h3>
+<p>The <a class="reference internal" href="generated/mlquantify.matching.KDEyML.html#mlquantify.matching.KDEyML" title="mlquantify.matching.KDEyML"><code class="xref py py-class docutils literal notranslate"><span class="pre">KDEyML</span></code></a> class implements the Maximum Likelihood quantifier. It models class-conditional densities of posterior probabilities via KDE and estimates class prevalences by maximizing the likelihood of test data under a mixture model of these KDEs.</p>
+<ul class="simple">
+<li><p><strong>Mechanism:</strong> The mixture weights correspond to class prevalences, optimized under the simplex constraint.</p></li>
+<li><p><strong>Optimization:</strong> The method minimizes the negative log-likelihood of the mixture density evaluated at the test posteriors.</p></li>
+<li><p><strong>Relation to EM:</strong> This approach generalizes EM-based quantification methods by using KDE instead of discrete histograms, allowing smooth multivariate density estimation over the probability simplex.</p></li>
+</ul>
+<details class="sd-sphinx-override sd-dropdown sd-card sd-mb-3">
+<summary class="sd-summary-title sd-card-header">
+<span class="sd-summary-text">Mathematical details - KDEy-ML Optimization</span><span class="sd-summary-state-marker sd-summary-chevron-right"><svg version="1.1" width="1.5em" height="1.5em" class="sd-octicon sd-octicon-chevron-right" viewBox="0 0 24 24" aria-hidden="true"><path d="M8.72 18.78a.75.75 0 0 1 0-1.06L14.44 12 8.72 6.28a.751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018l6.25 6.25a.75.75 0 0 1 0 1.06l-6.25 6.25a.75.75 0 0 1-1.06 0Z"></path></svg></span></summary><div class="sd-summary-content sd-card-body docutils">
+<p class="sd-card-text">The optimization problem is solved over the probability simplex <span class="math notranslate nohighlight">\(\Delta^{n-1}\)</span>:</p>
+<div class="math notranslate nohighlight">
+\[\hat{\alpha} = \operatorname*{arg\,min}_{\alpha \in \Delta^{n-1}} \left( - \sum_{x \in U} \log \left( \sum_{i=1}^{n} \alpha_i \cdot p_{\tilde{L}_i}(x) \right) \right)\]</div>
+<p class="sd-card-text">Where <span class="math notranslate nohighlight">\(p_{\tilde{L}_i}\)</span> is the KDE model for class <span class="math notranslate nohighlight">\(i\)</span>. The implementation uses constrained optimization (SLSQP) to ensure <span class="math notranslate nohighlight">\(\sum \alpha = 1\)</span> and <span class="math notranslate nohighlight">\(\alpha_i \ge 0\)</span>.</p>
+</div>
+</details><p><strong>Example</strong></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span> <span class="kn">from</span><span class="w"> </span><span class="nn">mlquantify.matching</span><span class="w"> </span><span class="kn">import</span> <span class="n">KDEyML</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">sklearn.ensemble</span><span class="w"> </span><span class="kn">import</span> <span class="n">RandomForestClassifier</span>
+
+<span class="c1"># KDEy-ML uses Maximum Likelihood optimization</span>
+<span class="n">q</span> <span class="o">=</span> <span class="n">KDEyML</span><span class="p">(</span><span class="n">estimator</span><span class="o">=</span><span class="n">RandomForestClassifier</span><span class="p">(),</span> <span class="n">bandwidth</span><span class="o">=</span><span class="mf">0.1</span><span class="p">)</span>
+<span class="n">q</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">X_train</span><span class="p">,</span> <span class="n">y_train</span><span class="p">)</span>
+<span class="n">q</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">X_test</span><span class="p">)</span>
+</pre></div>
+</div>
+</section>
+<section id="kdey-hd-hellinger-distance">
+<h3>KDEy-HD (Hellinger Distance)<a class="headerlink" href="#kdey-hd-hellinger-distance" title="Link to this heading">#</a></h3>
+<p>The <a class="reference internal" href="generated/mlquantify.matching.KDEyHD.html#mlquantify.matching.KDEyHD" title="mlquantify.matching.KDEyHD"><code class="xref py py-class docutils literal notranslate"><span class="pre">KDEyHD</span></code></a> class estimates class prevalences by minimizing the <strong>Hellinger Distance (HD)</strong> between the KDE mixture of class-conditional densities and the KDE of the test data.</p>
+<ul class="simple">
+<li><p><strong>Stochastic Approximation:</strong> Since the Hellinger distance between Gaussian Mixture Models lacks a closed-form expression, this class uses <strong>Monte Carlo sampling</strong> and <strong>importance weighting</strong> to approximate the divergence.</p></li>
+<li><p><strong>Parameters:</strong> The precision of the approximation is controlled by the <code class="docutils literal notranslate"><span class="pre">montecarlo_trials</span></code> parameter.</p></li>
+</ul>
+<details class="sd-sphinx-override sd-dropdown sd-card sd-mb-3">
+<summary class="sd-summary-title sd-card-header">
+<span class="sd-summary-text">Mathematical details - KDEy-HD Monte Carlo</span><span class="sd-summary-state-marker sd-summary-chevron-right"><svg version="1.1" width="1.5em" height="1.5em" class="sd-octicon sd-octicon-chevron-right" viewBox="0 0 24 24" aria-hidden="true"><path d="M8.72 18.78a.75.75 0 0 1 0-1.06L14.44 12 8.72 6.28a.751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018l6.25 6.25a.75.75 0 0 1 0 1.06l-6.25 6.25a.75.75 0 0 1-1.06 0Z"></path></svg></span></summary><div class="sd-summary-content sd-card-body docutils">
+<p class="sd-card-text">The implementation approximates the HD integral using importance sampling. It precomputes reference samples from the class KDEs and weighs them by the ratio of the test density to the reference density.</p>
+<p class="sd-card-text">The objective function calculated during optimization is:</p>
+<div class="math notranslate nohighlight">
+\[J(\alpha) \approx \frac{1}{N} \sum_{k=1}^{N} \left( \sqrt{\frac{p_\alpha(x_k)}{q_U(x_k)}} - 1 \right)^2 \cdot \frac{q_U(x_k)}{p_{ref}(x_k)}\]</div>
+<p class="sd-card-text">Where <span class="math notranslate nohighlight">\(p_\alpha\)</span> is the mixture candidate, <span class="math notranslate nohighlight">\(q_U\)</span> is the test density, and <span class="math notranslate nohighlight">\(p_{ref}\)</span> is the density of the reference samples.</p>
+</div>
+</details><p><strong>Example</strong></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span> <span class="kn">from</span><span class="w"> </span><span class="nn">mlquantify.matching</span><span class="w"> </span><span class="kn">import</span> <span class="n">KDEyHD</span>
+
+<span class="c1"># Uses Monte Carlo sampling (default trials=1000)</span>
+<span class="n">q</span> <span class="o">=</span> <span class="n">KDEyHD</span><span class="p">(</span><span class="n">estimator</span><span class="o">=</span><span class="n">RandomForestClassifier</span><span class="p">(),</span> <span class="n">montecarlo_trials</span><span class="o">=</span><span class="mi">2000</span><span class="p">,</span> <span class="n">random_state</span><span class="o">=</span><span class="mi">42</span><span class="p">)</span>
+<span class="n">q</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">X_train</span><span class="p">,</span> <span class="n">y_train</span><span class="p">)</span>
+<span class="n">q</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">X_test</span><span class="p">)</span>
+</pre></div>
+</div>
+</section>
+<section id="kdey-cs-cauchy-schwarz">
+<h3>KDEy-CS (Cauchy-Schwarz)<a class="headerlink" href="#kdey-cs-cauchy-schwarz" title="Link to this heading">#</a></h3>
+<p>The <a class="reference internal" href="generated/mlquantify.matching.KDEyCS.html#mlquantify.matching.KDEyCS" title="mlquantify.matching.KDEyCS"><code class="xref py py-class docutils literal notranslate"><span class="pre">KDEyCS</span></code></a> class minimizes the <strong>Cauchy-Schwarz (CS)</strong> divergence.</p>
+<ul class="simple">
+<li><p><strong>Efficiency:</strong> Unlike Hellinger distance, the CS divergence between mixtures of Gaussians allows for a <strong>closed-form solution</strong>.</p></li>
+<li><p><strong>Mechanism:</strong> This mathematically efficient approach leverages precomputed kernel <strong>Gram matrices</strong> of train-train (<span class="math notranslate nohighlight">\(B_{bar}\)</span>) and train-test (<span class="math notranslate nohighlight">\(a_{bar}\)</span>) instances. This allows for fast divergence evaluation without the need for sampling, making it scalable for multiclass quantification.</p></li>
+</ul>
+<details class="sd-sphinx-override sd-dropdown sd-card sd-mb-3">
+<summary class="sd-summary-title sd-card-header">
+<span class="sd-summary-text">Mathematical details - KDEy-CS Closed Form</span><span class="sd-summary-state-marker sd-summary-chevron-right"><svg version="1.1" width="1.5em" height="1.5em" class="sd-octicon sd-octicon-chevron-right" viewBox="0 0 24 24" aria-hidden="true"><path d="M8.72 18.78a.75.75 0 0 1 0-1.06L14.44 12 8.72 6.28a.751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018l6.25 6.25a.75.75 0 0 1 0 1.06l-6.25 6.25a.75.75 0 0 1-1.06 0Z"></path></svg></span></summary><div class="sd-summary-content sd-card-body docutils">
+<p class="sd-card-text">The implementation minimizes the following objective derived from the CS divergence definition:</p>
+<div class="math notranslate nohighlight">
+\[J_{CS}(\alpha) = - \log \left( \mathbf{r}^T \mathbf{a}_{bar} \right) + \frac{1}{2} \log \left( \mathbf{r}^T \mathbf{B}_{bar} \mathbf{r} \right)\]</div>
+<p class="sd-card-text">Where:</p>
+<ul class="simple">
+<li><p class="sd-card-text"><span class="math notranslate nohighlight">\(\mathbf{r} = \alpha / \text{counts}\)</span> are the normalized weights.</p></li>
+<li><p class="sd-card-text"><span class="math notranslate nohighlight">\(\mathbf{a}_{bar}\)</span> represents kernel sums between training centers and test points.</p></li>
+<li><p class="sd-card-text"><span class="math notranslate nohighlight">\(\mathbf{B}_{bar}\)</span> is the Gram matrix of kernel sums between training centers.</p></li>
+</ul>
+</div>
+</details><p><strong>Example</strong></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span> <span class="kn">from</span><span class="w"> </span><span class="nn">mlquantify.matching</span><span class="w"> </span><span class="kn">import</span> <span class="n">KDEyCS</span>
+
+<span class="c1"># Fast execution using closed-form solution</span>
+<span class="n">q</span> <span class="o">=</span> <span class="n">KDEyCS</span><span class="p">(</span><span class="n">estimator</span><span class="o">=</span><span class="n">RandomForestClassifier</span><span class="p">(),</span> <span class="n">bandwidth</span><span class="o">=</span><span class="mf">0.1</span><span class="p">)</span>
+<span class="n">q</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">X_train</span><span class="p">,</span> <span class="n">y_train</span><span class="p">)</span>
+<span class="n">q</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">X_test</span><span class="p">)</span>
+</pre></div>
+</div>
+<p><strong>References</strong></p>
+<aside class="footnote-list brackets">
+<aside class="footnote brackets" id="id5" role="doc-footnote">
+<span class="label"><span class="fn-bracket">[</span>1<span class="fn-bracket">]</span></span>
+<span class="backrefs">(<a role="doc-backlink" href="#id1">1</a>,<a role="doc-backlink" href="#id2">2</a>,<a role="doc-backlink" href="#id3">3</a>,<a role="doc-backlink" href="#id4">4</a>)</span>
+<p>Moreo, A., González, P., &amp; del Coz, J. J. (2024). Kernel Density Estimation for Multiclass Quantification. <a class="reference external" href="http://arxiv.org/abs/2401.00490">http://arxiv.org/abs/2401.00490</a></p>
+</aside>
+</aside>
+</section>
+</section>
+</section>
+
+
+                </article>
+              
+              
+              
+                <footer class="bd-footer-article">
+                  <div class="footer-article-items footer-article__inner">
+  
+    <div class="footer-article-item">
+<div class="prev-next-area">
+</div></div>
+  
+</div>
+                </footer>
+              
+              
+              
+            </div>
+            
+            
+              
+                <dialog id="pst-secondary-sidebar-modal"></dialog>
+                <div id="pst-secondary-sidebar" class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item">
+<div
+    id="pst-page-navigation-heading-2"
+    class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> On this page
+  </div>
+  <nav id="pst-page-toc-nav" class="page-toc" aria-labelledby="pst-page-navigation-heading-2">
+    <ul class="pst-show_toc_level nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#kdey-kernel-density-estimation-y-similarity">KDEy: Kernel Density Estimation y-Similarity</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#kdey-ml-maximum-likelihood">KDEy-ML (Maximum Likelihood)</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#kdey-hd-hellinger-distance">KDEy-HD (Hellinger Distance)</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#kdey-cs-cauchy-schwarz">KDEy-CS (Cauchy-Schwarz)</a></li>
+</ul>
+</li>
+</ul>
+  </nav></div>
+
+  <div class="sidebar-secondary-item">
+
+  <div class="tocsection sourcelink">
+    <a href="../_sources/modules/density.rst.txt">
+      <i class="fa-solid fa-file-lines"></i> Show Source
+    </a>
+  </div>
+</div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+          </footer>
+        
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script defer src="../_static/scripts/bootstrap.js?digest=0790524f97105ba85085"></script>
+<script defer src="../_static/scripts/pydata-sphinx-theme.js?digest=0790524f97105ba85085"></script>
+
+  <footer class="bd-footer">
+  </footer>
+  </body>
+</html>
