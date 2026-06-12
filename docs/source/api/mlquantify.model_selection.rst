@@ -30,3 +30,4 @@ mlquantify.model_selection
   NPP
   UPP
   PPP
+  apply_protocol

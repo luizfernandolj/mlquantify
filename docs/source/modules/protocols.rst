@@ -26,6 +26,46 @@ method behaviour across the entire prevalence spectrum.
 
 ----
 
+Quick evaluation with ``apply_protocol``
+========================================
+
+:func:`apply_protocol` runs the whole evaluation loop in a single call — the
+protocol analogue of scikit-learn's
+:func:`~sklearn.model_selection.cross_validate`. It fits the quantifier, samples
+the test batches with the chosen protocol, predicts each one, and returns the
+true and predicted prevalences together with one score array per metric:
+
+.. code-block:: python
+
+   from mlquantify.model_selection import apply_protocol
+   from mlquantify.likelihood import EMQ
+   from sklearn.linear_model import LogisticRegression
+   from sklearn.datasets import make_classification
+
+   X, y = make_classification(n_samples=2000, weights=[0.7, 0.3], random_state=42)
+
+   results = apply_protocol(
+       EMQ(LogisticRegression()), X, y,
+       protocol="app",           # 'app' | 'npp' | 'upp' | 'ppp'
+       scoring=["mae", "nmd"],   # one metric name, a callable, or a list
+       n_prevalences=21,
+       batch_size=100,
+       test_size=0.5,            # held-out pool the protocol samples from
+       random_state=42,
+   )
+
+   print("samples:", results["n_batches"])
+   print("MAE:", results["MAE"].mean(), "NMD:", results["NMD"].mean())
+   # results["true_prevalences"], results["predicted_prevalences"] -> (n_samples, n_classes)
+
+By default a copy of the quantifier is trained on ``1 - test_size`` of the data
+and evaluated on the rest. Pass ``fit=False`` to evaluate an already-fitted
+quantifier, ``return_estimator=True`` to get the trained model back, or a
+:class:`BaseProtocol` instance as ``protocol`` for full control. The sections
+below document the underlying protocols, which you can also drive manually.
+
+----
+
 APP — Artificial Prevalence Protocol
 ======================================
 
@@ -278,6 +318,52 @@ Parameters
 
 ----
 
+PPP — Personalized Prevalence Protocol
+========================================
+
+:class:`PPP` generates samples at class prevalences you specify **explicitly**,
+for targeted evaluation at exact operating points (where APP and UPP sweep the
+prevalences for you). Pass a list of prevalence vectors; in the binary case a
+single float is read as the positive-class prevalence.
+
+Parameters
+----------
+
+.. list-table::
+   :widths: 22 15 63
+   :header-rows: 1
+
+   * - Parameter
+     - Default
+     - Explanation
+   * - ``batch_size``
+     - required
+     - Size of each sample.
+   * - ``prevalences``
+     - required
+     - List of target prevalence vectors (or floats for binary problems).
+   * - ``repeats``
+     - ``1``
+     - Number of samples drawn per target prevalence.
+   * - ``random_state``
+     - ``None``
+     - Seed for reproducibility.
+
+.. code-block:: python
+
+   from mlquantify.model_selection import PPP
+   from mlquantify.utils import get_prev_from_labels
+
+   protocol = PPP(batch_size=100,
+                  prevalences=[[0.1, 0.9], [0.5, 0.5], [0.9, 0.1]],
+                  random_state=42)
+   for idx in protocol.split(X_test, y_test):
+       X_s, y_s = X_test[idx], y_test[idx]
+       true_prev = get_prev_from_labels(y_s)
+       pred_prev = q.predict(X_s)
+
+----
+
 Choosing a Protocol
 =====================
 
@@ -301,6 +387,15 @@ Choosing a Protocol
    * - UPP (kraemer)
      - Multiclass
      - You need a deterministic grid equivalent to APP for multiclass.
+   * - PPP
+     - Binary / multiclass
+     - You want to evaluate at specific, hand-picked prevalences.
+
+.. tip::
+
+   For most workflows, reach for :func:`apply_protocol` rather than writing the
+   loop by hand — it accepts the same ``protocol`` choice and returns the scores
+   directly.
 
 .. tip::
 
@@ -313,123 +408,14 @@ Choosing a Protocol
    protocols are necessary. :ref:`model_selection` for hyperparameter
    tuning with ``GridSearchQ``.
 
-Protocols for Quantification
-==============================
-
-Quantification protocols are designed to evaluate quantifiers by generating multiple test samples with varying class prevalences. These protocols ensure robust assessment of quantification methods under different distributional shifts.
-
-Experimental evaluation primarily uses two main protocols:
-
-Artificial-Prevalence Protocol (APP)
-====================================
-
-The :class:`APP` is the most commonly used protocol, leveraging widely available classification datasets to artificially vary class prevalences in test samples.
-
-- Generates multiple test samples by subsampling the original test set to produce varying class prevalences.
-- Simulates prior probability shift (:math:`P_L(Y) \neq P_U(Y)`) while maintaining conditional feature distributions constant.
-- Allows creation of extensive test points from a single dataset for thorough evaluation.
-
-**Example**
-
-.. code-block:: python
-
-    from mlquantify.model_selection import APP
-    from mlquantify.utils import get_prev_from_labels
-
-    # Initialize protocol
-    app = APP(
-        batch_size=[100, 200], 
-        n_prevalences=5, 
-        repeats=3, 
-        random_state=42
-    )
-
-    for idx in app.split(X_test, y_test):
-        X_sample, y_sample = X_test[idx], y_test[idx]
-        real_prevalence = get_prev_from_labels(y_sample)
-        # Evaluate quantifier on (X_sample, y_sample)
-
-
-Natural-Prevalence Protocol (NPP)
-=================================
-
-The NPP uses naturally occurring prevalence variations by partitioning a large test set into random sub-samples, preserving their inherent class distributions.
-
-- Preserves real-world prevalence distributions without artificial manipulation.
-- Provides realistic evaluation of quantifiers but is less common due to data requirements.
-
-**Example**
-
-.. code-block:: python
-
-    from mlquantify.model_selection import NPP
-    from mlquantify.utils import get_prev_from_labels
-
-    # Initialize protocol
-    npp = NPP(batch_size=100, random_state=42)
-
-    for idx in npp.split(X_test, y_test):
-        X_sample, y_sample = X_test[idx], y_test[idx]
-        real_prevalence = get_prev_from_labels(y_sample)
-        # Evaluate quantifier on (X_sample, y_sample)
-
-
-
-Uniform Prevalence Protocol (UPP)
-=================================
-
-The :class:`UPP` is a variant of the APP that ensures uniform sampling of class prevalences across the entire range [0, 1].
-
-- Guarantees that all possible prevalence values are equally represented in the test samples.
-- Useful for comprehensive evaluation of quantifiers across the full prevalence spectrum.
-- Particularly beneficial in multiclass quantification tasks (less computationally intensive).
-
-**Example**
-
-.. code-block:: python
-
-    from mlquantify.model_selection import UPP
-    from mlquantify.utils import get_prev_from_labels
-
-    # Initialize protocol
-    upp = UPP(
-        batch_size=[100, 200], 
-        n_prevalences=5, 
-        repeats=3, 
-        random_state=42
-    )
-
-    for idx in upp.split(X_test, y_test):
-        X_sample, y_sample = X_test[idx], y_test[idx]
-        real_prevalence = get_prev_from_labels(y_sample)
-        # Evaluate quantifier on (X_sample, y_sample)
-
-
-Personalized Prevalence Protocol (PPP)
-======================================
-
-The :class:`PPP` is another APP variant that allows users to specify desired class prevalences for generating test samples, since APP sample all possible prevalences uniformly.
-
-- Enables targeted evaluation of quantifiers at specific prevalence levels.
-- Useful for scenarios where certain prevalence values are of particular interest.
-
-**Example**
-
-.. code-block:: python
-
-    from mlquantify.model_selection import PPP
-    from mlquantify.utils import get_prev_from_labels
-
-    # Initialize protocol with desired prevalences
-    ppp = PPP(batch_size=100, prevalences=[0.1, 0.9], repeats=3, random_state=42)
-
-    for idx in ppp.split(X_test, y_test):
-        X_sample, y_sample = X_test[idx], y_test[idx]
-        real_prevalence = get_prev_from_labels(y_sample)
-        # Evaluate quantifier on (X_sample, y_sample)
-
-
 References
 ==========
 
-.. [1] Esuli, A., Fabris, A., Moreo, A., & Sebastiani, F. (n.d.). Learning to Quantify The Information Retrieval Series.
+.. dropdown:: References
+
+   - Forman, G. (2008). Quantifying Counts and Costs via Classification.
+     *Data Mining and Knowledge Discovery*, 17(2), 164–206.
+   - González, P., Castaño, A., Chawla, N. V., & del Coz, J. J. (2017). A Review
+     on Quantification Learning. *ACM Computing Surveys*, 50(5), 1–40.
+   - Esuli, A., Fabris, A., Moreo, A., & Sebastiani, F. (2023).
+     *Learning to Quantify*. The Information Retrieval Series, Springer.
