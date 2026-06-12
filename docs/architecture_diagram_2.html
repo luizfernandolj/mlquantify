@@ -1,0 +1,269 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>mlquantify Architecture Matrix</title>
+  <style>
+    :root {
+      --bg: #ffffff;
+      --text: #1e293b;
+      --border: #cbd5e1;
+      --section-bg: #f8fafc;
+      --header-bg: #475569;
+      
+      /* Muted publication-friendly accents */
+      --counting: #f0fdf4;
+      --matching: #fff1f2;
+      --likelihood: #fefaf0;
+      --generalized: #eef2ff;
+      --specialized: #f0f9ff;
+      --meta: #fdf2f8;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      padding: 20px;
+      display: flex;
+      justify-content: center;
+    }
+
+    /* Standard paper width container */
+    .paper-container {
+      width: 100%;
+      max-width: 900px;
+      border: 1px solid #94a3b8;
+      padding: 18px;
+      background: #ffffff;
+    }
+
+    .title-block {
+      text-align: center;
+      margin-bottom: 16px;
+      border-bottom: 2px solid var(--text);
+      padding-bottom: 8px;
+    }
+
+    .title-block h1 {
+      font-size: 20px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    .title-block p {
+      font-size: 13px;
+      color: #64748b;
+      margin-top: 2px;
+      font-style: italic;
+    }
+
+    /* Layout Matrix Grid */
+    .matrix-grid {
+      display: grid;
+      grid-template-columns: repeat(12, 1fr);
+      gap: 10px;
+    }
+
+    .section {
+      border: 1px solid var(--border);
+      background: var(--section-bg);
+      border-radius: 4px;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .section-header {
+      background: var(--header-bg);
+      color: #ffffff;
+      font-size: 12px;
+      font-weight: 600;
+      padding: 5px 8px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    .section-body {
+      padding: 8px;
+      font-size: 11px;
+      line-height: 1.4;
+      flex-grow: 1;
+    }
+
+    /* Grid Span Definitions for Compact Packing */
+    .span-12 { grid-column: span 12; }
+    .span-8  { grid-column: span 8; }
+    .span-7  { grid-column: span 7; }
+    .span-6  { grid-column: span 6; }
+    .span-5  { grid-column: span 5; }
+    .span-4  { grid-column: span 4; }
+
+    /* Nested elements */
+    .sub-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 6px;
+    }
+
+    .mini-block {
+      border: 1px solid var(--border);
+      border-radius: 3px;
+      padding: 6px;
+      background: #ffffff;
+    }
+
+    .mini-block h4 {
+      font-size: 11px;
+      font-weight: 700;
+      margin-bottom: 3px;
+      border-bottom: 1px dashed var(--border);
+      padding-bottom: 2px;
+    }
+
+    .code-inline {
+      font-family: "SFMono-Regular", Consolas, "Liberation Mono", Menlo, monospace;
+      font-size: 10.5px;
+      color: #0f172a;
+    }
+
+    ul {
+      list-style: none;
+    }
+
+    li {
+      margin-bottom: 2px;
+      position: relative;
+      padding-left: 8px;
+    }
+    li::before {
+      content: "•";
+      position: absolute;
+      left: 0;
+      color: #64748b;
+    }
+
+    /* Specific sub-block fills for subtle block contrast */
+    .b-counting { background-color: var(--counting); }
+    .b-matching { background-color: var(--matching); }
+    .b-likelihood { background-color: var(--likelihood); }
+    .b-generalized { background-color: var(--generalized); }
+    .b-specialized { background-color: var(--specialized); }
+    .b-meta { background-color: var(--meta); }
+
+  </style>
+</head>
+<body>
+
+  <div class="paper-container">
+    <div class="title-block">
+      <h1>mlquantify Package Architecture Matrix</h1>
+      <p>Structural layout mapping modules, contracts, interfaces, and optimization pipelines.</p>
+    </div>
+
+    <div class="matrix-grid">
+      
+      <div class="section span-5">
+        <div class="section-header">1. Public API Interface</div>
+        <div class="section-body">
+          <ul>
+            <li><span class="code-inline">__init__.py</span>: Top-level exports</li>
+            <li><span class="code-inline">_config.py</span>: Global configuration settings</li>
+            <li>Unified user-facing workflow: <span class="code-inline">fit / predict / aggregate</span></li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="section span-7">
+        <div class="section-header">2. Shared Contracts, Mixins &amp; Composition</div>
+        <div class="section-body sub-grid">
+          <div class="mini-block">
+            <h4>Abstract &amp; Mixins</h4>
+            <span class="code-inline">base.py</span>: BaseQuantifier, MetaquantifierMixin, ProtocolMixin<br>
+            <span class="code-inline">base_aggregative.py</span>: AggregativeMixin, Soft/CrispPrediction
+          </div>
+          <div class="mini-block">
+            <h4>Multiclass &amp; Layering</h4>
+            <span class="code-inline">multiclass.py</span>: OVR, OVO<br>
+            <span class="code-inline">Composition</span>: LinearCompose ($q \approx M \cdot p$), LikelihoodCompose
+          </div>
+        </div>
+      </div>
+
+      <div class="section span-12">
+        <div class="section-header">3. Quantification Method Families</div>
+        <div class="section-body sub-grid" style="grid-template-columns: repeat(3, 1fr); gap: 6px;">
+          
+          <div class="mini-block b-counting">
+            <h4>counting/ (Closed-form)</h4>
+            <span class="code-inline">CC, PCC, AC, PAC, TX, TMAX, T50, MS, MS2</span>
+          </div>
+
+          <div class="mini-block b-matching">
+            <h4>matching/ (Distribution)</h4>
+            <span class="code-inline">HDx, HDy, DyS, MMD_RKHS, KDEyHD, KDEyCS, SORD, SMM</span>
+          </div>
+
+          <div class="mini-block b-likelihood">
+            <h4>likelihood/ (Priors)</h4>
+            <span class="code-inline">EMQ, CDE</span>
+          </div>
+
+          <div class="mini-block b-generalized">
+            <h4>generalized/ (Composition)</h4>
+            <span class="code-inline">GAC, GPAC, FM, GHDx, GHDy, EDx, EDy, GKDEyML, MLPE</span>
+          </div>
+
+          <div class="mini-block b-specialized">
+            <h4>specialized/ (Hybrid)</h4>
+            <span class="code-inline">neighbors/</span>: PWK<br>
+            <span class="code-inline">neural/</span>: QuaNet
+          </div>
+
+          <div class="mini-block b-meta">
+            <h4>meta/ (Ensembles)</h4>
+            <span class="code-inline">EnsembleQ, AggregativeBootstrap, QuaDapt</span>
+          </div>
+
+        </div>
+      </div>
+
+      <div class="section span-6">
+        <div class="section-header">4. Composition &amp; Matching Engine</div>
+        <div class="section-body sub-grid">
+          <div class="mini-block">
+            <h4>Representations &amp; Losses</h4>
+            Prediction, Histogram, KDE, Distance, KernelMean, DistanceLoss, LeastSquares, Energy, NLL
+          </div>
+          <div class="mini-block">
+            <h4>Optimization Solvers</h4>
+            <span class="code-inline">minimize_prevalence</span>: simplex, binary, blocks, least_squares
+          </div>
+        </div>
+      </div>
+
+      <div class="section span-6">
+        <div class="section-header">5. Evaluation, Metrics &amp; Runtime Support</div>
+        <div class="section-body sub-grid" style="grid-template-columns: 55% 45%;">
+          <div class="mini-block">
+            <h4>Runtime &amp; Validation</h4>
+            <span class="code-inline">utils/</span>: validation, sampling, parallel, load/save<br>
+            <span class="code-inline">_CVEstimator</span>: Out-of-fold predictions
+          </div>
+          <div class="mini-block">
+            <h4>Metrics &amp; Selection</h4>
+            MAE, MSE, SLQ, OQ/RQ<br>
+            <span class="code-inline">model_selection/</span>: GridSearchQ, APP, NPP, UPP, PPP
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+</body>
+</html>

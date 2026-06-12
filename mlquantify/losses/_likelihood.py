@@ -57,6 +57,12 @@ class NegativeLogLikelihoodLoss(BaseLoss):
     reduction : str
         The configured reduction mode.
 
+    See Also
+    --------
+    MixtureNegativeLogLikelihoodLoss : Builds the mixture likelihood from per-class likelihoods.
+    RegularizedMixtureNLLLoss : Adds simplex-smoothness penalties.
+    get_loss : Factory that builds this loss by name.
+
     Examples
     --------
     >>> from mlquantify.losses import get_loss

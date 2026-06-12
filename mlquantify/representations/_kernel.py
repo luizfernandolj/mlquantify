@@ -8,7 +8,31 @@ from ._base import BaseRepresentation
 
 
 class KernelMeanRepresentation(BaseRepresentation):
-    r"""Kernel mean embedding representation."""
+    r"""Kernel mean embedding representation.
+
+    Represents a sample of instances by its kernel mean embedding in a
+    reproducing-kernel Hilbert space (the mean feature map), so that matching
+    distributions reduces to matching mean embeddings. Exact under a linear
+    kernel and an approximation under non-linear kernels.
+
+    Parameters
+    ----------
+    kernel : str, default='rbf'
+        Kernel defining the RKHS feature map (``'rbf'``, ``'linear'``,
+        ``'poly'``, ``'sigmoid'``, ...); should be universal for consistency.
+    gamma : float or None, default=None
+        Kernel coefficient for ``'rbf'``/``'poly'``/``'sigmoid'``; ``None``
+        uses ``1 / n_features``.
+    degree : int, default=3
+        Polynomial degree for the ``'poly'`` kernel.
+    coef0 : float, default=0.0
+        Independent term for the ``'poly'`` and ``'sigmoid'`` kernels.
+
+    See Also
+    --------
+    DistanceRepresentation : Pairwise-distance representation (energy distance).
+    MMD_RKHS : Quantifier built on this representation.
+    """
 
     def __init__(
         self,

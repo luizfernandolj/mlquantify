@@ -55,6 +55,12 @@ def minimize_prevalence(
         If ``n_classes < 2`` or if ``solver`` is incompatible with the
         number of classes.
 
+    See Also
+    --------
+    solve_binary : Binary backend used for two-class problems.
+    solve_simplex : SLSQP backend used for multiclass problems.
+    minimize_prevalence_blocks : Block-wise variant for histogram matching.
+
     Examples
     --------
     >>> import numpy as np

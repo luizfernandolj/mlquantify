@@ -104,28 +104,51 @@ class MatchingKernelQuantifier(BaseMatchingQuantifier):
 class MMD_RKHS(MatchingKernelQuantifier):
     r"""Maximum Mean Discrepancy in RKHS (MMD-RKHS) quantifier.
 
-    Estimates class prevalences by minimising the squared distance between the
-    kernel mean embedding of the test sample and the mixture of class-conditional
-    kernel mean embeddings in a reproducing kernel Hilbert space.
+    Targets prior probability shift. Matches distributions by their mean
+    embeddings in a reproducing-kernel Hilbert space: it finds the prevalence
+    vector whose mixture of per-class mean embeddings is closest to the test
+    mean embedding, a convex quadratic program on the simplex. Native
+    multiclass, classifier-free, and provably consistent under a universal
+    kernel.
 
     Parameters
     ----------
     kernel : str, default='rbf'
-        Kernel function to use. One of ``'rbf'``, ``'linear'``, ``'poly'``,
-        ``'sigmoid'``, ``'cosine'``.
+        Kernel defining the RKHS feature map; should be universal for
+        consistency.
+
+        - ``'rbf'`` : Gaussian radial-basis kernel; universal (recommended).
+        - ``'linear'`` : inner product; matches only first moments.
+        - ``'poly'`` : polynomial kernel; matches moments up to ``degree``.
+        - ``'sigmoid'`` : hyperbolic-tangent kernel.
+        - ``'cosine'`` : cosine-similarity kernel.
     gamma : float or None, default=None
-        Kernel coefficient for ``'rbf'``, ``'poly'``, and ``'sigmoid'``.
+        Kernel coefficient for ``'rbf'``, ``'poly'`` and ``'sigmoid'``.
+        ``None`` uses ``1 / n_features``. Smaller over-smooths the embedding;
+        larger over-fits it.
     degree : int, default=3
-        Polynomial degree for the ``'poly'`` kernel.
+        Polynomial degree for the ``'poly'`` kernel (highest moment matched).
     coef0 : float, default=0.0
         Independent term for ``'poly'`` and ``'sigmoid'`` kernels.
     solver : str, default='slsqp'
-        Optimization solver.
+        Constrained optimizer for the convex QP on the simplex (see
+        :mod:`mlquantify.solvers`).
 
     Attributes
     ----------
     classes_ : ndarray of shape (n_classes,)
         Class labels seen during ``fit``.
+
+    Notes
+    -----
+    Statistically consistent under a universal kernel; its error shrinks when
+    classes are well separated and the data spread is small. Kernel choice and
+    bandwidth matter and can be tuned.
+
+    See Also
+    --------
+    EDy : Energy-distance sample matching using classifier predictions.
+    KDEyML : Multivariate-density multiclass matching.
 
     Examples
     --------
@@ -143,6 +166,9 @@ class MMD_RKHS(MatchingKernelQuantifier):
         .. [1] Zhang, K., Schölkopf, B., Muandet, K., & Wang, Z. (2013).
                Domain Adaptation under Target and Conditional Shift.
                *ICML*, pp. 819–827.
+        .. [2] Iyer, A., Nath, S., & Sarawagi, S. (2014). Maximum Mean
+               Discrepancy for Class Ratio Estimation: Convergence Bounds and
+               Kernel Selection. *ICML*, 32.
     """
 
     def __init__(

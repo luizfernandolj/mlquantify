@@ -11,6 +11,7 @@ from ._adjustment import (
     T50,
     MS,
     MS2,
+    ACC
 )
 from ._generalized import FM, GACC, GPACC
 

@@ -61,6 +61,11 @@ numpydoc_show_class_members = False
 numpydoc_show_inherited_class_members = False
 numpydoc_class_members_toctree = False
 
+# Silence the benign "citation not referenced" warnings emitted for the
+# ``.. [1]`` references in the numpydoc References sections (the references
+# still render; they are simply not back-referenced inline).
+suppress_warnings = ["ref.citation"]
+
 
 source_suffix = ".rst"
 

@@ -189,19 +189,26 @@ class KDEyQuantifier(
 class KDEyML(KDEyQuantifier):
     r"""KDEy Maximum Likelihood (KDEy-ML) quantifier.
 
-    Estimates class prevalences by maximising the mixture log-likelihood of
-    the test posterior-probability scores under class-conditional KDE densities.
+    Targets prior probability shift. A multiclass distribution-matching method
+    that replaces the per-class histograms of :class:`HDy` with multivariate
+    kernel density estimates over the posterior vectors, then chooses the
+    prevalence that maximises the mixture log-likelihood of the test
+    posteriors. Native multiclass; scales where histogram matching fragments.
 
     Parameters
     ----------
     estimator : estimator, optional
         A probabilistic classifier with ``fit`` and ``predict_proba`` methods.
     bandwidth : float, default=0.1
-        Bandwidth of the kernel density estimator.
+        Bandwidth of the kernel density estimator and the key parameter. Too
+        small spikes each class density on its training points; too large
+        blurs the class densities together.
     kernel : str, default='gaussian'
-        Kernel type for the KDE.
+        Kernel shape placed on each training point (``'gaussian'``,
+        ``'tophat'``, ``'epanechnikov'``, ``'exponential'``, ``'linear'``,
+        ``'cosine'``).
     solver : str, default='slsqp'
-        Optimization solver.
+        Constrained optimizer over the simplex (see :mod:`mlquantify.solvers`).
     cv : int or None, default=None
         Cross-validation folds for computing training scores.
     stratified : bool, default=True
@@ -217,6 +224,17 @@ class KDEyML(KDEyQuantifier):
         The fitted underlying classifier.
     classes_ : ndarray of shape (n_classes,)
         Class labels seen during ``fit``.
+
+    Notes
+    -----
+    KDEy-ML is a maximum-likelihood method (compare :class:`~mlquantify.likelihood.EMQ`)
+    and often outperforms EM when posteriors are recalibrated.
+
+    See Also
+    --------
+    KDEyHD : Hellinger-distance KDE variant.
+    KDEyCS : Closed-form Cauchy-Schwarz KDE variant.
+    HDy : Histogram mixture model this generalises.
 
     Examples
     --------
@@ -273,22 +291,27 @@ class KDEyML(KDEyQuantifier):
 class KDEyHD(KDEyQuantifier):
     r"""KDEy Hellinger Distance (KDEy-HD) quantifier.
 
-    Estimates class prevalences by approximating the Hellinger distance between
-    the test density and the mixture of class-conditional KDE densities using
-    Monte Carlo sampling from the reference distribution.
+    Targets prior probability shift. A multiclass distribution-matching method
+    that models each class with a multivariate KDE over the posterior vectors
+    and selects the prevalence minimising the Hellinger distance between the
+    test density and the mixture density, estimated by Monte-Carlo sampling.
+    The KDE analogue of :class:`HDy` lifted to the simplex.
 
     Parameters
     ----------
     estimator : estimator, optional
         A probabilistic classifier with ``fit`` and ``predict_proba`` methods.
     bandwidth : float, default=0.1
-        Bandwidth of the kernel density estimator.
+        Bandwidth of the kernel density estimator; controls density smoothness.
     kernel : str, default='gaussian'
-        Kernel type for the KDE.
+        Kernel shape placed on each training point (``'gaussian'``,
+        ``'tophat'``, ``'epanechnikov'``, ``'exponential'``, ``'linear'``,
+        ``'cosine'``).
     montecarlo_trials : int, default=10000
-        Number of Monte Carlo samples for approximating the Hellinger distance.
+        Number of Monte Carlo samples used to approximate the Hellinger
+        distance integral; more samples reduce approximation noise.
     solver : str, default='slsqp'
-        Optimization solver.
+        Constrained optimizer over the simplex (see :mod:`mlquantify.solvers`).
     cv : int or None, default=None
         Cross-validation folds for computing training scores.
     stratified : bool, default=True
@@ -304,6 +327,11 @@ class KDEyHD(KDEyQuantifier):
         The fitted underlying classifier.
     classes_ : ndarray of shape (n_classes,)
         Class labels seen during ``fit``.
+
+    See Also
+    --------
+    KDEyML : Maximum-likelihood KDE variant.
+    KDEyCS : Closed-form Cauchy-Schwarz KDE variant.
 
     Examples
     --------
@@ -421,20 +449,22 @@ class KDEyHD(KDEyQuantifier):
 class KDEyCS(KDEyQuantifier):
     r"""KDEy Cauchy-Schwarz (KDEy-CS) quantifier.
 
-    Estimates class prevalences by minimising a closed-form Cauchy-Schwarz
-    divergence between the test density and the mixture of Gaussian
-    class-conditional KDE densities. Only the Gaussian kernel is supported.
+    Targets prior probability shift. A multiclass distribution-matching method
+    that models each class with a Gaussian KDE over the posterior vectors and
+    selects the prevalence minimising the Cauchy-Schwarz divergence, which has
+    a closed form. The most efficient KDEy variant, since the expensive
+    train-train kernel terms are precomputed once at fit time.
 
     Parameters
     ----------
     estimator : estimator, optional
         A probabilistic classifier with ``fit`` and ``predict_proba`` methods.
     bandwidth : float, default=0.1
-        Bandwidth of the Gaussian kernel density estimator.
+        Bandwidth of the Gaussian kernel density estimator; controls smoothness.
     kernel : str, default='gaussian'
-        Must be ``'gaussian'``; other kernels are not supported.
+        Must be ``'gaussian'``; the closed-form divergence is Gaussian-specific.
     solver : str, default='slsqp'
-        Optimization solver.
+        Constrained optimizer over the simplex (see :mod:`mlquantify.solvers`).
     cv : int or None, default=None
         Cross-validation folds for computing training scores.
     stratified : bool, default=True
@@ -450,6 +480,17 @@ class KDEyCS(KDEyQuantifier):
         The fitted underlying classifier.
     classes_ : ndarray of shape (n_classes,)
         Class labels seen during ``fit``.
+
+    Notes
+    -----
+    The closed form makes KDEy-CS the fastest KDEy variant: the train-train
+    kernel matrices are computed once at training time and reused for any test
+    bag.
+
+    See Also
+    --------
+    KDEyML : Maximum-likelihood KDE variant.
+    KDEyHD : Hellinger-distance KDE variant.
 
     Examples
     --------

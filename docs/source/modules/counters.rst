@@ -365,65 +365,19 @@ Choosing Among CC, PCC, GACC, and GPACC
 - For large distributional shifts, graduate to :class:`~mlquantify.likelihood.EMQ`
   or a distribution-matching method from :mod:`mlquantify.matching`.
 
+References
+==========
+
+.. dropdown:: References
+
+   - Forman, G. (2005). Counting Positives Accurately Despite Inaccurate
+     Classification. *ECML*, 564–575.
+   - Bella, A., Ferri, C., Hernández-Orallo, J., & Ramírez-Quintana, M. J.
+     (2010). Quantification via Probability Estimators. *ICDM*, 737–742.
+   - Firat, A. (2016). Unified Framework for Quantification.
+     *arXiv:1606.00868*.
+
 .. seealso::
 
    :ref:`counting` for threshold-adjustment methods (:class:`ACC`,
    :class:`TAC`, :class:`TX`, …) which offer stronger binary-specific correction.
-
-===========================
-Counters For Quantification
-===========================
-
-To deal with problems of quantification, a straightforward approach is to count the number of items predicted to belong to each class in the unlabeled set. This is the basis of the **Classify and Count** family of methods.
-
-
-Classify and Count  
-==================
-
-The **Classify and Count** method, or :class:`CC` is the simplest baseline.  
-It trains a hard classifier :math:`h` on labeled data :math:`L` , applies it to an unlabeled set :math:`U` , and counts how many samples belong to each predicted class.
-
-
-**Example**
-
-.. code-block:: python
-
-   from mlquantify.counting import CC
-   from sklearn.linear_model import LogisticRegression
-   import numpy as np
-
-   X, y = np.random.randn(100, 5), np.random.randint(0, 2, 100)
-   q = CC(estimator=LogisticRegression())
-   q.fit(X, y)
-   q.predict(X)
-   # -> {0: 0.47, 1: 0.53}
-
-
-.. note::
-    :class:`CC` is fast and simple, but when class proportions in the test set differ from the training set, its estimates can become biased or inaccurate.
-
-
-
-Probabilistic Classify and Count  
-================================
-
-The **Probabilistic Classify and Count** or :class:`PCC` variant uses the *predicted probabilities* from a soft classifier instead of hard labels.  
-This makes it less sensitive to uncertain predictions.
-
-[Plot Idea: A plot comparing probabilities per sample and their averaged mean per class]
-
-**Example**
-
-.. code-block:: python
-
-   from mlquantify.counting import PCC
-   from sklearn.linear_model import LogisticRegression
-   import numpy as np
-
-   X, y = np.random.randn(100, 5), np.random.randint(0, 2, 100)
-   q = PCC(estimator=LogisticRegression())
-   q.fit(X, y)
-   q.predict(X)
-   # -> {0: 0.45, 1: 0.55}
-
-CC and PCC both often underestimate or overestimate the true prevalence when there is distribution shift (also known as "dataset shift").

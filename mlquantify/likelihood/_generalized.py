@@ -1,29 +1,34 @@
 # likelihood/_generalized.py
 
+import numpy as np
+
 from mlquantify.base_aggregative import AggregativeMixin, SoftPredictionMixin
 from mlquantify.compose import LikelihoodComposeQuantifier
 from mlquantify.representations import PredictionRepresentation
+from mlquantify.utils._validation import validate_prevalences
 
 
 class MLPE(SoftPredictionMixin, AggregativeMixin, LikelihoodComposeQuantifier):
-    r"""Maximum Likelihood Prior Estimation (MLPE) quantifier.
+    r"""Maximum Likelihood Prevalence Estimation (MLPE) quantifier.
 
-    Estimates class prevalences by maximising the mixture log-likelihood of
-    test posterior probabilities under class-conditional distributions learned
-    from training data, using the likelihood-composition framework.
+    The trivial quantification baseline. Under the assumption of *no* shift, the
+    maximum-likelihood estimate of the test prevalence is exactly the observed
+    training prevalence, so MLPE ignores the test set entirely and always
+    returns the training class proportions. It is the reference lower bound that
+    any genuine quantifier should beat; if a method cannot improve on MLPE, it
+    is not exploiting the test data.
 
     Parameters
     ----------
     estimator : estimator, optional
-        A probabilistic classifier with ``fit`` and ``predict_proba`` methods.
-    solver : str, default='slsqp'
-        Optimization solver.
-    tau_0 : float, default=0.0
-        Regularisation weight for the first class.
-    tau_1 : float, default=0.0
-        Regularisation weight for the second class.
+        Kept for API compatibility with the aggregative quantifiers; it does
+        **not** influence the estimate, since MLPE returns the training
+        prevalence regardless of the test input.
+    solver, tau_0, tau_1 : optional
+        Retained for interface compatibility with the likelihood-composition
+        framework; unused by this trivial baseline.
     cv : int or None, default=None
-        Cross-validation folds for computing training scores.
+        Cross-validation folds used when fitting the (unused) estimator.
     stratified : bool, default=True
         Whether to stratify CV splits.
     shuffle : bool, default=False
@@ -33,21 +38,33 @@ class MLPE(SoftPredictionMixin, AggregativeMixin, LikelihoodComposeQuantifier):
 
     Attributes
     ----------
-    estimator_ : estimator
-        The fitted underlying classifier.
     classes_ : ndarray of shape (n_classes,)
         Class labels seen during ``fit``.
+    train_priors_ : ndarray of shape (n_classes,)
+        Training class prevalences, returned for any test set.
+
+    Notes
+    -----
+    MLPE makes no use of the test data; it is included only as a sanity-check
+    baseline. Contrast with :class:`EMQ`, the non-trivial maximum-likelihood
+    quantifier that re-weights the posteriors to the test set.
+
+    See Also
+    --------
+    EMQ : Non-trivial maximum-likelihood quantifier (EM re-weighting).
+    CC : Classify-and-count baseline that does use the test data.
 
     Examples
     --------
     >>> from mlquantify.likelihood import MLPE
     >>> from sklearn.linear_model import LogisticRegression
-    >>> from sklearn.datasets import make_classification
-    >>> X, y = make_classification(n_samples=200, n_classes=3, n_informative=5,
-    ...                            n_redundant=0, random_state=42)
-    >>> q = MLPE(estimator=LogisticRegression()).fit(X, y)
-    >>> q.predict(X)
-    {0: 0.33, 1: 0.34, 2: 0.33}
+    >>> import numpy as np
+    >>> rng = np.random.default_rng(0)
+    >>> X = rng.standard_normal((200, 4))
+    >>> y = (rng.random(200) < 0.3).astype(int)
+    >>> q = MLPE(LogisticRegression()).fit(X, y)
+    >>> q.predict(rng.standard_normal((50, 4)))  # returns the training prevalence
+    {0: 0.7, 1: 0.3}
 
     References
     ----------
@@ -86,3 +103,50 @@ class MLPE(SoftPredictionMixin, AggregativeMixin, LikelihoodComposeQuantifier):
         self.stratified = stratified
         self.shuffle = shuffle
         self.random_state = random_state
+
+    def predict(self, X):
+        """Return the training prevalence, ignoring ``X``.
+
+        MLPE is the trivial baseline: it estimates the test prevalence as the
+        observed training prevalence, so the test features are not used.
+
+        Parameters
+        ----------
+        X : array-like of shape (n_samples, n_features)
+            Test feature matrix (ignored).
+
+        Returns
+        -------
+        prevalences : dict or ndarray of shape (n_classes,)
+            The training class prevalences.
+        """
+        return validate_prevalences(self, self.train_priors_, self.classes_)
+
+    def aggregate(
+        self,
+        test_representation,
+        train_representation=None,
+        train_labels=None,
+        classes=None,
+    ):
+        """Return the training prevalence, ignoring the test representation.
+
+        If ``train_labels`` is provided its class prevalence is used; otherwise
+        the prevalence observed at ``fit`` time (``train_priors_``) is returned.
+        """
+        if train_labels is not None:
+            train_labels = np.asarray(train_labels)
+            cls = (
+                np.asarray(classes)
+                if classes is not None
+                else np.unique(train_labels)
+            )
+            priors = np.asarray(
+                [np.mean(train_labels == c) for c in cls],
+                dtype=float,
+            )
+            self.classes_ = cls
+        else:
+            priors = np.asarray(self.train_priors_, dtype=float)
+
+        return validate_prevalences(self, priors, self.classes_)

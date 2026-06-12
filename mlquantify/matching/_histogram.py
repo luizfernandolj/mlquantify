@@ -163,22 +163,42 @@ class MatchingHistogramQuantifier(BaseMatchingQuantifier):
 class DyS(SoftPredictionMixin, AggregativeMixin, MatchingHistogramQuantifier):
     r"""Distribution y-Similarity (DyS) quantifier.
 
-    Estimates binary prevalence by finding the mixture proportion of positive
-    and negative class score histograms that minimises the Hellinger distance
-    to the test score histogram. Class-conditional histograms are built from
-    cross-validated classifier scores.
-
-    This is a **binary-only** method. Multiclass problems are handled with a
-    one-vs-rest (OvR) strategy by default.
+    Targets prior probability shift. A general mixture-model (distribution
+    matching) quantifier: it builds class-conditional score histograms from
+    cross-validated classifier scores and searches for the positive-class
+    mixture proportion whose mixed histogram minimises a chosen dissimilarity
+    to the test score histogram. Generalises :class:`HDy` to any distance
+    (Topsoe by default). Binary-only; requires soft scores; multiclass via
+    one-vs-rest (OvR).
 
     Parameters
     ----------
     estimator : estimator, optional
         A probabilistic classifier with ``fit`` and ``predict_proba`` methods.
     bins_size : int or array-like or None, default=None
-        Histogram bin count(s) to sweep over. Defaults to a logarithmic grid.
+        Histogram bin count(s) to sweep over; controls histogram resolution.
+        Defaults to a logarithmic grid. Estimates over the bin counts are
+        aggregated by their median.
+    distance : str, default='topsoe'
+        Dissimilarity minimised between the mixed and test histograms.
+
+        - ``'topsoe'`` : symmetric information-theoretic distance; the best
+          general performer (recommended).
+        - ``'hellinger'`` : bounded sqrt-probability distance (the HDy choice).
+        - ``'probsymm'`` : probabilistic symmetric chi-square distance.
+        - ``'sqEuclidean'`` : squared Euclidean distance between bin vectors.
+    solver : {'auto', 'ternary', 'grid', 'bounded'}, default='auto'
+        Search strategy over the mixture proportion alpha.
+
+        - ``'auto'`` : pick a sensible default (bounded scalar search).
+        - ``'ternary'`` : interval-trisection search; fast on the near-unimodal objective.
+        - ``'grid'`` : exhaustive search over an evenly-spaced grid of alpha.
+        - ``'bounded'`` : scipy bounded scalar minimiser.
     strategy : {'ovr', 'ovo'}, default='ovr'
         Multiclass decomposition strategy.
+
+        - ``'ovr'`` : one-vs-rest, one binary quantifier per class.
+        - ``'ovo'`` : one-vs-one, one binary quantifier per class pair.
     cv : int or None, default=None
         Cross-validation folds for computing training scores.
     stratified : bool, default=True
@@ -187,6 +207,13 @@ class DyS(SoftPredictionMixin, AggregativeMixin, MatchingHistogramQuantifier):
         Whether to shuffle data before splitting.
     random_state : int or None, default=None
         Random seed for reproducibility.
+    bin_strategy : {'median', 'mean', None}, default=None
+        How per-bin-block prevalence estimates are aggregated when the
+        histogram is partitioned into blocks; ``None`` disables block
+        partitioning.
+    laplace_smoothing : bool, default=False
+        If ``True``, add a small count to every bin before normalising,
+        stabilising ratio/log-based distances when some bins are empty.
 
     Attributes
     ----------
@@ -194,6 +221,19 @@ class DyS(SoftPredictionMixin, AggregativeMixin, MatchingHistogramQuantifier):
         The fitted underlying classifier.
     classes_ : ndarray of shape (n_classes,)
         Class labels seen during ``fit``.
+
+    Notes
+    -----
+    DyS generalises :class:`HDy`: with ``distance='hellinger'`` the two
+    coincide. Best bin counts are typically small (around 20 or fewer); the
+    median over swept bin counts makes the estimate robust to bin
+    mis-specification.
+
+    See Also
+    --------
+    HDy : Hellinger-distance special case.
+    SORD : Bin-free ordinal-distance member of the same framework.
+    SMM : Mean-matching member of the same framework.
 
     Examples
     --------
@@ -287,22 +327,30 @@ class DyS(SoftPredictionMixin, AggregativeMixin, MatchingHistogramQuantifier):
 class HDy(SoftPredictionMixin, AggregativeMixin, MatchingHistogramQuantifier):
     r"""Hellinger Distance y (HDy) quantifier.
 
-    Estimates binary prevalence by sweeping over multiple histogram bin counts,
-    computing the Hellinger distance between the test score histogram and each
-    candidate mixture of class-conditional histograms, and returning the median
-    prevalence estimate across all bin sizes.
-
-    This is a **binary-only** method. Multiclass problems are handled with a
-    one-vs-rest (OvR) strategy by default.
+    Targets prior probability shift. The original mixture-model quantifier on
+    classifier scores: it sweeps several histogram bin counts, finds the
+    mixture of class-conditional score histograms that minimises the Hellinger
+    distance to the test histogram at each bin count, and returns the median
+    estimate. Binary-only; requires soft scores; multiclass via one-vs-rest.
 
     Parameters
     ----------
     estimator : estimator, optional
         A probabilistic classifier with ``fit`` and ``predict_proba`` methods.
     bins_size : array-like or None, default=None
-        Array of bin counts to sweep. Defaults to a range from 10 to 110.
+        Array of bin counts to sweep; controls histogram resolution. Defaults
+        to a range from 10 to 110; the per-bin estimates are aggregated by the
+        median.
+    distance : str, default='hellinger'
+        Histogram dissimilarity minimised (HDy uses ``'hellinger'``; see
+        :class:`DyS` for other choices such as ``'topsoe'``).
+    solver : {'grid', 'ternary', 'bounded', 'auto'}, default='grid'
+        Search strategy over the mixture proportion alpha.
     strategy : {'ovr', 'ovo'}, default='ovr'
         Multiclass decomposition strategy.
+
+        - ``'ovr'`` : one-vs-rest, one binary quantifier per class.
+        - ``'ovo'`` : one-vs-one, one binary quantifier per class pair.
     cv : int or None, default=None
         Cross-validation folds for computing training scores.
     stratified : bool, default=True
@@ -311,6 +359,11 @@ class HDy(SoftPredictionMixin, AggregativeMixin, MatchingHistogramQuantifier):
         Whether to shuffle data before splitting.
     random_state : int or None, default=None
         Random seed for reproducibility.
+    bin_strategy : {'median', 'mean', None}, default='median'
+        Aggregation of per-bin-block prevalence estimates across the sweep.
+    laplace_smoothing : bool, default=False
+        If ``True``, add a small count to every bin before normalising,
+        stabilising the Hellinger distance when some bins are empty.
 
     Attributes
     ----------
@@ -318,6 +371,18 @@ class HDy(SoftPredictionMixin, AggregativeMixin, MatchingHistogramQuantifier):
         The fitted underlying classifier.
     classes_ : ndarray of shape (n_classes,)
         Class labels seen during ``fit``.
+
+    Notes
+    -----
+    HDy is the Hellinger instance of :class:`DyS`; switching to the Topsoe
+    distance (via :class:`DyS`) often lowers error. The original 10–110 bin
+    range is wide — small bin counts frequently suffice.
+
+    See Also
+    --------
+    DyS : Generalisation to any histogram distance.
+    HDx : Classifier-free, feature-space variant.
+    GHDy : Multiclass constrained-regression variant.
 
     Examples
     --------
@@ -414,25 +479,39 @@ class HDy(SoftPredictionMixin, AggregativeMixin, MatchingHistogramQuantifier):
 class HDx(MatchingHistogramQuantifier):
     r"""Hellinger Distance x (HDx) quantifier.
 
-    Estimates binary prevalence by comparing class-conditional feature histograms
-    directly, without a classifier. The method sweeps over multiple bin counts and
-    selects the mixture proportion that minimises the Hellinger distance between
-    the test and mixture training histograms.
-
-    This is a **binary-only** method. Multiclass problems are handled with a
-    one-vs-rest (OvR) strategy by default.
+    Targets prior probability shift. The classifier-free mixture model: it
+    builds a histogram for every input feature and selects the mixture
+    proportion whose prevalence-mixed per-feature histograms minimise the
+    Hellinger distance to the test histograms. Uses no scorer, only the raw
+    features. Binary-only; multiclass via one-vs-rest.
 
     Parameters
     ----------
     bins_size : array-like or None, default=None
-        Array of bin counts to sweep. Defaults to a range from 2 to 30.
+        Array of bin counts to sweep per feature; controls histogram
+        resolution. Defaults to a range from 2 to 30. Per-feature and per-bin
+        estimates are aggregated by the median.
     strategy : {'ovr', 'ovo'}, default='ovr'
         Multiclass decomposition strategy.
+
+        - ``'ovr'`` : one-vs-rest, one binary quantifier per class.
+        - ``'ovo'`` : one-vs-one, one binary quantifier per class pair.
 
     Attributes
     ----------
     classes_ : ndarray of shape (n_classes,)
         Class labels seen during ``fit``.
+
+    Notes
+    -----
+    Because it skips the classifier, HDx avoids calibration issues but cannot
+    exploit a good scorer, and degrades when there are many weak or correlated
+    features.
+
+    See Also
+    --------
+    HDy : Score-space variant using a classifier.
+    GHDx : Multiclass constrained-regression variant.
 
     Examples
     --------

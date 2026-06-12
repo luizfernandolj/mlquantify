@@ -97,21 +97,23 @@ class MatchingScoreQuantifier(BaseMatchingQuantifier):
 class SORD(SoftPredictionMixin, AggregativeMixin, MatchingScoreQuantifier):
     r"""Sample Ordinal Distance (SORD) quantifier.
 
-    Estimates binary prevalence by finding the mixture proportion that minimises
-    a cumulative absolute-difference distance between the test score distribution
-    and the weighted mixture of positive and negative training score distributions.
-
-    This is a **binary-only** method. Multiclass problems are handled with a
-    one-vs-rest (OvR) strategy by default.
+    Targets prior probability shift. A parameter-free mixture model: instead of
+    binning scores it compares the raw weighted score samples with an ordinal
+    (earth-mover-like) distance, searching the mixture proportion that best
+    blends the positive and negative training scores to match the test sample.
+    Binary-only, with no bin count to tune; multiclass via one-vs-rest.
 
     Parameters
     ----------
     estimator : estimator, optional
         A probabilistic classifier with ``fit`` and ``predict_proba`` methods.
     n_grid : int, default=101
-        Number of grid points for the prevalence search.
+        Number of grid points for the prevalence (alpha) search.
     strategy : {'ovr', 'ovo'}, default='ovr'
         Multiclass decomposition strategy.
+
+        - ``'ovr'`` : one-vs-rest, one binary quantifier per class.
+        - ``'ovo'`` : one-vs-one, one binary quantifier per class pair.
     cv : int or None, default=None
         Cross-validation folds for computing training scores.
     stratified : bool, default=True
@@ -127,6 +129,17 @@ class SORD(SoftPredictionMixin, AggregativeMixin, MatchingScoreQuantifier):
         The fitted underlying classifier.
     classes_ : ndarray of shape (n_classes,)
         Class labels seen during ``fit``.
+
+    Notes
+    -----
+    SORD is parameter-free (no bin count) and competitive with a tuned
+    Topsoe-:class:`DyS`. Its cost grows roughly as ``O(n log n)`` in the
+    combined sample size, so training scores may be sub-sampled.
+
+    See Also
+    --------
+    DyS : Histogram mixture model with a selectable distance.
+    SMM : Mean-matching member of the same framework.
 
     Examples
     --------
@@ -268,21 +281,23 @@ class SORD(SoftPredictionMixin, AggregativeMixin, MatchingScoreQuantifier):
 class SMM(SoftPredictionMixin, AggregativeMixin, MatchingScoreQuantifier):
     r"""Sample Mean Matching (SMM) quantifier.
 
-    Estimates binary prevalence by matching the mean score of the test samples
-    to a convex combination of positive and negative training score means.
-    The prevalence is solved analytically in closed form.
-
-    This is a **binary-only** method. Multiclass problems are handled with a
-    one-vs-rest (OvR) strategy by default.
+    Targets prior probability shift. The lightest mixture model: it summarises
+    each class by its mean classifier score and solves analytically, in closed
+    form, for the mixture proportion that makes the blended mean equal the test
+    mean score. Binary-only, with no search and no bins; multiclass via
+    one-vs-rest.
 
     Parameters
     ----------
     estimator : estimator, optional
         A probabilistic classifier with ``fit`` and ``predict_proba`` methods.
     moment : int, default=1
-        Score moment used for matching (1 = mean).
+        Score moment used for matching (``1`` = mean).
     strategy : {'ovr', 'ovo'}, default='ovr'
         Multiclass decomposition strategy.
+
+        - ``'ovr'`` : one-vs-rest, one binary quantifier per class.
+        - ``'ovo'`` : one-vs-one, one binary quantifier per class pair.
     cv : int or None, default=None
         Cross-validation folds for computing training scores.
     stratified : bool, default=True
@@ -298,6 +313,17 @@ class SMM(SoftPredictionMixin, AggregativeMixin, MatchingScoreQuantifier):
         The fitted underlying classifier.
     classes_ : ndarray of shape (n_classes,)
         Class labels seen during ``fit``.
+
+    Notes
+    -----
+    SMM is extremely fast (closed form) but uses only the first moment of the
+    score distribution, so it is less accurate than :class:`DyS`/:class:`SORD`
+    when the class scores overlap.
+
+    See Also
+    --------
+    DyS : Full-histogram mixture model.
+    SORD : Bin-free ordinal-distance member of the same framework.
 
     Examples
     --------

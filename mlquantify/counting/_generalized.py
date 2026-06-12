@@ -12,20 +12,25 @@ from mlquantify.representations import PredictionRepresentation
 class GACC(CrispPredictionMixin, AggregativeMixin, LinearComposeQuantifier):
     r"""Generalized Adjusted Classify and Count (GACC).
 
-    Extends confusion-matrix adjustment to the multiclass setting by
-    solving a constrained linear system. A confusion matrix is estimated
-    via cross-validation from hard (crisp) classifier predictions, and
-    the test prevalence is recovered by minimizing the chosen loss subject
-    to simplex constraints.
+    Targets prior probability shift. Extends confusion-matrix adjustment to
+    the multiclass setting through the unified constrained-regression
+    framework: a per-class matrix of mean hard (crisp) predictions is
+    estimated by cross-validation, and the test prevalence is recovered by
+    minimizing the chosen loss on the probability simplex. Native multiclass,
+    so no One-vs-All decomposition is needed.
 
     Parameters
     ----------
     estimator : estimator, optional
         A classifier with ``fit`` and ``predict`` methods.
     loss : str, default='ls'
-        Loss function for solving the linear system (e.g. ``'ls'``, ``'l1'``).
+        Loss minimized over the simplex when solving the linear system.
+
+        - ``'ls'`` : least squares (L2); the standard adjusted-count objective.
+        - ``'l1'`` : least absolute deviation (L1); more robust to outliers.
     solver : str, default='slsqp'
-        Optimization solver for the constrained problem.
+        Constrained optimizer used on the simplex; ``'slsqp'`` is the
+        sequential least-squares programming backend (see :mod:`mlquantify.solvers`).
     cv : int or None, default=None
         Number of cross-validation folds. Defaults to 5 if ``None``.
     stratified : bool, default=True
@@ -41,6 +46,18 @@ class GACC(CrispPredictionMixin, AggregativeMixin, LinearComposeQuantifier):
         The fitted underlying classifier.
     classes_ : ndarray of shape (n_classes,)
         Class labels seen during ``fit``.
+
+    Notes
+    -----
+    GACC is the multiclass generalisation of :class:`ACC`: the per-class
+    matrix is the training confusion matrix and solving it on the simplex
+    inverts that matrix while guaranteeing a valid distribution.
+
+    See Also
+    --------
+    ACC : Binary adjusted count.
+    GPACC : Soft-prediction variant.
+    FM : Friedman's prior-threshold variant.
 
     Examples
     --------
@@ -93,18 +110,23 @@ class GACC(CrispPredictionMixin, AggregativeMixin, LinearComposeQuantifier):
 class GPACC(SoftPredictionMixin, AggregativeMixin, LinearComposeQuantifier):
     r"""Generalized Probabilistic Adjusted Classify and Count (GPACC).
 
-    Same as :class:`GACC` but uses soft (probabilistic) predictions from
-    ``predict_proba`` to build the confusion matrix, making it better
-    calibrated when posterior probabilities are reliable.
+    Targets prior probability shift. Like :class:`GACC`, but builds the
+    per-class matrix from soft posterior probabilities (``predict_proba``)
+    instead of hard predictions, so it exploits classifier confidence and is
+    better behaved when the posteriors are well calibrated. Native multiclass;
+    requires a probabilistic classifier.
 
     Parameters
     ----------
     estimator : estimator, optional
         A classifier with ``fit`` and ``predict_proba`` methods.
     loss : str, default='ls'
-        Loss function for solving the linear system.
+        Loss minimized over the simplex when solving the linear system.
+
+        - ``'ls'`` : least squares (L2); the standard objective.
+        - ``'l1'`` : least absolute deviation (L1); more robust to outliers.
     solver : str, default='slsqp'
-        Optimization solver for the constrained problem.
+        Constrained optimizer used on the simplex (see :mod:`mlquantify.solvers`).
     cv : int or None, default=None
         Number of cross-validation folds. Defaults to 5 if ``None``.
     stratified : bool, default=True
@@ -120,6 +142,18 @@ class GPACC(SoftPredictionMixin, AggregativeMixin, LinearComposeQuantifier):
         The fitted underlying classifier.
     classes_ : ndarray of shape (n_classes,)
         Class labels seen during ``fit``.
+
+    Notes
+    -----
+    GPACC is the multiclass, corrected generalisation of :class:`PCC` (also
+    known as PACC): the soft-count matrix is inverted on the simplex instead
+    of being read off directly, removing PCC's residual bias.
+
+    See Also
+    --------
+    PCC : Probabilistic Classify and Count.
+    GACC : Hard-prediction variant.
+    FM : Friedman's prior-threshold variant.
 
     Examples
     --------
@@ -169,32 +203,34 @@ class GPACC(SoftPredictionMixin, AggregativeMixin, LinearComposeQuantifier):
 
 
 class FM(SoftPredictionMixin, AggregativeMixin, LinearComposeQuantifier):
-    r"""Friedman Method (FM).
+    r"""Friedman Method (FM) quantifier.
 
-    A soft adjustment method that binarizes posterior probabilities by
-    comparing them against class priors learned during training, rather
-    than a fixed 0.5 threshold. This makes the method more robust to
-    skewed class distributions.
-
-    Uses the same linear-system framework as :class:`GPACC` but applies
-    a class-prior-aware binarization transform before aggregation.
+    Targets prior probability shift. A constrained-regression quantifier
+    whose feature transform indicates, for each class, whether the posterior
+    exceeds that class's training prior, rather than a fixed 0.5 threshold.
+    Thresholding at the class's own prior minimizes the variance of the
+    proportion estimate, making FM robust to skewed class distributions.
+    Native multiclass; requires a probabilistic classifier.
 
     Parameters
     ----------
     estimator : estimator, optional
         A classifier with ``fit`` and ``predict_proba`` methods.
     loss : str, default='ls'
-        Loss function for the constrained system.
+        Loss minimized over the simplex when solving the linear system.
+
+        - ``'ls'`` : least squares (L2); the standard objective.
+        - ``'l1'`` : least absolute deviation (L1); more robust to outliers.
     solver : str, default='slsqp'
-        Optimization solver.
+        Constrained optimizer used on the simplex (see :mod:`mlquantify.solvers`).
     cv : int or None, default=None
-        Number of cross-validation folds.
+        Number of cross-validation folds. Defaults to 5 if ``None``.
     stratified : bool, default=True
-        Stratified CV flag.
+        Whether to use stratified CV splits.
     shuffle : bool, default=False
-        Shuffle flag.
+        Whether to shuffle data before splitting.
     random_state : int or None, default=None
-        Random seed.
+        Random seed for reproducibility.
 
     Attributes
     ----------
@@ -202,6 +238,11 @@ class FM(SoftPredictionMixin, AggregativeMixin, LinearComposeQuantifier):
         The fitted underlying classifier.
     classes_ : ndarray of shape (n_classes,)
         Class labels seen during ``fit``.
+
+    See Also
+    --------
+    GACC : Hard-prediction adjusted count.
+    GPACC : Soft-prediction adjusted count.
 
     Examples
     --------

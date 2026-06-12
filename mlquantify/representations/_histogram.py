@@ -45,6 +45,11 @@ class HistogramRepresentation(BaseRepresentation):
     laplace_smoothing : bool, default=False
         Whether to apply Laplace smoothing to the histogram counts.
 
+    See Also
+    --------
+    KDERepresentation : Smooth (density) alternative to binning.
+    PredictionRepresentation : Posterior/label representation.
+
     Examples
     --------
     >>> from mlquantify.representations._histogram import HistogramRepresentation

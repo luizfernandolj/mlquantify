@@ -59,6 +59,10 @@ def minimize_prevalence_blocks(
     ValueError
         If ``aggregate`` is not ``'median'`` or ``'mean'``.
 
+    See Also
+    --------
+    minimize_prevalence : Single-block prevalence minimisation.
+
     Examples
     --------
     >>> import numpy as np

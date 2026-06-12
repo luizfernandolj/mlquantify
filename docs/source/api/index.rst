@@ -442,6 +442,22 @@ reference on concepts repeated across the API, see :ref:`glossary`.
 
 
 
+  * - :obj:`~mlquantify.counting.ACC`
+
+    - .. div:: sk-apisearch-desc
+
+        .. currentmodule:: mlquantify.counting
+
+        .. autoshortsummary:: mlquantify.counting.ACC
+
+        .. div:: caption
+
+          :mod:`mlquantify.counting`
+
+
+
+
+
   * - :obj:`~mlquantify.counting.ThresholdAdjustment`
 
     - .. div:: sk-apisearch-desc

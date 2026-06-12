@@ -32,6 +32,10 @@ def ternary_search(
     minimum : float
         Approximate location of the minimum.
 
+    See Also
+    --------
+    solve_binary : Binary prevalence solver that can call this search.
+
     Examples
     --------
     >>> from mlquantify.solvers._binary import ternary_search
@@ -97,6 +101,11 @@ def solve_binary(
     ------
     ValueError
         If ``solver`` is not one of the recognised identifiers.
+
+    See Also
+    --------
+    ternary_search : Unimodal line search used by the ``'ternary'`` strategy.
+    minimize_prevalence : Binary/multiclass dispatcher built on this.
 
     Examples
     --------

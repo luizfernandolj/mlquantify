@@ -25,6 +25,11 @@ class KDERepresentation(BaseRepresentation):
         - "linear": Linear kernel, which gives weight that decreases linearly with distance from the center of the bandwidth, with zero weight beyond the bandwidth radius.
         - "cosine": Cosine kernel, which gives weight that follows a cosine function of the distance from the center of the bandwidth, with zero weight beyond the bandwidth radius
 
+    See Also
+    --------
+    HistogramRepresentation : Discrete (binned) alternative.
+    KernelMeanRepresentation : RKHS mean-embedding representation.
+
     Examples
     --------
     >>> from mlquantify.representations._density import KDERepresentation

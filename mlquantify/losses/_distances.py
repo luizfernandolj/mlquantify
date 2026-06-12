@@ -73,6 +73,12 @@ class DistanceLoss(BaseLoss):
     normalize : bool
         Whether inputs are normalized before computing the distance.
 
+    See Also
+    --------
+    HellingerSurrogateLoss : Gradient-friendly surrogate for squared Hellinger.
+    LeastSquaresLoss : Squared-error loss for constrained regression.
+    get_loss : Factory that builds this loss by name.
+
     Examples
     --------
     >>> from mlquantify.losses import get_loss
@@ -151,6 +157,12 @@ class LeastSquaresLoss(BaseLoss):
     matrix ``M`` is provided the loss reduces to
     :math:`\\|target - mixture\\|_2^2`.
 
+    See Also
+    --------
+    DistanceLoss : Distribution-distance losses (Hellinger, Topsoe, ...).
+    EnergyLoss : Energy-distance objective.
+    get_loss : Factory that builds this loss by name.
+
     Examples
     --------
     >>> from mlquantify.losses import get_loss
@@ -214,6 +226,11 @@ class HellingerSurrogateLoss(BaseLoss):
     ----------
     normalize : bool
         Whether inputs are normalized before computing the surrogate.
+
+    See Also
+    --------
+    DistanceLoss : Exact Hellinger and other distribution distances.
+    get_loss : Factory that builds this loss by name.
 
     Examples
     --------
@@ -284,6 +301,12 @@ class EnergyLoss(BaseLoss):
     energy-distance matrix between training classes.  Minimising this
     objective is equivalent to minimising the energy distance between the
     mixture distribution and the test distribution.
+
+    See Also
+    --------
+    EDy : Energy-distance quantifier that minimises this loss.
+    DistanceRepresentation : Builds the ``q`` and ``M`` terms.
+    get_loss : Factory that builds this loss by name.
 
     Examples
     --------

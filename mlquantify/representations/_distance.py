@@ -33,6 +33,11 @@ class DistanceRepresentation(BaseRepresentation):
     classes_ : ndarray of shape (n_classes,)
         Unique class labels seen during fit.
 
+    See Also
+    --------
+    KernelMeanRepresentation : RKHS mean-embedding representation (MMD).
+    EDy : Energy-distance quantifier built on this representation.
+
     Examples
     --------
     >>> from mlquantify.representations._distance import DistanceRepresentation

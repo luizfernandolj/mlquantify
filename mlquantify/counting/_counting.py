@@ -14,10 +14,11 @@ from mlquantify.utils._constraints import Interval
 class CC(CrispPredictionMixin, BaseCount):
     """Classify and Count (CC) quantifier.
 
-    Estimates class prevalences by classifying each test instance and
-    counting the proportion assigned to each class. This is the simplest
-    quantification baseline and tends to be biased when the class
-    distribution differs between training and test data.
+    Targets prior probability shift. Estimates class prevalences by
+    classifying each test instance with a hard classifier and counting the
+    fraction assigned to each class. It is the simplest quantification
+    baseline and is systematically biased whenever the test class
+    distribution differs from the training one.
 
     Parameters
     ----------
@@ -34,6 +35,18 @@ class CC(CrispPredictionMixin, BaseCount):
         The fitted underlying classifier.
     classes_ : ndarray of shape (n_classes,)
         Class labels seen during ``fit``.
+
+    Notes
+    -----
+    CC applies no correction for classifier error, so its absolute error grows
+    roughly linearly as the test prevalence departs from the training
+    prevalence. Contrast with :class:`PCC`, which averages soft posteriors, and
+    :class:`ACC`, which corrects for the true- and false-positive rates.
+
+    See Also
+    --------
+    PCC : Probabilistic Classify and Count quantifier.
+    ACC : Adjusted Classify and Count quantifier.
 
     Examples
     --------
@@ -111,10 +124,11 @@ class CC(CrispPredictionMixin, BaseCount):
 class PCC(SoftPredictionMixin, BaseCount):
     """Probabilistic Classify and Count (PCC) quantifier.
 
-    Estimates class prevalences by averaging the posterior probabilities
-    returned by a probabilistic classifier over all test instances.
-    Generally less biased than :class:`CC` but still not fully corrected
-    for prior shift.
+    Targets prior probability shift. Estimates class prevalences by averaging
+    the posterior probabilities returned by a probabilistic classifier over
+    all test instances. Generally less biased than :class:`CC`, but, lacking
+    any error correction, it still drifts under strong shift and assumes a
+    well-calibrated classifier.
 
     Parameters
     ----------
@@ -128,6 +142,18 @@ class PCC(SoftPredictionMixin, BaseCount):
         The fitted underlying classifier.
     classes_ : ndarray of shape (n_classes,)
         Class labels seen during ``fit``.
+
+    Notes
+    -----
+    PCC is unbiased under prior shift only when the posteriors are well
+    calibrated on the test distribution; calibration drift re-introduces bias.
+    It applies no explicit correction for classifier error.
+
+    See Also
+    --------
+    CC : Classify and Count quantifier.
+    ACC : Adjusted Classify and Count quantifier.
+    GPACC : Multiclass, corrected generalisation of PCC.
 
     Examples
     --------

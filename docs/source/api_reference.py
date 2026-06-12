@@ -94,6 +94,7 @@ API_REFERENCE = {
                 "autosummary": [
                     "CC",
                     "PCC",
+                    "ACC",
                     "ThresholdAdjustment",
                     "TAC",
                     "TX",

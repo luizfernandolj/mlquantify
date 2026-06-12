@@ -43,6 +43,11 @@ def solve_simplex(
     loss : float
         Objective value at the optimum.
 
+    See Also
+    --------
+    solve_binary : Specialised solver for the binary case.
+    minimize_prevalence : Dispatcher that selects this for multiclass problems.
+
     Examples
     --------
     >>> import numpy as np

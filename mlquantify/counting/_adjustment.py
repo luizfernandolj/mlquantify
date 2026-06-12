@@ -32,10 +32,11 @@ from mlquantify.utils._constraints import Interval, Options
 class ThresholdAdjustment(SoftPredictionMixin, BaseAdjustCount):
     r"""Abstract base class for ROC-threshold adjustment quantifiers.
 
-    Corrects the bias in :class:`CC` estimates by selecting a threshold
-    on the ROC curve and adjusting the observed positive proportion using
-    the corresponding TPR and FPR. Subclasses implement
-    :meth:`get_best_threshold` to define the selection strategy.
+    Targets prior probability shift. Corrects the bias in :class:`CC`
+    estimates by selecting a threshold on the ROC curve and adjusting the
+    observed positive proportion using the corresponding TPR and FPR.
+    Subclasses implement :meth:`get_best_threshold` to define the selection
+    strategy.
 
     This is a **binary-only** method. When applied to multiclass problems,
     a one-vs-rest (OvR) strategy is applied automatically.
@@ -61,7 +62,16 @@ class ThresholdAdjustment(SoftPredictionMixin, BaseAdjustCount):
         Cross-validated soft predictions used for TPR/FPR estimation.
     y_train : ndarray of shape (n_samples,)
         Training labels corresponding to ``train_predictions``.
-        
+
+    See Also
+    --------
+    TAC : Adjusted count at the default threshold.
+    TX : Threshold where FPR crosses 1 - TPR.
+    TMAX : Threshold maximizing TPR - FPR.
+    T50 : Threshold where TPR is 0.5.
+    MS : Median Sweep over all thresholds.
+    MS2 : Median Sweep restricted to reliable thresholds.
+
     Examples
     --------
     >>> from mlquantify.counting import ThresholdAdjustment
@@ -142,11 +152,13 @@ class ThresholdAdjustment(SoftPredictionMixin, BaseAdjustCount):
 
 
 class TAC(ThresholdAdjustment):
-    r"""Threshold Adjusted Count (TAC).
+    r"""Threshold Adjusted Count (TAC) quantifier.
 
-    Applies the threshold adjustment correction at a fixed classification
-    threshold. TPR and FPR are estimated from cross-validated predictions
-    at the specified ``threshold`` value.
+    Targets prior probability shift. A threshold-policy member of the
+    Adjusted Count family that applies the adjusted-count correction at a
+    fixed decision threshold, with TPR and FPR estimated from
+    cross-validated predictions at that threshold. Binary-only; requires
+    soft scores.
 
     Parameters
     ----------
@@ -154,7 +166,19 @@ class TAC(ThresholdAdjustment):
         A classifier with ``fit`` and ``predict_proba`` methods.
     threshold : float, default=0.5
         The classification threshold at which TPR and FPR are evaluated.
-        
+
+    Attributes
+    ----------
+    estimator_ : estimator
+        The fitted underlying classifier.
+    classes_ : ndarray of shape (n_classes,)
+        Class labels seen during ``fit``.
+
+    See Also
+    --------
+    ACC : Adjusted Classify and Count.
+    TX, TMAX, T50, MS, MS2 : Other threshold-selection policies.
+
     Examples
     --------
     >>> from mlquantify.counting import TAC
@@ -180,10 +204,13 @@ class TAC(ThresholdAdjustment):
 
 
 class TX(ThresholdAdjustment):
-    r"""Threshold X (TX).
+    r"""Threshold X (TX) quantifier.
 
-    Selects the threshold where ``TPR + FPR = 1``, balancing the two
-    error rates symmetrically around the ROC diagonal.
+    Targets prior probability shift. A threshold-policy member of the
+    Adjusted Count family that selects the operating point where the
+    false-positive rate crosses ``1 - TPR`` (i.e. ``FPR = 1 - TPR``), then
+    applies the adjusted-count correction there. Binary-only; requires soft
+    scores.
 
     Parameters
     ----------
@@ -191,7 +218,25 @@ class TX(ThresholdAdjustment):
         A classifier with ``fit`` and ``predict_proba`` methods.
     threshold : float, default=0.5
         Unused by this subclass; kept for API consistency.
-        
+
+    Attributes
+    ----------
+    estimator_ : estimator
+        The fitted underlying classifier.
+    classes_ : ndarray of shape (n_classes,)
+        Class labels seen during ``fit``.
+
+    Notes
+    -----
+    The crossing point keeps both error rates moderate and ``TPR - FPR``
+    comfortably away from zero, giving a stable correction denominator under
+    class imbalance.
+
+    See Also
+    --------
+    ACC : Adjusted Classify and Count.
+    TAC, TMAX, T50, MS, MS2 : Other threshold-selection policies.
+
     Examples
     --------
     >>> from mlquantify.counting import TX
@@ -215,10 +260,13 @@ class TX(ThresholdAdjustment):
 
 
 class TMAX(ThresholdAdjustment):
-    r"""Threshold MAX (TMAX).
+    r"""Threshold MAX (TMAX) quantifier.
 
-    Selects the threshold that maximizes ``|TPR - FPR|``, which corresponds
-    to the most discriminative operating point on the ROC curve.
+    Targets prior probability shift. A threshold-policy member of the
+    Adjusted Count family that selects the operating point maximizing
+    ``TPR - FPR`` (the most discriminative point on the ROC curve) before
+    applying the adjusted-count correction. Binary-only; requires soft
+    scores.
 
     Parameters
     ----------
@@ -226,7 +274,25 @@ class TMAX(ThresholdAdjustment):
         A classifier with ``fit`` and ``predict_proba`` methods.
     threshold : float, default=0.5
         Unused by this subclass; kept for API consistency.
-        
+
+    Attributes
+    ----------
+    estimator_ : estimator
+        The fitted underlying classifier.
+    classes_ : ndarray of shape (n_classes,)
+        Class labels seen during ``fit``.
+
+    Notes
+    -----
+    Maximizing ``TPR - FPR`` yields the most stable correction denominator,
+    but Forman (2008) reports that TMAX carries a systematic bias because the
+    chosen rates often fail to transfer to the test set.
+
+    See Also
+    --------
+    ACC : Adjusted Classify and Count.
+    TAC, TX, T50, MS, MS2 : Other threshold-selection policies.
+
     Examples
     --------
     >>> from mlquantify.counting import TMAX
@@ -250,11 +316,12 @@ class TMAX(ThresholdAdjustment):
 
 
 class T50(ThresholdAdjustment):
-    r"""T50 — threshold where TPR is closest to 0.5.
+    r"""Threshold 50 (T50) quantifier.
 
-    Selects the classification threshold at which the true positive rate
-    (TPR) is approximately 0.5, avoiding the extreme ends of the ROC
-    curve where estimates tend to be unstable.
+    Targets prior probability shift. A threshold-policy member of the
+    Adjusted Count family that selects the operating point where the
+    true-positive rate is closest to 0.5, then applies the adjusted-count
+    correction there. Binary-only; requires soft scores.
 
     Parameters
     ----------
@@ -262,7 +329,25 @@ class T50(ThresholdAdjustment):
         A classifier with ``fit`` and ``predict_proba`` methods.
     threshold : float, default=0.5
         Unused by this subclass; kept for API consistency.
-        
+
+    Attributes
+    ----------
+    estimator_ : estimator
+        The fitted underlying classifier.
+    classes_ : ndarray of shape (n_classes,)
+        Class labels seen during ``fit``.
+
+    Notes
+    -----
+    Pinning TPR makes the policy insensitive to positive-class scarcity;
+    Forman reports it stays robust with as few as roughly ten training
+    positives.
+
+    See Also
+    --------
+    ACC : Adjusted Classify and Count.
+    TAC, TX, TMAX, MS, MS2 : Other threshold-selection policies.
+
     Examples
     --------
     >>> from mlquantify.counting import T50
@@ -286,11 +371,13 @@ class T50(ThresholdAdjustment):
 
 
 class MS(ThresholdAdjustment):
-    r"""Median Sweep (MS).
+    r"""Median Sweep (MS) quantifier.
 
-    Applies the threshold adjustment formula at every threshold on the
-    ROC curve and returns the median prevalence estimate. This reduces
-    variance compared to any single-threshold method.
+    Targets prior probability shift. A threshold-policy member of the
+    Adjusted Count family that computes the adjusted-count correction at
+    every ROC threshold and returns the median estimate, rather than
+    committing to a single operating point. Binary-only; requires soft
+    scores.
 
     Parameters
     ----------
@@ -298,6 +385,24 @@ class MS(ThresholdAdjustment):
         A classifier with ``fit`` and ``predict_proba`` methods.
     threshold : float, default=0.5
         Unused by this subclass; kept for API consistency.
+
+    Attributes
+    ----------
+    estimator_ : estimator
+        The fitted underlying classifier.
+    classes_ : ndarray of shape (n_classes,)
+        Class labels seen during ``fit``.
+
+    Notes
+    -----
+    The median is robust to the unreliable thresholds (small ``TPR - FPR``)
+    that would destabilise a single-point adjusted count, which is why Forman
+    found Median Sweep so robust across shifts.
+
+    See Also
+    --------
+    MS2 : Median Sweep restricted to reliable thresholds.
+    ACC, TAC, TX, TMAX, T50 : Other Adjusted Count policies.
 
     Examples
     --------
@@ -342,12 +447,13 @@ class MS(ThresholdAdjustment):
 
 
 class MS2(MS):
-    r"""Median Sweep 2 (MS2).
+    r"""Median Sweep 2 (MS2) quantifier.
 
-    A constrained variant of :class:`MS` that only sweeps thresholds
-    where ``|TPR - FPR| > 0.25``, discarding ambiguous regions of the
-    ROC curve. Falls back to all thresholds if no qualifying threshold
-    exists.
+    Targets prior probability shift. A constrained variant of :class:`MS`
+    that sweeps only the thresholds where ``|TPR - FPR| > 0.25``, discarding
+    low-separation operating points before taking the median adjusted count.
+    Falls back to all thresholds if none qualify. Binary-only; requires soft
+    scores.
 
     Parameters
     ----------
@@ -356,11 +462,29 @@ class MS2(MS):
     threshold : float, default=0.5
         Unused by this subclass; kept for API consistency.
 
+    Attributes
+    ----------
+    estimator_ : estimator
+        The fitted underlying classifier.
+    classes_ : ndarray of shape (n_classes,)
+        Class labels seen during ``fit``.
+
     Warns
     -----
     UserWarning
         If all TPR or FPR values are zero, or if no threshold satisfies
         the ``|TPR - FPR| > 0.25`` constraint.
+
+    Notes
+    -----
+    Pruning low-separation thresholds removes the highest-variance terms of
+    the sweep, usually improving on :class:`MS` when the classifier is weak in
+    part of the score range.
+
+    See Also
+    --------
+    MS : Unrestricted Median Sweep.
+    ACC, TAC, TX, TMAX, T50 : Other Adjusted Count policies.
 
     Examples
     --------
@@ -391,20 +515,14 @@ class MS2(MS):
 
 @binary_quantifier(strategy_attr="strategy")
 class ACC(CrispPredictionMixin, BaseAdjustCount):
-    r"""Adjusted Classify and Count (ACC) using argmax hard predictions.
+    r"""Adjusted Classify and Count (ACC) quantifier.
 
-    Matches the reference QoT paper ACC implementation. TPR, FPR, and the
-    CC count are all derived from the classifier's argmax hard prediction
-    rather than a soft-probability threshold.
-
-    When combined with the ``_OvRBinaryWrapper`` applied in
-    ``_fit_binary_ovr`` (for ``estimator_fitted=True``), each OvR
-    sub-problem's ``predict()`` returns 1 if the multiclass classifier's
-    argmax equals the target class, 0 otherwise — exactly the binary
-    decision used by the reference.
-
-    This is a **binary-only** method. Multiclass problems are handled with
-    a one-vs-rest (OvR) strategy.
+    Targets prior probability shift. Runs :class:`CC` and corrects the biased
+    count using the classifier's true- and false-positive rates, which are
+    estimated by cross-validation and assumed invariant across the shift. The
+    count, TPR and FPR are all derived from the classifier's argmax hard
+    prediction. This is a **binary-only** method; multiclass problems are
+    handled with a one-vs-rest (OvR) strategy.
 
     Parameters
     ----------
@@ -412,6 +530,9 @@ class ACC(CrispPredictionMixin, BaseAdjustCount):
         A classifier with ``fit``, ``predict_proba``, and ``predict`` methods.
     strategy : {'ovr', 'ovo'}, default='ovr'
         Multiclass decomposition strategy.
+
+        - ``'ovr'`` : one-vs-rest, one binary adjusted count per class.
+        - ``'ovo'`` : one-vs-one, one binary adjusted count per class pair.
     n_jobs : int or None, default=None
         Number of parallel jobs for multiclass decomposition.
     cv : int, default=5
@@ -430,12 +551,44 @@ class ACC(CrispPredictionMixin, BaseAdjustCount):
     classes_ : ndarray of shape (n_classes,)
         Class labels seen during ``fit``.
 
+    Notes
+    -----
+    ACC corrects the linear bias of :class:`CC` and is unbiased when the
+    estimated TPR/FPR match the test set. When ``TPR - FPR`` is small (a weak
+    classifier under heavy imbalance) the correction amplifies estimation
+    error, trading bias for variance. The implementation follows the reference
+    QoT formulation, deriving TPR, FPR and the count from argmax hard
+    predictions rather than a soft-probability threshold.
+
+    See Also
+    --------
+    CC : Classify and Count quantifier.
+    TAC : Adjusted count at a fixed soft threshold.
+    GACC : Multiclass generalisation via constrained regression.
+
+    Examples
+    --------
+    >>> from mlquantify.counting import ACC
+    >>> from sklearn.linear_model import LogisticRegression
+    >>> import numpy as np
+    >>> X, y = np.random.randn(100, 5), np.random.randint(0, 2, 100)
+    >>> q = ACC(LogisticRegression()).fit(X, y)
+    >>> q.predict(X)
+    {0: 0.30, 1: 0.70}
+    >>> # aggregate() path with pre-computed hard predictions
+    >>> preds = q.estimator_.predict(X)
+    >>> q.aggregate(preds, y_train=y)
+    {0: 0.30, 1: 0.70}
+
     References
     ----------
     .. dropdown:: References
 
         .. [1] Forman, G. (2005). Counting Positives Accurately Despite
                Inaccurate Classification. *ECML*, pp. 564–575.
+        .. [2] Forman, G. (2008). Quantifying Counts and Costs via
+               Classification. *Data Mining and Knowledge Discovery*,
+               17(2), 164–206.
     """
 
     def __init__(

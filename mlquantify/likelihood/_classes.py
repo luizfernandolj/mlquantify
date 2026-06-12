@@ -138,7 +138,13 @@ class EMQ(BaseLikelihoodQuantifier):
     max_iter : int, default=100
         Maximum number of EM iterations.
     calib_function : {'ts', 'bcts', 'vs', 'nbvs'} or callable or None, default=None
-        Calibration applied to posteriors before EM. ``None`` skips calibration.
+        Calibration applied to posteriors before EM; well-calibrated posteriors
+        markedly improve EMQ. ``None`` skips calibration.
+
+        - ``'ts'`` : temperature scaling (a single global scalar).
+        - ``'bcts'`` : bias-corrected temperature scaling (recommended by Alexandari et al.).
+        - ``'vs'`` : vector scaling (per-class scale and bias).
+        - ``'nbvs'`` : no-bias vector scaling.
     criteria : callable, default=MAE
         Convergence criterion comparing successive prevalence estimates.
     on_calib_error : {'raise', 'backup'}, default='backup'
@@ -153,6 +159,20 @@ class EMQ(BaseLikelihoodQuantifier):
         Class labels seen during ``fit``.
     priors_ : ndarray of shape (n_classes,)
         Training class prevalences.
+
+    Notes
+    -----
+    EMQ (also called SLD) is a maximum-likelihood method: it returns the
+    prevalence maximising the likelihood of the test posteriors under the
+    prior-shift model. It is a strong default, but uncalibrated posteriors bias
+    it, so pairing it with ``calib_function='bcts'`` is "hard to beat"
+    (Alexandari et al., 2020).
+
+    See Also
+    --------
+    KDEyML : Maximum-likelihood density matching.
+    PCC : Uncorrected probabilistic baseline that EMQ improves on.
+    AggregativeBootstrap : Wrap EMQ to obtain confidence regions.
 
     Examples
     --------
@@ -359,26 +379,28 @@ class EMQ(BaseLikelihoodQuantifier):
 class CDE(BaseLikelihoodQuantifier):
     r"""CDE-Iterate quantifier.
 
-    Estimates binary class prevalence by iteratively adjusting a decision
-    threshold using class-cost ratios derived from training priors and the
-    current prevalence estimate. At each iteration the threshold is updated
-    until the predicted positive proportion stabilises.
-
-    This is a **binary-only** method. Multiclass problems are handled with a
-    one-vs-rest (OvR) strategy by default.
+    Targets prior probability shift. Estimates binary prevalence by iteratively
+    adjusting the decision threshold using class-cost ratios derived from the
+    training priors and the current prevalence estimate, re-counting at the new
+    threshold until the predicted positive proportion stabilises. Binary-only;
+    multiclass via one-vs-rest.
 
     Parameters
     ----------
     estimator : estimator, optional
         A probabilistic classifier with ``fit`` and ``predict_proba`` methods.
     tol : float, default=1e-4
-        Convergence threshold on the positive prevalence change.
+        Convergence threshold on the positive prevalence change between iterations.
     max_iter : int, default=100
         Maximum number of iterations.
     init_cfp : float, default=1.0
-        Initial cost of false positives.
+        Initial cost of false positives; sets the starting cost ratio that the
+        iteration then refines.
     strategy : {'ovr', 'ovo'}, default='ovr'
         Multiclass decomposition strategy.
+
+        - ``'ovr'`` : one-vs-rest, one binary quantifier per class.
+        - ``'ovo'`` : one-vs-one, one binary quantifier per class pair.
     n_jobs : int or None, default=None
         Number of parallel jobs for multiclass decomposition.
 
@@ -390,6 +412,17 @@ class CDE(BaseLikelihoodQuantifier):
         Class labels seen during ``fit``.
     priors_ : ndarray of shape (n_classes,)
         Training class prevalences.
+
+    Notes
+    -----
+    CDE couples threshold adjustment with cost-sensitive re-counting; it behaves
+    like an iterative cousin of the :class:`~mlquantify.counting.ThresholdAdjustment`
+    family rather than a likelihood maximiser, despite living in this module.
+
+    See Also
+    --------
+    EMQ : Expectation-Maximization likelihood quantifier.
+    ACC : Single-step adjusted count.
 
     Examples
     --------

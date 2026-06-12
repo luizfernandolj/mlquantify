@@ -43,6 +43,12 @@ class PredictionRepresentation(BaseRepresentation):
     classes_ : ndarray of shape (n_classes,)
         Unique class labels seen during ``fit``.
 
+    See Also
+    --------
+    HistogramRepresentation : Binned representation of scores/features.
+    HardPredictionRepresentation : Fixed hard (class-frequency) variant.
+    SoftPredictionRepresentation : Fixed soft (mean-posterior) variant.
+
     Examples
     --------
     >>> from mlquantify.representations._prediction import SoftPredictionRepresentation

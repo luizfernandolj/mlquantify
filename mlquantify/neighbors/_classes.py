@@ -11,26 +11,33 @@ from mlquantify.utils._validation import validate_prevalences
 class PWK(BaseQuantifier):
     r"""Probabilistic Weighted k-Nearest Neighbour (PWK) quantifier.
 
-    Estimates class prevalences using a k-nearest neighbour classifier with
-    class-imbalance-aware weighting. Each neighbour's contribution is scaled
-    by a class-specific weight that corrects for the imbalance between class
-    sizes, controlled by the ``alpha`` exponent.
+    Targets prior probability shift. A classify-and-count quantifier built on a
+    nearest-neighbour classifier whose votes are re-weighted to undo training
+    class imbalance: each neighbour's vote is scaled by a class-specific weight
+    (controlled by ``alpha``), so the count is not dominated by the majority
+    class. Native multiclass; classifier-free in the sense of needing no
+    external estimator.
 
     Parameters
     ----------
     alpha : float, default=1
-        Imbalance correction exponent. Higher values amplify the influence of
-        minority-class neighbours.
+        Imbalance-correction exponent. ``1`` applies the standard inverse-size
+        weighting; higher values further amplify minority-class neighbours.
     n_neighbors : int, default=10
         Number of nearest neighbours considered for each test instance.
     algorithm : {'auto', 'ball_tree', 'kd_tree', 'brute'}, default='auto'
-        Algorithm used to find nearest neighbours.
+        Neighbour-search algorithm.
+
+        - ``'auto'`` : pick the best of the below from the fitted data (default).
+        - ``'ball_tree'`` : ball-tree index; good in higher dimensions.
+        - ``'kd_tree'`` : k-d tree index; fast in low dimensions.
+        - ``'brute'`` : exhaustive search; exact, best for small data.
     metric : str, default='euclidean'
         Distance metric for the neighbour search.
     leaf_size : int, default=30
-        Leaf size for tree-based algorithms.
+        Leaf size for the tree-based algorithms (speed/memory trade-off).
     p : int, default=2
-        Power parameter for the Minkowski metric.
+        Power parameter for the Minkowski metric (``1`` = Manhattan, ``2`` = Euclidean).
     metric_params : dict or None, default=None
         Additional keyword arguments for the metric function.
     n_jobs : int or None, default=None
@@ -42,6 +49,18 @@ class PWK(BaseQuantifier):
         Fitted underlying weighted k-NN classifier.
     classes_ : ndarray of shape (n_classes,)
         Class labels seen during ``fit``.
+
+    Notes
+    -----
+    PWK is a classify-and-count method whose only quantification-specific
+    ingredient is the imbalance re-weighting; it needs no separate scorer and
+    handles multiclass directly, but inherits k-NN's sensitivity to feature
+    scaling and dimensionality.
+
+    See Also
+    --------
+    CC : Plain classify-and-count baseline.
+    ACC : Adjusted count for binary prior shift.
 
     Examples
     --------

@@ -114,30 +114,36 @@ def get_protocol_sampler(protocol_name, batch_size, n_prevalences, min_prev, max
     return protocol
 
 class EnsembleQ(MetaquantifierMixin, BaseQuantifier):
-    r"""Ensemble-based quantifier with prevalence-controlled diversity.
+    r"""Ensemble Quantifier with prevalence-controlled diversity.
 
-    Constructs an ensemble of base quantifiers, each trained on a subsample
-    of the training data drawn according to a prevalence-sampling protocol.
-    At prediction time the ensemble members' estimates are aggregated, with
-    optional selection of the most relevant subset.
+    Targets prior probability shift, including shifts whose magnitude is
+    unknown at training time. Trains many copies of a base quantifier on
+    subsamples drawn at deliberately different class prevalences, then
+    aggregates their estimates, optionally keeping only the members whose
+    training distribution resembles the test sample (dynamic selection). The
+    spread of training prevalences brackets the possible test distributions.
 
     Parameters
     ----------
     quantifier : BaseQuantifier
-        The base quantifier used for each ensemble member.
+        The base quantifier replicated across ensemble members.
     size : int, default=50
         Number of ensemble members to train.
     min_prop : float, default=0.1
         Minimum class prevalence proportion for sampling batches.
     max_prop : float, default=1.0
-        Maximum class prevalence proportion for sampling batches.
+        Maximum class prevalence proportion for sampling batches; together with
+        ``min_prop`` it sets the diversity of training prevalences.
     selection_metric : {'all', 'ptr', 'ds'}, default='all'
-        Member selection strategy. ``'all'`` uses every member; ``'ptr'``
-        selects members whose training prevalence is closest to the initial
-        test estimate; ``'ds'`` selects members whose training score
-        distribution is closest to the test distribution.
+        Which members vote at prediction time.
+
+        - ``'all'`` : use every member (a plain bagged average).
+        - ``'ptr'`` : keep members whose training prevalence is closest to an
+          initial test estimate.
+        - ``'ds'`` : keep members whose training score distribution is closest
+          to the test distribution.
     p_metric : float, default=0.25
-        Fraction of ensemble members to retain when applying a selection metric.
+        Fraction of ensemble members to retain when a selection metric is used.
     protocol : {'artificial', 'natural', 'uniform', 'kraemer'}, default='uniform'
         Prevalence-sampling protocol for generating training batches.
     return_type : {'mean', 'median'}, default='mean'
@@ -159,6 +165,18 @@ class EnsembleQ(MetaquantifierMixin, BaseQuantifier):
         Training prevalences for each ensemble member.
     classes : ndarray of shape (n_classes,)
         Class labels seen during ``fit``.
+
+    Notes
+    -----
+    Members are trained with sampling-with-replacement so that ``p(x|y)`` is
+    preserved while only ``p(y)`` varies. Dynamic selection (``'ptr'``/``'ds'``)
+    is what specialises the ensemble to each test bag; with ``'all'`` it reduces
+    to a bagged average. Wraps any base quantifier.
+
+    See Also
+    --------
+    AggregativeBootstrap : Resampling wrapper for confidence regions.
+    QuaDapt : Drift-resilient adaptation wrapper.
 
     Examples
     --------
@@ -514,12 +532,13 @@ def _select_k(elements, order, k):
 
 
 class AggregativeBootstrap(MetaquantifierMixin, BaseQuantifier):
-    r"""Aggregative Bootstrap Quantifier for prevalence confidence regions.
+    r"""Aggregative Bootstrap quantifier for prevalence confidence regions.
 
-    Wraps any aggregative quantifier and applies bootstrap resampling to both
-    training and test predictions to produce a distribution of prevalence
-    estimates. The distribution is summarised as a point estimate together with
-    a confidence region (intervals, ellipse, or CLR-ellipse).
+    Targets prior probability shift. Wraps any aggregative quantifier and
+    bootstrap-resamples its (cached) train and test predictions to turn a point
+    prevalence estimate into a confidence region. Because aggregative
+    quantifiers classify once and aggregate, the resampling is applied only to
+    the cheap aggregation step, so uncertainty is obtained efficiently.
 
     Parameters
     ----------
@@ -528,13 +547,19 @@ class AggregativeBootstrap(MetaquantifierMixin, BaseQuantifier):
     n_train_bootstraps : int, default=1
         Number of bootstrap resamples from the training predictions.
     n_test_bootstraps : int, default=1
-        Number of bootstrap resamples from the test predictions.
+        Number of bootstrap resamples from the test predictions; combining both
+        sides captures model and sampling uncertainty.
     random_state : int or None, default=None
         Random seed for reproducibility.
     region_type : {'intervals', 'ellipse', 'ellipse-clr'}, default='intervals'
-        Type of confidence region to construct.
+        Shape of the confidence region built from the resampled estimates.
+
+        - ``'intervals'`` : independent per-class percentile intervals.
+        - ``'ellipse'`` : Gaussian confidence ellipse on the simplex.
+        - ``'ellipse-clr'`` : ellipse in centered-log-ratio (Aitchison) space,
+          respecting the simplex geometry.
     confidence_level : float, default=0.95
-        Confidence level for the region.
+        Probability mass the region is meant to cover.
 
     Attributes
     ----------
@@ -544,6 +569,18 @@ class AggregativeBootstrap(MetaquantifierMixin, BaseQuantifier):
         Labels corresponding to ``train_predictions``.
     classes : ndarray of shape (n_classes,)
         Class labels seen during ``fit``.
+
+    Notes
+    -----
+    Applying the bootstrap only to the aggregation step (not the whole pipeline)
+    gives large speed-ups; the region is valid insofar as the bootstrap
+    approximates the true sampling distribution, so it needs enough test points
+    and resamples.
+
+    See Also
+    --------
+    EnsembleQ : Ensemble wrapper for shift robustness.
+    ConfidenceInterval : Confidence-region constructs produced here.
 
     Examples
     --------
@@ -781,26 +818,36 @@ class AggregativeBootstrap(MetaquantifierMixin, BaseQuantifier):
 
 @binary_quantifier(strategy_attr="strategy")
 class QuaDapt(MetaquantifierMixin, BaseQuantifier):
-    r"""QuaDapt: Adaptive quantification using synthetic score simulation.
+    r"""QuaDapt: drift-resilient quantification via parameter adaptation.
 
-    Improves prevalence estimation by selecting the merging factor that produces
-    a synthetic score distribution (via MoSS) closest to the test distribution.
-    The best-matching synthetic set is then used as the training reference for
-    the base quantifier's ``aggregate`` call.
-
-    This is a **binary-only** method. Multiclass problems are handled with a
-    one-vs-rest (OvR) strategy by default.
+    Targets general distribution shift / concept drift, not only prior shift.
+    Wraps a soft base quantifier and, at prediction time, simulates training
+    score distributions with MoSS at several overlap levels, selects the level
+    whose mixed scores best match the test scores, and uses that synthetic set
+    as the aggregation reference. Binary base method; multiclass via
+    one-vs-rest.
 
     Parameters
     ----------
     quantifier : BaseQuantifier
         A soft (probabilistic) base aggregative quantifier.
-    measure : {'hellinger', 'topsoe', 'probsymm', 'sord'}, default='topsoe'
-        Distance metric used to select the best merging factor.
+    measure : {'topsoe', 'hellinger', 'probsymm', 'sord'}, default='topsoe'
+        Distance comparing each synthetic score set with the test scores, used
+        to pick the best merging factor.
+
+        - ``'topsoe'`` : symmetric information-theoretic distance.
+        - ``'hellinger'`` : bounded sqrt-probability distance.
+        - ``'probsymm'`` : probabilistic symmetric chi-square distance.
+        - ``'sord'`` : Sample Ordinal Distance on the raw scores (bin-free).
     merging_factors : array-like, default=np.arange(0.1, 1.0, 0.2)
-        Candidate merging factor values to evaluate.
+        Candidate MoSS overlap levels ``m`` to evaluate; each sets how much the
+        synthetic positive and negative scores overlap (0 = well separated,
+        1 = fully overlapping).
     strategy : {'ovr', 'ovo'}, default='ovr'
         Multiclass decomposition strategy.
+
+        - ``'ovr'`` : one-vs-rest, one binary adaptation per class.
+        - ``'ovo'`` : one-vs-one, one binary adaptation per class pair.
 
     Attributes
     ----------
@@ -808,6 +855,19 @@ class QuaDapt(MetaquantifierMixin, BaseQuantifier):
         Class labels seen during ``fit``.
     y_train : ndarray of shape (n_samples,)
         Training labels stored during ``fit``.
+
+    Notes
+    -----
+    Built on MoSS (Model for Score Simulation): adapting the merging factor to
+    the test scores makes a standard quantifier resilient when the
+    score-distribution complexity drifts. Generalises DySyn (DyS + MoSS) to any
+    classifier-based quantifier; only the quantifier's score reference is
+    adapted, with no classifier retraining.
+
+    See Also
+    --------
+    DyS : A common base quantifier for QuaDapt.
+    EnsembleQ : Ensemble wrapper for prior-shift robustness.
 
     Examples
     --------
@@ -828,9 +888,13 @@ class QuaDapt(MetaquantifierMixin, BaseQuantifier):
     ----------
     .. dropdown:: References
 
-        .. [1] Maletzke, A., Reis, D., Hassan, W., & Batista, G. (2021).
-               Accurately Quantifying under Score Variability.
-               *ICDM 2021*, pp. 1228–1233.
+        .. [1] Ortega, J. P., Luth Junior, L. F., Zalewski, W., & Maletzke, A.
+               (2025). QuaDapt: Drift-Resilient Quantification via Parameters
+               Adaptation. *Proc. 5th Int. Workshop on Learning to Quantify
+               (LQ 2025)*, p. 64.
+        .. [2] Maletzke, A., dos Reis, D., Hassan, W., & Batista, G. (2021).
+               Accurately Quantifying under Score Variability. *ICDM 2021*,
+               pp. 1228–1233. (Model for Score Simulation, MoSS.)
     """
 
     _parameter_constraints = {
