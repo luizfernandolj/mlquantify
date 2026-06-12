@@ -1,0 +1,372 @@
+# Cython integration plan for mlquantify
+
+Design document for adding compiled (Cython) acceleration to mlquantify, in the
+style of scikit-learn. It defines **where** Cython goes, **what data structures
+and algorithms** to use in C for real efficiency, **how to build/ship** it, and
+**how to prove** the speedup with benchmarks and parity tests.
+
+> **TL;DR.** mlquantify is already vectorised and delegates the heavy work
+> (classifiers, KDE, `cdist`, `np.histogram`) to compiled C. Cython only pays off
+> in one place: **Python/numpy per-call overhead inside tight inner loops over
+> tiny arrays.** Profiling proves exactly one such hotspot — the histogram
+> distribution-matching α-sweep (DyS/HDy/HDx) — plus one conditional candidate,
+> batched histograms for wide `HDx`. Everything else stays pure Python.
+
+---
+
+## 1. Philosophy: benchmark-first, not Cython-first
+
+Rules for every candidate:
+
+1. **Profile first.** Only Cythonise code that a profiler shows is hot *and*
+   Python-overhead-bound (many calls on small arrays), not work already done in C.
+2. **Keep a pure-Python reference.** Every kernel has a Python twin with the same
+   signature, used as a correctness oracle and an install-without-compiler fallback.
+3. **Prove the delta.** A kernel is not "done" until a committed benchmark shows
+   the speedup and a parity test shows identical output.
+4. **Small surface area.** A handful of leaf kernels (no Python objects, no I/O),
+   not a Cython rewrite of the class hierarchy.
+
+What is **already C** and must not be touched: sklearn classifiers,
+`KernelDensity`, `scipy.spatial.distance.cdist`, `sklearn.metrics.pairwise`,
+`numpy.histogram`'s counting core, BLAS.
+
+---
+
+## 2. Profiling evidence (where the time actually goes)
+
+Measured on this machine (`.venv`, numpy 2.x), representative workloads.
+
+### 2.1 HDy `predict` — the hot loop
+
+20 predicts of 1000 samples, bins swept 10→110 with the grid solver:
+
+```
+607,541 function calls in 0.797 s
+  ncalls  tottime  function
+  22,220   0.151   metrics/_distances.py:hellinger_backend
+  44,440   0.131   losses/_distances.py:normalize_distribution   (2x per objective)
+  67,500   0.112   numpy.ufunc.reduce
+  22,220   0.056   losses/_distances.py:DistanceLoss.__call__
+  22,220   0.052   matching/_base.py:_mixture
+  22,220   0.041   matching/_histogram.py:objective
+```
+
+Per predict ≈ **1,100 objective evaluations** (11 bin sizes × ~100 α-grid), each
+doing `2× normalize + 1 mixture + 1 distance` on **8–110-element** vectors. The
+cost is numpy *per-call overhead* (`asarray`, ufunc dispatch, `_wrapreduction`),
+not arithmetic. **This is the #1 Cython target.**
+
+### 2.2 Representations
+
+```
+HistogramRepresentation.transform :  0.07 ms (1 feat) → 1.06 ms (10) → 7.3 ms (100)
+   profile: np.histogram called once PER FEATURE; pure-Python edge setup
+            (linspace, _get_bin_edges) rebuilt every call
+DistanceRepresentation.transform  : 11 ms/call  -> scipy cdist (C), do NOT touch
+PredictionRepresentation.transform:  0.03 ms/call -> trivial, do NOT touch
+KDERepresentation                 : sklearn KernelDensity (C), do NOT touch
+```
+
+Histogram scales linearly with feature count because each feature triggers a
+separate (partly pure-Python) `np.histogram`. Negligible for 1 feature
+(DyS/HDy on a score column); real for wide `HDx`/`GHDx`. **Conditional target.**
+
+---
+
+## 3. Where to put Cython (the map)
+
+| Place | Module | Kernel | Priority | Expected gain |
+|---|---|---|---|---|
+| Histogram DM α-sweep | `matching/_histogram.py` (DyS, HDy, HDx) | `match_sweep` | **P1** | ~5–20× on the matching inner loop |
+| Inline distances | `metrics/_distances.py` consumers | `_distances.pxd` (cdef inline) | **P1** | enables P1; removes call overhead |
+| Batched histograms | `representations/_histogram.py` | `histogram_batch` | P3 (wide HDx only) | several × for many features |
+| Energy / SORD terms | `matching/_score.py`, `losses` | — | P3, **only if profiled** | TBD |
+| Everything else | KDE, Distance, KernelMean, Prediction, solvers-multiclass, sampling | — | skip | already C / too cheap |
+
+---
+
+## 4. Data structures & algorithms in C
+
+The efficiency comes from the **memory layout and the loop structure**, not from
+"using Cython" per se. Principles applied to every kernel:
+
+- **Contiguous typed memoryviews.** Pass `const floating[::1]` (1-D) and
+  `const floating[:, ::1]` (2-D, C-order). Coerce once at the Python boundary with
+  `np.ascontiguousarray(x, dtype=...)`. Contiguity lets the C compiler auto-vectorise
+  the inner loop and keeps it cache-friendly.
+- **Fused types.** `ctypedef fused floating: float, double` → one kernel serves
+  `float32` and `float64`; no code duplication, no hidden upcasts.
+- **Zero allocation in the hot loop.** Preallocate one scratch buffer for the
+  mixture and reuse it across the whole sweep. (Today the Python path allocates a
+  fresh mixture + two normalised arrays *per α* — thousands of allocations/predict.)
+- **`nogil` leaf loops.** The arithmetic loop holds no Python objects, so mark it
+  `noexcept nogil`. Frees the GIL and leaves the door open to `prange`.
+- **Struct-of-arrays.** Store the per-class histograms as one C-contiguous
+  `(n_classes, n_bins)` block, not a Python list of arrays — one cache line stream.
+- **Precompute invariants at fit, not per predict.** Fixed bin edges, and
+  `sqrt(test)` / class-histogram square-roots for Hellinger, are computed once and
+  stored contiguously.
+
+### 4.1 Kernel A — histogram distribution-matching sweep (P1)
+
+The whole `mixture → normalise → distance → argmin-over-α` collapses into one C
+function. Because Hellinger/Topsøe-vs-α is **unimodal**, replace the 100-point
+Python grid with an in-C **ternary (golden-section) search**: O(log(1/tol)·n_bins)
+instead of O(grid·n_bins), and *zero* Python solver overhead.
+
+Data structures:
+- `const floating[::1] pos, neg, test` — one bin group, already normalised (n_bins).
+- one reusable `floating[::1] mix` scratch buffer (n_bins).
+- a function pointer / enum selecting the distance (so one kernel serves all
+  Hellinger/Topsøe/prob-symm).
+
+```cython
+# matching/_matching_fast.pyx
+# cython: language_level=3, boundscheck=False, wraparound=False, cdivision=True
+from libc.math cimport sqrt, fabs
+cimport cython
+
+ctypedef fused floating:
+    float
+    double
+
+cdef inline double _hellinger(const floating[::1] m, const floating[::1] q,
+                              Py_ssize_t n) noexcept nogil:
+    cdef double s = 0.0, d
+    cdef Py_ssize_t i
+    for i in range(n):
+        d = sqrt(m[i]) - sqrt(q[i])
+        s += d * d
+    return sqrt(0.5 * s)
+
+cdef double _dist_at_alpha(double a, const floating[::1] pos,
+                           const floating[::1] neg, const floating[::1] test,
+                           floating[::1] mix, int metric) noexcept nogil:
+    cdef Py_ssize_t i, n = pos.shape[0]
+    cdef double total = 0.0
+    for i in range(n):                       # mixture, no allocation
+        mix[i] = a * pos[i] + (1.0 - a) * neg[i]
+        total += mix[i]
+    if total > 0:                            # normalise in place
+        for i in range(n):
+            mix[i] /= total
+    # metric==0 -> hellinger, 1 -> topsoe, ...  (branch hoisted out for speed)
+    return _hellinger(mix, test, n)
+
+def match_sweep(floating[::1] pos, floating[::1] neg, floating[::1] test,
+                int metric=0, double tol=1e-5):
+    """Return the alpha in [0,1] minimising distance(mix(alpha), test)."""
+    cdef floating[::1] mix = pos.copy()      # one scratch buffer
+    cdef double lo = 0.0, hi = 1.0, m1, m2, f1, f2
+    with nogil:
+        while hi - lo > tol:                 # ternary search, all in C
+            m1 = lo + (hi - lo) / 3.0
+            m2 = hi - (hi - lo) / 3.0
+            f1 = _dist_at_alpha(m1, pos, neg, test, mix, metric)
+            f2 = _dist_at_alpha(m2, pos, neg, test, mix, metric)
+            if f1 < f2: hi = m2
+            else:       lo = m1
+    return 0.5 * (lo + hi)
+```
+
+The multi-bin sweep (11 bin sizes) stays a thin Python loop calling `match_sweep`
+per bin size, then takes the median — 11 C calls/predict instead of ~1,100 ×
+4 numpy calls.
+
+### 4.2 Kernel B — batched histograms (P3, wide HDx only)
+
+Replace N pure-Python `np.histogram` calls (each recomputing edges) with one
+fused pass. Fixed-width bins make the bin index a single division — no edge array
+lookup, no `searchsorted`.
+
+Data structure: counts as a flat C buffer `out[f*n_bins + b]` (struct-of-arrays
+over features), filled in one `nogil` double loop, normalised after.
+
+```cython
+# representations/_histogram_fast.pyx
+@cython.boundscheck(False)
+@cython.wraparound(False)
+def histogram_batch(const double[:, ::1] X, int n_bins,
+                    double lo, double hi):
+    """Per-feature fixed-width histograms in one pass -> (n_features, n_bins)."""
+    cdef Py_ssize_t n = X.shape[0], nf = X.shape[1], i, f, b
+    cdef double width = (hi - lo) / n_bins, v
+    cdef double[:, ::1] out = np.zeros((nf, n_bins))
+    with nogil:
+        for i in range(n):
+            for f in range(nf):
+                v = (X[i, f] - lo) / width            # bin index by division
+                b = <Py_ssize_t> v
+                if b < 0: b = 0
+                elif b >= n_bins: b = n_bins - 1
+                out[f, b] += 1.0
+    return np.asarray(out)                              # normalise in caller
+```
+
+Note the loop order `(samples, features)` reads `X` row-major (C-contiguous) →
+cache-friendly. Edges are implicit (`lo + b*width`), computed zero times.
+
+### 4.3 Shared inline distances (`.pxd`)
+
+Put the `cdef inline` distance functions in a header so several `.pyx` files
+`cimport` them and the compiler **inlines** them (no call overhead at all):
+
+```cython
+# _cython/_distances.pxd
+ctypedef fused floating:
+    float
+    double
+cdef inline double hellinger(const floating[::1] p, const floating[::1] q) noexcept nogil
+cdef inline double topsoe(const floating[::1] p, const floating[::1] q)    noexcept nogil
+cdef inline double probsymm(const floating[::1] p, const floating[::1] q)  noexcept nogil
+```
+
+---
+
+## 5. Build & packaging infrastructure (sklearn-style)
+
+Today: bare `setup.py`, pure Python. Add:
+
+```
+pyproject.toml      # PEP 517 build deps
+setup.py            # cythonize() Extensions
+MANIFEST.in         # ship *.pyx, *.pxd in sdist
+.gitignore          # ignore generated *.c, *.so, *.pyd
+```
+
+`pyproject.toml`:
+```toml
+[build-system]
+requires = ["setuptools>=64", "Cython>=3.0", "numpy>=2.0"]
+build-backend = "setuptools.build_meta"
+```
+
+`setup.py` additions:
+```python
+from setuptools import Extension
+from Cython.Build import cythonize
+import numpy as np
+
+DIRECTIVES = {"language_level": "3", "boundscheck": False,
+              "wraparound": False, "cdivision": True}
+EXTENSIONS = [
+    Extension("mlquantify.matching._matching_fast",
+              ["mlquantify/matching/_matching_fast.pyx"],
+              include_dirs=[np.get_include()]),
+]
+# setup(..., ext_modules=cythonize(EXTENSIONS, compiler_directives=DIRECTIVES))
+```
+
+**Compiler policy (recommended): optional acceleration + pure-Python fallback +
+prebuilt wheels.** Unlike sklearn (hard compile requirement), keep a fallback so a
+source install without a compiler still works, and ship binary wheels so 99% of
+users get the compiled path transparently:
+
+```python
+# matching/_histogram.py
+try:
+    from ._matching_fast import match_sweep            # compiled
+except ImportError:                                    # pragma: no cover
+    from ._matching_py import match_sweep              # pure-Python reference
+```
+
+CI: add **cibuildwheel** (Linux/macOS/Windows × supported Pythons) to the release
+workflow; build + test the compiled path on every PR.
+
+---
+
+## 6. File & naming conventions
+
+```
+mlquantify/
+  _cython/
+    __init__.py
+    _distances.pxd            # shared cdef inline distances
+  matching/
+    _histogram.py             # DyS/HDy/HDx — call the kernel (with fallback import)
+    _matching_fast.pyx        # Kernel A
+    _matching_py.py           # pure-Python reference twin
+  representations/
+    _histogram.py
+    _histogram_fast.pyx       # Kernel B (P3)
+    _histogram_py.py
+benchmarks/                   # asv + quick scripts
+tests/test_cython_parity.py   # compiled == python
+```
+
+- Compiled module: leading underscore, `_<name>_fast.pyx`, beside its `.py` user.
+- Every `.pyx` opens with the `# cython:` directive comment.
+- Every kernel has a `_<name>_py.py` twin with an identical signature.
+
+---
+
+## 7. Efficiency tests & benchmarks (proving it changed)
+
+### 7.1 Correctness parity — `tests/test_cython_parity.py`
+```python
+@pytest.mark.parametrize("n_bins", [8, 16, 64])
+def test_match_sweep_parity(n_bins):
+    rng = np.random.default_rng(0)
+    pos, neg, test = (rng.random(n_bins) for _ in range(3))
+    a_fast = match_sweep(pos/pos.sum(), neg/neg.sum(), test/test.sum())
+    a_py   = match_sweep_py(pos/pos.sum(), neg/neg.sum(), test/test.sum())
+    assert abs(a_fast - a_py) < 1e-4
+```
+
+### 7.2 Guard — fail loudly if the extension isn't built
+```python
+def test_cython_extension_built():
+    import importlib
+    importlib.import_module("mlquantify.matching._matching_fast")
+```
+
+### 7.3 Benchmarks — two tiers
+- **Quick/local** `benchmarks/bench_matching.py` (`time.perf_counter`): prints a
+  Python-vs-Cython table across sizes + the speedup factor. This is what you run
+  to *see* the change:
+  ```
+  workload          python   cython   speedup
+  HDy predict 1k     0.040    0.006     6.7x
+  HDy predict 10k    0.39     0.052     7.5x
+  HDx 100feat 1k     7.3 ms   1.1 ms    6.6x
+  ```
+- **Rigorous/tracked** `asv` (airspeed velocity — what numpy/sklearn use):
+  `asv.conf.json` + `benchmarks/` with `time_*` methods; `asv continuous main HEAD`
+  reports the %-change and **flags regressions**. This is the durable answer to
+  "did efficiency really change?" and the only thing suitable for CI gating
+  (raw timings are too noisy to assert directly).
+
+### 7.4 Baseline protocol (Phase 0)
+Before any Cython, capture cProfile + asv numbers for: `DyS`/`HDy` predict,
+wide-`HDx` predict, `EDy`, `EMQ`, on a fixed dataset and seed. These are the
+"before" numbers every later PR is measured against.
+
+---
+
+## 8. Phased rollout
+
+- **Phase 0 — baseline.** Add `benchmarks/` (quick script + asv) and record
+  numbers against today's pure-Python code. No Cython yet.
+- **Phase 1 — infra.** `pyproject.toml`, `setup.py` extensions, MANIFEST, gitignore,
+  one trivial `.pyx`, the fallback-import pattern, and `cibuildwheel` in CI — prove
+  the build/ship pipeline end to end.
+- **Phase 2 — Kernel A.** `match_sweep` + `_distances.pxd` + pure-Python twin +
+  parity test + benchmark delta, wired into DyS/HDy/HDx.
+- **Phase 3 — conditional.** Kernel B (batched histograms) *iff* a wide-`HDx`
+  benchmark justifies it; profile SORD/energy and decide.
+- **Phase 4 — wheels.** Publish binary wheels for the supported matrix.
+
+Each phase is independently shippable and leaves the library installable and green.
+
+---
+
+## 9. Open decisions
+
+1. **Compiler policy:** optional-accel + fallback + wheels *(recommended)* vs hard
+   compile requirement (sklearn-style).
+2. **Build backend:** setuptools + Cython *(simpler, recommended)* vs meson-python
+   (newer sklearn; more powerful, steeper).
+3. **Benchmark tooling:** asv + quick script *(recommended)* vs quick script only.
+4. **Precision:** ship `float64` only first, or fused `float32/float64` from day one.
+5. **First PR scope:** Phase 0+1 together (infra + baseline) before any kernel.
