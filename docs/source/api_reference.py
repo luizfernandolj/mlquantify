@@ -316,6 +316,7 @@ API_REFERENCE = {
                     "NPP",
                     "UPP",
                     "PPP",
+                    "apply_protocol",
                 ],
             }
         ],

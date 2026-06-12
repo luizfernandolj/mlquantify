@@ -1,15 +1,20 @@
 import numpy as np
 
+from copy import deepcopy
+from joblib import Parallel, delayed
+from sklearn.model_selection import train_test_split
+
 from mlquantify.base import BaseQuantifier, ProtocolMixin
 from mlquantify.utils._constraints import Interval, Options
 from mlquantify.utils._sampling import (
-    get_indexes_with_prevalence, 
+    get_indexes_with_prevalence,
     simplex_grid_sampling,
     simplex_uniform_kraemer,
     simplex_uniform_sampling,
 )
 from mlquantify.utils._random import check_random_state
 from mlquantify.utils._validation import validate_data
+from mlquantify.utils.prevalence import get_prev_from_labels
 from abc import ABC, abstractmethod
 from logging import warning
 import numpy as np
@@ -395,7 +400,283 @@ class PPP(BaseProtocol):
             for prev in self.prevalences:
                 if isinstance(prev, float):
                     prev = [1-prev, prev]
-                
+
                 indexes = get_indexes_with_prevalence(y, prev, batch_size, random_state=rng)
                 yield indexes
+
+
+# ===========================================
+# High-level protocol runner
+# ===========================================
+
+
+def _resolve_scoring(scoring):
+    """Resolve ``scoring`` into an ordered ``{name: callable}`` mapping."""
+    from mlquantify import metrics as _metrics
+
+    registry = {}
+    for _name in ("AE", "SE", "MAE", "MSE", "KLD", "RAE", "NAE", "NRAE",
+                  "NKLD", "NMD", "RNOD", "VSE", "CvM_L1"):
+        if hasattr(_metrics, _name):
+            registry[_name.lower()] = getattr(_metrics, _name)
+
+    if scoring is None:
+        scoring = ["mae"]
+    if isinstance(scoring, str) or callable(scoring):
+        scoring = [scoring]
+
+    resolved = {}
+    for item in scoring:
+        if isinstance(item, str):
+            key = item.lower()
+            if key not in registry:
+                raise ValueError(
+                    f"Unknown scoring {item!r}. Available metrics: "
+                    f"{sorted(registry)}."
+                )
+            fn = registry[key]
+            resolved[fn.__name__] = fn
+        elif callable(item):
+            resolved[getattr(item, "__name__", "score")] = item
+        else:
+            raise TypeError(
+                "scoring must be a metric name, a callable, or a list of those."
+            )
+    return resolved
+
+
+def _build_protocol(protocol, batch_size, n_prevalences, repeats,
+                    random_state, params):
+    """Instantiate a protocol from a name, or pass through an instance."""
+    if isinstance(protocol, BaseProtocol):
+        return protocol
+    if not isinstance(protocol, str):
+        raise TypeError(
+            "protocol must be a string ('app', 'npp', 'upp', 'ppp') or a "
+            "BaseProtocol instance."
+        )
+
+    name = protocol.lower()
+    if name == "app":
+        return APP(batch_size=batch_size, n_prevalences=n_prevalences,
+                   repeats=repeats, random_state=random_state,
+                   **{k: params[k] for k in ("min_prev", "max_prev") if k in params})
+    if name == "upp":
+        return UPP(batch_size=batch_size, n_prevalences=n_prevalences,
+                   repeats=repeats, random_state=random_state,
+                   **{k: params[k] for k in ("min_prev", "max_prev", "algorithm")
+                      if k in params})
+    if name == "npp":
+        return NPP(batch_size=batch_size,
+                   n_samples=params.get("n_samples", n_prevalences),
+                   repeats=repeats, random_state=random_state)
+    if name == "ppp":
+        if "prevalences" not in params:
+            raise ValueError(
+                "protocol='ppp' requires a `prevalences` keyword argument."
+            )
+        return PPP(batch_size=batch_size, prevalences=params["prevalences"],
+                   repeats=repeats, random_state=random_state)
+
+    raise ValueError(
+        f"Unknown protocol {protocol!r}. Use 'app', 'npp', 'upp', 'ppp' or a "
+        "BaseProtocol instance."
+    )
+
+
+def _prevalence_to_array(prevalence, classes):
+    """Coerce a prediction (dict or array) to an array aligned to ``classes``."""
+    if isinstance(prevalence, dict):
+        return np.asarray([float(prevalence.get(c, 0.0)) for c in classes],
+                          dtype=float)
+    return np.asarray(prevalence, dtype=float)
+
+
+def apply_protocol(
+    quantifier,
+    X,
+    y,
+    protocol="app",
+    *,
+    scoring="mae",
+    batch_size=100,
+    n_prevalences=11,
+    repeats=1,
+    fit=True,
+    test_size=0.4,
+    stratify=True,
+    n_jobs=1,
+    random_state=None,
+    return_predictions=True,
+    return_estimator=False,
+    verbose=False,
+    **protocol_params,
+):
+    r"""Evaluate a quantifier across an evaluation protocol.
+
+    The protocol analogue of scikit-learn's :func:`~sklearn.model_selection.cross_validate`:
+    it fits the quantifier, generates many test samples with controlled
+    prevalences using a sampling protocol (:class:`APP`, :class:`NPP`,
+    :class:`UPP` or :class:`PPP`), predicts the prevalence of each sample, and
+    returns the true and predicted prevalences together with one score array per
+    metric. This packages the standard quantification evaluation loop into a
+    single call.
+
+    Parameters
+    ----------
+    quantifier : BaseQuantifier
+        The quantifier to evaluate. When ``fit=True`` a copy is trained, so the
+        passed object is left untouched; when ``fit=False`` it must already be
+        fitted.
+    X : array-like of shape (n_samples, n_features)
+        Feature matrix.
+    y : array-like of shape (n_samples,)
+        Class labels.
+    protocol : {'app', 'npp', 'upp', 'ppp'} or BaseProtocol, default='app'
+        Sampling protocol used to build the evaluation samples.
+
+        - ``'app'`` : Artificial Prevalence Protocol (grid of prevalences).
+        - ``'npp'`` : Natural Prevalence Protocol (random natural samples).
+        - ``'upp'`` : Uniform Prevalence Protocol (uniform over the simplex).
+        - ``'ppp'`` : Personalized protocol (requires ``prevalences=...``).
+
+        A pre-built :class:`BaseProtocol` instance may also be passed, in which
+        case ``batch_size``, ``n_prevalences`` and ``repeats`` are ignored.
+    scoring : str, callable, or list, default='mae'
+        Metric(s) used to score each sample. A metric name (e.g. ``'mae'``,
+        ``'nmd'``), a callable ``metric(pred, true) -> float``, or a list mixing
+        the two. Each becomes a key in the returned dictionary.
+    batch_size : int or list of int, default=100
+        Size of each evaluation sample.
+    n_prevalences : int, default=11
+        Number of prevalence points (APP/UPP) or natural samples (NPP).
+    repeats : int, default=1
+        Number of repetitions per prevalence point.
+    fit : bool, default=True
+        If ``True``, train a copy of ``quantifier`` before evaluating; if
+        ``False``, use the already-fitted ``quantifier`` directly.
+    test_size : float or int or None, default=0.4
+        When ``fit=True``, the held-out fraction (or count) the protocol samples
+        from; the quantifier is trained on the complement. ``None`` or ``0``
+        trains and evaluates on the same data (in-sample).
+    stratify : bool, default=True
+        Whether the train/evaluation split is stratified by ``y``.
+    n_jobs : int or None, default=1
+        Number of parallel jobs over the protocol samples.
+    random_state : int, RandomState instance, or None, default=None
+        Seed controlling the split and the protocol sampling.
+    return_predictions : bool, default=True
+        Whether to include the true and predicted prevalence arrays.
+    return_estimator : bool, default=False
+        Whether to include the fitted quantifier under the ``'estimator'`` key.
+    verbose : bool, default=False
+        Print the number of samples generated.
+    **protocol_params : dict
+        Extra protocol arguments forwarded to the constructor (e.g.
+        ``min_prev``, ``max_prev``, ``algorithm`` for UPP, ``prevalences`` for
+        PPP).
+
+    Returns
+    -------
+    results : dict
+        Dictionary with the keys:
+
+        - ``'true_prevalences'`` : ndarray of shape (n_samples, n_classes),
+          present when ``return_predictions=True``.
+        - ``'predicted_prevalences'`` : ndarray of the same shape.
+        - ``'n_batches'`` : int, the number of evaluation samples.
+        - one key per metric (e.g. ``'MAE'``) : ndarray of shape (n_samples,)
+          holding the per-sample score.
+        - ``'estimator'`` : the fitted quantifier, when ``return_estimator=True``.
+
+    See Also
+    --------
+    APP, NPP, UPP, PPP : The sampling protocols this runs.
+    GridSearchQ : Hyper-parameter search using the same protocols.
+
+    Notes
+    -----
+    Aggregate a run with ``results['MAE'].mean()``. The true and predicted
+    prevalence arrays are convenient for diagonal "true vs predicted" diagnostic
+    plots.
+
+    Examples
+    --------
+    >>> from mlquantify.model_selection import apply_protocol
+    >>> from mlquantify.counting import CC
+    >>> from sklearn.linear_model import LogisticRegression
+    >>> from sklearn.datasets import make_classification
+    >>> X, y = make_classification(n_samples=400, random_state=0)
+    >>> results = apply_protocol(
+    ...     CC(LogisticRegression()), X, y,
+    ...     protocol="app", n_prevalences=11, batch_size=100,
+    ...     scoring=["mae", "nmd"], random_state=0,
+    ... )
+    >>> results["true_prevalences"].shape       # doctest: +SKIP
+    (11, 2)
+    >>> round(float(results["MAE"].mean()), 2)   # doctest: +SKIP
+    0.06
+    """
+    X = np.asarray(X)
+    y = np.asarray(y)
+
+    scorers = _resolve_scoring(scoring)
+
+    if fit:
+        estimator = deepcopy(quantifier)
+        if test_size:
+            X_train, X_pool, y_train, y_pool = train_test_split(
+                X, y,
+                test_size=test_size,
+                random_state=random_state,
+                stratify=y if stratify else None,
+            )
+        else:
+            X_train, y_train, X_pool, y_pool = X, y, X, y
+        estimator.fit(X_train, y_train)
+    else:
+        estimator = quantifier
+        X_pool, y_pool = X, y
+
+    classes = getattr(estimator, "classes_", None)
+    if classes is None:
+        classes = np.unique(y_pool)
+    classes = list(classes)
+
+    proto = _build_protocol(protocol, batch_size, n_prevalences, repeats,
+                            random_state, protocol_params)
+
+    batches = list(proto.split(X_pool, y_pool))
+    if verbose:
+        print(f"[apply_protocol] {proto.__class__.__name__}: "
+              f"{len(batches)} samples")
+
+    def _evaluate(idx):
+        X_batch, y_batch = X_pool[idx], y_pool[idx]
+        true = get_prev_from_labels(y_batch, format="array", classes=classes)
+        pred = _prevalence_to_array(estimator.predict(X_batch), classes)
+        return true, pred
+
+    outcomes = Parallel(n_jobs=n_jobs)(
+        delayed(_evaluate)(idx) for idx in batches
+    )
+    true_prevalences = np.asarray([t for t, _ in outcomes], dtype=float)
+    predicted_prevalences = np.asarray([p for _, p in outcomes], dtype=float)
+
+    results = {}
+    if return_predictions:
+        results["true_prevalences"] = true_prevalences
+        results["predicted_prevalences"] = predicted_prevalences
+    results["n_batches"] = len(batches)
+
+    for name, fn in scorers.items():
+        results[name] = np.asarray([
+            fn(pred, true)
+            for true, pred in zip(true_prevalences, predicted_prevalences)
+        ])
+
+    if return_estimator:
+        results["estimator"] = estimator
+
+    return results
         

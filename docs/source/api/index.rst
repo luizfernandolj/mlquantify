@@ -1554,6 +1554,22 @@ reference on concepts repeated across the API, see :ref:`glossary`.
 
 
 
+  * - :obj:`~mlquantify.model_selection.apply_protocol`
+
+    - .. div:: sk-apisearch-desc
+
+        .. currentmodule:: mlquantify.model_selection
+
+        .. autoshortsummary:: mlquantify.model_selection.apply_protocol
+
+        .. div:: caption
+
+          :mod:`mlquantify.model_selection`
+
+
+
+
+
 
 
 

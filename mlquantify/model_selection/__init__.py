@@ -3,7 +3,8 @@ from ._protocol import (
     APP,
     NPP,
     UPP,
-    PPP
+    PPP,
+    apply_protocol,
 )
 
 from ._search import GridSearchQ
