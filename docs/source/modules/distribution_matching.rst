@@ -67,7 +67,7 @@ with any distance and bin size. Maletzke et al. (2019) showed it beats
 threshold-adjustment methods and matches EMQ on many benchmarks.
 
 Parameters
-----------
+~~~~~~~~~~
 
 .. list-table::
    :widths: 22 15 63
@@ -135,7 +135,7 @@ Parameters
    as closely as possible.*
 
 Examples
---------
+~~~~~~~~
 
 Basic binary usage:
 
@@ -207,7 +207,7 @@ reduces sensitivity to the bin count hyperparameter, making HDy robust without
 tuning.
 
 Parameters
-----------
+~~~~~~~~~~
 
 Same structure as :class:`DyS`. Key defaults:
 
@@ -240,7 +240,7 @@ available, or as a sanity check. Performance is generally below HDy/DyS
 (which use a classifier's summary score), but it is a zero-cost baseline.
 
 Parameters
-----------
+~~~~~~~~~~
 
 .. list-table::
    :widths: 22 15 63
@@ -299,7 +299,7 @@ and avoid the histogram bin-count hyperparameter. Moreo et al. (2024) showed
 they are state-of-the-art for multiclass quantification.
 
 Parameters
-----------
+~~~~~~~~~~
 
 .. list-table::
    :widths: 22 15 63
@@ -331,7 +331,7 @@ Parameters
      - Stratified folds.
 
 Examples
---------
+~~~~~~~~
 
 Binary with KDEyHD:
 
@@ -390,8 +390,11 @@ Tuning bandwidth with grid search:
 
 ----
 
-Kernel Methods — MMD
-======================
+Kernel Methods
+==============
+
+MMD — Maximum Mean Discrepancy
+------------------------------
 
 :class:`MMD_RKHS` (Maximum Mean Discrepancy in Reproducing Kernel Hilbert
 Space) matches class-conditional **kernel mean embeddings** of the raw
@@ -406,7 +409,7 @@ graphs, or dense embeddings). Iyer et al. (2014) showed strong convergence
 guarantees for kernel quantification.
 
 Parameters
-----------
+~~~~~~~~~~
 
 .. list-table::
    :widths: 22 15 63
@@ -444,8 +447,11 @@ Parameters
 
 ----
 
-Score Methods — SORD
-======================
+Score Methods
+=============
+
+SORD — Score-based Optimal Ranking Distribution
+-----------------------------------------------
 
 :class:`SORD` (Score-based Optimal Ranking Distribution) estimates prevalence
 by comparing the *ranked order* of classifier scores between the test set
