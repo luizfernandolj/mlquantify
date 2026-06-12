@@ -10,7 +10,36 @@ VERSION = version_file.read_text(encoding='utf-8').strip()
 
 DESCRIPTION = 'Quantification Library'
 
+# --- optional Cython acceleration -------------------------------------------
+# Compiled kernels are an optimisation: if Cython/numpy/a compiler are missing
+# the package still installs and runs via the pure-Python fallbacks.
+ext_modules = []
+try:
+    from setuptools import Extension
+    from Cython.Build import cythonize
+    import numpy as _np
+
+    ext_modules = cythonize(
+        [
+            Extension(
+                "mlquantify.matching._matching_fast",
+                ["mlquantify/matching/_matching_fast.pyx"],
+                include_dirs=[_np.get_include()],
+            ),
+        ],
+        compiler_directives={
+            "language_level": "3",
+            "boundscheck": False,
+            "wraparound": False,
+            "cdivision": True,
+        },
+    )
+except Exception as _exc:  # pragma: no cover
+    import warnings
+    warnings.warn(f"mlquantify: building without Cython acceleration ({_exc}).")
+
 setup(
+    ext_modules=ext_modules,
     name="mlquantify",
     version=VERSION,
     url="https://github.com/luizfernandolj/QuantifyML/tree/master",

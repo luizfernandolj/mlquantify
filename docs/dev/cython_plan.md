@@ -84,6 +84,9 @@ separate (partly pure-Python) `np.histogram`. Negligible for 1 feature
 | Energy / SORD terms | `matching/_score.py`, `losses` | — | P3, **only if profiled** | TBD |
 | Everything else | KDE, Distance, KernelMean, Prediction, solvers-multiclass, sampling | — | skip | already C / too cheap |
 
+> **Fit, protocols and grid search** were profiled separately: their best wins are
+> **numpy vectorisation and caching, not Cython** (fit is classifier-bound). See §9.
+
 ---
 
 ## 4. Data structures & algorithms in C
@@ -361,7 +364,62 @@ Each phase is independently shippable and leaves the library installable and gre
 
 ---
 
-## 9. Open decisions
+## 9. Adjacent optimisations (fit / protocols / grid search)
+
+Profiling these paths shows the best wins are **numpy vectorisation and
+algorithmic caching, not Cython** — the heavy work is already in sklearn/scipy C.
+
+### 9.1 Threshold-method evaluation — vectorise `evaluate_thresholds` (no compiler)
+`counting/_utils.py:evaluate_thresholds` is a Python loop over thresholds, each
+doing an O(n) `np.where` + count → **O(n_thresholds · n_samples)**. Measured:
+
+```
+score_edges="auto" (unique scores):  n=500 -> 12.9 ms   n=2000 -> 77 ms   n=8000 -> 671 ms   (quadratic!)
+score_edges="fixed" (101 thresholds): n=500 ->  2.6 ms   n=2000 -> 4.4 ms   n=8000 ->  10 ms
+```
+
+The `"auto"` path is quadratic. Fix by computing TP/FP at all thresholds from
+**sorted scores via cumulative sums** (the `roc_curve` trick): O(n log n), one pass,
+pure numpy. Speeds every threshold method (TAC/TX/TMAX/T50/MS/MS2) and removes the
+cliff. Cython unnecessary.
+
+### 9.2 Median Sweep `_adjust` — vectorise the threshold loop
+`MS`/`MS2` loop over *every* threshold calling `CC(threshold=thr).aggregate(...)`,
+re-counting each time. The adjusted count at all thresholds is the same cumulative
+computation as §9.1 — fold them together and take the median over a precomputed
+array instead of a Python loop.
+
+### 9.3 GridSearchQ — precompute protocol batches (DONE) + classifier cache (deferred)
+**Shipped (exact, safe):** the seeded protocol yields identical samples for every
+combination, yet the original regenerated it (and recomputed the ground-truth
+prevalences) `|grid|` times — and protocol generation costs about as much as a
+classifier fit. `GridSearchQ.fit` now materialises the batches + true prevalences
+**once**, giving **~1.48x** on a 6-combination DyS search with byte-identical
+`best_params_`/`best_score` (verified against the per-combination loop across
+app/npp/upp protocols). Predict-time cost also benefits transitively from
+Kernel A (§4.1).
+
+**Deferred (bigger, needs a core change):** reusing the classifier / CV predictions
+across combinations that share the estimator would save the repeated `fit`, but the
+existing `estimator_fitted=True` path uses *in-sample* predictions whereas the
+default builds the representation from *out-of-fold CV* predictions — so a naive
+cache would silently change model selection. Doing it exactly requires an additive
+"inject precomputed CV predictions" hook in the aggregative `fit`; left as a
+separate, carefully-tested change.
+
+### 9.4 Protocol index generation — minor caching
+`get_indexes_with_prevalence` recomputes the per-class pools (`np.where(y==c)`) every
+call; `APP.split` for 210 batches measured ~43 ms total (~0.2 ms/batch), dwarfed by
+the per-batch `predict`. Precompute the per-class pools once only if it ever matters.
+
+### 9.5 Not worth touching
+`fit` is **classifier-bound** — a TX fit at n=8000 spent ~0.037 s of 0.052 s inside
+sklearn's `LogisticRegression.fit`/CV (C); the mlquantify orchestration around it is
+negligible. KDE, `cdist`, `pairwise_kernels`, simplex sampling are already C.
+
+---
+
+## 10. Open decisions
 
 1. **Compiler policy:** optional-accel + fallback + wheels *(recommended)* vs hard
    compile requirement (sklearn-style).

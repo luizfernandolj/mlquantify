@@ -171,47 +171,48 @@ class GridSearchQ(MetaquantifierMixin, BaseQuantifier):
             Returns self for chaining.
         """
         X, y = validate_data(self, X, y)
-        
-        
+
         X_train, X_val, y_train, y_val = train_test_split(X, y, test_size=self.val_split, random_state=self.random_seed)
         param_combinations = list(itertools.product(*self.param_grid.values()))
-        params = list(self.param_grid.keys())
+
+        # Precompute the evaluation samples once. The protocol is seeded, so it
+        # yields identical samples for every parameter combination; caching the
+        # batches and their true prevalences avoids regenerating the protocol
+        # and recomputing ground truth |grid| times (protocol generation costs
+        # roughly as much as a classifier fit), with no change in results.
+        protocol = self.__get_protocol()
+        eval_batches = [
+            (X_val[idx], get_prev_from_labels(y_val[idx]))
+            for idx in protocol.split(X_val, y_val)
+        ]
 
         best_score, best_params = None, None
-        
-        def evaluate_combination(params):
-           
-            self.sout(f'Evaluating combination: {str(params)}')
-            
-            errors = []
-            
-            params = dict(zip(self.param_grid.keys(), params))
+
+        def evaluate_combination(combo):
+
+            self.sout(f'Evaluating combination: {str(combo)}')
+
+            params = dict(zip(self.param_grid.keys(), combo))
 
             model = deepcopy(self.quantifier)
             model.set_params(**params)
-            
-            protocol = self.__get_protocol()
-            
+
             model.fit(X_train, y_train)
-            
-            for idx in protocol.split(X_val, y_val):
-                X_batch, y_batch = X_val[idx], y_val[idx]
 
-                y_real = get_prev_from_labels(y_batch)
-                y_pred = model.predict(X_batch)
-
-                
-                errors.append(self.scoring(y_real, y_pred))
+            errors = [
+                self.scoring(y_real, model.predict(X_batch))
+                for X_batch, y_real in eval_batches
+            ]
 
             avg_score = np.mean(errors)
-            
+
             self.sout(f'\\--Finished evaluation: {str(params)} with score: {avg_score}')
-            
+
             return avg_score
-                
-        
+
+
         results = Parallel(n_jobs=self.n_jobs)(
-            delayed(evaluate_combination)(params) for params in param_combinations
+            delayed(evaluate_combination)(combo) for combo in param_combinations
         )
         
             

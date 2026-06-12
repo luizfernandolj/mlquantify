@@ -182,3 +182,8 @@ lobal gitignore or merged into this file.  For a more nuclear
 .test.py
 comparisions/
 comparison/
+# Cython-generated
+mlquantify/**/*_fast.c
+*.pyd
+build/
+VERSION.txt

@@ -87,27 +87,29 @@ def evaluate_thresholds (y, probabilities:np.ndarray, score_edges:str="fixed") -
         - tprs is a numpy array of corresponding True Positive Rates,
         - fprs is a numpy array of corresponding False Positive Rates.
     """
+    y = np.asarray(y)
+    probabilities = np.asarray(probabilities, dtype=float)
+    classes = np.unique(y)
+
     if score_edges == "fixed":
         unique_scores = np.linspace(0, 1, 101)
     else:
         unique_scores = np.unique(probabilities)
 
-    
-    tprs = []
-    fprs = []
-    
-    classes = np.unique(y)
-    
-    for threshold in unique_scores:
-        y_pred = np.where(probabilities >= threshold, classes[1], classes[0])
-        
-        TP, FP, FN, TN = compute_table(y, y_pred, classes)
-        
-        tpr = compute_tpr(TP, FN)
-        fpr = compute_fpr(FP, TN)
-        
-        tprs.append(tpr)
-        fprs.append(fpr)
-    
-    #best_tpr, best_fpr = self.adjust_threshold(np.asarray(tprs), np.asarray(fprs))
-    return (unique_scores, np.asarray(tprs), np.asarray(fprs))
+    # Vectorised TPR/FPR sweep. For a threshold ``t`` a positive prediction means
+    # ``score >= t``; the number of class-c scores at or above ``t`` is a survival
+    # count read from the sorted scores in O((n + T) log n) instead of the original
+    # O(T * n) Python loop over thresholds.
+    pos_scores = np.sort(probabilities[y == classes[1]])
+    neg_scores = np.sort(probabilities[y == classes[0]])
+    n_pos = pos_scores.shape[0]
+    n_neg = neg_scores.shape[0]
+
+    # count(score >= t) == n - count(score < t) == n - searchsorted(., t, "left")
+    tp = n_pos - np.searchsorted(pos_scores, unique_scores, side="left")
+    fp = n_neg - np.searchsorted(neg_scores, unique_scores, side="left")
+
+    tprs = tp / n_pos if n_pos > 0 else np.zeros_like(unique_scores, dtype=float)
+    fprs = fp / n_neg if n_neg > 0 else np.zeros_like(unique_scores, dtype=float)
+
+    return (unique_scores, np.asarray(tprs, dtype=float), np.asarray(fprs, dtype=float))

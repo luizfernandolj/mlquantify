@@ -504,6 +504,116 @@ def _fit_predict_ovo(quantifier, X, y, X_test, n_jobs=None):
 
 
 # ============================================================
+# Strategy registry
+# ============================================================
+class MulticlassStrategy:
+    """Base class for multiclass decomposition strategies.
+
+    A strategy turns a binary quantifier into a multiclass one: it decomposes the
+    problem, fits/predicts the binary sub-quantifiers, and recombines their
+    outputs into per-class prevalences. Register new strategies (e.g. ECOC,
+    hierarchical) with :func:`register_strategy` and they become usable through
+    the quantifier's ``strategy`` attribute with no change to the dispatch.
+
+    Subclasses implement :meth:`fit`, :meth:`predict`, :meth:`aggregate` and
+    :meth:`fit_predict`, returning prevalences *before* the shared
+    ``validate_prevalences`` normalization applied by :class:`BinaryQuantifier`.
+    """
+
+    name = None
+
+    def fit(self, quantifier, X, y, n_jobs=None, fit_args=None, fit_kwargs=None):
+        """Return ``{key: fitted_binary_quantifier}`` for the decomposition."""
+        raise NotImplementedError
+
+    def predict(self, quantifier, X, n_jobs=None):
+        """Return per-class prevalences (dict or array) for ``X``."""
+        raise NotImplementedError
+
+    def aggregate(self, quantifier, classes, args_dict, n_jobs=None):
+        """Return per-class prevalences from pre-computed predictions."""
+        raise NotImplementedError
+
+    def fit_predict(self, quantifier, X, y, X_test, classes, n_jobs=None):
+        """Fit on ``(X, y)`` and return per-class prevalences for ``X_test``."""
+        raise NotImplementedError
+
+
+_STRATEGIES = {}
+
+
+def register_strategy(name):
+    """Register a :class:`MulticlassStrategy` subclass under ``name``.
+
+    The decorated class is instantiated once and stored in the registry, so it
+    can be selected via a quantifier's ``strategy`` attribute (e.g.
+    ``strategy='ovr'``).
+    """
+    def decorator(cls):
+        cls.name = name
+        _STRATEGIES[name] = cls()
+        return cls
+    return decorator
+
+
+def get_strategy(name):
+    """Return the registered :class:`MulticlassStrategy` instance for ``name``."""
+    try:
+        return _STRATEGIES[name]
+    except KeyError:
+        raise ValueError(
+            f"Unknown multiclass strategy {name!r}. "
+            f"Available strategies: {sorted(_STRATEGIES)}."
+        ) from None
+
+
+def available_strategies():
+    """Return the sorted names of all registered multiclass strategies."""
+    return sorted(_STRATEGIES)
+
+
+@register_strategy("ovr")
+class OvRStrategy(MulticlassStrategy):
+    """One-vs-Rest: one binary quantifier per class, recombined by class."""
+
+    def fit(self, quantifier, X, y, n_jobs=None, fit_args=None, fit_kwargs=None):
+        return _fit_ovr(quantifier, X, y, n_jobs=n_jobs,
+                        fit_args=fit_args, fit_kwargs=fit_kwargs)
+
+    def predict(self, quantifier, X, n_jobs=None):
+        return _predict_ovr(quantifier, X, n_jobs=n_jobs)
+
+    def aggregate(self, quantifier, classes, args_dict, n_jobs=None):
+        return _aggregate_ovr(quantifier, n_jobs=n_jobs, **args_dict)
+
+    def fit_predict(self, quantifier, X, y, X_test, classes, n_jobs=None):
+        return _fit_predict_ovr(quantifier, X, y, X_test, n_jobs=n_jobs)
+
+
+@register_strategy("ovo")
+class OvOStrategy(MulticlassStrategy):
+    """One-vs-One: one binary quantifier per class pair, recombined pairwise."""
+
+    def fit(self, quantifier, X, y, n_jobs=None, fit_args=None, fit_kwargs=None):
+        return _fit_ovo(quantifier, X, y, n_jobs=n_jobs,
+                        fit_args=fit_args, fit_kwargs=fit_kwargs)
+
+    def predict(self, quantifier, X, n_jobs=None):
+        preds = _predict_ovo(quantifier, X, n_jobs=n_jobs)
+        pairs = list(combinations(quantifier.classes_, 2))
+        pair_preds = dict(zip(pairs, preds))
+        return _ovo_pairwise_to_class_prevalences(pair_preds, quantifier.classes_)
+
+    def aggregate(self, quantifier, classes, args_dict, n_jobs=None):
+        pair_prev = _aggregate_ovo(quantifier, n_jobs=n_jobs, **args_dict)
+        return _ovo_pairwise_to_class_prevalences(pair_prev, classes)
+
+    def fit_predict(self, quantifier, X, y, X_test, classes, n_jobs=None):
+        preds_dict = _fit_predict_ovo(quantifier, X, y, X_test, n_jobs=n_jobs)
+        return _ovo_pairwise_to_class_prevalences(preds_dict, classes)
+
+
+# ============================================================
 # Main Class
 # ============================================================
 class BinaryQuantifier(MetaquantifierMixin, BaseQuantifier):
@@ -528,32 +638,14 @@ class BinaryQuantifier(MetaquantifierMixin, BaseQuantifier):
             qtf.binary = True
             return qtf._original_fit(X, y, *args, **kwargs)
 
-        strategy = _get_binary_strategy(qtf)
-        n_jobs = getattr(qtf, "n_jobs", None)  # Retrieve n_jobs if available
+        strategy = get_strategy(_get_binary_strategy(qtf))
+        n_jobs = getattr(qtf, "n_jobs", None)
 
         qtf.binary = False
         qtf.classes_ = np.unique(y)
-
-        if strategy == "ovr":
-            qtf.qtfs_ = _fit_ovr(
-                qtf,
-                X,
-                y,
-                n_jobs=n_jobs,
-                fit_args=args,
-                fit_kwargs=kwargs,
-            )
-        elif strategy == "ovo":
-            qtf.qtfs_ = _fit_ovo(
-                qtf,
-                X,
-                y,
-                n_jobs=n_jobs,
-                fit_args=args,
-                fit_kwargs=kwargs,
-            )
-        else:
-            raise ValueError("Strategy must be 'ovr' or 'ovo'")
+        qtf.qtfs_ = strategy.fit(
+            qtf, X, y, n_jobs=n_jobs, fit_args=args, fit_kwargs=kwargs,
+        )
 
         return qtf
 
@@ -561,20 +653,10 @@ class BinaryQuantifier(MetaquantifierMixin, BaseQuantifier):
         """Predict class prevalences using the trained binary quantifiers."""
         if hasattr(qtf, "binary") and qtf.binary:
             return qtf._original_predict(X)
-        else:
-            strategy = _get_binary_strategy(qtf)
-            n_jobs = getattr(qtf, "n_jobs", None)
-            if strategy == "ovr":
-                preds = _predict_ovr(qtf, X, n_jobs=n_jobs)
-            elif strategy == "ovo":
-                preds = _predict_ovo(qtf, X, n_jobs=n_jobs)
-            else:
-                raise ValueError("Strategy must be 'ovr' or 'ovo'")
 
-        if strategy == "ovo":
-            pairs = list(combinations(qtf.classes_, 2))
-            pair_preds = dict(zip(pairs, preds))
-            preds = _ovo_pairwise_to_class_prevalences(pair_preds, qtf.classes_)
+        strategy = get_strategy(_get_binary_strategy(qtf))
+        n_jobs = getattr(qtf, "n_jobs", None)
+        preds = strategy.predict(qtf, X, n_jobs=n_jobs)
 
         return validate_prevalences(qtf, preds, qtf.classes_)
 
@@ -592,19 +674,13 @@ class BinaryQuantifier(MetaquantifierMixin, BaseQuantifier):
             raise ValueError("Binary aggregation requires at least train labels")
 
         classes = np.unique(args_dict["y_train"])
-        strategy = _get_binary_strategy(qtf)
         n_jobs = getattr(qtf, "n_jobs", None)
 
         if (hasattr(qtf, "binary") and qtf.binary) or len(classes) <= 2:
             return qtf._original_aggregate(*args_dict.values())
 
-        if strategy == "ovr":
-            prevalences = _aggregate_ovr(qtf, n_jobs=n_jobs, **args_dict)
-        elif strategy == "ovo":
-            pair_prev = _aggregate_ovo(qtf, n_jobs=n_jobs, **args_dict)
-            prevalences = _ovo_pairwise_to_class_prevalences(pair_prev, classes)
-        else:
-            raise ValueError("Strategy must be 'ovr' or 'ovo'")
+        strategy = get_strategy(_get_binary_strategy(qtf))
+        prevalences = strategy.aggregate(qtf, classes, args_dict, n_jobs=n_jobs)
 
         return validate_prevalences(qtf, prevalences, classes)
 
@@ -617,22 +693,11 @@ class BinaryQuantifier(MetaquantifierMixin, BaseQuantifier):
             qtf.fit(X, y)
             return qtf.predict(X_test)
 
-        strategy = _get_binary_strategy(qtf)
+        strategy = get_strategy(_get_binary_strategy(qtf))
         n_jobs = getattr(qtf, "n_jobs", None)
-        
+
         # Set classes_ attribute required by validate_prevalences
         qtf.classes_ = classes
 
-        if strategy == "ovr":
-            # Returns dict {cls: prev}
-            preds_dict = _fit_predict_ovr(qtf, X, y, X_test, n_jobs=n_jobs)
-            keys = classes
-            
-            return validate_prevalences(qtf, preds_dict, classes)
-            
-        elif strategy == "ovo":
-            preds_dict = _fit_predict_ovo(qtf, X, y, X_test, n_jobs=n_jobs)
-            prevalences = _ovo_pairwise_to_class_prevalences(preds_dict, classes)
-            return validate_prevalences(qtf, prevalences, classes) 
-        else:
-            raise ValueError("Strategy must be 'ovr' or 'ovo'")
+        prevalences = strategy.fit_predict(qtf, X, y, X_test, classes, n_jobs=n_jobs)
+        return validate_prevalences(qtf, prevalences, classes)

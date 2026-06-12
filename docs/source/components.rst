@@ -10,6 +10,8 @@ optimization workflows.
 .. toctree::
    :maxdepth: 2
 
+   modules/multiclass.rst
+   modules/prevalence_normalization.rst
    modules/compose.rst
    modules/losses.rst
    modules/representations.rst

@@ -56,18 +56,28 @@ def normalize_prevalence(prevalences: np.ndarray, classes:list):
         Dictionary of class labels and their corresponding prevalence.
     """
     if isinstance(prevalences, dict):
-        summ = sum(prevalences.values())
-        prevalences = {int(_class):float(value/summ) for _class, value in prevalences.items()}
-        return prevalences
-    
-    summ = np.sum(prevalences, axis=-1, keepdims=True)
-    prevalences = np.true_divide(prevalences, sum(prevalences), where=summ>0)
-    prevalences = {int(_class):float(prev) for _class, prev in zip(classes, prevalences)}
+        total = sum(prevalences.values())
+        if total > 0:
+            return {int(_class): float(value / total)
+                    for _class, value in prevalences.items()}
+        n = len(prevalences)
+        return {int(_class): 1.0 / n for _class in prevalences}
+
+    prevalences = np.asarray(prevalences, dtype=float)
+    total = prevalences.sum()
+    if total > 0:
+        prevalences = prevalences / total
+    else:
+        # degenerate (non-positive sum): fall back to a uniform distribution
+        # rather than dividing by zero / returning uninitialised values.
+        prevalences = np.full(prevalences.shape[-1], 1.0 / prevalences.shape[-1])
+
+    prevalences = {int(_class): float(prev) for _class, prev in zip(classes, prevalences)}
     prevalences = defaultdict(lambda: 0, prevalences)
-    
+
     # Ensure all classes are present in the result
     for cls in classes:
         prevalences[cls] = prevalences[cls]
-    
+
     return dict(prevalences)
 

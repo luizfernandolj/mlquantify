@@ -423,25 +423,28 @@ class MS(ThresholdAdjustment):
     """
     def _adjust(self, predictions, train_y_scores, y_train):
         positive_scores = train_y_scores[:, 1]
-        
+
         thresholds, tprs, fprs = evaluate_thresholds(y_train, positive_scores)
         thresholds, tprs, fprs = self.get_best_threshold(thresholds, tprs, fprs)
-        
-        prevs = []
-        for thr, tpr, fpr in zip(thresholds, tprs, fprs):
-            with config_context(prevalence_return_type="array"):
-                cc_predictions = CC(threshold=thr).aggregate(predictions, y_train)
-            cc_predictions = cc_predictions[1]
-            
-            if tpr - fpr == 0:
-                prevalence = cc_predictions
-            else:
-                prevalence = np.clip((cc_predictions - fpr) / (tpr - fpr), 0, 1)
-                
-            prevs.append(prevalence)
-        prevalence = np.median(prevs)
+
+        # CC positive count at every threshold, vectorised. The fraction of test
+        # predictions assigned to the positive class at threshold ``t`` is
+        # ``mean(score >= t)`` -- a survival count over the sorted positive-class
+        # scores -- replacing the per-threshold ``CC(threshold=t).aggregate`` loop.
+        scores = np.asarray(predictions, dtype=float)
+        if scores.ndim == 2:
+            scores = scores[:, 1]
+        scores = np.sort(scores)
+        n = scores.shape[0]
+        cc = (n - np.searchsorted(scores, thresholds, side="left")) / n
+
+        denom = tprs - fprs
+        safe = np.where(denom == 0, 1.0, denom)
+        adjusted = np.where(denom == 0, cc, np.clip((cc - fprs) / safe, 0.0, 1.0))
+
+        prevalence = float(np.median(adjusted))
         return np.asarray([1 - prevalence, prevalence])
-    
+
     def get_best_threshold(self, thresholds, tprs, fprs):
         return thresholds, tprs, fprs
 

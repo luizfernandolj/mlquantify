@@ -1606,6 +1606,70 @@ reference on concepts repeated across the API, see :ref:`glossary`.
 
 
 
+  * - :obj:`~mlquantify.multiclass.MulticlassStrategy`
+
+    - .. div:: sk-apisearch-desc
+
+        .. currentmodule:: mlquantify.multiclass
+
+        .. autoshortsummary:: mlquantify.multiclass.MulticlassStrategy
+
+        .. div:: caption
+
+          :mod:`mlquantify.multiclass`
+
+
+
+
+
+  * - :obj:`~mlquantify.multiclass.register_strategy`
+
+    - .. div:: sk-apisearch-desc
+
+        .. currentmodule:: mlquantify.multiclass
+
+        .. autoshortsummary:: mlquantify.multiclass.register_strategy
+
+        .. div:: caption
+
+          :mod:`mlquantify.multiclass`
+
+
+
+
+
+  * - :obj:`~mlquantify.multiclass.get_strategy`
+
+    - .. div:: sk-apisearch-desc
+
+        .. currentmodule:: mlquantify.multiclass
+
+        .. autoshortsummary:: mlquantify.multiclass.get_strategy
+
+        .. div:: caption
+
+          :mod:`mlquantify.multiclass`
+
+
+
+
+
+  * - :obj:`~mlquantify.multiclass.available_strategies`
+
+    - .. div:: sk-apisearch-desc
+
+        .. currentmodule:: mlquantify.multiclass
+
+        .. autoshortsummary:: mlquantify.multiclass.available_strategies
+
+        .. div:: caption
+
+          :mod:`mlquantify.multiclass`
+
+
+
+
+
 
 
 
