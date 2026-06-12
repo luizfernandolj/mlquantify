@@ -22,8 +22,8 @@ try:
     ext_modules = cythonize(
         [
             Extension(
-                "mlquantify.matching._matching_fast",
-                ["mlquantify/matching/_matching_fast.pyx"],
+                "mlquantify.matching._histogram_sweep",
+                ["mlquantify/matching/_histogram_sweep.pyx"],
                 include_dirs=[_np.get_include()],
             ),
         ],

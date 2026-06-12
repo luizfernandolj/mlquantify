@@ -122,10 +122,10 @@ def test_matching_kernel_matches_fallback():
     """Compiled kernel (if built) must match the pure-Python reference."""
     import mlquantify.matching._histogram as H
     if not H._HAS_FAST_KERNEL:
-        pytest.skip("compiled _matching_fast not built")
+        pytest.skip("compiled _histogram_sweep not built")
 
-    from mlquantify.matching._matching_fast import match_sweep as fast
-    from mlquantify.matching._matching_py import match_sweep as py
+    from mlquantify.matching._histogram_sweep import match_sweep as fast
+    from mlquantify.matching._histogram_sweep_py import match_sweep as py
 
     rng = np.random.default_rng(0)
     worst = 0.0
