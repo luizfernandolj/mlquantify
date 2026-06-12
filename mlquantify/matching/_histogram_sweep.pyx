@@ -3,7 +3,7 @@
 
 Folds ``mixture -> normalize -> distance -> ternary-search-over-alpha`` into a
 single ``nogil`` routine, eliminating the ~1100 tiny-array numpy calls/predict
-of the pure-Python path. Output matches :mod:`mlquantify.matching._matching_py`.
+of the pure-Python path. Output matches :mod:`mlquantify.matching._histogram_sweep_py`.
 """
 import numpy as np
 from libc.math cimport sqrt, log
@@ -67,7 +67,7 @@ def match_sweep(const double[::1] neg, const double[::1] pos,
 
     ``solver`` selects the search: ``0`` ternary (unimodal), ``1`` exhaustive
     grid of ``grid_size`` points. See
-    :func:`mlquantify.matching._matching_py.match_sweep` for semantics.
+    :func:`mlquantify.matching._histogram_sweep_py.match_sweep` for semantics.
     """
     cdef Py_ssize_t i, k, n = neg.shape[0]
     cdef double[::1] test_n = np.empty(n, dtype=np.float64)

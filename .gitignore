@@ -6,6 +6,9 @@ __pycache__/
 # C extensions
 *.so
 
+# Cython-generated C sources (built from the .pyx; never committed)
+mlquantify/**/*.c
+
 # Distribution / packaging
 .Python
 build/

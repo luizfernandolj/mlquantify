@@ -4,6 +4,97 @@ All notable changes to mlquantify will be documented in this file.
 
 ---
 
+## [v0.4.0]
+
+This release focuses on **performance** (a compiled Cython kernel + several
+vectorisations), **multiclass extensibility**, an easy **evaluation helper**, and
+a full **documentation standardisation** across every module.
+
+### New Features
+
+- **`apply_protocol`** (`model_selection`) — a scikit-learn `cross_validate`-style
+  helper that runs the whole quantification-evaluation loop in one call: fit the
+  quantifier, sample test batches with a protocol (`'app'`/`'npp'`/`'upp'`/`'ppp'`),
+  predict each, and return the true/predicted prevalences plus one score array per
+  metric.
+- **Cython acceleration for distribution matching** — a compiled histogram α-sweep
+  kernel (`mlquantify.matching._histogram_sweep`) speeds up `DyS`/`HDy`/`HDx`. It is
+  **optional**: when the extension is not built, the library transparently falls
+  back to a pure-Python sweep (a one-time `PerformanceWarning` is emitted) and to
+  the generic solver. Toggle it at runtime with
+  `mlquantify.matching._histogram.USE_SWEEP_KERNEL`.
+- **Pluggable multiclass strategies** (`multiclass`) — One-vs-Rest / One-vs-One now
+  live in a registry. Add custom decompositions (ECOC, hierarchical, …) with
+  `@register_strategy(...)` on a `MulticlassStrategy` subclass; inspect them with
+  `available_strategies()`. No change to the dispatch is required.
+
+### Performance
+
+- **`evaluate_thresholds`** vectorised from `O(n_thresholds · n)` to `O(n log n)`
+  via sorted survival counts — removes a quadratic cliff and speeds **all**
+  threshold methods (`TAC`, `TX`, `TMAX`, `T50`, `MS`, `MS2`); ~160–490× faster on
+  large inputs.
+- **Median Sweep** (`MS`/`MS2`) vectorised — the per-threshold `CC` re-count loop is
+  replaced by a single cumulative computation.
+- **`GridSearchQ`** now precomputes the (seeded) protocol batches and their true
+  prevalences once instead of regenerating them for every parameter combination
+  (identical results).
+- The Cython sweep kernel roughly halves `DyS`/`HDy` `predict` time versus the
+  generic Python solver, with bit-identical estimates.
+
+### Behavior Changes
+
+- **`MLPE`** now matches its documented role as the *trivial baseline*: it returns
+  the **training prevalence** for any test set (previously it responded to the test
+  set, contradicting the docs). Use `EMQ` for the non-trivial maximum-likelihood
+  estimator.
+
+### Fixes
+
+- `normalize_prevalence` no longer emits a numpy "uninitialised memory" warning
+  (it used `where=` without `out=`); zero/negative-sum inputs now return a valid
+  distribution.
+- Corrected the `DyS` docstring (it defaults to the **Topsøe** distance, not
+  Hellinger) and documented previously-undocumented constructor parameters
+  (`distance`, `solver`, `bin_strategy`, `laplace_smoothing`).
+- `QuaDapt` reference corrected to the LeQua 2025 paper.
+- Added the missing `ACC` entry to the API reference.
+
+### Documentation
+
+- **Standardised docstrings and user guide across every module** following a
+  two-surface model (API docstrings = interface, User Guide = theory): each method
+  leads with its shift assumption, and gained `Attributes`/`Notes`/`See Also`
+  sections and per-option parameter descriptions.
+- New User Guide pages: **Multiclass Quantification** (OvR/OvO, setting a binary
+  method, registering new strategies), **Prevalence Normalization** (all
+  `normalize_prevalence` / config options), and **Cython acceleration** (what the
+  histogram sweep is and where it saves time and memory).
+- Augmented the **Solvers**, **Representations** and **Losses** guides, and added
+  live `.. plot::` figures (histogram `bins`/`bin_edges`/class-conditional, KDE
+  `bandwidth`, Prediction soft-vs-hard, and the EMQ optimisation).
+- Removed duplicated content and fixed heading-level nesting in several guide pages;
+  suppressed benign `ref.citation` build warnings.
+
+### Build & Packaging
+
+- Added the Cython build infrastructure: `pyproject.toml` build backend, `setup.py`
+  `cythonize` of the optional extension, and `MANIFEST.in` shipping `*.pyx`/`*.pxd`
+  in the sdist so source installs can compile (or use the fallback).
+- CI now builds **portable binary wheels** with `cibuildwheel`
+  (Linux / macOS x86_64+arm64 / Windows × CPython 3.9–3.13), verifies each wheel
+  ships the compiled kernel, builds an sdist, and publishes to PyPI on a `v*` tag.
+
+### Tests
+
+- Added `tests/test_optimizations.py` with parity tests for `evaluate_thresholds`,
+  Median Sweep, `GridSearchQ` caching, and the Cython kernel (compiled == pure
+  Python == generic solver).
+- Added a cross-library comparison harness (`comparisons/`) validating prevalence
+  agreement and speed against QuaPy, qunfold and quantificationlib.
+
+---
+
 ## [Unreleased] — v0.3.0
 
 ### New Modules
@@ -90,4 +181,5 @@ quantifier = CC(estimator=LogisticRegression())
 
 ---
 
+[v0.4.0]: https://github.com/luizfernandolj/QuantifyML/compare/v0.3.0...v0.4.0
 [Unreleased]: https://github.com/luizfernandolj/QuantifyML/compare/v0.2.1...HEAD

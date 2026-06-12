@@ -1,3 +1,5 @@
+import warnings
+
 import numpy as np
 
 from mlquantify.base_aggregative import (
@@ -12,12 +14,17 @@ from mlquantify.multiclass import binary_quantifier
 from mlquantify.utils._constraints import Options
 from mlquantify.utils._validation import validate_data
 from mlquantify.solvers import minimize_prevalence, minimize_prevalence_blocks
-from mlquantify.matching._matching_py import METRIC_IDS, match_sweep as _match_sweep_py
+from mlquantify.matching._histogram_sweep_py import METRIC_IDS, match_sweep as _match_sweep_py
+
+
+class PerformanceWarning(UserWarning):
+    """Emitted when mlquantify runs a slower, non-compiled code path."""
+
 
 # Optional compiled acceleration for the binary histogram sweep. Falls back to
 # the pure-Python reference when the extension is not built.
 try:
-    from mlquantify.matching._matching_fast import match_sweep as _match_sweep
+    from mlquantify.matching._histogram_sweep import match_sweep as _match_sweep
     _HAS_FAST_KERNEL = True
 except ImportError:  # pragma: no cover - source install without a compiler
     _match_sweep = _match_sweep_py
@@ -25,6 +32,24 @@ except ImportError:  # pragma: no cover - source install without a compiler
 
 #: Toggle the compiled/py sweep kernel (set False to force the generic solver).
 USE_SWEEP_KERNEL = True
+
+_warned_no_kernel = False
+
+
+def _warn_no_compiled_kernel():
+    """Warn once that the histogram sweep is running without the compiled kernel."""
+    global _warned_no_kernel
+    if _warned_no_kernel:
+        return
+    _warned_no_kernel = True
+    warnings.warn(
+        "mlquantify: the compiled histogram-sweep kernel "
+        "(mlquantify.matching._histogram_sweep) is not built, so distribution "
+        "matching is falling back to the slower pure-Python sweep. Build it with "
+        "`pip install -e .` (or install a binary wheel) for the accelerated path.",
+        PerformanceWarning,
+        stacklevel=3,
+    )
 
 
 @binary_quantifier(strategy_attr="strategy")
@@ -148,6 +173,9 @@ class MatchingHistogramQuantifier(BaseMatchingQuantifier):
         metric_id = METRIC_IDS.get(self.distance)
         if metric_id is None or not USE_SWEEP_KERNEL:
             return None
+
+        if not _HAS_FAST_KERNEL:
+            _warn_no_compiled_kernel()
 
         # map the effective solver to the kernel's search mode; the scipy
         # "bounded" solver is not replicated, so defer to the generic path.

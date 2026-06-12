@@ -1,36 +1,84 @@
-name: Publish Python Package
+name: Build wheels and publish
+
+# Builds portable binary wheels (with the compiled Cython kernel) for every
+# supported platform/Python via cibuildwheel, plus an sdist, and publishes them
+# to PyPI on a version tag. Source installs without a compiler still work via the
+# pure-Python fallback.
 
 on:
   push:
     tags:
-      - 'v*'  # Dispara o workflow quando um novo tag com 'v' for criado (ex: v0.1.1)
+      - 'v*'
+  workflow_dispatch:
 
 jobs:
-  build:
-    runs-on: ubuntu-latest
-
+  build_wheels:
+    name: Wheels on ${{ matrix.os }}
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, macos-13, macos-14, windows-latest]
     steps:
-      - name: Checkout do código
-        uses: actions/checkout@v4
+      - uses: actions/checkout@v4
 
-      - name: Configurar Python
-        uses: actions/setup-python@v4
+      - name: Generate VERSION.txt
+        shell: bash
+        run: |
+          if [[ "${GITHUB_REF}" == refs/tags/v* ]]; then
+            echo "${GITHUB_REF##*/}" | sed 's/^v//' > VERSION.txt
+          else
+            echo "0.0.0.dev0" > VERSION.txt
+          fi
+
+      - name: Build wheels
+        uses: pypa/cibuildwheel@v2.21
+        env:
+          # CPython 3.9-3.13, 64-bit; skip the slow/rare targets
+          CIBW_BUILD: "cp39-* cp310-* cp311-* cp312-* cp313-*"
+          CIBW_SKIP: "*-musllinux_* *_i686 *_ppc64le *_s390x pp*"
+          CIBW_ARCHS_MACOS: "auto"
+          # verify each wheel actually shipped the compiled kernel
+          CIBW_TEST_COMMAND: >-
+            python -c "import mlquantify.matching._histogram as H;
+            assert H._HAS_FAST_KERNEL, 'compiled histogram-sweep kernel missing from wheel'"
+
+      - uses: actions/upload-artifact@v4
         with:
-          python-version: "3.9"
+          name: wheels-${{ matrix.os }}
+          path: ./wheelhouse/*.whl
 
-      - name: Gerar arquivo de versão
+  build_sdist:
+    name: Source distribution
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Generate VERSION.txt
+        shell: bash
         run: |
-          echo "${GITHUB_REF##*/}" | sed 's/^v//' > VERSION.txt
+          if [[ "${GITHUB_REF}" == refs/tags/v* ]]; then
+            echo "${GITHUB_REF##*/}" | sed 's/^v//' > VERSION.txt
+          else
+            echo "0.0.0.dev0" > VERSION.txt
+          fi
+      - name: Build sdist
+        run: pipx run build --sdist
+      - uses: actions/upload-artifact@v4
+        with:
+          name: sdist
+          path: dist/*.tar.gz
 
-      - name: Instalar dependências
-        run: |
-          python -m pip install --upgrade pip
-          pip install build
-
-      - name: Construir o pacote
-        run: python -m build
-
-      - name: Publicar no PyPI
-        uses: pypa/gh-action-pypi-publish@release/v1
+  publish:
+    name: Publish to PyPI
+    needs: [build_wheels, build_sdist]
+    runs-on: ubuntu-latest
+    if: startsWith(github.ref, 'refs/tags/v')
+    steps:
+      - uses: actions/download-artifact@v4
+        with:
+          path: dist
+          merge-multiple: true
+      - uses: pypa/gh-action-pypi-publish@release/v1
         with:
           password: ${{ secrets.PYPI_API_TOKEN }}
+          packages-dir: dist

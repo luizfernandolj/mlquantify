@@ -21,58 +21,30 @@ candidate prevalence :math:`p` produces a *mixed* representation
 quantifier then searches for the :math:`p` whose mixture best matches the test
 descriptor :math:`r_U` under a chosen loss. Fitting a representation computes the
 per-class descriptors (``class_representations_``); ``transform`` produces the
-descriptor of a new sample.
+descriptor of a new sample. :class:`BaseRepresentation` defines the common
+``fit`` / ``transform`` interface; custom representations subclass it.
 
-.. list-table::
-   :widths: 30 42 28
-   :header-rows: 1
+The sections below describe each representation type and the descriptor it
+produces; the :ref:`summary table <choosing-a-representation>` at the end
+compares them and explains how to choose.
 
-   * - Representation
-     - What it computes
-     - Used by
-   * - :class:`HistogramRepresentation`
-     - Per-feature / per-score binned probability-mass vectors.
-     - DyS, HDy, HDx, GHDy, GHDx
-   * - :class:`KDERepresentation`
-     - Per-class multivariate kernel density estimates over posteriors.
-     - KDEyML, KDEyHD, KDEyCS, GKDEyML
-   * - :class:`DistanceRepresentation`
-     - Mean pairwise distances to each class (energy-distance terms).
-     - EDy, EDx
-   * - :class:`KernelMeanRepresentation`
-     - Mean embedding of a sample in an RKHS.
-     - MMD_RKHS
-   * - :class:`PredictionRepresentation`
-     - Mean posterior (soft) or class-frequency (hard) vectors.
-     - GACC, GPACC, FM
-   * - :class:`HardPredictionRepresentation`, :class:`SoftPredictionRepresentation`
-     - Fixed hard / soft variants of the above.
-     - compose-based matching
+.. contents:: Contents
+   :local:
+   :depth: 1
 
-:class:`BaseRepresentation` defines the common ``fit`` / ``transform`` interface;
-custom representations subclass it.
+----
 
-Choosing a representation
-=========================
+Histogram representation
+========================
 
-- **Histogram** is cheap and interpretable but bin-sensitive, and degrades on the
-  high-dimensional posterior simplex; prefer it for binary score matching.
-- **KDE** replaces bins with smooth densities and scales to several classes.
-- **Distance** and **kernel mean** are bin-free sample-matching descriptors used
-  by the energy-distance and MMD methods.
-- **Prediction** descriptors feed the constrained-regression counting methods.
-
-Histogram parameters, visually
-==============================
-
-The :class:`HistogramRepresentation` is the most widely used representation, and
-its two most important parameters — ``bins`` and ``bin_edges`` — are easiest to
-understand by seeing the descriptor they produce.
+:class:`HistogramRepresentation` bins the classifier scores (or features) and
+stores one normalised histogram per class. It is the most widely used
+representation, and its two most important parameters — ``bins`` and
+``bin_edges`` — are easiest to understand by seeing the descriptor they produce.
 
 **``bins`` — resolution.** ``bins`` sets how many intervals the score range is
 split into. Few bins give a coarse, stable summary; many bins capture fine
-structure but need more data to fill each bin reliably. The plot below shows the
-same score distribution summarised at three resolutions.
+structure but need more data to fill each bin reliably.
 
 .. plot::
    :caption: More ``bins`` means a finer (but noisier) summary of the same scores.
@@ -180,23 +152,21 @@ alike (hard), regardless of how the bins are configured.
    axes[0].legend(fontsize=8)
    fig.tight_layout()
 
-In quantification terms, a representation that wastes bins throws away resolution
-exactly where these per-class distributions differ, so ``'auto'`` edges (or a
-sensible ``range``) and a modest ``bins`` count usually give the most
-discriminative descriptor. The remaining parameters are minor: for a single score
-``mode='onehot'`` yields essentially the same per-bin vector as the default
-``'histogram'``; ``laplace_smoothing=True`` adds a small floor that removes empty
-bins (stabilising ratio- and log-based distances such as Hellinger); and
-``features`` selects which columns are histogrammed.
+The remaining parameters are minor: for a single score ``mode='onehot'`` yields
+essentially the same per-bin vector as the default ``'histogram'``;
+``laplace_smoothing=True`` adds a small floor that removes empty bins (stabilising
+ratio- and log-based distances such as Hellinger); and ``features`` selects which
+columns are histogrammed.
 
-Other representations, visually
-===============================
+----
 
-**KDE — the ``bandwidth`` parameter.** :class:`KDERepresentation` replaces the
-bins with a smooth per-class density. ``bandwidth`` is its key control: too small
-and each class density spikes on its training points (over-fitting); too large
-and the class densities blur together, erasing the separation the quantifier
-relies on.
+Density (KDE) representation
+============================
+
+:class:`KDERepresentation` replaces the bins with a smooth per-class kernel
+density over the posteriors. ``bandwidth`` is its key control: too small and each
+class density spikes on its training points (over-fitting); too large and the
+class densities blur together, erasing the separation the quantifier relies on.
 
 .. plot::
    :caption: ``bandwidth`` trades off over-fitting (left) against over-smoothing (right).
@@ -224,11 +194,99 @@ relies on.
    axes[0].legend(fontsize=8)
    fig.tight_layout()
 
-**Prediction — ``method='soft'`` vs ``'hard'``.**
+Unlike histograms, the KDE is smooth and multivariate, so it scales to several
+classes on the posterior simplex where bin-based representations fragment.
+
+----
+
+Distance representation
+=======================
+
+:class:`DistanceRepresentation` summarises a sample by its **mean distance to
+each class**, producing one ``(n_classes,)`` descriptor. It carries no per-bin
+shape, but it discriminates because a sample sits closer (on average) to its own
+class — these distances are the terms of the energy-distance objective.
+
+.. plot::
+   :caption: The descriptor is a sample's mean distance to each class — smallest to its own.
+
+   import numpy as np
+   import matplotlib.pyplot as plt
+   from mlquantify.representations import DistanceRepresentation
+
+   rng = np.random.default_rng(0)
+   X0 = rng.normal(-1.3, 0.8, (300, 6))
+   X1 = rng.normal(1.3, 0.8, (300, 6))
+   X = np.vstack([X0, X1])
+   y = np.r_[np.zeros(300), np.ones(300)].astype(int)
+
+   rep = DistanceRepresentation().fit(X, y)
+   d0 = np.asarray(rep.transform(X[y == 0]), float)   # sample drawn from class 0
+   d1 = np.asarray(rep.transform(X[y == 1]), float)   # sample drawn from class 1
+
+   x = np.arange(2)
+   fig, ax = plt.subplots(figsize=(5.6, 3))
+   ax.bar(x - 0.19, d0, width=0.38, color="#4477aa", label="sample from class 0")
+   ax.bar(x + 0.19, d1, width=0.38, color="#cc6677", label="sample from class 1")
+   ax.set_xticks(x)
+   ax.set_xticklabels(["mean dist to class 0", "mean dist to class 1"])
+   ax.set_ylabel("mean distance")
+   ax.legend(fontsize=8)
+   fig.tight_layout()
+
+The ``metric`` parameter sets the ground distance (Euclidean, Manhattan, ...).
+
+----
+
+Kernel mean representation
+==========================
+
+:class:`KernelMeanRepresentation` embeds a whole sample as a single point — its
+**mean embedding** in a reproducing-kernel Hilbert space (the mean feature vector
+under a linear kernel). Each class is summarised by its mean embedding, and MMD
+matches the test embedding to a mixture of the class embeddings.
+
+.. plot::
+   :caption: Each class is one mean-embedding vector; MMD matches the test mixture to these.
+
+   import numpy as np
+   import matplotlib.pyplot as plt
+   from mlquantify.representations import KernelMeanRepresentation
+
+   rng = np.random.default_rng(0)
+   X0 = rng.normal(-1.3, 0.8, (300, 6))
+   X1 = rng.normal(1.3, 0.8, (300, 6))
+   X = np.vstack([X0, X1])
+   y = np.r_[np.zeros(300), np.ones(300)].astype(int)
+
+   rep = KernelMeanRepresentation(kernel="linear").fit(X, y)
+   e0 = np.asarray(rep.transform(X[y == 0]), float)   # class-0 mean embedding
+   e1 = np.asarray(rep.transform(X[y == 1]), float)
+
+   feat = np.arange(len(e0))
+   fig, ax = plt.subplots(figsize=(6.2, 3))
+   ax.bar(feat - 0.19, e0, width=0.38, color="#4477aa", label="negative class")
+   ax.bar(feat + 0.19, e1, width=0.38, color="#cc6677", label="positive class")
+   ax.set_xticks(feat)
+   ax.set_xticklabels([f"f{i}" for i in feat])
+   ax.set_xlabel("feature")
+   ax.set_ylabel("mean embedding")
+   ax.legend(fontsize=8)
+   fig.tight_layout()
+
+The ``kernel`` / ``gamma`` parameters choose the RKHS (an ``'rbf'`` kernel makes
+the matching universal, capturing all moments rather than just the mean).
+
+----
+
+Prediction representation
+=========================
+
 :class:`PredictionRepresentation` summarises classifier outputs as either the
-mean posterior (``'soft'``) or the class-frequency of the argmax labels
-(``'hard'``, i.e. Classify-and-Count). The hard descriptor discards confidence
-and is more peaked toward the majority predicted class.
+mean posterior (``method='soft'``) or the class-frequency of the argmax labels
+(``method='hard'``, i.e. Classify-and-Count). The hard descriptor discards
+confidence and is more peaked toward the majority predicted class. These
+descriptors feed the constrained-regression counting methods.
 
 .. plot::
    :caption: ``'soft'`` keeps the posterior mass; ``'hard'`` collapses it to argmax counts.
@@ -255,16 +313,55 @@ and is more peaked toward the majority predicted class.
    ax.legend(fontsize=8)
    fig.tight_layout()
 
-The :class:`DistanceRepresentation` and :class:`KernelMeanRepresentation` instead
-summarise a whole sample as a single compact vector (mean distances to each class,
-or an RKHS mean embedding); they carry no per-bin shape to plot, but are tuned
-through their ``metric`` and ``kernel`` / ``gamma`` parameters respectively.
+:class:`HardPredictionRepresentation` and :class:`SoftPredictionRepresentation`
+are the fixed-mode variants.
 
-Used by
-=======
+.. _choosing-a-representation:
 
-The representation is the first element of the ``(representation, loss, solver)``
-triple that defines a matching quantifier; see :ref:`distribution_matching`.
+----
+
+Summary and how to choose
+=========================
+
+.. list-table::
+   :widths: 26 36 22 16
+   :header-rows: 1
+
+   * - Representation
+     - What it computes
+     - Used by
+     - Tuned by
+   * - :class:`HistogramRepresentation`
+     - Per-class binned probability-mass vectors of the scores.
+     - DyS, HDy, HDx, GHDy, GHDx
+     - ``bins``, ``bin_edges``
+   * - :class:`KDERepresentation`
+     - Per-class smooth multivariate densities over posteriors.
+     - KDEyML, KDEyHD, KDEyCS, GKDEyML
+     - ``bandwidth``, ``kernel``
+   * - :class:`DistanceRepresentation`
+     - Mean distance to each class (energy-distance terms).
+     - EDy, EDx
+     - ``metric``
+   * - :class:`KernelMeanRepresentation`
+     - Mean embedding of a sample in an RKHS.
+     - MMD_RKHS
+     - ``kernel``, ``gamma``
+   * - :class:`PredictionRepresentation`
+     - Mean posterior (soft) or class-frequency (hard) vector.
+     - GACC, GPACC, FM
+     - ``method``
+
+**Choosing one:**
+
+- **Histogram** — cheap and interpretable, but bin-sensitive and degrades on the
+  high-dimensional posterior simplex; prefer it for binary score matching.
+- **KDE** — replaces bins with smooth densities and scales to several classes;
+  use it for multiclass density matching.
+- **Distance** and **kernel mean** — bin-free descriptors that summarise a whole
+  sample as a compact vector, used by the energy-distance and MMD methods.
+- **Prediction** — the soft/hard descriptors that feed the constrained-regression
+  counting methods.
 
 Example
 =======

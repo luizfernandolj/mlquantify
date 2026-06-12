@@ -1,7 +1,7 @@
 """Pure-Python reference for the histogram distribution-matching kernel.
 
 This is the correctness oracle and the fallback used when the compiled
-``_matching_fast`` extension is not available. It reproduces, in numpy, exactly
+``_histogram_sweep`` extension is not available. It reproduces, in numpy, exactly
 what the ``DistanceLoss(normalize=True)`` + ternary-search path computes:
 
     alpha* = argmin_alpha  distance( normalize((1-a)*neg + a*pos), normalize(test) )
