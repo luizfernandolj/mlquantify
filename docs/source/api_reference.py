@@ -64,7 +64,11 @@ API_REFERENCE = {
                 "title": None,
                 "autosummary": [
                     "binary_quantifier",
-                    "BinaryQuantifier"
+                    "BinaryQuantifier",
+                    "MulticlassStrategy",
+                    "register_strategy",
+                    "get_strategy",
+                    "available_strategies",
                 ],
             }
         ],

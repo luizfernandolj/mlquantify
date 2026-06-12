@@ -26,3 +26,7 @@ mlquantify.multiclass
 
   binary_quantifier
   BinaryQuantifier
+  MulticlassStrategy
+  register_strategy
+  get_strategy
+  available_strategies

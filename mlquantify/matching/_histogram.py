@@ -12,6 +12,19 @@ from mlquantify.multiclass import binary_quantifier
 from mlquantify.utils._constraints import Options
 from mlquantify.utils._validation import validate_data
 from mlquantify.solvers import minimize_prevalence, minimize_prevalence_blocks
+from mlquantify.matching._matching_py import METRIC_IDS, match_sweep as _match_sweep_py
+
+# Optional compiled acceleration for the binary histogram sweep. Falls back to
+# the pure-Python reference when the extension is not built.
+try:
+    from mlquantify.matching._matching_fast import match_sweep as _match_sweep
+    _HAS_FAST_KERNEL = True
+except ImportError:  # pragma: no cover - source install without a compiler
+    _match_sweep = _match_sweep_py
+    _HAS_FAST_KERNEL = False
+
+#: Toggle the compiled/py sweep kernel (set False to force the generic solver).
+USE_SWEEP_KERNEL = True
 
 
 @binary_quantifier(strategy_attr="strategy")
@@ -96,6 +109,13 @@ class MatchingHistogramQuantifier(BaseMatchingQuantifier):
         )
 
     def _solve_prevalence(self, test_representation, train_representations):
+        alpha = self._fast_sweep_alpha(test_representation, train_representations)
+        if alpha is not None:
+            prevalence = np.asarray([1.0 - alpha, alpha])
+            mixture = self._mixture(np.asarray(train_representations), prevalence)
+            distance = self.loss_function(mixture, test_representation)
+            return prevalence, distance
+
         solver = self._resolve_solver()
 
         if self.bin_strategy in {"median", "mean"}:
@@ -117,6 +137,47 @@ class MatchingHistogramQuantifier(BaseMatchingQuantifier):
             n_classes=2,
             solver=solver,
         )
+
+    def _fast_sweep_alpha(self, test_representation, train_representations):
+        """Positive-class ``alpha`` via the compiled sweep kernel.
+
+        Returns ``None`` (so the caller uses the generic solver) when the
+        distance is not one of the kernel's metrics, the kernel is disabled, or
+        the representation is not binary.
+        """
+        metric_id = METRIC_IDS.get(self.distance)
+        if metric_id is None or not USE_SWEEP_KERNEL:
+            return None
+
+        # map the effective solver to the kernel's search mode; the scipy
+        # "bounded" solver is not replicated, so defer to the generic path.
+        resolved = self._resolve_solver()
+        if resolved == "ternary":
+            mode = 0
+        elif resolved == "grid":
+            mode = 1
+        else:
+            return None
+
+        train = np.ascontiguousarray(train_representations, dtype=np.float64)
+        if train.ndim != 2 or train.shape[0] != 2:
+            return None
+
+        test = np.ascontiguousarray(test_representation, dtype=np.float64)
+        neg = np.ascontiguousarray(train[0])
+        pos = np.ascontiguousarray(train[1])
+
+        if self.bin_strategy in {"median", "mean"}:
+            alphas = [
+                _match_sweep(np.ascontiguousarray(neg[sl]),
+                             np.ascontiguousarray(pos[sl]),
+                             np.ascontiguousarray(test[sl]), metric_id, mode)
+                for sl in self._get_block_slices()
+            ]
+            agg = np.median(alphas) if self.bin_strategy == "median" else np.mean(alphas)
+            return float(agg)
+
+        return float(_match_sweep(neg, pos, test, metric_id, mode))
 
     def _resolve_solver(self):
         if self.solver != "auto":
