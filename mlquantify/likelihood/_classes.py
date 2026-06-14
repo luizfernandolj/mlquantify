@@ -8,7 +8,7 @@ from mlquantify.base_aggregative import (
     get_aggregation_requirements,
 )
 from mlquantify.metrics._slq import MAE
-from mlquantify.utils import _fit_context, validate_data, check_classes_attribute, validate_predictions, validate_prevalences
+from mlquantify.utils import _fit_context, validate_data, check_classes_attribute, resolve_aggregate_classes, validate_predictions, validate_prevalences
 from mlquantify.utils._constraints import (
     Interval,
     CallableConstraint,
@@ -243,6 +243,7 @@ class EMQ(BaseLikelihoodQuantifier):
         predictions,
         train_predictions=None,
         train_labels=None,
+        classes=None,
     ):
         predictions = validate_predictions(self, predictions)
 
@@ -252,7 +253,7 @@ class EMQ(BaseLikelihoodQuantifier):
         if train_labels is None:
             train_labels = self.train_labels_
 
-        self.classes_ = check_classes_attribute(self, np.unique(train_labels))
+        self.classes_ = resolve_aggregate_classes(self, classes, train_labels)
         self.priors_ = self._compute_priors(train_labels)
 
         calibrated_predictions = self._maybe_calibrate(
@@ -479,13 +480,14 @@ class CDE(BaseLikelihoodQuantifier):
         predictions,
         train_predictions=None,
         train_labels=None,
+        classes=None,
     ):
         predictions = validate_predictions(self, predictions)
 
         if train_labels is None:
             train_labels = self.train_labels_
 
-        self.classes_ = check_classes_attribute(self, np.unique(train_labels))
+        self.classes_ = resolve_aggregate_classes(self, classes, train_labels)
 
         if hasattr(self, "priors_"):
             priors = np.asarray(self.priors_, dtype=np.float64)

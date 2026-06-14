@@ -135,7 +135,7 @@ class ThresholdAdjustment(SoftPredictionMixin, BaseAdjustCount):
         threshold, tpr, fpr = self.get_best_threshold(thresholds, tprs, fprs)
 
         with config_context(prevalence_return_type="array"):
-            cc_predictions = CC(threshold=threshold).aggregate(predictions, y_train)
+            cc_predictions = CC(threshold=threshold).aggregate(predictions, classes=np.unique(y_train))
         cc_predictions = cc_predictions[1]
 
         if tpr - fpr == 0:

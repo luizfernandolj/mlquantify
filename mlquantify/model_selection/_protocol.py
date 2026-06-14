@@ -11,6 +11,7 @@ from mlquantify.utils._sampling import (
     simplex_grid_sampling,
     simplex_uniform_kraemer,
     simplex_uniform_sampling,
+    simplex_dirichlet_sampling,
 )
 from mlquantify.utils._random import check_random_state
 from mlquantify.utils._validation import validate_data
@@ -123,16 +124,19 @@ class BaseProtocol(ProtocolMixin, BaseQuantifier):
 class APP(BaseProtocol):
     r"""Artificial Prevalence Protocol (APP).
 
-    Generates evaluation batches with artificially imposed prevalences sampled
-    on a regular grid over the probability simplex within ``[min_prev, max_prev]``.
-    Covers all combinations of prevalence levels for comprehensive evaluation.
+    Generates evaluation batches with artificially imposed prevalences drawn
+    from the probability simplex within ``[min_prev, max_prev]``, covering a
+    range of prevalence levels for comprehensive evaluation. The way the
+    prevalence points are produced is controlled by the ``strategy`` parameter.
 
     Parameters
     ----------
     batch_size : int or list of int
         Size(s) of the evaluation batches.
     n_prevalences : int
-        Number of prevalence grid points per class dimension.
+        Number of prevalence points. For ``strategy='grid'`` this is the number
+        of grid points *per class dimension*; for the sampling strategies it is
+        the number of prevalence vectors drawn from the simplex.
     repeats : int, default=1
         Number of repetitions for each prevalence combination.
     random_state : int or None, default=None
@@ -141,6 +145,33 @@ class APP(BaseProtocol):
         Minimum class prevalence.
     max_prev : float, default=1.0
         Maximum class prevalence.
+    strategy : {'grid', 'kraemer', 'uniform', 'dirichlet'}, default='grid'
+        How prevalence vectors are generated over the simplex:
+
+        - ``'grid'`` — a regular lattice of evenly-spaced prevalences from
+          ``min_prev`` to ``max_prev`` (the classic APP). Deterministic and
+          gives systematic coverage, but the number of points grows
+          combinatorially (:math:`O(n^{k-1})` for ``k`` classes), so it is best
+          for the binary / low-class-count case.
+        - ``'kraemer'`` — the Kraemer method for *uniform* sampling over the
+          simplex. Every prevalence combination is equally likely and the cost
+          is independent of the number of classes, making it well suited to
+          multiclass problems where a grid would explode.
+        - ``'uniform'`` — uniform sampling over the simplex via the flat
+          Dirichlet distribution :math:`\mathrm{Dir}(\mathbf{1})`. Statistically
+          equivalent to ``'kraemer'`` (uniform coverage) but produced through
+          the Dirichlet route; it is exactly ``'dirichlet'`` with
+          ``dirichlet_alpha=1``.
+        - ``'dirichlet'`` — sampling from a Dirichlet distribution whose
+          concentration is set by ``dirichlet_alpha``. Use this to *bias* the
+          sampling: ``alpha > 1`` favours balanced prevalences near the centre
+          of the simplex, while ``alpha < 1`` favours extreme,
+          one-class-dominant prevalences near the corners.
+    dirichlet_alpha : float or array-like, default=1.0
+        Concentration parameter used when ``strategy='dirichlet'``. A scalar is
+        broadcast to a symmetric Dirichlet over all classes; an array of length
+        ``n_classes`` sets a per-class concentration. Ignored by the other
+        strategies (``'uniform'`` always uses ``1.0``).
 
     Attributes
     ----------
@@ -149,8 +180,8 @@ class APP(BaseProtocol):
 
     Notes
     -----
-    For multiclass problems the grid grows combinatorially; prefer :class:`UPP`
-    for large class counts.
+    For multiclass problems the ``'grid'`` strategy grows combinatorially;
+    prefer a sampling strategy (or :class:`UPP`) for large class counts.
 
     Examples
     --------
@@ -172,34 +203,59 @@ class APP(BaseProtocol):
                Evaluation of Machine Learning Approaches for Quantification.
                *ArXiv preprint*.
     """
-    
+
     _parameter_constraints = {
         "n_prevalences": [Interval(left=1, right=None, discrete=True)],
         "repeats": [Interval(left=1, right=None, discrete=True)],
         "min_prev": [Interval(left=0.0, right=1.0)],
-        "max_prev": [Interval(left=0.0, right=1.0)]
+        "max_prev": [Interval(left=0.0, right=1.0)],
+        "strategy": [Options(['grid', 'kraemer', 'uniform', 'dirichlet'])],
     }
 
-    def __init__(self, batch_size, n_prevalences, repeats=1, random_state=None, min_prev=0.0, max_prev=1.0):
-        super().__init__(batch_size=batch_size, 
+    def __init__(self, batch_size, n_prevalences, repeats=1, random_state=None,
+                 min_prev=0.0, max_prev=1.0, strategy='grid', dirichlet_alpha=1.0):
+        super().__init__(batch_size=batch_size,
                             random_state=random_state,
-                            n_prevalences=n_prevalences, 
+                            n_prevalences=n_prevalences,
                             repeats=repeats)
         self.min_prev = min_prev
         self.max_prev = max_prev
+        self.strategy = strategy
+        self.dirichlet_alpha = dirichlet_alpha
+
+    def _sample_prevalences(self, n_dim, rng):
+        """Generate prevalence vectors for one batch according to ``strategy``."""
+        if self.strategy == 'grid':
+            return simplex_grid_sampling(n_dim=n_dim,
+                                         n_prev=self.n_prevalences,
+                                         n_iter=self.repeats,
+                                         min_val=self.min_prev,
+                                         max_val=self.max_prev)
+        if self.strategy == 'kraemer':
+            return simplex_uniform_kraemer(n_dim=n_dim,
+                                           n_prev=self.n_prevalences,
+                                           n_iter=self.repeats,
+                                           min_val=self.min_prev,
+                                           max_val=self.max_prev,
+                                           random_state=rng)
+        # 'uniform' is the flat Dirichlet; 'dirichlet' uses dirichlet_alpha.
+        alpha = 1.0 if self.strategy == 'uniform' else self.dirichlet_alpha
+        return simplex_dirichlet_sampling(n_dim=n_dim,
+                                          n_prev=self.n_prevalences,
+                                          n_iter=self.repeats,
+                                          alpha=alpha,
+                                          min_val=self.min_prev,
+                                          max_val=self.max_prev,
+                                          random_state=rng)
 
     def _iter_indices(self, X: np.ndarray, y: np.ndarray):
-        
+
         n_dim = len(np.unique(y))
 
         rng = check_random_state(self.random_state)
-        
+
         for batch_size in self.batch_size:
-            prevalences = simplex_grid_sampling(n_dim=n_dim,
-                                              n_prev=self.n_prevalences,
-                                              n_iter=self.repeats,
-                                              min_val=self.min_prev,
-                                              max_val=self.max_prev)
+            prevalences = self._sample_prevalences(n_dim, rng)
             for prev in prevalences:
                 indexes = get_indexes_with_prevalence(y, prev, batch_size, random_state=rng)
                 yield indexes
@@ -258,12 +314,14 @@ class NPP(BaseProtocol):
                     yield idx
             
 
-class UPP(BaseProtocol):
+class UPP(APP):
     r"""Uniform Prevalence Protocol (UPP).
 
-    Similar to :class:`APP`, but samples prevalences uniformly over the
-    probability simplex rather than on a regular grid, avoiding bias towards
-    the simplex corners. Supports Kraemer or uniform simplex sampling.
+    A thin specialisation of :class:`APP` that samples prevalences *uniformly*
+    over the probability simplex rather than on a regular grid, avoiding the
+    combinatorial blow-up of a grid for multiclass problems. It is exactly
+    :class:`APP` with the simplex sampling ``strategy`` pinned on (``'kraemer'``
+    by default).
 
     Parameters
     ----------
@@ -279,9 +337,16 @@ class UPP(BaseProtocol):
         Minimum class prevalence.
     max_prev : float, default=1.0
         Maximum class prevalence.
-    algorithm : {'kraemer', 'uniform'}, default='kraemer'
-        Simplex sampling algorithm. ``'kraemer'`` uses the Kraemer method;
-        ``'uniform'`` uses uniform Dirichlet sampling.
+    strategy : {'kraemer', 'uniform', 'dirichlet'}, default='kraemer'
+        Simplex sampling strategy, forwarded to :class:`APP`. ``'grid'`` is not
+        meaningful for UPP. See :class:`APP` for a description of each strategy.
+    dirichlet_alpha : float or array-like, default=1.0
+        Concentration parameter used when ``strategy='dirichlet'``; see
+        :class:`APP`.
+    algorithm : {'kraemer', 'uniform'}, optional
+        .. deprecated::
+            Use ``strategy`` instead. When given, its value is used as
+            ``strategy`` for backward compatibility.
 
     Attributes
     ----------
@@ -298,55 +363,39 @@ class UPP(BaseProtocol):
     >>> len(batches)
     5
     """
-    
+
     _parameter_constraints = {
         "n_prevalences": [Interval(left=1, right=None, discrete=True)],
         "repeats": [Interval(left=1, right=None, discrete=True)],
         "min_prev": [Interval(left=0.0, right=1.0)],
         "max_prev": [Interval(left=0.0, right=1.0)],
-        "algorithm": [Options(['kraemer', 'uniform'])]
+        "strategy": [Options(['kraemer', 'uniform', 'dirichlet'])],
     }
 
-    def __init__(self, 
-                 batch_size, 
-                 n_prevalences, 
-                 repeats=1, 
-                 random_state=None, 
-                 min_prev=0.0, 
+    def __init__(self,
+                 batch_size,
+                 n_prevalences,
+                 repeats=1,
+                 random_state=None,
+                 min_prev=0.0,
                  max_prev=1.0,
-                 algorithm='kraemer'):
-        super().__init__(batch_size=batch_size, 
-                            random_state=random_state,
-                            n_prevalences=n_prevalences, 
-                            repeats=repeats)
-        self.min_prev = min_prev
-        self.max_prev = max_prev
-        self.algorithm = algorithm
-
-    def _iter_indices(self, X: np.ndarray, y: np.ndarray):
-        
-        n_dim = len(np.unique(y))
-
-        rng = check_random_state(self.random_state)
-        
-        for batch_size in self.batch_size:
-            if self.algorithm == 'kraemer':
-                prevalences = simplex_uniform_kraemer(n_dim=n_dim,
-                                           n_prev=self.n_prevalences,
-                                           n_iter=self.repeats,
-                                           min_val=self.min_prev,
-                                           max_val=self.max_prev,
-                                           random_state=rng)
-            elif self.algorithm == 'uniform':
-                prevalences = simplex_uniform_sampling(n_dim=n_dim,
-                                              n_prev=self.n_prevalences,
-                                              n_iter=self.repeats,
-                                              min_val=self.min_prev,
-                                              max_val=self.max_prev,
-                                              random_state=rng)
-            for prev in prevalences:
-                indexes = get_indexes_with_prevalence(y, prev, batch_size, random_state=rng)
-                yield indexes
+                 strategy='kraemer',
+                 dirichlet_alpha=1.0,
+                 algorithm=None):
+        if algorithm is not None:
+            warning(
+                "The 'algorithm' parameter of UPP is deprecated; use 'strategy' "
+                "instead."
+            )
+            strategy = algorithm
+        super().__init__(batch_size=batch_size,
+                         n_prevalences=n_prevalences,
+                         repeats=repeats,
+                         random_state=random_state,
+                         min_prev=min_prev,
+                         max_prev=max_prev,
+                         strategy=strategy,
+                         dirichlet_alpha=dirichlet_alpha)
 
 
 class PPP(BaseProtocol):
@@ -460,11 +509,15 @@ def _build_protocol(protocol, batch_size, n_prevalences, repeats,
     if name == "app":
         return APP(batch_size=batch_size, n_prevalences=n_prevalences,
                    repeats=repeats, random_state=random_state,
-                   **{k: params[k] for k in ("min_prev", "max_prev") if k in params})
+                   **{k: params[k] for k in
+                      ("min_prev", "max_prev", "strategy", "dirichlet_alpha")
+                      if k in params})
     if name == "upp":
         return UPP(batch_size=batch_size, n_prevalences=n_prevalences,
                    repeats=repeats, random_state=random_state,
-                   **{k: params[k] for k in ("min_prev", "max_prev", "algorithm")
+                   **{k: params[k] for k in
+                      ("min_prev", "max_prev", "strategy", "dirichlet_alpha",
+                       "algorithm")
                       if k in params})
     if name == "npp":
         return NPP(batch_size=batch_size,
@@ -573,8 +626,8 @@ def apply_protocol(
         Print the number of samples generated.
     **protocol_params : dict
         Extra protocol arguments forwarded to the constructor (e.g.
-        ``min_prev``, ``max_prev``, ``algorithm`` for UPP, ``prevalences`` for
-        PPP).
+        ``min_prev``, ``max_prev``, ``strategy`` and ``dirichlet_alpha`` for
+        APP/UPP, ``prevalences`` for PPP).
 
     Returns
     -------

@@ -450,18 +450,57 @@ def check_has_method(obj: Any, method_name: str) -> bool:
 
 def check_classes_attribute(quantifier: Any, classes) -> bool:
     """Check if the quantifier has a 'classes_' attribute and if it matches the type of classes."""
-    
+
     if not hasattr(quantifier, "classes_"):
         return classes
-    
+
     quantifier_classes = quantifier.classes_
-    
+
     # Check if types match
     if type(quantifier_classes) != type(classes):
         return classes
-    
+
     # Check if shapes match before comparing elements
     if len(quantifier_classes) != len(classes) or not np.all(quantifier_classes == classes):
         return classes
     return quantifier_classes
-    
+
+
+def resolve_aggregate_classes(quantifier, classes=None, *fallbacks):
+    """Resolve the ordered class set an ``aggregate`` call should report.
+
+    The output prevalence vector always spans these classes, so a class that is
+    absent from the predictions still appears (with prevalence 0).
+
+    The first non-empty candidate is used, in order: the explicit ``classes``
+    argument, then each value in ``fallbacks`` (e.g. the training labels, the
+    fitted ``classes_``, or the test predictions). The chosen candidate is
+    reduced to its sorted unique values and reconciled with any existing
+    ``classes_`` via :func:`check_classes_attribute`.
+
+    Parameters
+    ----------
+    quantifier : object
+        The quantifier whose ``classes_`` is being resolved.
+    classes : array-like or None, default=None
+        Explicit class set requested by the caller. Takes precedence.
+    *fallbacks : array-like or None
+        Ordered fallbacks used when ``classes`` is ``None``.
+
+    Returns
+    -------
+    np.ndarray
+        The resolved, sorted unique class labels.
+    """
+    for candidate in (classes, *fallbacks):
+        if candidate is None:
+            continue
+        candidate = np.asarray(candidate)
+        if candidate.size == 0:
+            continue
+        return check_classes_attribute(quantifier, np.unique(candidate))
+    raise InvalidParameterError(
+        f"{quantifier.__class__.__name__}.aggregate could not determine the "
+        "class set: pass `classes=` or fit the quantifier first."
+    )
+

@@ -27,6 +27,20 @@ a full **documentation standardisation** across every module.
   live in a registry. Add custom decompositions (ECOC, hierarchical, …) with
   `@register_strategy(...)` on a `MulticlassStrategy` subclass; inspect them with
   `available_strategies()`. No change to the dispatch is required.
+- **`strategy` parameter on `APP`** (`model_selection`) — the way prevalences are
+  sampled over the simplex is now selectable: `'grid'` (the classic evenly-spaced
+  lattice), `'kraemer'` (uniform Kraemer sampling), `'uniform'` (flat Dirichlet), or
+  `'dirichlet'` (biased by a new `dirichlet_alpha` concentration: `<1` favours
+  extreme, one-class-dominant prevalences, `>1` balanced ones). `UPP` is now a thin
+  `APP` subclass with the strategy pinned to `'kraemer'`; its old `algorithm=`
+  argument is kept as a **deprecated** alias for `strategy`.
+- **`simplex_dirichlet_sampling`** (`utils`) — new Dirichlet sampler over the simplex
+  with a tunable `alpha` concentration. `simplex_uniform_sampling` is now a thin
+  `alpha=1` wrapper around it.
+- **`classes` argument on `aggregate`** — every aggregative quantifier's `aggregate`
+  accepts an optional `classes=` listing the class set the output must report, so a
+  class absent from the predictions still appears (with prevalence 0). Defaults to
+  `None` (inferred as before).
 
 ### Performance
 
@@ -48,6 +62,11 @@ a full **documentation standardisation** across every module.
   the **training prevalence** for any test set (previously it responded to the test
   set, contradicting the docs). Use `EMQ` for the non-trivial maximum-likelihood
   estimator.
+- **`CC`/`PCC` `aggregate` signature** — the `y_train` argument (which only supplied
+  the class set) is replaced by `classes`. On the predict path they now report the
+  classes seen at `fit`, and their `requires_train_labels` tag is `False`. Callers
+  passing `y_train=` positionally are unaffected (it maps to `classes`); update
+  `y_train=` keyword calls to `classes=`.
 
 ### Fixes
 
@@ -59,6 +78,13 @@ a full **documentation standardisation** across every module.
   (`distance`, `solver`, `bin_strategy`, `laplace_smoothing`).
 - `QuaDapt` reference corrected to the LeQua 2025 paper.
 - Added the missing `ACC` entry to the API reference.
+- **`CC.aggregate` on multiclass data** no longer shrinks `classes_` to the classes
+  present in a single batch's predictions. This previously produced ragged
+  prevalence vectors and crashed `apply_protocol` (and `UPP`/sampled-prevalence
+  protocols) on multiclass problems; absent classes now correctly report 0.
+- **`simplex_uniform_sampling`** now respects `random_state` — it previously drew
+  from the global NumPy RNG and ignored the seed, making "uniform" UPP runs
+  non-reproducible.
 
 ### Documentation
 
@@ -75,6 +101,9 @@ a full **documentation standardisation** across every module.
   `bandwidth`, Prediction soft-vs-hard, and the EMQ optimisation).
 - Removed duplicated content and fixed heading-level nesting in several guide pages;
   suppressed benign `ref.citation` build warnings.
+- Rewrote the **Protocols** guide's `APP`/`UPP` parameter tables to document the new
+  `strategy`/`dirichlet_alpha` options (grid vs Kraemer vs uniform vs Dirichlet), and
+  added `simplex_dirichlet_sampling` to the API reference.
 
 ### Build & Packaging
 

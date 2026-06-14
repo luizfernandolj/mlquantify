@@ -599,7 +599,9 @@ class QuaNet(SoftPredictionMixin, AggregativeMixin, BaseQuantifier):
             elif requirements.requires_train_labels:
                 prev = qtf.aggregate(posteriors, y_train)
             else:
-                prev = qtf.aggregate(posteriors)
+                # CC/PCC-style quantifiers self-source their classes; pass them
+                # explicitly so absent classes still appear in the estimate.
+                prev = qtf.aggregate(posteriors, classes=np.unique(y_train))
 
             qtf_estims.extend(np.asarray(list(prev.values())))
 

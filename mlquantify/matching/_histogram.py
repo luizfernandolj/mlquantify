@@ -12,7 +12,7 @@ from mlquantify.losses import get_loss
 from mlquantify.representations import HistogramRepresentation
 from mlquantify.multiclass import binary_quantifier
 from mlquantify.utils._constraints import Options
-from mlquantify.utils._validation import validate_data
+from mlquantify.utils._validation import validate_data, resolve_aggregate_classes
 from mlquantify.solvers import minimize_prevalence, minimize_prevalence_blocks
 from mlquantify.matching._histogram_sweep_py import METRIC_IDS, match_sweep as _match_sweep_py
 
@@ -406,9 +406,11 @@ class DyS(SoftPredictionMixin, AggregativeMixin, MatchingHistogramQuantifier):
         test_scores = self._predict_estimator(X)
         return self._predict(test_scores)
 
-    def aggregate(self, test_scores, train_scores, y_train):
+    def aggregate(self, test_scores, train_scores, y_train, classes=None):
         if not getattr(self, "_precomputed", False):
             self._fit(train_scores, y_train)
+        if classes is not None:
+            self.classes_ = resolve_aggregate_classes(self, classes, self.classes_)
         return self._predict(test_scores)
 
 
@@ -558,9 +560,11 @@ class HDy(SoftPredictionMixin, AggregativeMixin, MatchingHistogramQuantifier):
         test_scores = self._predict_estimator(X)
         return self._predict(test_scores)
 
-    def aggregate(self, test_scores, train_scores, y_train):
+    def aggregate(self, test_scores, train_scores, y_train, classes=None):
         if not getattr(self, "_precomputed", False):
             self._fit(train_scores, y_train)
+        if classes is not None:
+            self.classes_ = resolve_aggregate_classes(self, classes, self.classes_)
         return self._predict(test_scores)
 
 

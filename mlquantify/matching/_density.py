@@ -7,7 +7,7 @@ from mlquantify.matching._utils import gaussian_kernel
 from mlquantify.solvers import minimize_prevalence
 from mlquantify.utils._constraints import Interval, Options
 from mlquantify.utils._decorators import _fit_context
-from mlquantify.utils._validation import validate_data, validate_prevalences
+from mlquantify.utils._validation import validate_data, validate_prevalences, resolve_aggregate_classes
 from mlquantify.base_aggregative import (
     AggregativeMixin,
     SoftPredictionMixin,
@@ -161,7 +161,7 @@ class KDEyQuantifier(
         test_scores = self._predict_estimator(X)
         return self._predict(test_scores)
 
-    def aggregate(self, test_scores, train_scores=None, y_train=None):
+    def aggregate(self, test_scores, train_scores=None, y_train=None, classes=None):
         if train_scores is not None and y_train is not None:
             self._fit(train_scores, y_train)
 
@@ -170,6 +170,9 @@ class KDEyQuantifier(
                 train_labels=y_train,
                 train_representation=self.tr_representation_,
             )
+
+        if classes is not None:
+            self.classes_ = resolve_aggregate_classes(self, classes, self.classes_)
 
         return self._predict(test_scores)
 

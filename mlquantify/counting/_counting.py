@@ -6,7 +6,7 @@ from mlquantify.base_aggregative import (
 )
 
 from mlquantify.counting._base import BaseCount
-from mlquantify.utils._validation import validate_predictions, validate_prevalences, check_classes_attribute
+from mlquantify.utils._validation import validate_predictions, validate_prevalences, check_classes_attribute, resolve_aggregate_classes
 from mlquantify.utils._constraints import Interval
         
 
@@ -59,7 +59,7 @@ class CC(CrispPredictionMixin, BaseCount):
     {0: 0.47, 1: 0.53}
     >>> # call aggregate directly with pre-computed hard predictions
     >>> preds = q.estimator_.predict(X)
-    >>> q.aggregate(preds, y_train=y)
+    >>> q.aggregate(preds, classes=[0, 1])
     {0: 0.47, 1: 0.53}
 
     References
@@ -84,16 +84,21 @@ class CC(CrispPredictionMixin, BaseCount):
         super().__init__(estimator=estimator)
         self.threshold = threshold
 
-    def aggregate(self, predictions, y_train=None):
-        """Aggregate predictions into class prevalence estimates. 
-        
+    def aggregate(self, predictions, classes=None):
+        """Aggregate predictions into class prevalence estimates.
+
         Parameters
         ----------
-        predictions : ndarray of shape (n_samples, n_classes)
-            Estimator predictions on test data. Can be probabilities (n_samples, n_classes) or class labels (n_samples,).
-        y_train : ndarray of shape (n_samples,)
-            True class labels of the training data. None by default.
-        
+        predictions : ndarray of shape (n_samples,) or (n_samples, n_classes)
+            Estimator predictions on test data. Can be probabilities
+            (n_samples, n_classes) or class labels (n_samples,).
+        classes : array-like of shape (n_classes,) or None, default=None
+            Class labels the output must report, in order. When given, every
+            class appears in the result even if absent from ``predictions``
+            (with prevalence 0). When ``None``, the classes seen during ``fit``
+            are used; if the quantifier is unfitted, they are inferred from the
+            predictions.
+
         Returns
         -------
         ndarray of shape (n_classes,)
@@ -108,12 +113,14 @@ class CC(CrispPredictionMixin, BaseCount):
         >>> q.aggregate(predictions)
         {0: 0.51, 1: 0.49}
         """
-        predictions = validate_predictions(self, predictions, self.threshold, y_train)
-        
-        if y_train is None:
-            y_train = np.unique(predictions)
-            
-        self.classes_ = check_classes_attribute(self, np.unique(y_train))
+        # Convert soft scores to crisp labels using the known class set (the
+        # requested ``classes`` or the fitted ``classes_``); only then infer the
+        # output classes, falling back to the crisp predictions when unfitted.
+        label_source = classes if classes is not None else getattr(self, "classes_", None)
+        predictions = validate_predictions(self, predictions, self.threshold, label_source)
+        self.classes_ = resolve_aggregate_classes(
+            self, classes, getattr(self, "classes_", None), predictions
+        )
         class_counts = np.array([np.count_nonzero(predictions == _class) for _class in self.classes_])
         prevalences = class_counts / len(predictions)
 
@@ -182,16 +189,21 @@ class PCC(SoftPredictionMixin, BaseCount):
     def __init__(self, estimator=None):
         super().__init__(estimator=estimator)
 
-    def aggregate(self, predictions, y_train=None):
-        """Aggregate predictions into class prevalence estimates. 
-        
+    def aggregate(self, predictions, classes=None):
+        """Aggregate predictions into class prevalence estimates.
+
         Parameters
         ----------
         predictions : ndarray of shape (n_samples, n_classes)
-            Estimator predictions on test data. Can be probabilities (n_samples, n_classes) or class labels (n_samples,).
-        y_train : ndarray of shape (n_samples,)
-            True class labels of the training data. None by default.
-        
+            Estimator predictions on test data. Can be probabilities
+            (n_samples, n_classes) or class labels (n_samples,).
+        classes : array-like of shape (n_classes,) or None, default=None
+            Class labels the output must report, in order. When given, every
+            class appears in the result even if absent from ``predictions``
+            (with prevalence 0). When ``None``, the classes seen during ``fit``
+            are used; if the quantifier is unfitted, they are inferred from the
+            predictions (categorical) or their width (probabilities).
+
         Returns
         -------
         ndarray of shape (n_classes,)
@@ -207,24 +219,25 @@ class PCC(SoftPredictionMixin, BaseCount):
         {0: 0.50, 1: 0.50}
         """
         predictions = validate_predictions(self, predictions)
-        
+
         # Handle categorical predictions (1D array with class labels)
         if predictions.ndim == 1 and not np.issubdtype(predictions.dtype, (np.floating, np.integer)):
-            if y_train is None:
-                y_values = np.unique(predictions)
-
-            self.classes_ = check_classes_attribute(self, np.unique(y_values))
+            self.classes_ = resolve_aggregate_classes(
+                self, classes, getattr(self, "classes_", None), predictions
+            )
             class_counts = np.array([np.count_nonzero(predictions == _class) for _class in self.classes_])
             prevalences = class_counts / len(predictions)
         else:
-            # Handle probability predictions (2D array or 1D probabilities)
-            if predictions.ndim == 2:
-                self.classes_ = check_classes_attribute(self, np.arange(predictions.shape[1]))
-            else:
-                self.classes_ = check_classes_attribute(self, np.arange(2))
+            # Handle probability predictions (2D array or 1D probabilities).
+            # The column count fixes the number of classes; ``classes`` only
+            # relabels them.
+            width = predictions.shape[1] if predictions.ndim == 2 else 2
+            self.classes_ = resolve_aggregate_classes(
+                self, classes, getattr(self, "classes_", None), np.arange(width)
+            )
             prevalences = np.mean(predictions, axis=0) if predictions.ndim == 2 else predictions.mean()
             if predictions.ndim == 1:
                 prevalences = np.array([1-prevalences, prevalences])
-        
+
         prevalences = validate_prevalences(self, prevalences, self.classes_)
         return prevalences

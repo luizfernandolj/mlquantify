@@ -4,7 +4,7 @@ from sklearn.neighbors import KernelDensity
 
 from mlquantify.utils._decorators import _fit_context
 from mlquantify.base import BaseQuantifier
-from mlquantify.utils import validate_y, validate_predictions, validate_data, check_classes_attribute
+from mlquantify.utils import validate_y, validate_predictions, validate_data, check_classes_attribute, resolve_aggregate_classes
 from mlquantify.base_aggregative import AggregativeMixin, SoftPredictionMixin
 from mlquantify.utils._constraints import Interval, Options
 from mlquantify.utils._validation import validate_prevalences
@@ -134,14 +134,14 @@ class BaseKDE(SoftPredictionMixin, AggregativeMixin, BaseQuantifier):
         predictions = self._predict_estimator(X)
         return self.aggregate(predictions, self.train_predictions, self.y_train)
     
-    def aggregate(self, predictions, train_predictions, y_train):
+    def aggregate(self, predictions, train_predictions, y_train, classes=None):
         predictions = validate_predictions(self, predictions)
-        
+
         if hasattr(self, "classes_") and len(np.unique(y_train)) != len(self.classes_):
             self._precomputed = False
-        
-        self.classes_ = check_classes_attribute(self, np.unique(y_train))
-        
+
+        self.classes_ = resolve_aggregate_classes(self, classes, y_train)
+
         if not self._precomputed:
             self._precompute_training(train_predictions, y_train)
             self._precomputed = True

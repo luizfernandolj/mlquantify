@@ -190,17 +190,110 @@ def simplex_grid_sampling(
 
 
 
+def simplex_dirichlet_sampling(
+    n_dim: int,
+    n_prev: int,
+    n_iter: int,
+    alpha=1.0,
+    min_val: float = 0.0,
+    max_val: float = 1.0,
+    max_tries: int = 1000,
+    random_state: int = None,
+) -> np.ndarray:
+    r"""
+    Sample prevalence vectors from a Dirichlet distribution on the simplex,
+    constrained by ``min_val`` ≤ :math:`p_i` ≤ ``max_val``.
+
+    The concentration parameter ``alpha`` controls how the probability mass is
+    spread over the simplex:
+
+    - ``alpha == 1`` — the flat Dirichlet :math:`\mathrm{Dir}(\mathbf{1})`,
+      i.e. a *uniform* distribution over the simplex (every prevalence
+      combination is equally likely).
+    - ``alpha > 1`` — mass is pulled towards the balanced centre
+      :math:`(1/k, \ldots, 1/k)`; extreme prevalences become rare.
+    - ``alpha < 1`` — mass is pushed towards the corners; near-pure
+      (one-class-dominant) prevalences become common.
+
+    Parameters
+    ----------
+    n_dim : int
+        Number of dimensions (classes).
+    n_prev : int
+        Number of prevalence vectors to generate.
+    n_iter : int
+        Number of repetitions for each generated vector.
+    alpha : float or array-like of shape (n_dim,), default=1.0
+        Dirichlet concentration parameter. A scalar is broadcast to a symmetric
+        Dirichlet over all classes; an array sets a per-class concentration.
+    min_val : float, default=0.0
+        Minimum allowed prevalence for each class.
+    max_val : float, default=1.0
+        Maximum allowed prevalence for each class.
+    max_tries : int, optional
+        Maximum number of sampling iterations to reach the target count.
+    random_state : int, RandomState instance or None, default=None
+        Seed or generator controlling the sampling.
+
+    Returns
+    -------
+    np.ndarray
+        Array of shape (n_prev * n_iter, n_dim) with valid prevalence vectors.
+    """
+    if n_dim < 2:
+        raise ValueError("n_dim must be >= 2.")
+    if min_val * n_dim > 1 or max_val * n_dim < 1:
+        raise ValueError("Invalid min_val/max_val for simplex constraints.")
+
+    rng = check_random_state(random_state)
+
+    alpha = np.broadcast_to(np.asarray(alpha, dtype=float), (n_dim,))
+    if np.any(alpha <= 0):
+        raise ValueError("alpha values must be strictly positive.")
+
+    samples = []
+    collected = 0
+    tries = 0
+
+    while collected < n_prev and tries < max_tries:
+        tries += 1
+        # Generate candidates via the Dirichlet distribution.
+        x = rng.dirichlet(alpha, size=n_prev * 2)
+        # Keep only those respecting the per-class bounds.
+        mask = np.all((x >= min_val) & (x <= max_val), axis=1)
+        valid = x[mask]
+        if valid.size > 0:
+            samples.append(valid)
+            collected += len(valid)
+
+    if not samples:
+        raise RuntimeError(
+            "No valid prevalences found with given constraints. "
+            "Try adjusting min_val/max_val or alpha."
+        )
+
+    result = np.concatenate(samples, axis=0)[:n_prev]
+
+    if n_iter > 1:
+        result = np.repeat(result, n_iter, axis=0)
+
+    return result
+
+
 def simplex_uniform_sampling(
     n_dim: int,
     n_prev: int,
     n_iter: int,
-    min_val: float,
-    max_val: float,
+    min_val: float = 0.0,
+    max_val: float = 1.0,
     random_state: int = None
 ) -> np.ndarray:
     """
     Generates uniformly distributed prevalence vectors within the simplex,
     constrained by min_val ≤ p_i ≤ max_val.
+
+    Thin wrapper around :func:`simplex_dirichlet_sampling` with a flat
+    concentration (``alpha=1``), which is uniform over the simplex.
 
     Parameters
     ----------
@@ -220,27 +313,15 @@ def simplex_uniform_sampling(
     np.ndarray
         Array of shape (n_samples, n_dim) with uniformly distributed prevalences.
     """
-    if min_val * n_dim > 1 or max_val * n_dim < 1:
-        raise ValueError("Invalid min_val/max_val for simplex constraints.")
-
-    total_samples = n_prev * n_iter
-    samples = []
-
-    while len(samples) < total_samples:
-        # Gera candidatos via Dirichlet (uniforme no simplex)
-        x = np.random.dirichlet(np.ones(n_dim), size=total_samples * 2)
-        # Filtra os que respeitam os limites
-        mask = np.all((x >= min_val) & (x <= max_val), axis=1)
-        valid = x[mask]
-        if len(valid) > 0:
-            samples.append(valid)
-        
-        if len(samples) > 0:
-            all_samples = np.concatenate(samples, axis=0)
-            if len(all_samples) >= total_samples:
-                return all_samples[:total_samples]
-
-    return np.concatenate(samples, axis=0)[:total_samples]
+    return simplex_dirichlet_sampling(
+        n_dim=n_dim,
+        n_prev=n_prev,
+        n_iter=n_iter,
+        alpha=1.0,
+        min_val=min_val,
+        max_val=max_val,
+        random_state=random_state,
+    )
 
 
 def bootstrap_sample_indices(
