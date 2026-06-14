@@ -8,7 +8,7 @@ from mlquantify.base_aggregative import (
     _get_estimator,
 )
 from mlquantify.utils._decorators import _fit_context
-from mlquantify.utils._validation import check_classes_attribute, validate_predictions, validate_y, validate_data, validate_prevalences
+from mlquantify.utils._validation import check_classes_attribute, resolve_aggregate_classes, validate_predictions, validate_y, validate_data, validate_prevalences
 
 
 
@@ -56,7 +56,10 @@ class BaseCount(AggregativeMixin, BaseQuantifier):
     def __mlquantify_tags__(self):
         tags = super().__mlquantify_tags__()
         tags.prediction_requirements.requires_train_proba = False
-        tags.prediction_requirements.requires_train_labels = True
+        # CC/PCC derive their output classes from the fitted ``classes_`` (or an
+        # explicit ``classes`` argument), so ``aggregate`` no longer needs the
+        # training labels passed in.
+        tags.prediction_requirements.requires_train_labels = False
         return tags
 
     @_fit_context(prefer_skip_nested_validation=True)
@@ -69,15 +72,15 @@ class BaseCount(AggregativeMixin, BaseQuantifier):
             estimator.fit(X, y, *args, **kwargs)
         self.estimator_ = estimator
         return self
-    
+
     def predict(self, X):
         r"""Predict class prevalences for the given data."""
         predictions = self._predict_estimator(X)
         prevalences = self.aggregate(predictions)
         return prevalences
-    
+
     @abstractmethod
-    def aggregate(self, predictions):
+    def aggregate(self, predictions, classes=None):
         ...
 
 
@@ -199,9 +202,9 @@ class BaseAdjustCount(AggregativeMixin, BaseQuantifier):
         prevalences = self.aggregate(predictions, self.train_predictions, self.y_train)
         return prevalences
 
-    def aggregate(self, predictions, train_predictions, y_train):
-        r"""Aggregate predictions and apply matrix- or rate-based bias correction. 
-        
+    def aggregate(self, predictions, train_predictions, y_train, classes=None):
+        r"""Aggregate predictions and apply matrix- or rate-based bias correction.
+
         Parameters
         ----------
         predictions : ndarray of shape (n_samples, n_classes)
@@ -210,7 +213,10 @@ class BaseAdjustCount(AggregativeMixin, BaseQuantifier):
             Estimator predictions on training data. Can be probabilities (n_samples, n_classes) or class labels (n_samples,).
         y_train : ndarray of shape (n_samples,)
             True class labels of the training data.
-        
+        classes : array-like of shape (n_classes,) or None, default=None
+            Class labels the output must report, in order. When ``None`` they are
+            inferred from ``y_train``.
+
         Returns
         -------
         ndarray of shape (n_classes,)
@@ -227,8 +233,8 @@ class BaseAdjustCount(AggregativeMixin, BaseQuantifier):
         >>> q.aggregate(predictions, train_predictions, y_train)
         {0: 0.51, 1: 0.49}
         """
-        self.classes_ = check_classes_attribute(self, np.unique(y_train))
-        
+        self.classes_ = resolve_aggregate_classes(self, classes, y_train)
+
         predictions = validate_predictions(self, predictions)
         train_predictions = validate_predictions(self, train_predictions)
         

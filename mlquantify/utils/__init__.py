@@ -28,6 +28,7 @@ from mlquantify.utils._sampling import (
     simplex_uniform_kraemer,
     simplex_grid_sampling,
     simplex_uniform_sampling,
+    simplex_dirichlet_sampling,
     get_indexes_with_prevalence
 )
 from mlquantify.utils._validation import (
@@ -44,5 +45,6 @@ from mlquantify.utils._validation import (
     _is_arraylike,
     validate_data,
     check_classes_attribute,
+    resolve_aggregate_classes,
     validate_prevalences
 )

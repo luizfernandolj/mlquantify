@@ -69,8 +69,8 @@ below document the underlying protocols, which you can also drive manually.
 APP — Artificial Prevalence Protocol
 ======================================
 
-:class:`APP` is the most widely used evaluation protocol. It draws samples
-from the test set at each prevalence in a uniform grid
+:class:`APP` is the most widely used evaluation protocol. By default it draws
+samples from the test set at each prevalence in a uniform grid
 :math:`\{0, \frac{1}{n-1}, \frac{2}{n-1}, \ldots, 1\}` for the positive
 class, repeating each prevalence ``repeats`` times.
 
@@ -79,6 +79,12 @@ prevalence values, not just the natural one. It exposes systematic biases
 (e.g. methods that only work near 50/50) and gives a fair cross-method
 comparison. González et al. (2017) review papers routinely use APP as the
 evaluation backbone.
+
+**Choosing how prevalences are produced.** The ``strategy`` parameter selects
+how the prevalence vectors are drawn over the simplex. ``'grid'`` is the
+classic systematic sweep; the other strategies *sample* the simplex and scale
+to many classes without the grid's combinatorial blow-up. :class:`UPP` is
+simply ``APP`` with a sampling strategy pinned on.
 
 Parameters
 ----------
@@ -112,6 +118,32 @@ Parameters
      - ``1.0``
      - Maximum positive class prevalence. Leave at 1 to include the
        all-positive case.
+   * - ``strategy``
+     - ``'grid'``
+     - How prevalence vectors are generated over the simplex:
+
+       - ``'grid'`` — a regular lattice of evenly-spaced prevalences from
+         ``min_prev`` to ``max_prev`` (the classic APP). Deterministic and
+         systematic, but the number of points grows combinatorially
+         (:math:`O(n^{k-1})` for ``k`` classes), so it is best for binary or
+         low-class-count problems.
+       - ``'kraemer'`` — the Kraemer method for *uniform* sampling over the
+         simplex. Every prevalence combination is equally likely and the cost
+         is independent of the number of classes, ideal for multiclass.
+       - ``'uniform'`` — uniform sampling via the flat Dirichlet
+         :math:`\mathrm{Dir}(\mathbf{1})`. Statistically equivalent to
+         ``'kraemer'`` but produced through the Dirichlet route; it is exactly
+         ``'dirichlet'`` with ``dirichlet_alpha=1``.
+       - ``'dirichlet'`` — sampling from a Dirichlet whose concentration is set
+         by ``dirichlet_alpha``, letting you *bias* the prevalences (see below).
+   * - ``dirichlet_alpha``
+     - ``1.0``
+     - Concentration for ``strategy='dirichlet'``. A scalar is broadcast to a
+       symmetric Dirichlet; an array of length ``n_classes`` sets a per-class
+       concentration. ``alpha > 1`` favours balanced prevalences near the
+       centre of the simplex; ``alpha < 1`` favours extreme,
+       one-class-dominant prevalences near the corners; ``alpha = 1`` is
+       uniform. Ignored by the other strategies.
    * - ``random_state``
      - ``None``
      - Seed for reproducible sampling.
@@ -249,9 +281,10 @@ UPP — Uniform Prevalence Protocol
 ===================================
 
 :class:`UPP` samples prevalence vectors uniformly from the **probability
-simplex**. For binary problems it is similar to APP, but for
-**multiclass** problems it avoids the combinatorial explosion of sweeping
-all class-prevalence combinations independently.
+simplex**. It is exactly :class:`APP` with the simplex sampling ``strategy``
+pinned on (``'kraemer'`` by default). For binary problems it is similar to APP,
+but for **multiclass** problems it avoids the combinatorial explosion of
+sweeping all class-prevalence combinations independently.
 
 **Why it exists:** For :math:`k` classes, a grid approach like APP grows as
 :math:`O(n^{k-1})` which quickly becomes intractable. UPP samples :math:`n`
@@ -275,15 +308,25 @@ Parameters
    * - ``n_prevalences``
      - ``100``
      - Number of prevalence vectors to sample from the simplex.
-   * - ``algorithm``
-     - ``'uniform'``
-     - Sampling algorithm:
+   * - ``strategy``
+     - ``'kraemer'``
+     - Simplex sampling strategy, forwarded to :class:`APP` (``'grid'`` is not
+       meaningful here):
 
-       - ``'uniform'`` — samples from the flat Dirichlet distribution
-         (:math:`\text{Dir}(\mathbf{1})`). All prevalence combinations are
-         equally likely.
-       - ``'kraemer'`` — generates prevalences with a fixed step size,
-         analogous to APP for multiclass. More systematic, fewer samples.
+       - ``'kraemer'`` — Kraemer uniform sampling over the simplex. All
+         prevalence combinations are equally likely; cost independent of the
+         number of classes.
+       - ``'uniform'`` — uniform sampling via the flat Dirichlet
+         (:math:`\text{Dir}(\mathbf{1})`); equivalent uniform coverage through
+         the Dirichlet route.
+       - ``'dirichlet'`` — Dirichlet sampling biased by ``dirichlet_alpha``
+         (see :class:`APP`).
+   * - ``dirichlet_alpha``
+     - ``1.0``
+     - Concentration used when ``strategy='dirichlet'``; see :class:`APP`.
+   * - ``algorithm``
+     - *(deprecated)*
+     - Deprecated alias for ``strategy``; kept for backward compatibility.
    * - ``min_prev``
      - ``0.0``
      - Minimum per-class prevalence. Raise (e.g. to ``0.01``) to avoid
@@ -307,7 +350,7 @@ Parameters
    X_train, X_test = X[:1500], X[1500:]
    y_train, y_test = y[:1500], y[1500:]
 
-   protocol = UPP(batch_size=100, n_prevalences=200, algorithm='uniform',
+   protocol = UPP(batch_size=100, n_prevalences=200, strategy='uniform',
                   random_state=42)
    errors = []
    for idx in protocol.split(X_test, y_test):

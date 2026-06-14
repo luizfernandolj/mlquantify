@@ -12,7 +12,7 @@ from mlquantify.multiclass import binary_quantifier
 from mlquantify.solvers import minimize_prevalence
 from mlquantify.utils._constraints import Interval, Options
 from mlquantify.utils._decorators import _fit_context
-from mlquantify.utils._validation import validate_data
+from mlquantify.utils._validation import validate_data, resolve_aggregate_classes
 
 
 EPS = 1e-12
@@ -225,14 +225,16 @@ class SORD(SoftPredictionMixin, AggregativeMixin, MatchingScoreQuantifier):
         test_scores = self._predict_estimator(X)
         return self._predict(test_scores)
     
-    def aggregate(self, test_scores, train_scores, y_train):
+    def aggregate(self, test_scores, train_scores, y_train, classes=None):
         if not getattr(self, "_precomputed", False):
             self._fit(train_scores, y_train)
+        if classes is not None:
+            self.classes_ = resolve_aggregate_classes(self, classes, self.classes_)
         return self._predict(test_scores)
 
     def _solve_prevalence(self, test_representation, train_representations):
         test_scores = np.asarray(test_representation, dtype=float).ravel()
-        
+
         neg_repr = train_representations[0]
         pos_repr = train_representations[1]
 
@@ -409,9 +411,11 @@ class SMM(SoftPredictionMixin, AggregativeMixin, MatchingScoreQuantifier):
         test_scores = self._predict_estimator(X)
         return self._predict(test_scores)
 
-    def aggregate(self, test_scores, train_scores, y_train):
+    def aggregate(self, test_scores, train_scores, y_train, classes=None):
         if not getattr(self, "_precomputed", False):
             self._fit(train_scores, y_train)
+        if classes is not None:
+            self.classes_ = resolve_aggregate_classes(self, classes, self.classes_)
         return self._predict(test_scores)
 
     def _solve_prevalence(self, test_representation, train_representations):

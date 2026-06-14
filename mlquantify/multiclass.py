@@ -660,7 +660,7 @@ class BinaryQuantifier(MetaquantifierMixin, BaseQuantifier):
 
         return validate_prevalences(qtf, preds, qtf.classes_)
 
-    def aggregate(qtf, *args):
+    def aggregate(qtf, *args, classes=None):
         """Aggregate binary predictions to obtain multiclass prevalence estimates."""
         requirements = get_aggregation_requirements(qtf)
 
@@ -673,16 +673,16 @@ class BinaryQuantifier(MetaquantifierMixin, BaseQuantifier):
         else:
             raise ValueError("Binary aggregation requires at least train labels")
 
-        classes = np.unique(args_dict["y_train"])
+        resolved = np.unique(classes) if classes is not None else np.unique(args_dict["y_train"])
         n_jobs = getattr(qtf, "n_jobs", None)
 
-        if (hasattr(qtf, "binary") and qtf.binary) or len(classes) <= 2:
-            return qtf._original_aggregate(*args_dict.values())
+        if (hasattr(qtf, "binary") and qtf.binary) or len(resolved) <= 2:
+            return qtf._original_aggregate(*args_dict.values(), classes=classes)
 
         strategy = get_strategy(_get_binary_strategy(qtf))
-        prevalences = strategy.aggregate(qtf, classes, args_dict, n_jobs=n_jobs)
+        prevalences = strategy.aggregate(qtf, resolved, args_dict, n_jobs=n_jobs)
 
-        return validate_prevalences(qtf, prevalences, classes)
+        return validate_prevalences(qtf, prevalences, resolved)
 
     def fit_predict(qtf, X, y, X_test):
         """Fit and predict class prevalences without storing models."""

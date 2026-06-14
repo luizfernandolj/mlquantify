@@ -1,4 +1,4 @@
-from mlquantify.utils import check_classes_attribute
+from mlquantify.utils import check_classes_attribute, resolve_aggregate_classes
 import numpy as np
 import pandas as pd
 from copy import deepcopy
@@ -731,7 +731,7 @@ class AggregativeBootstrap(MetaquantifierMixin, BaseQuantifier):
         return self.aggregate(predictions, self.train_predictions, self.y_train)
 
 
-    def aggregate(self, predictions, train_predictions, y_train):
+    def aggregate(self, predictions, train_predictions, y_train, classes=None):
         r"""Aggregate predictions via bootstrap resampling into a prevalence estimate.
 
         Resamples both the training and test predictions
@@ -798,7 +798,10 @@ class AggregativeBootstrap(MetaquantifierMixin, BaseQuantifier):
                     elif requirements.requires_train_labels:
                         prevalences_boot = self.quantifier.aggregate(test_pred_boot, train_y_boot)
                     else:
-                        prevalences_boot = self.quantifier.aggregate(test_pred_boot)
+                        # CC/PCC-style quantifiers no longer take train labels;
+                        # give them the class set explicitly so absent classes
+                        # still appear in the bootstrap estimate.
+                        prevalences_boot = self.quantifier.aggregate(test_pred_boot, classes=np.unique(train_y_boot))
                 prevalences.append(np.asarray(prevalences_boot))
 
         prevalences = np.asarray(prevalences)
@@ -1003,7 +1006,7 @@ class QuaDapt(MetaquantifierMixin, BaseQuantifier):
         return self.aggregate(predictions, self.y_train)
 
 
-    def aggregate(self, predictions, y_train):
+    def aggregate(self, predictions, y_train, classes=None):
         """Aggregate posteriors into prevalences using MoSS score simulation.
 
         Searches over ``merging_factors`` to find the synthetic score
@@ -1017,6 +1020,9 @@ class QuaDapt(MetaquantifierMixin, BaseQuantifier):
             Posterior probabilities of the test instances.
         y_train : ndarray of shape (n_train_samples,)
             Training class labels used to resolve class ordering.
+        classes : array-like of shape (n_classes,) or None, default=None
+            Class labels the output must report, in order. When ``None`` they
+            are inferred from ``y_train``.
 
         Returns
         -------
@@ -1035,7 +1041,7 @@ class QuaDapt(MetaquantifierMixin, BaseQuantifier):
         >>> q.aggregate(proba, y)
         {0: 0.49, 1: 0.51}
         """
-        self.classes_ = check_classes_attribute(self, np.unique(y_train))
+        self.classes_ = resolve_aggregate_classes(self, classes, y_train)
         _, _, best_m = self.best_mixture(predictions)
 
         moss_scores, moss_labels = self.MoSS(n=1000, alpha=0.5, merging_factor=best_m, classes=self.classes_)

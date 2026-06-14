@@ -2,8 +2,8 @@
 import pytest
 import numpy as np
 from sklearn.linear_model import LogisticRegression
-from mlquantify.model_selection import GridSearchQ
-from mlquantify.counting import CC
+from mlquantify.model_selection import GridSearchQ, apply_protocol
+from mlquantify.counting import CC, PCC
 from mlquantify.metrics import MAE
 
 class MockQuantifier(CC):
@@ -84,3 +84,39 @@ def test_protocols(binary_dataset):
         )
         gs.fit(X, y)
         assert gs.best_score is not None
+
+
+@pytest.mark.parametrize("quantifier", [CC, PCC])
+@pytest.mark.parametrize(
+    "protocol, params",
+    [
+        ("app", {"strategy": "grid"}),
+        ("app", {"strategy": "kraemer"}),
+        ("app", {"strategy": "uniform"}),
+        ("app", {"strategy": "dirichlet", "dirichlet_alpha": 0.3}),
+        ("upp", {}),
+        ("upp", {"strategy": "uniform"}),
+    ],
+)
+def test_apply_protocol_multiclass_full_class_output(multiclass_dataset, quantifier, protocol, params):
+    """Sampled-prevalence protocols on multiclass data must yield prevalence
+    vectors spanning all fitted classes, even when a batch's predictions miss a
+    class (regression test for CC shrinking ``classes_`` on the predict path)."""
+    X, y = multiclass_dataset
+    n_classes = len(np.unique(y))
+
+    results = apply_protocol(
+        quantifier(LogisticRegression(max_iter=200)),
+        X, y,
+        protocol=protocol,
+        n_prevalences=12,
+        batch_size=60,
+        random_state=0,
+        **params,
+    )
+
+    true = results["true_prevalences"]
+    pred = results["predicted_prevalences"]
+    assert true.shape == pred.shape == (results["n_batches"], n_classes)
+    assert np.allclose(pred.sum(axis=1), 1.0, atol=1e-6)
+    assert np.all(pred >= 0)
