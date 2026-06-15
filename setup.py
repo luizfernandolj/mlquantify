@@ -4,9 +4,13 @@ import pathlib
 here = pathlib.Path(__file__).parent.resolve()
 long_description = (here / 'README.md').read_text(encoding='utf-8')
 
-# Lê a versão do arquivo VERSION.txt
+# Lê a versão do arquivo VERSION.txt (gerado no CI). Fora do CI o arquivo pode
+# não existir, então usamos um fallback PEP 440 válido para builds locais.
 version_file = here / 'VERSION.txt'
-VERSION = version_file.read_text(encoding='utf-8').strip()
+if version_file.exists():
+    VERSION = version_file.read_text(encoding='utf-8').strip()
+else:
+    VERSION = '0.4.0.dev0'
 
 DESCRIPTION = 'Quantification Library'
 

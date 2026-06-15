@@ -101,6 +101,12 @@ a full **documentation standardisation** across every module.
   doctest setup; fixed numerous broken examples (wrong `aggregate` calls, stale
   attribute names, incomplete snippets). Added a GitHub Actions workflow that runs
   the test suite and the doctests across Python 3.9–3.13 on Linux/macOS/Windows.
+- **Restored Python 3.9 import** — `utils._tags` used `str | None` class
+  annotations, which 3.9 evaluates at runtime (the `|` union syntax is 3.10+),
+  breaking the whole package import. Added `from __future__ import annotations`.
+- **`MS2`/`TMAX` doctests** are now skipped (`# doctest: +SKIP`): their threshold
+  selection is platform-sensitive and produced non-reproducible prevalences on
+  macOS.
 
 ### Documentation
 
@@ -129,6 +135,10 @@ a full **documentation standardisation** across every module.
 - CI now builds **portable binary wheels** with `cibuildwheel`
   (Linux / macOS x86_64+arm64 / Windows × CPython 3.9–3.13), verifies each wheel
   ships the compiled kernel, builds an sdist, and publishes to PyPI on a `v*` tag.
+- **Source builds no longer fail on the package version** — the docs workflow now
+  writes a PEP 440-compliant `0.4.0.dev0` to `VERSION.txt` instead of a bare `dev`
+  (rejected by newer setuptools), and `setup.py` falls back to that version when
+  `VERSION.txt` is absent, so local `pip install .`/`-e .` works again.
 
 ### Tests
 
