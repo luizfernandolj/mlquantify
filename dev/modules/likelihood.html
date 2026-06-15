@@ -1,0 +1,1031 @@
+
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="../" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+<meta property="og:title" content="2.5. Likelihood-Based Quantification" />
+<meta property="og:type" content="website" />
+<meta property="og:url" content="modules/likelihood.html" />
+<meta property="og:site_name" content="mlquantify" />
+<meta property="og:description" content="Likelihood-based methods estimate class prevalences by maximising the likelihood of the observed posterior probabilities under the assumption of prior probability shift — the feature distributions ..." />
+<meta property="og:image:width" content="1146" />
+<meta property="og:image:height" content="600" />
+<meta property="og:image" content="_images/social_previews/summary_modules_likelihood_e7dba166.png" />
+<meta property="og:image:alt" content="Likelihood-based methods estimate class prevalences by maximising the likelihood of the observed posterior probabilities under the assumption of prior probability shift — the feature distributions ..." />
+<meta name="description" content="Likelihood-based methods estimate class prevalences by maximising the likelihood of the observed posterior probabilities under the assumption of prior probability shift — the feature distributions ..." />
+<meta name="twitter:card" content="summary_large_image" />
+
+    <title>2.5. Likelihood-Based Quantification &#8212; mlquantify</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
+  </script>
+  <!--
+    this give us a css class that will be invisible only if js is disabled
+  -->
+  <noscript>
+    <style>
+      .pst-js-only { display: none !important; }
+
+    </style>
+  </noscript>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../_static/styles/theme.css?digest=a95f357e85573c9b56d5" rel="stylesheet" />
+<link href="../_static/styles/pydata-sphinx-theme.css?digest=a95f357e85573c9b56d5" rel="stylesheet" />
+
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=8f2a1f02" />
+    <link rel="stylesheet" type="text/css" href="../_static/copybutton.css?v=76b2166b" />
+    <link rel="stylesheet" type="text/css" href="../_static/plot_directive.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinx-design.min.css?v=95c83b7e" />
+    <link rel="stylesheet" type="text/css" href="../_static/variables.css?v=fded66fe" />
+    <link rel="stylesheet" type="text/css" href="../_static/theme_overrides.css?v=dec63a3c" />
+    <link rel="stylesheet" type="text/css" href="../_static/landing.css?v=e93fd00d" />
+  
+  <!-- So that users can add custom icons -->
+  <script defer src="../_static/scripts/fontawesome.js?digest=a95f357e85573c9b56d5"></script>
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=a95f357e85573c9b56d5" />
+<link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=a95f357e85573c9b56d5" />
+
+    <script src="../_static/documentation_options.js?v=dc233e31"></script>
+    <script src="../_static/doctools.js?v=9bcbadda"></script>
+    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../_static/clipboard.min.js?v=a7894cd8"></script>
+    <script src="../_static/copybutton.js?v=f281be69"></script>
+    <script src="../_static/design-tabs.js?v=f930bc37"></script>
+    <script async="async" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'modules/likelihood';</script>
+    <script>
+        DOCUMENTATION_OPTIONS.theme_version = '0.19.0';
+        DOCUMENTATION_OPTIONS.theme_switcher_json_url = 'https://luizfernandolj.github.io/mlquantify/switcher.json';
+        DOCUMENTATION_OPTIONS.theme_switcher_version_match = 'dev';
+        DOCUMENTATION_OPTIONS.show_version_warning_banner =
+            true;
+        </script>
+    <script>DOCUMENTATION_OPTIONS.search_as_you_type = false;</script>
+    <link rel="canonical" href="https://luizfernandolj.github.io/mlquantify/modules/likelihood.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="2.6. Distribution Matching" href="distribution_matching.html" />
+    <link rel="prev" title="2.4. Adjusted Counting" href="adjust_counting.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  <meta name="docsearch:version" content="" />
+  
+    
+    <script src="../_static/searchtools.js"></script>
+    <script src="../_static/language_data.js"></script>
+    <script src="../searchindex.js"></script>
+  
+  </head>
+  <body data-default-mode="">
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+  
+  
+  
+  
+  <dialog id="pst-search-dialog">
+    
+<form class="bd-search d-flex align-items-center"
+      action="../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         placeholder="Search the docs ..."
+         aria-label="Search the docs ..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form>
+  </dialog>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
+  
+    <header id="pst-header" class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+<div class="bd-header__inner bd-page-width">
+  <button class="pst-navbar-icon sidebar-toggle primary-toggle" aria-label="Site navigation">
+    <span class="fa-solid fa-bars"></span>
+  </button>
+  
+  
+  <div class=" navbar-header-items__start">
+    
+      <div class="navbar-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="../index.html">
+  
+  
+  
+  
+  
+    
+    
+      
+    
+    
+    <img src="../_static/logo_mlquantify.svg" class="logo__image only-light" alt="mlquantify homepage"/>
+    <img src="../_static/logo_mlquantify-white.svg" class="logo__image only-dark pst-js-only" alt="mlquantify homepage"/>
+  
+  
+</a></div>
+    
+  </div>
+  
+  <div class=" navbar-header-items">
+    
+    <div class="me-auto navbar-header-items__center">
+      
+        <div class="navbar-item">
+<div class="version-switcher__container dropdown pst-js-only">
+  <button id="pst-version-switcher-button-2"
+    type="button"
+    class="version-switcher__button btn btn-sm dropdown-toggle"
+    data-bs-toggle="dropdown"
+    aria-haspopup="listbox"
+    aria-controls="pst-version-switcher-list-2"
+    aria-label="Version switcher list"
+  >
+    Choose version  <!-- this text may get changed later by javascript -->
+    <span class="caret"></span>
+  </button>
+  <div id="pst-version-switcher-list-2"
+    class="version-switcher__menu dropdown-menu list-group-flush py-0"
+    role="listbox" aria-labelledby="pst-version-switcher-button-2">
+    <!-- dropdown will be populated by javascript on page load -->
+  </div>
+</div></div>
+      
+        <div class="navbar-item">
+<nav>
+  <ul class="bd-navbar-elements navbar-nav">
+    
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../install.html">
+    Install
+  </a>
+</li>
+
+
+<li class="nav-item current active">
+  <a class="nav-link nav-internal" href="../user_guide.html">
+    User Guide
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../api/index.html">
+    API
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../getting_started.html">
+    Getting Started
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../about_us.html">
+    About Us
+  </a>
+</li>
+
+  </ul>
+</nav></div>
+      
+    </div>
+    
+    
+    <div class="navbar-header-items__end">
+      
+        <div class="navbar-item navbar-persistent--container">
+          
+
+<button class="btn btn-sm pst-navbar-icon search-button search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass fa-lg"></i>
+</button>
+        </div>
+      
+      
+        <div class="navbar-item">
+
+<div class="theme-switch-container dropdown pst-js-only" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Color mode">
+  <button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button dropdown-toggle" aria-label="Color mode" data-bs-toggle="dropdown">
+    <i class="theme-switch fa-solid fa-sun fa-lg fa-fw" data-mode="light" title="Light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg fa-fw" data-mode="dark" title="Dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg fa-fw" data-mode="auto" title="System Settings"></i>
+  </button>
+  <ul class="dropdown-menu dropdown-menu-end">
+    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="auto"><i class="fa-solid fa-circle-half-stroke fa-lg fa-fw me-1"></i>System Settings</button></li>
+    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="light"><i class="fa-solid fa-sun fa-lg fa-fw me-1"></i>Light</button></li>
+    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="dark"><i class="fa-solid fa-moon fa-lg fa-fw me-1"></i>Dark</button></li>
+  </ul>
+</div></div>
+      
+        <div class="navbar-item"><ul class="navbar-icon-links"
+    aria-label="Icon Links">
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://github.com/luizfernandolj/mlquantify/tree/master" title="GitHub" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><i class="fa-brands fa-square-github fa-lg" aria-hidden="true"></i><span class="visually-hidden">GitHub</span></a>
+        </li>
+</ul></div>
+      
+    </div>
+    
+  </div>
+  
+  
+    <div class="navbar-persistent--mobile">
+
+<button class="btn btn-sm pst-navbar-icon search-button search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass fa-lg"></i>
+</button>
+    </div>
+  
+
+  
+    <button class="pst-navbar-icon sidebar-toggle secondary-toggle" aria-label="On this page">
+      <span class="fa-solid fa-outdent"></span>
+    </button>
+  
+</div>
+
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+      <dialog id="pst-primary-sidebar-modal"></dialog>
+      <div id="pst-primary-sidebar" class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+      <div class="sidebar-header-items__center">
+        
+          
+          
+            <div class="navbar-item">
+<div class="version-switcher__container dropdown pst-js-only">
+  <button id="pst-version-switcher-button-3"
+    type="button"
+    class="version-switcher__button btn btn-sm dropdown-toggle"
+    data-bs-toggle="dropdown"
+    aria-haspopup="listbox"
+    aria-controls="pst-version-switcher-list-3"
+    aria-label="Version switcher list"
+  >
+    Choose version  <!-- this text may get changed later by javascript -->
+    <span class="caret"></span>
+  </button>
+  <div id="pst-version-switcher-list-3"
+    class="version-switcher__menu dropdown-menu list-group-flush py-0"
+    role="listbox" aria-labelledby="pst-version-switcher-button-3">
+    <!-- dropdown will be populated by javascript on page load -->
+  </div>
+</div></div>
+          
+        
+          
+          
+            <div class="navbar-item">
+<nav>
+  <ul class="bd-navbar-elements navbar-nav">
+    
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../install.html">
+    Install
+  </a>
+</li>
+
+
+<li class="nav-item current active">
+  <a class="nav-link nav-internal" href="../user_guide.html">
+    User Guide
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../api/index.html">
+    API
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../getting_started.html">
+    Getting Started
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../about_us.html">
+    About Us
+  </a>
+</li>
+
+  </ul>
+</nav></div>
+          
+        
+      </div>
+    
+    
+    
+      <div class="sidebar-header-items__end">
+        
+          <div class="navbar-item">
+
+<div class="theme-switch-container dropdown pst-js-only" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Color mode">
+  <button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button dropdown-toggle" aria-label="Color mode" data-bs-toggle="dropdown">
+    <i class="theme-switch fa-solid fa-sun fa-lg fa-fw" data-mode="light" title="Light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg fa-fw" data-mode="dark" title="Dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg fa-fw" data-mode="auto" title="System Settings"></i>
+  </button>
+  <ul class="dropdown-menu dropdown-menu-end">
+    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="auto"><i class="fa-solid fa-circle-half-stroke fa-lg fa-fw me-1"></i>System Settings</button></li>
+    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="light"><i class="fa-solid fa-sun fa-lg fa-fw me-1"></i>Light</button></li>
+    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="dark"><i class="fa-solid fa-moon fa-lg fa-fw me-1"></i>Dark</button></li>
+  </ul>
+</div></div>
+        
+          <div class="navbar-item"><ul class="navbar-icon-links"
+    aria-label="Icon Links">
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://github.com/luizfernandolj/mlquantify/tree/master" title="GitHub" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><i class="fa-brands fa-square-github fa-lg" aria-hidden="true"></i><span class="visually-hidden">GitHub</span></a>
+        </li>
+</ul></div>
+        
+      </div>
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item pst-sidebar-collapse"><button id="pst-collapse-sidebar-button" aria-expanded="true" aria-controls="pst-primary-sidebar"><svg class="pst-icon svg-inline--fa" role="img" aria-hidden="true" focusable="false" viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg">
+    <path fill="currentColor" d="M3 15.5C2.36232 15.5 1.74874 15.2564 1.28478 14.8189C0.820828 14.3815 0.541576 13.7832 0.504167 13.1467L0.5 13L0.5 3C0.499965 2.36232 0.743605 1.74874 1.18107 1.28478C1.61854 0.820828 2.21676 0.541576 2.85333 0.504167L3 0.5L13 0.5C13.6377 0.499965 14.2513 0.743605 14.7152 1.18107C15.1792 1.61854 15.4584 2.21676 15.4958 2.85333L15.5 3L15.5 13C15.5 13.6377 15.2564 14.2513 14.8189 14.7152C14.3815 15.1792 13.7832 15.4584 13.1467 15.4958L13 15.5L3 15.5ZM3 13.8333L10.5 13.8333L10.5 2.16667L3 2.16667C2.79589 2.16669 2.59889 2.24163 2.44636 2.37726C2.29383 2.5129 2.19638 2.69979 2.1725 2.9025L2.16667 3L2.16667 13C2.16669 13.2041 2.24163 13.4011 2.37726 13.5536C2.5129 13.7062 2.69979 13.8036 2.9025 13.8275L3 13.8333ZM6.65583 10.325L6.5775 10.2558L4.91083 8.58917C4.76735 8.44567 4.68116 8.25476 4.66843 8.05223C4.65569 7.84971 4.71729 7.6495 4.84167 7.48917L4.91083 7.41083L6.5775 5.74417C6.72747 5.59471 6.9287 5.50794 7.14032 5.50148C7.35194 5.49502 7.55809 5.56935 7.7169 5.70937C7.8757 5.8494 7.97525 6.04463 7.99533 6.25539C8.01541 6.46616 7.95451 6.67667 7.825 6.84417L7.75583 6.9225L6.67917 8L7.75583 9.0775C7.89931 9.22099 7.98551 9.41191 7.99824 9.61443C8.01097 9.81695 7.94938 10.0172 7.825 10.1775L7.75583 10.2558C7.61234 10.3993 7.42142 10.4855 7.2189 10.4982C7.01638 10.511 6.81617 10.4494 6.65583 10.325Z"/>
+  </svg>
+  <span class="pst-collapse-sidebar-label">Collapse Sidebar</span>
+  <span class="pst-expand-sidebar-label">Expand Sidebar</span>
+</button></div>
+        <div class="sidebar-primary-item">
+
+<nav class="bd-docs-nav bd-links"
+     aria-label="Section Navigation">
+  <p class="bd-links__title" role="heading" aria-level="1">Section Navigation</p>
+  <div class="bd-toc-item navbar-nav"><ul class="current nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="quantification_foundations.html">1. Foundations</a></li>
+<li class="toctree-l1 current active has-children"><a class="reference internal" href="../aggregative_quantification.html">2. Aggregative Quantification</a><details open="open"><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="using_aggregative.html">2.1. Using Aggregative Quantification Methods</a></li>
+
+<li class="toctree-l2"><a class="reference internal" href="counters.html">2.3. Counting Methods</a></li>
+<li class="toctree-l2"><a class="reference internal" href="adjust_counting.html">2.4. Adjusted Counting</a></li>
+<li class="toctree-l2 current active"><a class="current reference internal" href="#">2.5. Likelihood Methods</a></li>
+<li class="toctree-l2"><a class="reference internal" href="distribution_matching.html">2.6. Distribution Matching</a></li>
+<li class="toctree-l2"><a class="reference internal" href="neighbors.html">2.7. Nearest Neighbours</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../non_aggregative_quantification.html">3. Non Aggregative Quantification</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="mixture_models_non_agg.html">3.1. Mixture Models for Non-Aggregative Quantification</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../meta_quantification.html">4. Meta Quantification</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="ensemble.html">4.1. Ensembles and Adaptation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="bootstrap.html">4.2. Bootstrap in Quantification</a></li>
+<li class="toctree-l2"><a class="reference internal" href="scores_adaptation.html">4.3. QuaDapt: Drift-Resilient Score Adaptation</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../model_selection_evaluation.html">5. Model Selection and Evaluation</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="protocols.html">5.1. Evaluation Protocols</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tuning_hyperparameters.html">5.2. Hyperparameter Tuning</a></li>
+<li class="toctree-l2"><a class="reference internal" href="evaluation_metrics.html">5.3. Evaluation Metrics</a></li>
+
+
+
+</ul>
+</details></li>
+<li class="toctree-l1"><a class="reference internal" href="confidence_intervals.html">6. Confidence Intervals</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../building_a_quantifier.html">7. Building a Quantifier</a></li>
+<li class="toctree-l1"><a class="reference internal" href="mlquantify_methods.html">8. Mlquantify methods</a></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../components.html">9. Core Components</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="representations.html">9.1.1. Representations</a></li>
+<li class="toctree-l2"><a class="reference internal" href="losses.html">9.1.2. Loss Functions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="solvers.html">9.1.3. Solvers</a></li>
+<li class="toctree-l2"><a class="reference internal" href="compose.html">9.1.4. Composable Quantifiers</a></li>
+<li class="toctree-l2"><a class="reference internal" href="multiclass.html">9.2.1. Multiclass Quantification</a></li>
+<li class="toctree-l2"><a class="reference internal" href="prevalence_normalization.html">9.2.2. Prevalence Normalization</a></li>
+<li class="toctree-l2"><a class="reference internal" href="cython_acceleration.html">9.3.1. Cython Acceleration</a></li>
+<li class="toctree-l2"><a class="reference internal" href="calibration.html">9.4.1. Calibration</a></li>
+<li class="toctree-l2"><a class="reference internal" href="neural.html">9.4.2. Neural Quantifiers</a></li>
+</ul>
+</details></li>
+</ul>
+</div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+  </div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item">
+
+<nav aria-label="Breadcrumb" class="d-print-none">
+  <ul class="bd-breadcrumbs">
+    
+    <li class="breadcrumb-item breadcrumb-home">
+      <a href="../index.html" class="nav-link" aria-label="Home">
+        <i class="fa-solid fa-home"></i>
+      </a>
+    </li>
+    
+    <li class="breadcrumb-item"><a href="../user_guide.html" class="nav-link">User Guide</a></li>
+    
+    
+    <li class="breadcrumb-item"><a href="../aggregative_quantification.html" class="nav-link"><span class="section-number">2. </span>Aggregative Quantification</a></li>
+    
+    <li class="breadcrumb-item active" aria-current="page"><span class="ellipsis"><span class="section-number">2.5. </span>Likelihood-Based Quantification</span></li>
+  </ul>
+</nav>
+</div>
+      
+    </div>
+  
+  
+</div>
+</div>
+              
+              
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <section id="likelihood-based-quantification">
+<span id="likelihood"></span><h1><span class="section-number">2.5. </span>Likelihood-Based Quantification<a class="headerlink" href="#likelihood-based-quantification" title="Link to this heading">#</a></h1>
+<p>Likelihood-based methods estimate class prevalences by maximising the
+likelihood of the observed posterior probabilities under the assumption of
+<strong>prior probability shift</strong> — the feature distributions within each class do
+not change, only the class proportions do.</p>
+<p>They are among the most accurate single-model quantifiers and should be your
+first upgrade from the counting family.</p>
+<nav class="contents local" id="contents">
+<p class="topic-title">Contents</p>
+<ul class="simple">
+<li><p><a class="reference internal" href="#prior-probability-shift-the-core-assumption" id="id5">Prior Probability Shift — The Core Assumption</a></p></li>
+<li><p><a class="reference internal" href="#mlpe-maximum-likelihood-prevalence-estimation-trivial-baseline" id="id6">MLPE — Maximum Likelihood Prevalence Estimation (trivial baseline)</a></p></li>
+<li><p><a class="reference internal" href="#emq-expectation-maximization-quantifier-sld" id="id7">EMQ — Expectation-Maximization Quantifier (SLD)</a></p>
+<ul>
+<li><p><a class="reference internal" href="#parameters" id="id8">Parameters</a></p></li>
+<li><p><a class="reference internal" href="#examples" id="id9">Examples</a></p></li>
+</ul>
+</li>
+<li><p><a class="reference internal" href="#cde-cde-iterate-threshold-adjustment-via-cost-ratios" id="id10">CDE — CDE-Iterate (threshold-adjustment via cost ratios)</a></p>
+<ul>
+<li><p><a class="reference internal" href="#id1" id="id11">Parameters</a></p></li>
+<li><p><a class="reference internal" href="#id2" id="id12">Examples</a></p></li>
+</ul>
+</li>
+<li><p><a class="reference internal" href="#method-comparison" id="id13">Method Comparison</a></p></li>
+<li><p><a class="reference internal" href="#references" id="id14">References</a></p></li>
+</ul>
+</nav>
+<hr class="docutils" />
+<section id="prior-probability-shift-the-core-assumption">
+<h2><a class="toc-backref" href="#id5" role="doc-backlink"><span class="section-number">2.5.1. </span>Prior Probability Shift — The Core Assumption</a><a class="headerlink" href="#prior-probability-shift-the-core-assumption" title="Link to this heading">#</a></h2>
+<p>All methods on this page assume:</p>
+<div class="math notranslate nohighlight">
+\[P_U(x \mid y) = P_L(x \mid y) \quad \text{but} \quad P_U(y) \neq P_L(y).\]</div>
+<p>Under this assumption, the classifier’s posterior probability for a test
+instance <span class="math notranslate nohighlight">\(x\)</span> is distorted by the wrong priors baked in at training time.
+Bayes’ theorem tells us how to correct it:</p>
+<div class="math notranslate nohighlight">
+\[P_U(y \mid x) = \frac{P_U(y)}{P_L(y)} \cdot P_L(y \mid x) \cdot Z^{-1}\]</div>
+<p>where <span class="math notranslate nohighlight">\(Z\)</span> is a normalisation constant. Likelihood-based methods iterate
+this correction together with updating <span class="math notranslate nohighlight">\(P_U(y)\)</span> until convergence.</p>
+</section>
+<hr class="docutils" />
+<section id="mlpe-maximum-likelihood-prevalence-estimation-trivial-baseline">
+<h2><a class="toc-backref" href="#id6" role="doc-backlink"><span class="section-number">2.5.2. </span>MLPE — Maximum Likelihood Prevalence Estimation (trivial baseline)</a><a class="headerlink" href="#mlpe-maximum-likelihood-prevalence-estimation-trivial-baseline" title="Link to this heading">#</a></h2>
+<p><a class="reference internal" href="generated/mlquantify.likelihood.MLPE.html#mlquantify.likelihood.MLPE" title="mlquantify.likelihood.MLPE"><code class="xref py py-class docutils literal notranslate"><span class="pre">MLPE</span></code></a> is the trivial likelihood baseline: it simply returns the
+training-set prevalence as the estimate for any test set, assuming no shift.</p>
+<div class="math notranslate nohighlight">
+\[\hat{p}^{MLPE}(c) = p_L(c) = \frac{|\{i : y_i = c\}|}{n}\]</div>
+<p><strong>Why it exists:</strong> MLPE provides the lower bound of what a method should
+achieve. If your quantifier cannot beat MLPE, something is wrong. It is also
+the <strong>starting point of EMQ</strong> (see below).</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">mlquantify.likelihood</span><span class="w"> </span><span class="kn">import</span> <span class="n">MLPE</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">sklearn.linear_model</span><span class="w"> </span><span class="kn">import</span> <span class="n">LogisticRegression</span>
+
+<span class="n">q</span> <span class="o">=</span> <span class="n">MLPE</span><span class="p">(</span><span class="n">LogisticRegression</span><span class="p">())</span>
+<span class="n">q</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">X_train</span><span class="p">,</span> <span class="n">y_train</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">q</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">X_test</span><span class="p">))</span>
+<span class="c1"># Returns training prevalence regardless of X_test</span>
+</pre></div>
+</div>
+</section>
+<hr class="docutils" />
+<section id="emq-expectation-maximization-quantifier-sld">
+<h2><a class="toc-backref" href="#id7" role="doc-backlink"><span class="section-number">2.5.3. </span>EMQ — Expectation-Maximization Quantifier (SLD)</a><a class="headerlink" href="#emq-expectation-maximization-quantifier-sld" title="Link to this heading">#</a></h2>
+<p><a class="reference internal" href="generated/mlquantify.likelihood.EMQ.html#mlquantify.likelihood.EMQ" title="mlquantify.likelihood.EMQ"><code class="xref py py-class docutils literal notranslate"><span class="pre">EMQ</span></code></a> (also known as <em>SLD</em> for Saerens–Latinne–Decaestecker) is the
+most important single quantifier in <code class="docutils literal notranslate"><span class="pre">mlquantify</span></code>. It iteratively adjusts
+posterior probabilities to find the class prevalences that maximise the
+likelihood of the observed test data.</p>
+<p>The algorithm has two alternating steps:</p>
+<p><strong>E-step</strong> — correct each posterior using the current prevalence estimate:</p>
+<div class="math notranslate nohighlight">
+\[P^{(s)}(y \mid x_k) = \frac
+    {\hat{p}^{(s)}(y) \cdot P_L(y \mid x_k) / p_L(y)}
+    {\sum_{y'} \hat{p}^{(s)}(y') \cdot P_L(y' \mid x_k) / p_L(y')}\]</div>
+<p><strong>M-step</strong> — update the prevalence estimate as the mean of corrected
+posteriors:</p>
+<div class="math notranslate nohighlight">
+\[\hat{p}^{(s+1)}(y) = \frac{1}{|U|} \sum_{x_k \in U} P^{(s)}(y \mid x_k)\]</div>
+<p>Starting from <span class="math notranslate nohighlight">\(\hat{p}^{(0)} = p_L\)</span> (MLPE), EMQ converges to the
+maximum-likelihood prevalence estimate. (Saerens et al., 2002;
+Alexandari et al., 2020)</p>
+<p>The plot below shows the two steps in action. A classifier trained on a
+balanced set is applied to a test set that is 80 % positive: starting from the
+training prior (0.5), each EM iteration re-weights the posteriors (right) and
+updates the estimate, which climbs to the true test prevalence (left).</p>
+<p>(<a class="reference download internal" download="" href="../_downloads/2ccfc80faabea884ed58d99545d09a7c/likelihood-1.py"><code class="xref download docutils literal notranslate"><span class="pre">Source</span> <span class="pre">code</span></code></a>, <a class="reference download internal" download="" href="../_downloads/88fb1962a4bdd3688696300677b48bef/likelihood-1.png"><code class="xref download docutils literal notranslate"><span class="pre">png</span></code></a>, <a class="reference download internal" download="" href="../_downloads/e374bdded0321fd47f2ea6508dc207d0/likelihood-1.hires.png"><code class="xref download docutils literal notranslate"><span class="pre">hires.png</span></code></a>, <a class="reference download internal" download="" href="../_downloads/9f4a44e4990ef1ba8f047344a2eaea87/likelihood-1.pdf"><code class="xref download docutils literal notranslate"><span class="pre">pdf</span></code></a>)</p>
+<figure class="align-default" id="id3">
+<img alt="../_images/likelihood-1.png" class="plot-directive" src="../_images/likelihood-1.png" />
+<figcaption>
+<p><span class="caption-text">EMQ iteratively optimises the prevalence to the test set, re-weighting the posteriors along the way.</span><a class="headerlink" href="#id3" title="Link to this image">#</a></p>
+</figcaption>
+</figure>
+<p><strong>Why it excels:</strong> EMQ corrects for the exact form of distortion caused by
+prior probability shift. Esuli et al. (2023) show it is consistently among
+the top performers across benchmarks when the shift assumption holds.</p>
+<section id="parameters">
+<h3><a class="toc-backref" href="#id8" role="doc-backlink"><span class="section-number">2.5.3.1. </span>Parameters</a><a class="headerlink" href="#parameters" title="Link to this heading">#</a></h3>
+<div class="pst-scrollable-table-container"><table class="table">
+<colgroup>
+<col style="width: 22.0%" />
+<col style="width: 15.0%" />
+<col style="width: 63.0%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Parameter</p></th>
+<th class="head"><p>Default</p></th>
+<th class="head"><p>Explanation</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">estimator</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">None</span></code></p></td>
+<td><p>A probabilistic classifier with <code class="docutils literal notranslate"><span class="pre">predict_proba</span></code>. Logistic Regression
+is a strong default — it is well-calibrated and fast. Tree-based
+classifiers benefit from probability calibration (e.g. wrap with
+<code class="docutils literal notranslate"><span class="pre">CalibratedClassifierCV</span></code>) before passing to EMQ.</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">tol</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">1e-4</span></code></p></td>
+<td><p>Convergence threshold. The algorithm stops when the MAE between
+successive prevalence estimates falls below this value. The default
+balances speed and accuracy. Reduce to <code class="docutils literal notranslate"><span class="pre">1e-6</span></code> for precision-critical
+applications.</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">max_iter</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">100</span></code></p></td>
+<td><p>Maximum EM iterations. Almost always converges in &lt; 20 iterations.
+Raise to 500 if you see convergence warnings.</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">calib_function</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">None</span></code></p></td>
+<td><p>Optional calibration applied to posteriors <strong>before</strong> the EM loop.
+Calibration corrects overconfident or underconfident probability
+outputs, which can significantly improve EMQ accuracy. Options:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">None</span></code> — skip calibration (use if your classifier is already
+calibrated, e.g. Logistic Regression).</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">'ts'</span></code> — Temperature Scaling: a single scalar applied to all logits.
+Good for overconfident models.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">'bcts'</span></code> — Bias-Corrected Temperature Scaling: recommended for most
+neural networks. Alexandari et al. (2020) show this variant achieves
+state-of-the-art label-shift adaptation.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">'vs'</span></code> — Vector Scaling: per-class scaling. More expressive than TS.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">'nbvs'</span></code> — No-Bias Vector Scaling: a middle ground.</p></li>
+</ul>
+</td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">on_calib_error</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">'backup'</span></code></p></td>
+<td><p>What to do if calibration fails (e.g. due to numerical issues).
+<code class="docutils literal notranslate"><span class="pre">'backup'</span></code> silently falls back to uncalibrated posteriors.
+<code class="docutils literal notranslate"><span class="pre">'raise'</span></code> propagates the exception so you can investigate.</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">criteria</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">MAE</span></code></p></td>
+<td><p>Convergence criterion comparing successive prevalence estimates. The
+default MAE is appropriate for all problem types.</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+<section id="examples">
+<h3><a class="toc-backref" href="#id9" role="doc-backlink"><span class="section-number">2.5.3.2. </span>Examples</a><a class="headerlink" href="#examples" title="Link to this heading">#</a></h3>
+<p>Basic usage with Logistic Regression (recommended):</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">mlquantify.likelihood</span><span class="w"> </span><span class="kn">import</span> <span class="n">EMQ</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">sklearn.linear_model</span><span class="w"> </span><span class="kn">import</span> <span class="n">LogisticRegression</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">sklearn.datasets</span><span class="w"> </span><span class="kn">import</span> <span class="n">make_classification</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">sklearn.model_selection</span><span class="w"> </span><span class="kn">import</span> <span class="n">train_test_split</span>
+
+<span class="n">X</span><span class="p">,</span> <span class="n">y</span> <span class="o">=</span> <span class="n">make_classification</span><span class="p">(</span><span class="n">n_samples</span><span class="o">=</span><span class="mi">1000</span><span class="p">,</span> <span class="n">weights</span><span class="o">=</span><span class="p">[</span><span class="mf">0.8</span><span class="p">,</span> <span class="mf">0.2</span><span class="p">],</span>
+                           <span class="n">random_state</span><span class="o">=</span><span class="mi">42</span><span class="p">)</span>
+<span class="n">X_train</span><span class="p">,</span> <span class="n">X_test</span><span class="p">,</span> <span class="n">y_train</span><span class="p">,</span> <span class="n">y_test</span> <span class="o">=</span> <span class="n">train_test_split</span><span class="p">(</span>
+    <span class="n">X</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">test_size</span><span class="o">=</span><span class="mf">0.3</span><span class="p">,</span> <span class="n">random_state</span><span class="o">=</span><span class="mi">42</span><span class="p">)</span>
+
+<span class="n">q</span> <span class="o">=</span> <span class="n">EMQ</span><span class="p">(</span><span class="n">LogisticRegression</span><span class="p">())</span>
+<span class="n">q</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">X_train</span><span class="p">,</span> <span class="n">y_train</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">q</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">X_test</span><span class="p">))</span>
+<span class="c1"># {0: 0.80, 1: 0.20}</span>
+</pre></div>
+</div>
+<p>With BCTS calibration (best for neural/overconfident classifiers):</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">mlquantify.likelihood</span><span class="w"> </span><span class="kn">import</span> <span class="n">EMQ</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">sklearn.neural_network</span><span class="w"> </span><span class="kn">import</span> <span class="n">MLPClassifier</span>
+
+<span class="n">q</span> <span class="o">=</span> <span class="n">EMQ</span><span class="p">(</span><span class="n">MLPClassifier</span><span class="p">(</span><span class="n">hidden_layer_sizes</span><span class="o">=</span><span class="p">(</span><span class="mi">100</span><span class="p">,),</span> <span class="n">max_iter</span><span class="o">=</span><span class="mi">500</span><span class="p">),</span>
+        <span class="n">calib_function</span><span class="o">=</span><span class="s1">&#39;bcts&#39;</span><span class="p">)</span>
+<span class="n">q</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">X_train</span><span class="p">,</span> <span class="n">y_train</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">q</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">X_test</span><span class="p">))</span>
+</pre></div>
+</div>
+<p>Using <code class="xref py py-meth docutils literal notranslate"><span class="pre">aggregate</span></code> directly with pre-computed posteriors:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">mlquantify.likelihood</span><span class="w"> </span><span class="kn">import</span> <span class="n">EMQ</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">sklearn.linear_model</span><span class="w"> </span><span class="kn">import</span> <span class="n">LogisticRegression</span>
+
+<span class="c1"># Fit just the classifier</span>
+<span class="n">clf</span> <span class="o">=</span> <span class="n">LogisticRegression</span><span class="p">()</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">X_train</span><span class="p">,</span> <span class="n">y_train</span><span class="p">)</span>
+<span class="n">proba_train</span> <span class="o">=</span> <span class="n">clf</span><span class="o">.</span><span class="n">predict_proba</span><span class="p">(</span><span class="n">X_train</span><span class="p">)</span>
+<span class="n">proba_test</span>  <span class="o">=</span> <span class="n">clf</span><span class="o">.</span><span class="n">predict_proba</span><span class="p">(</span><span class="n">X_test</span><span class="p">)</span>
+
+<span class="n">q</span> <span class="o">=</span> <span class="n">EMQ</span><span class="p">(</span><span class="n">clf</span><span class="p">)</span>
+<span class="n">q</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">X_train</span><span class="p">,</span> <span class="n">y_train</span><span class="p">)</span>
+
+<span class="c1"># aggregate(test_posteriors, train_posteriors, train_labels)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">q</span><span class="o">.</span><span class="n">aggregate</span><span class="p">(</span><span class="n">proba_test</span><span class="p">,</span> <span class="n">proba_train</span><span class="p">,</span> <span class="n">y_train</span><span class="p">))</span>
+</pre></div>
+</div>
+<p>Multiclass (EMQ is natively multiclass):</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">mlquantify.likelihood</span><span class="w"> </span><span class="kn">import</span> <span class="n">EMQ</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">sklearn.linear_model</span><span class="w"> </span><span class="kn">import</span> <span class="n">LogisticRegression</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">sklearn.datasets</span><span class="w"> </span><span class="kn">import</span> <span class="n">make_classification</span>
+
+<span class="n">X</span><span class="p">,</span> <span class="n">y</span> <span class="o">=</span> <span class="n">make_classification</span><span class="p">(</span><span class="n">n_samples</span><span class="o">=</span><span class="mi">800</span><span class="p">,</span> <span class="n">n_classes</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span>
+                           <span class="n">n_informative</span><span class="o">=</span><span class="mi">6</span><span class="p">,</span> <span class="n">n_redundant</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>
+                           <span class="n">random_state</span><span class="o">=</span><span class="mi">42</span><span class="p">)</span>
+<span class="n">X_train</span><span class="p">,</span> <span class="n">X_test</span> <span class="o">=</span> <span class="n">X</span><span class="p">[:</span><span class="mi">600</span><span class="p">],</span> <span class="n">X</span><span class="p">[</span><span class="mi">600</span><span class="p">:]</span>
+<span class="n">y_train</span><span class="p">,</span> <span class="n">y_test</span> <span class="o">=</span> <span class="n">y</span><span class="p">[:</span><span class="mi">600</span><span class="p">],</span> <span class="n">y</span><span class="p">[</span><span class="mi">600</span><span class="p">:]</span>
+
+<span class="n">q</span> <span class="o">=</span> <span class="n">EMQ</span><span class="p">(</span><span class="n">LogisticRegression</span><span class="p">())</span>
+<span class="n">q</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">X_train</span><span class="p">,</span> <span class="n">y_train</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">q</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">X_test</span><span class="p">))</span>
+<span class="c1"># {0: 0.25, 1: 0.25, 2: 0.25, 3: 0.25}</span>
+</pre></div>
+</div>
+<div class="admonition tip">
+<p class="admonition-title">Tip</p>
+<p>EMQ with <code class="docutils literal notranslate"><span class="pre">calib_function='bcts'</span></code> is the single best-performing method
+in Alexandari et al. (2020)’s large benchmark of label-shift methods. Use
+it as the primary quantifier when prior probability shift is expected.</p>
+</div>
+<div class="admonition-when-emq-struggles admonition">
+<p class="admonition-title">When EMQ struggles</p>
+<p>EMQ assumes prior probability shift. If the <strong>features</strong> of a class change
+between training and test (concept drift), or if the class-conditional
+distributions overlap heavily and the classifier is poorly calibrated,
+EMQ’s correction can overshoot. In these cases, distribution-matching
+methods like <a class="reference internal" href="generated/mlquantify.matching.DyS.html#mlquantify.matching.DyS" title="mlquantify.matching.DyS"><code class="xref py py-class docutils literal notranslate"><span class="pre">DyS</span></code></a> or
+<a class="reference internal" href="generated/mlquantify.matching.KDEyHD.html#mlquantify.matching.KDEyHD" title="mlquantify.matching.KDEyHD"><code class="xref py py-class docutils literal notranslate"><span class="pre">KDEyHD</span></code></a> may be more robust.</p>
+</div>
+</section>
+</section>
+<hr class="docutils" />
+<section id="cde-cde-iterate-threshold-adjustment-via-cost-ratios">
+<h2><a class="toc-backref" href="#id10" role="doc-backlink"><span class="section-number">2.5.4. </span>CDE — CDE-Iterate (threshold-adjustment via cost ratios)</a><a class="headerlink" href="#cde-cde-iterate-threshold-adjustment-via-cost-ratios" title="Link to this heading">#</a></h2>
+<p><a class="reference internal" href="generated/mlquantify.likelihood.CDE.html#mlquantify.likelihood.CDE" title="mlquantify.likelihood.CDE"><code class="xref py py-class docutils literal notranslate"><span class="pre">CDE</span></code></a> estimates binary class prevalence by iteratively adjusting the
+decision threshold using the ratio of misclassification costs derived from
+the training priors and the current prevalence estimate.</p>
+<p>At each step, the threshold <span class="math notranslate nohighlight">\(\tau\)</span> is set such that a false negative
+and a false positive have equal expected cost:</p>
+<div class="math notranslate nohighlight">
+\[\tau^{(s)} = \frac{c_{FP}^{(s)}}{c_{FP}^{(s)} + c_{FN}}\]</div>
+<p>where <span class="math notranslate nohighlight">\(c_{FP}\)</span> is updated from the current prevalence estimate. The
+process repeats until the estimated positive proportion stabilises.</p>
+<p><strong>Why it exists:</strong> CDE was proposed by Barranquero et al. (2015) as an
+iterative threshold-selection method that avoids cross-validation entirely.
+It is lighter than EMQ (no full posterior re-weighting) and often competitive
+with threshold-adjustment methods on binary problems.</p>
+<p><strong>Binary-only</strong> — multiclass via OvR.</p>
+<section id="id1">
+<h3><a class="toc-backref" href="#id11" role="doc-backlink"><span class="section-number">2.5.4.1. </span>Parameters</a><a class="headerlink" href="#id1" title="Link to this heading">#</a></h3>
+<div class="pst-scrollable-table-container"><table class="table">
+<colgroup>
+<col style="width: 22.0%" />
+<col style="width: 15.0%" />
+<col style="width: 63.0%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Parameter</p></th>
+<th class="head"><p>Default</p></th>
+<th class="head"><p>Explanation</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">estimator</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">None</span></code></p></td>
+<td><p>Probabilistic classifier.</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">tol</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">1e-4</span></code></p></td>
+<td><p>Convergence tolerance on the positive prevalence between iterations.</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">max_iter</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">100</span></code></p></td>
+<td><p>Maximum iterations. Typically converges in &lt; 20 steps.</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">init_cfp</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">1.0</span></code></p></td>
+<td><p>Initial false-positive cost. The algorithm starts with equal misclassification
+costs (<span class="math notranslate nohighlight">\(c_{FP} = c_{FN} = 1\)</span>). Change if you have domain knowledge
+about the true cost ratio.</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">strategy</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">'ovr'</span></code></p></td>
+<td><p>Multiclass decomposition.</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">n_jobs</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">None</span></code></p></td>
+<td><p>Parallel jobs.</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+<section id="id2">
+<h3><a class="toc-backref" href="#id12" role="doc-backlink"><span class="section-number">2.5.4.2. </span>Examples</a><a class="headerlink" href="#id2" title="Link to this heading">#</a></h3>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">mlquantify.likelihood</span><span class="w"> </span><span class="kn">import</span> <span class="n">CDE</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">sklearn.linear_model</span><span class="w"> </span><span class="kn">import</span> <span class="n">LogisticRegression</span>
+
+<span class="n">q</span> <span class="o">=</span> <span class="n">CDE</span><span class="p">(</span><span class="n">LogisticRegression</span><span class="p">(),</span> <span class="n">tol</span><span class="o">=</span><span class="mf">1e-5</span><span class="p">)</span>
+<span class="n">q</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">X_train</span><span class="p">,</span> <span class="n">y_train</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">q</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">X_test</span><span class="p">))</span>
+<span class="c1"># {0: 0.80, 1: 0.20}</span>
+</pre></div>
+</div>
+<p>Using <code class="xref py py-meth docutils literal notranslate"><span class="pre">aggregate</span></code> with pre-computed posteriors:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">clf</span> <span class="o">=</span> <span class="n">LogisticRegression</span><span class="p">()</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">X_train</span><span class="p">,</span> <span class="n">y_train</span><span class="p">)</span>
+<span class="n">proba_test</span> <span class="o">=</span> <span class="n">clf</span><span class="o">.</span><span class="n">predict_proba</span><span class="p">(</span><span class="n">X_test</span><span class="p">)</span>
+
+<span class="n">q</span> <span class="o">=</span> <span class="n">CDE</span><span class="p">(</span><span class="n">clf</span><span class="p">)</span>
+<span class="n">q</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">X_train</span><span class="p">,</span> <span class="n">y_train</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">q</span><span class="o">.</span><span class="n">aggregate</span><span class="p">(</span><span class="n">proba_test</span><span class="p">,</span> <span class="n">train_labels</span><span class="o">=</span><span class="n">y_train</span><span class="p">))</span>
+</pre></div>
+</div>
+</section>
+</section>
+<hr class="docutils" />
+<section id="method-comparison">
+<h2><a class="toc-backref" href="#id13" role="doc-backlink"><span class="section-number">2.5.5. </span>Method Comparison</a><a class="headerlink" href="#method-comparison" title="Link to this heading">#</a></h2>
+<div class="pst-scrollable-table-container"><table class="table">
+<colgroup>
+<col style="width: 12.0%" />
+<col style="width: 15.0%" />
+<col style="width: 15.0%" />
+<col style="width: 15.0%" />
+<col style="width: 43.0%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Method</p></th>
+<th class="head"><p>Multiclass</p></th>
+<th class="head"><p>Needs proba</p></th>
+<th class="head"><p>Extra fit cost</p></th>
+<th class="head"><p>Best for</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>MLPE</p></td>
+<td><p>✓</p></td>
+<td><p>✓</p></td>
+<td><p>None</p></td>
+<td><p>Baseline; no shift expected.</p></td>
+</tr>
+<tr class="row-odd"><td><p>EMQ</p></td>
+<td><p>✓</p></td>
+<td><p>✓</p></td>
+<td><p>None</p></td>
+<td><p><strong>Prior probability shift; recommended default.</strong></p></td>
+</tr>
+<tr class="row-even"><td><p>EMQ+BCTS</p></td>
+<td><p>✓</p></td>
+<td><p>✓</p></td>
+<td><p>Calibration</p></td>
+<td><p>Overconfident classifiers (neural nets, forests).</p></td>
+</tr>
+<tr class="row-odd"><td><p>CDE</p></td>
+<td><p>✗ (OvR)</p></td>
+<td><p>✓</p></td>
+<td><p>None</p></td>
+<td><p>Binary problems; lightweight alternative to EMQ.</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<p><strong>Practical recommendation:</strong></p>
+<ul class="simple">
+<li><p>Use <strong>EMQ</strong> as your primary quantifier in most scenarios.</p></li>
+<li><p>Add <code class="docutils literal notranslate"><span class="pre">calib_function='bcts'</span></code> when your classifier tends to be overconfident.</p></li>
+<li><p>Use <strong>CDE</strong> when you want a fast, calibration-free alternative for binary tasks.</p></li>
+<li><p>Always compare against <strong>MLPE</strong> to verify your method is actually learning something.</p></li>
+</ul>
+</section>
+<section id="references">
+<h2><a class="toc-backref" href="#id14" role="doc-backlink"><span class="section-number">2.5.6. </span>References</a><a class="headerlink" href="#references" title="Link to this heading">#</a></h2>
+<details class="sd-sphinx-override sd-dropdown sd-card sd-mb-3">
+<summary class="sd-summary-title sd-card-header">
+<span class="sd-summary-text">References</span><span class="sd-summary-state-marker sd-summary-chevron-right"><svg version="1.1" width="1.5em" height="1.5em" class="sd-octicon sd-octicon-chevron-right" viewBox="0 0 24 24" aria-hidden="true"><path d="M8.72 18.78a.75.75 0 0 1 0-1.06L14.44 12 8.72 6.28a.751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018l6.25 6.25a.75.75 0 0 1 0 1.06l-6.25 6.25a.75.75 0 0 1-1.06 0Z"></path></svg></span></summary><div class="sd-summary-content sd-card-body docutils">
+<ul class="simple">
+<li><p class="sd-card-text">Saerens, M., Latinne, P., &amp; Decaestecker, C. (2002). Adjusting the Outputs
+of a Classifier to New a Priori Probabilities. <em>Neural Computation</em>,
+14(1), 21–41.</p></li>
+<li><p class="sd-card-text">Alexandari, A., Kundaje, A., &amp; Shrikumar, A. (2020). Maximum Likelihood
+with Bias-Corrected Calibration is Hard-to-Beat at Label Shift Adaptation.
+<em>ICML</em>, 222–232.</p></li>
+<li><p class="sd-card-text">Barranquero, J., Díez, J., &amp; del Coz, J. J. (2015). Quantification-Oriented
+Learning Based on Reliable Classifiers. <em>Pattern Recognition</em>, 48(2), 591–604.</p></li>
+</ul>
+</div>
+</details><div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<p><a class="reference internal" href="distribution_matching.html#distribution-matching"><span class="std std-ref">Distribution Matching</span></a> for methods that do not rely on the prior-shift
+assumption and can handle more general distributional changes.</p>
+</div>
+</section>
+</section>
+
+
+                </article>
+              
+              
+              
+                <footer class="bd-footer-article">
+                  <div class="footer-article-items footer-article__inner">
+  
+    <div class="footer-article-item">
+<div class="prev-next-area">
+    <a class="left-prev"
+       href="adjust_counting.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title"><span class="section-number">2.4. </span>Adjusted Counting</p>
+      </div>
+    </a>
+    <a class="right-next"
+       href="distribution_matching.html"
+       title="next page">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title"><span class="section-number">2.6. </span>Distribution Matching</p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
+    </a>
+</div></div>
+  
+</div>
+                </footer>
+              
+              
+              
+            </div>
+            
+            
+              
+                <dialog id="pst-secondary-sidebar-modal"></dialog>
+                <div id="pst-secondary-sidebar" class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item">
+<div
+    id="pst-page-navigation-heading-2"
+    class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> On this page
+  </div>
+  <nav id="pst-page-toc-nav" class="page-toc" aria-labelledby="pst-page-navigation-heading-2">
+    <ul class="pst-show_toc_level nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#prior-probability-shift-the-core-assumption">2.5.1. Prior Probability Shift — The Core Assumption</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#mlpe-maximum-likelihood-prevalence-estimation-trivial-baseline">2.5.2. MLPE — Maximum Likelihood Prevalence Estimation (trivial baseline)</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#emq-expectation-maximization-quantifier-sld">2.5.3. EMQ — Expectation-Maximization Quantifier (SLD)</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#parameters">2.5.3.1. Parameters</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#examples">2.5.3.2. Examples</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#cde-cde-iterate-threshold-adjustment-via-cost-ratios">2.5.4. CDE — CDE-Iterate (threshold-adjustment via cost ratios)</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id1">2.5.4.1. Parameters</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id2">2.5.4.2. Examples</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#method-comparison">2.5.5. Method Comparison</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#references">2.5.6. References</a></li>
+</ul>
+  </nav></div>
+
+  <div class="sidebar-secondary-item">
+
+  <div class="tocsection sourcelink">
+    <a href="../_sources/modules/likelihood.rst.txt">
+      <i class="fa-solid fa-file-lines"></i> Show Source
+    </a>
+  </div>
+</div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+          </footer>
+        
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script defer src="../_static/scripts/bootstrap.js?digest=a95f357e85573c9b56d5"></script>
+<script defer src="../_static/scripts/pydata-sphinx-theme.js?digest=a95f357e85573c9b56d5"></script>
+
+  <footer class="bd-footer">
+  </footer>
+  </body>
+</html>

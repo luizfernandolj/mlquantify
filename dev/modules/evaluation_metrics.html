@@ -1,0 +1,1200 @@
+
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="../" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+<meta property="og:title" content="5.3. Evaluation Metrics" />
+<meta property="og:type" content="website" />
+<meta property="og:url" content="modules/evaluation_metrics.html" />
+<meta property="og:site_name" content="mlquantify" />
+<meta property="og:description" content="Quantification metrics measure the discrepancy between the estimated prevalence vector\hat{p} and the true prevalence vector p. Unlike classification metrics, they operate on aggregate probability ..." />
+<meta property="og:image:width" content="1146" />
+<meta property="og:image:height" content="600" />
+<meta property="og:image" content="_images/social_previews/summary_modules_evaluation_metrics_127fd6cb.png" />
+<meta property="og:image:alt" content="Quantification metrics measure the discrepancy between the estimated prevalence vector\hat{p} and the true prevalence vector p. Unlike classification metrics, they operate on aggregate probability ..." />
+<meta name="description" content="Quantification metrics measure the discrepancy between the estimated prevalence vector\hat{p} and the true prevalence vector p. Unlike classification metrics, they operate on aggregate probability ..." />
+<meta name="twitter:card" content="summary_large_image" />
+
+    <title>5.3. Evaluation Metrics &#8212; mlquantify</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
+  </script>
+  <!--
+    this give us a css class that will be invisible only if js is disabled
+  -->
+  <noscript>
+    <style>
+      .pst-js-only { display: none !important; }
+
+    </style>
+  </noscript>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../_static/styles/theme.css?digest=a95f357e85573c9b56d5" rel="stylesheet" />
+<link href="../_static/styles/pydata-sphinx-theme.css?digest=a95f357e85573c9b56d5" rel="stylesheet" />
+
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=8f2a1f02" />
+    <link rel="stylesheet" type="text/css" href="../_static/copybutton.css?v=76b2166b" />
+    <link rel="stylesheet" type="text/css" href="../_static/plot_directive.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinx-design.min.css?v=95c83b7e" />
+    <link rel="stylesheet" type="text/css" href="../_static/variables.css?v=fded66fe" />
+    <link rel="stylesheet" type="text/css" href="../_static/theme_overrides.css?v=dec63a3c" />
+    <link rel="stylesheet" type="text/css" href="../_static/landing.css?v=e93fd00d" />
+  
+  <!-- So that users can add custom icons -->
+  <script defer src="../_static/scripts/fontawesome.js?digest=a95f357e85573c9b56d5"></script>
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=a95f357e85573c9b56d5" />
+<link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=a95f357e85573c9b56d5" />
+
+    <script src="../_static/documentation_options.js?v=dc233e31"></script>
+    <script src="../_static/doctools.js?v=9bcbadda"></script>
+    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../_static/clipboard.min.js?v=a7894cd8"></script>
+    <script src="../_static/copybutton.js?v=f281be69"></script>
+    <script src="../_static/design-tabs.js?v=f930bc37"></script>
+    <script async="async" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'modules/evaluation_metrics';</script>
+    <script>
+        DOCUMENTATION_OPTIONS.theme_version = '0.19.0';
+        DOCUMENTATION_OPTIONS.theme_switcher_json_url = 'https://luizfernandolj.github.io/mlquantify/switcher.json';
+        DOCUMENTATION_OPTIONS.theme_switcher_version_match = 'dev';
+        DOCUMENTATION_OPTIONS.show_version_warning_banner =
+            true;
+        </script>
+    <script>DOCUMENTATION_OPTIONS.search_as_you_type = false;</script>
+    <link rel="canonical" href="https://luizfernandolj.github.io/mlquantify/modules/evaluation_metrics.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="6. Confidence Regions for Quantification" href="confidence_intervals.html" />
+    <link rel="prev" title="5.2. Tuning Hyperparameters" href="tuning_hyperparameters.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  <meta name="docsearch:version" content="" />
+  
+    
+    <script src="../_static/searchtools.js"></script>
+    <script src="../_static/language_data.js"></script>
+    <script src="../searchindex.js"></script>
+  
+  </head>
+  <body data-default-mode="">
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+  
+  
+  
+  
+  <dialog id="pst-search-dialog">
+    
+<form class="bd-search d-flex align-items-center"
+      action="../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         placeholder="Search the docs ..."
+         aria-label="Search the docs ..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form>
+  </dialog>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
+  
+    <header id="pst-header" class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+<div class="bd-header__inner bd-page-width">
+  <button class="pst-navbar-icon sidebar-toggle primary-toggle" aria-label="Site navigation">
+    <span class="fa-solid fa-bars"></span>
+  </button>
+  
+  
+  <div class=" navbar-header-items__start">
+    
+      <div class="navbar-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="../index.html">
+  
+  
+  
+  
+  
+    
+    
+      
+    
+    
+    <img src="../_static/logo_mlquantify.svg" class="logo__image only-light" alt="mlquantify homepage"/>
+    <img src="../_static/logo_mlquantify-white.svg" class="logo__image only-dark pst-js-only" alt="mlquantify homepage"/>
+  
+  
+</a></div>
+    
+  </div>
+  
+  <div class=" navbar-header-items">
+    
+    <div class="me-auto navbar-header-items__center">
+      
+        <div class="navbar-item">
+<div class="version-switcher__container dropdown pst-js-only">
+  <button id="pst-version-switcher-button-2"
+    type="button"
+    class="version-switcher__button btn btn-sm dropdown-toggle"
+    data-bs-toggle="dropdown"
+    aria-haspopup="listbox"
+    aria-controls="pst-version-switcher-list-2"
+    aria-label="Version switcher list"
+  >
+    Choose version  <!-- this text may get changed later by javascript -->
+    <span class="caret"></span>
+  </button>
+  <div id="pst-version-switcher-list-2"
+    class="version-switcher__menu dropdown-menu list-group-flush py-0"
+    role="listbox" aria-labelledby="pst-version-switcher-button-2">
+    <!-- dropdown will be populated by javascript on page load -->
+  </div>
+</div></div>
+      
+        <div class="navbar-item">
+<nav>
+  <ul class="bd-navbar-elements navbar-nav">
+    
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../install.html">
+    Install
+  </a>
+</li>
+
+
+<li class="nav-item current active">
+  <a class="nav-link nav-internal" href="../user_guide.html">
+    User Guide
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../api/index.html">
+    API
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../getting_started.html">
+    Getting Started
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../about_us.html">
+    About Us
+  </a>
+</li>
+
+  </ul>
+</nav></div>
+      
+    </div>
+    
+    
+    <div class="navbar-header-items__end">
+      
+        <div class="navbar-item navbar-persistent--container">
+          
+
+<button class="btn btn-sm pst-navbar-icon search-button search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass fa-lg"></i>
+</button>
+        </div>
+      
+      
+        <div class="navbar-item">
+
+<div class="theme-switch-container dropdown pst-js-only" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Color mode">
+  <button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button dropdown-toggle" aria-label="Color mode" data-bs-toggle="dropdown">
+    <i class="theme-switch fa-solid fa-sun fa-lg fa-fw" data-mode="light" title="Light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg fa-fw" data-mode="dark" title="Dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg fa-fw" data-mode="auto" title="System Settings"></i>
+  </button>
+  <ul class="dropdown-menu dropdown-menu-end">
+    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="auto"><i class="fa-solid fa-circle-half-stroke fa-lg fa-fw me-1"></i>System Settings</button></li>
+    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="light"><i class="fa-solid fa-sun fa-lg fa-fw me-1"></i>Light</button></li>
+    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="dark"><i class="fa-solid fa-moon fa-lg fa-fw me-1"></i>Dark</button></li>
+  </ul>
+</div></div>
+      
+        <div class="navbar-item"><ul class="navbar-icon-links"
+    aria-label="Icon Links">
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://github.com/luizfernandolj/mlquantify/tree/master" title="GitHub" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><i class="fa-brands fa-square-github fa-lg" aria-hidden="true"></i><span class="visually-hidden">GitHub</span></a>
+        </li>
+</ul></div>
+      
+    </div>
+    
+  </div>
+  
+  
+    <div class="navbar-persistent--mobile">
+
+<button class="btn btn-sm pst-navbar-icon search-button search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass fa-lg"></i>
+</button>
+    </div>
+  
+
+  
+    <button class="pst-navbar-icon sidebar-toggle secondary-toggle" aria-label="On this page">
+      <span class="fa-solid fa-outdent"></span>
+    </button>
+  
+</div>
+
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+      <dialog id="pst-primary-sidebar-modal"></dialog>
+      <div id="pst-primary-sidebar" class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+      <div class="sidebar-header-items__center">
+        
+          
+          
+            <div class="navbar-item">
+<div class="version-switcher__container dropdown pst-js-only">
+  <button id="pst-version-switcher-button-3"
+    type="button"
+    class="version-switcher__button btn btn-sm dropdown-toggle"
+    data-bs-toggle="dropdown"
+    aria-haspopup="listbox"
+    aria-controls="pst-version-switcher-list-3"
+    aria-label="Version switcher list"
+  >
+    Choose version  <!-- this text may get changed later by javascript -->
+    <span class="caret"></span>
+  </button>
+  <div id="pst-version-switcher-list-3"
+    class="version-switcher__menu dropdown-menu list-group-flush py-0"
+    role="listbox" aria-labelledby="pst-version-switcher-button-3">
+    <!-- dropdown will be populated by javascript on page load -->
+  </div>
+</div></div>
+          
+        
+          
+          
+            <div class="navbar-item">
+<nav>
+  <ul class="bd-navbar-elements navbar-nav">
+    
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../install.html">
+    Install
+  </a>
+</li>
+
+
+<li class="nav-item current active">
+  <a class="nav-link nav-internal" href="../user_guide.html">
+    User Guide
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../api/index.html">
+    API
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../getting_started.html">
+    Getting Started
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../about_us.html">
+    About Us
+  </a>
+</li>
+
+  </ul>
+</nav></div>
+          
+        
+      </div>
+    
+    
+    
+      <div class="sidebar-header-items__end">
+        
+          <div class="navbar-item">
+
+<div class="theme-switch-container dropdown pst-js-only" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Color mode">
+  <button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button dropdown-toggle" aria-label="Color mode" data-bs-toggle="dropdown">
+    <i class="theme-switch fa-solid fa-sun fa-lg fa-fw" data-mode="light" title="Light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg fa-fw" data-mode="dark" title="Dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg fa-fw" data-mode="auto" title="System Settings"></i>
+  </button>
+  <ul class="dropdown-menu dropdown-menu-end">
+    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="auto"><i class="fa-solid fa-circle-half-stroke fa-lg fa-fw me-1"></i>System Settings</button></li>
+    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="light"><i class="fa-solid fa-sun fa-lg fa-fw me-1"></i>Light</button></li>
+    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="dark"><i class="fa-solid fa-moon fa-lg fa-fw me-1"></i>Dark</button></li>
+  </ul>
+</div></div>
+        
+          <div class="navbar-item"><ul class="navbar-icon-links"
+    aria-label="Icon Links">
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://github.com/luizfernandolj/mlquantify/tree/master" title="GitHub" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><i class="fa-brands fa-square-github fa-lg" aria-hidden="true"></i><span class="visually-hidden">GitHub</span></a>
+        </li>
+</ul></div>
+        
+      </div>
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item pst-sidebar-collapse"><button id="pst-collapse-sidebar-button" aria-expanded="true" aria-controls="pst-primary-sidebar"><svg class="pst-icon svg-inline--fa" role="img" aria-hidden="true" focusable="false" viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg">
+    <path fill="currentColor" d="M3 15.5C2.36232 15.5 1.74874 15.2564 1.28478 14.8189C0.820828 14.3815 0.541576 13.7832 0.504167 13.1467L0.5 13L0.5 3C0.499965 2.36232 0.743605 1.74874 1.18107 1.28478C1.61854 0.820828 2.21676 0.541576 2.85333 0.504167L3 0.5L13 0.5C13.6377 0.499965 14.2513 0.743605 14.7152 1.18107C15.1792 1.61854 15.4584 2.21676 15.4958 2.85333L15.5 3L15.5 13C15.5 13.6377 15.2564 14.2513 14.8189 14.7152C14.3815 15.1792 13.7832 15.4584 13.1467 15.4958L13 15.5L3 15.5ZM3 13.8333L10.5 13.8333L10.5 2.16667L3 2.16667C2.79589 2.16669 2.59889 2.24163 2.44636 2.37726C2.29383 2.5129 2.19638 2.69979 2.1725 2.9025L2.16667 3L2.16667 13C2.16669 13.2041 2.24163 13.4011 2.37726 13.5536C2.5129 13.7062 2.69979 13.8036 2.9025 13.8275L3 13.8333ZM6.65583 10.325L6.5775 10.2558L4.91083 8.58917C4.76735 8.44567 4.68116 8.25476 4.66843 8.05223C4.65569 7.84971 4.71729 7.6495 4.84167 7.48917L4.91083 7.41083L6.5775 5.74417C6.72747 5.59471 6.9287 5.50794 7.14032 5.50148C7.35194 5.49502 7.55809 5.56935 7.7169 5.70937C7.8757 5.8494 7.97525 6.04463 7.99533 6.25539C8.01541 6.46616 7.95451 6.67667 7.825 6.84417L7.75583 6.9225L6.67917 8L7.75583 9.0775C7.89931 9.22099 7.98551 9.41191 7.99824 9.61443C8.01097 9.81695 7.94938 10.0172 7.825 10.1775L7.75583 10.2558C7.61234 10.3993 7.42142 10.4855 7.2189 10.4982C7.01638 10.511 6.81617 10.4494 6.65583 10.325Z"/>
+  </svg>
+  <span class="pst-collapse-sidebar-label">Collapse Sidebar</span>
+  <span class="pst-expand-sidebar-label">Expand Sidebar</span>
+</button></div>
+        <div class="sidebar-primary-item">
+
+<nav class="bd-docs-nav bd-links"
+     aria-label="Section Navigation">
+  <p class="bd-links__title" role="heading" aria-level="1">Section Navigation</p>
+  <div class="bd-toc-item navbar-nav"><ul class="current nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="quantification_foundations.html">1. Foundations</a></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../aggregative_quantification.html">2. Aggregative Quantification</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="using_aggregative.html">2.1. Using Aggregative Quantification Methods</a></li>
+
+<li class="toctree-l2"><a class="reference internal" href="counters.html">2.3. Counting Methods</a></li>
+<li class="toctree-l2"><a class="reference internal" href="adjust_counting.html">2.4. Adjusted Counting</a></li>
+<li class="toctree-l2"><a class="reference internal" href="likelihood.html">2.5. Likelihood Methods</a></li>
+<li class="toctree-l2"><a class="reference internal" href="distribution_matching.html">2.6. Distribution Matching</a></li>
+<li class="toctree-l2"><a class="reference internal" href="neighbors.html">2.7. Nearest Neighbours</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../non_aggregative_quantification.html">3. Non Aggregative Quantification</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="mixture_models_non_agg.html">3.1. Mixture Models for Non-Aggregative Quantification</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../meta_quantification.html">4. Meta Quantification</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="ensemble.html">4.1. Ensembles and Adaptation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="bootstrap.html">4.2. Bootstrap in Quantification</a></li>
+<li class="toctree-l2"><a class="reference internal" href="scores_adaptation.html">4.3. QuaDapt: Drift-Resilient Score Adaptation</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1 current active has-children"><a class="reference internal" href="../model_selection_evaluation.html">5. Model Selection and Evaluation</a><details open="open"><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="protocols.html">5.1. Evaluation Protocols</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tuning_hyperparameters.html">5.2. Hyperparameter Tuning</a></li>
+<li class="toctree-l2 current active"><a class="current reference internal" href="#">5.3. Evaluation Metrics</a></li>
+
+
+
+</ul>
+</details></li>
+<li class="toctree-l1"><a class="reference internal" href="confidence_intervals.html">6. Confidence Intervals</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../building_a_quantifier.html">7. Building a Quantifier</a></li>
+<li class="toctree-l1"><a class="reference internal" href="mlquantify_methods.html">8. Mlquantify methods</a></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../components.html">9. Core Components</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="representations.html">9.1.1. Representations</a></li>
+<li class="toctree-l2"><a class="reference internal" href="losses.html">9.1.2. Loss Functions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="solvers.html">9.1.3. Solvers</a></li>
+<li class="toctree-l2"><a class="reference internal" href="compose.html">9.1.4. Composable Quantifiers</a></li>
+<li class="toctree-l2"><a class="reference internal" href="multiclass.html">9.2.1. Multiclass Quantification</a></li>
+<li class="toctree-l2"><a class="reference internal" href="prevalence_normalization.html">9.2.2. Prevalence Normalization</a></li>
+<li class="toctree-l2"><a class="reference internal" href="cython_acceleration.html">9.3.1. Cython Acceleration</a></li>
+<li class="toctree-l2"><a class="reference internal" href="calibration.html">9.4.1. Calibration</a></li>
+<li class="toctree-l2"><a class="reference internal" href="neural.html">9.4.2. Neural Quantifiers</a></li>
+</ul>
+</details></li>
+</ul>
+</div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+  </div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item">
+
+<nav aria-label="Breadcrumb" class="d-print-none">
+  <ul class="bd-breadcrumbs">
+    
+    <li class="breadcrumb-item breadcrumb-home">
+      <a href="../index.html" class="nav-link" aria-label="Home">
+        <i class="fa-solid fa-home"></i>
+      </a>
+    </li>
+    
+    <li class="breadcrumb-item"><a href="../user_guide.html" class="nav-link">User Guide</a></li>
+    
+    
+    <li class="breadcrumb-item"><a href="../model_selection_evaluation.html" class="nav-link"><span class="section-number">5. </span>Model Selection and Evaluation</a></li>
+    
+    <li class="breadcrumb-item active" aria-current="page"><span class="ellipsis"><span class="section-number">5.3. </span>Evaluation Metrics</span></li>
+  </ul>
+</nav>
+</div>
+      
+    </div>
+  
+  
+</div>
+</div>
+              
+              
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <section id="evaluation-metrics">
+<span id="id1"></span><h1><span class="section-number">5.3. </span>Evaluation Metrics<a class="headerlink" href="#evaluation-metrics" title="Link to this heading">#</a></h1>
+<p>Quantification metrics measure the discrepancy between the estimated
+prevalence vector <span class="math notranslate nohighlight">\(\hat{p}\)</span> and the true prevalence vector <span class="math notranslate nohighlight">\(p\)</span>.
+Unlike classification metrics, they operate on <strong>aggregate probability
+vectors</strong> — not on individual predictions.</p>
+<p>All metrics in <code class="docutils literal notranslate"><span class="pre">mlquantify</span></code> follow the same calling convention:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">error</span> <span class="o">=</span> <span class="n">MetricName</span><span class="p">(</span><span class="n">true_prevalences</span><span class="p">,</span> <span class="n">predicted_prevalences</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Both arguments can be:</p>
+<ul class="simple">
+<li><p>A flat array of true class labels (<code class="docutils literal notranslate"><span class="pre">y_true</span></code>), or</p></li>
+<li><p>A prevalence dict/array returned by <code class="docutils literal notranslate"><span class="pre">quantifier.predict(X)</span></code>.</p></li>
+</ul>
+<p><code class="docutils literal notranslate"><span class="pre">mlquantify</span></code> automatically converts true labels to prevalences using
+<a class="reference internal" href="generated/mlquantify.utils.get_prev_from_labels.html#mlquantify.utils.get_prev_from_labels" title="mlquantify.utils.get_prev_from_labels"><code class="xref py py-func docutils literal notranslate"><span class="pre">get_prev_from_labels</span></code></a> when needed.</p>
+<nav class="contents local" id="contents">
+<p class="topic-title">Contents</p>
+<ul class="simple">
+<li><p><a class="reference internal" href="#absolute-error-metrics" id="id4">Absolute Error Metrics</a></p>
+<ul>
+<li><p><a class="reference internal" href="#ae-and-mae-mean-absolute-error" id="id5">AE and MAE — (Mean) Absolute Error</a></p></li>
+<li><p><a class="reference internal" href="#se-and-mse-mean-squared-error" id="id6">SE and MSE — (Mean) Squared Error</a></p></li>
+</ul>
+</li>
+<li><p><a class="reference internal" href="#relative-error-metrics" id="id7">Relative Error Metrics</a></p>
+<ul>
+<li><p><a class="reference internal" href="#rae-and-nrae-normalised-relative-absolute-error" id="id8">RAE and NRAE — (Normalised) Relative Absolute Error</a></p></li>
+<li><p><a class="reference internal" href="#nae-normalised-absolute-error" id="id9">NAE — Normalised Absolute Error</a></p></li>
+</ul>
+</li>
+<li><p><a class="reference internal" href="#divergence-metrics" id="id10">Divergence Metrics</a></p>
+<ul>
+<li><p><a class="reference internal" href="#kld-and-nkld-normalised-kullback-leibler-divergence" id="id11">KLD and NKLD — (Normalised) Kullback-Leibler Divergence</a></p></li>
+</ul>
+</li>
+<li><p><a class="reference internal" href="#ordinal-metrics" id="id12">Ordinal Metrics</a></p>
+<ul>
+<li><p><a class="reference internal" href="#nmd-normalised-match-distance" id="id13">NMD — Normalised Match Distance</a></p></li>
+<li><p><a class="reference internal" href="#rnod-relative-normalised-order-distance" id="id14">RNOD — Relative Normalised Order Distance</a></p></li>
+</ul>
+</li>
+<li><p><a class="reference internal" href="#distribution-distance-metrics" id="id15">Distribution Distance Metrics</a></p></li>
+<li><p><a class="reference internal" href="#choosing-a-metric" id="id16">Choosing a Metric</a></p></li>
+</ul>
+</nav>
+<hr class="docutils" />
+<section id="absolute-error-metrics">
+<h2><a class="toc-backref" href="#id4" role="doc-backlink"><span class="section-number">5.3.1. </span>Absolute Error Metrics</a><a class="headerlink" href="#absolute-error-metrics" title="Link to this heading">#</a></h2>
+<section id="ae-and-mae-mean-absolute-error">
+<h3><a class="toc-backref" href="#id5" role="doc-backlink"><span class="section-number">5.3.1.1. </span>AE and MAE — (Mean) Absolute Error</a><a class="headerlink" href="#ae-and-mae-mean-absolute-error" title="Link to this heading">#</a></h3>
+<div class="math notranslate nohighlight">
+\[\text{AE}(p, \hat{p}) = \frac{1}{|\mathcal{Y}|}
+    \sum_{c \in \mathcal{Y}} |p(c) - \hat{p}(c)|\]</div>
+<p><a class="reference internal" href="generated/mlquantify.metrics.AE.html#mlquantify.metrics.AE" title="mlquantify.metrics.AE"><code class="xref py py-func docutils literal notranslate"><span class="pre">AE</span></code></a> computes the mean absolute difference per class over a <em>single</em>
+sample. <a class="reference internal" href="generated/mlquantify.metrics.MAE.html#mlquantify.metrics.MAE" title="mlquantify.metrics.MAE"><code class="xref py py-func docutils literal notranslate"><span class="pre">MAE</span></code></a> averages AE over <em>multiple</em> samples (from a protocol).</p>
+<p><strong>When to use:</strong> MAE is the standard metric for quantification evaluation.
+It is interpretable (the average error in prevalence units, e.g. 0.05 means
+“off by 5 percentage points on average”), symmetric, and gives equal weight
+to all classes and prevalence levels.</p>
+<figure class="align-center" id="id2">
+<a class="reference internal image-reference" href="../_images/metrics_comparison.png"><img alt="MAE vs RAE weighting comparison" src="../_images/metrics_comparison.png" style="width: 90%;" />
+</a>
+<figcaption>
+<p><span class="caption-text"><em>Left: for a fixed 5 percentage-point absolute error, MAE assigns equal weight
+regardless of the true prevalence (flat blue line), while RAE’s contribution
+grows steeply as prevalence approaches zero (orange curve).
+Right: the same 5 pp absolute error applied at different prevalence levels
+— RAE imposes a much heavier penalty at 5% and 10% prevalence, reflecting
+that a 5 pp error is far more significant when the true value is 5% than 50%.</em></span><a class="headerlink" href="#id2" title="Link to this image">#</a></p>
+</figcaption>
+</figure>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">mlquantify.metrics</span><span class="w"> </span><span class="kn">import</span> <span class="n">MAE</span><span class="p">,</span> <span class="n">AE</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">mlquantify.utils</span><span class="w"> </span><span class="kn">import</span> <span class="n">get_prev_from_labels</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+
+<span class="n">y_true</span>  <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">])</span>
+<span class="n">y_pred</span>  <span class="o">=</span> <span class="p">{</span><span class="mi">0</span><span class="p">:</span> <span class="mf">0.62</span><span class="p">,</span> <span class="mi">1</span><span class="p">:</span> <span class="mf">0.38</span><span class="p">}</span>
+
+<span class="n">true_prev</span> <span class="o">=</span> <span class="n">get_prev_from_labels</span><span class="p">(</span><span class="n">y_true</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">AE</span><span class="p">(</span><span class="n">true_prev</span><span class="p">,</span> <span class="n">y_pred</span><span class="p">))</span>   <span class="c1"># single-sample AE</span>
+<span class="c1"># 0.02</span>
+
+<span class="c1"># Over multiple protocol samples</span>
+<span class="n">errors</span> <span class="o">=</span> <span class="p">[</span><span class="n">AE</span><span class="p">(</span><span class="n">get_prev_from_labels</span><span class="p">(</span><span class="n">y_s</span><span class="p">),</span> <span class="n">q</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">X_s</span><span class="p">))</span>
+          <span class="k">for</span> <span class="n">X_s</span><span class="p">,</span> <span class="n">y_s</span> <span class="ow">in</span> <span class="n">samples</span><span class="p">]</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">MAE</span><span class="p">(</span><span class="n">errors</span><span class="p">))</span>             <span class="c1"># mean over all samples</span>
+</pre></div>
+</div>
+</section>
+<section id="se-and-mse-mean-squared-error">
+<h3><a class="toc-backref" href="#id6" role="doc-backlink"><span class="section-number">5.3.1.2. </span>SE and MSE — (Mean) Squared Error</a><a class="headerlink" href="#se-and-mse-mean-squared-error" title="Link to this heading">#</a></h3>
+<div class="math notranslate nohighlight">
+\[\text{SE}(p, \hat{p}) = \frac{1}{|\mathcal{Y}|}
+    \sum_{c \in \mathcal{Y}} (p(c) - \hat{p}(c))^2\]</div>
+<p><a class="reference internal" href="generated/mlquantify.metrics.SE.html#mlquantify.metrics.SE" title="mlquantify.metrics.SE"><code class="xref py py-func docutils literal notranslate"><span class="pre">SE</span></code></a> penalises large errors more severely than AE (quadratic vs
+linear). Use MSE when large deviations are especially harmful.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">mlquantify.metrics</span><span class="w"> </span><span class="kn">import</span> <span class="n">MSE</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">MSE</span><span class="p">(</span><span class="n">true_prev</span><span class="p">,</span> <span class="n">y_pred</span><span class="p">))</span>
+</pre></div>
+</div>
+</section>
+</section>
+<hr class="docutils" />
+<section id="relative-error-metrics">
+<h2><a class="toc-backref" href="#id7" role="doc-backlink"><span class="section-number">5.3.2. </span>Relative Error Metrics</a><a class="headerlink" href="#relative-error-metrics" title="Link to this heading">#</a></h2>
+<section id="rae-and-nrae-normalised-relative-absolute-error">
+<h3><a class="toc-backref" href="#id8" role="doc-backlink"><span class="section-number">5.3.2.1. </span>RAE and NRAE — (Normalised) Relative Absolute Error</a><a class="headerlink" href="#rae-and-nrae-normalised-relative-absolute-error" title="Link to this heading">#</a></h3>
+<div class="math notranslate nohighlight">
+\[\text{RAE}(p, \hat{p}) = \frac{1}{|\mathcal{Y}|}
+    \sum_{c \in \mathcal{Y}} \frac{|p(c) - \hat{p}(c)|}{p(c) + \varepsilon}\]</div>
+<p>where <span class="math notranslate nohighlight">\(\varepsilon\)</span> is a small smoothing constant.</p>
+<p><strong>When to use:</strong> RAE amplifies errors at <em>low prevalences</em>. An error of 5
+percentage points matters much more at 5% prevalence than at 50%. Use RAE
+when rare classes are important (e.g. rare disease detection, fraud
+detection).</p>
+<p><a class="reference internal" href="generated/mlquantify.metrics.NRAE.html#mlquantify.metrics.NRAE" title="mlquantify.metrics.NRAE"><code class="xref py py-func docutils literal notranslate"><span class="pre">NRAE</span></code></a> normalises RAE to <span class="math notranslate nohighlight">\([0, 1]\)</span> so it is comparable across
+datasets with different numbers of classes.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">mlquantify.metrics</span><span class="w"> </span><span class="kn">import</span> <span class="n">RAE</span><span class="p">,</span> <span class="n">NRAE</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="n">RAE</span><span class="p">(</span><span class="n">true_prev</span><span class="p">,</span> <span class="n">y_pred</span><span class="p">))</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">NRAE</span><span class="p">(</span><span class="n">true_prev</span><span class="p">,</span> <span class="n">y_pred</span><span class="p">))</span>
+</pre></div>
+</div>
+</section>
+<section id="nae-normalised-absolute-error">
+<h3><a class="toc-backref" href="#id9" role="doc-backlink"><span class="section-number">5.3.2.2. </span>NAE — Normalised Absolute Error</a><a class="headerlink" href="#nae-normalised-absolute-error" title="Link to this heading">#</a></h3>
+<p><a class="reference internal" href="generated/mlquantify.metrics.NAE.html#mlquantify.metrics.NAE" title="mlquantify.metrics.NAE"><code class="xref py py-func docutils literal notranslate"><span class="pre">NAE</span></code></a> normalises AE by the number of classes so results are comparable
+across different multiclass settings.</p>
+</section>
+</section>
+<hr class="docutils" />
+<section id="divergence-metrics">
+<h2><a class="toc-backref" href="#id10" role="doc-backlink"><span class="section-number">5.3.3. </span>Divergence Metrics</a><a class="headerlink" href="#divergence-metrics" title="Link to this heading">#</a></h2>
+<section id="kld-and-nkld-normalised-kullback-leibler-divergence">
+<h3><a class="toc-backref" href="#id11" role="doc-backlink"><span class="section-number">5.3.3.1. </span>KLD and NKLD — (Normalised) Kullback-Leibler Divergence</a><a class="headerlink" href="#kld-and-nkld-normalised-kullback-leibler-divergence" title="Link to this heading">#</a></h3>
+<div class="math notranslate nohighlight">
+\[\text{KLD}(p, \hat{p}) = \sum_{c \in \mathcal{Y}} p(c) \log\frac{p(c)}{\hat{p}(c)}\]</div>
+<p>KLD measures the <em>information loss</em> when using <span class="math notranslate nohighlight">\(\hat{p}\)</span> to
+approximate <span class="math notranslate nohighlight">\(p\)</span>. It penalises zero-probability predictions
+asymptotically (use the smoothed version internally).</p>
+<p><strong>When to use:</strong> KLD is used when prevalences represent probability
+distributions and you care about calibration. It is asymmetric — the true
+and estimated distributions are not interchangeable — so the convention
+matters (<code class="docutils literal notranslate"><span class="pre">KLD(true,</span> <span class="pre">pred)</span></code>). <a class="reference internal" href="generated/mlquantify.metrics.NKLD.html#mlquantify.metrics.NKLD" title="mlquantify.metrics.NKLD"><code class="xref py py-func docutils literal notranslate"><span class="pre">NKLD</span></code></a> normalises to <span class="math notranslate nohighlight">\([0, 1]\)</span>.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">mlquantify.metrics</span><span class="w"> </span><span class="kn">import</span> <span class="n">KLD</span><span class="p">,</span> <span class="n">NKLD</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="n">KLD</span><span class="p">(</span><span class="n">true_prev</span><span class="p">,</span> <span class="n">y_pred</span><span class="p">))</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">NKLD</span><span class="p">(</span><span class="n">true_prev</span><span class="p">,</span> <span class="n">y_pred</span><span class="p">))</span>
+</pre></div>
+</div>
+</section>
+</section>
+<hr class="docutils" />
+<section id="ordinal-metrics">
+<h2><a class="toc-backref" href="#id12" role="doc-backlink"><span class="section-number">5.3.4. </span>Ordinal Metrics</a><a class="headerlink" href="#ordinal-metrics" title="Link to this heading">#</a></h2>
+<section id="nmd-normalised-match-distance">
+<h3><a class="toc-backref" href="#id13" role="doc-backlink"><span class="section-number">5.3.4.1. </span>NMD — Normalised Match Distance</a><a class="headerlink" href="#nmd-normalised-match-distance" title="Link to this heading">#</a></h3>
+<p><a class="reference internal" href="generated/mlquantify.metrics.NMD.html#mlquantify.metrics.NMD" title="mlquantify.metrics.NMD"><code class="xref py py-func docutils literal notranslate"><span class="pre">NMD</span></code></a> is designed for <strong>ordinal</strong> quantification tasks where classes
+have a natural order (e.g. severity levels: mild &lt; moderate &lt; severe). It
+measures the earth-mover distance between the CDFs of <span class="math notranslate nohighlight">\(p\)</span> and
+<span class="math notranslate nohighlight">\(\hat{p}\)</span>.</p>
+<p><strong>When to use:</strong> Use NMD when your classes are ordered and the distance
+between adjacent classes matters. For non-ordinal problems, AE or KLD are
+more appropriate.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">mlquantify.metrics</span><span class="w"> </span><span class="kn">import</span> <span class="n">NMD</span>
+
+<span class="c1"># Ordinal classes: 0 &lt; 1 &lt; 2</span>
+<span class="n">true_prev</span> <span class="o">=</span> <span class="p">[</span><span class="mf">0.5</span><span class="p">,</span> <span class="mf">0.3</span><span class="p">,</span> <span class="mf">0.2</span><span class="p">]</span>
+<span class="n">pred_prev</span> <span class="o">=</span> <span class="p">[</span><span class="mf">0.4</span><span class="p">,</span> <span class="mf">0.4</span><span class="p">,</span> <span class="mf">0.2</span><span class="p">]</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">NMD</span><span class="p">(</span><span class="n">true_prev</span><span class="p">,</span> <span class="n">pred_prev</span><span class="p">))</span>
+</pre></div>
+</div>
+</section>
+<section id="rnod-relative-normalised-order-distance">
+<h3><a class="toc-backref" href="#id14" role="doc-backlink"><span class="section-number">5.3.4.2. </span>RNOD — Relative Normalised Order Distance</a><a class="headerlink" href="#rnod-relative-normalised-order-distance" title="Link to this heading">#</a></h3>
+<p><a class="reference internal" href="generated/mlquantify.metrics.RNOD.html#mlquantify.metrics.RNOD" title="mlquantify.metrics.RNOD"><code class="xref py py-func docutils literal notranslate"><span class="pre">RNOD</span></code></a> is a relative version of NMD that amplifies errors at low
+prevalences — analogous to RAE for ordinal settings.</p>
+</section>
+</section>
+<hr class="docutils" />
+<section id="distribution-distance-metrics">
+<h2><a class="toc-backref" href="#id15" role="doc-backlink"><span class="section-number">5.3.5. </span>Distribution Distance Metrics</a><a class="headerlink" href="#distribution-distance-metrics" title="Link to this heading">#</a></h2>
+<p>The following functions also serve as loss functions in distribution-matching
+quantifiers:</p>
+<div class="pst-scrollable-table-container"><table class="table">
+<colgroup>
+<col style="width: 20.0%" />
+<col style="width: 80.0%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Function</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="xref py py-func docutils literal notranslate"><span class="pre">hellinger</span></code></p></td>
+<td><p>Hellinger distance between two distributions. <span class="math notranslate nohighlight">\(\in [0, 1]\)</span>.</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="xref py py-func docutils literal notranslate"><span class="pre">topsoe</span></code></p></td>
+<td><p>TopSoe (Jensen-Shannon-like) divergence.</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="xref py py-func docutils literal notranslate"><span class="pre">probsymm</span></code></p></td>
+<td><p>Probabilistic symmetric chi-squared divergence.</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="xref py py-func docutils literal notranslate"><span class="pre">sqEuclidean</span></code></p></td>
+<td><p>Squared Euclidean distance.</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>These are available both in standard numpy and JAX-compatible variants
+(<code class="docutils literal notranslate"><span class="pre">hellinger_jax</span></code>, etc.) for gradient-based optimisation.</p>
+</section>
+<hr class="docutils" />
+<section id="choosing-a-metric">
+<h2><a class="toc-backref" href="#id16" role="doc-backlink"><span class="section-number">5.3.6. </span>Choosing a Metric</a><a class="headerlink" href="#choosing-a-metric" title="Link to this heading">#</a></h2>
+<div class="pst-scrollable-table-container"><table class="table">
+<colgroup>
+<col style="width: 15.0%" />
+<col style="width: 85.0%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Metric</p></th>
+<th class="head"><p>Use when</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><strong>MAE</strong></p></td>
+<td><p>Default. Most papers report MAE. Easy to interpret.</p></td>
+</tr>
+<tr class="row-odd"><td><p><strong>RAE</strong></p></td>
+<td><p>Rare classes matter; you want errors at low prevalences amplified.</p></td>
+</tr>
+<tr class="row-even"><td><p><strong>KLD / NKLD</strong></p></td>
+<td><p>Probabilistic calibration of the prevalence vector matters.</p></td>
+</tr>
+<tr class="row-odd"><td><p><strong>MSE</strong></p></td>
+<td><p>Large estimation errors are especially harmful.</p></td>
+</tr>
+<tr class="row-even"><td><p><strong>NMD</strong></p></td>
+<td><p>Classes have a natural order (ordinal quantification).</p></td>
+</tr>
+<tr class="row-odd"><td><p><strong>NRAE / NAE / NKLD</strong></p></td>
+<td><p>Comparing results across datasets with different class counts.</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<p><strong>Full evaluation example:</strong></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">mlquantify.model_selection</span><span class="w"> </span><span class="kn">import</span> <span class="n">APP</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">mlquantify.metrics</span><span class="w"> </span><span class="kn">import</span> <span class="n">MAE</span><span class="p">,</span> <span class="n">RAE</span><span class="p">,</span> <span class="n">NKLD</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">mlquantify.utils</span><span class="w"> </span><span class="kn">import</span> <span class="n">get_prev_from_labels</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">mlquantify.likelihood</span><span class="w"> </span><span class="kn">import</span> <span class="n">EMQ</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">sklearn.linear_model</span><span class="w"> </span><span class="kn">import</span> <span class="n">LogisticRegression</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">sklearn.datasets</span><span class="w"> </span><span class="kn">import</span> <span class="n">make_classification</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">sklearn.model_selection</span><span class="w"> </span><span class="kn">import</span> <span class="n">train_test_split</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+
+<span class="n">X</span><span class="p">,</span> <span class="n">y</span> <span class="o">=</span> <span class="n">make_classification</span><span class="p">(</span><span class="n">n_samples</span><span class="o">=</span><span class="mi">2000</span><span class="p">,</span> <span class="n">weights</span><span class="o">=</span><span class="p">[</span><span class="mf">0.8</span><span class="p">,</span> <span class="mf">0.2</span><span class="p">],</span>
+                           <span class="n">random_state</span><span class="o">=</span><span class="mi">42</span><span class="p">)</span>
+<span class="n">X_train</span><span class="p">,</span> <span class="n">X_test</span><span class="p">,</span> <span class="n">y_train</span><span class="p">,</span> <span class="n">y_test</span> <span class="o">=</span> <span class="n">train_test_split</span><span class="p">(</span>
+    <span class="n">X</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">test_size</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span> <span class="n">random_state</span><span class="o">=</span><span class="mi">42</span><span class="p">)</span>
+
+<span class="n">q</span> <span class="o">=</span> <span class="n">EMQ</span><span class="p">(</span><span class="n">LogisticRegression</span><span class="p">())</span>
+<span class="n">q</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">X_train</span><span class="p">,</span> <span class="n">y_train</span><span class="p">)</span>
+
+<span class="n">protocol</span> <span class="o">=</span> <span class="n">APP</span><span class="p">(</span><span class="n">batch_size</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> <span class="n">n_prevalences</span><span class="o">=</span><span class="mi">21</span><span class="p">,</span> <span class="n">repeats</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span>
+               <span class="n">random_state</span><span class="o">=</span><span class="mi">42</span><span class="p">)</span>
+
+<span class="n">maes</span><span class="p">,</span> <span class="n">raes</span><span class="p">,</span> <span class="n">nklds</span> <span class="o">=</span> <span class="p">[],</span> <span class="p">[],</span> <span class="p">[]</span>
+<span class="k">for</span> <span class="n">idx</span> <span class="ow">in</span> <span class="n">protocol</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="n">X_test</span><span class="p">,</span> <span class="n">y_test</span><span class="p">):</span>
+    <span class="n">X_s</span><span class="p">,</span> <span class="n">y_s</span> <span class="o">=</span> <span class="n">X_test</span><span class="p">[</span><span class="n">idx</span><span class="p">],</span> <span class="n">y_test</span><span class="p">[</span><span class="n">idx</span><span class="p">]</span>
+    <span class="n">tp</span> <span class="o">=</span> <span class="n">get_prev_from_labels</span><span class="p">(</span><span class="n">y_s</span><span class="p">)</span>
+    <span class="n">pp</span> <span class="o">=</span> <span class="n">q</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">X_s</span><span class="p">)</span>
+    <span class="n">maes</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">MAE</span><span class="p">(</span><span class="n">tp</span><span class="p">,</span> <span class="n">pp</span><span class="p">))</span>
+    <span class="n">raes</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">RAE</span><span class="p">(</span><span class="n">tp</span><span class="p">,</span> <span class="n">pp</span><span class="p">))</span>
+    <span class="n">nklds</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">NKLD</span><span class="p">(</span><span class="n">tp</span><span class="p">,</span> <span class="n">pp</span><span class="p">))</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;MAE:  </span><span class="si">{</span><span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">maes</span><span class="p">)</span><span class="si">:</span><span class="s2">.4f</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;RAE:  </span><span class="si">{</span><span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">raes</span><span class="p">)</span><span class="si">:</span><span class="s2">.4f</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;NKLD: </span><span class="si">{</span><span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">nklds</span><span class="p">)</span><span class="si">:</span><span class="s2">.4f</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Evaluation metrics for quantification assess the accuracy of estimated class prevalences against true prevalences. These metrics are crucial for understanding how well a quantifier performs, especially under distributional shifts.</p>
+<p>The library includes several widely used evaluation metrics:</p>
+<div class="pst-scrollable-table-container"><table class="table" id="id3">
+<caption><span class="caption-text">Metrics</span><a class="headerlink" href="#id3" title="Link to this table">#</a></caption>
+<colgroup>
+<col style="width: 30.0%" />
+<col style="width: 70.0%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Metric</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><a class="reference internal" href="generated/mlquantify.metrics.NMD.html#mlquantify.metrics.NMD" title="mlquantify.metrics.NMD"><code class="xref py py-class docutils literal notranslate"><span class="pre">NMD</span></code></a></p></td>
+<td><p>Normalized Match Distance</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="generated/mlquantify.metrics.RNOD.html#mlquantify.metrics.RNOD" title="mlquantify.metrics.RNOD"><code class="xref py py-class docutils literal notranslate"><span class="pre">RNOD</span></code></a></p></td>
+<td><p>Relative Normalized Overall Deviation</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="generated/mlquantify.metrics.VSE.html#mlquantify.metrics.VSE" title="mlquantify.metrics.VSE"><code class="xref py py-class docutils literal notranslate"><span class="pre">VSE</span></code></a></p></td>
+<td><p>Variance Shift Error</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="generated/mlquantify.metrics.CvM_L1.html#mlquantify.metrics.CvM_L1" title="mlquantify.metrics.CvM_L1"><code class="xref py py-class docutils literal notranslate"><span class="pre">CvM_L1</span></code></a></p></td>
+<td><p>Cramér-von Mises L1 Distance</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="generated/mlquantify.metrics.AE.html#mlquantify.metrics.AE" title="mlquantify.metrics.AE"><code class="xref py py-class docutils literal notranslate"><span class="pre">AE</span></code></a></p></td>
+<td><p>Absolute Error</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="generated/mlquantify.metrics.SE.html#mlquantify.metrics.SE" title="mlquantify.metrics.SE"><code class="xref py py-class docutils literal notranslate"><span class="pre">SE</span></code></a></p></td>
+<td><p>Squared Error</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="generated/mlquantify.metrics.MAE.html#mlquantify.metrics.MAE" title="mlquantify.metrics.MAE"><code class="xref py py-class docutils literal notranslate"><span class="pre">MAE</span></code></a></p></td>
+<td><p>Mean Absolute Error</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="generated/mlquantify.metrics.MSE.html#mlquantify.metrics.MSE" title="mlquantify.metrics.MSE"><code class="xref py py-class docutils literal notranslate"><span class="pre">MSE</span></code></a></p></td>
+<td><p>Mean Squared Error</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="generated/mlquantify.metrics.KLD.html#mlquantify.metrics.KLD" title="mlquantify.metrics.KLD"><code class="xref py py-class docutils literal notranslate"><span class="pre">KLD</span></code></a></p></td>
+<td><p>Kullback-Leibler Divergence</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="generated/mlquantify.metrics.RAE.html#mlquantify.metrics.RAE" title="mlquantify.metrics.RAE"><code class="xref py py-class docutils literal notranslate"><span class="pre">RAE</span></code></a></p></td>
+<td><p>Relative Absolute Error</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="generated/mlquantify.metrics.NAE.html#mlquantify.metrics.NAE" title="mlquantify.metrics.NAE"><code class="xref py py-class docutils literal notranslate"><span class="pre">NAE</span></code></a></p></td>
+<td><p>Normalized Absolute Error</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="generated/mlquantify.metrics.NRAE.html#mlquantify.metrics.NRAE" title="mlquantify.metrics.NRAE"><code class="xref py py-class docutils literal notranslate"><span class="pre">NRAE</span></code></a></p></td>
+<td><p>Normalized Relative Absolute Error</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="generated/mlquantify.metrics.NKLD.html#mlquantify.metrics.NKLD" title="mlquantify.metrics.NKLD"><code class="xref py py-class docutils literal notranslate"><span class="pre">NKLD</span></code></a></p></td>
+<td><p>Normalized Kullback-Leibler Divergence</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+</section>
+<section id="single-label-quantification-slq-metrics">
+<h1><span class="section-number">5.4. </span>Single Label Quantification (SLQ) Metrics<a class="headerlink" href="#single-label-quantification-slq-metrics" title="Link to this heading">#</a></h1>
+<section id="ae-absolute-error">
+<h2><span class="section-number">5.4.1. </span>AE (Absolute Error)<a class="headerlink" href="#ae-absolute-error" title="Link to this heading">#</a></h2>
+<p><strong>Parameters:</strong></p>
+<ul class="simple">
+<li><p><span class="math notranslate nohighlight">\(p\)</span>: array-like, shape (n_classes,)
+True prevalence (distribution of classes).</p></li>
+<li><p><span class="math notranslate nohighlight">\(\hat{p}\)</span>: array-like, shape (n_classes,)
+Estimated prevalence.</p></li>
+</ul>
+<p>AE calculates the simple absolute error across classes:</p>
+<div class="math notranslate nohighlight">
+\[\text{AE}(p, \hat{p}) = \sum_{c} |p(c) - \hat{p}(c)|\]</div>
+<p>Its primary strength is transparency and ease of interpretation.</p>
+</section>
+<section id="se-squared-error">
+<h2><span class="section-number">5.4.2. </span>SE (Squared Error)<a class="headerlink" href="#se-squared-error" title="Link to this heading">#</a></h2>
+<p><strong>Parameters:</strong></p>
+<ul class="simple">
+<li><p><span class="math notranslate nohighlight">\(p\)</span>: array-like, shape (n_classes,)
+True prevalence.</p></li>
+<li><p><span class="math notranslate nohighlight">\(\hat{p}\)</span>: array-like, shape (n_classes,)
+Estimated prevalence.</p></li>
+</ul>
+<p>SE is the sum of squared differences:</p>
+<div class="math notranslate nohighlight">
+\[\text{SE}(p, \hat{p}) = \sum_{c} (p(c) - \hat{p}(c))^2\]</div>
+<p>This penalizes larger errors more heavily, making outlier mistakes more obvious.</p>
+</section>
+<section id="mae-mean-absolute-error">
+<h2><span class="section-number">5.4.3. </span>MAE (Mean Absolute Error)<a class="headerlink" href="#mae-mean-absolute-error" title="Link to this heading">#</a></h2>
+<p><strong>Parameters:</strong></p>
+<ul class="simple">
+<li><p><span class="math notranslate nohighlight">\(p\)</span>: array-like, shape (n_classes,)
+True prevalence.</p></li>
+<li><p><span class="math notranslate nohighlight">\(\hat{p}\)</span>: array-like, shape (n_classes,)
+Estimated prevalence.</p></li>
+</ul>
+<p>MAE averages the absolute errors over all classes:</p>
+<div class="math notranslate nohighlight">
+\[\text{MAE}(p, \hat{p}) = \frac{1}{K} \sum_{c} |p(c) - \hat{p}(c)|\]</div>
+<p>It offers a normalized perspective, useful for comparing performances across datasets.</p>
+</section>
+<section id="mse-mean-squared-error">
+<h2><span class="section-number">5.4.4. </span>MSE (Mean Squared Error)<a class="headerlink" href="#mse-mean-squared-error" title="Link to this heading">#</a></h2>
+<p><strong>Parameters:</strong></p>
+<ul class="simple">
+<li><p><span class="math notranslate nohighlight">\(p\)</span>: array-like, shape (n_classes,)
+True prevalence.</p></li>
+<li><p><span class="math notranslate nohighlight">\(\hat{p}\)</span>: array-like, shape (n_classes,)
+Estimated prevalence.</p></li>
+</ul>
+<p>MSE averages the squared errors:</p>
+<div class="math notranslate nohighlight">
+\[\text{MSE}(p, \hat{p}) = \frac{1}{K} \sum_{c} (p(c) - \hat{p}(c))^2\]</div>
+<p>Ideal for highlighting large deviations in prevalence estimation.</p>
+</section>
+<section id="kld-kullback-leibler-divergence">
+<h2><span class="section-number">5.4.5. </span>KLD (Kullback-Leibler Divergence)<a class="headerlink" href="#kld-kullback-leibler-divergence" title="Link to this heading">#</a></h2>
+<p><strong>Parameters:</strong></p>
+<ul class="simple">
+<li><p><span class="math notranslate nohighlight">\(p\)</span>: array-like, shape (n_classes,)
+True prevalence.</p></li>
+<li><p><span class="math notranslate nohighlight">\(\hat{p}\)</span>: array-like, shape (n_classes,)
+Estimated prevalence.</p></li>
+</ul>
+<p>KLD measures the information loss between distributions:</p>
+<div class="math notranslate nohighlight">
+\[\text{KLD}(p, \hat{p}) = \sum_{c} p(c) \log \frac{p(c)}{\hat{p}(c)}\]</div>
+<p>Its key advantage is sensitivity to wrong predictions where the true prevalence is high.</p>
+</section>
+<section id="rae-relative-absolute-error">
+<h2><span class="section-number">5.4.6. </span>RAE (Relative Absolute Error)<a class="headerlink" href="#rae-relative-absolute-error" title="Link to this heading">#</a></h2>
+<p><strong>Parameters:</strong></p>
+<ul class="simple">
+<li><p><span class="math notranslate nohighlight">\(p\)</span>: array-like, shape (n_classes,)
+True prevalence.</p></li>
+<li><p><span class="math notranslate nohighlight">\(\hat{p}\)</span>: array-like, shape (n_classes,)
+Estimated prevalence.</p></li>
+<li><p><span class="math notranslate nohighlight">\(\epsilon\)</span>: float, optional (default=1e-12)
+Small constant to ensure numerical stability.</p></li>
+</ul>
+<p>RAE scales the absolute error by true prevalence:</p>
+<div class="math notranslate nohighlight">
+\[\text{RAE}(p, \hat{p}) = \sum_{c} \frac{|p(c) - \hat{p}(c)|}{p(c) + \epsilon}\]</div>
+<p>This is beneficial for identifying relative impact in imbalanced scenarios.</p>
+</section>
+<section id="nae-normalized-absolute-error">
+<h2><span class="section-number">5.4.7. </span>NAE (Normalized Absolute Error)<a class="headerlink" href="#nae-normalized-absolute-error" title="Link to this heading">#</a></h2>
+<p><strong>Parameters:</strong></p>
+<ul class="simple">
+<li><p><span class="math notranslate nohighlight">\(p\)</span>: array-like, shape (n_classes,)
+True prevalence.</p></li>
+<li><p><span class="math notranslate nohighlight">\(\hat{p}\)</span>: array-like, shape (n_classes,)
+Estimated prevalence.</p></li>
+</ul>
+<p>NAE normalizes the absolute error:</p>
+<div class="math notranslate nohighlight">
+\[\text{NAE}(p, \hat{p}) = \frac{1}{K} \sum_{c} \frac{|p(c) - \hat{p}(c)|}{\max\{p(c), \hat{p}(c)\}}\]</div>
+<p>Best used for ensuring error scale invariance.</p>
+</section>
+<section id="nrae-normalized-relative-absolute-error">
+<h2><span class="section-number">5.4.8. </span>NRAE (Normalized Relative Absolute Error)<a class="headerlink" href="#nrae-normalized-relative-absolute-error" title="Link to this heading">#</a></h2>
+<p><strong>Parameters:</strong></p>
+<ul class="simple">
+<li><p><span class="math notranslate nohighlight">\(p\)</span>: array-like, shape (n_classes,)
+True prevalence.</p></li>
+<li><p><span class="math notranslate nohighlight">\(\hat{p}\)</span>: array-like, shape (n_classes,)
+Estimated prevalence.</p></li>
+<li><p><span class="math notranslate nohighlight">\(\epsilon\)</span>: float, optional (default=1e-12)
+Small constant for numerical stability.</p></li>
+</ul>
+<p>NRAE further normalizes relative errors:</p>
+<div class="math notranslate nohighlight">
+\[\text{NRAE}(p, \hat{p}) = \frac{1}{K} \sum_{c} \frac{|p(c) - \hat{p}(c)|}{p(c) + \hat{p}(c) + \epsilon}\]</div>
+<p>This balances error measurement between true and estimated values.</p>
+</section>
+<section id="nkld-normalized-kullback-leibler-divergence">
+<h2><span class="section-number">5.4.9. </span>NKLD (Normalized Kullback-Leibler Divergence)<a class="headerlink" href="#nkld-normalized-kullback-leibler-divergence" title="Link to this heading">#</a></h2>
+<p><strong>Parameters:</strong></p>
+<ul class="simple">
+<li><p><span class="math notranslate nohighlight">\(p\)</span>: array-like, shape (n_classes,)
+True prevalence.</p></li>
+<li><p><span class="math notranslate nohighlight">\(\hat{p}\)</span>: array-like, shape (n_classes,)
+Estimated prevalence.</p></li>
+<li><p><span class="math notranslate nohighlight">\(\epsilon\)</span>: float, optional (default=1e-12)
+Small constant for numerical stability.</p></li>
+</ul>
+<p>NKLD outputs a normalized form of KLD:</p>
+<div class="math notranslate nohighlight">
+\[\text{NKLD}(p, \hat{p}) = \frac{1}{K} \sum_{c} p(c) \log \frac{p(c)}{\hat{p}(c) + \epsilon}\]</div>
+<p>This makes it robust for comparing across distinct sample sizes.</p>
+</section>
+</section>
+<section id="regression-based-quantification-rq-metrics">
+<h1><span class="section-number">5.5. </span>Regression-Based Quantification (RQ) Metrics<a class="headerlink" href="#regression-based-quantification-rq-metrics" title="Link to this heading">#</a></h1>
+<section id="vse-variance-shift-error">
+<h2><span class="section-number">5.5.1. </span>VSE (Variance Shift Error)<a class="headerlink" href="#vse-variance-shift-error" title="Link to this heading">#</a></h2>
+<p><strong>Parameters:</strong></p>
+<ul class="simple">
+<li><p><span class="math notranslate nohighlight">\(p\)</span>: array-like, shape (n_classes,)
+True prevalence.</p></li>
+<li><p><span class="math notranslate nohighlight">\(\hat{p}\)</span>: array-like, shape (n_classes,)
+Estimated prevalence.</p></li>
+</ul>
+<p>The Variance Shift Error quantifies the discrepancy between the variance of true and estimated distributions:</p>
+<div class="math notranslate nohighlight">
+\[\text{VSE}(p, \hat{p}) = |\text{Var}(p) - \text{Var}(\hat{p})|\]</div>
+<p>This metric emphasizes changes in dispersion, which is useful for detecting model bias towards certain classes.</p>
+</section>
+<section id="cvm-l1-cramer-von-mises-l1-distance">
+<h2><span class="section-number">5.5.2. </span>CvM_L1 (Cramér-von Mises L1 Distance)<a class="headerlink" href="#cvm-l1-cramer-von-mises-l1-distance" title="Link to this heading">#</a></h2>
+<p><strong>Parameters:</strong></p>
+<ul class="simple">
+<li><p><span class="math notranslate nohighlight">\(p\)</span>: array-like, shape (n_classes,)
+True prevalence.</p></li>
+<li><p><span class="math notranslate nohighlight">\(\hat{p}\)</span>: array-like, shape (n_classes,)
+Estimated prevalence.</p></li>
+</ul>
+<p>CvM_L1 compares cumulative distributions using the L1 norm:</p>
+<div class="math notranslate nohighlight">
+\[\text{CvM\_L1}(p, \hat{p}) = \sum_{c} |F_p(c) - F_{\hat{p}}(c)|\]</div>
+<p>where (F_p(c)) is the cumulative distribution. Its advantage lies in capturing distributional differences beyond pointwise errors.</p>
+</section>
+</section>
+<section id="ordinal-quantification-oq-metrics">
+<h1><span class="section-number">5.6. </span>Ordinal Quantification (OQ) Metrics<a class="headerlink" href="#ordinal-quantification-oq-metrics" title="Link to this heading">#</a></h1>
+<section id="nmd-normalized-match-distance">
+<h2><span class="section-number">5.6.1. </span>NMD (Normalized Match Distance)<a class="headerlink" href="#nmd-normalized-match-distance" title="Link to this heading">#</a></h2>
+<p><strong>Parameters:</strong></p>
+<ul class="simple">
+<li><p><span class="math notranslate nohighlight">\(p\)</span>: array-like, shape (n_classes,)
+True prevalence.</p></li>
+<li><p><span class="math notranslate nohighlight">\(\hat{p}\)</span>: array-like, shape (n_classes,)
+Estimated prevalence.</p></li>
+</ul>
+<p>The NMD metric quantifies the normalized difference between two prevalence distributions:</p>
+<div class="math notranslate nohighlight">
+\[\text{NMD}(p, \hat{p}) = \frac{1}{2} \sum_{c} |p(c) - \hat{p}(c)|\]</div>
+<p>where ( p(c) ) is the true prevalence and ( hat{p}(c) ) is the estimated. The advantage of NMD is its straightforward interpretability and normalization, making it ideal for comparing different quantification methods.</p>
+</section>
+<section id="rnod-relative-normalized-overall-deviation">
+<h2><span class="section-number">5.6.2. </span>RNOD (Relative Normalized Overall Deviation)<a class="headerlink" href="#rnod-relative-normalized-overall-deviation" title="Link to this heading">#</a></h2>
+<p><strong>Parameters:</strong></p>
+<ul class="simple">
+<li><p><span class="math notranslate nohighlight">\(p\)</span>: array-like, shape (n_classes,)
+True prevalence.</p></li>
+<li><p><span class="math notranslate nohighlight">\(\hat{p}\)</span>: array-like, shape (n_classes,)
+Estimated prevalence.</p></li>
+<li><p><span class="math notranslate nohighlight">\(\epsilon\)</span>: float, optional (default=1e-12)
+Small constant to ensure numerical stability.</p></li>
+</ul>
+<p>RNOD measures the proportional deviation between the true and estimated prevalence, particularly highlighting errors in rare classes:</p>
+<div class="math notranslate nohighlight">
+\[\text{RNOD}(p, \hat{p}) = \frac{1}{K} \sum_{c} \frac{|p(c) - \hat{p}(c)|}{p(c) + \epsilon}\]</div>
+<p>Its benefit is in handling imbalanced distributions by reducing the influence of dominant classes.</p>
+</section>
+</section>
+
+
+                </article>
+              
+              
+              
+                <footer class="bd-footer-article">
+                  <div class="footer-article-items footer-article__inner">
+  
+    <div class="footer-article-item">
+<div class="prev-next-area">
+    <a class="left-prev"
+       href="tuning_hyperparameters.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title"><span class="section-number">5.2. </span>Tuning Hyperparameters</p>
+      </div>
+    </a>
+    <a class="right-next"
+       href="confidence_intervals.html"
+       title="next page">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title"><span class="section-number">6. </span>Confidence Regions for Quantification</p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
+    </a>
+</div></div>
+  
+</div>
+                </footer>
+              
+              
+              
+            </div>
+            
+            
+              
+                <dialog id="pst-secondary-sidebar-modal"></dialog>
+                <div id="pst-secondary-sidebar" class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item">
+<div
+    id="pst-page-navigation-heading-2"
+    class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> On this page
+  </div>
+  <nav id="pst-page-toc-nav" class="page-toc" aria-labelledby="pst-page-navigation-heading-2">
+    <ul class="pst-show_toc_level nav section-nav flex-column">
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#">5.3. Evaluation Metrics</a><ul class="pst-show_toc_level nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#absolute-error-metrics">5.3.1. Absolute Error Metrics</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#ae-and-mae-mean-absolute-error">5.3.1.1. AE and MAE — (Mean) Absolute Error</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#se-and-mse-mean-squared-error">5.3.1.2. SE and MSE — (Mean) Squared Error</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#relative-error-metrics">5.3.2. Relative Error Metrics</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#rae-and-nrae-normalised-relative-absolute-error">5.3.2.1. RAE and NRAE — (Normalised) Relative Absolute Error</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#nae-normalised-absolute-error">5.3.2.2. NAE — Normalised Absolute Error</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#divergence-metrics">5.3.3. Divergence Metrics</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#kld-and-nkld-normalised-kullback-leibler-divergence">5.3.3.1. KLD and NKLD — (Normalised) Kullback-Leibler Divergence</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#ordinal-metrics">5.3.4. Ordinal Metrics</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#nmd-normalised-match-distance">5.3.4.1. NMD — Normalised Match Distance</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#rnod-relative-normalised-order-distance">5.3.4.2. RNOD — Relative Normalised Order Distance</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#distribution-distance-metrics">5.3.5. Distribution Distance Metrics</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#choosing-a-metric">5.3.6. Choosing a Metric</a></li>
+</ul>
+</li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#single-label-quantification-slq-metrics">5.4. Single Label Quantification (SLQ) Metrics</a><ul class="pst-show_toc_level nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#ae-absolute-error">5.4.1. AE (Absolute Error)</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#se-squared-error">5.4.2. SE (Squared Error)</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#mae-mean-absolute-error">5.4.3. MAE (Mean Absolute Error)</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#mse-mean-squared-error">5.4.4. MSE (Mean Squared Error)</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#kld-kullback-leibler-divergence">5.4.5. KLD (Kullback-Leibler Divergence)</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#rae-relative-absolute-error">5.4.6. RAE (Relative Absolute Error)</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#nae-normalized-absolute-error">5.4.7. NAE (Normalized Absolute Error)</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#nrae-normalized-relative-absolute-error">5.4.8. NRAE (Normalized Relative Absolute Error)</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#nkld-normalized-kullback-leibler-divergence">5.4.9. NKLD (Normalized Kullback-Leibler Divergence)</a></li>
+</ul>
+</li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#regression-based-quantification-rq-metrics">5.5. Regression-Based Quantification (RQ) Metrics</a><ul class="pst-show_toc_level nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#vse-variance-shift-error">5.5.1. VSE (Variance Shift Error)</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#cvm-l1-cramer-von-mises-l1-distance">5.5.2. CvM_L1 (Cramér-von Mises L1 Distance)</a></li>
+</ul>
+</li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#ordinal-quantification-oq-metrics">5.6. Ordinal Quantification (OQ) Metrics</a><ul class="pst-show_toc_level nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#nmd-normalized-match-distance">5.6.1. NMD (Normalized Match Distance)</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#rnod-relative-normalized-overall-deviation">5.6.2. RNOD (Relative Normalized Overall Deviation)</a></li>
+</ul>
+</li>
+</ul>
+
+  </nav></div>
+
+  <div class="sidebar-secondary-item">
+
+  <div class="tocsection sourcelink">
+    <a href="../_sources/modules/evaluation_metrics.rst.txt">
+      <i class="fa-solid fa-file-lines"></i> Show Source
+    </a>
+  </div>
+</div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+          </footer>
+        
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script defer src="../_static/scripts/bootstrap.js?digest=a95f357e85573c9b56d5"></script>
+<script defer src="../_static/scripts/pydata-sphinx-theme.js?digest=a95f357e85573c9b56d5"></script>
+
+  <footer class="bd-footer">
+  </footer>
+  </body>
+</html>

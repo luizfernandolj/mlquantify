@@ -1,0 +1,1130 @@
+
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="../" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+<meta property="og:title" content="2.4. Adjusted Counting" />
+<meta property="og:type" content="website" />
+<meta property="og:url" content="modules/adjust_counting.html" />
+<meta property="og:site_name" content="mlquantify" />
+<meta property="og:description" content="Adjusted counting methods correct the bias of naive counting by using what the classifier’s error rates reveal about the true class distribution. They are the oldest family of dedicated quantificat..." />
+<meta property="og:image:width" content="1146" />
+<meta property="og:image:height" content="600" />
+<meta property="og:image" content="_images/social_previews/summary_modules_adjust_counting_ee7c1438.png" />
+<meta property="og:image:alt" content="Adjusted counting methods correct the bias of naive counting by using what the classifier’s error rates reveal about the true class distribution. They are the oldest family of dedicated quantificat..." />
+<meta name="description" content="Adjusted counting methods correct the bias of naive counting by using what the classifier’s error rates reveal about the true class distribution. They are the oldest family of dedicated quantificat..." />
+<meta name="twitter:card" content="summary_large_image" />
+
+    <title>2.4. Adjusted Counting &#8212; mlquantify</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
+  </script>
+  <!--
+    this give us a css class that will be invisible only if js is disabled
+  -->
+  <noscript>
+    <style>
+      .pst-js-only { display: none !important; }
+
+    </style>
+  </noscript>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../_static/styles/theme.css?digest=a95f357e85573c9b56d5" rel="stylesheet" />
+<link href="../_static/styles/pydata-sphinx-theme.css?digest=a95f357e85573c9b56d5" rel="stylesheet" />
+
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=8f2a1f02" />
+    <link rel="stylesheet" type="text/css" href="../_static/copybutton.css?v=76b2166b" />
+    <link rel="stylesheet" type="text/css" href="../_static/plot_directive.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinx-design.min.css?v=95c83b7e" />
+    <link rel="stylesheet" type="text/css" href="../_static/variables.css?v=fded66fe" />
+    <link rel="stylesheet" type="text/css" href="../_static/theme_overrides.css?v=dec63a3c" />
+    <link rel="stylesheet" type="text/css" href="../_static/landing.css?v=e93fd00d" />
+  
+  <!-- So that users can add custom icons -->
+  <script defer src="../_static/scripts/fontawesome.js?digest=a95f357e85573c9b56d5"></script>
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=a95f357e85573c9b56d5" />
+<link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=a95f357e85573c9b56d5" />
+
+    <script src="../_static/documentation_options.js?v=dc233e31"></script>
+    <script src="../_static/doctools.js?v=9bcbadda"></script>
+    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../_static/clipboard.min.js?v=a7894cd8"></script>
+    <script src="../_static/copybutton.js?v=f281be69"></script>
+    <script src="../_static/design-tabs.js?v=f930bc37"></script>
+    <script async="async" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'modules/adjust_counting';</script>
+    <script>
+        DOCUMENTATION_OPTIONS.theme_version = '0.19.0';
+        DOCUMENTATION_OPTIONS.theme_switcher_json_url = 'https://luizfernandolj.github.io/mlquantify/switcher.json';
+        DOCUMENTATION_OPTIONS.theme_switcher_version_match = 'dev';
+        DOCUMENTATION_OPTIONS.show_version_warning_banner =
+            true;
+        </script>
+    <script>DOCUMENTATION_OPTIONS.search_as_you_type = false;</script>
+    <link rel="canonical" href="https://luizfernandolj.github.io/mlquantify/modules/adjust_counting.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="2.5. Likelihood-Based Quantification" href="likelihood.html" />
+    <link rel="prev" title="2.3. Counting-Based Quantifiers" href="counters.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  <meta name="docsearch:version" content="" />
+  
+    
+    <script src="../_static/searchtools.js"></script>
+    <script src="../_static/language_data.js"></script>
+    <script src="../searchindex.js"></script>
+  
+  </head>
+  <body data-default-mode="">
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+  
+  
+  
+  
+  <dialog id="pst-search-dialog">
+    
+<form class="bd-search d-flex align-items-center"
+      action="../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         placeholder="Search the docs ..."
+         aria-label="Search the docs ..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form>
+  </dialog>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
+  
+    <header id="pst-header" class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+<div class="bd-header__inner bd-page-width">
+  <button class="pst-navbar-icon sidebar-toggle primary-toggle" aria-label="Site navigation">
+    <span class="fa-solid fa-bars"></span>
+  </button>
+  
+  
+  <div class=" navbar-header-items__start">
+    
+      <div class="navbar-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="../index.html">
+  
+  
+  
+  
+  
+    
+    
+      
+    
+    
+    <img src="../_static/logo_mlquantify.svg" class="logo__image only-light" alt="mlquantify homepage"/>
+    <img src="../_static/logo_mlquantify-white.svg" class="logo__image only-dark pst-js-only" alt="mlquantify homepage"/>
+  
+  
+</a></div>
+    
+  </div>
+  
+  <div class=" navbar-header-items">
+    
+    <div class="me-auto navbar-header-items__center">
+      
+        <div class="navbar-item">
+<div class="version-switcher__container dropdown pst-js-only">
+  <button id="pst-version-switcher-button-2"
+    type="button"
+    class="version-switcher__button btn btn-sm dropdown-toggle"
+    data-bs-toggle="dropdown"
+    aria-haspopup="listbox"
+    aria-controls="pst-version-switcher-list-2"
+    aria-label="Version switcher list"
+  >
+    Choose version  <!-- this text may get changed later by javascript -->
+    <span class="caret"></span>
+  </button>
+  <div id="pst-version-switcher-list-2"
+    class="version-switcher__menu dropdown-menu list-group-flush py-0"
+    role="listbox" aria-labelledby="pst-version-switcher-button-2">
+    <!-- dropdown will be populated by javascript on page load -->
+  </div>
+</div></div>
+      
+        <div class="navbar-item">
+<nav>
+  <ul class="bd-navbar-elements navbar-nav">
+    
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../install.html">
+    Install
+  </a>
+</li>
+
+
+<li class="nav-item current active">
+  <a class="nav-link nav-internal" href="../user_guide.html">
+    User Guide
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../api/index.html">
+    API
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../getting_started.html">
+    Getting Started
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../about_us.html">
+    About Us
+  </a>
+</li>
+
+  </ul>
+</nav></div>
+      
+    </div>
+    
+    
+    <div class="navbar-header-items__end">
+      
+        <div class="navbar-item navbar-persistent--container">
+          
+
+<button class="btn btn-sm pst-navbar-icon search-button search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass fa-lg"></i>
+</button>
+        </div>
+      
+      
+        <div class="navbar-item">
+
+<div class="theme-switch-container dropdown pst-js-only" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Color mode">
+  <button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button dropdown-toggle" aria-label="Color mode" data-bs-toggle="dropdown">
+    <i class="theme-switch fa-solid fa-sun fa-lg fa-fw" data-mode="light" title="Light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg fa-fw" data-mode="dark" title="Dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg fa-fw" data-mode="auto" title="System Settings"></i>
+  </button>
+  <ul class="dropdown-menu dropdown-menu-end">
+    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="auto"><i class="fa-solid fa-circle-half-stroke fa-lg fa-fw me-1"></i>System Settings</button></li>
+    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="light"><i class="fa-solid fa-sun fa-lg fa-fw me-1"></i>Light</button></li>
+    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="dark"><i class="fa-solid fa-moon fa-lg fa-fw me-1"></i>Dark</button></li>
+  </ul>
+</div></div>
+      
+        <div class="navbar-item"><ul class="navbar-icon-links"
+    aria-label="Icon Links">
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://github.com/luizfernandolj/mlquantify/tree/master" title="GitHub" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><i class="fa-brands fa-square-github fa-lg" aria-hidden="true"></i><span class="visually-hidden">GitHub</span></a>
+        </li>
+</ul></div>
+      
+    </div>
+    
+  </div>
+  
+  
+    <div class="navbar-persistent--mobile">
+
+<button class="btn btn-sm pst-navbar-icon search-button search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass fa-lg"></i>
+</button>
+    </div>
+  
+
+  
+    <button class="pst-navbar-icon sidebar-toggle secondary-toggle" aria-label="On this page">
+      <span class="fa-solid fa-outdent"></span>
+    </button>
+  
+</div>
+
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+      <dialog id="pst-primary-sidebar-modal"></dialog>
+      <div id="pst-primary-sidebar" class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+      <div class="sidebar-header-items__center">
+        
+          
+          
+            <div class="navbar-item">
+<div class="version-switcher__container dropdown pst-js-only">
+  <button id="pst-version-switcher-button-3"
+    type="button"
+    class="version-switcher__button btn btn-sm dropdown-toggle"
+    data-bs-toggle="dropdown"
+    aria-haspopup="listbox"
+    aria-controls="pst-version-switcher-list-3"
+    aria-label="Version switcher list"
+  >
+    Choose version  <!-- this text may get changed later by javascript -->
+    <span class="caret"></span>
+  </button>
+  <div id="pst-version-switcher-list-3"
+    class="version-switcher__menu dropdown-menu list-group-flush py-0"
+    role="listbox" aria-labelledby="pst-version-switcher-button-3">
+    <!-- dropdown will be populated by javascript on page load -->
+  </div>
+</div></div>
+          
+        
+          
+          
+            <div class="navbar-item">
+<nav>
+  <ul class="bd-navbar-elements navbar-nav">
+    
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../install.html">
+    Install
+  </a>
+</li>
+
+
+<li class="nav-item current active">
+  <a class="nav-link nav-internal" href="../user_guide.html">
+    User Guide
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../api/index.html">
+    API
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../getting_started.html">
+    Getting Started
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../about_us.html">
+    About Us
+  </a>
+</li>
+
+  </ul>
+</nav></div>
+          
+        
+      </div>
+    
+    
+    
+      <div class="sidebar-header-items__end">
+        
+          <div class="navbar-item">
+
+<div class="theme-switch-container dropdown pst-js-only" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Color mode">
+  <button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button dropdown-toggle" aria-label="Color mode" data-bs-toggle="dropdown">
+    <i class="theme-switch fa-solid fa-sun fa-lg fa-fw" data-mode="light" title="Light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg fa-fw" data-mode="dark" title="Dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg fa-fw" data-mode="auto" title="System Settings"></i>
+  </button>
+  <ul class="dropdown-menu dropdown-menu-end">
+    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="auto"><i class="fa-solid fa-circle-half-stroke fa-lg fa-fw me-1"></i>System Settings</button></li>
+    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="light"><i class="fa-solid fa-sun fa-lg fa-fw me-1"></i>Light</button></li>
+    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="dark"><i class="fa-solid fa-moon fa-lg fa-fw me-1"></i>Dark</button></li>
+  </ul>
+</div></div>
+        
+          <div class="navbar-item"><ul class="navbar-icon-links"
+    aria-label="Icon Links">
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://github.com/luizfernandolj/mlquantify/tree/master" title="GitHub" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><i class="fa-brands fa-square-github fa-lg" aria-hidden="true"></i><span class="visually-hidden">GitHub</span></a>
+        </li>
+</ul></div>
+        
+      </div>
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item pst-sidebar-collapse"><button id="pst-collapse-sidebar-button" aria-expanded="true" aria-controls="pst-primary-sidebar"><svg class="pst-icon svg-inline--fa" role="img" aria-hidden="true" focusable="false" viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg">
+    <path fill="currentColor" d="M3 15.5C2.36232 15.5 1.74874 15.2564 1.28478 14.8189C0.820828 14.3815 0.541576 13.7832 0.504167 13.1467L0.5 13L0.5 3C0.499965 2.36232 0.743605 1.74874 1.18107 1.28478C1.61854 0.820828 2.21676 0.541576 2.85333 0.504167L3 0.5L13 0.5C13.6377 0.499965 14.2513 0.743605 14.7152 1.18107C15.1792 1.61854 15.4584 2.21676 15.4958 2.85333L15.5 3L15.5 13C15.5 13.6377 15.2564 14.2513 14.8189 14.7152C14.3815 15.1792 13.7832 15.4584 13.1467 15.4958L13 15.5L3 15.5ZM3 13.8333L10.5 13.8333L10.5 2.16667L3 2.16667C2.79589 2.16669 2.59889 2.24163 2.44636 2.37726C2.29383 2.5129 2.19638 2.69979 2.1725 2.9025L2.16667 3L2.16667 13C2.16669 13.2041 2.24163 13.4011 2.37726 13.5536C2.5129 13.7062 2.69979 13.8036 2.9025 13.8275L3 13.8333ZM6.65583 10.325L6.5775 10.2558L4.91083 8.58917C4.76735 8.44567 4.68116 8.25476 4.66843 8.05223C4.65569 7.84971 4.71729 7.6495 4.84167 7.48917L4.91083 7.41083L6.5775 5.74417C6.72747 5.59471 6.9287 5.50794 7.14032 5.50148C7.35194 5.49502 7.55809 5.56935 7.7169 5.70937C7.8757 5.8494 7.97525 6.04463 7.99533 6.25539C8.01541 6.46616 7.95451 6.67667 7.825 6.84417L7.75583 6.9225L6.67917 8L7.75583 9.0775C7.89931 9.22099 7.98551 9.41191 7.99824 9.61443C8.01097 9.81695 7.94938 10.0172 7.825 10.1775L7.75583 10.2558C7.61234 10.3993 7.42142 10.4855 7.2189 10.4982C7.01638 10.511 6.81617 10.4494 6.65583 10.325Z"/>
+  </svg>
+  <span class="pst-collapse-sidebar-label">Collapse Sidebar</span>
+  <span class="pst-expand-sidebar-label">Expand Sidebar</span>
+</button></div>
+        <div class="sidebar-primary-item">
+
+<nav class="bd-docs-nav bd-links"
+     aria-label="Section Navigation">
+  <p class="bd-links__title" role="heading" aria-level="1">Section Navigation</p>
+  <div class="bd-toc-item navbar-nav"><ul class="current nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="quantification_foundations.html">1. Foundations</a></li>
+<li class="toctree-l1 current active has-children"><a class="reference internal" href="../aggregative_quantification.html">2. Aggregative Quantification</a><details open="open"><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="using_aggregative.html">2.1. Using Aggregative Quantification Methods</a></li>
+
+<li class="toctree-l2"><a class="reference internal" href="counters.html">2.3. Counting Methods</a></li>
+<li class="toctree-l2 current active"><a class="current reference internal" href="#">2.4. Adjusted Counting</a></li>
+<li class="toctree-l2"><a class="reference internal" href="likelihood.html">2.5. Likelihood Methods</a></li>
+<li class="toctree-l2"><a class="reference internal" href="distribution_matching.html">2.6. Distribution Matching</a></li>
+<li class="toctree-l2"><a class="reference internal" href="neighbors.html">2.7. Nearest Neighbours</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../non_aggregative_quantification.html">3. Non Aggregative Quantification</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="mixture_models_non_agg.html">3.1. Mixture Models for Non-Aggregative Quantification</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../meta_quantification.html">4. Meta Quantification</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="ensemble.html">4.1. Ensembles and Adaptation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="bootstrap.html">4.2. Bootstrap in Quantification</a></li>
+<li class="toctree-l2"><a class="reference internal" href="scores_adaptation.html">4.3. QuaDapt: Drift-Resilient Score Adaptation</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../model_selection_evaluation.html">5. Model Selection and Evaluation</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="protocols.html">5.1. Evaluation Protocols</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tuning_hyperparameters.html">5.2. Hyperparameter Tuning</a></li>
+<li class="toctree-l2"><a class="reference internal" href="evaluation_metrics.html">5.3. Evaluation Metrics</a></li>
+
+
+
+</ul>
+</details></li>
+<li class="toctree-l1"><a class="reference internal" href="confidence_intervals.html">6. Confidence Intervals</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../building_a_quantifier.html">7. Building a Quantifier</a></li>
+<li class="toctree-l1"><a class="reference internal" href="mlquantify_methods.html">8. Mlquantify methods</a></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../components.html">9. Core Components</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="representations.html">9.1.1. Representations</a></li>
+<li class="toctree-l2"><a class="reference internal" href="losses.html">9.1.2. Loss Functions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="solvers.html">9.1.3. Solvers</a></li>
+<li class="toctree-l2"><a class="reference internal" href="compose.html">9.1.4. Composable Quantifiers</a></li>
+<li class="toctree-l2"><a class="reference internal" href="multiclass.html">9.2.1. Multiclass Quantification</a></li>
+<li class="toctree-l2"><a class="reference internal" href="prevalence_normalization.html">9.2.2. Prevalence Normalization</a></li>
+<li class="toctree-l2"><a class="reference internal" href="cython_acceleration.html">9.3.1. Cython Acceleration</a></li>
+<li class="toctree-l2"><a class="reference internal" href="calibration.html">9.4.1. Calibration</a></li>
+<li class="toctree-l2"><a class="reference internal" href="neural.html">9.4.2. Neural Quantifiers</a></li>
+</ul>
+</details></li>
+</ul>
+</div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+  </div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item">
+
+<nav aria-label="Breadcrumb" class="d-print-none">
+  <ul class="bd-breadcrumbs">
+    
+    <li class="breadcrumb-item breadcrumb-home">
+      <a href="../index.html" class="nav-link" aria-label="Home">
+        <i class="fa-solid fa-home"></i>
+      </a>
+    </li>
+    
+    <li class="breadcrumb-item"><a href="../user_guide.html" class="nav-link">User Guide</a></li>
+    
+    
+    <li class="breadcrumb-item"><a href="../aggregative_quantification.html" class="nav-link"><span class="section-number">2. </span>Aggregative Quantification</a></li>
+    
+    <li class="breadcrumb-item active" aria-current="page"><span class="ellipsis"><span class="section-number">2.4. </span>Adjusted Counting</span></li>
+  </ul>
+</nav>
+</div>
+      
+    </div>
+  
+  
+</div>
+</div>
+              
+              
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <section id="adjusted-counting">
+<span id="counting"></span><h1><span class="section-number">2.4. </span>Adjusted Counting<a class="headerlink" href="#adjusted-counting" title="Link to this heading">#</a></h1>
+<p>Adjusted counting methods correct the bias of naive counting by using what the
+classifier’s error rates reveal about the true class distribution. They are
+the oldest family of dedicated quantification methods (Forman, 2005) and remain
+strong baselines for <strong>binary</strong> problems.</p>
+<div class="admonition-binary-only-multiclass-via-ovr admonition">
+<p class="admonition-title">Binary-only, multiclass via OvR</p>
+<p>All methods on this page are fundamentally binary. When you apply them to a
+dataset with more than two classes, <code class="docutils literal notranslate"><span class="pre">mlquantify</span></code> automatically decomposes
+the problem into <em>K</em> one-vs-rest (OvR) binary subproblems and recombines
+the results. Pass <code class="docutils literal notranslate"><span class="pre">strategy='ovo'</span></code> to use one-vs-one instead.</p>
+</div>
+<nav class="contents local" id="contents">
+<p class="topic-title">Contents</p>
+<ul class="simple">
+<li><p><a class="reference internal" href="#problem-formulation" id="id5">Problem formulation</a></p></li>
+<li><p><a class="reference internal" href="#the-adjustment-formula" id="id6">The Adjustment Formula</a></p></li>
+<li><p><a class="reference internal" href="#acc-adjusted-classify-and-count-hard-predictions" id="id7">ACC — Adjusted Classify and Count (hard predictions)</a></p>
+<ul>
+<li><p><a class="reference internal" href="#parameters" id="id8">Parameters</a></p></li>
+<li><p><a class="reference internal" href="#examples" id="id9">Examples</a></p></li>
+</ul>
+</li>
+<li><p><a class="reference internal" href="#thresholdadjustment-base-class-for-roc-threshold-methods" id="id10">ThresholdAdjustment — Base Class for ROC-Threshold Methods</a></p></li>
+<li><p><a class="reference internal" href="#tac-threshold-adjusted-count-fixed-threshold" id="id11">TAC — Threshold Adjusted Count (fixed threshold)</a></p>
+<ul>
+<li><p><a class="reference internal" href="#id1" id="id12">Parameters</a></p></li>
+<li><p><a class="reference internal" href="#id2" id="id13">Examples</a></p></li>
+</ul>
+</li>
+<li><p><a class="reference internal" href="#tx-threshold-x-symmetric-roc-point" id="id14">TX — Threshold X (symmetric ROC point)</a></p></li>
+<li><p><a class="reference internal" href="#tmax-maximum-tprfpr-separation" id="id15">TMAX — Maximum TPR−FPR Separation</a></p></li>
+<li><p><a class="reference internal" href="#t50-tpr-0-5-threshold" id="id16">T50 — TPR ≈ 0.5 Threshold</a></p></li>
+<li><p><a class="reference internal" href="#ms-median-sweep" id="id17">MS — Median Sweep</a></p></li>
+<li><p><a class="reference internal" href="#ms2-median-sweep-with-constraint" id="id18">MS2 — Median Sweep with Constraint</a></p>
+<ul>
+<li><p><a class="reference internal" href="#id3" id="id19">Parameters</a></p></li>
+</ul>
+</li>
+<li><p><a class="reference internal" href="#comparing-threshold-adjustment-methods" id="id20">Comparing Threshold-Adjustment Methods</a></p></li>
+<li><p><a class="reference internal" href="#assumptions-and-when-to-use" id="id21">Assumptions and when to use</a></p></li>
+<li><p><a class="reference internal" href="#references" id="id22">References</a></p></li>
+</ul>
+</nav>
+<hr class="docutils" />
+<section id="problem-formulation">
+<h2><a class="toc-backref" href="#id5" role="doc-backlink"><span class="section-number">2.4.1. </span>Problem formulation</a><a class="headerlink" href="#problem-formulation" title="Link to this heading">#</a></h2>
+<p>These methods target <strong>prior probability shift</strong>: between training and test the
+class priors <span class="math notranslate nohighlight">\(p(y)\)</span> change while the class-conditional densities
+<span class="math notranslate nohighlight">\(p(x \mid y)\)</span> stay fixed. Given a classifier trained on a labelled set
+<span class="math notranslate nohighlight">\(L\)</span> and applied to an unlabelled test set <span class="math notranslate nohighlight">\(U\)</span>, the goal is to
+estimate the test prevalence <span class="math notranslate nohighlight">\(p^U(c)\)</span>. The observed <a class="reference internal" href="generated/mlquantify.counting.CC.html#mlquantify.counting.CC" title="mlquantify.counting.CC"><code class="xref py py-class docutils literal notranslate"><span class="pre">CC</span></code></a> count is
+a known linear function of the true prevalence through the classifier’s TPR and
+FPR, so inverting that relationship recovers an unbiased estimate.</p>
+</section>
+<hr class="docutils" />
+<section id="the-adjustment-formula">
+<h2><a class="toc-backref" href="#id6" role="doc-backlink"><span class="section-number">2.4.2. </span>The Adjustment Formula</a><a class="headerlink" href="#the-adjustment-formula" title="Link to this heading">#</a></h2>
+<p>All adjusted counting methods share the same core correction derived from the
+confusion matrix. Suppose a binary classifier has true positive rate TPR and
+false positive rate FPR (estimated on training data). If CC returns an observed
+positive proportion <span class="math notranslate nohighlight">\(\hat{p}^{CC}\)</span>, the adjusted estimate is:</p>
+<div class="math notranslate nohighlight">
+\[\hat{p}^{AC}(\oplus) = \frac{\hat{p}^{CC}(\oplus) - \text{FPR}}{\text{TPR} - \text{FPR}}\]</div>
+<p>The methods below differ only in <strong>how they pick the threshold</strong> on the ROC
+curve at which TPR and FPR are read off. The formula itself is the same for
+all of them. (Forman, 2005, 2008)</p>
+<figure class="align-center" id="id4">
+<a class="reference internal image-reference" href="../_images/roc_threshold_policies.png"><img alt="Threshold selection policies on the ROC curve" src="../_images/roc_threshold_policies.png" style="width: 75%;" />
+</a>
+<figcaption>
+<p><span class="caption-text"><em>Each threshold-adjustment method picks a different operating point on the ROC
+curve. TAC uses τ=0.5 (red square); TX selects the symmetric crossing point
+(orange triangle); TMAX picks the point of maximum TPR−FPR separation (green
+diamond); T50 targets TPR≈0.5 (purple circle). MS sweeps the shaded area and
+takes the median.</em></span><a class="headerlink" href="#id4" title="Link to this image">#</a></p>
+</figcaption>
+</figure>
+<details class="sd-sphinx-override sd-dropdown sd-card sd-mb-3">
+<summary class="sd-summary-title sd-card-header">
+<span class="sd-summary-text">Why the formula works</span><span class="sd-summary-state-marker sd-summary-chevron-right"><svg version="1.1" width="1.5em" height="1.5em" class="sd-octicon sd-octicon-chevron-right" viewBox="0 0 24 24" aria-hidden="true"><path d="M8.72 18.78a.75.75 0 0 1 0-1.06L14.44 12 8.72 6.28a.751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018l6.25 6.25a.75.75 0 0 1 0 1.06l-6.25 6.25a.75.75 0 0 1-1.06 0Z"></path></svg></span></summary><div class="sd-summary-content sd-card-body docutils">
+<p class="sd-card-text">Consider the population of test items. Each item can be truly positive or
+negative. The CC count can be decomposed as:</p>
+<div class="math notranslate nohighlight">
+\[\hat{p}^{CC} = \text{TPR} \cdot p(\oplus) + \text{FPR} \cdot p(\ominus)\]</div>
+<p class="sd-card-text">Solving for <span class="math notranslate nohighlight">\(p(\oplus)\)</span> gives the AC formula. The correction is
+exact when TPR and FPR are known; in practice they are estimated from
+cross-validated training predictions, so a small estimation error remains.</p>
+</div>
+</details></section>
+<hr class="docutils" />
+<section id="acc-adjusted-classify-and-count-hard-predictions">
+<h2><a class="toc-backref" href="#id7" role="doc-backlink"><span class="section-number">2.4.3. </span>ACC — Adjusted Classify and Count (hard predictions)</a><a class="headerlink" href="#acc-adjusted-classify-and-count-hard-predictions" title="Link to this heading">#</a></h2>
+<p><a class="reference internal" href="generated/mlquantify.counting.ACC.html#mlquantify.counting.ACC" title="mlquantify.counting.ACC"><code class="xref py py-class docutils literal notranslate"><span class="pre">ACC</span></code></a> applies the adjustment formula using the classifier’s argmax
+(hard) predictions, rather than a soft-probability threshold. TPR and FPR
+are computed by comparing the classifier’s hard labels against the true
+training labels.</p>
+<p><strong>Why it exists:</strong> ACC is the “reference” adjusted-counting method described
+in Forman (2005). By deriving TPR/FPR from hard predictions it matches the
+behaviour expected from the theoretical derivation and avoids threshold
+selection entirely.</p>
+<section id="parameters">
+<h3><a class="toc-backref" href="#id8" role="doc-backlink"><span class="section-number">2.4.3.1. </span>Parameters</a><a class="headerlink" href="#parameters" title="Link to this heading">#</a></h3>
+<div class="pst-scrollable-table-container"><table class="table">
+<colgroup>
+<col style="width: 22.0%" />
+<col style="width: 15.0%" />
+<col style="width: 63.0%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Parameter</p></th>
+<th class="head"><p>Default</p></th>
+<th class="head"><p>Explanation</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">estimator</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">None</span></code></p></td>
+<td><p>A classifier with <code class="docutils literal notranslate"><span class="pre">fit</span></code>, <code class="docutils literal notranslate"><span class="pre">predict</span></code>, and optionally <code class="docutils literal notranslate"><span class="pre">predict_proba</span></code>.</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">strategy</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">'ovr'</span></code></p></td>
+<td><p>Multiclass decomposition strategy (<code class="docutils literal notranslate"><span class="pre">'ovr'</span></code> or <code class="docutils literal notranslate"><span class="pre">'ovo'</span></code>).</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">cv</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">5</span></code></p></td>
+<td><p>Folds for cross-validating the confusion matrix. More folds → better
+TPR/FPR estimates but longer fitting. 5–10 is recommended.</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">stratified</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">True</span></code></p></td>
+<td><p>Use stratified folds to ensure rare classes appear in every fold.
+Always leave <code class="docutils literal notranslate"><span class="pre">True</span></code> unless your dataset has no class imbalance.</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">shuffle</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">False</span></code></p></td>
+<td><p>Shuffle before splitting. Set <code class="docutils literal notranslate"><span class="pre">True</span></code> if data has a natural order.</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">random_state</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">None</span></code></p></td>
+<td><p>Seed for reproducible splits.</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">n_jobs</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">None</span></code></p></td>
+<td><p>Parallel jobs for OvR/OvO decomposition. <code class="docutils literal notranslate"><span class="pre">-1</span></code> uses all CPU cores.</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+<section id="examples">
+<h3><a class="toc-backref" href="#id9" role="doc-backlink"><span class="section-number">2.4.3.2. </span>Examples</a><a class="headerlink" href="#examples" title="Link to this heading">#</a></h3>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">mlquantify.counting</span><span class="w"> </span><span class="kn">import</span> <span class="n">ACC</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">sklearn.linear_model</span><span class="w"> </span><span class="kn">import</span> <span class="n">LogisticRegression</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">sklearn.datasets</span><span class="w"> </span><span class="kn">import</span> <span class="n">make_classification</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">sklearn.model_selection</span><span class="w"> </span><span class="kn">import</span> <span class="n">train_test_split</span>
+
+<span class="n">X</span><span class="p">,</span> <span class="n">y</span> <span class="o">=</span> <span class="n">make_classification</span><span class="p">(</span><span class="n">n_samples</span><span class="o">=</span><span class="mi">1000</span><span class="p">,</span> <span class="n">weights</span><span class="o">=</span><span class="p">[</span><span class="mf">0.8</span><span class="p">,</span> <span class="mf">0.2</span><span class="p">],</span>
+                           <span class="n">random_state</span><span class="o">=</span><span class="mi">42</span><span class="p">)</span>
+<span class="n">X_train</span><span class="p">,</span> <span class="n">X_test</span><span class="p">,</span> <span class="n">y_train</span><span class="p">,</span> <span class="n">y_test</span> <span class="o">=</span> <span class="n">train_test_split</span><span class="p">(</span>
+    <span class="n">X</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">test_size</span><span class="o">=</span><span class="mf">0.3</span><span class="p">,</span> <span class="n">random_state</span><span class="o">=</span><span class="mi">42</span><span class="p">)</span>
+
+<span class="n">q</span> <span class="o">=</span> <span class="n">ACC</span><span class="p">(</span><span class="n">LogisticRegression</span><span class="p">(),</span> <span class="n">cv</span><span class="o">=</span><span class="mi">5</span><span class="p">)</span>
+<span class="n">q</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">X_train</span><span class="p">,</span> <span class="n">y_train</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">q</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">X_test</span><span class="p">))</span>
+<span class="c1"># {0: 0.79, 1: 0.21}</span>
+</pre></div>
+</div>
+</section>
+</section>
+<hr class="docutils" />
+<section id="thresholdadjustment-base-class-for-roc-threshold-methods">
+<h2><a class="toc-backref" href="#id10" role="doc-backlink"><span class="section-number">2.4.4. </span>ThresholdAdjustment — Base Class for ROC-Threshold Methods</a><a class="headerlink" href="#thresholdadjustment-base-class-for-roc-threshold-methods" title="Link to this heading">#</a></h2>
+<p><a class="reference internal" href="generated/mlquantify.counting.ThresholdAdjustment.html#mlquantify.counting.ThresholdAdjustment" title="mlquantify.counting.ThresholdAdjustment"><code class="xref py py-class docutils literal notranslate"><span class="pre">ThresholdAdjustment</span></code></a> is the abstract base for all ROC-based adjusted
+counting methods. Subclasses implement <code class="xref py py-meth docutils literal notranslate"><span class="pre">get_best_threshold</span></code> to select
+the threshold at which to evaluate TPR and FPR. The adjustment formula is
+then applied at that chosen point.</p>
+<p>You can subclass it to implement custom threshold-selection policies:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">mlquantify.counting</span><span class="w"> </span><span class="kn">import</span> <span class="n">ThresholdAdjustment</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+
+<span class="k">class</span><span class="w"> </span><span class="nc">HalfTPR</span><span class="p">(</span><span class="n">ThresholdAdjustment</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Select the threshold where TPR ≈ 0.5.&quot;&quot;&quot;</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">get_best_threshold</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">thresholds</span><span class="p">,</span> <span class="n">tprs</span><span class="p">,</span> <span class="n">fprs</span><span class="p">):</span>
+        <span class="n">idx</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">argmin</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">tprs</span> <span class="o">-</span> <span class="mf">0.5</span><span class="p">))</span>
+        <span class="k">return</span> <span class="n">thresholds</span><span class="p">[</span><span class="n">idx</span><span class="p">],</span> <span class="n">tprs</span><span class="p">[</span><span class="n">idx</span><span class="p">],</span> <span class="n">fprs</span><span class="p">[</span><span class="n">idx</span><span class="p">]</span>
+</pre></div>
+</div>
+</section>
+<hr class="docutils" />
+<section id="tac-threshold-adjusted-count-fixed-threshold">
+<h2><a class="toc-backref" href="#id11" role="doc-backlink"><span class="section-number">2.4.5. </span>TAC — Threshold Adjusted Count (fixed threshold)</a><a class="headerlink" href="#tac-threshold-adjusted-count-fixed-threshold" title="Link to this heading">#</a></h2>
+<p><a class="reference internal" href="generated/mlquantify.counting.TAC.html#mlquantify.counting.TAC" title="mlquantify.counting.TAC"><code class="xref py py-class docutils literal notranslate"><span class="pre">TAC</span></code></a> evaluates TPR and FPR at a <strong>fixed threshold</strong> (default 0.5)
+and applies the AC formula at that single point.</p>
+<p><strong>Why it exists:</strong> TAC is the simplest threshold-adjustment method. It uses
+the natural decision boundary of the classifier without any search. It is
+often dominated by methods that pick a better threshold, but serves as a
+useful reference.</p>
+<section id="id1">
+<h3><a class="toc-backref" href="#id12" role="doc-backlink"><span class="section-number">2.4.5.1. </span>Parameters</a><a class="headerlink" href="#id1" title="Link to this heading">#</a></h3>
+<div class="pst-scrollable-table-container"><table class="table">
+<colgroup>
+<col style="width: 22.0%" />
+<col style="width: 15.0%" />
+<col style="width: 63.0%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Parameter</p></th>
+<th class="head"><p>Default</p></th>
+<th class="head"><p>Explanation</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">estimator</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">None</span></code></p></td>
+<td><p>Probabilistic classifier (<code class="docutils literal notranslate"><span class="pre">predict_proba</span></code> needed).</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">threshold</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">0.5</span></code></p></td>
+<td><p>The classification threshold at which TPR/FPR are evaluated. Change
+this when you know your classifier works better at a non-default cutoff
+(e.g. 0.3 for imbalanced classes).</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">cv</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">5</span></code></p></td>
+<td><p>Folds for cross-validating soft scores used to build the ROC curve.</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">stratified</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">True</span></code></p></td>
+<td><p>See <a class="reference internal" href="generated/mlquantify.counting.ACC.html#mlquantify.counting.ACC" title="mlquantify.counting.ACC"><code class="xref py py-class docutils literal notranslate"><span class="pre">ACC</span></code></a>.</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">strategy</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">'ovr'</span></code></p></td>
+<td><p>Multiclass decomposition.</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">n_jobs</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">None</span></code></p></td>
+<td><p>Parallel jobs for decomposition.</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+<section id="id2">
+<h3><a class="toc-backref" href="#id13" role="doc-backlink"><span class="section-number">2.4.5.2. </span>Examples</a><a class="headerlink" href="#id2" title="Link to this heading">#</a></h3>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">mlquantify.counting</span><span class="w"> </span><span class="kn">import</span> <span class="n">TAC</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">sklearn.linear_model</span><span class="w"> </span><span class="kn">import</span> <span class="n">LogisticRegression</span>
+
+<span class="n">q</span> <span class="o">=</span> <span class="n">TAC</span><span class="p">(</span><span class="n">LogisticRegression</span><span class="p">(),</span> <span class="n">threshold</span><span class="o">=</span><span class="mf">0.5</span><span class="p">)</span>
+<span class="n">q</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">X_train</span><span class="p">,</span> <span class="n">y_train</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">q</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">X_test</span><span class="p">))</span>
+<span class="c1"># {0: 0.79, 1: 0.21}</span>
+</pre></div>
+</div>
+</section>
+</section>
+<hr class="docutils" />
+<section id="tx-threshold-x-symmetric-roc-point">
+<h2><a class="toc-backref" href="#id14" role="doc-backlink"><span class="section-number">2.4.6. </span>TX — Threshold X (symmetric ROC point)</a><a class="headerlink" href="#tx-threshold-x-symmetric-roc-point" title="Link to this heading">#</a></h2>
+<p><a class="reference internal" href="generated/mlquantify.counting.TX.html#mlquantify.counting.TX" title="mlquantify.counting.TX"><code class="xref py py-class docutils literal notranslate"><span class="pre">TX</span></code></a> selects the threshold where <span class="math notranslate nohighlight">\(\text{FPR} = 1 - \text{TPR}\)</span>,
+i.e., the intersection of the FPR curve and the (1 − TPR) curve. This
+corresponds to the point on the ROC curve equidistant from both axes.</p>
+<p><strong>Why it exists:</strong> At this symmetric point the classifier makes a balanced
+tradeoff between false positives and false negatives, which tends to give a
+stable AC estimate. Forman (2005) found TX competitive across many benchmark
+tasks.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">mlquantify.counting</span><span class="w"> </span><span class="kn">import</span> <span class="n">TX</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">sklearn.linear_model</span><span class="w"> </span><span class="kn">import</span> <span class="n">LogisticRegression</span>
+
+<span class="n">q</span> <span class="o">=</span> <span class="n">TX</span><span class="p">(</span><span class="n">LogisticRegression</span><span class="p">())</span>
+<span class="n">q</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">X_train</span><span class="p">,</span> <span class="n">y_train</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">q</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">X_test</span><span class="p">))</span>
+</pre></div>
+</div>
+</section>
+<hr class="docutils" />
+<section id="tmax-maximum-tprfpr-separation">
+<h2><a class="toc-backref" href="#id15" role="doc-backlink"><span class="section-number">2.4.7. </span>TMAX — Maximum TPR−FPR Separation</a><a class="headerlink" href="#tmax-maximum-tprfpr-separation" title="Link to this heading">#</a></h2>
+<p><a class="reference internal" href="generated/mlquantify.counting.TMAX.html#mlquantify.counting.TMAX" title="mlquantify.counting.TMAX"><code class="xref py py-class docutils literal notranslate"><span class="pre">TMAX</span></code></a> selects the threshold that maximises <span class="math notranslate nohighlight">\(|\text{TPR} - \text{FPR}|\)</span>,
+which is the point of highest discriminative power on the ROC curve.</p>
+<p><strong>Why it exists:</strong> A large <span class="math notranslate nohighlight">\(\text{TPR} - \text{FPR}\)</span> gap makes the AC
+denominator large and keeps the adjusted estimate numerically stable. TMAX is
+useful when the classifier has a clear peak in discriminative power.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">mlquantify.counting</span><span class="w"> </span><span class="kn">import</span> <span class="n">TMAX</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">sklearn.linear_model</span><span class="w"> </span><span class="kn">import</span> <span class="n">LogisticRegression</span>
+
+<span class="n">q</span> <span class="o">=</span> <span class="n">TMAX</span><span class="p">(</span><span class="n">LogisticRegression</span><span class="p">())</span>
+<span class="n">q</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">X_train</span><span class="p">,</span> <span class="n">y_train</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">q</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">X_test</span><span class="p">))</span>
+</pre></div>
+</div>
+</section>
+<hr class="docutils" />
+<section id="t50-tpr-0-5-threshold">
+<h2><a class="toc-backref" href="#id16" role="doc-backlink"><span class="section-number">2.4.8. </span>T50 — TPR ≈ 0.5 Threshold</a><a class="headerlink" href="#t50-tpr-0-5-threshold" title="Link to this heading">#</a></h2>
+<p><a class="reference internal" href="generated/mlquantify.counting.T50.html#mlquantify.counting.T50" title="mlquantify.counting.T50"><code class="xref py py-class docutils literal notranslate"><span class="pre">T50</span></code></a> selects the threshold where the true positive rate is closest
+to 0.5, placing the operating point in the middle of the ROC curve.</p>
+<p><strong>Why it exists:</strong> Extreme thresholds (near 0 or 1 on the ROC) can yield
+unstable estimates when TPR or FPR is close to 0. T50 avoids both extremes,
+giving a conservative but robust estimate. Forman (2005) introduced it as
+an alternative to TX.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">mlquantify.counting</span><span class="w"> </span><span class="kn">import</span> <span class="n">T50</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">sklearn.linear_model</span><span class="w"> </span><span class="kn">import</span> <span class="n">LogisticRegression</span>
+
+<span class="n">q</span> <span class="o">=</span> <span class="n">T50</span><span class="p">(</span><span class="n">LogisticRegression</span><span class="p">())</span>
+<span class="n">q</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">X_train</span><span class="p">,</span> <span class="n">y_train</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">q</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">X_test</span><span class="p">))</span>
+</pre></div>
+</div>
+</section>
+<hr class="docutils" />
+<section id="ms-median-sweep">
+<h2><a class="toc-backref" href="#id17" role="doc-backlink"><span class="section-number">2.4.9. </span>MS — Median Sweep</a><a class="headerlink" href="#ms-median-sweep" title="Link to this heading">#</a></h2>
+<p><a class="reference internal" href="generated/mlquantify.counting.MS.html#mlquantify.counting.MS" title="mlquantify.counting.MS"><code class="xref py py-class docutils literal notranslate"><span class="pre">MS</span></code></a> applies the AC formula at <strong>every</strong> threshold on the ROC curve
+and returns the <strong>median</strong> of all resulting prevalence estimates.</p>
+<div class="math notranslate nohighlight">
+\[\hat{p}^{MS}(\oplus) = \text{median}_{\tau} \left\{
+    \frac{\hat{p}^{CC}_{\tau}(\oplus) - \text{FPR}_\tau}{\text{TPR}_\tau - \text{FPR}_\tau}
+\right\}\]</div>
+<p><strong>Why it exists:</strong> Any single-threshold method is sensitive to the exact
+threshold it picks. By sweeping all thresholds and taking the median, MS is
+robust to a bad individual threshold. Forman (2008) showed it is often the
+most accurate method across a wide range of test prevalences.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">mlquantify.counting</span><span class="w"> </span><span class="kn">import</span> <span class="n">MS</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">sklearn.linear_model</span><span class="w"> </span><span class="kn">import</span> <span class="n">LogisticRegression</span>
+
+<span class="n">q</span> <span class="o">=</span> <span class="n">MS</span><span class="p">(</span><span class="n">LogisticRegression</span><span class="p">())</span>
+<span class="n">q</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">X_train</span><span class="p">,</span> <span class="n">y_train</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">q</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">X_test</span><span class="p">))</span>
+</pre></div>
+</div>
+</section>
+<hr class="docutils" />
+<section id="ms2-median-sweep-with-constraint">
+<h2><a class="toc-backref" href="#id18" role="doc-backlink"><span class="section-number">2.4.10. </span>MS2 — Median Sweep with Constraint</a><a class="headerlink" href="#ms2-median-sweep-with-constraint" title="Link to this heading">#</a></h2>
+<p><a class="reference internal" href="generated/mlquantify.counting.MS2.html#mlquantify.counting.MS2" title="mlquantify.counting.MS2"><code class="xref py py-class docutils literal notranslate"><span class="pre">MS2</span></code></a> is a constrained variant of <a class="reference internal" href="generated/mlquantify.counting.MS.html#mlquantify.counting.MS" title="mlquantify.counting.MS"><code class="xref py py-class docutils literal notranslate"><span class="pre">MS</span></code></a>. It only uses
+thresholds where <span class="math notranslate nohighlight">\(|\text{TPR} - \text{FPR}| &gt; 0.25\)</span>, discarding
+regions of the ROC curve where the classifier is nearly non-discriminative
+(and where the AC denominator is close to zero, causing numerical instability).</p>
+<p><strong>Why it exists:</strong> Thresholds where TPR ≈ FPR inflate the adjusted estimate
+wildly. MS2 filters them out before taking the median, making it more stable
+than MS on noisy classifiers. Forman (2008) introduced it as an improvement
+over plain MS.</p>
+<section id="id3">
+<h3><a class="toc-backref" href="#id19" role="doc-backlink"><span class="section-number">2.4.10.1. </span>Parameters</a><a class="headerlink" href="#id3" title="Link to this heading">#</a></h3>
+<div class="pst-scrollable-table-container"><table class="table">
+<colgroup>
+<col style="width: 22.0%" />
+<col style="width: 15.0%" />
+<col style="width: 63.0%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Parameter</p></th>
+<th class="head"><p>Default</p></th>
+<th class="head"><p>Explanation</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">estimator</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">None</span></code></p></td>
+<td><p>Probabilistic classifier.</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">cv</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">5</span></code></p></td>
+<td><p>Cross-validation folds for the soft score distribution.</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">stratified</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">True</span></code></p></td>
+<td><p>Stratified folds.</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">strategy</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">'ovr'</span></code></p></td>
+<td><p>Multiclass decomposition.</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">n_jobs</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">None</span></code></p></td>
+<td><p>Parallel jobs.</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">mlquantify.counting</span><span class="w"> </span><span class="kn">import</span> <span class="n">MS2</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">sklearn.linear_model</span><span class="w"> </span><span class="kn">import</span> <span class="n">LogisticRegression</span>
+
+<span class="n">q</span> <span class="o">=</span> <span class="n">MS2</span><span class="p">(</span><span class="n">LogisticRegression</span><span class="p">())</span>
+<span class="n">q</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">X_train</span><span class="p">,</span> <span class="n">y_train</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">q</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">X_test</span><span class="p">))</span>
+</pre></div>
+</div>
+</section>
+</section>
+<hr class="docutils" />
+<section id="comparing-threshold-adjustment-methods">
+<h2><a class="toc-backref" href="#id20" role="doc-backlink"><span class="section-number">2.4.11. </span>Comparing Threshold-Adjustment Methods</a><a class="headerlink" href="#comparing-threshold-adjustment-methods" title="Link to this heading">#</a></h2>
+<div class="pst-scrollable-table-container"><table class="table">
+<colgroup>
+<col style="width: 12.0%" />
+<col style="width: 30.0%" />
+<col style="width: 30.0%" />
+<col style="width: 28.0%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Method</p></th>
+<th class="head"><p>Threshold rule</p></th>
+<th class="head"><p>Strength</p></th>
+<th class="head"><p>Use when</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>ACC</p></td>
+<td><p>Hard-prediction argmax</p></td>
+<td><p>Exact AC derivation; no threshold to choose</p></td>
+<td><p>You want the canonical AC method</p></td>
+</tr>
+<tr class="row-odd"><td><p>TAC</p></td>
+<td><p>Fixed <span class="math notranslate nohighlight">\(\tau\)</span> (default 0.5)</p></td>
+<td><p>Simplest; good when calibrated at 0.5</p></td>
+<td><p>Classifier is calibrated at default threshold</p></td>
+</tr>
+<tr class="row-even"><td><p>TX</p></td>
+<td><p><span class="math notranslate nohighlight">\(\text{FPR} = 1 - \text{TPR}\)</span></p></td>
+<td><p>Balanced operating point</p></td>
+<td><p>General-purpose binary quantification</p></td>
+</tr>
+<tr class="row-odd"><td><p>TMAX</p></td>
+<td><p>Max <span class="math notranslate nohighlight">\(|\text{TPR} - \text{FPR}|\)</span></p></td>
+<td><p>Most stable denominator</p></td>
+<td><p>Classifier has a sharp discrimination peak</p></td>
+</tr>
+<tr class="row-even"><td><p>T50</p></td>
+<td><p>TPR closest to 0.5</p></td>
+<td><p>Avoids extreme thresholds</p></td>
+<td><p>Unstable estimates at extreme thresholds</p></td>
+</tr>
+<tr class="row-odd"><td><p>MS</p></td>
+<td><p>Median over all thresholds</p></td>
+<td><p>Robust to threshold choice</p></td>
+<td><p><strong>Default choice</strong>; works well on most tasks</p></td>
+</tr>
+<tr class="row-even"><td><p>MS2</p></td>
+<td><p>Median over <span class="math notranslate nohighlight">\(|\text{TPR}-\text{FPR}|&gt;0.25\)</span></p></td>
+<td><p>Stable on noisy classifiers</p></td>
+<td><p>Classifier has poor discrimination in parts of ROC</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<p><strong>Practical recommendation:</strong> Start with <strong>MS</strong> or <strong>MS2</strong> — Forman (2008)
+showed they consistently outperform single-threshold methods. If you want
+the canonical ACC correction without ROC sweep, use <strong>ACC</strong>.</p>
+</section>
+<section id="assumptions-and-when-to-use">
+<h2><a class="toc-backref" href="#id21" role="doc-backlink"><span class="section-number">2.4.12. </span>Assumptions and when to use</a><a class="headerlink" href="#assumptions-and-when-to-use" title="Link to this heading">#</a></h2>
+<ul class="simple">
+<li><p><strong>What must hold.</strong> The correction is unbiased only when the TPR and FPR
+estimated on the training set transfer to the test set — i.e. under prior
+probability shift, where <span class="math notranslate nohighlight">\(p(x \mid y)\)</span> is stable across train and test.</p></li>
+<li><p><strong>When it fails.</strong> When <span class="math notranslate nohighlight">\(\text{TPR} - \text{FPR}\)</span> is small (a weak
+classifier under heavy imbalance) the denominator shrinks and the estimate
+becomes high-variance. <a class="reference internal" href="generated/mlquantify.counting.TMAX.html#mlquantify.counting.TMAX" title="mlquantify.counting.TMAX"><code class="xref py py-class docutils literal notranslate"><span class="pre">TMAX</span></code></a> keeps that denominator large but can
+carry a systematic bias; <a class="reference internal" href="generated/mlquantify.counting.MS.html#mlquantify.counting.MS" title="mlquantify.counting.MS"><code class="xref py py-class docutils literal notranslate"><span class="pre">MS</span></code></a>/<a class="reference internal" href="generated/mlquantify.counting.MS2.html#mlquantify.counting.MS2" title="mlquantify.counting.MS2"><code class="xref py py-class docutils literal notranslate"><span class="pre">MS2</span></code></a> average over thresholds to
+reduce variance.</p></li>
+<li><p><strong>Best suited for.</strong> Binary problems with a reasonably separating classifier
+and enough test data. Use <a class="reference internal" href="generated/mlquantify.counting.TX.html#mlquantify.counting.TX" title="mlquantify.counting.TX"><code class="xref py py-class docutils literal notranslate"><span class="pre">TX</span></code></a>/<a class="reference internal" href="generated/mlquantify.counting.T50.html#mlquantify.counting.T50" title="mlquantify.counting.T50"><code class="xref py py-class docutils literal notranslate"><span class="pre">T50</span></code></a> for stability under
+imbalance, and <a class="reference internal" href="generated/mlquantify.counting.MS.html#mlquantify.counting.MS" title="mlquantify.counting.MS"><code class="xref py py-class docutils literal notranslate"><span class="pre">MS</span></code></a>/<a class="reference internal" href="generated/mlquantify.counting.MS2.html#mlquantify.counting.MS2" title="mlquantify.counting.MS2"><code class="xref py py-class docutils literal notranslate"><span class="pre">MS2</span></code></a> when no single threshold is reliable.</p></li>
+</ul>
+<p>All of these methods expose the usual <code class="docutils literal notranslate"><span class="pre">fit</span></code>, <code class="docutils literal notranslate"><span class="pre">predict</span></code> and <code class="docutils literal notranslate"><span class="pre">aggregate</span></code>
+interface, plus a specialised <code class="docutils literal notranslate"><span class="pre">get_best_thresholds</span></code> helper that returns the
+operating point selected for given labels and predicted probabilities.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Threshold adjustment methods are fundamentally binary. On multiclass data
+<code class="docutils literal notranslate"><span class="pre">mlquantify</span></code> applies a one-vs-rest decomposition automatically.</p>
+</div>
+</section>
+<section id="references">
+<h2><a class="toc-backref" href="#id22" role="doc-backlink"><span class="section-number">2.4.13. </span>References</a><a class="headerlink" href="#references" title="Link to this heading">#</a></h2>
+<details class="sd-sphinx-override sd-dropdown sd-card sd-mb-3">
+<summary class="sd-summary-title sd-card-header">
+<span class="sd-summary-text">References</span><span class="sd-summary-state-marker sd-summary-chevron-right"><svg version="1.1" width="1.5em" height="1.5em" class="sd-octicon sd-octicon-chevron-right" viewBox="0 0 24 24" aria-hidden="true"><path d="M8.72 18.78a.75.75 0 0 1 0-1.06L14.44 12 8.72 6.28a.751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018l6.25 6.25a.75.75 0 0 1 0 1.06l-6.25 6.25a.75.75 0 0 1-1.06 0Z"></path></svg></span></summary><div class="sd-summary-content sd-card-body docutils">
+<ul class="simple">
+<li><p class="sd-card-text">Forman, G. (2005). Counting Positives Accurately Despite Inaccurate
+Classification. <em>ECML</em>, 564–575.</p></li>
+<li><p class="sd-card-text">Forman, G. (2008). Quantifying Counts and Costs via Classification.
+<em>Data Mining and Knowledge Discovery</em>, 17(2), 164–206.</p></li>
+</ul>
+</div>
+</details><div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<p><a class="reference internal" href="counters.html#counters-module"><span class="std std-ref">Counting-Based Quantifiers</span></a> for the simpler CC / PCC / GACC / GPACC family.
+<a class="reference internal" href="likelihood.html#likelihood"><span class="std std-ref">Likelihood-Based Quantification</span></a> for EMQ, which usually outperforms adjusted counting.</p>
+</div>
+</section>
+</section>
+
+
+                </article>
+              
+              
+              
+                <footer class="bd-footer-article">
+                  <div class="footer-article-items footer-article__inner">
+  
+    <div class="footer-article-item">
+<div class="prev-next-area">
+    <a class="left-prev"
+       href="counters.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title"><span class="section-number">2.3. </span>Counting-Based Quantifiers</p>
+      </div>
+    </a>
+    <a class="right-next"
+       href="likelihood.html"
+       title="next page">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title"><span class="section-number">2.5. </span>Likelihood-Based Quantification</p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
+    </a>
+</div></div>
+  
+</div>
+                </footer>
+              
+              
+              
+            </div>
+            
+            
+              
+                <dialog id="pst-secondary-sidebar-modal"></dialog>
+                <div id="pst-secondary-sidebar" class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item">
+<div
+    id="pst-page-navigation-heading-2"
+    class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> On this page
+  </div>
+  <nav id="pst-page-toc-nav" class="page-toc" aria-labelledby="pst-page-navigation-heading-2">
+    <ul class="pst-show_toc_level nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#problem-formulation">2.4.1. Problem formulation</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#the-adjustment-formula">2.4.2. The Adjustment Formula</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#acc-adjusted-classify-and-count-hard-predictions">2.4.3. ACC — Adjusted Classify and Count (hard predictions)</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#parameters">2.4.3.1. Parameters</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#examples">2.4.3.2. Examples</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#thresholdadjustment-base-class-for-roc-threshold-methods">2.4.4. ThresholdAdjustment — Base Class for ROC-Threshold Methods</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#tac-threshold-adjusted-count-fixed-threshold">2.4.5. TAC — Threshold Adjusted Count (fixed threshold)</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id1">2.4.5.1. Parameters</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id2">2.4.5.2. Examples</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#tx-threshold-x-symmetric-roc-point">2.4.6. TX — Threshold X (symmetric ROC point)</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#tmax-maximum-tprfpr-separation">2.4.7. TMAX — Maximum TPR−FPR Separation</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#t50-tpr-0-5-threshold">2.4.8. T50 — TPR ≈ 0.5 Threshold</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#ms-median-sweep">2.4.9. MS — Median Sweep</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#ms2-median-sweep-with-constraint">2.4.10. MS2 — Median Sweep with Constraint</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id3">2.4.10.1. Parameters</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#comparing-threshold-adjustment-methods">2.4.11. Comparing Threshold-Adjustment Methods</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#assumptions-and-when-to-use">2.4.12. Assumptions and when to use</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#references">2.4.13. References</a></li>
+</ul>
+  </nav></div>
+
+  <div class="sidebar-secondary-item">
+
+  <div class="tocsection sourcelink">
+    <a href="../_sources/modules/adjust_counting.rst.txt">
+      <i class="fa-solid fa-file-lines"></i> Show Source
+    </a>
+  </div>
+</div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+          </footer>
+        
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script defer src="../_static/scripts/bootstrap.js?digest=a95f357e85573c9b56d5"></script>
+<script defer src="../_static/scripts/pydata-sphinx-theme.js?digest=a95f357e85573c9b56d5"></script>
+
+  <footer class="bd-footer">
+  </footer>
+  </body>
+</html>

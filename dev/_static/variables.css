@@ -1,0 +1,24 @@
+:root {
+  /* Brand Colors - Logo Derived */
+  --brand-violet: #A855F7;
+  --brand-magenta: #D946EF;
+  --brand-pink: #F43F5E;
+  --brand-gradient: linear-gradient(135deg, var(--brand-violet), var(--brand-magenta), var(--brand-pink));
+  
+  /* Modern Dark Theme Base */
+  --bg-deep: #0f172a;        /* Very dark blue/slate */
+  --bg-card: rgba(30, 41, 59, 0.7); /* Translucent slate */
+  --text-primary: #f8fafc;
+  --text-secondary: #94a3b8;
+  
+  /* Accents */
+  --glass-border: rgba(255, 255, 255, 0.1);
+  --glow-shadow: 0 0 20px rgba(168, 85, 247, 0.2);
+  
+  /* PyData Theme Overrides for Links and Navigation */
+  --pst-color-primary: var(--brand-violet);
+  --pst-color-primary-highlight: var(--brand-magenta);
+  --pst-color-link: var(--brand-violet);
+  --pst-color-link-hover: var(--brand-magenta);
+  --pst-color-active-navigation: var(--brand-magenta); /* Critical: overrides theme's default blue active color */
+}
