@@ -22,6 +22,10 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.x"
+
       - name: Generate VERSION.txt
         shell: bash
         run: |
@@ -38,10 +42,32 @@ jobs:
           CIBW_BUILD: "cp39-* cp310-* cp311-* cp312-* cp313-*"
           CIBW_SKIP: "*-musllinux_* *_i686 *_ppc64le *_s390x pp*"
           CIBW_ARCHS_MACOS: "auto"
-          # verify each wheel actually shipped the compiled kernel
-          CIBW_TEST_COMMAND: >-
-            python -c "import mlquantify.matching._histogram as H;
-            assert H._HAS_FAST_KERNEL, 'compiled histogram-sweep kernel missing from wheel'"
+
+      # Verify each wheel shipped the compiled kernel by inspecting its contents
+      # instead of importing mlquantify. Importing would reinstall the full
+      # runtime stack, and the latest scipy/scikit-learn no longer ship
+      # manylinux2014 wheels, so that install tries to build scipy from source
+      # and fails (no OpenBLAS in the build container).
+      - name: Verify compiled kernel is in each wheel
+        shell: bash
+        run: |
+          python - <<'PY'
+          import glob, sys, zipfile
+          wheels = glob.glob("wheelhouse/*.whl")
+          assert wheels, "no wheels were built"
+          missing = [
+              w for w in wheels
+              if not any(
+                  "_histogram_sweep" in n and n.endswith((".so", ".pyd"))
+                  for n in zipfile.ZipFile(w).namelist()
+              )
+          ]
+          if missing:
+              print("compiled histogram-sweep kernel missing from:")
+              print(*("  " + w for w in missing), sep="\n")
+              sys.exit(1)
+          print(f"OK: compiled kernel present in all {len(wheels)} wheel(s)")
+          PY
 
       - uses: actions/upload-artifact@v4
         with:

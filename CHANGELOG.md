@@ -136,6 +136,11 @@ a full **documentation standardisation** across every module.
 - CI now builds **portable binary wheels** with `cibuildwheel`
   (Linux / macOS x86_64+arm64 / Windows × CPython 3.9–3.13), verifies each wheel
   ships the compiled kernel, builds an sdist, and publishes to PyPI on a `v*` tag.
+  The kernel check inspects the wheel's contents for the compiled
+  `_histogram_sweep` extension rather than importing `mlquantify` — importing
+  would reinstall the full runtime stack, and recent scipy/scikit-learn no longer
+  ship `manylinux2014` wheels, so that install tried to build scipy from source
+  and failed (no OpenBLAS) on Python 3.11+.
 - **Source builds no longer fail on the package version** — the docs workflow now
   writes a PEP 440-compliant `0.4.0.dev0` to `VERSION.txt` instead of a bare `dev`
   (rejected by newer setuptools), and `setup.py` falls back to that version when
@@ -148,6 +153,8 @@ a full **documentation standardisation** across every module.
   Python == generic solver).
 - Added a cross-library comparison harness (`comparisons/`) validating prevalence
   agreement and speed against QuaPy, qunfold and quantificationlib.
+- Removed the redundant `tests/test_mixture.py` (superseded by `test_matching.py`)
+  and folded its remaining unique coverage (`SMM` binary fit/predict) into it.
 
 ---
 
