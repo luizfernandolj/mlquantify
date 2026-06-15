@@ -222,13 +222,13 @@ def test_gridsearch_matches_reference_counting(protocol):
     make_q = lambda: CC(LogisticRegression(max_iter=300))
     grid = {"threshold": [0.3, 0.5, 0.7]}
 
-    gs = GridSearchQ(quantifier=make_q, param_grid=grid, protocol=protocol,
+    gs = GridSearchQ(quantifier=make_q(), param_grid=grid, protocol=protocol,
                      samples_sizes=60, n_repetitions=3, scoring=MAE, refit=False).fit(X, y)
     ref_params, ref_score = _gridsearch_reference(
         make_q, grid, X, y, protocol=protocol, samples_sizes=60, n_repetitions=3, scoring=MAE)
 
-    assert gs.best_params == ref_params
-    assert gs.best_score == pytest.approx(ref_score, rel=1e-12)
+    assert gs.best_params_ == ref_params
+    assert gs.best_score_ == pytest.approx(ref_score, rel=1e-12)
 
 
 def test_gridsearch_matches_reference_multiparam():
@@ -240,13 +240,13 @@ def test_gridsearch_matches_reference_multiparam():
     make_q = lambda: DyS(LogisticRegression(max_iter=300))
     grid = {"distance": ["topsoe", "hellinger"], "bins_size": [[8], [16]]}
 
-    gs = GridSearchQ(quantifier=make_q, param_grid=grid, protocol="app",
+    gs = GridSearchQ(quantifier=make_q(), param_grid=grid, protocol="app",
                      samples_sizes=60, n_repetitions=3, scoring=MAE, refit=False).fit(X, y)
     ref_params, ref_score = _gridsearch_reference(
         make_q, grid, X, y, protocol="app", samples_sizes=60, n_repetitions=3, scoring=MAE)
 
-    assert gs.best_params == ref_params
-    assert gs.best_score == pytest.approx(ref_score, rel=1e-12)
+    assert gs.best_params_ == ref_params
+    assert gs.best_score_ == pytest.approx(ref_score, rel=1e-12)
 
 
 def test_gridsearch_deterministic_and_refit():
@@ -259,12 +259,12 @@ def test_gridsearch_deterministic_and_refit():
     grid = {"threshold": [0.4, 0.5, 0.6]}
 
     def run():
-        return GridSearchQ(quantifier=make_q, param_grid=grid, protocol="app",
+        return GridSearchQ(quantifier=make_q(), param_grid=grid, protocol="app",
                            samples_sizes=50, n_repetitions=2, scoring=MAE).fit(X, y)
 
     a, b = run(), run()
-    assert a.best_params == b.best_params
-    assert a.best_score == pytest.approx(b.best_score, rel=1e-12)
+    assert a.best_params_ == b.best_params_
+    assert a.best_score_ == pytest.approx(b.best_score_, rel=1e-12)
     # refit=True (default) exposes a usable best model
     assert hasattr(a, "best_model_")
     pred = a.predict(X)

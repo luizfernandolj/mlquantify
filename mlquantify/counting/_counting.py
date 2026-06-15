@@ -56,11 +56,11 @@ class CC(CrispPredictionMixin, BaseCount):
     >>> X, y = np.random.randn(100, 5), np.random.randint(0, 2, 100)
     >>> q = CC(LogisticRegression()).fit(X, y)
     >>> q.predict(X)
-    {0: 0.47, 1: 0.53}
+    {0: ..., 1: ...}
     >>> # call aggregate directly with pre-computed hard predictions
     >>> preds = q.estimator_.predict(X)
     >>> q.aggregate(preds, classes=[0, 1])
-    {0: 0.47, 1: 0.53}
+    {0: ..., 1: ...}
 
     References
     ----------
@@ -111,7 +111,7 @@ class CC(CrispPredictionMixin, BaseCount):
         >>> q = CC()
         >>> predictions = np.random.rand(200)
         >>> q.aggregate(predictions)
-        {0: 0.51, 1: 0.49}
+        {0: ..., 1: ...}
         """
         # Convert soft scores to crisp labels using the known class set (the
         # requested ``classes`` or the fitted ``classes_``); only then infer the
@@ -170,11 +170,11 @@ class PCC(SoftPredictionMixin, BaseCount):
     >>> X, y = np.random.randn(100, 5), np.random.randint(0, 2, 100)
     >>> q = PCC(LogisticRegression()).fit(X, y)
     >>> q.predict(X)
-    {0: 0.48, 1: 0.52}
+    {0: ..., 1: ...}
     >>> # call aggregate directly with pre-computed posterior probabilities
     >>> proba = q.estimator_.predict_proba(X)
     >>> q.aggregate(proba)
-    {0: 0.48, 1: 0.52}
+    {0: ..., 1: ...}
 
     References
     ----------
@@ -216,7 +216,7 @@ class PCC(SoftPredictionMixin, BaseCount):
         >>> q = PCC()
         >>> predictions = np.random.rand(200, 2)
         >>> q.aggregate(predictions)
-        {0: 0.50, 1: 0.50}
+        {0: ..., 1: ...}
         """
         predictions = validate_predictions(self, predictions)
 

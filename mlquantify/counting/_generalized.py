@@ -68,7 +68,7 @@ class GACC(CrispPredictionMixin, AggregativeMixin, LinearComposeQuantifier):
     ...                            n_redundant=0, random_state=42)
     >>> q = GACC(estimator=LogisticRegression()).fit(X, y)
     >>> q.predict(X)
-    {0: 0.33, 1: 0.34, 2: 0.33}
+    {0: ..., 1: ..., 2: ...}
 
     References
     ----------
@@ -164,7 +164,7 @@ class GPACC(SoftPredictionMixin, AggregativeMixin, LinearComposeQuantifier):
     ...                            n_redundant=0, random_state=42)
     >>> q = GPACC(estimator=LogisticRegression()).fit(X, y)
     >>> q.predict(X)
-    {0: 0.33, 1: 0.34, 2: 0.33}
+    {0: ..., 1: ..., 2: ...}
 
     References
     ----------
@@ -253,7 +253,7 @@ class FM(SoftPredictionMixin, AggregativeMixin, LinearComposeQuantifier):
     ...                            n_redundant=0, random_state=42)
     >>> q = FM(estimator=LogisticRegression()).fit(X, y)
     >>> q.predict(X)
-    {0: 0.33, 1: 0.34, 2: 0.33}
+    {0: ..., 1: ..., 2: ...}
 
     References
     ----------

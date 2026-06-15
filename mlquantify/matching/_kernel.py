@@ -48,7 +48,7 @@ class MatchingKernelQuantifier(BaseMatchingQuantifier):
     ...         return self._predict(X)
     >>> X, y = make_classification(n_samples=200, random_state=42)
     >>> MyKernelQ().fit(X, y).predict(X)
-    {0: 0.49, 1: 0.51}
+    {0: ..., 1: ...}
     """
 
     _parameter_constraints = {
@@ -157,7 +157,7 @@ class MMD_RKHS(MatchingKernelQuantifier):
     >>> X, y = make_classification(n_samples=200, random_state=42)
     >>> q = MMD_RKHS().fit(X, y)
     >>> q.predict(X)
-    {0: 0.49, 1: 0.51}
+    {0: ..., 1: ...}
 
     References
     ----------

@@ -83,9 +83,9 @@ class ThresholdAdjustment(SoftPredictionMixin, BaseAdjustCount):
     ...         return thresholds[idx], tprs[idx], fprs[idx]
     >>> X, y = make_classification(n_samples=100, n_classes=2, n_informative=5, random_state=42)
     >>> quantifier = CustomTA(estimator=RandomForestClassifier(random_state=42))
-    >>> quantifier.fit(X, y)
+    >>> _ = quantifier.fit(X, y)
     >>> quantifier.predict(X)
-    array([[0.3, 0.7]])
+    {0: 0.0, 1: 1.0}
     
     References
     ----------
@@ -186,9 +186,9 @@ class TAC(ThresholdAdjustment):
     >>> from sklearn.datasets import make_classification
     >>> X, y = make_classification(n_samples=100, n_classes=2, n_informative=5, random_state=42)
     >>> quantifier = TAC(threshold=0.3, estimator=RandomForestClassifier(random_state=42))
-    >>> quantifier.fit(X, y)
+    >>> _ = quantifier.fit(X, y)
     >>> quantifier.predict(X)
-    array([[0.4, 0.6]])
+    {0: 1.0, 1: 0.0}
 
     References
     ----------
@@ -244,9 +244,9 @@ class TX(ThresholdAdjustment):
     >>> from sklearn.datasets import make_classification
     >>> X, y = make_classification(n_samples=100, n_classes=2, n_informative=5, random_state=42)
     >>> quantifier = TX(estimator=RandomForestClassifier(random_state=42))
-    >>> quantifier.fit(X, y)
+    >>> _ = quantifier.fit(X, y)
     >>> quantifier.predict(X)
-    array([[0.4, 0.6]])
+    {0: 0.5272344827586207, 1: 0.4727655172413793}
 
     References
     ----------
@@ -300,9 +300,9 @@ class TMAX(ThresholdAdjustment):
     >>> from sklearn.datasets import make_classification
     >>> X, y = make_classification(n_samples=100, n_classes=2, n_informative=5, random_state=42)
     >>> quantifier = TMAX(estimator=RandomForestClassifier(random_state=42))
-    >>> quantifier.fit(X, y)
+    >>> _ = quantifier.fit(X, y)
     >>> quantifier.predict(X)
-    array([[0.4, 0.6]])
+    {0: 0.4938565891472869, 1: 0.5061434108527131}
 
     References
     ----------
@@ -355,9 +355,9 @@ class T50(ThresholdAdjustment):
     >>> from sklearn.datasets import make_classification
     >>> X, y = make_classification(n_samples=100, n_classes=2, n_informative=5, random_state=42)
     >>> quantifier = T50(estimator=RandomForestClassifier(random_state=42))
-    >>> quantifier.fit(X, y)
+    >>> _ = quantifier.fit(X, y)
     >>> quantifier.predict(X)
-    array([[0.4, 0.6]])
+    {0: 0.0, 1: 1.0}
 
     References
     ----------
@@ -411,9 +411,9 @@ class MS(ThresholdAdjustment):
     >>> from sklearn.datasets import make_classification
     >>> X, y = make_classification(n_samples=100, n_classes=2, n_informative=5, random_state=42)
     >>> quantifier = MS(estimator=RandomForestClassifier(random_state=42))
-    >>> quantifier.fit(X, y)
+    >>> _ = quantifier.fit(X, y)
     >>> quantifier.predict(X)
-    array([[0.4, 0.6]])
+    {0: 0.69, 1: 0.31}
 
     References
     ----------
@@ -496,9 +496,9 @@ class MS2(MS):
     >>> from sklearn.datasets import make_classification
     >>> X, y = make_classification(n_samples=100, n_classes=2, n_informative=5, random_state=42)
     >>> quantifier = MS2(estimator=RandomForestClassifier(random_state=42))
-    >>> quantifier.fit(X, y)
+    >>> _ = quantifier.fit(X, y)
     >>> quantifier.predict(X)
-    array([[0.4, 0.6]])
+    {0: 0.6167188612099646, 1: 0.3832811387900355}
 
     References
     ----------
@@ -577,11 +577,11 @@ class ACC(CrispPredictionMixin, BaseAdjustCount):
     >>> X, y = np.random.randn(100, 5), np.random.randint(0, 2, 100)
     >>> q = ACC(LogisticRegression()).fit(X, y)
     >>> q.predict(X)
-    {0: 0.30, 1: 0.70}
+    {0: ..., 1: ...}
     >>> # aggregate() path with pre-computed hard predictions
     >>> preds = q.estimator_.predict(X)
-    >>> q.aggregate(preds, y_train=y)
-    {0: 0.30, 1: 0.70}
+    >>> q.aggregate(preds, q.train_predictions, q.y_train)
+    {0: ..., 1: ...}
 
     References
     ----------

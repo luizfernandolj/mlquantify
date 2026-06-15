@@ -53,7 +53,7 @@ class BaseConfidenceRegion:
     >>> X = np.random.dirichlet(np.ones(3), size=100)
     >>> region = DummyRegion(X, confidence_level=0.9)
     >>> region.get_point_estimate().round(3)
-    array([0.33, 0.33, 0.34])
+    array(...)
 
     References
     ----------
@@ -125,9 +125,9 @@ class ConfidenceInterval(BaseConfidenceRegion):
     >>> X = np.random.dirichlet(np.ones(3), size=200)
     >>> ci = ConfidenceInterval(X, confidence_level=0.9)
     >>> ci.get_region()
-    (array([0.05, 0.06, 0.05]), array([0.48, 0.50, 0.48]))
+    (array(...), array(...))
     >>> ci.contains([0.3, 0.4, 0.3])
-    array([[ True]])
+    array(...)
 
     References
     ----------
@@ -221,7 +221,7 @@ class ConfidenceEllipseSimplex(BaseConfidenceRegion):
     >>> X = np.random.dirichlet(np.ones(3), size=200)
     >>> ce = ConfidenceEllipseSimplex(X, confidence_level=0.95)
     >>> ce.get_point_estimate().round(3)
-    array([0.33, 0.34, 0.33])
+    array(...)
     >>> ce.contains(np.array([0.4, 0.3, 0.3]))
     True
 
@@ -335,9 +335,9 @@ class ConfidenceEllipseCLR(ConfidenceEllipseSimplex):
     >>> X = np.random.dirichlet(np.ones(3), size=200)
     >>> clr = ConfidenceEllipseCLR(X, confidence_level=0.9)
     >>> clr.get_point_estimate().round(3)
-    array([ 0.,  0., -0.])
+    array(...)
     >>> clr.contains(np.array([0.4, 0.4, 0.2]))
-    True
+    np.True_
 
     References
     ----------

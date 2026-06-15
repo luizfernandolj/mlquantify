@@ -25,7 +25,7 @@ def test_gridsearchq_fit_predict(binary_dataset):
     param_grid = {'threshold': [0.4, 0.6]}
     
     gs = GridSearchQ(
-        quantifier=lambda: MockQuantifier(estimator=estimator), # Factory or class
+        quantifier=MockQuantifier(estimator=estimator),
         param_grid=param_grid,
         protocol='app',
         samples_sizes=50,
@@ -34,7 +34,7 @@ def test_gridsearchq_fit_predict(binary_dataset):
     )
     gs.fit(X, y)
     
-    assert gs.best_params['threshold'] in [0.4, 0.6]
+    assert gs.best_params_['threshold'] in [0.4, 0.6]
     preds = gs.predict(X)
     _assert_valid_prevalence(preds, n_classes=2)
 
@@ -44,13 +44,13 @@ def test_gridsearchq_random_state(binary_dataset):
     param_grid = {'threshold': [0.5]}
     
     gs1 = GridSearchQ(
-        quantifier=lambda: MockQuantifier(estimator=estimator),
+        quantifier=MockQuantifier(estimator=estimator),
         param_grid=param_grid,
         random_seed=42,
         n_repetitions=5
     )
     gs2 = GridSearchQ(
-        quantifier=lambda: MockQuantifier(estimator=estimator),
+        quantifier=MockQuantifier(estimator=estimator),
         param_grid=param_grid,
         random_seed=42,
         n_repetitions=5
@@ -59,7 +59,7 @@ def test_gridsearchq_random_state(binary_dataset):
     gs1.fit(X, y)
     gs2.fit(X, y)
     
-    assert gs1.best_score == gs2.best_score
+    assert gs1.best_score_ == gs2.best_score_
 
 def test_gridsearchq_estimator_params(binary_dataset):
     X, y = binary_dataset
@@ -77,13 +77,13 @@ def test_protocols(binary_dataset):
     
     for protocol in ['app', 'npp', 'upp']:
         gs = GridSearchQ(
-            quantifier=lambda: MockQuantifier(estimator=estimator),
+            quantifier=MockQuantifier(estimator=estimator),
             param_grid=param_grid,
             protocol=protocol,
             n_repetitions=2
         )
         gs.fit(X, y)
-        assert gs.best_score is not None
+        assert gs.best_score_ is not None
 
 
 @pytest.mark.parametrize("quantifier", [CC, PCC])

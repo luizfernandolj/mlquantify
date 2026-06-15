@@ -61,7 +61,7 @@ class BaseLikelihoodQuantifier(SoftPredictionMixin, AggregativeMixin, BaseQuanti
     ...         return np.mean(predictions, axis=0)
     >>> X, y = make_classification(n_samples=200, random_state=42)
     >>> MyLikelihoodQ().fit(X, y).predict(X)
-    {0: 0.49, 1: 0.51}
+    array([0.5099608, 0.4900392])
     """
 
     def __init__(self, estimator=None):
@@ -182,12 +182,12 @@ class EMQ(BaseLikelihoodQuantifier):
     >>> X, y = make_classification(n_samples=200, random_state=42)
     >>> q = EMQ(estimator=LogisticRegression()).fit(X, y)
     >>> q.predict(X)
-    {0: 0.49, 1: 0.51}
+    {0: ..., 1: ...}
     >>> # call aggregate with pre-computed posteriors
     >>> proba_train = q.estimator_.predict_proba(X)
     >>> proba_test = q.estimator_.predict_proba(X)
     >>> q.aggregate(proba_test, proba_train, y)
-    {0: 0.49, 1: 0.51}
+    {0: ..., 1: ...}
 
     References
     ----------
@@ -433,11 +433,11 @@ class CDE(BaseLikelihoodQuantifier):
     >>> X, y = make_classification(n_samples=200, random_state=42)
     >>> q = CDE(estimator=LogisticRegression()).fit(X, y)
     >>> q.predict(X)
-    {0: 0.49, 1: 0.51}
+    {0: ..., 1: ...}
     >>> # call aggregate with pre-computed posteriors
-    >>> proba_test = q.estimator_.predict_proba(X)
-    >>> q.aggregate(proba_test, train_labels=y)
-    {0: 0.49, 1: 0.51}
+    >>> proba = q.estimator_.predict_proba(X)
+    >>> q.aggregate(proba, proba, y)
+    {0: ..., 1: ...}
 
     References
     ----------

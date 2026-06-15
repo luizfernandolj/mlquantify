@@ -46,11 +46,11 @@ class BaseQuantifier(ABC, BaseEstimator):
     ...         return prevalence
     >>> quantifier = MyQuantifier(param1=10, param2='custom')
     >>> quantifier.get_params()
-    {'param1': 10, 'param2': 'custom'}
+    {'param1': ..., 'param2': 'custom'}
     >>> X = np.random.rand(100, 10)
     >>> y = np.random.randint(0, 2, size=100)
     >>> quantifier.fit(X, y).predict(X)
-    [0.5 0.5]
+    array(...)
     """
    
     

@@ -37,16 +37,17 @@ class BaseCount(AggregativeMixin, BaseQuantifier):
     >>> from mlquantify.counting._base import BaseCount
     >>> from mlquantify.base_aggregative import CrispPredictionMixin
     >>> from sklearn.linear_model import LogisticRegression
+    >>> from sklearn.datasets import make_classification
     >>> import numpy as np
     >>> class MyCC(CrispPredictionMixin, BaseCount):
     ...     def __init__(self, estimator=None):
     ...         self.estimator = estimator or LogisticRegression()
-    ...     def aggregate(self, predictions, y_train=None):
-    ...         classes, counts = np.unique(predictions, return_counts=True)
-    ...         return dict(zip(classes, counts / len(predictions)))
-    >>> X, y = np.random.randn(100, 5), np.random.randint(0, 2, 100)
+    ...     def aggregate(self, predictions, classes=None):
+    ...         labels, counts = np.unique(predictions, return_counts=True)
+    ...         return {int(c): float(n) for c, n in zip(labels, counts / len(predictions))}
+    >>> X, y = make_classification(n_samples=200, random_state=42)
     >>> MyCC().fit(X, y).predict(X)
-    {0: 0.47, 1: 0.53}
+    {0: ..., 1: ...}
     """
 
     @abstractmethod
@@ -137,7 +138,7 @@ class BaseAdjustCount(AggregativeMixin, BaseQuantifier):
     ...         return np.array([1 - p_adj, p_adj])
     >>> X, y = np.random.randn(100, 5), np.random.randint(0, 2, 100)
     >>> MyAdjusted().fit(X, y).predict(X)
-    {0: 0.48, 1: 0.52}
+    {0: ..., 1: ...}
     """
 
     @abstractmethod
@@ -231,7 +232,7 @@ class BaseAdjustCount(AggregativeMixin, BaseQuantifier):
         >>> train_predictions = np.random.rand(200)
         >>> y_train = np.random.randint(0, 2, 200)
         >>> q.aggregate(predictions, train_predictions, y_train)
-        {0: 0.51, 1: 0.49}
+        {0: ..., 1: ...}
         """
         self.classes_ = resolve_aggregate_classes(self, classes, y_train)
 

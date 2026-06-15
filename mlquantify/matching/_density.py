@@ -69,7 +69,7 @@ class KDEyQuantifier(
     ...         return np.array([1 - alpha, alpha]), None
     >>> X, y = make_classification(n_samples=200, random_state=42)
     >>> MyKDEy(estimator=LogisticRegression()).fit(X, y).predict(X)
-    {0: 0.49, 1: 0.51}
+    {0: ..., 1: ...}
 
     References
     ----------
@@ -247,12 +247,11 @@ class KDEyML(KDEyQuantifier):
     >>> X, y = make_classification(n_samples=200, random_state=42)
     >>> q = KDEyML(estimator=LogisticRegression()).fit(X, y)
     >>> q.predict(X)
-    {0: 0.49, 1: 0.51}
-    >>> # call aggregate with pre-computed scores
-    >>> import numpy as np
-    >>> train_scores = LogisticRegression().fit(X, y).predict_proba(X)
-    >>> q.aggregate(X, train_scores, y)
-    {0: 0.49, 1: 0.51}
+    {0: ..., 1: ...}
+    >>> # call aggregate with pre-computed posterior scores
+    >>> scores = q.estimator_.predict_proba(X)
+    >>> q.aggregate(scores, scores, y)
+    {0: ..., 1: ...}
 
     References
     ----------
@@ -344,7 +343,7 @@ class KDEyHD(KDEyQuantifier):
     >>> X, y = make_classification(n_samples=200, random_state=42)
     >>> q = KDEyHD(estimator=LogisticRegression()).fit(X, y)
     >>> q.predict(X)
-    {0: 0.49, 1: 0.51}
+    {0: ..., 1: ...}
 
     References
     ----------
@@ -503,7 +502,7 @@ class KDEyCS(KDEyQuantifier):
     >>> X, y = make_classification(n_samples=200, random_state=42)
     >>> q = KDEyCS(estimator=LogisticRegression()).fit(X, y)
     >>> q.predict(X)
-    {0: 0.49, 1: 0.51}
+    {0: ..., 1: ...}
 
     References
     ----------

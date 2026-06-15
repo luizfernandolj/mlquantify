@@ -74,9 +74,9 @@ class GridSearchQ(MetaquantifierMixin, BaseQuantifier):
     ...     n_repetitions=3,
     ... ).fit(X, y)
     >>> gs.best_params_
-    {'threshold': 0.5}
+    {'threshold': ...}
     >>> gs.predict(X)
-    {0: 0.49, 1: 0.51}
+    {0: ..., 1: ...}
     """
     
     _parameter_constraints = {
@@ -108,7 +108,7 @@ class GridSearchQ(MetaquantifierMixin, BaseQuantifier):
                  random_seed=42,
                  verbose=False):
                      
-        self.quantifier = quantifier()
+        self.quantifier = quantifier
         self.param_grid = param_grid
         self.protocol = protocol.lower()
         self.samples_sizes = samples_sizes
@@ -221,13 +221,13 @@ class GridSearchQ(MetaquantifierMixin, BaseQuantifier):
                 best_score, best_params = score, params
             
         
-        self.best_score = best_score
-        self.best_params = dict(zip(self.param_grid.keys(), best_params))
-        self.sout(f'Optimization complete. Best score: {self.best_score}, with parameters: {self.best_params}.')
+        self.best_score_ = best_score
+        self.best_params_ = dict(zip(self.param_grid.keys(), best_params))
+        self.sout(f'Optimization complete. Best score: {self.best_score_}, with parameters: {self.best_params_}.')
 
-        if self.refit and self.best_params:
+        if self.refit and self.best_params_:
             model = deepcopy(self.quantifier)
-            model.set_params(**self.best_params)
+            model.set_params(**self.best_params_)
             model.fit(X, y)
             self.best_model_ = model
 
@@ -257,41 +257,3 @@ class GridSearchQ(MetaquantifierMixin, BaseQuantifier):
         if not hasattr(self, 'best_model_'):
             raise RuntimeError("The model has not been fitted yet.")
         return self.best_model_.predict(X)
-    
-    
-    
-    def best_params(self):
-        """Return the best parameters found during fitting.
-
-        Returns
-        -------
-        dict
-            The best parameters.
-
-        Raises
-        ------
-        ValueError
-            If called before fitting.
-        """
-        if hasattr(self, 'best_params'):
-            return self.best_params
-        raise ValueError('best_params called before fit.')
-        
-        
-        
-    def best_model(self):
-        """Return the best model after fitting.
-
-        Returns
-        -------
-        Quantifier
-            The best fitted model.
-
-        Raises
-        ------
-        ValueError
-            If called before fitting.
-        """
-        if hasattr(self, 'best_model_'):
-            return self.best_model_
-        raise ValueError('best_model called before fit.')

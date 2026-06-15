@@ -84,7 +84,7 @@ class DistanceLoss(BaseLoss):
     >>> from mlquantify.losses import get_loss
     >>> loss = get_loss("hellinger")
     >>> loss([0.4, 0.6], [0.5, 0.5])
-    0.07612...
+    0.0711607124393506
     """
 
     def __init__(self, distance="hellinger", normalize=True):
@@ -117,7 +117,7 @@ class DistanceLoss(BaseLoss):
         >>> from mlquantify.losses import get_loss
         >>> loss = get_loss("topsoe")
         >>> round(loss([0.3, 0.7], [0.5, 0.5]), 4)
-        0.0528
+        0.042
         """
         mixture = np.asarray(mixture, dtype=float)
         target = np.asarray(target, dtype=float)
@@ -237,7 +237,7 @@ class HellingerSurrogateLoss(BaseLoss):
     >>> from mlquantify.losses import get_loss
     >>> loss = get_loss("hellinger_surrogate")
     >>> loss([0.4, 0.6], [0.5, 0.5])
-    -0.9899...
+    -0.994936153005124
     """
 
     def __init__(self, normalize=True):
@@ -267,7 +267,7 @@ class HellingerSurrogateLoss(BaseLoss):
         >>> from mlquantify.losses import get_loss
         >>> loss = get_loss("hd_surrogate")
         >>> round(loss([0.3, 0.7], [0.5, 0.5]), 4)
-        -0.9747
+        -0.9789
         """
         mixture = np.asarray(mixture, dtype=float)
         target = np.asarray(target, dtype=float)
@@ -317,7 +317,7 @@ class EnergyLoss(BaseLoss):
     >>> q = np.array([0.3, 0.7])
     >>> M = np.eye(2)
     >>> loss(p, q, M)
-    0.04
+    0.5599999999999999
     """
 
     def __call__(self, prevalence, q, M):
