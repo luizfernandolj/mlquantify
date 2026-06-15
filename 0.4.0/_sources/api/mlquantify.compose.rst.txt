@@ -1,0 +1,35 @@
+:html_theme.sidebar_secondary.remove:
+
+
+.. _compose_ref:
+
+
+mlquantify.compose
+==================
+
+.. automodule:: mlquantify.compose
+
+
+
+
+
+.. _compose_ref-composable-methods:
+
+
+
+Composable Methods
+------------------
+
+
+
+
+.. autosummary::
+  :nosignatures:
+  :toctree: ../modules/generated/
+  :template: base.rst
+
+
+  BaseComposeQuantifier
+  LinearComposeQuantifier
+  LikelihoodComposeQuantifier
+  ComposeQuantifier
