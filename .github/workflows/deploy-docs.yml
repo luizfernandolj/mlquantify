@@ -39,7 +39,12 @@ jobs:
           fi
 
       - name: Generate VERSION.txt
-        run: echo "${{ steps.version.outputs.version }}" > VERSION.txt
+        run: |
+          if [ "${{ steps.version.outputs.is_release }}" = "true" ]; then
+            echo "${{ steps.version.outputs.version }}" > VERSION.txt
+          else
+            echo "0.4.0.dev0" > VERSION.txt
+          fi
 
       - name: Install dependencies
         run: |
