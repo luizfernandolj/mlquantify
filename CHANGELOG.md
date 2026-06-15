@@ -101,9 +101,10 @@ a full **documentation standardisation** across every module.
   doctest setup; fixed numerous broken examples (wrong `aggregate` calls, stale
   attribute names, incomplete snippets). Added a GitHub Actions workflow that runs
   the test suite and the doctests across Python 3.9–3.13 on Linux/macOS/Windows.
-- **Restored Python 3.9 import** — `utils._tags` used `str | None` class
-  annotations, which 3.9 evaluates at runtime (the `|` union syntax is 3.10+),
-  breaking the whole package import. Added `from __future__ import annotations`.
+- **Restored Python 3.9 import** — `utils._tags` and `utils._constraints` used
+  `X | Y` class annotations, which 3.9 evaluates at runtime (the `|` union syntax
+  is 3.10+), breaking the whole package import. Added
+  `from __future__ import annotations` to the affected modules.
 - **`MS2`/`TMAX` doctests** are now skipped (`# doctest: +SKIP`): their threshold
   selection is platform-sensitive and produced non-reproducible prevalences on
   macOS.
