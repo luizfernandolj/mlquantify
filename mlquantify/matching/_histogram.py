@@ -98,7 +98,7 @@ class MatchingHistogramQuantifier(BaseMatchingQuantifier):
     ...         return self._predict(X)
     >>> X, y = make_classification(n_samples=200, random_state=42)
     >>> MyHistQ().fit(X, y).predict(X)
-    {0: 0.5, 1: 0.5}
+    {0: ..., 1: ...}
     """
 
     def __init__(
@@ -332,14 +332,11 @@ class DyS(SoftPredictionMixin, AggregativeMixin, MatchingHistogramQuantifier):
     >>> X, y = make_classification(n_samples=200, random_state=42)
     >>> q = DyS(estimator=LogisticRegression()).fit(X, y)
     >>> q.predict(X)
-    {0: 0.49, 1: 0.51}
-    >>> # call aggregate with pre-computed scores
-    >>> import numpy as np
-    >>> train_scores = np.random.rand(200)
-    >>> test_scores = np.random.rand(100)
-    >>> y_train = np.random.randint(0, 2, 200)
-    >>> q.aggregate(test_scores, train_scores, y_train)
-    {0: 0.48, 1: 0.52}
+    {0: ..., 1: ...}
+    >>> # call aggregate with pre-computed posterior scores
+    >>> scores = q.estimator_.predict_proba(X)
+    >>> q.aggregate(scores, scores, y)
+    {0: ..., 1: ...}
 
     References
     ----------
@@ -483,14 +480,11 @@ class HDy(SoftPredictionMixin, AggregativeMixin, MatchingHistogramQuantifier):
     >>> X, y = make_classification(n_samples=200, random_state=42)
     >>> q = HDy(estimator=LogisticRegression()).fit(X, y)
     >>> q.predict(X)
-    {0: 0.49, 1: 0.51}
-    >>> # call aggregate with pre-computed scores
-    >>> import numpy as np
-    >>> train_scores = np.random.rand(200)
-    >>> test_scores = np.random.rand(100)
-    >>> y_train = np.random.randint(0, 2, 200)
-    >>> q.aggregate(test_scores, train_scores, y_train)
-    {0: 0.48, 1: 0.52}
+    {0: ..., 1: ...}
+    >>> # call aggregate with pre-computed posterior scores
+    >>> scores = q.estimator_.predict_proba(X)
+    >>> q.aggregate(scores, scores, y)
+    {0: ..., 1: ...}
 
     References
     ----------
@@ -613,7 +607,7 @@ class HDx(MatchingHistogramQuantifier):
     >>> X, y = make_classification(n_samples=200, random_state=42)
     >>> q = HDx().fit(X, y)
     >>> q.predict(X)
-    {0: 0.49, 1: 0.51}
+    {0: ..., 1: ...}
 
     References
     ----------

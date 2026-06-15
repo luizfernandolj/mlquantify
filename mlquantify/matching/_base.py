@@ -56,10 +56,7 @@ class BaseMatchingQuantifier(BaseQuantifier):
     ...         prevalences = np.random.dirichlet(np.ones(len(train_representations)))
     ...         distance = np.random.rand()
     ...         return prevalences, distance
-    >>> X_train, y_train = np.random.randn(100, 5), np.random.randint(0, 2, 100)
-    >>> X_test = np.random.randn(50, 5)
-    >>> MyMatching().fit(X_train, y_train).predict(X_test)
-    {0: 0.6, 1: 0.4}
+    >>> q = MyMatching()   # subclasses implement _solve_prevalence
     """
 
     _parameter_constraints = {

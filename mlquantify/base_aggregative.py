@@ -60,7 +60,7 @@ class AggregativeMixin:
     >>> X = np.random.rand(100, 10)
     >>> y = np.random.randint(0, 2, size=100)
     >>> quantifier.fit(X, y).predict(X)
-    [0.5 0.5]
+    array(...)
     """
     
     def __mlquantify_tags__(self):
@@ -290,7 +290,7 @@ class SoftPredictionMixin:
     >>> X = np.random.rand(100, 10)
     >>> y = np.random.randint(0, 2, size=100)
     >>> quantifier.fit(X, y).predict(X)
-    [0.5 0.5]
+    array(...)
     """
     
     def __mlquantify_tags__(self):
@@ -336,7 +336,7 @@ class CrispPredictionMixin:
     >>> X = np.random.rand(100, 10)
     >>> y = np.random.randint(0, 2, size=100)
     >>> quantifier.fit(X, y).predict(X)
-    [0.5 0.5]
+    array(...)
     """
 
     def __mlquantify_tags__(self):

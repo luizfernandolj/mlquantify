@@ -1,22 +1,21 @@
 import numpy as np
 from mlquantify.utils._constraints import Interval, Options
 from mlquantify.neighbors._classification import PWKCLF
-from mlquantify.base import BaseQuantifier
-from mlquantify.utils._decorators import _fit_context
-from mlquantify.counting import CC
 from mlquantify.utils import validate_data
-from mlquantify.utils._validation import validate_prevalences
+from mlquantify.counting import CC
 
 
-class PWK(BaseQuantifier):
+class PWK(CC):
     r"""Probabilistic Weighted k-Nearest Neighbour (PWK) quantifier.
 
-    Targets prior probability shift. A classify-and-count quantifier built on a
-    nearest-neighbour classifier whose votes are re-weighted to undo training
-    class imbalance: each neighbour's vote is scaled by a class-specific weight
-    (controlled by ``alpha``), so the count is not dominated by the majority
-    class. Native multiclass; classifier-free in the sense of needing no
-    external estimator.
+    Targets prior probability shift. PWK is an **aggregative** Classify-and-Count
+    quantifier — it shares the standard ``fit`` / ``predict`` / ``aggregate``
+    interface of :class:`~mlquantify.counting.CC` — but its classifier is a
+    k-nearest-neighbour rule *modified for quantification* (:class:`PWKCLF`):
+    each neighbour's vote is re-weighted by a class-specific factor (controlled
+    by ``alpha``) so the count is not dominated by the majority class. Unlike the
+    other aggregative quantifiers, PWK therefore takes **no external estimator
+    parameter**: the modified k-NN is intrinsic to the method.
 
     Parameters
     ----------
@@ -46,7 +45,10 @@ class PWK(BaseQuantifier):
     Attributes
     ----------
     estimator : PWKCLF
-        Fitted underlying weighted k-NN classifier.
+        The underlying weighted k-NN classifier (built from the parameters
+        above; not an argument).
+    estimator_ : PWKCLF
+        The fitted classifier.
     classes_ : ndarray of shape (n_classes,)
         Class labels seen during ``fit``.
 
@@ -55,7 +57,8 @@ class PWK(BaseQuantifier):
     PWK is a classify-and-count method whose only quantification-specific
     ingredient is the imbalance re-weighting; it needs no separate scorer and
     handles multiclass directly, but inherits k-NN's sensitivity to feature
-    scaling and dimensionality.
+    scaling and dimensionality. Because it subclasses :class:`CC`, ``aggregate``
+    (with its optional ``classes`` argument) is available too.
 
     See Also
     --------
@@ -69,7 +72,7 @@ class PWK(BaseQuantifier):
     >>> X, y = make_classification(n_samples=200, random_state=42)
     >>> q = PWK(alpha=1.5, n_neighbors=5).fit(X, y)
     >>> q.predict(X)
-    {0: 0.49, 1: 0.51}
+    {0: ..., 1: ...}
 
     References
     ----------
@@ -79,7 +82,7 @@ class PWK(BaseQuantifier):
                Quantification-Oriented Learning Based on Reliable Classifiers.
                *Pattern Recognition*, 48(2), 591–604.
     """
-    
+
     _parameter_constraints = {
         "alpha": [Interval(1, None, inclusive_right=False)],
         "n_neighbors": [Interval(1, None, inclusive_right=False)],
@@ -90,7 +93,7 @@ class PWK(BaseQuantifier):
         "metric_params": [dict, type(None)],
         "n_jobs": [Interval(-1, None, inclusive_right=False), type(None)],
     }
-    
+
     def __init__(self,
                  alpha=1,
                  n_neighbors=10,
@@ -100,84 +103,26 @@ class PWK(BaseQuantifier):
                  p=2,
                  metric_params=None,
                  n_jobs=None):
-        estimator = PWKCLF(alpha=alpha,
-                         n_neighbors=n_neighbors,
-                         algorithm=algorithm,
-                         metric=metric,
-                         leaf_size=leaf_size,
-                         p=p,
-                         metric_params=metric_params,
-                         n_jobs=n_jobs)
-        self.algorithm = algorithm
         self.alpha = alpha
         self.n_neighbors = n_neighbors
+        self.algorithm = algorithm
         self.metric = metric
         self.leaf_size = leaf_size
         self.p = p
         self.metric_params = metric_params
         self.n_jobs = n_jobs
-        self.estimator = estimator
-        
-    @_fit_context(prefer_skip_nested_validation=True)
-    def fit(self, X, y):
-        """Fit the PWK quantifier to the training data.
-
-        Builds a :class:`~mlquantify.counting.CC` quantifier around the
-        underlying weighted k-NN classifier and fits it on the provided data.
-
-        Parameters
-        ----------
-        X : array-like of shape (n_samples, n_features)
-            Training feature matrix.
-        y : array-like of shape (n_samples,)
-            Training class labels.
-
-        Returns
-        -------
-        self : PWK
-            The fitted quantifier.
-
-        Examples
-        --------
-        >>> from mlquantify.neighbors import PWK
-        >>> from sklearn.datasets import make_classification
-        >>> X, y = make_classification(n_samples=200, random_state=42)
-        >>> q = PWK(alpha=1.5, n_neighbors=5).fit(X, y)
-        """
-        X, y = validate_data(self, X, y, ensure_2d=True, ensure_min_samples=2)
-        self.classes_ = np.unique(y)
-        self.cc = CC(self.estimator)
-        return self.cc.fit(X, y)
-
-    def predict(self, X):
-        """Predict class prevalences for the given test data.
-
-        Classifies each test instance with the fitted weighted k-NN classifier
-        and counts the fraction assigned to each class (Classify and Count).
-
-        Parameters
-        ----------
-        X : array-like of shape (n_samples, n_features)
-            Test feature matrix.
-
-        Returns
-        -------
-        prevalences : dict or ndarray of shape (n_classes,)
-            Estimated class prevalences summing to 1.
-
-        Examples
-        --------
-        >>> from mlquantify.neighbors import PWK
-        >>> from sklearn.datasets import make_classification
-        >>> X, y = make_classification(n_samples=200, random_state=42)
-        >>> q = PWK(alpha=1.5, n_neighbors=5).fit(X, y)
-        >>> q.predict(X)
-        {0: 0.49, 1: 0.51}
-        """
-        X = validate_data(self, X, ensure_2d=True)
-        prevalences = self.cc.predict(X)
-        prevalences = validate_prevalences(self, prevalences, self.classes_)
-        return prevalences
+        # PWK is aggregative, but its estimator is fixed to the quantification
+        # k-NN rather than supplied by the user.
+        super().__init__(
+            estimator=PWKCLF(alpha=alpha,
+                             n_neighbors=n_neighbors,
+                             algorithm=algorithm,
+                             metric=metric,
+                             leaf_size=leaf_size,
+                             p=p,
+                             metric_params=metric_params,
+                             n_jobs=n_jobs),
+        )
 
     def classify(self, X):
         """Classify test instances using the underlying weighted k-NN estimator.
@@ -201,8 +146,7 @@ class PWK(BaseQuantifier):
         >>> from sklearn.datasets import make_classification
         >>> X, y = make_classification(n_samples=200, random_state=42)
         >>> q = PWK(alpha=1.5, n_neighbors=5).fit(X, y)
-        >>> q.classify(X[:5])
-        array([0, 1, 0, 1, 0])
+        >>> labels = q.classify(X[:5])
         """
-        return self.estimator.predict(X)
-        
+        X = validate_data(self, X, ensure_2d=True)
+        return self.estimator_.predict(X)

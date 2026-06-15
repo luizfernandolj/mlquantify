@@ -41,8 +41,8 @@ The :class:`GridSearchQ` class provides a systematic way to perform hyperparamet
 
     grid_search.fit(X_train, y_train)
     y_pred = grid_search.predict(X_test)
-    best_params = grid_search.best_params()
-    best_model = grid_search.best_model()
+    best_params = grid_search.best_params_
+    best_model = grid_search.best_model_
 
 .. seealso::
 

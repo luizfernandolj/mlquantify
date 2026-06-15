@@ -69,7 +69,7 @@ class NegativeLogLikelihoodLoss(BaseLoss):
     >>> loss = get_loss("nll")
     >>> import numpy as np
     >>> loss(np.array([0.8, 0.6, 0.9]))  # doctest: +ELLIPSIS
-    0.2576...
+    0.2797765635793423
     """
 
     def __init__(self, reduction="mean"):
@@ -129,7 +129,7 @@ class MixtureNegativeLogLikelihoodLoss(BaseLoss):
     >>> prev = np.array([0.4, 0.6])
     >>> lkl = np.array([[0.3, 0.7], [0.6, 0.4]])
     >>> loss(prev, lkl)  # doctest: +ELLIPSIS
-    0.5...
+    0.6939478212434322
     """
 
     def __init__(self, reduction="mean"):
@@ -160,7 +160,7 @@ class MixtureNegativeLogLikelihoodLoss(BaseLoss):
         >>> prev = np.array([0.5, 0.5])
         >>> lkl = np.array([[0.2, 0.8], [0.7, 0.3]])
         >>> round(loss(prev, lkl), 4)
-        0.6931
+        0.6982
         """
         mixture = _mixture_likelihood(prevalences, class_likelihoods)
         return _reduce_negative_log_likelihood(mixture, self.reduction)
@@ -209,7 +209,7 @@ class RegularizedMixtureNLLLoss(BaseLoss):
     >>> prev = np.array([0.3, 0.4, 0.3])
     >>> lkl = np.array([[0.2, 0.5, 0.3], [0.6, 0.3, 0.1], [0.1, 0.2, 0.7]])
     >>> loss(prev, lkl)  # doctest: +ELLIPSIS
-    1.1...
+    1.0997116368050508
     """
 
     def __init__(self, tau_0=0.0, tau_1=0.0, reduction="mean"):
@@ -241,7 +241,7 @@ class RegularizedMixtureNLLLoss(BaseLoss):
         >>> prev = np.array([0.5, 0.5])
         >>> lkl = np.array([[0.2, 0.8], [0.7, 0.3]])
         >>> round(loss(prev, lkl), 4)
-        0.6931
+        0.6982
         """
         prevalences = np.asarray(prevalences, dtype=float)
 

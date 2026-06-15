@@ -113,7 +113,7 @@ def solve_binary(
     >>> prevalence, loss = solve_binary(lambda a: (a - 0.3) ** 2,
     ...                                 solver="bounded")
     >>> round(prevalence[1], 2)
-    0.3
+    np.float64(0.3)
     """
     if solver == "auto":
         solver = "bounded"

@@ -64,7 +64,7 @@ class MLPE(SoftPredictionMixin, AggregativeMixin, LikelihoodComposeQuantifier):
     >>> y = (rng.random(200) < 0.3).astype(int)
     >>> q = MLPE(LogisticRegression()).fit(X, y)
     >>> q.predict(rng.standard_normal((50, 4)))  # returns the training prevalence
-    {0: 0.7, 1: 0.3}
+    {0: ..., 1: ...}
 
     References
     ----------

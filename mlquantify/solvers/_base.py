@@ -69,7 +69,7 @@ def minimize_prevalence(
     >>> prevalence, loss = minimize_prevalence(objective, n_classes=2,
     ...                                        solver="bounded")
     >>> round(prevalence[1], 2)
-    0.3
+    np.float64(0.3)
     """
     if n_classes < 2:
         raise ValueError("n_classes must be >= 2.")

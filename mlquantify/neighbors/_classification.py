@@ -44,8 +44,11 @@ class PWKCLF:
 
     Examples
     --------
+    >>> import numpy as np
+    >>> X_train, y_train = np.random.randn(60, 4), np.random.randint(0, 2, 60)
+    >>> X_test = np.random.randn(10, 4)
     >>> clf = PWKCLF(alpha=2.0, n_neighbors=7)
-    >>> clf.fit(X_train, y_train)
+    >>> _ = clf.fit(X_train, y_train)
     >>> labels = clf.predict(X_test)
     """
     

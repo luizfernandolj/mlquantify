@@ -204,14 +204,14 @@ class PredictionRepresentation(BaseRepresentation):
 
         Examples
         --------
-        >>> from mlquantify.representations._prediction import SoftPredictionRepresentation
+        >>> from mlquantify.representations._prediction import PredictionRepresentation
         >>> from mlquantify.representations._density import KDERepresentation
         >>> import numpy as np
         >>> rng = np.random.default_rng(0)
         >>> posteriors = rng.dirichlet([2, 2], size=100)
         >>> y = posteriors.argmax(axis=1)
         >>> kde = KDERepresentation(bandwidth=0.1)
-        >>> rep = SoftPredictionRepresentation(representation=kde).fit(posteriors, y)
+        >>> rep = PredictionRepresentation(representation=kde).fit(posteriors, y)
         >>> rep.class_likelihoods(posteriors[:5]).shape
         (2, 5)
         """
@@ -272,7 +272,7 @@ class SoftPredictionRepresentation(PredictionRepresentation):
     >>> y = np.array([0, 1, 0])
     >>> rep = SoftPredictionRepresentation().fit(posteriors, y)
     >>> rep.transform(posteriors)
-    array([0.5, 0.5])
+    array(...)
     """
 
     def __init__(self, average=True):

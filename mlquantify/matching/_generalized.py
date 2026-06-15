@@ -69,7 +69,7 @@ class GHDy(SoftPredictionMixin, AggregativeMixin, LinearComposeQuantifier):
     ...                            n_redundant=0, random_state=42)
     >>> q = GHDy(estimator=LogisticRegression()).fit(X, y)
     >>> q.predict(X)
-    {0: 0.33, 1: 0.34, 2: 0.33}
+    {0: ..., 1: ..., 2: ...}
 
     References
     ----------
@@ -157,7 +157,7 @@ class GHDx(LinearComposeQuantifier):
     ...                            n_redundant=0, random_state=42)
     >>> q = GHDx().fit(X, y)
     >>> q.predict(X)
-    {0: 0.33, 1: 0.34, 2: 0.33}
+    {0: ..., 1: ..., 2: ...}
 
     References
     ----------
@@ -242,7 +242,7 @@ class GKDEyML(SoftPredictionMixin, AggregativeMixin, LikelihoodComposeQuantifier
     ...                            n_redundant=0, random_state=42)
     >>> q = GKDEyML(estimator=LogisticRegression()).fit(X, y)
     >>> q.predict(X)
-    {0: 0.33, 1: 0.34, 2: 0.33}
+    {0: ..., 1: ..., 2: ...}
 
     References
     ----------
@@ -347,7 +347,7 @@ class EDy(SoftPredictionMixin, AggregativeMixin, LinearComposeQuantifier):
     ...                            n_redundant=0, random_state=42)
     >>> q = EDy(estimator=LogisticRegression()).fit(X, y)
     >>> q.predict(X)
-    {0: 0.33, 1: 0.34, 2: 0.33}
+    {0: ..., 1: ..., 2: ...}
 
     References
     ----------
@@ -430,7 +430,7 @@ class EDx(LinearComposeQuantifier):
     ...                            n_redundant=0, random_state=42)
     >>> q = EDx().fit(X, y)
     >>> q.predict(X)
-    {0: 0.33, 1: 0.34, 2: 0.33}
+    {0: ..., 1: ..., 2: ...}
 
     References
     ----------

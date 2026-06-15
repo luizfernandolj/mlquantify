@@ -67,6 +67,16 @@ a full **documentation standardisation** across every module.
   classes seen at `fit`, and their `requires_train_labels` tag is `False`. Callers
   passing `y_train=` positionally are unaffected (it maps to `classes`); update
   `y_train=` keyword calls to `classes=`.
+- **`GridSearchQ` now takes a quantifier *instance*** (e.g. `GridSearchQ(CC(...))`)
+  rather than a zero-argument factory, matching its documented `quantifier`
+  parameter. Its fitted attributes are standardised to the trailing-underscore
+  convention — `best_score_`, `best_params_`, `best_model_` (were `best_score` /
+  `best_params`) — and the redundant `best_params()` / `best_model()` accessor
+  methods (which collided with the attributes) are removed.
+- **`PWK`** is now an aggregative `CC` subclass built on a quantification-modified
+  k-NN classifier, so it shares the `fit`/`predict`/`aggregate` interface (and the
+  new `classes` argument). It no longer accepts an external estimator parameter —
+  the modified k-NN is intrinsic to the method.
 
 ### Fixes
 
@@ -85,6 +95,12 @@ a full **documentation standardisation** across every module.
 - **`simplex_uniform_sampling`** now respects `random_state` — it previously drew
   from the global NumPy RNG and ignored the seed, making "uniform" UPP runs
   non-reproducible.
+- Removed dead code: the unused `neighbors._base` (`BaseKDE`) and
+  `solvers._least_squares` modules.
+- **All docstring doctests now run and pass** (122), with a seeded, format-stable
+  doctest setup; fixed numerous broken examples (wrong `aggregate` calls, stale
+  attribute names, incomplete snippets). Added a GitHub Actions workflow that runs
+  the test suite and the doctests across Python 3.9–3.13 on Linux/macOS/Windows.
 
 ### Documentation
 

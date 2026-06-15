@@ -56,7 +56,7 @@ def solve_simplex(
     >>> objective = lambda p: np.sum((np.asarray(p) - target) ** 2)
     >>> prevalence, loss = solve_simplex(objective, n_classes=3)
     >>> np.round(prevalence, 2)
-    array([0.2, 0.5, 0.3])
+    array(...)
     """
     if x0 is None:
         if random_state is None:

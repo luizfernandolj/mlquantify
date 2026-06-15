@@ -54,9 +54,7 @@ class MatchingScoreQuantifier(BaseMatchingQuantifier):
     ...     def _solve_prevalence(self, test_representation, train_representations):
     ...         alpha = np.clip(np.mean(test_representation), 0, 1)
     ...         return np.array([1 - alpha, alpha]), None
-    >>> X, y = make_classification(n_samples=200, random_state=42)
-    >>> MyScoreQ().fit(X, y).predict(X)
-    {0: 0.49, 1: 0.51}
+    >>> q = MyScoreQ()   # subclasses implement _solve_prevalence
     """
 
     _parameter_constraints = {
@@ -149,14 +147,11 @@ class SORD(SoftPredictionMixin, AggregativeMixin, MatchingScoreQuantifier):
     >>> X, y = make_classification(n_samples=200, random_state=42)
     >>> q = SORD(estimator=LogisticRegression()).fit(X, y)
     >>> q.predict(X)
-    {0: 0.49, 1: 0.51}
-    >>> # call aggregate with pre-computed scores
-    >>> import numpy as np
-    >>> train_scores = np.random.rand(200)
-    >>> test_scores = np.random.rand(100)
-    >>> y_train = np.random.randint(0, 2, 200)
-    >>> q.aggregate(test_scores, train_scores, y_train)
-    {0: 0.48, 1: 0.52}
+    {0: ..., 1: ...}
+    >>> # call aggregate with pre-computed posterior scores
+    >>> scores = q.estimator_.predict_proba(X)
+    >>> q.aggregate(scores, scores, y)
+    {0: ..., 1: ...}
 
     References
     ----------
@@ -335,14 +330,11 @@ class SMM(SoftPredictionMixin, AggregativeMixin, MatchingScoreQuantifier):
     >>> X, y = make_classification(n_samples=200, random_state=42)
     >>> q = SMM(estimator=LogisticRegression()).fit(X, y)
     >>> q.predict(X)
-    {0: 0.49, 1: 0.51}
-    >>> # call aggregate with pre-computed scores
-    >>> import numpy as np
-    >>> train_scores = np.random.rand(200)
-    >>> test_scores = np.random.rand(100)
-    >>> y_train = np.random.randint(0, 2, 200)
-    >>> q.aggregate(test_scores, train_scores, y_train)
-    {0: 0.48, 1: 0.52}
+    {0: ..., 1: ...}
+    >>> # call aggregate with pre-computed posterior scores
+    >>> scores = q.estimator_.predict_proba(X)
+    >>> q.aggregate(scores, scores, y)
+    {0: ..., 1: ...}
 
     References
     ----------

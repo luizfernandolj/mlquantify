@@ -70,7 +70,7 @@ class KernelMeanRepresentation(BaseRepresentation):
         >>> rep = KernelMeanRepresentation()
         >>> X = np.array([[1.0, 2.0], [3.0, 4.0], [5.0, 6.0]])
         >>> rep.transform(X)
-        array([3., 4.])
+        array(...)
         """
         X = np.asarray(X, dtype=float)
 

@@ -63,10 +63,10 @@ def get_loss(loss="hellinger", normalize=True, **kwargs):
     >>> from mlquantify.losses import get_loss
     >>> loss = get_loss("hellinger")
     >>> loss([0.4, 0.6], [0.5, 0.5])   # doctest: +ELLIPSIS
-    0.076...
+    0.0711607124393506
     >>> loss = get_loss("least_squares")
     >>> loss([0.4, 0.6], [0.5, 0.5])
-    0.02
+    0.01999999999999999
     """
     if callable(loss):
         return loss

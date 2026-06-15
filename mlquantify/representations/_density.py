@@ -39,7 +39,7 @@ class KDERepresentation(BaseRepresentation):
     >>> y = (X[:, 0] > 0).astype(int)
     >>> rep = KDERepresentation(bandwidth=0.2, kernel="gaussian").fit(X, y)
     >>> rep.class_representations_[0]
-    KernelDensity(bandwidth=0.2, kernel='gaussian')
+    KernelDensity(bandwidth=0.2)
     
     """
 

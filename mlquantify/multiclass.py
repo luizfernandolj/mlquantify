@@ -112,7 +112,7 @@ def binary_quantifier(_cls=None, *, strategy_attr="strategy"):
     >>> qtf.fit(X, y)
     MyQuantifier(...)
     >>> qtf.predict(X)
-    array([...])
+    {0: 0.33333333333333337, 1: 0.33333333333333337, 2: 0.33333333333333337}
     """
     def decorate(cls):
         cls._binary_strategy_attr = strategy_attr

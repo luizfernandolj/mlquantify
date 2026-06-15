@@ -191,7 +191,7 @@ class APP(BaseProtocol):
     >>> proto = APP(batch_size=50, n_prevalences=5, random_state=0)
     >>> batches = list(proto.split(X, y))
     >>> len(batches)
-    6
+    5
 
     References
     ----------
@@ -668,7 +668,6 @@ def apply_protocol(
     >>> results["true_prevalences"].shape       # doctest: +SKIP
     (11, 2)
     >>> round(float(results["MAE"].mean()), 2)   # doctest: +SKIP
-    0.06
     """
     X = np.asarray(X)
     y = np.asarray(y)

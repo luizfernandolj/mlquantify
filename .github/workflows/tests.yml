@@ -1,0 +1,52 @@
+name: Tests
+
+on:
+  push:
+    branches: ['**']
+  pull_request:
+    branches: ['**']
+
+jobs:
+  test:
+    name: pytest (${{ matrix.os }}, py${{ matrix.python-version }})
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest]
+        python-version: ['3.9', '3.10', '3.11', '3.12', '3.13']
+        include:
+          # Cross-platform smoke check on a single Python.
+          - os: windows-latest
+            python-version: '3.12'
+          - os: macos-latest
+            python-version: '3.12'
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Python ${{ matrix.python-version }}
+        uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python-version }}
+
+      - name: Generate VERSION.txt
+        # VERSION.txt is git-ignored and normally produced at release time.
+        shell: bash
+        run: echo "0.0.0.dev0" > VERSION.txt
+
+      - name: Install build + test tooling
+        run: python -m pip install --upgrade pip setuptools wheel numpy cython pytest
+
+      - name: Install mlquantify (with compiled Cython kernel)
+        # Compiling the extension means the accelerated histogram-sweep path is
+        # exercised too; if it fails to build the package still falls back.
+        run: python -m pip install -e .
+
+      - name: Run test suite
+        # Neural (QuaNet) tests skip automatically because torch is not installed.
+        run: python -m pytest tests/ -q
+
+      - name: Run docstring doctests
+        # Runs every example in the mlquantify package.
+        run: python -m pytest --doctest-modules mlquantify/ -q

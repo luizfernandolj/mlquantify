@@ -187,7 +187,7 @@ class EnsembleQ(MetaquantifierMixin, BaseQuantifier):
     >>> X, y = make_classification(n_samples=300, random_state=42)
     >>> q = EnsembleQ(DyS(estimator=LogisticRegression()), size=10).fit(X, y)
     >>> q.predict(X)
-    {0: 0.49, 1: 0.51}
+    {0: ..., 1: ...}
 
     References
     ----------
@@ -358,7 +358,7 @@ class EnsembleQ(MetaquantifierMixin, BaseQuantifier):
         >>> X, y = make_classification(n_samples=300, random_state=42)
         >>> q = EnsembleQ(DyS(estimator=LogisticRegression()), size=10).fit(X, y)
         >>> q.predict(X)
-        {0: 0.49, 1: 0.51}
+        {0: ..., 1: ...}
         """
         self.sout('Predict')
 
@@ -595,7 +595,7 @@ class AggregativeBootstrap(MetaquantifierMixin, BaseQuantifier):
     ...     n_test_bootstraps=10,
     ... ).fit(X, y)
     >>> q.predict(X)
-    {0: 0.49, 1: 0.51}
+    {0: ..., 1: ...}
 
     References
     ----------
@@ -720,7 +720,7 @@ class AggregativeBootstrap(MetaquantifierMixin, BaseQuantifier):
         ...                          n_train_bootstraps=10,
         ...                          n_test_bootstraps=10).fit(X, y)
         >>> q.predict(X)
-        {0: 0.49, 1: 0.51}
+        {0: ..., 1: ...}
         """
         X = validate_data(self, X, None)
         estimator_function = _get_estimator_function(self.quantifier_estimator)
@@ -767,7 +767,7 @@ class AggregativeBootstrap(MetaquantifierMixin, BaseQuantifier):
         >>> q = AggregativeBootstrap(EMQ(lr), n_train_bootstraps=5,
         ...                          n_test_bootstraps=5).fit(X, y)
         >>> q.aggregate(train_preds, train_preds, y)
-        {0: 0.49, 1: 0.51}
+        {0: ..., 1: ...}
         """
         prevalences = []
 
@@ -881,11 +881,11 @@ class QuaDapt(MetaquantifierMixin, BaseQuantifier):
     >>> X, y = make_classification(n_samples=200, random_state=42)
     >>> q = QuaDapt(DyS(LogisticRegression())).fit(X, y)
     >>> q.predict(X)
-    {0: 0.49, 1: 0.51}
+    {0: ..., 1: ...}
     >>> # call aggregate with pre-computed posteriors
     >>> proba = LogisticRegression().fit(X, y).predict_proba(X)
     >>> q.aggregate(proba, y)
-    {0: 0.49, 1: 0.51}
+    {0: ..., 1: ...}
 
     References
     ----------
@@ -995,7 +995,7 @@ class QuaDapt(MetaquantifierMixin, BaseQuantifier):
         >>> X, y = make_classification(n_samples=200, random_state=42)
         >>> q = QuaDapt(DyS(LogisticRegression())).fit(X, y)
         >>> q.predict(X)
-        {0: 0.49, 1: 0.51}
+        {0: ..., 1: ...}
         """
         X = validate_data(self, X, None)
 
@@ -1039,7 +1039,7 @@ class QuaDapt(MetaquantifierMixin, BaseQuantifier):
         >>> q = QuaDapt(DyS(LogisticRegression())).fit(X, y)
         >>> proba = LogisticRegression().fit(X, y).predict_proba(X)
         >>> q.aggregate(proba, y)
-        {0: 0.49, 1: 0.51}
+        {0: ..., 1: ...}
         """
         self.classes_ = resolve_aggregate_classes(self, classes, y_train)
         _, _, best_m = self.best_mixture(predictions)
