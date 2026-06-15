@@ -179,6 +179,7 @@ lobal gitignore or merged into this file.  For a more nuclear
 .dist/
 
 .claude/
+.vscode/
 
 .mlquantify.egg-info
 
