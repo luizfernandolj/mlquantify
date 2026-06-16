@@ -87,6 +87,7 @@ print(f"Normalized Relative Absolute Error -> {nrae}")
 - In case you need any help, refer to the [User Guide](https://luizfernandolj.github.io/mlquantify/user_guide.html).
 - Explore the [API documentation](https://luizfernandolj.github.io/mlquantify/api/index.html) for detailed developer information.
 - See also the library in the pypi site in [pypi mlquantify](https://pypi.org/project/mlquantify/)
+- Check the [CHANGELOG](https://github.com/luizfernandolj/mlquantify/blob/master/CHANGELOG.md) to see what's currently beign developed!
 
 ___
 
