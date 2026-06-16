@@ -130,6 +130,25 @@ jobs:
           EOF
           fi
 
+          # Root index redirects to the latest stable docs, so the canonical
+          # site URL (.../mlquantify/) always lands on a versioned,
+          # switcher-enabled page instead of a stale standalone build.
+          cat > /tmp/gh-pages/index.html <<'HTML'
+          <!DOCTYPE html>
+          <html lang="en">
+          <head>
+          <meta charset="utf-8">
+          <meta http-equiv="refresh" content="0; url=./stable/">
+          <link rel="canonical" href="https://luizfernandolj.github.io/mlquantify/stable/">
+          <title>mlquantify documentation</title>
+          <script>window.location.replace("./stable/" + window.location.hash);</script>
+          </head>
+          <body>
+          Redirecting to the <a href="./stable/">latest mlquantify documentation</a>.
+          </body>
+          </html>
+          HTML
+
           cd /tmp/gh-pages
           git add -A
           git diff --cached --quiet || git commit -m "deploy docs ${VERSION}"
