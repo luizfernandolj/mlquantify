@@ -108,6 +108,7 @@ html_css_files = [
     "variables.css",
     "theme_overrides.css",
     "landing.css",
+    "dev_banner.css",
     # "custom.css" # Deprecated, split into modules above
 ]
 
@@ -200,6 +201,23 @@ html_theme_options = {
     "show_version_warning_banner": True,
     "announcement": None,
 }
+
+# On the development docs, replace the theme's default version-warning banner
+# with a prominent red announcement that links back to the stable release.
+# ``DOCS_VERSION`` is set to "dev" for non-release builds by the deploy workflow
+# (and defaults to "dev" locally).
+DOCS_VERSION = os.environ.get("DOCS_VERSION", "dev")
+if DOCS_VERSION == "dev":
+    html_theme_options["show_version_warning_banner"] = False
+    html_theme_options["announcement"] = (
+        '<div class="mlq-dev-banner">'
+        "This is the documentation for the <strong>unstable development "
+        "version</strong> of mlquantify. "
+        '<a class="mlq-dev-banner__btn" '
+        'href="https://luizfernandolj.github.io/mlquantify/stable/">'
+        "Switch to stable version</a>"
+        "</div>"
+    )
 
 
 
