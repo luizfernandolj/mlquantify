@@ -1,4 +1,6 @@
+[![unit tests](https://img.shields.io/github/actions/workflow/status/luizfernandolj/mlquantify/tests.yml?branch=master&label=unit%20tests)](https://github.com/luizfernandolj/mlquantify/actions/workflows/tests.yml)
 [![PyPI - Version](https://img.shields.io/pypi/v/mlquantify)](https://pypi.org/project/mlquantify/)
+[![python versions](https://img.shields.io/pypi/pyversions/mlquantify)](https://pypi.org/project/mlquantify/)
 [![docs](https://img.shields.io/badge/docs-sphinx-blue)](https://luizfernandolj.github.io/mlquantify/)
 
 
