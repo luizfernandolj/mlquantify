@@ -4,6 +4,12 @@ All notable changes to mlquantify will be documented in this file.
 
 ---
 
+## [Unreleased]
+
+_Nothing yet. Add user-visible changes here as they land._
+
+---
+
 ## [v0.4.0]
 
 This release focuses on **performance** (a compiled Cython kernel + several

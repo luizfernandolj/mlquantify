@@ -1,0 +1,26 @@
+cff-version: 1.2.0
+message: "If you use mlquantify in your research, please cite it as below."
+title: "mlquantify: A Python Package for Quantification"
+abstract: >-
+  mlquantify is a Python library for quantification (supervised prevalence
+  estimation). It provides a broad set of quantification methods, model
+  selection and evaluation protocols, calibration, and confidence-region
+  tools, all exposed through a scikit-learn-compatible API.
+type: software
+authors:
+  - given-names: "Luiz Fernando"
+    family-names: "Luth Junior"
+    email: luizfernandoluth@gmail.com
+  - given-names: "André Gustavo"
+    family-names: "Maletzke"
+version: "0.4.0"
+license: BSD-3-Clause
+repository-code: "https://github.com/luizfernandolj/mlquantify"
+url: "https://luizfernandolj.github.io/mlquantify/"
+keywords:
+  - quantification
+  - prevalence estimation
+  - supervised learning
+  - machine learning
+  - scikit-learn
+  - python
