@@ -1,4 +1,4 @@
-![PyPI - Version](https://img.shields.io/pypi/v/mlquantify)
+[![PyPI - Version](https://img.shields.io/pypi/v/mlquantify)](https://pypi.org/project/mlquantify/)
 [![docs](https://img.shields.io/badge/docs-sphinx-blue)](https://luizfernandolj.github.io/mlquantify/)
 
 

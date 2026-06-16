@@ -18,7 +18,9 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        os: [ubuntu-latest, macos-13, macos-14, windows-latest]
+        # macos-14 (Apple Silicon) cross-builds both macOS arches, so the
+        # scarce/slow-to-schedule Intel macos-13 runner is no longer needed.
+        os: [ubuntu-latest, macos-14, windows-latest]
     steps:
       - uses: actions/checkout@v4
 
@@ -41,7 +43,9 @@ jobs:
           # CPython 3.9-3.13, 64-bit; skip the slow/rare targets
           CIBW_BUILD: "cp39-* cp310-* cp311-* cp312-* cp313-*"
           CIBW_SKIP: "*-musllinux_* *_i686 *_ppc64le *_s390x pp*"
-          CIBW_ARCHS_MACOS: "auto"
+          # Build Intel + Apple Silicon macOS wheels from the single arm64 runner.
+          # No wheel tests run here, so cross-compiled x86_64 wheels are fine.
+          CIBW_ARCHS_MACOS: "x86_64 arm64"
 
       # Verify each wheel shipped the compiled kernel by inspecting its contents
       # instead of importing mlquantify. Importing would reinstall the full
