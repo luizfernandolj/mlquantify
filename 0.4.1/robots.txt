@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://luizfernandolj.github.io/mlquantify/sitemap.xml
