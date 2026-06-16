@@ -51,6 +51,14 @@ extensions = [
 
 autosummary_generate = True
 
+# -- matplotlib plot_directive -----------------------------------------------
+# Render the example source inline (copyable, above each figure) like
+# scikit-learn, instead of emitting a "Source code" download link.
+plot_include_source = True
+plot_html_show_source_link = False
+plot_html_show_formats = False
+plot_formats = ["png"]
+
 templates_path = ['_templates']
 exclude_patterns = [
     "_build",

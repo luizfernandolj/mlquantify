@@ -42,6 +42,7 @@ ___
 | **Confidence Regions** | `ConfidenceInterval`, `ConfidenceEllipseSimplex`, `ConfidenceEllipseCLR` for uncertainty estimation on prevalence predictions. |
 | **Model Selection** | `GridSearchQ` and evaluation protocols (APP, NPP, UPP, PPP) tailored for quantification tasks. |
 | **Evaluation Metrics** | Metrics for quantification performance: AE, MAE, NAE, SE, MSE, KLD, RAE, NRAE, NKLD, NMD, RNOD, VSE, CvM_L1. |
+| **Visualization** | scikit-learn-style `Display` classes for both single- and multiple-sample results: `DiagonalDisplay`, `BiasDisplay`, `ErrorByShiftDisplay`, `PrevalenceDisplay`, `ConfidenceRegionDisplay`. |
 | **Comprehensive Documentation** | Full API reference and user guide covering all modules and methods. |
 
 ___

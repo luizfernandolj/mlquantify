@@ -10,6 +10,31 @@ _Nothing yet. Add user-visible changes here as they land._
 
 ---
 
+## [v0.5.0]
+
+### New Features
+
+- **`mlquantify.visualization`** — a new plotting subpackage of scikit-learn-style
+  ``*Display`` classes for quantification results. Each exposes
+  ``from_predictions`` / ``from_estimator`` / ``from_protocol`` constructors, a
+  ``plot()`` method, stored ``ax_`` / ``figure_`` attributes, and forwards
+  matplotlib styling kwargs.
+
+  - *Multiple-sample diagnostics* (summarise a protocol run): ``DiagonalDisplay``
+    (true vs. predicted prevalence), ``BiasDisplay`` (signed-error boxplots,
+    global or binned), ``ErrorByShiftDisplay`` (error vs. prior-probability
+    shift, with Forman smoothing for RAE).
+  - *Single-sample displays*: ``PrevalenceDisplay`` (per-class prevalence bars)
+    and ``ConfidenceRegionDisplay`` (per-class intervals, or a ternary
+    confidence ellipse for 3-class problems, hooking into
+    ``mlquantify.confidence``).
+
+  The subpackage is not imported by ``import mlquantify`` so matplotlib stays
+  off the top-level import path; import it explicitly with
+  ``from mlquantify.visualization import DiagonalDisplay``.
+
+---
+
 ## [v0.4.0]
 
 This release focuses on **performance** (a compiled Cython kernel + several

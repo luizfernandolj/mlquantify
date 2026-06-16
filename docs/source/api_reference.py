@@ -89,6 +89,27 @@ API_REFERENCE = {
             }
         ],
     },
+    "mlquantify.visualization": {
+        "short_summary": "Plotting utilities for quantification results.",
+        "description": None,
+        "sections": [
+            {
+                "title": "Multiple-sample displays",
+                "autosummary": [
+                    "DiagonalDisplay",
+                    "BiasDisplay",
+                    "ErrorByShiftDisplay",
+                ],
+            },
+            {
+                "title": "Single-sample displays",
+                "autosummary": [
+                    "PrevalenceDisplay",
+                    "ConfidenceRegionDisplay",
+                ],
+            },
+        ],
+    },
     "mlquantify.counting": {
         "short_summary": "Counting methods for quantification.",
         "description": None,

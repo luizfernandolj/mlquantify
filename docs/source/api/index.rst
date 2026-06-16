@@ -35,6 +35,7 @@ reference on concepts repeated across the API, see :ref:`glossary`.
   mlquantify.representations
   mlquantify.solvers
   mlquantify.utils
+  mlquantify.visualization
 
 .. list-table::
   :header-rows: 1
@@ -2069,6 +2070,92 @@ reference on concepts repeated across the API, see :ref:`glossary`.
         .. div:: caption
 
           :mod:`mlquantify.utils`
+
+
+
+
+
+
+
+
+
+  * - :obj:`~mlquantify.visualization.DiagonalDisplay`
+
+    - .. div:: sk-apisearch-desc
+
+        .. currentmodule:: mlquantify.visualization
+
+        .. autoshortsummary:: mlquantify.visualization.DiagonalDisplay
+
+        .. div:: caption
+
+          :mod:`mlquantify.visualization`
+
+
+
+
+
+  * - :obj:`~mlquantify.visualization.BiasDisplay`
+
+    - .. div:: sk-apisearch-desc
+
+        .. currentmodule:: mlquantify.visualization
+
+        .. autoshortsummary:: mlquantify.visualization.BiasDisplay
+
+        .. div:: caption
+
+          :mod:`mlquantify.visualization`
+
+
+
+
+
+  * - :obj:`~mlquantify.visualization.ErrorByShiftDisplay`
+
+    - .. div:: sk-apisearch-desc
+
+        .. currentmodule:: mlquantify.visualization
+
+        .. autoshortsummary:: mlquantify.visualization.ErrorByShiftDisplay
+
+        .. div:: caption
+
+          :mod:`mlquantify.visualization`
+
+
+
+
+
+
+
+  * - :obj:`~mlquantify.visualization.PrevalenceDisplay`
+
+    - .. div:: sk-apisearch-desc
+
+        .. currentmodule:: mlquantify.visualization
+
+        .. autoshortsummary:: mlquantify.visualization.PrevalenceDisplay
+
+        .. div:: caption
+
+          :mod:`mlquantify.visualization`
+
+
+
+
+
+  * - :obj:`~mlquantify.visualization.ConfidenceRegionDisplay`
+
+    - .. div:: sk-apisearch-desc
+
+        .. currentmodule:: mlquantify.visualization
+
+        .. autoshortsummary:: mlquantify.visualization.ConfidenceRegionDisplay
+
+        .. div:: caption
+
+          :mod:`mlquantify.visualization`
 
 
 

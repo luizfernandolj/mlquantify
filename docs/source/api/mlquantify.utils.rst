@@ -32,5 +32,4 @@ mlquantify.utils
   simplex_uniform_kraemer
   simplex_grid_sampling
   simplex_uniform_sampling
-  simplex_dirichlet_sampling
   get_indexes_with_prevalence
