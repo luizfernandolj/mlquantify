@@ -1,5 +1,5 @@
 ![PyPI - Version](https://img.shields.io/pypi/v/mlquantify)
-[![docs](https://img.shields.io/badge/docs-sphinx-blue)](https://github.com/luizfernandolj/mlquantify/)
+[![docs](https://img.shields.io/badge/docs-sphinx-blue)](https://luizfernandolj.github.io/mlquantify/)
 
 
 <a href="https://luizfernandolj.github.io/mlquantify/"><img src="assets/logo_mlquantify-white.svg" alt="mlquantify logo"></a>
