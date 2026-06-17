@@ -35,7 +35,7 @@
     <link rel="stylesheet" type="text/css" href="_static/sphinx-design.min.css?v=95c83b7e" />
     <link rel="stylesheet" type="text/css" href="_static/variables.css?v=fded66fe" />
     <link rel="stylesheet" type="text/css" href="_static/theme_overrides.css?v=dec63a3c" />
-    <link rel="stylesheet" type="text/css" href="_static/landing.css?v=e93fd00d" />
+    <link rel="stylesheet" type="text/css" href="_static/landing.css?v=a73da8a0" />
     <link rel="stylesheet" type="text/css" href="_static/dev_banner.css?v=4009f06c" />
   
   <!-- So that users can add custom icons -->
@@ -90,6 +90,14 @@
   <meta property="twitter:description" content="Master class prevalence estimation with mlquantify. The comprehensive toolkit for quantification methods and evaluation.">
   
   <meta name="google-site-verification" content="bWayDYFdWewG2kY5OEW6su5q5wOuxpB23JoE_wUVrbY" />
+
+  <style>
+    /* Landing page only: lift the theme's content-width cap so the module
+       showcase can span a wider area with small side gutters. */
+    @media (min-width: 960px) {
+      .bd-page-width { max-width: 110rem; }
+    }
+  </style>
 
   </head>
   <body data-default-mode="">
@@ -224,13 +232,30 @@
   </a>
 </li>
 
+            <li class="nav-item dropdown">
+                <button class="btn dropdown-toggle nav-item" type="button"
+                data-bs-toggle="dropdown" aria-expanded="false"
+                aria-controls="pst-nav-more-links">
+                    More
+                </button>
+                <ul id="pst-nav-more-links" class="dropdown-menu">
+                    
+<li class=" ">
+  <a class="nav-link dropdown-item nav-internal" href="examples/index.html">
+    Examples
+  </a>
+</li>
 
-<li class="nav-item ">
-  <a class="nav-link nav-internal" href="about_us.html">
+
+<li class=" ">
+  <a class="nav-link dropdown-item nav-internal" href="about_us.html">
     About Us
   </a>
 </li>
 
+                </ul>
+            </li>
+            
   </ul>
 </nav></div>
       
@@ -374,6 +399,13 @@
 
 
 <li class="nav-item ">
+  <a class="nav-link nav-internal" href="examples/index.html">
+    Examples
+  </a>
+</li>
+
+
+<li class="nav-item ">
   <a class="nav-link nav-internal" href="about_us.html">
     About Us
   </a>
@@ -452,72 +484,136 @@
     </div>
 </div>
 
-<div class="container py-5">
-  <div class="row g-4">
-    
-    <div class="col-md-4">
-      <div class="feature-card">
-        <div class="card-icon-wrapper">
-          <i class="fa-solid fa-layer-group"></i>
-        </div>
-        <h4><a href="aggregative_quantification.html">Aggregative Methods</a></h4>
-        <p>Estimate prevalence by aggregating individual classifications. Includes CC, ACC, PCC, and more.</p>
-        <a href="examples/aggregative_quantification.html" class="btn-link text-decoration-none">View Examples &rarr;</a>
+<div class="showcase-section">
+  <div class="showcase-grid">
+
+    <div class="showcase-card">
+      <div class="showcase-thumb"><img src="_static/showcase/counting.png" alt="Counting methods diagonal plot"></div>
+      <div class="showcase-body">
+        <span class="showcase-tag">Aggregative</span>
+        <h5><a class="showcase-title-link" href="aggregative_quantification.html">Counting methods</a></h5>
+        <p>Count the classifier's predictions, then adjust for shift.</p>
+        <p class="showcase-methods">
+          <span class="methods-list">CC &middot; ACC &middot; PCC &middot; MS &middot; T50 &middot; FM</span><br>
+          <a class="showcase-api-link" href="api/mlquantify.counting.html">API reference &rarr;</a>
+        </p>
       </div>
     </div>
 
-    <div class="col-md-4">
-      <div class="feature-card">
-        <div class="card-icon-wrapper">
-          <i class="fa-solid fa-chart-pie"></i>
-        </div>
-        <h4><a href="non_aggregative_quantification.html">Non-Aggregative</a></h4>
-        <p>Direct methods that bypass individual classification, optimizing global loss functions directly.</p>
-        <a href="examples/non_aggregative_quantification.html" class="btn-link text-decoration-none">View Examples &rarr;</a>
+    <div class="showcase-card">
+      <div class="showcase-thumb"><img src="_static/showcase/matching.png" alt="Distribution matching histograms"></div>
+      <div class="showcase-body">
+        <span class="showcase-tag">Aggregative</span>
+        <h5><a class="showcase-title-link" href="examples/plot_distribution_matching.html">Distribution matching</a></h5>
+        <p>Match the test distribution with a mixture of class distributions.</p>
+        <p class="showcase-methods">
+          <span class="methods-list">HDy &middot; DyS &middot; SORD &middot; SMM &middot; EDy</span><br>
+          <a class="showcase-api-link" href="api/mlquantify.matching.html">API reference &rarr;</a>
+        </p>
       </div>
     </div>
 
-    <div class="col-md-4">
-      <div class="feature-card">
-        <div class="card-icon-wrapper">
-          <i class="fa-solid fa-network-wired"></i>
-        </div>
-        <h4><a href="meta_quantification.html">Meta Quantification</a></h4>
-        <p>Ensemble techniques and meta-learning approaches to boost quantification performance.</p>
-        <a href="examples/meta_quantification.html" class="btn-link text-decoration-none">View Examples &rarr;</a>
+    <div class="showcase-card">
+      <div class="showcase-thumb"><img src="_static/showcase/likelihood.png" alt="EMQ convergence curve"></div>
+      <div class="showcase-body">
+        <span class="showcase-tag">Aggregative</span>
+        <h5><a class="showcase-title-link" href="examples/plot_emq_convergence.html">Likelihood &middot; EMQ</a></h5>
+        <p>Maximise the test-set likelihood under prior-probability shift.</p>
+        <p class="showcase-methods">
+          <span class="methods-list">EMQ &middot; CDE &middot; MLPE</span><br>
+          <a class="showcase-api-link" href="api/mlquantify.likelihood.html">API reference &rarr;</a>
+        </p>
       </div>
     </div>
 
-    <div class="col-md-4">
-      <div class="feature-card">
-        <div class="card-icon-wrapper">
-          <i class="fa-solid fa-ruler-combined"></i>
-        </div>
-        <h4><a href="modules/evaluation_metrics.html">Evaluation Metrics</a></h4>
-        <p>Dedicated metrics for quantification tasks: Absolute Error, KL Divergence, and more.</p>
-        <a href="examples/evaluation_metrics.html" class="btn-link text-decoration-none">View Examples &rarr;</a>
+    <div class="showcase-card">
+      <div class="showcase-thumb"><img src="_static/showcase/representations.png" alt="Kernel density representations"></div>
+      <div class="showcase-body">
+        <span class="showcase-tag">Components</span>
+        <h5><a class="showcase-title-link" href="components.html">Representations</a></h5>
+        <p>Pluggable feature spaces that matching methods compare in.</p>
+        <p class="showcase-methods">
+          <span class="methods-list">Histogram &middot; KDE &middot; Distance &middot; KernelMean</span><br>
+          <a class="showcase-api-link" href="api/mlquantify.representations.html">API reference &rarr;</a>
+        </p>
       </div>
     </div>
 
-    <div class="col-md-4">
-      <div class="feature-card">
-        <div class="card-icon-wrapper">
-          <i class="fa-solid fa-scale-balanced"></i>
-        </div>
-        <h4><a href="modules/confidence_intervals.html">Confidence Intervals</a></h4>
-        <p>Assess the reliability of your predictions with robust confidence interval estimation.</p>
-        <a href="examples/confidence_intervals.html" class="btn-link text-decoration-none">View Examples &rarr;</a>
+    <div class="showcase-card">
+      <div class="showcase-thumb"><img src="_static/showcase/confidence.png" alt="Confidence region on the simplex"></div>
+      <div class="showcase-body">
+        <span class="showcase-tag">Uncertainty</span>
+        <h5><a class="showcase-title-link" href="examples/plot_confidence_regions.html">Confidence regions</a></h5>
+        <p>Turn a point estimate into intervals or a simplex region.</p>
+        <p class="showcase-methods">
+          <span class="methods-list">ConfidenceInterval &middot; ConfidenceEllipseSimplex</span><br>
+          <a class="showcase-api-link" href="api/mlquantify.confidence.html">API reference &rarr;</a>
+        </p>
       </div>
     </div>
 
-    <div class="col-md-4">
-      <div class="feature-card">
-        <div class="card-icon-wrapper">
-          <i class="fa-solid fa-flask"></i>
-        </div>
-        <h4><a href="model_selection_evaluation.html">Model Selection</a></h4>
-        <p>Tools for hyperparameter tuning and selecting the best quantifier for your data.</p>
-        <a href="examples/model_selection_evaluation.html" class="btn-link text-decoration-none">View Examples &rarr;</a>
+    <div class="showcase-card">
+      <div class="showcase-thumb"><img src="_static/showcase/protocols.png" alt="Sampled prevalences on the simplex"></div>
+      <div class="showcase-body">
+        <span class="showcase-tag">Evaluation</span>
+        <h5><a class="showcase-title-link" href="examples/plot_protocols.html">Sampling protocols</a></h5>
+        <p>Sample many test prevalences to stress-test under shift.</p>
+        <p class="showcase-methods">
+          <span class="methods-list">APP &middot; NPP &middot; UPP &middot; PPP &middot; GridSearchQ</span><br>
+          <a class="showcase-api-link" href="api/mlquantify.model_selection.html">API reference &rarr;</a>
+        </p>
+      </div>
+    </div>
+
+    <div class="showcase-card">
+      <div class="showcase-thumb"><img src="_static/showcase/metrics.png" alt="Error by prior-probability shift"></div>
+      <div class="showcase-body">
+        <span class="showcase-tag">Evaluation</span>
+        <h5><a class="showcase-title-link" href="modules/evaluation_metrics.html">Quantification metrics</a></h5>
+        <p>Error measures built for prevalence, not individual labels.</p>
+        <p class="showcase-methods">
+          <span class="methods-list">AE &middot; RAE &middot; KLD &middot; NMD &middot; RNOD</span><br>
+          <a class="showcase-api-link" href="api/mlquantify.metrics.html">API reference &rarr;</a>
+        </p>
+      </div>
+    </div>
+
+    <div class="showcase-card">
+      <div class="showcase-thumb"><img src="_static/showcase/visualization.png" alt="Bias boxplots"></div>
+      <div class="showcase-body">
+        <span class="showcase-tag">Tooling</span>
+        <h5><a class="showcase-title-link" href="visualization.html">Visualization</a></h5>
+        <p>One-line scikit-learn-style diagnostic plots.</p>
+        <p class="showcase-methods">
+          <span class="methods-list">DiagonalDisplay &middot; BiasDisplay &middot; ErrorByShiftDisplay</span><br>
+          <a class="showcase-api-link" href="api/mlquantify.visualization.html">API reference &rarr;</a>
+        </p>
+      </div>
+    </div>
+
+    <div class="showcase-card">
+      <div class="showcase-thumb"><img src="_static/showcase/calibration.png" alt="Reliability calibration curve"></div>
+      <div class="showcase-body">
+        <span class="showcase-tag">Components</span>
+        <h5><a class="showcase-title-link" href="modules/calibration.html">Calibration</a></h5>
+        <p>Recalibrate classifiers and quantifiers for sharper estimates.</p>
+        <p class="showcase-methods">
+          <span class="methods-list">ClassifierCalibrator &middot; QuantifierCalibrator</span><br>
+          <a class="showcase-api-link" href="api/mlquantify.calibration.html">API reference &rarr;</a>
+        </p>
+      </div>
+    </div>
+
+    <div class="showcase-card">
+      <div class="showcase-thumb"><img src="_static/showcase/meta.png" alt="Ensemble member spread"></div>
+      <div class="showcase-body">
+        <span class="showcase-tag">Meta</span>
+        <h5><a class="showcase-title-link" href="meta_quantification.html">Meta &amp; ensembles</a></h5>
+        <p>Compose resampling and ensembles around any quantifier.</p>
+        <p class="showcase-methods">
+          <span class="methods-list">AggregativeBootstrap &middot; EnsembleQ &middot; QuaDapt</span><br>
+          <a class="showcase-api-link" href="api/mlquantify.meta.html">API reference &rarr;</a>
+        </p>
       </div>
     </div>
 
@@ -532,15 +628,46 @@
   <script defer src="_static/scripts/bootstrap.js?digest=a95f357e85573c9b56d5"></script>
 <script defer src="_static/scripts/pydata-sphinx-theme.js?digest=a95f357e85573c9b56d5"></script>
 
-<div class="container-fluid py-4" style="background: rgba(15,23,42,0.95); border-top: 1px solid var(--glass-border);">
-  <div class="container text-center">
-    <h5 class="text-white mb-3">mlquantify</h5>
-    <div class="d-flex justify-content-center gap-4 mb-3">
-      <a href="about_us.html" class="text-secondary text-decoration-none">About Us</a>
-      <a href="https://github.com/luizfernandolj/mlquantify" class="text-secondary text-decoration-none">GitHub</a>
-      <a href="mailto:luizfernandoluth@gmail.com" class="text-secondary text-decoration-none">Contact</a>
+<div class="container-fluid landing-footer">
+  <div class="container">
+    <div class="row g-4">
+
+      <div class="col-lg-5 col-md-12">
+        <h5 class="footer-brand">mlquantify</h5>
+        <p class="footer-tagline">
+          A Python package for quantification &mdash; class-prevalence
+          estimation with a scikit-learn-style API.
+        </p>
+      </div>
+
+      <div class="col-lg-3 col-md-6">
+        <h6 class="footer-col-title">Project</h6>
+        <ul class="footer-links">
+          <li><a href="user_guide.html">User Guide</a></li>
+          <li><a href="api/index.html">API Reference</a></li>
+          <li><a href="examples/index.html">Examples</a></li>
+          <li><a href="about_us.html">About Us</a></li>
+        </ul>
+      </div>
+
+      <div class="col-lg-4 col-md-6">
+        <h6 class="footer-col-title">Contact &amp; links</h6>
+        <ul class="footer-links">
+          <li><i class="fa-solid fa-envelope"></i><a href="mailto:luizfernandoluth@gmail.com">luizfernandoluth@gmail.com</a></li>
+          <li><i class="fa-brands fa-github"></i><a href="https://github.com/luizfernandolj/mlquantify">github.com/luizfernandolj/mlquantify</a></li>
+          <li><i class="fa-brands fa-python"></i><a href="https://pypi.org/project/mlquantify/">pypi.org/project/mlquantify</a></li>
+          <li><i class="fa-solid fa-bug"></i><a href="https://github.com/luizfernandolj/mlquantify/issues">Report an issue</a></li>
+        </ul>
+      </div>
+
     </div>
-    <small class="text-muted">&copy; 2024 Luiz Fernando. All rights reserved.</small>
+
+    <hr class="footer-rule">
+
+    <div class="footer-bottom">
+      <small>Maintained by Luiz Fernando Luth Junior &amp; Andr&eacute; Gustavo Maletzke</small>
+      <small>&copy; 2024&ndash;2026 mlquantify &middot; BSD-3-Clause License</small>
+    </div>
   </div>
 </div>
 
