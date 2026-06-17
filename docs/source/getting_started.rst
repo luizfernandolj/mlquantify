@@ -1,3 +1,5 @@
+.. _getting_started:
+
 Getting Started
 ===============
 
@@ -140,6 +142,6 @@ Next steps
 
 We have briefly covered estimator fitting and predicting, aggregative methods, and model evaluation. This guide should give you an overview of some of the main features of the library, but there is much more to ``mlquantify``!
 
-Please refer to our :ref:`user-guide` for details on all the tools that we provide, including **Non-Aggregative Methods**, **Meta Quantification**, and **Confidence Intervals**. You can also find an exhaustive list of the public API in the :ref:`api`.
+Please refer to our :ref:`user_guide` for details on all the tools that we provide, including **Non-Aggregative Methods**, **Meta Quantification**, and **Confidence Intervals**. You can also find an exhaustive list of the public API in the :ref:`api_ref`.
 
 You can also look at our numerous :ref:`examples` that illustrate the use of ``mlquantify`` in many different contexts.

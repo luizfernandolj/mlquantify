@@ -19,7 +19,7 @@ class BaseQuantifier(ABC, BaseEstimator):
     - saving/loading quantifier instances;
     - parameter validation.
     
-    Read more in :ref:`User Guide <rolling_your_own_quantifier>`.
+    Read more in :ref:`Building a Quantifier <building_a_quantifier>`.
     
     
     Notes

@@ -9,7 +9,7 @@ API Reference
 This is the class and function reference of mlquantify. Please refer to the
 :ref:`full user guide <user_guide>` for further details, as the raw specifications of
 classes and functions may not be enough to give full guidelines on their use. For
-reference on concepts repeated across the API, see :ref:`glossary`.
+reference on core concepts, see the :ref:`Foundations <quantification_foundations>` guide.
 
 .. toctree::
   :maxdepth: 2

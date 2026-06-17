@@ -51,6 +51,18 @@ extensions = [
 
 autosummary_generate = True
 
+# -- intersphinx -------------------------------------------------------------
+# Resolve cross-references to the projects mlquantify builds on. This also
+# resolves the ``:ref:`metadata_routing``` (and similar) targets that
+# scikit-learn's inherited base-class docstrings emit.
+intersphinx_mapping = {
+    "python": ("https://docs.python.org/3", None),
+    "numpy": ("https://numpy.org/doc/stable", None),
+    "scipy": ("https://docs.scipy.org/doc/scipy", None),
+    "sklearn": ("https://scikit-learn.org/stable", None),
+    "matplotlib": ("https://matplotlib.org/stable", None),
+}
+
 # -- matplotlib plot_directive -----------------------------------------------
 # Render the example source inline (copyable, above each figure) like
 # scikit-learn, instead of emitting a "Source code" download link.
@@ -160,7 +172,7 @@ html_theme_options = {
     "show_nav_level": 1,
     "show_toc_level": 1,
     "navbar_align": "left",
-    "header_links_before_dropdown": 5,
+    "header_links_before_dropdown": 4,
     "header_dropdown_text": "More",
     "switcher": {
         "json_url": "https://luizfernandolj.github.io/mlquantify/switcher.json",

@@ -11,4 +11,5 @@
    User Guide <user_guide.rst>
    API <api/index.rst>
    Getting Started <getting_started.rst>
+   Examples <examples/index.rst>
    About Us <about_us.rst>
