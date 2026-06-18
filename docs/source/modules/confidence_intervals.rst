@@ -31,6 +31,7 @@ API Reference: :class:`BaseConfidenceRegion` (in :mod:`mlquantify.confidence`).
 
 
 .. _confidence_intervals:
+
 =====================================
 Percentile-Based Confidence Intervals
 =====================================

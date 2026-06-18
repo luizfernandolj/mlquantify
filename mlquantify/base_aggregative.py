@@ -261,14 +261,14 @@ class SoftPredictionMixin:
     r"""Soft predictions mixin for aggregative quantifiers.
 
     This mixin provides the following change tags:
+
     - `estimator_function`: "predict_proba"
     - `estimator_type`: "soft"
-    
-    
+
     Notes
     -----
-    - This mixin should be used alongside the `AggregativeMixin`, in 
-    the left of it in the inheritance order.
+    - This mixin should be used alongside the `AggregativeMixin`, to its
+      left in the inheritance order.
     
     Examples
     --------
@@ -304,14 +304,14 @@ class CrispPredictionMixin:
     r"""Crisp predictions mixin for aggregative quantifiers.
     
     This mixin provides the following change tags:
+
     - `estimator_function`: "predict"
     - `estimator_type`: "crisp"
-    
-    
+
     Notes
     -----
-    - This mixin should be used alongside the `AggregativeMixin`, in
-    the left of it in the inheritance order.
+    - This mixin should be used alongside the `AggregativeMixin`, to its
+      left in the inheritance order.
     
     
     Examples

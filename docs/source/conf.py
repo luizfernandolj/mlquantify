@@ -47,9 +47,14 @@ extensions = [
     "sphinx_design",
     # See sphinxext/
     "override_pst_pagetoc",
+    "autoshortsummary",
 ]
 
 autosummary_generate = True
+
+# torch is an optional dependency (only ``mlquantify.neural`` needs it); mock it
+# so autodoc can import and document QuaNet without a torch install.
+autodoc_mock_imports = ["torch"]
 
 # -- intersphinx -------------------------------------------------------------
 # Resolve cross-references to the projects mlquantify builds on. This also
@@ -122,6 +127,10 @@ html_css_files = [
     "landing.css",
     "dev_banner.css",
     # "custom.css" # Deprecated, split into modules above
+]
+
+html_js_files = [
+    "dev_banner.js",
 ]
 
 html_sidebars = {
@@ -228,6 +237,8 @@ if DOCS_VERSION == "dev":
         '<a class="mlq-dev-banner__btn" '
         'href="https://luizfernandolj.github.io/mlquantify/stable/">'
         "Switch to stable version</a>"
+        '<button class="mlq-dev-banner__close" type="button" '
+        'aria-label="Close development-version banner">&times;</button>'
         "</div>"
     )
 

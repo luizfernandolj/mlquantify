@@ -56,6 +56,18 @@ API_REFERENCE = {
             }
         ],
     },
+    "mlquantify.datasets": {
+        "short_summary": "Synthetic sample generators for quantification.",
+        "description": None,
+        "sections": [
+            {
+                "title": None,
+                "autosummary": [
+                    "make_quantification",
+                ],
+            }
+        ],
+    },
     "mlquantify.multiclass": {
         "short_summary": "Multiclass definitions and utilities.",
         "description": None,

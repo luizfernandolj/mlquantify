@@ -5,6 +5,3 @@ ComposeQuantifier
     :members:
     :inherited-members:
     :special-members: __call__
-.. minigallery:: mlquantify.compose.ComposeQuantifier mlquantify.compose.ComposeQuantifier.__init__ mlquantify.compose.ComposeQuantifier.aggregate mlquantify.compose.ComposeQuantifier.fit mlquantify.compose.ComposeQuantifier.get_metadata_routing mlquantify.compose.ComposeQuantifier.get_params mlquantify.compose.ComposeQuantifier.predict mlquantify.compose.ComposeQuantifier.save_quantifier mlquantify.compose.ComposeQuantifier.set_fit_request mlquantify.compose.ComposeQuantifier.set_params 
-   :add-heading: Gallery examples
-   :heading-level: -

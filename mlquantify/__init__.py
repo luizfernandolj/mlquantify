@@ -12,6 +12,7 @@ from . import likelihood
 from . import matching
 from . import meta
 from . import counting
+from . import datasets
 from . import model_selection
 from . import base_aggregative
 from . import base
@@ -33,6 +34,7 @@ __all__ = [
     "matching",
     "meta",
     "counting",
+    "datasets",
     "model_selection",
     "base_aggregative",
     "base",

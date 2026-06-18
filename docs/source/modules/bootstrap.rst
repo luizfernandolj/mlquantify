@@ -28,7 +28,7 @@ Bootstrap strategies are classified into three main types:
 
         Applies both model-based and population-based resampling, generating a grid of prevalence estimates balancing computational efficiency and robustness under prior probability shift.
 
-The :class:`AggregativeBootstrap` class implements these strategies for aggregative quantifiers by using two parameters: ``n_train_bootstraps`` and ``n_test_bootstraps``. These parameters define the number of bootstrap samples for the training and test phases, respectively.
+The :class:`AggregativeBootstrap` class implements these strategies [1]_ for aggregative quantifiers by using two parameters: ``n_train_bootstraps`` and ``n_test_bootstraps``. These parameters define the number of bootstrap samples for the training and test phases, respectively.
 
 .. code-block:: python
 

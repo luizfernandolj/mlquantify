@@ -79,7 +79,7 @@ def RNOD(prev_pred, prev_real, distances=None):
 
     distances : 2D array-like of shape (n_classes, n_classes), optional
         Distance matrix between classes (d(y_i, y_j)).
-        If None, assumes d(y_i, y_j) = |i - j|.
+        If None, assumes d(y_i, y_j) = abs(i - j).
 
     Returns
     -------

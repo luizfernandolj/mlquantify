@@ -23,6 +23,7 @@ reference on core concepts, see the :ref:`Foundations <quantification_foundation
   mlquantify.compose
   mlquantify.confidence
   mlquantify.counting
+  mlquantify.datasets
   mlquantify.likelihood
   mlquantify.losses
   mlquantify.matching
@@ -678,6 +679,26 @@ reference on core concepts, see the :ref:`Foundations <quantification_foundation
         .. div:: caption
 
           :mod:`mlquantify.counting`
+
+
+
+
+
+
+
+
+
+  * - :obj:`~mlquantify.datasets.make_quantification`
+
+    - .. div:: sk-apisearch-desc
+
+        .. currentmodule:: mlquantify.datasets
+
+        .. autoshortsummary:: mlquantify.datasets.make_quantification
+
+        .. div:: caption
+
+          :mod:`mlquantify.datasets`
 
 
 
