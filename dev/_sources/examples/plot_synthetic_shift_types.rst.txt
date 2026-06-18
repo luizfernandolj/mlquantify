@@ -69,39 +69,76 @@ cloud is fixed and the boundary itself swings from bag to bag.
 
 .. plot::
 
+    import numpy as np
     import matplotlib.pyplot as plt
 
     from mlquantify.datasets import make_quantification
 
-    def draw_boundary(ax, w, b):                          # w . x + b = 0
+    def draw_boundary(ax, w, b):
         ax.axline((0.0, -b / w[1]), slope=-w[0] / w[1], color="k", ls="--", lw=1.5)
+
+    def draw_multiclass_boundary(ax, X, coef, intercept):
+        x0_min, x0_max = X[:, 0].min() - 0.8, X[:, 0].max() + 0.8
+        x1_min, x1_max = X[:, 1].min() - 0.8, X[:, 1].max() + 0.8
+        xx0, xx1 = np.meshgrid(
+            np.linspace(x0_min, x0_max, 250),
+            np.linspace(x1_min, x1_max, 250),
+        )
+        grid = np.c_[xx0.ravel(), xx1.ravel()]
+
+        scores = grid @ np.asarray(coef).T + np.asarray(intercept)
+        pred = scores.argmax(axis=1).reshape(xx0.shape)
+
+        colors = ["#2a9d8f", "#e76f51", "#264653"]
+        cmap = plt.matplotlib.colors.ListedColormap(colors[: scores.shape[1]])
+        ax.contourf(
+            xx0, xx1, pred,
+            levels=np.arange(scores.shape[1] + 1) - 0.5,
+            cmap=cmap,
+            alpha=0.14,
+        )
+        ax.contour(
+            xx0, xx1, pred,
+            levels=np.arange(scores.shape[1]) - 0.5,
+            colors="k",
+            linewidths=1.3,
+            linestyles="--",
+        )
 
     # Covariate: one fixed boundary, returned for every bag.
     Xs_c, ys_c, prevs_c, bnd_c = make_quantification(
         n_batches=4, batch_size=400, shift_type="covariate", covariate_scale=1.5,
+        n_classes=3,
         n_features=2, n_redundant=0, class_sep=1.0, return_boundary=True,
         random_state=0,
     )
     # Concept: each bag's own rotated boundary, returned directly.
     Xs_k, ys_k, prevs_k, bnd_k = make_quantification(
         n_batches=4, batch_size=400, shift_type="concept", concept_strength=1.0,
+        n_classes=3,
         n_features=2, n_redundant=0, class_sep=1.0, return_boundary=True,
         random_state=0,
     )
 
     fig, axes = plt.subplots(2, 4, figsize=(13, 6.4), sharex="row", sharey="row")
     for i, (ax, X, y, p) in enumerate(zip(axes[0], Xs_c, ys_c, prevs_c)):
-        for k, color in enumerate(["#2a9d8f", "#e76f51"]):
+        for k, color in enumerate(["#2a9d8f", "#e76f51", "#264653"]):
             ax.scatter(*X[y == k].T, s=8, alpha=0.6, color=color)
-        draw_boundary(ax, bnd_c.coef[i], bnd_c.intercept[i])
+        if np.ndim(bnd_c.coef[i]) == 1:
+            draw_boundary(ax, bnd_c.coef[i], bnd_c.intercept[i])
+        else:
+            draw_multiclass_boundary(ax, X, bnd_c.coef[i], bnd_c.intercept[i])
         ax.set_title(f"class 1 = {p[1]:.0%}", fontsize="small")
         ax.set_xticks([]); ax.set_yticks([])
     axes[0, 0].set_ylabel("covariate\n(boundary fixed)")
 
     for i, (ax, X, y, p) in enumerate(zip(axes[1], Xs_k, ys_k, prevs_k)):
-        for k, color in enumerate(["#2a9d8f", "#e76f51"]):
+        for k, color in enumerate(["#2a9d8f", "#e76f51", "#264653"]):
             ax.scatter(*X[y == k].T, s=8, alpha=0.6, color=color)
-        draw_boundary(ax, bnd_k.coef[i], bnd_k.intercept[i])
+        if np.ndim(bnd_k.coef[i]) == 1:
+            draw_boundary(ax, bnd_k.coef[i], bnd_k.intercept[i])
+        else:
+            draw_multiclass_boundary(ax, X, bnd_k.coef[i], bnd_k.intercept[i])
         ax.set_title(f"class 1 = {p[1]:.0%}", fontsize="small")
         ax.set_xticks([]); ax.set_yticks([])
     axes[1, 0].set_ylabel("concept\n(boundary moves)")
