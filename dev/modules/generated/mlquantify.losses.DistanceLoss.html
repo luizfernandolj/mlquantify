@@ -46,7 +46,7 @@
     <link rel="stylesheet" type="text/css" href="../../_static/variables.css?v=fded66fe" />
     <link rel="stylesheet" type="text/css" href="../../_static/theme_overrides.css?v=dec63a3c" />
     <link rel="stylesheet" type="text/css" href="../../_static/landing.css?v=a73da8a0" />
-    <link rel="stylesheet" type="text/css" href="../../_static/dev_banner.css?v=4009f06c" />
+    <link rel="stylesheet" type="text/css" href="../../_static/dev_banner.css?v=ad749d7a" />
   
   <!-- So that users can add custom icons -->
   <script defer src="../../_static/scripts/fontawesome.js?digest=a95f357e85573c9b56d5"></script>
@@ -69,6 +69,7 @@
             false;
         </script>
     <script>DOCUMENTATION_OPTIONS.search_as_you_type = false;</script>
+    <script src="../../_static/dev_banner.js?v=1edec9a1"></script>
     <link rel="canonical" href="https://luizfernandolj.github.io/mlquantify/modules/generated/mlquantify.losses.DistanceLoss.html" />
     <link rel="search" title="Search" href="../../search.html" />
     <link rel="next" title="LeastSquaresLoss" href="mlquantify.losses.LeastSquaresLoss.html" />
@@ -120,7 +121,7 @@
   <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
 </div>
 <aside class="bd-header-announcement" aria-label="Announcement">
-  <div class="bd-header-announcement__content"><div class="mlq-dev-banner">This is the documentation for the <strong>unstable development version</strong> of mlquantify. <a class="mlq-dev-banner__btn" href="https://luizfernandolj.github.io/mlquantify/stable/">Switch to stable version</a></div></div>
+  <div class="bd-header-announcement__content"><div class="mlq-dev-banner">This is the documentation for the <strong>unstable development version</strong> of mlquantify. <a class="mlq-dev-banner__btn" href="https://luizfernandolj.github.io/mlquantify/stable/">Switch to stable version</a><button class="mlq-dev-banner__close" type="button" aria-label="Close development-version banner">&times;</button></div></div>
 </aside>
 
   
@@ -508,6 +509,10 @@
 <li class="toctree-l2"><a class="reference internal" href="mlquantify.counting.compute_table.html">compute_table</a></li>
 </ul>
 </details></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../../api/mlquantify.datasets.html">mlquantify.datasets</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="mlquantify.datasets.make_quantification.html">make_quantification</a></li>
+</ul>
+</details></li>
 <li class="toctree-l1 has-children"><a class="reference internal" href="../../api/mlquantify.likelihood.html">mlquantify.likelihood</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
 <li class="toctree-l2"><a class="reference internal" href="mlquantify.likelihood.CDE.html">CDE</a></li>
 <li class="toctree-l2"><a class="reference internal" href="mlquantify.likelihood.EMQ.html">EMQ</a></li>
@@ -593,7 +598,10 @@
 <li class="toctree-l2"><a class="reference internal" href="mlquantify.neighbors.PWK.html">PWK</a></li>
 </ul>
 </details></li>
-<li class="toctree-l1"><a class="reference internal" href="../../api/mlquantify.neural.html">mlquantify.neural</a></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../../api/mlquantify.neural.html">mlquantify.neural</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="mlquantify.neural.QuaNet.html">QuaNet</a></li>
+</ul>
+</details></li>
 <li class="toctree-l1 has-children"><a class="reference internal" href="../../api/mlquantify.representations.html">mlquantify.representations</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
 <li class="toctree-l2"><a class="reference internal" href="mlquantify.representations.BaseRepresentation.html">BaseRepresentation</a></li>
 <li class="toctree-l2"><a class="reference internal" href="mlquantify.representations.HistogramRepresentation.html">HistogramRepresentation</a></li>
@@ -693,18 +701,15 @@
 <h1>DistanceLoss<a class="headerlink" href="#distanceloss" title="Link to this heading">#</a></h1>
 <dl class="py class">
 <dt class="sig sig-object py" id="mlquantify.losses.DistanceLoss">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">mlquantify.losses.</span></span><span class="sig-name descname"><span class="pre">DistanceLoss</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">distance</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'hellinger'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">normalize</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/luizfernandolj/mlquantify/tree/master/mlquantify/losses/_distances.py#L53-L150"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mlquantify.losses.DistanceLoss" title="Link to this definition">#</a></dt>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">mlquantify.losses.</span></span><span class="sig-name descname"><span class="pre">DistanceLoss</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">distance</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'hellinger'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">normalize</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/luizfernandolj/mlquantify/tree/master/mlquantify/losses/_distances.py#L53-L149"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mlquantify.losses.DistanceLoss" title="Link to this definition">#</a></dt>
 <dd><p>Generic distance-based loss between two probability distributions.</p>
 <p>Computes a symmetric distance measure between a mixture distribution
 and a target distribution.  Both arrays are optionally normalized to
 valid probability vectors before the distance is evaluated.</p>
-<dl class="field-list">
+<dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><dl>
-<dt><strong>distance</strong><span class="classifier">{‘hellinger’, ‘topsoe’, ‘probsymm’, ‘sqEuclidean’, ‘euclidean’}, </span></dt><dd><blockquote>
-<div><p>default=’hellinger’</p>
-</div></blockquote>
-<p>The distance measure to apply.</p>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>distance</strong><span class="classifier">{‘hellinger’, ‘topsoe’, ‘probsymm’, ‘sqEuclidean’, ‘euclidean’}, default=’hellinger’</span></dt><dd><p>The distance measure to apply.</p>
 </dd>
 <dt><strong>normalize</strong><span class="classifier">bool, default=True</span></dt><dd><p>If <code class="docutils literal notranslate"><span class="pre">True</span></code>, both <code class="docutils literal notranslate"><span class="pre">mixture</span></code> and <code class="docutils literal notranslate"><span class="pre">target</span></code> are passed through
 <a class="reference internal" href="mlquantify.losses.normalize_distribution.html#mlquantify.losses.normalize_distribution" title="mlquantify.losses.normalize_distribution"><code class="xref py py-func docutils literal notranslate"><span class="pre">normalize_distribution</span></code></a> before comparison.</p>
@@ -740,7 +745,7 @@ valid probability vectors before the distance is evaluated.</p>
 </div>
 <dl class="py method">
 <dt class="sig sig-object py" id="mlquantify.losses.DistanceLoss.__call__">
-<span class="sig-name descname"><span class="pre">__call__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">mixture</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">target</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/luizfernandolj/mlquantify/tree/master/mlquantify/losses/_distances.py#L94-L150"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mlquantify.losses.DistanceLoss.__call__" title="Link to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">__call__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">mixture</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">target</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/luizfernandolj/mlquantify/tree/master/mlquantify/losses/_distances.py#L93-L149"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mlquantify.losses.DistanceLoss.__call__" title="Link to this definition">#</a></dt>
 <dd><p>Compute the distance between two distributions.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>

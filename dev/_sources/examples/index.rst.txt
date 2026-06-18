@@ -128,6 +128,66 @@ Multiclass
         the joint uncertainty on the probability simplex.
 
 
+Synthetic datasets with ``make_quantification``
+-----------------------------------------------
+
+Build controlled experiments with
+:func:`~mlquantify.datasets.make_quantification`: generate labelled bags under
+prior-probability shift, see how the data and its prevalence behave, then
+benchmark quantifiers on it with the true prevalences in hand.
+
+.. grid:: 1 1 2 2
+    :gutter: 3
+
+    .. grid-item-card:: Visualizing synthetic data
+        :link: sphx_synthetic_intro
+        :link-type: ref
+        :text-align: center
+
+        Plot a single bag in two dimensions, coloured by class, to see what the
+        generator produces.
+
+    .. grid-item-card:: Prior shift, bag by bag
+        :link: sphx_synthetic_shift
+        :link-type: ref
+        :text-align: center
+
+        Watch the class clusters keep their shape while their balance shifts
+        from bag to bag.
+
+    .. grid-item-card:: Controlling prevalence variability
+        :link: sphx_synthetic_prevalence
+        :link-type: ref
+        :text-align: center
+
+        Compare the ``prevalence`` strategies — uniform, grid, natural and
+        Dirichlet — and the ``concentration`` knob.
+
+    .. grid-item-card:: Class separability and label noise
+        :link: sphx_synthetic_difficulty
+        :link-type: ref
+        :text-align: center
+
+        Tune how hard the problem is with ``class_sep`` and ``flip_y``, and see
+        the effect on quantification error.
+
+    .. grid-item-card:: Covariate and concept shift
+        :link: sphx_synthetic_shift_types
+        :link-type: ref
+        :text-align: center
+
+        Generate the other two kinds of dataset shift, see how each looks, and
+        why the best quantifier depends on the shift.
+
+    .. grid-item-card:: Benchmarking quantifiers
+        :link: sphx_synthetic_quantifiers
+        :link-type: ref
+        :text-align: center
+
+        Fit on a training sample, predict many shifted bags, and score methods
+        directly against the known prevalences.
+
+
 .. toctree::
    :hidden:
 
@@ -141,3 +201,9 @@ Multiclass
    plot_grid_search
    plot_confidence_regions
    plot_multiclass
+   plot_synthetic_intro
+   plot_synthetic_shift
+   plot_synthetic_prevalence
+   plot_synthetic_difficulty
+   plot_synthetic_shift_types
+   plot_synthetic_quantifiers

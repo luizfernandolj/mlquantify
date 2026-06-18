@@ -48,7 +48,7 @@
     <link rel="stylesheet" type="text/css" href="../_static/variables.css?v=fded66fe" />
     <link rel="stylesheet" type="text/css" href="../_static/theme_overrides.css?v=dec63a3c" />
     <link rel="stylesheet" type="text/css" href="../_static/landing.css?v=a73da8a0" />
-    <link rel="stylesheet" type="text/css" href="../_static/dev_banner.css?v=4009f06c" />
+    <link rel="stylesheet" type="text/css" href="../_static/dev_banner.css?v=ad749d7a" />
   
   <!-- So that users can add custom icons -->
   <script defer src="../_static/scripts/fontawesome.js?digest=a95f357e85573c9b56d5"></script>
@@ -71,9 +71,10 @@
             false;
         </script>
     <script>DOCUMENTATION_OPTIONS.search_as_you_type = false;</script>
+    <script src="../_static/dev_banner.js?v=1edec9a1"></script>
     <link rel="canonical" href="https://luizfernandolj.github.io/mlquantify/api/mlquantify.neural.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="mlquantify.representations" href="mlquantify.representations.html" />
+    <link rel="next" title="QuaNet" href="../modules/generated/mlquantify.neural.QuaNet.html" />
     <link rel="prev" title="PWK" href="../modules/generated/mlquantify.neighbors.PWK.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
@@ -122,7 +123,7 @@
   <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
 </div>
 <aside class="bd-header-announcement" aria-label="Announcement">
-  <div class="bd-header-announcement__content"><div class="mlq-dev-banner">This is the documentation for the <strong>unstable development version</strong> of mlquantify. <a class="mlq-dev-banner__btn" href="https://luizfernandolj.github.io/mlquantify/stable/">Switch to stable version</a></div></div>
+  <div class="bd-header-announcement__content"><div class="mlq-dev-banner">This is the documentation for the <strong>unstable development version</strong> of mlquantify. <a class="mlq-dev-banner__btn" href="https://luizfernandolj.github.io/mlquantify/stable/">Switch to stable version</a><button class="mlq-dev-banner__close" type="button" aria-label="Close development-version banner">&times;</button></div></div>
 </aside>
 
   
@@ -506,6 +507,10 @@
 <li class="toctree-l2"><a class="reference internal" href="../modules/generated/mlquantify.counting.compute_table.html">compute_table</a></li>
 </ul>
 </details></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="mlquantify.datasets.html">mlquantify.datasets</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../modules/generated/mlquantify.datasets.make_quantification.html">make_quantification</a></li>
+</ul>
+</details></li>
 <li class="toctree-l1 has-children"><a class="reference internal" href="mlquantify.likelihood.html">mlquantify.likelihood</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
 <li class="toctree-l2"><a class="reference internal" href="../modules/generated/mlquantify.likelihood.CDE.html">CDE</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../modules/generated/mlquantify.likelihood.EMQ.html">EMQ</a></li>
@@ -591,7 +596,10 @@
 <li class="toctree-l2"><a class="reference internal" href="../modules/generated/mlquantify.neighbors.PWK.html">PWK</a></li>
 </ul>
 </details></li>
-<li class="toctree-l1 current active"><a class="current reference internal" href="#">mlquantify.neural</a></li>
+<li class="toctree-l1 current active has-children"><a class="current reference internal" href="#">mlquantify.neural</a><details open="open"><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../modules/generated/mlquantify.neural.QuaNet.html">QuaNet</a></li>
+</ul>
+</details></li>
 <li class="toctree-l1 has-children"><a class="reference internal" href="mlquantify.representations.html">mlquantify.representations</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
 <li class="toctree-l2"><a class="reference internal" href="../modules/generated/mlquantify.representations.BaseRepresentation.html">BaseRepresentation</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../modules/generated/mlquantify.representations.HistogramRepresentation.html">HistogramRepresentation</a></li>
@@ -690,6 +698,9 @@
 <span id="neural-ref-neural-methods"></span><h2>Neural Methods<a class="headerlink" href="#neural-methods" title="Link to this heading">#</a></h2>
 <div class="pst-scrollable-table-container"><table class="autosummary longtable table autosummary">
 <tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="../modules/generated/mlquantify.neural.QuaNet.html#mlquantify.neural.QuaNet" title="mlquantify.neural.QuaNet"><code class="xref py py-obj docutils literal notranslate"><span class="pre">QuaNet</span></code></a></p></td>
+<td><p>QuaNet: deep neural quantification with an LSTM architecture.</p></td>
+</tr>
 </tbody>
 </table>
 </div>
@@ -716,11 +727,11 @@
       </div>
     </a>
     <a class="right-next"
-       href="mlquantify.representations.html"
+       href="../modules/generated/mlquantify.neural.QuaNet.html"
        title="next page">
       <div class="prev-next-info">
         <p class="prev-next-subtitle">next</p>
-        <p class="prev-next-title">mlquantify.representations</p>
+        <p class="prev-next-title">QuaNet</p>
       </div>
       <i class="fa-solid fa-angle-right"></i>
     </a>

@@ -1,3 +1,5 @@
+:orphan:
+
 .. _density:
 
 .. currentmodule:: mlquantify.matching

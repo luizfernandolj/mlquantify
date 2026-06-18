@@ -48,7 +48,7 @@
     <link rel="stylesheet" type="text/css" href="../_static/variables.css?v=fded66fe" />
     <link rel="stylesheet" type="text/css" href="../_static/theme_overrides.css?v=dec63a3c" />
     <link rel="stylesheet" type="text/css" href="../_static/landing.css?v=a73da8a0" />
-    <link rel="stylesheet" type="text/css" href="../_static/dev_banner.css?v=4009f06c" />
+    <link rel="stylesheet" type="text/css" href="../_static/dev_banner.css?v=ad749d7a" />
   
   <!-- So that users can add custom icons -->
   <script defer src="../_static/scripts/fontawesome.js?digest=a95f357e85573c9b56d5"></script>
@@ -71,6 +71,7 @@
             false;
         </script>
     <script>DOCUMENTATION_OPTIONS.search_as_you_type = false;</script>
+    <script src="../_static/dev_banner.js?v=1edec9a1"></script>
     <link rel="canonical" href="https://luizfernandolj.github.io/mlquantify/modules/bootstrap.html" />
     <link rel="search" title="Search" href="../search.html" />
     <link rel="next" title="4.3. QuaDapt: Drift-Resilient Score Adaptation" href="scores_adaptation.html" />
@@ -122,7 +123,7 @@
   <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
 </div>
 <aside class="bd-header-announcement" aria-label="Announcement">
-  <div class="bd-header-announcement__content"><div class="mlq-dev-banner">This is the documentation for the <strong>unstable development version</strong> of mlquantify. <a class="mlq-dev-banner__btn" href="https://luizfernandolj.github.io/mlquantify/stable/">Switch to stable version</a></div></div>
+  <div class="bd-header-announcement__content"><div class="mlq-dev-banner">This is the documentation for the <strong>unstable development version</strong> of mlquantify. <a class="mlq-dev-banner__btn" href="https://luizfernandolj.github.io/mlquantify/stable/">Switch to stable version</a><button class="mlq-dev-banner__close" type="button" aria-label="Close development-version banner">&times;</button></div></div>
 </aside>
 
   
@@ -588,7 +589,7 @@ Combined Approach</div>
 </div>
 </div>
 </div>
-<p>The <a class="reference internal" href="generated/mlquantify.meta.AggregativeBootstrap.html#mlquantify.meta.AggregativeBootstrap" title="mlquantify.meta.AggregativeBootstrap"><code class="xref py py-class docutils literal notranslate"><span class="pre">AggregativeBootstrap</span></code></a> class implements these strategies for aggregative quantifiers by using two parameters: <code class="docutils literal notranslate"><span class="pre">n_train_bootstraps</span></code> and <code class="docutils literal notranslate"><span class="pre">n_test_bootstraps</span></code>. These parameters define the number of bootstrap samples for the training and test phases, respectively.</p>
+<p>The <a class="reference internal" href="generated/mlquantify.meta.AggregativeBootstrap.html#mlquantify.meta.AggregativeBootstrap" title="mlquantify.meta.AggregativeBootstrap"><code class="xref py py-class docutils literal notranslate"><span class="pre">AggregativeBootstrap</span></code></a> class implements these strategies <a class="footnote-reference brackets" href="#id2" id="id1" role="doc-noteref"><span class="fn-bracket">[</span>1<span class="fn-bracket">]</span></a> for aggregative quantifiers by using two parameters: <code class="docutils literal notranslate"><span class="pre">n_train_bootstraps</span></code> and <code class="docutils literal notranslate"><span class="pre">n_test_bootstraps</span></code>. These parameters define the number of bootstrap samples for the training and test phases, respectively.</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">mlquantify.meta</span><span class="w"> </span><span class="kn">import</span> <span class="n">AggregativeBootstrap</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">mlquantify.likelihood</span><span class="w"> </span><span class="kn">import</span> <span class="n">EMQ</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">sklearn.ensemble</span><span class="w"> </span><span class="kn">import</span> <span class="n">RandomForestClassifier</span>
@@ -607,8 +608,8 @@ Combined Approach</div>
 <summary class="sd-summary-title sd-card-header">
 <span class="sd-summary-text">References</span><span class="sd-summary-state-marker sd-summary-chevron-right"><svg version="1.1" width="1.5em" height="1.5em" class="sd-octicon sd-octicon-chevron-right" viewBox="0 0 24 24" aria-hidden="true"><path d="M8.72 18.78a.75.75 0 0 1 0-1.06L14.44 12 8.72 6.28a.751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018l6.25 6.25a.75.75 0 0 1 0 1.06l-6.25 6.25a.75.75 0 0 1-1.06 0Z"></path></svg></span></summary><div class="sd-summary-content sd-card-body docutils">
 <aside class="footnote-list brackets">
-<aside class="footnote brackets" id="id1" role="doc-footnote">
-<span class="label"><span class="fn-bracket">[</span>1<span class="fn-bracket">]</span></span>
+<aside class="footnote brackets" id="id2" role="doc-footnote">
+<span class="label"><span class="fn-bracket">[</span><a role="doc-backlink" href="#id1">1</a><span class="fn-bracket">]</span></span>
 <p class="sd-card-text">Moreo, A., &amp; Salvati, N. (2025). An Efficient Method for Deriving Confidence Intervals in Aggregative Quantification.</p>
 </aside>
 </aside>

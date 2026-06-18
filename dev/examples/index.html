@@ -48,7 +48,7 @@
     <link rel="stylesheet" type="text/css" href="../_static/variables.css?v=fded66fe" />
     <link rel="stylesheet" type="text/css" href="../_static/theme_overrides.css?v=dec63a3c" />
     <link rel="stylesheet" type="text/css" href="../_static/landing.css?v=a73da8a0" />
-    <link rel="stylesheet" type="text/css" href="../_static/dev_banner.css?v=4009f06c" />
+    <link rel="stylesheet" type="text/css" href="../_static/dev_banner.css?v=ad749d7a" />
   
   <!-- So that users can add custom icons -->
   <script defer src="../_static/scripts/fontawesome.js?digest=a95f357e85573c9b56d5"></script>
@@ -72,6 +72,7 @@
             false;
         </script>
     <script>DOCUMENTATION_OPTIONS.search_as_you_type = false;</script>
+    <script src="../_static/dev_banner.js?v=1edec9a1"></script>
     <link rel="canonical" href="https://luizfernandolj.github.io/mlquantify/examples/index.html" />
     <link rel="search" title="Search" href="../search.html" />
     <link rel="next" title="Introduction to quantification" href="plot_quantification_intro.html" />
@@ -123,7 +124,7 @@
   <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
 </div>
 <aside class="bd-header-announcement" aria-label="Announcement">
-  <div class="bd-header-announcement__content"><div class="mlq-dev-banner">This is the documentation for the <strong>unstable development version</strong> of mlquantify. <a class="mlq-dev-banner__btn" href="https://luizfernandolj.github.io/mlquantify/stable/">Switch to stable version</a></div></div>
+  <div class="bd-header-announcement__content"><div class="mlq-dev-banner">This is the documentation for the <strong>unstable development version</strong> of mlquantify. <a class="mlq-dev-banner__btn" href="https://luizfernandolj.github.io/mlquantify/stable/">Switch to stable version</a><button class="mlq-dev-banner__close" type="button" aria-label="Close development-version banner">&times;</button></div></div>
 </aside>
 
   
@@ -462,6 +463,12 @@
 <li class="toctree-l1"><a class="reference internal" href="plot_grid_search.html">Tuning a quantifier with GridSearchQ</a></li>
 <li class="toctree-l1"><a class="reference internal" href="plot_confidence_regions.html">Confidence intervals and regions</a></li>
 <li class="toctree-l1"><a class="reference internal" href="plot_multiclass.html">Multiclass quantification</a></li>
+<li class="toctree-l1"><a class="reference internal" href="plot_synthetic_intro.html">Visualizing synthetic quantification data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="plot_synthetic_shift.html">Prior shift, bag by bag</a></li>
+<li class="toctree-l1"><a class="reference internal" href="plot_synthetic_prevalence.html">Controlling prevalence variability across bags</a></li>
+<li class="toctree-l1"><a class="reference internal" href="plot_synthetic_difficulty.html">Class separability and label noise</a></li>
+<li class="toctree-l1"><a class="reference internal" href="plot_synthetic_shift_types.html">Covariate and concept shift</a></li>
+<li class="toctree-l1"><a class="reference internal" href="plot_synthetic_quantifiers.html">Benchmarking quantifiers on synthetic bags</a></li>
 </ul>
 </div>
 </nav></div>
@@ -654,6 +661,77 @@ the joint uncertainty on the probability simplex.</p>
 </div>
 </div>
 </div>
+</section>
+<section id="synthetic-datasets-with-make-quantification">
+<h2>Synthetic datasets with <code class="docutils literal notranslate"><span class="pre">make_quantification</span></code><a class="headerlink" href="#synthetic-datasets-with-make-quantification" title="Link to this heading">#</a></h2>
+<p>Build controlled experiments with
+<a class="reference internal" href="../modules/generated/mlquantify.datasets.make_quantification.html#mlquantify.datasets.make_quantification" title="mlquantify.datasets.make_quantification"><code class="xref py py-func docutils literal notranslate"><span class="pre">make_quantification</span></code></a>: generate labelled bags under
+prior-probability shift, see how the data and its prevalence behave, then
+benchmark quantifiers on it with the true prevalences in hand.</p>
+<div class="sd-container-fluid sd-sphinx-override sd-mb-4 docutils">
+<div class="sd-row sd-row-cols-1 sd-row-cols-xs-1 sd-row-cols-sm-1 sd-row-cols-md-2 sd-row-cols-lg-2 sd-g-3 sd-g-xs-3 sd-g-sm-3 sd-g-md-3 sd-g-lg-3 docutils">
+<div class="sd-col sd-d-flex-row docutils">
+<div class="sd-card sd-sphinx-override sd-w-100 sd-shadow-sm sd-card-hover sd-text-center docutils">
+<div class="sd-card-body docutils">
+<div class="sd-card-title sd-font-weight-bold docutils">
+Visualizing synthetic data</div>
+<p class="sd-card-text">Plot a single bag in two dimensions, coloured by class, to see what the
+generator produces.</p>
+</div>
+<a class="sd-stretched-link sd-hide-link-text reference internal" href="plot_synthetic_intro.html#sphx-synthetic-intro"><span class="std std-ref">Visualizing synthetic quantification data</span></a></div>
+</div>
+<div class="sd-col sd-d-flex-row docutils">
+<div class="sd-card sd-sphinx-override sd-w-100 sd-shadow-sm sd-card-hover sd-text-center docutils">
+<div class="sd-card-body docutils">
+<div class="sd-card-title sd-font-weight-bold docutils">
+Prior shift, bag by bag</div>
+<p class="sd-card-text">Watch the class clusters keep their shape while their balance shifts
+from bag to bag.</p>
+</div>
+<a class="sd-stretched-link sd-hide-link-text reference internal" href="plot_synthetic_shift.html#sphx-synthetic-shift"><span class="std std-ref">Prior shift, bag by bag</span></a></div>
+</div>
+<div class="sd-col sd-d-flex-row docutils">
+<div class="sd-card sd-sphinx-override sd-w-100 sd-shadow-sm sd-card-hover sd-text-center docutils">
+<div class="sd-card-body docutils">
+<div class="sd-card-title sd-font-weight-bold docutils">
+Controlling prevalence variability</div>
+<p class="sd-card-text">Compare the <code class="docutils literal notranslate"><span class="pre">prevalence</span></code> strategies — uniform, grid, natural and
+Dirichlet — and the <code class="docutils literal notranslate"><span class="pre">concentration</span></code> knob.</p>
+</div>
+<a class="sd-stretched-link sd-hide-link-text reference internal" href="plot_synthetic_prevalence.html#sphx-synthetic-prevalence"><span class="std std-ref">Controlling prevalence variability across bags</span></a></div>
+</div>
+<div class="sd-col sd-d-flex-row docutils">
+<div class="sd-card sd-sphinx-override sd-w-100 sd-shadow-sm sd-card-hover sd-text-center docutils">
+<div class="sd-card-body docutils">
+<div class="sd-card-title sd-font-weight-bold docutils">
+Class separability and label noise</div>
+<p class="sd-card-text">Tune how hard the problem is with <code class="docutils literal notranslate"><span class="pre">class_sep</span></code> and <code class="docutils literal notranslate"><span class="pre">flip_y</span></code>, and see
+the effect on quantification error.</p>
+</div>
+<a class="sd-stretched-link sd-hide-link-text reference internal" href="plot_synthetic_difficulty.html#sphx-synthetic-difficulty"><span class="std std-ref">Class separability and label noise</span></a></div>
+</div>
+<div class="sd-col sd-d-flex-row docutils">
+<div class="sd-card sd-sphinx-override sd-w-100 sd-shadow-sm sd-card-hover sd-text-center docutils">
+<div class="sd-card-body docutils">
+<div class="sd-card-title sd-font-weight-bold docutils">
+Covariate and concept shift</div>
+<p class="sd-card-text">Generate the other two kinds of dataset shift, see how each looks, and
+why the best quantifier depends on the shift.</p>
+</div>
+<a class="sd-stretched-link sd-hide-link-text reference internal" href="plot_synthetic_shift_types.html#sphx-synthetic-shift-types"><span class="std std-ref">Covariate and concept shift</span></a></div>
+</div>
+<div class="sd-col sd-d-flex-row docutils">
+<div class="sd-card sd-sphinx-override sd-w-100 sd-shadow-sm sd-card-hover sd-text-center docutils">
+<div class="sd-card-body docutils">
+<div class="sd-card-title sd-font-weight-bold docutils">
+Benchmarking quantifiers</div>
+<p class="sd-card-text">Fit on a training sample, predict many shifted bags, and score methods
+directly against the known prevalences.</p>
+</div>
+<a class="sd-stretched-link sd-hide-link-text reference internal" href="plot_synthetic_quantifiers.html#sphx-synthetic-quantifiers"><span class="std std-ref">Benchmarking quantifiers on synthetic bags</span></a></div>
+</div>
+</div>
+</div>
 <div class="toctree-wrapper compound">
 </div>
 </section>
@@ -715,6 +793,7 @@ the joint uncertainty on the probability simplex.</p>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#evaluation-and-protocols">Evaluation and protocols</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#model-selection-and-uncertainty">Model selection and uncertainty</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#multiclass">Multiclass</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#synthetic-datasets-with-make-quantification">Synthetic datasets with <code class="docutils literal notranslate"><span class="pre">make_quantification</span></code></a></li>
 </ul>
   </nav></div>
 

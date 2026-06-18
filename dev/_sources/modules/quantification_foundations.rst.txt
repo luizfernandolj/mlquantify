@@ -1,8 +1,8 @@
 .. _quantification_foundations:
 
-=========================
+==========================
 Quantification Foundations
-=========================
+==========================
 
 This page introduces the core theory behind quantification — what the problem is,
 why it differs from classification, how dataset shift motivates it, and how the

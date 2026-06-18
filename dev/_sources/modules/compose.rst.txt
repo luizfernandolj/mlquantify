@@ -2,9 +2,9 @@
 
 .. currentmodule:: mlquantify.compose
 
-====================
+======================
 Composable Quantifiers
-====================
+======================
 
 Compose quantifiers build prevalence estimators by combining a representation,
 a loss function, and a solver. This makes it easy to swap components when you

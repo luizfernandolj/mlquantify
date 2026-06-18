@@ -293,6 +293,25 @@ def meta():
     _save(fig, "meta.png")
 
 
+# --------------------------------------------------------------------------- #
+# 11. Datasets — synthetic labelled clusters (make_quantification)
+# --------------------------------------------------------------------------- #
+def datasets():
+    rng = np.random.default_rng(4)
+    clusters = [((-1.35, 0.65), TEAL), ((1.15, 1.0), VIOLET), ((0.25, -1.15), AMBER)]
+    fig, ax = _new()
+    for (cx, cy), c in clusters:
+        pts = rng.normal((cx, cy), (0.55, 0.5), size=(90, 2))
+        ax.scatter(pts[:, 0], pts[:, 1], s=26, color=c, alpha=0.78,
+                   edgecolors="white", linewidths=0.3)
+    ax.set_xlabel("x1")
+    ax.set_ylabel("x2")
+    ax.set_xticks([])
+    ax.set_yticks([])
+    _style(ax)
+    _save(fig, "datasets.png")
+
+
 def main():
     counting()
     matching()
@@ -304,6 +323,7 @@ def main():
     visualization()
     calibration()
     meta()
+    datasets()
 
 
 if __name__ == "__main__":

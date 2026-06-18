@@ -46,7 +46,7 @@
     <link rel="stylesheet" type="text/css" href="../../_static/variables.css?v=fded66fe" />
     <link rel="stylesheet" type="text/css" href="../../_static/theme_overrides.css?v=dec63a3c" />
     <link rel="stylesheet" type="text/css" href="../../_static/landing.css?v=a73da8a0" />
-    <link rel="stylesheet" type="text/css" href="../../_static/dev_banner.css?v=4009f06c" />
+    <link rel="stylesheet" type="text/css" href="../../_static/dev_banner.css?v=ad749d7a" />
   
   <!-- So that users can add custom icons -->
   <script defer src="../../_static/scripts/fontawesome.js?digest=a95f357e85573c9b56d5"></script>
@@ -69,8 +69,11 @@
             false;
         </script>
     <script>DOCUMENTATION_OPTIONS.search_as_you_type = false;</script>
+    <script src="../../_static/dev_banner.js?v=1edec9a1"></script>
     <link rel="canonical" href="https://luizfernandolj.github.io/mlquantify/modules/generated/mlquantify.neural.QuaNet.html" />
     <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="mlquantify.representations" href="../../api/mlquantify.representations.html" />
+    <link rel="prev" title="mlquantify.neural" href="../../api/mlquantify.neural.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
   <meta name="docsearch:version" content="" />
@@ -118,7 +121,7 @@
   <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
 </div>
 <aside class="bd-header-announcement" aria-label="Announcement">
-  <div class="bd-header-announcement__content"><div class="mlq-dev-banner">This is the documentation for the <strong>unstable development version</strong> of mlquantify. <a class="mlq-dev-banner__btn" href="https://luizfernandolj.github.io/mlquantify/stable/">Switch to stable version</a></div></div>
+  <div class="bd-header-announcement__content"><div class="mlq-dev-banner">This is the documentation for the <strong>unstable development version</strong> of mlquantify. <a class="mlq-dev-banner__btn" href="https://luizfernandolj.github.io/mlquantify/stable/">Switch to stable version</a><button class="mlq-dev-banner__close" type="button" aria-label="Close development-version banner">&times;</button></div></div>
 </aside>
 
   
@@ -198,7 +201,7 @@
 </li>
 
 
-<li class="nav-item ">
+<li class="nav-item current active">
   <a class="nav-link nav-internal" href="../../api/index.html">
     API
   </a>
@@ -310,10 +313,8 @@
       
       
       
-        
-      
       <dialog id="pst-primary-sidebar-modal"></dialog>
-      <div id="pst-primary-sidebar" class="bd-sidebar-primary bd-sidebar hide-on-wide">
+      <div id="pst-primary-sidebar" class="bd-sidebar-primary bd-sidebar">
         
 
   
@@ -365,7 +366,7 @@
 </li>
 
 
-<li class="nav-item ">
+<li class="nav-item current active">
   <a class="nav-link nav-internal" href="../../api/index.html">
     API
   </a>
@@ -436,6 +437,215 @@
     
   </div>
   
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item pst-sidebar-collapse"><button id="pst-collapse-sidebar-button" aria-expanded="true" aria-controls="pst-primary-sidebar"><svg class="pst-icon svg-inline--fa" role="img" aria-hidden="true" focusable="false" viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg">
+    <path fill="currentColor" d="M3 15.5C2.36232 15.5 1.74874 15.2564 1.28478 14.8189C0.820828 14.3815 0.541576 13.7832 0.504167 13.1467L0.5 13L0.5 3C0.499965 2.36232 0.743605 1.74874 1.18107 1.28478C1.61854 0.820828 2.21676 0.541576 2.85333 0.504167L3 0.5L13 0.5C13.6377 0.499965 14.2513 0.743605 14.7152 1.18107C15.1792 1.61854 15.4584 2.21676 15.4958 2.85333L15.5 3L15.5 13C15.5 13.6377 15.2564 14.2513 14.8189 14.7152C14.3815 15.1792 13.7832 15.4584 13.1467 15.4958L13 15.5L3 15.5ZM3 13.8333L10.5 13.8333L10.5 2.16667L3 2.16667C2.79589 2.16669 2.59889 2.24163 2.44636 2.37726C2.29383 2.5129 2.19638 2.69979 2.1725 2.9025L2.16667 3L2.16667 13C2.16669 13.2041 2.24163 13.4011 2.37726 13.5536C2.5129 13.7062 2.69979 13.8036 2.9025 13.8275L3 13.8333ZM6.65583 10.325L6.5775 10.2558L4.91083 8.58917C4.76735 8.44567 4.68116 8.25476 4.66843 8.05223C4.65569 7.84971 4.71729 7.6495 4.84167 7.48917L4.91083 7.41083L6.5775 5.74417C6.72747 5.59471 6.9287 5.50794 7.14032 5.50148C7.35194 5.49502 7.55809 5.56935 7.7169 5.70937C7.8757 5.8494 7.97525 6.04463 7.99533 6.25539C8.01541 6.46616 7.95451 6.67667 7.825 6.84417L7.75583 6.9225L6.67917 8L7.75583 9.0775C7.89931 9.22099 7.98551 9.41191 7.99824 9.61443C8.01097 9.81695 7.94938 10.0172 7.825 10.1775L7.75583 10.2558C7.61234 10.3993 7.42142 10.4855 7.2189 10.4982C7.01638 10.511 6.81617 10.4494 6.65583 10.325Z"/>
+  </svg>
+  <span class="pst-collapse-sidebar-label">Collapse Sidebar</span>
+  <span class="pst-expand-sidebar-label">Expand Sidebar</span>
+</button></div>
+        <div class="sidebar-primary-item">
+
+<nav class="bd-docs-nav bd-links"
+     aria-label="Section Navigation">
+  <p class="bd-links__title" role="heading" aria-level="1">Section Navigation</p>
+  <div class="bd-toc-item navbar-nav"><ul class="current nav bd-sidenav">
+<li class="toctree-l1 has-children"><a class="reference internal" href="../../api/mlquantify.html">mlquantify</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="mlquantify.get_config.html">get_config</a></li>
+<li class="toctree-l2"><a class="reference internal" href="mlquantify.set_config.html">set_config</a></li>
+<li class="toctree-l2"><a class="reference internal" href="mlquantify.config_context.html">config_context</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../../api/mlquantify.base.html">mlquantify.base</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="mlquantify.base.BaseQuantifier.html">BaseQuantifier</a></li>
+<li class="toctree-l2"><a class="reference internal" href="mlquantify.base.MetaquantifierMixin.html">MetaquantifierMixin</a></li>
+<li class="toctree-l2"><a class="reference internal" href="mlquantify.base.ProtocolMixin.html">ProtocolMixin</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../../api/mlquantify.base_aggregative.html">mlquantify.base_aggregative</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="mlquantify.base_aggregative.AggregationMixin.html">AggregationMixin</a></li>
+<li class="toctree-l2"><a class="reference internal" href="mlquantify.base_aggregative.SoftPredictionMixin.html">SoftPredictionMixin</a></li>
+<li class="toctree-l2"><a class="reference internal" href="mlquantify.base_aggregative.CrispPredictionMixin.html">CrispPredictionMixin</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../../api/mlquantify.calibration.html">mlquantify.calibration</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="mlquantify.calibration.Calibrator.html">Calibrator</a></li>
+<li class="toctree-l2"><a class="reference internal" href="mlquantify.calibration.ClassifierCalibrator.html">ClassifierCalibrator</a></li>
+<li class="toctree-l2"><a class="reference internal" href="mlquantify.calibration.QuantifierCalibrator.html">QuantifierCalibrator</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../../api/mlquantify.compose.html">mlquantify.compose</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="mlquantify.compose.BaseComposeQuantifier.html">BaseComposeQuantifier</a></li>
+<li class="toctree-l2"><a class="reference internal" href="mlquantify.compose.LinearComposeQuantifier.html">LinearComposeQuantifier</a></li>
+<li class="toctree-l2"><a class="reference internal" href="mlquantify.compose.LikelihoodComposeQuantifier.html">LikelihoodComposeQuantifier</a></li>
+<li class="toctree-l2"><a class="reference internal" href="mlquantify.compose.ComposeQuantifier.html">ComposeQuantifier</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../../api/mlquantify.confidence.html">mlquantify.confidence</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="mlquantify.confidence.BaseConfidenceRegion.html">BaseConfidenceRegion</a></li>
+<li class="toctree-l2"><a class="reference internal" href="mlquantify.confidence.ConfidenceInterval.html">ConfidenceInterval</a></li>
+<li class="toctree-l2"><a class="reference internal" href="mlquantify.confidence.ConfidenceEllipseSimplex.html">ConfidenceEllipseSimplex</a></li>
+<li class="toctree-l2"><a class="reference internal" href="mlquantify.confidence.ConfidenceEllipseCLR.html">ConfidenceEllipseCLR</a></li>
+<li class="toctree-l2"><a class="reference internal" href="mlquantify.confidence.construct_confidence_region.html">construct_confidence_region</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../../api/mlquantify.counting.html">mlquantify.counting</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="mlquantify.counting.CC.html">CC</a></li>
+<li class="toctree-l2"><a class="reference internal" href="mlquantify.counting.PCC.html">PCC</a></li>
+<li class="toctree-l2"><a class="reference internal" href="mlquantify.counting.ACC.html">ACC</a></li>
+<li class="toctree-l2"><a class="reference internal" href="mlquantify.counting.ThresholdAdjustment.html">ThresholdAdjustment</a></li>
+<li class="toctree-l2"><a class="reference internal" href="mlquantify.counting.TAC.html">TAC</a></li>
+<li class="toctree-l2"><a class="reference internal" href="mlquantify.counting.TX.html">TX</a></li>
+<li class="toctree-l2"><a class="reference internal" href="mlquantify.counting.TMAX.html">TMAX</a></li>
+<li class="toctree-l2"><a class="reference internal" href="mlquantify.counting.T50.html">T50</a></li>
+<li class="toctree-l2"><a class="reference internal" href="mlquantify.counting.MS.html">MS</a></li>
+<li class="toctree-l2"><a class="reference internal" href="mlquantify.counting.MS2.html">MS2</a></li>
+<li class="toctree-l2"><a class="reference internal" href="mlquantify.counting.FM.html">FM</a></li>
+<li class="toctree-l2"><a class="reference internal" href="mlquantify.counting.GACC.html">GACC</a></li>
+<li class="toctree-l2"><a class="reference internal" href="mlquantify.counting.GPACC.html">GPACC</a></li>
+<li class="toctree-l2"><a class="reference internal" href="mlquantify.counting.evaluate_thresholds.html">evaluate_thresholds</a></li>
+<li class="toctree-l2"><a class="reference internal" href="mlquantify.counting.compute_tpr.html">compute_tpr</a></li>
+<li class="toctree-l2"><a class="reference internal" href="mlquantify.counting.compute_fpr.html">compute_fpr</a></li>
+<li class="toctree-l2"><a class="reference internal" href="mlquantify.counting.compute_table.html">compute_table</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../../api/mlquantify.datasets.html">mlquantify.datasets</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="mlquantify.datasets.make_quantification.html">make_quantification</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../../api/mlquantify.likelihood.html">mlquantify.likelihood</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="mlquantify.likelihood.CDE.html">CDE</a></li>
+<li class="toctree-l2"><a class="reference internal" href="mlquantify.likelihood.EMQ.html">EMQ</a></li>
+<li class="toctree-l2"><a class="reference internal" href="mlquantify.likelihood.MLPE.html">MLPE</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../../api/mlquantify.losses.html">mlquantify.losses</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="mlquantify.losses.BaseLoss.html">BaseLoss</a></li>
+<li class="toctree-l2"><a class="reference internal" href="mlquantify.losses.DistanceLoss.html">DistanceLoss</a></li>
+<li class="toctree-l2"><a class="reference internal" href="mlquantify.losses.LeastSquaresLoss.html">LeastSquaresLoss</a></li>
+<li class="toctree-l2"><a class="reference internal" href="mlquantify.losses.HellingerSurrogateLoss.html">HellingerSurrogateLoss</a></li>
+<li class="toctree-l2"><a class="reference internal" href="mlquantify.losses.EnergyLoss.html">EnergyLoss</a></li>
+<li class="toctree-l2"><a class="reference internal" href="mlquantify.losses.NegativeLogLikelihoodLoss.html">NegativeLogLikelihoodLoss</a></li>
+<li class="toctree-l2"><a class="reference internal" href="mlquantify.losses.MixtureNegativeLogLikelihoodLoss.html">MixtureNegativeLogLikelihoodLoss</a></li>
+<li class="toctree-l2"><a class="reference internal" href="mlquantify.losses.RegularizedMixtureNLLLoss.html">RegularizedMixtureNLLLoss</a></li>
+<li class="toctree-l2"><a class="reference internal" href="mlquantify.losses.normalize_distribution.html">normalize_distribution</a></li>
+<li class="toctree-l2"><a class="reference internal" href="mlquantify.losses.get_loss.html">get_loss</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../../api/mlquantify.matching.html">mlquantify.matching</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="mlquantify.matching.BaseMatchingQuantifier.html">BaseMatchingQuantifier</a></li>
+<li class="toctree-l2"><a class="reference internal" href="mlquantify.matching.MatchingHistogramQuantifier.html">MatchingHistogramQuantifier</a></li>
+<li class="toctree-l2"><a class="reference internal" href="mlquantify.matching.DyS.html">DyS</a></li>
+<li class="toctree-l2"><a class="reference internal" href="mlquantify.matching.HDy.html">HDy</a></li>
+<li class="toctree-l2"><a class="reference internal" href="mlquantify.matching.HDx.html">HDx</a></li>
+<li class="toctree-l2"><a class="reference internal" href="mlquantify.matching.SORD.html">SORD</a></li>
+<li class="toctree-l2"><a class="reference internal" href="mlquantify.matching.MatchingKernelQuantifier.html">MatchingKernelQuantifier</a></li>
+<li class="toctree-l2"><a class="reference internal" href="mlquantify.matching.MMD_RKHS.html">MMD_RKHS</a></li>
+<li class="toctree-l2"><a class="reference internal" href="mlquantify.matching.KDEyQuantifier.html">KDEyQuantifier</a></li>
+<li class="toctree-l2"><a class="reference internal" href="mlquantify.matching.KDEyML.html">KDEyML</a></li>
+<li class="toctree-l2"><a class="reference internal" href="mlquantify.matching.KDEyHD.html">KDEyHD</a></li>
+<li class="toctree-l2"><a class="reference internal" href="mlquantify.matching.KDEyCS.html">KDEyCS</a></li>
+<li class="toctree-l2"><a class="reference internal" href="mlquantify.matching.GKDEyML.html">GKDEyML</a></li>
+<li class="toctree-l2"><a class="reference internal" href="mlquantify.matching.GHDx.html">GHDx</a></li>
+<li class="toctree-l2"><a class="reference internal" href="mlquantify.matching.GHDy.html">GHDy</a></li>
+<li class="toctree-l2"><a class="reference internal" href="mlquantify.matching.SMM.html">SMM</a></li>
+<li class="toctree-l2"><a class="reference internal" href="mlquantify.matching.EDy.html">EDy</a></li>
+<li class="toctree-l2"><a class="reference internal" href="mlquantify.matching.EDx.html">EDx</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../../api/mlquantify.meta.html">mlquantify.meta</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="mlquantify.meta.EnsembleQ.html">EnsembleQ</a></li>
+<li class="toctree-l2"><a class="reference internal" href="mlquantify.meta.QuaDapt.html">QuaDapt</a></li>
+<li class="toctree-l2"><a class="reference internal" href="mlquantify.meta.AggregativeBootstrap.html">AggregativeBootstrap</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../../api/mlquantify.metrics.html">mlquantify.metrics</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="mlquantify.metrics.AE.html">AE</a></li>
+<li class="toctree-l2"><a class="reference internal" href="mlquantify.metrics.SE.html">SE</a></li>
+<li class="toctree-l2"><a class="reference internal" href="mlquantify.metrics.MAE.html">MAE</a></li>
+<li class="toctree-l2"><a class="reference internal" href="mlquantify.metrics.MSE.html">MSE</a></li>
+<li class="toctree-l2"><a class="reference internal" href="mlquantify.metrics.KLD.html">KLD</a></li>
+<li class="toctree-l2"><a class="reference internal" href="mlquantify.metrics.RAE.html">RAE</a></li>
+<li class="toctree-l2"><a class="reference internal" href="mlquantify.metrics.NAE.html">NAE</a></li>
+<li class="toctree-l2"><a class="reference internal" href="mlquantify.metrics.NRAE.html">NRAE</a></li>
+<li class="toctree-l2"><a class="reference internal" href="mlquantify.metrics.NKLD.html">NKLD</a></li>
+<li class="toctree-l2"><a class="reference internal" href="mlquantify.metrics.NMD.html">NMD</a></li>
+<li class="toctree-l2"><a class="reference internal" href="mlquantify.metrics.RNOD.html">RNOD</a></li>
+<li class="toctree-l2"><a class="reference internal" href="mlquantify.metrics.VSE.html">VSE</a></li>
+<li class="toctree-l2"><a class="reference internal" href="mlquantify.metrics.CvM_L1.html">CvM_L1</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../../api/mlquantify.model_selection.html">mlquantify.model_selection</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="mlquantify.model_selection.GridSearchQ.html">GridSearchQ</a></li>
+<li class="toctree-l2"><a class="reference internal" href="mlquantify.model_selection.BaseProtocol.html">BaseProtocol</a></li>
+<li class="toctree-l2"><a class="reference internal" href="mlquantify.model_selection.APP.html">APP</a></li>
+<li class="toctree-l2"><a class="reference internal" href="mlquantify.model_selection.NPP.html">NPP</a></li>
+<li class="toctree-l2"><a class="reference internal" href="mlquantify.model_selection.UPP.html">UPP</a></li>
+<li class="toctree-l2"><a class="reference internal" href="mlquantify.model_selection.PPP.html">PPP</a></li>
+<li class="toctree-l2"><a class="reference internal" href="mlquantify.model_selection.apply_protocol.html">apply_protocol</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../../api/mlquantify.multiclass.html">mlquantify.multiclass</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="mlquantify.multiclass.binary_quantifier.html">binary_quantifier</a></li>
+<li class="toctree-l2"><a class="reference internal" href="mlquantify.multiclass.BinaryQuantifier.html">BinaryQuantifier</a></li>
+<li class="toctree-l2"><a class="reference internal" href="mlquantify.multiclass.MulticlassStrategy.html">MulticlassStrategy</a></li>
+<li class="toctree-l2"><a class="reference internal" href="mlquantify.multiclass.register_strategy.html">register_strategy</a></li>
+<li class="toctree-l2"><a class="reference internal" href="mlquantify.multiclass.get_strategy.html">get_strategy</a></li>
+<li class="toctree-l2"><a class="reference internal" href="mlquantify.multiclass.available_strategies.html">available_strategies</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../../api/mlquantify.neighbors.html">mlquantify.neighbors</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="mlquantify.neighbors.PWK.html">PWK</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1 current active has-children"><a class="reference internal" href="../../api/mlquantify.neural.html">mlquantify.neural</a><details open="open"><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul class="current">
+<li class="toctree-l2 current active"><a class="current reference internal" href="#">QuaNet</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../../api/mlquantify.representations.html">mlquantify.representations</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="mlquantify.representations.BaseRepresentation.html">BaseRepresentation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="mlquantify.representations.HistogramRepresentation.html">HistogramRepresentation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="mlquantify.representations.KDERepresentation.html">KDERepresentation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="mlquantify.representations.DistanceRepresentation.html">DistanceRepresentation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="mlquantify.representations.KernelMeanRepresentation.html">KernelMeanRepresentation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="mlquantify.representations.PredictionRepresentation.html">PredictionRepresentation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="mlquantify.representations.HardPredictionRepresentation.html">HardPredictionRepresentation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="mlquantify.representations.SoftPredictionRepresentation.html">SoftPredictionRepresentation</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../../api/mlquantify.solvers.html">mlquantify.solvers</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="mlquantify.solvers.solve_binary.html">solve_binary</a></li>
+<li class="toctree-l2"><a class="reference internal" href="mlquantify.solvers.ternary_search.html">ternary_search</a></li>
+<li class="toctree-l2"><a class="reference internal" href="mlquantify.solvers.solve_simplex.html">solve_simplex</a></li>
+<li class="toctree-l2"><a class="reference internal" href="mlquantify.solvers.minimize_prevalence.html">minimize_prevalence</a></li>
+<li class="toctree-l2"><a class="reference internal" href="mlquantify.solvers.minimize_prevalence_blocks.html">minimize_prevalence_blocks</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../../api/mlquantify.utils.html">mlquantify.utils</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="mlquantify.utils.get_prev_from_labels.html">get_prev_from_labels</a></li>
+<li class="toctree-l2"><a class="reference internal" href="mlquantify.utils.normalize_prevalence.html">normalize_prevalence</a></li>
+<li class="toctree-l2"><a class="reference internal" href="mlquantify.utils.load_quantifier.html">load_quantifier</a></li>
+<li class="toctree-l2"><a class="reference internal" href="mlquantify.utils.make_prevs.html">make_prevs</a></li>
+<li class="toctree-l2"><a class="reference internal" href="mlquantify.utils.apply_cross_validation.html">apply_cross_validation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="mlquantify.utils.simplex_uniform_kraemer.html">simplex_uniform_kraemer</a></li>
+<li class="toctree-l2"><a class="reference internal" href="mlquantify.utils.simplex_grid_sampling.html">simplex_grid_sampling</a></li>
+<li class="toctree-l2"><a class="reference internal" href="mlquantify.utils.simplex_uniform_sampling.html">simplex_uniform_sampling</a></li>
+<li class="toctree-l2"><a class="reference internal" href="mlquantify.utils.get_indexes_with_prevalence.html">get_indexes_with_prevalence</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../../api/mlquantify.visualization.html">mlquantify.visualization</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="mlquantify.visualization.DiagonalDisplay.html">DiagonalDisplay</a></li>
+<li class="toctree-l2"><a class="reference internal" href="mlquantify.visualization.BiasDisplay.html">BiasDisplay</a></li>
+<li class="toctree-l2"><a class="reference internal" href="mlquantify.visualization.ErrorByShiftDisplay.html">ErrorByShiftDisplay</a></li>
+<li class="toctree-l2"><a class="reference internal" href="mlquantify.visualization.PrevalenceDisplay.html">PrevalenceDisplay</a></li>
+<li class="toctree-l2"><a class="reference internal" href="mlquantify.visualization.ConfidenceRegionDisplay.html">ConfidenceRegionDisplay</a></li>
+</ul>
+</details></li>
+</ul>
+</div>
+</nav></div>
+    </div>
+  
   
   <div class="sidebar-primary-items__end sidebar-primary__section">
   </div>
@@ -464,6 +674,12 @@
         <i class="fa-solid fa-home"></i>
       </a>
     </li>
+    
+    <li class="breadcrumb-item"><a href="../../api/index.html" class="nav-link">API Reference</a></li>
+    
+    
+    <li class="breadcrumb-item"><a href="../../api/mlquantify.neural.html" class="nav-link">mlquantify.neural</a></li>
+    
     <li class="breadcrumb-item active" aria-current="page"><span class="ellipsis">QuaNet</span></li>
   </ul>
 </nav>
@@ -483,6 +699,222 @@
                   
   <section id="quanet">
 <h1>QuaNet<a class="headerlink" href="#quanet" title="Link to this heading">#</a></h1>
+<dl class="py class">
+<dt class="sig sig-object py" id="mlquantify.neural.QuaNet">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">mlquantify.neural.</span></span><span class="sig-name descname"><span class="pre">QuaNet</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">estimator</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fit_estimator</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.14)"><span class="pre">bool</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sample_size</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.14)"><span class="pre">int</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">100</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_epochs</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.14)"><span class="pre">int</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">100</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tr_iter</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.14)"><span class="pre">int</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">500</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">va_iter</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.14)"><span class="pre">int</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">100</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">lr</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.14)"><span class="pre">float</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0.001</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">lstm_hidden_size</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.14)"><span class="pre">int</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">64</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">lstm_nlayers</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.14)"><span class="pre">int</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ff_layers</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Sequence" title="(in Python v3.14)"><span class="pre">Sequence</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.14)"><span class="pre">int</span></a><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">(1024,</span> <span class="pre">512)</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">bidirectional</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.14)"><span class="pre">bool</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">random_state</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.14)"><span class="pre">int</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.14)"><span class="pre">None</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">qdrop_p</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.14)"><span class="pre">float</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0.5</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">patience</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.14)"><span class="pre">int</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">10</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">checkpointdir</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><span class="pre">str</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'./checkpoint_quanet'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">checkpointname</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><span class="pre">str</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.14)"><span class="pre">None</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">device</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><span class="pre">str</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'cuda'</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/luizfernandolj/mlquantify/tree/master/mlquantify/neural/_classes.py#L311-L724"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mlquantify.neural.QuaNet" title="Link to this definition">#</a></dt>
+<dd><p>QuaNet: deep neural quantification with an LSTM architecture.</p>
+<p>Learns a mapping from bags of instances to class-prevalence vectors using
+an LSTM network. During training, artificial bags are generated via the APP
+protocol; for each bag the network receives document embeddings, posterior
+probabilities, and simple quantification statistics (CC, PCC, EMQ …) and
+is trained to minimise the MSE against the true bag prevalences.</p>
+<p>Requires a base estimator that implements <code class="docutils literal notranslate"><span class="pre">fit</span></code>, <code class="docutils literal notranslate"><span class="pre">predict_proba</span></code>, and
+<code class="docutils literal notranslate"><span class="pre">transform</span></code> (the last to produce document embeddings). PyTorch must be
+installed.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>estimator</strong><span class="classifier">estimator</span></dt><dd><p>Base probabilistic classifier with <code class="docutils literal notranslate"><span class="pre">fit</span></code>, <code class="docutils literal notranslate"><span class="pre">predict_proba</span></code>, and
+<code class="docutils literal notranslate"><span class="pre">transform</span></code> methods.</p>
+</dd>
+<dt><strong>fit_estimator</strong><span class="classifier">bool, default=True</span></dt><dd><p>If <code class="docutils literal notranslate"><span class="pre">True</span></code>, fit the estimator inside <a class="reference internal" href="#mlquantify.neural.QuaNet.fit" title="mlquantify.neural.QuaNet.fit"><code class="xref py py-meth docutils literal notranslate"><span class="pre">fit</span></code></a>.</p>
+</dd>
+<dt><strong>sample_size</strong><span class="classifier">int, default=100</span></dt><dd><p>Bag size used by the APP protocol during training.</p>
+</dd>
+<dt><strong>n_epochs</strong><span class="classifier">int, default=100</span></dt><dd><p>Maximum number of training epochs.</p>
+</dd>
+<dt><strong>tr_iter</strong><span class="classifier">int, default=500</span></dt><dd><p>Training APP samplings per epoch.</p>
+</dd>
+<dt><strong>va_iter</strong><span class="classifier">int, default=100</span></dt><dd><p>Validation APP samplings per epoch.</p>
+</dd>
+<dt><strong>lr</strong><span class="classifier">float, default=1e-3</span></dt><dd><p>Learning rate for the Adam optimiser.</p>
+</dd>
+<dt><strong>lstm_hidden_size</strong><span class="classifier">int, default=64</span></dt><dd><p>Hidden size of the LSTM.</p>
+</dd>
+<dt><strong>lstm_nlayers</strong><span class="classifier">int, default=1</span></dt><dd><p>Number of LSTM layers.</p>
+</dd>
+<dt><strong>ff_layers</strong><span class="classifier">sequence of int, default=(1024, 512)</span></dt><dd><p>Sizes of the fully connected layers above the LSTM embedding.</p>
+</dd>
+<dt><strong>bidirectional</strong><span class="classifier">bool, default=True</span></dt><dd><p>Whether to use a bidirectional LSTM.</p>
+</dd>
+<dt><strong>qdrop_p</strong><span class="classifier">float, default=0.5</span></dt><dd><p>Dropout probability in the network.</p>
+</dd>
+<dt><strong>patience</strong><span class="classifier">int, default=10</span></dt><dd><p>Early-stopping patience (epochs without validation improvement).</p>
+</dd>
+<dt><strong>checkpointdir</strong><span class="classifier">str, default=’./checkpoint_quanet’</span></dt><dd><p>Directory for saving intermediate model weights.</p>
+</dd>
+<dt><strong>checkpointname</strong><span class="classifier">str or None, default=None</span></dt><dd><p>Checkpoint filename. <code class="docutils literal notranslate"><span class="pre">None</span></code> generates a random name.</p>
+</dd>
+<dt><strong>device</strong><span class="classifier">{‘cpu’, ‘cuda’}, default=’cuda’</span></dt><dd><p>Device used for PyTorch computations.</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Attributes<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt><strong>classes_</strong><span class="classifier">ndarray of shape (n_classes,)</span></dt><dd><p>Class labels seen during <code class="docutils literal notranslate"><span class="pre">fit</span></code>.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+<p class="rubric">References</p>
+<details class="sd-sphinx-override sd-dropdown sd-card sd-mb-3">
+<summary class="sd-summary-title sd-card-header">
+<span class="sd-summary-text">References</span><span class="sd-summary-state-marker sd-summary-chevron-right"><svg version="1.1" width="1.5em" height="1.5em" class="sd-octicon sd-octicon-chevron-right" viewBox="0 0 24 24" aria-hidden="true"><path d="M8.72 18.78a.75.75 0 0 1 0-1.06L14.44 12 8.72 6.28a.751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018l6.25 6.25a.75.75 0 0 1 0 1.06l-6.25 6.25a.75.75 0 0 1-1.06 0Z"></path></svg></span></summary><div class="sd-summary-content sd-card-body docutils">
+<div role="list" class="citation-list">
+<div class="citation" id="rc3b4c6299b82-1" role="doc-biblioentry">
+<span class="label"><span class="fn-bracket">[</span>1<span class="fn-bracket">]</span></span>
+<p class="sd-card-text">Esuli, A., Moreo, A., &amp; Sebastiani, F. (2018).
+A Recurrent Neural Network for Sentiment Quantification.
+<em>CIKM</em>, pp. 1775–1778.</p>
+</div>
+</div>
+</div>
+</details><p class="rubric">Examples</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Requires PyTorch and an estimator with a transform() method</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">mlquantify.neural</span><span class="w"> </span><span class="kn">import</span> <span class="n">QuaNet</span>
+<span class="n">q</span> <span class="o">=</span> <span class="n">QuaNet</span><span class="p">(</span><span class="n">estimator</span><span class="o">=</span><span class="n">my_embedding_classifier</span><span class="p">,</span> <span class="n">device</span><span class="o">=</span><span class="s1">&#39;cpu&#39;</span><span class="p">)</span>
+<span class="n">q</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">X_train</span><span class="p">,</span> <span class="n">y_train</span><span class="p">)</span>
+<span class="n">q</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">X_test</span><span class="p">)</span>
+</pre></div>
+</div>
+<dl class="py method">
+<dt class="sig sig-object py" id="mlquantify.neural.QuaNet.clean_checkpoint">
+<span class="sig-name descname"><span class="pre">clean_checkpoint</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference external" href="https://github.com/luizfernandolj/mlquantify/tree/master/mlquantify/neural/_classes.py#L716-L719"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mlquantify.neural.QuaNet.clean_checkpoint" title="Link to this definition">#</a></dt>
+<dd><p>Remove the checkpoint file saved during training, if it exists.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="mlquantify.neural.QuaNet.clean_checkpoint_dir">
+<span class="sig-name descname"><span class="pre">clean_checkpoint_dir</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference external" href="https://github.com/luizfernandolj/mlquantify/tree/master/mlquantify/neural/_classes.py#L721-L724"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mlquantify.neural.QuaNet.clean_checkpoint_dir" title="Link to this definition">#</a></dt>
+<dd><p>Remove the entire checkpoint directory and all its contents.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="mlquantify.neural.QuaNet.fit">
+<span class="sig-name descname"><span class="pre">fit</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/luizfernandolj/mlquantify/tree/master/mlquantify/utils/_decorators.py#L474-L588"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mlquantify.neural.QuaNet.fit" title="Link to this definition">#</a></dt>
+<dd><p>Fit QuaNet to the training data.</p>
+<p>Optionally fits the base estimator, then trains the LSTM network
+on artificially generated bags sampled with the UPP protocol.
+Uses early stopping based on the validation loss.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>X</strong><span class="classifier">array-like of shape (n_samples, n_features)</span></dt><dd><p>Training feature matrix. Must be compatible with both
+<code class="docutils literal notranslate"><span class="pre">estimator.fit</span></code> and <code class="docutils literal notranslate"><span class="pre">estimator.transform</span></code>.</p>
+</dd>
+<dt><strong>y</strong><span class="classifier">array-like of shape (n_samples,)</span></dt><dd><p>Training class labels.</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt><strong>self</strong><span class="classifier">QuaNet</span></dt><dd><p>The fitted quantifier.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+<p class="rubric">Notes</p>
+<p>When <code class="docutils literal notranslate"><span class="pre">fit_estimator=True</span></code> the data is internally split into a
+classifier-training set (60 %), a network-training set (32 %), and
+a validation set (8 %). When <code class="docutils literal notranslate"><span class="pre">fit_estimator=False</span></code> only the
+train/validation split (80 %/20 %) is performed.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="mlquantify.neural.QuaNet.get_metadata_routing">
+<span class="sig-name descname"><span class="pre">get_metadata_routing</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference external" href="https://github.com/luizfernandolj/mlquantify/tree/master/mlquantify/neural.py"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mlquantify.neural.QuaNet.get_metadata_routing" title="Link to this definition">#</a></dt>
+<dd><p>Get metadata routing of this object.</p>
+<p>Please check <a class="reference external" href="https://scikit-learn.org/stable/metadata_routing.html#metadata-routing" title="(in scikit-learn v1.9)"><span class="xref std std-ref">User Guide</span></a> on how the routing
+mechanism works.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>routing</strong><span class="classifier">MetadataRequest</span></dt><dd><p>A <a class="reference external" href="https://scikit-learn.org/stable/modules/generated/sklearn.utils.metadata_routing.MetadataRequest.html#sklearn.utils.metadata_routing.MetadataRequest" title="(in scikit-learn v1.9)"><code class="xref py py-class docutils literal notranslate"><span class="pre">MetadataRequest</span></code></a> encapsulating
+routing information.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="mlquantify.neural.QuaNet.get_params">
+<span class="sig-name descname"><span class="pre">get_params</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">deep</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/luizfernandolj/mlquantify/tree/master/mlquantify/base_aggregative.py#L208-L227"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mlquantify.neural.QuaNet.get_params" title="Link to this definition">#</a></dt>
+<dd><p>Get parameters for this estimator.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>deep</strong><span class="classifier">bool, default=True</span></dt><dd><p>If True, will return the parameters for this estimator and
+contained subobjects that are estimators.</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt><strong>params</strong><span class="classifier">dict</span></dt><dd><p>Parameter names mapped to their values.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="mlquantify.neural.QuaNet.predict">
+<span class="sig-name descname"><span class="pre">predict</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/luizfernandolj/mlquantify/tree/master/mlquantify/neural/_classes.py#L611-L643"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mlquantify.neural.QuaNet.predict" title="Link to this definition">#</a></dt>
+<dd><p>Predict class prevalences for a test bag.</p>
+<p>Computes posterior probabilities and document embeddings with the base
+estimator, collects simple quantification statistics (CC, GACC, PCC,
+GPACC, EMQ) as auxiliary inputs, and forwards everything through the
+trained <code class="xref py py-class docutils literal notranslate"><span class="pre">QuaNetModule</span></code>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>X</strong><span class="classifier">array-like of shape (n_samples, n_features)</span></dt><dd><p>Test feature matrix.</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt><strong>prevalences</strong><span class="classifier">ndarray of shape (n_classes,)</span></dt><dd><p>Estimated class prevalence vector for the test bag, normalised
+to sum to 1.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="mlquantify.neural.QuaNet.save_quantifier">
+<span class="sig-name descname"><span class="pre">save_quantifier</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">path</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><span class="pre">str</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.14)"><span class="pre">None</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.14)"><span class="pre">None</span></a></span></span><a class="reference external" href="https://github.com/luizfernandolj/mlquantify/tree/master/mlquantify/base.py#L99-L104"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mlquantify.neural.QuaNet.save_quantifier" title="Link to this definition">#</a></dt>
+<dd><p>Save the quantifier instance to a file.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="mlquantify.neural.QuaNet.set_params">
+<span class="sig-name descname"><span class="pre">set_params</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">params</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/luizfernandolj/mlquantify/tree/master/mlquantify/base_aggregative.py#L229-L249"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mlquantify.neural.QuaNet.set_params" title="Link to this definition">#</a></dt>
+<dd><p>Set the parameters of this estimator.</p>
+<p>The method works on simple estimators as well as on nested objects
+(such as <a class="reference external" href="https://scikit-learn.org/stable/modules/generated/sklearn.pipeline.Pipeline.html#sklearn.pipeline.Pipeline" title="(in scikit-learn v1.9)"><code class="xref py py-class docutils literal notranslate"><span class="pre">Pipeline</span></code></a>). The latter have
+parameters of the form <code class="docutils literal notranslate"><span class="pre">&lt;component&gt;__&lt;parameter&gt;</span></code> so that it’s
+possible to update each component of a nested object.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>**params</strong><span class="classifier">dict</span></dt><dd><p>Estimator parameters.</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt><strong>self</strong><span class="classifier">estimator instance</span></dt><dd><p>Estimator instance.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
 </section>
 
 
@@ -495,6 +927,24 @@
   
     <div class="footer-article-item">
 <div class="prev-next-area">
+    <a class="left-prev"
+       href="../../api/mlquantify.neural.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title">mlquantify.neural</p>
+      </div>
+    </a>
+    <a class="right-next"
+       href="../../api/mlquantify.representations.html"
+       title="next page">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">mlquantify.representations</p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
+    </a>
 </div></div>
   
 </div>
@@ -509,6 +959,32 @@
                 <dialog id="pst-secondary-sidebar-modal"></dialog>
                 <div id="pst-secondary-sidebar" class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
 
+
+  <div class="sidebar-secondary-item">
+<div
+    id="pst-page-navigation-heading-2"
+    class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> On this page
+  </div>
+  <nav id="pst-page-toc-nav" class="page-toc" aria-labelledby="pst-page-navigation-heading-2">
+    
+<ul class="pst-show_toc_level nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#mlquantify.neural.QuaNet"><code class="docutils literal notranslate"><span class="pre">QuaNet</span></code></a><ul class="nav section-nav flex-column visible">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#mlquantify.neural.QuaNet.clean_checkpoint"><code class="docutils literal notranslate"><span class="pre">clean_checkpoint</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#mlquantify.neural.QuaNet.clean_checkpoint_dir"><code class="docutils literal notranslate"><span class="pre">clean_checkpoint_dir</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#mlquantify.neural.QuaNet.fit"><code class="docutils literal notranslate"><span class="pre">fit</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#mlquantify.neural.QuaNet.get_metadata_routing"><code class="docutils literal notranslate"><span class="pre">get_metadata_routing</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#mlquantify.neural.QuaNet.get_params"><code class="docutils literal notranslate"><span class="pre">get_params</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#mlquantify.neural.QuaNet.predict"><code class="docutils literal notranslate"><span class="pre">predict</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#mlquantify.neural.QuaNet.save_quantifier"><code class="docutils literal notranslate"><span class="pre">save_quantifier</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#mlquantify.neural.QuaNet.set_params"><code class="docutils literal notranslate"><span class="pre">set_params</span></code></a></li>
+</ul>
+</li>
+</ul>
+
+
+
+  </nav></div>
 
   <div class="sidebar-secondary-item">
 
