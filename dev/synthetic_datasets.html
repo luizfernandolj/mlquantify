@@ -7,19 +7,19 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
-<meta property="og:title" content="3. Non-Aggregative Quantification" />
+<meta property="og:title" content="6. Synthetic Datasets" />
 <meta property="og:type" content="website" />
-<meta property="og:url" content="non_aggregative_quantification.html" />
+<meta property="og:url" content="synthetic_datasets.html" />
 <meta property="og:site_name" content="mlquantify" />
-<meta property="og:description" content="Non-aggregative quantification methods estimate class prevalence directly from the data without relying on aggregating individual predictions. These methods often involve specialized algorithms tha..." />
+<meta property="og:description" content="make_quantification is the quantification analogue of sklearn.datasets.make_classification. Where a classification generator hands you one labelled table, a quantification generator must hand you m..." />
 <meta property="og:image:width" content="1146" />
 <meta property="og:image:height" content="600" />
-<meta property="og:image" content="_images/social_previews/summary_non_aggregative_quantification_673d9992.png" />
-<meta property="og:image:alt" content="Non-aggregative quantification methods estimate class prevalence directly from the data without relying on aggregating individual predictions. These methods often involve specialized algorithms tha..." />
-<meta name="description" content="Non-aggregative quantification methods estimate class prevalence directly from the data without relying on aggregating individual predictions. These methods often involve specialized algorithms tha..." />
+<meta property="og:image" content="_images/social_previews/summary_synthetic_datasets_c50ed275.png" />
+<meta property="og:image:alt" content="make_quantification is the quantification analogue of sklearn.datasets.make_classification. Where a classification generator hands you one labelled table, a quantification generator must hand you m..." />
+<meta name="description" content="make_quantification is the quantification analogue of sklearn.datasets.make_classification. Where a classification generator hands you one labelled table, a quantification generator must hand you m..." />
 <meta name="twitter:card" content="summary_large_image" />
 
-    <title>3. Non-Aggregative Quantification &#8212; mlquantify</title>
+    <title>6. Synthetic Datasets &#8212; mlquantify</title>
   
   
   
@@ -63,7 +63,7 @@
     <script src="_static/copybutton.js?v=f281be69"></script>
     <script src="_static/design-tabs.js?v=f930bc37"></script>
     <script async="async" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
-    <script>DOCUMENTATION_OPTIONS.pagename = 'non_aggregative_quantification';</script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'synthetic_datasets';</script>
     <script>
         DOCUMENTATION_OPTIONS.theme_version = '0.19.0';
         DOCUMENTATION_OPTIONS.theme_switcher_json_url = 'https://luizfernandolj.github.io/mlquantify/switcher.json';
@@ -73,10 +73,10 @@
         </script>
     <script>DOCUMENTATION_OPTIONS.search_as_you_type = false;</script>
     <script src="_static/dev_banner.js?v=1edec9a1"></script>
-    <link rel="canonical" href="https://luizfernandolj.github.io/mlquantify/non_aggregative_quantification.html" />
+    <link rel="canonical" href="https://luizfernandolj.github.io/mlquantify/synthetic_datasets.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="next" title="3.1. Mixture Models for Non-Aggregative Quantification" href="modules/mixture_models_non_agg.html" />
-    <link rel="prev" title="2.7. Nearest Neighbours" href="modules/neighbors.html" />
+    <link rel="next" title="7. Confidence Regions for Quantification" href="modules/confidence_intervals.html" />
+    <link rel="prev" title="5.3. Evaluation Metrics" href="modules/evaluation_metrics.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
   <meta name="docsearch:version" content="" />
@@ -464,7 +464,7 @@
 <li class="toctree-l2"><a class="reference internal" href="modules/neighbors.html">2.7. Nearest Neighbours</a></li>
 </ul>
 </details></li>
-<li class="toctree-l1 current active has-children"><a class="current reference internal" href="#">3. Non Aggregative Quantification</a><details open="open"><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l1 has-children"><a class="reference internal" href="non_aggregative_quantification.html">3. Non Aggregative Quantification</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
 <li class="toctree-l2"><a class="reference internal" href="modules/mixture_models_non_agg.html">3.1. Mixture Models for Non-Aggregative Quantification</a></li>
 </ul>
 </details></li>
@@ -483,7 +483,7 @@
 
 </ul>
 </details></li>
-<li class="toctree-l1"><a class="reference internal" href="synthetic_datasets.html">6. Synthetic Datasets</a></li>
+<li class="toctree-l1 current active"><a class="current reference internal" href="#">6. Synthetic Datasets</a></li>
 <li class="toctree-l1"><a class="reference internal" href="modules/confidence_intervals.html">7. Confidence Intervals</a></li>
 <li class="toctree-l1"><a class="reference internal" href="visualization.html">8. Visualization</a></li>
 <li class="toctree-l1"><a class="reference internal" href="building_a_quantifier.html">9. Building a Quantifier</a></li>
@@ -536,7 +536,7 @@
     
     <li class="breadcrumb-item"><a href="user_guide.html" class="nav-link">User Guide</a></li>
     
-    <li class="breadcrumb-item active" aria-current="page"><span class="ellipsis"><span class="section-number">3. </span>Non-Aggregative Quantification</span></li>
+    <li class="breadcrumb-item active" aria-current="page"><span class="ellipsis"><span class="section-number">6. </span>Synthetic Datasets</span></li>
   </ul>
 </nav>
 </div>
@@ -553,19 +553,180 @@
 <div id="searchbox"></div>
                 <article class="bd-article">
                   
-  <section id="non-aggregative-quantification">
-<span id="id1"></span><h1><span class="section-number">3. </span>Non-Aggregative Quantification<a class="headerlink" href="#non-aggregative-quantification" title="Link to this heading">#</a></h1>
-<p>Non-aggregative quantification methods estimate class prevalence directly from the data without relying on aggregating individual predictions. These methods often involve specialized algorithms that are designed to infer the overall distribution of classes in a dataset based on certain characteristics or patterns observed in the data.
-Unlike aggregative methods, non-aggregative approaches do not follow the traditional aggregate step after making individual predictions. Instead, they may utilize techniques such as distribution matching, density estimation, or other statistical methods to directly estimate class prevalences.</p>
-<p>The main non-aggregative quantification methods will be defined next, with details about their specific approaches and differences.</p>
-<div class="toctree-wrapper compound">
-<ul>
-<li class="toctree-l1"><a class="reference internal" href="modules/mixture_models_non_agg.html">3.1. Mixture Models for Non-Aggregative Quantification</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="modules/mixture_models_non_agg.html#hdx-hellinger-distance-x-similarity">3.1.1. HDx: Hellinger Distance x-Similarity</a></li>
-</ul>
-</li>
+  <section id="synthetic-datasets">
+<span id="id1"></span><h1><span class="section-number">6. </span>Synthetic Datasets<a class="headerlink" href="#synthetic-datasets" title="Link to this heading">#</a></h1>
+<p><a class="reference internal" href="modules/generated/mlquantify.datasets.make_quantification.html#mlquantify.datasets.make_quantification" title="mlquantify.datasets.make_quantification"><code class="xref py py-func docutils literal notranslate"><span class="pre">make_quantification</span></code></a> is the quantification analogue of
+<a class="reference external" href="https://scikit-learn.org/stable/modules/generated/sklearn.datasets.make_classification.html#sklearn.datasets.make_classification" title="(in scikit-learn v1.9)"><code class="xref py py-func docutils literal notranslate"><span class="pre">sklearn.datasets.make_classification</span></code></a>. Where a classification generator
+hands you one labelled table, a <em>quantification</em> generator must hand you many
+<strong>bags</strong> — test samples whose class proportions vary — together with each bag’s
+<strong>true prevalence</strong>, because that vector (not the individual labels) is what a
+quantifier is scored against.</p>
+<section id="how-it-works">
+<h2><span class="section-number">6.1. </span>How it works<a class="headerlink" href="#how-it-works" title="Link to this heading">#</a></h2>
+<p>The generator works in two stages:</p>
+<ol class="arabic simple">
+<li><p><strong>Build one labelled population.</strong> Internally it calls
+<a class="reference external" href="https://scikit-learn.org/stable/modules/generated/sklearn.datasets.make_classification.html#sklearn.datasets.make_classification" title="(in scikit-learn v1.9)"><code class="xref py py-func docutils literal notranslate"><span class="pre">make_classification</span></code></a> once to create a pool of
+<code class="docutils literal notranslate"><span class="pre">n_samples</span></code> points, whose difficulty you control with <code class="docutils literal notranslate"><span class="pre">class_sep</span></code>
+(cluster separation), <code class="docutils literal notranslate"><span class="pre">flip_y</span></code> (label noise), <code class="docutils literal notranslate"><span class="pre">n_features</span></code> and
+<code class="docutils literal notranslate"><span class="pre">weights</span></code>.</p></li>
+<li><p><strong>Draw ``n_batches`` bags from that population</strong>, where each bag’s class
+balance, feature positions, or labelling are perturbed according to the
+chosen <code class="docutils literal notranslate"><span class="pre">shift_type</span></code>.</p></li>
+</ol>
+<p>The call returns three aligned objects:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">mlquantify.datasets</span><span class="w"> </span><span class="kn">import</span> <span class="n">make_quantification</span>
+
+<span class="n">Xs</span><span class="p">,</span> <span class="n">ys</span><span class="p">,</span> <span class="n">prevalences</span> <span class="o">=</span> <span class="n">make_quantification</span><span class="p">(</span><span class="n">n_batches</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">random_state</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+<span class="c1">#   Xs           : list of feature matrices, one per bag</span>
+<span class="c1">#   ys           : list of label vectors,    one per bag</span>
+<span class="c1">#   prevalences  : (n_batches, n_classes) array of TRUE prevalences</span>
+</pre></div>
+</div>
+<p><code class="docutils literal notranslate"><span class="pre">prevalences[i]</span></code> is the quantification target for bag <code class="docutils literal notranslate"><span class="pre">i</span></code> — feed <code class="docutils literal notranslate"><span class="pre">Xs[i]</span></code> to
+a fitted quantifier and compare its prediction against <code class="docutils literal notranslate"><span class="pre">prevalences[i]</span></code>.</p>
+</section>
+<section id="controlling-the-prevalence-prior-shift">
+<h2><span class="section-number">6.2. </span>Controlling the prevalence (prior shift)<a class="headerlink" href="#controlling-the-prevalence-prior-shift" title="Link to this heading">#</a></h2>
+<p>By default <code class="docutils literal notranslate"><span class="pre">shift_type=&quot;prior&quot;</span></code>: the class prevalence <span class="math notranslate nohighlight">\(P(y)\)</span> changes from
+bag to bag while the class-conditional features <span class="math notranslate nohighlight">\(P(x \mid y)\)</span> stay fixed.
+The <code class="docutils literal notranslate"><span class="pre">prevalence</span></code> argument decides <em>how</em> each bag’s target prevalence is drawn:</p>
+<div class="pst-scrollable-table-container"><table class="table">
+<colgroup>
+<col style="width: 22.0%" />
+<col style="width: 78.0%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p><code class="docutils literal notranslate"><span class="pre">prevalence</span></code></p></th>
+<th class="head"><p>Behaviour</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">&quot;uniform&quot;</span></code></p></td>
+<td><p>Prevalences spread uniformly over the probability simplex — the full
+range of shifts (the default).</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">&quot;grid&quot;</span></code></p></td>
+<td><p>A regular grid over the simplex (the Artificial Prevalence Protocol); the
+bag count is then set by <code class="docutils literal notranslate"><span class="pre">n_prevalences</span></code> and <code class="docutils literal notranslate"><span class="pre">repeats</span></code>.</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">&quot;natural&quot;</span></code></p></td>
+<td><p>Bags drawn i.i.d. from the population, so prevalence fluctuates only with
+sampling noise around <code class="docutils literal notranslate"><span class="pre">weights</span></code>.</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">&quot;dirichlet&quot;</span></code></p></td>
+<td><p>From a Dirichlet centred on <code class="docutils literal notranslate"><span class="pre">target_prevalence</span></code> with spread set by
+<code class="docutils literal notranslate"><span class="pre">concentration</span></code> — high concentration pins bags to the target, low
+concentration spreads them out.</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># bags concentrated near a 70/30 split</span>
+<span class="n">Xs</span><span class="p">,</span> <span class="n">ys</span><span class="p">,</span> <span class="n">prevs</span> <span class="o">=</span> <span class="n">make_quantification</span><span class="p">(</span>
+    <span class="n">n_batches</span><span class="o">=</span><span class="mi">30</span><span class="p">,</span> <span class="n">prevalence</span><span class="o">=</span><span class="s2">&quot;dirichlet&quot;</span><span class="p">,</span>
+    <span class="n">target_prevalence</span><span class="o">=</span><span class="p">[</span><span class="mf">0.7</span><span class="p">,</span> <span class="mf">0.3</span><span class="p">],</span> <span class="n">concentration</span><span class="o">=</span><span class="mi">150</span><span class="p">,</span> <span class="n">random_state</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+</pre></div>
+</div>
+</section>
+<section id="shift-types">
+<h2><span class="section-number">6.3. </span>Shift types<a class="headerlink" href="#shift-types" title="Link to this heading">#</a></h2>
+<p>Beyond prior shift, <code class="docutils literal notranslate"><span class="pre">shift_type</span></code> can request the other two canonical kinds of
+dataset shift. Each is realised by a different per-bag operation on the <em>same</em>
+fixed population:</p>
+<div class="pst-scrollable-table-container"><table class="table">
+<colgroup>
+<col style="width: 16.0%" />
+<col style="width: 38.0%" />
+<col style="width: 46.0%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p><code class="docutils literal notranslate"><span class="pre">shift_type</span></code></p></th>
+<th class="head"><p>What changes</p></th>
+<th class="head"><p>How a bag is built</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">&quot;prior&quot;</span></code></p></td>
+<td><p><span class="math notranslate nohighlight">\(P(y)\)</span> — the class balance</p></td>
+<td><p>Resample the population to a target prevalence; the labels are the
+population’s own.</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">&quot;covariate&quot;</span></code></p></td>
+<td><p><span class="math notranslate nohighlight">\(P(x)\)</span> — where the features sit</p></td>
+<td><p><strong>Translate</strong> the bag’s features by a random vector, then label them with
+a <em>fixed</em> reference boundary. The boundary stays put while the cloud
+slides across it (<code class="docutils literal notranslate"><span class="pre">covariate_scale</span></code> sets the distance).</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">&quot;concept&quot;</span></code></p></td>
+<td><p><span class="math notranslate nohighlight">\(P(y \mid x)\)</span> — the labelling rule</p></td>
+<td><p>Keep the features in place but <strong>rotate</strong> the reference boundary and
+relabel, so the same point can change class (<code class="docutils literal notranslate"><span class="pre">concept_strength</span></code> sets the
+rotation).</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>Both covariate and concept shift use a single <strong>reference decision boundary</strong> — a
+logistic-regression rule fit on the population. Covariate shift moves the
+features across that boundary; concept shift rotates the boundary itself.</p>
+</section>
+<section id="the-decision-boundary">
+<h2><span class="section-number">6.4. </span>The decision boundary<a class="headerlink" href="#the-decision-boundary" title="Link to this heading">#</a></h2>
+<p>Because that boundary is explicit, <code class="docutils literal notranslate"><span class="pre">return_boundary=True</span></code> hands it back, so the
+exact labelling rule is known rather than hidden:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">Xs</span><span class="p">,</span> <span class="n">ys</span><span class="p">,</span> <span class="n">prevs</span><span class="p">,</span> <span class="n">boundary</span> <span class="o">=</span> <span class="n">make_quantification</span><span class="p">(</span>
+    <span class="n">n_batches</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">shift_type</span><span class="o">=</span><span class="s2">&quot;covariate&quot;</span><span class="p">,</span> <span class="n">return_boundary</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">random_state</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+</pre></div>
+</div>
+<p><code class="docutils literal notranslate"><span class="pre">boundary</span></code> is a <code class="docutils literal notranslate"><span class="pre">DecisionBoundary</span></code> namedtuple with per-bag <code class="docutils literal notranslate"><span class="pre">coef</span></code> and
+<code class="docutils literal notranslate"><span class="pre">intercept</span></code> arrays. For a <strong>binary</strong> problem <code class="docutils literal notranslate"><span class="pre">coef</span></code> has shape
+<code class="docutils literal notranslate"><span class="pre">(n_bags,</span> <span class="pre">n_features)</span></code> and <code class="docutils literal notranslate"><span class="pre">intercept</span></code> <code class="docutils literal notranslate"><span class="pre">(n_bags,)</span></code> — the hyperplane
+<code class="docutils literal notranslate"><span class="pre">coef[i]</span> <span class="pre">·</span> <span class="pre">x</span> <span class="pre">+</span> <span class="pre">intercept[i]</span> <span class="pre">=</span> <span class="pre">0</span></code>. Covariate (and prior) bags share one fixed
+boundary, so all rows are identical; <strong>concept</strong> bags each carry their own
+rotated boundary.</p>
+<p>For <code class="docutils literal notranslate"><span class="pre">k</span> <span class="pre">&gt;</span> <span class="pre">2</span></code> classes the shapes become <code class="docutils literal notranslate"><span class="pre">(n_bags,</span> <span class="pre">k,</span> <span class="pre">n_features)</span></code> and
+<code class="docutils literal notranslate"><span class="pre">(n_bags,</span> <span class="pre">k)</span></code> — one weight vector per class — and the label is
+<code class="docutils literal notranslate"><span class="pre">argmax(coef[i]</span> <span class="pre">·</span> <span class="pre">x</span> <span class="pre">+</span> <span class="pre">intercept[i])</span></code>, which carves the feature space into <code class="docutils literal notranslate"><span class="pre">k</span></code>
+piecewise-linear regions rather than splitting it with a single line.</p>
+</section>
+<section id="stacking-shifts">
+<h2><span class="section-number">6.5. </span>Stacking shifts<a class="headerlink" href="#stacking-shifts" title="Link to this heading">#</a></h2>
+<p>Real data rarely shifts in one way only. Pass a <strong>list</strong> to <code class="docutils literal notranslate"><span class="pre">shift_type</span></code> to
+combine them:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">Xs</span><span class="p">,</span> <span class="n">ys</span><span class="p">,</span> <span class="n">prevs</span> <span class="o">=</span> <span class="n">make_quantification</span><span class="p">(</span>
+    <span class="n">n_batches</span><span class="o">=</span><span class="mi">50</span><span class="p">,</span> <span class="n">shift_type</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;prior&quot;</span><span class="p">,</span> <span class="s2">&quot;covariate&quot;</span><span class="p">,</span> <span class="s2">&quot;concept&quot;</span><span class="p">],</span>
+    <span class="n">prevalence</span><span class="o">=</span><span class="s2">&quot;uniform&quot;</span><span class="p">,</span> <span class="n">covariate_scale</span><span class="o">=</span><span class="mf">0.4</span><span class="p">,</span> <span class="n">concept_strength</span><span class="o">=</span><span class="mf">0.3</span><span class="p">,</span>
+    <span class="n">random_state</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Stacked shifts compose per bag in a fixed order: covariate translates the
+features, concept rotates the boundary, the bag is relabelled by that boundary,
+and prior finally resamples it to the target prevalence — so every bag can differ
+in position, labelling rule <strong>and</strong> class balance at once.</p>
+</section>
+<section id="training-data-and-difficulty">
+<h2><span class="section-number">6.6. </span>Training data and difficulty<a class="headerlink" href="#training-data-and-difficulty" title="Link to this heading">#</a></h2>
+<p>Set <code class="docutils literal notranslate"><span class="pre">return_train=True</span></code> to also receive a clean training sample (drawn from a
+disjoint half of the population at <code class="docutils literal notranslate"><span class="pre">train_prevalence</span></code>), so you can fit a
+quantifier and score it on the shifted bags in a single call:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">X_train</span><span class="p">,</span> <span class="n">y_train</span><span class="p">,</span> <span class="n">Xs</span><span class="p">,</span> <span class="n">ys</span><span class="p">,</span> <span class="n">prevs</span> <span class="o">=</span> <span class="n">make_quantification</span><span class="p">(</span>
+    <span class="n">n_batches</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> <span class="n">return_train</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">train_prevalence</span><span class="o">=</span><span class="p">[</span><span class="mf">0.5</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">],</span>
+    <span class="n">random_state</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>How hard the bags are to quantify is governed by the underlying problem:
+<code class="docutils literal notranslate"><span class="pre">class_sep</span></code> (lower is harder), <code class="docutils literal notranslate"><span class="pre">flip_y</span></code> (more label noise), <code class="docutils literal notranslate"><span class="pre">n_features</span></code>
+(more noise dimensions) and <code class="docutils literal notranslate"><span class="pre">batch_size</span></code> (smaller bags are noisier).</p>
+<div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<ul class="simple">
+<li><p><a class="reference internal" href="examples/plot_synthetic_intro.html#sphx-synthetic-intro"><span class="std std-ref">Visualizing synthetic quantification data</span></a> and the surrounding gallery section visualise
+every option above with plots.</p></li>
+<li><p><a class="reference internal" href="modules/generated/mlquantify.datasets.make_quantification.html#mlquantify.datasets.make_quantification" title="mlquantify.datasets.make_quantification"><code class="xref py py-func docutils literal notranslate"><span class="pre">make_quantification</span></code></a> — the full parameter reference.</p></li>
 </ul>
 </div>
+</section>
 </section>
 
 
@@ -579,20 +740,20 @@ Unlike aggregative methods, non-aggregative approaches do not follow the traditi
     <div class="footer-article-item">
 <div class="prev-next-area">
     <a class="left-prev"
-       href="modules/neighbors.html"
+       href="modules/evaluation_metrics.html"
        title="previous page">
       <i class="fa-solid fa-angle-left"></i>
       <div class="prev-next-info">
         <p class="prev-next-subtitle">previous</p>
-        <p class="prev-next-title"><span class="section-number">2.7. </span>Nearest Neighbours</p>
+        <p class="prev-next-title"><span class="section-number">5.3. </span>Evaluation Metrics</p>
       </div>
     </a>
     <a class="right-next"
-       href="modules/mixture_models_non_agg.html"
+       href="modules/confidence_intervals.html"
        title="next page">
       <div class="prev-next-info">
         <p class="prev-next-subtitle">next</p>
-        <p class="prev-next-title"><span class="section-number">3.1. </span>Mixture Models for Non-Aggregative Quantification</p>
+        <p class="prev-next-title"><span class="section-number">7. </span>Confidence Regions for Quantification</p>
       </div>
       <i class="fa-solid fa-angle-right"></i>
     </a>
@@ -612,9 +773,26 @@ Unlike aggregative methods, non-aggregative approaches do not follow the traditi
 
 
   <div class="sidebar-secondary-item">
+<div
+    id="pst-page-navigation-heading-2"
+    class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> On this page
+  </div>
+  <nav id="pst-page-toc-nav" class="page-toc" aria-labelledby="pst-page-navigation-heading-2">
+    <ul class="pst-show_toc_level nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#how-it-works">6.1. How it works</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#controlling-the-prevalence-prior-shift">6.2. Controlling the prevalence (prior shift)</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#shift-types">6.3. Shift types</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#the-decision-boundary">6.4. The decision boundary</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#stacking-shifts">6.5. Stacking shifts</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#training-data-and-difficulty">6.6. Training data and difficulty</a></li>
+</ul>
+  </nav></div>
+
+  <div class="sidebar-secondary-item">
 
   <div class="tocsection sourcelink">
-    <a href="_sources/non_aggregative_quantification.rst.txt">
+    <a href="_sources/synthetic_datasets.rst.txt">
       <i class="fa-solid fa-file-lines"></i> Show Source
     </a>
   </div>
