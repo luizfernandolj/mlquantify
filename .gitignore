@@ -191,3 +191,4 @@ mlquantify/**/*_fast.c
 *.pyd
 build/
 VERSION.txt
+mlquantify/datasets/_data/
