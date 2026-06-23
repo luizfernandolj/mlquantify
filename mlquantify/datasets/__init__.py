@@ -38,7 +38,7 @@ from ._image import (
 from ._graph import fetch_planetoid_cora_citeseer_pubmed
 from ._synthetic import fetch_sea_concepts
 from ._lequa import fetch_lequa2024
-from ._base import Bunch, get_data_home, fetch_remote
+from ._base import Bunch, get_data_home, fetch_remote, set_progress_hook, get_progress_hook
 from ._protocol import make_protocol
 
 __all__ = [
@@ -52,5 +52,6 @@ __all__ = [
     "fetch_sea_concepts",
     "fetch_lequa2024",
     "make_protocol", "Bunch", "get_data_home", "fetch_remote",
+    "set_progress_hook", "get_progress_hook",
     "make_quantification",
 ]

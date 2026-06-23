@@ -59,10 +59,10 @@ def fetch_mushroom(*, data_home=None, download_if_missing=True, return_X_y=False
 
     Examples
     --------
-    >>> from datasets import fetch_mushroom
-    >>> b = fetch_mushroom()
-    >>> b.data.shape
-    >>> # (8124, 22)
+    >>> from mlquantify.datasets import fetch_mushroom
+    >>> b = fetch_mushroom()  # doctest: +SKIP
+    >>> b.data.shape  # doctest: +SKIP
+    (8124, 22)
     """
     import pandas as pd
     d = get_data_home(data_home)
@@ -129,8 +129,8 @@ def fetch_banknote_authentication(*, data_home=None, download_if_missing=True, r
 
     Examples
     --------
-    >>> b = fetch_banknote_authentication(); b.data.shape
-    >>> # (1372, 4)
+    >>> b = fetch_banknote_authentication(); b.data.shape  # doctest: +SKIP
+    (1372, 4)
     """
     import pandas as pd
     d = get_data_home(data_home)
@@ -197,8 +197,8 @@ def fetch_haberman_survival(*, data_home=None, download_if_missing=True, return_
 
     Examples
     --------
-    >>> b = fetch_haberman_survival(); b.data.shape
-    >>> # (306, 3)
+    >>> b = fetch_haberman_survival(); b.data.shape  # doctest: +SKIP
+    (306, 3)
     """
     import pandas as pd
     d = get_data_home(data_home)
@@ -265,8 +265,8 @@ def fetch_dry_bean(*, data_home=None, download_if_missing=True, return_X_y=False
 
     Examples
     --------
-    >>> b = fetch_dry_bean(); b.data.shape
-    >>> # (13611, 16)
+    >>> b = fetch_dry_bean(); b.data.shape  # doctest: +SKIP
+    (13611, 16)
     """
     import pandas as pd
     d = get_data_home(data_home)
@@ -333,8 +333,8 @@ def fetch_covertype(*, data_home=None, download_if_missing=True, return_X_y=Fals
 
     Examples
     --------
-    >>> b = fetch_covertype(); b.data.shape
-    >>> # (581012, 54)
+    >>> b = fetch_covertype(); b.data.shape  # doctest: +SKIP
+    (581012, 54)
     """
     import pandas as pd
     d = get_data_home(data_home)
@@ -401,8 +401,8 @@ def fetch_yeast(*, data_home=None, download_if_missing=True, return_X_y=False, a
 
     Examples
     --------
-    >>> b = fetch_yeast(); b.data.shape
-    >>> # (1484, 8)
+    >>> b = fetch_yeast(); b.data.shape  # doctest: +SKIP
+    (1484, 8)
     """
     import pandas as pd
     d = get_data_home(data_home)
@@ -469,8 +469,8 @@ def fetch_statlog_shuttle(*, data_home=None, download_if_missing=True, return_X_
 
     Examples
     --------
-    >>> b = fetch_statlog_shuttle(); b.data.shape
-    >>> # (58000, 7)
+    >>> b = fetch_statlog_shuttle(); b.data.shape  # doctest: +SKIP
+    (58000, 7)
     """
     import pandas as pd
     d = get_data_home(data_home)
@@ -537,8 +537,8 @@ def fetch_wine_quality(*, data_home=None, download_if_missing=True, return_X_y=F
 
     Examples
     --------
-    >>> b = fetch_wine_quality(); sorted(set(b.target))
-    >>> # [3, 4, 5, 6, 7, 8, 9]
+    >>> b = fetch_wine_quality(); sorted(set(b.target))  # doctest: +SKIP
+    [3, 4, 5, 6, 7, 8, 9]
     """
     import pandas as pd
     d = get_data_home(data_home)
@@ -607,8 +607,8 @@ def fetch_digits_optical_penbased(*, data_home=None, download_if_missing=True, r
 
     Examples
     --------
-    >>> b = fetch_digits_optical_penbased(which='penbased'); b.data.shape
-    >>> # (10992, 16)
+    >>> b = fetch_digits_optical_penbased(which='penbased'); b.data.shape  # doctest: +SKIP
+    (10992, 16)
     """
     import pandas as pd
     d = get_data_home(data_home); uid = {"optical": 80, "penbased": 81}[which]
@@ -674,8 +674,8 @@ def fetch_pima_diabetes(*, data_home=None, download_if_missing=True, return_X_y=
 
     Examples
     --------
-    >>> b = fetch_pima_diabetes(); b.data.shape
-    >>> # (768, 8)
+    >>> b = fetch_pima_diabetes(); b.data.shape  # doctest: +SKIP
+    (768, 8)
     """
     import pandas as pd
     d = get_data_home(data_home)
@@ -743,8 +743,8 @@ def fetch_electricity_elec2(*, data_home=None, download_if_missing=True, return_
 
     Examples
     --------
-    >>> b = fetch_electricity_elec2(); b.data.shape
-    >>> # (45312, 6)
+    >>> b = fetch_electricity_elec2(); b.data.shape  # doctest: +SKIP
+    (45312, 6)
     """
     import pandas as pd
     d = get_data_home(data_home)
@@ -810,8 +810,8 @@ def fetch_airlines(*, data_home=None, download_if_missing=True, return_X_y=False
 
     Examples
     --------
-    >>> b = fetch_airlines(); b.data.shape
-    >>> # (539383, 7)
+    >>> b = fetch_airlines(); b.data.shape  # doctest: +SKIP
+    (539383, 7)
     """
     import pandas as pd
     d = get_data_home(data_home)
@@ -877,8 +877,8 @@ def fetch_sensorless_drive(*, data_home=None, download_if_missing=True, return_X
 
     Examples
     --------
-    >>> b = fetch_sensorless_drive(); b.data.shape
-    >>> # (58509, 48)
+    >>> b = fetch_sensorless_drive(); b.data.shape  # doctest: +SKIP
+    (58509, 48)
     """
     import pandas as pd
     d = get_data_home(data_home)
@@ -946,8 +946,8 @@ def fetch_miniboone(*, data_home=None, download_if_missing=True, return_X_y=Fals
 
     Examples
     --------
-    >>> b = fetch_miniboone(); b.data.shape
-    >>> # (130064, 50)
+    >>> b = fetch_miniboone(); b.data.shape  # doctest: +SKIP
+    (130064, 50)
     """
     import pandas as pd, numpy as np
     d = get_data_home(data_home)
@@ -1019,8 +1019,8 @@ def fetch_online_news_popularity(*, data_home=None, download_if_missing=True, re
 
     Examples
     --------
-    >>> b = fetch_online_news_popularity(threshold=1400); b.data.shape
-    >>> # (39644, 58)
+    >>> b = fetch_online_news_popularity(threshold=1400); b.data.shape  # doctest: +SKIP
+    (39644, 58)
     """
     import pandas as pd
     d = get_data_home(data_home)

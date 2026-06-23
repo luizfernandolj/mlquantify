@@ -64,8 +64,8 @@ def fetch_planetoid_cora_citeseer_pubmed(*, data_home=None, download_if_missing=
 
     Examples
     --------
-    >>> b = fetch_planetoid_cora_citeseer_pubmed(name='cora'); b.data.shape
-    >>> # (2708, 1433)  sparse; b.graph has the edges
+    >>> b = fetch_planetoid_cora_citeseer_pubmed(name='cora'); b.data.shape  # doctest: +SKIP
+    (2708, 1433)  sparse; b.graph has the edges
     """
     import numpy as np, pickle, scipy.sparse as sp
     d = get_data_home(data_home); nd = os.path.join(d, "planetoid", name)

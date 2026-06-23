@@ -65,8 +65,8 @@ def fetch_lequa2024(*, data_home=None, download_if_missing=True, return_X_y=Fals
 
     Examples
     --------
-    >>> b = fetch_lequa2024(task='T3'); b.data.shape[1]
-    >>> # 256
+    >>> b = fetch_lequa2024(task='T3'); b.data.shape[1]  # doctest: +SKIP
+    256
     """
     task = str(task).upper()
     if task not in _TASKS:

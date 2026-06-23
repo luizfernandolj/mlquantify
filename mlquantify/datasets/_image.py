@@ -62,8 +62,8 @@ def fetch_mnist_usps(*, data_home=None, download_if_missing=True, return_X_y=Fal
 
     Examples
     --------
-    >>> b = fetch_mnist_usps(domain='usps', subset='test'); b.data.shape
-    >>> # (2007, 256)
+    >>> b = fetch_mnist_usps(domain='usps', subset='test'); b.data.shape  # doctest: +SKIP
+    (2007, 256)
     """
     import numpy as np, gzip, struct, bz2
     d = get_data_home(data_home); root = os.path.join(d, "mnist_usps")
@@ -155,8 +155,8 @@ def fetch_cifar10(*, data_home=None, download_if_missing=True, return_X_y=False,
 
     Examples
     --------
-    >>> b = fetch_cifar10(subset='test'); b.data.shape
-    >>> # (10000, 3072)
+    >>> b = fetch_cifar10(subset='test'); b.data.shape  # doctest: +SKIP
+    (10000, 3072)
     """
     import numpy as np, tarfile, pickle
     d = get_data_home(data_home); root = os.path.join(d, "cifar10")

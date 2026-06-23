@@ -65,7 +65,7 @@ def fetch_sea_concepts(*, data_home=None, download_if_missing=True, return_X_y=F
     Examples
     --------
     >>> b = fetch_sea_concepts(n=10000, drift=True); b.data.shape
-    >>> # (10000, 3)
+    (10000, 3)
     """
     import numpy as np
     rng = np.random.default_rng(random_state); thr = np.array([8.0, 9.0, 7.0, 9.5])

@@ -60,8 +60,8 @@ def fetch_newsgroups20(*, data_home=None, download_if_missing=True, return_X_y=F
 
     Examples
     --------
-    >>> b = fetch_newsgroups20(subset='train'); len(b.data), len(b.target_names)
-    >>> # (11314, 20)
+    >>> b = fetch_newsgroups20(subset='train'); len(b.data), len(b.target_names)  # doctest: +SKIP
+    (11314, 20)
     """
     import tarfile
     d = get_data_home(data_home); root = os.path.join(d, "newsgroups20")
@@ -135,8 +135,8 @@ def fetch_imdb(*, data_home=None, download_if_missing=True, return_X_y=False, as
 
     Examples
     --------
-    >>> b = fetch_imdb(subset='test'); len(b.data)
-    >>> # 25000
+    >>> b = fetch_imdb(subset='test'); len(b.data)  # doctest: +SKIP
+    25000
     """
     import tarfile
     d = get_data_home(data_home); root = os.path.join(d, "imdb")
@@ -211,8 +211,8 @@ def fetch_multidomain_sentiment(*, data_home=None, download_if_missing=True, ret
 
     Examples
     --------
-    >>> b = fetch_multidomain_sentiment(domain='dvd'); len(b.data)
-    >>> # 2000
+    >>> b = fetch_multidomain_sentiment(domain='dvd'); len(b.data)  # doctest: +SKIP
+    2000
     """
     import tarfile
     d = get_data_home(data_home); root = os.path.join(d, "multidomain_sentiment")
@@ -285,8 +285,8 @@ def fetch_sentiment140(*, data_home=None, download_if_missing=True, return_X_y=F
 
     Examples
     --------
-    >>> b = fetch_sentiment140(); len(b.data)
-    >>> # 1600000
+    >>> b = fetch_sentiment140(); len(b.data)  # doctest: +SKIP
+    1600000
     """
     import zipfile, pandas as pd
     d = get_data_home(data_home)
@@ -354,8 +354,8 @@ def fetch_rcv1_v2(*, data_home=None, download_if_missing=True, return_X_y=False,
 
     Examples
     --------
-    >>> b = fetch_rcv1_v2(); b.data.shape
-    >>> # (804414, 47236)  sparse
+    >>> b = fetch_rcv1_v2(); b.data.shape  # doctest: +SKIP
+    (804414, 47236)  sparse
     """
     d = get_data_home(data_home)
     try:
