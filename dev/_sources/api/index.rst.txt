@@ -704,6 +704,454 @@ reference on core concepts, see the :ref:`Foundations <quantification_foundation
 
 
 
+  * - :obj:`~mlquantify.datasets.fetch_mushroom`
+
+    - .. div:: sk-apisearch-desc
+
+        .. currentmodule:: mlquantify.datasets
+
+        .. autoshortsummary:: mlquantify.datasets.fetch_mushroom
+
+        .. div:: caption
+
+          :mod:`mlquantify.datasets`
+
+
+
+
+
+  * - :obj:`~mlquantify.datasets.fetch_banknote_authentication`
+
+    - .. div:: sk-apisearch-desc
+
+        .. currentmodule:: mlquantify.datasets
+
+        .. autoshortsummary:: mlquantify.datasets.fetch_banknote_authentication
+
+        .. div:: caption
+
+          :mod:`mlquantify.datasets`
+
+
+
+
+
+  * - :obj:`~mlquantify.datasets.fetch_haberman_survival`
+
+    - .. div:: sk-apisearch-desc
+
+        .. currentmodule:: mlquantify.datasets
+
+        .. autoshortsummary:: mlquantify.datasets.fetch_haberman_survival
+
+        .. div:: caption
+
+          :mod:`mlquantify.datasets`
+
+
+
+
+
+  * - :obj:`~mlquantify.datasets.fetch_miniboone`
+
+    - .. div:: sk-apisearch-desc
+
+        .. currentmodule:: mlquantify.datasets
+
+        .. autoshortsummary:: mlquantify.datasets.fetch_miniboone
+
+        .. div:: caption
+
+          :mod:`mlquantify.datasets`
+
+
+
+
+
+  * - :obj:`~mlquantify.datasets.fetch_digits_optical_penbased`
+
+    - .. div:: sk-apisearch-desc
+
+        .. currentmodule:: mlquantify.datasets
+
+        .. autoshortsummary:: mlquantify.datasets.fetch_digits_optical_penbased
+
+        .. div:: caption
+
+          :mod:`mlquantify.datasets`
+
+
+
+
+
+  * - :obj:`~mlquantify.datasets.fetch_dry_bean`
+
+    - .. div:: sk-apisearch-desc
+
+        .. currentmodule:: mlquantify.datasets
+
+        .. autoshortsummary:: mlquantify.datasets.fetch_dry_bean
+
+        .. div:: caption
+
+          :mod:`mlquantify.datasets`
+
+
+
+
+
+  * - :obj:`~mlquantify.datasets.fetch_covertype`
+
+    - .. div:: sk-apisearch-desc
+
+        .. currentmodule:: mlquantify.datasets
+
+        .. autoshortsummary:: mlquantify.datasets.fetch_covertype
+
+        .. div:: caption
+
+          :mod:`mlquantify.datasets`
+
+
+
+
+
+  * - :obj:`~mlquantify.datasets.fetch_yeast`
+
+    - .. div:: sk-apisearch-desc
+
+        .. currentmodule:: mlquantify.datasets
+
+        .. autoshortsummary:: mlquantify.datasets.fetch_yeast
+
+        .. div:: caption
+
+          :mod:`mlquantify.datasets`
+
+
+
+
+
+  * - :obj:`~mlquantify.datasets.fetch_sensorless_drive`
+
+    - .. div:: sk-apisearch-desc
+
+        .. currentmodule:: mlquantify.datasets
+
+        .. autoshortsummary:: mlquantify.datasets.fetch_sensorless_drive
+
+        .. div:: caption
+
+          :mod:`mlquantify.datasets`
+
+
+
+
+
+  * - :obj:`~mlquantify.datasets.fetch_statlog_shuttle`
+
+    - .. div:: sk-apisearch-desc
+
+        .. currentmodule:: mlquantify.datasets
+
+        .. autoshortsummary:: mlquantify.datasets.fetch_statlog_shuttle
+
+        .. div:: caption
+
+          :mod:`mlquantify.datasets`
+
+
+
+
+
+  * - :obj:`~mlquantify.datasets.fetch_wine_quality`
+
+    - .. div:: sk-apisearch-desc
+
+        .. currentmodule:: mlquantify.datasets
+
+        .. autoshortsummary:: mlquantify.datasets.fetch_wine_quality
+
+        .. div:: caption
+
+          :mod:`mlquantify.datasets`
+
+
+
+
+
+  * - :obj:`~mlquantify.datasets.fetch_online_news_popularity`
+
+    - .. div:: sk-apisearch-desc
+
+        .. currentmodule:: mlquantify.datasets
+
+        .. autoshortsummary:: mlquantify.datasets.fetch_online_news_popularity
+
+        .. div:: caption
+
+          :mod:`mlquantify.datasets`
+
+
+
+
+
+  * - :obj:`~mlquantify.datasets.fetch_pima_diabetes`
+
+    - .. div:: sk-apisearch-desc
+
+        .. currentmodule:: mlquantify.datasets
+
+        .. autoshortsummary:: mlquantify.datasets.fetch_pima_diabetes
+
+        .. div:: caption
+
+          :mod:`mlquantify.datasets`
+
+
+
+
+
+  * - :obj:`~mlquantify.datasets.fetch_electricity_elec2`
+
+    - .. div:: sk-apisearch-desc
+
+        .. currentmodule:: mlquantify.datasets
+
+        .. autoshortsummary:: mlquantify.datasets.fetch_electricity_elec2
+
+        .. div:: caption
+
+          :mod:`mlquantify.datasets`
+
+
+
+
+
+  * - :obj:`~mlquantify.datasets.fetch_airlines`
+
+    - .. div:: sk-apisearch-desc
+
+        .. currentmodule:: mlquantify.datasets
+
+        .. autoshortsummary:: mlquantify.datasets.fetch_airlines
+
+        .. div:: caption
+
+          :mod:`mlquantify.datasets`
+
+
+
+
+
+  * - :obj:`~mlquantify.datasets.fetch_newsgroups20`
+
+    - .. div:: sk-apisearch-desc
+
+        .. currentmodule:: mlquantify.datasets
+
+        .. autoshortsummary:: mlquantify.datasets.fetch_newsgroups20
+
+        .. div:: caption
+
+          :mod:`mlquantify.datasets`
+
+
+
+
+
+  * - :obj:`~mlquantify.datasets.fetch_imdb`
+
+    - .. div:: sk-apisearch-desc
+
+        .. currentmodule:: mlquantify.datasets
+
+        .. autoshortsummary:: mlquantify.datasets.fetch_imdb
+
+        .. div:: caption
+
+          :mod:`mlquantify.datasets`
+
+
+
+
+
+  * - :obj:`~mlquantify.datasets.fetch_multidomain_sentiment`
+
+    - .. div:: sk-apisearch-desc
+
+        .. currentmodule:: mlquantify.datasets
+
+        .. autoshortsummary:: mlquantify.datasets.fetch_multidomain_sentiment
+
+        .. div:: caption
+
+          :mod:`mlquantify.datasets`
+
+
+
+
+
+  * - :obj:`~mlquantify.datasets.fetch_sentiment140`
+
+    - .. div:: sk-apisearch-desc
+
+        .. currentmodule:: mlquantify.datasets
+
+        .. autoshortsummary:: mlquantify.datasets.fetch_sentiment140
+
+        .. div:: caption
+
+          :mod:`mlquantify.datasets`
+
+
+
+
+
+  * - :obj:`~mlquantify.datasets.fetch_rcv1_v2`
+
+    - .. div:: sk-apisearch-desc
+
+        .. currentmodule:: mlquantify.datasets
+
+        .. autoshortsummary:: mlquantify.datasets.fetch_rcv1_v2
+
+        .. div:: caption
+
+          :mod:`mlquantify.datasets`
+
+
+
+
+
+  * - :obj:`~mlquantify.datasets.fetch_mnist_usps`
+
+    - .. div:: sk-apisearch-desc
+
+        .. currentmodule:: mlquantify.datasets
+
+        .. autoshortsummary:: mlquantify.datasets.fetch_mnist_usps
+
+        .. div:: caption
+
+          :mod:`mlquantify.datasets`
+
+
+
+
+
+  * - :obj:`~mlquantify.datasets.fetch_cifar10`
+
+    - .. div:: sk-apisearch-desc
+
+        .. currentmodule:: mlquantify.datasets
+
+        .. autoshortsummary:: mlquantify.datasets.fetch_cifar10
+
+        .. div:: caption
+
+          :mod:`mlquantify.datasets`
+
+
+
+
+
+  * - :obj:`~mlquantify.datasets.fetch_planetoid_cora_citeseer_pubmed`
+
+    - .. div:: sk-apisearch-desc
+
+        .. currentmodule:: mlquantify.datasets
+
+        .. autoshortsummary:: mlquantify.datasets.fetch_planetoid_cora_citeseer_pubmed
+
+        .. div:: caption
+
+          :mod:`mlquantify.datasets`
+
+
+
+
+
+  * - :obj:`~mlquantify.datasets.fetch_sea_concepts`
+
+    - .. div:: sk-apisearch-desc
+
+        .. currentmodule:: mlquantify.datasets
+
+        .. autoshortsummary:: mlquantify.datasets.fetch_sea_concepts
+
+        .. div:: caption
+
+          :mod:`mlquantify.datasets`
+
+
+
+
+
+  * - :obj:`~mlquantify.datasets.fetch_lequa2024`
+
+    - .. div:: sk-apisearch-desc
+
+        .. currentmodule:: mlquantify.datasets
+
+        .. autoshortsummary:: mlquantify.datasets.fetch_lequa2024
+
+        .. div:: caption
+
+          :mod:`mlquantify.datasets`
+
+
+
+
+
+  * - :obj:`~mlquantify.datasets.Bunch`
+
+    - .. div:: sk-apisearch-desc
+
+        .. currentmodule:: mlquantify.datasets
+
+        .. autoshortsummary:: mlquantify.datasets.Bunch
+
+        .. div:: caption
+
+          :mod:`mlquantify.datasets`
+
+
+
+
+
+  * - :obj:`~mlquantify.datasets.get_data_home`
+
+    - .. div:: sk-apisearch-desc
+
+        .. currentmodule:: mlquantify.datasets
+
+        .. autoshortsummary:: mlquantify.datasets.get_data_home
+
+        .. div:: caption
+
+          :mod:`mlquantify.datasets`
+
+
+
+
+
+  * - :obj:`~mlquantify.datasets.fetch_remote`
+
+    - .. div:: sk-apisearch-desc
+
+        .. currentmodule:: mlquantify.datasets
+
+        .. autoshortsummary:: mlquantify.datasets.fetch_remote
+
+        .. div:: caption
+
+          :mod:`mlquantify.datasets`
+
+
+
+
+
 
 
 
