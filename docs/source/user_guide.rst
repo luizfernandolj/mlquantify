@@ -16,6 +16,7 @@ User Guide
    Synthetic Datasets <synthetic_datasets.rst>
    Real-World Datasets <datasets.rst>
    Confidence Intervals <modules/confidence_intervals.rst>
+   Calibration <modules/calibration.rst>
    Visualization <visualization.rst>
    Building a Quantifier <building_a_quantifier.rst>
    Mlquantify methods <modules/mlquantify_methods.rst>

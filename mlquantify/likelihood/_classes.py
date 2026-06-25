@@ -15,11 +15,7 @@ from mlquantify.utils._constraints import (
     Options
 )
 from mlquantify.multiclass import binary_quantifier
-from abstention.calibration import (
-    NoBiasVectorScaling,
-    TempScaling,
-    VectorScaling
-)
+from mlquantify.calibration import ClassifierCalibrator
 
 
 
@@ -272,29 +268,13 @@ class EMQ(BaseLikelihoodQuantifier):
 
         return validate_prevalences(self, prevalences, self.classes_)
 
-    def _resolve_calib_function(self):
-        if self.calib_function is None:
-            return None
-
-        if callable(self.calib_function):
-            return self.calib_function
-
-        return {
-            "nbvs": NoBiasVectorScaling(),
-            "bcts": TempScaling(bias_positions="all"),
-            "ts": TempScaling(),
-            "vs": VectorScaling(),
-        }.get(self.calib_function, None)
-
     def _maybe_calibrate(
         self,
         predictions,
         train_predictions,
         train_labels,
     ):
-        calib_factory = self._resolve_calib_function()
-
-        if calib_factory is None:
+        if self.calib_function is None:
             return predictions
 
         eps = 1e-6
@@ -308,20 +288,37 @@ class EMQ(BaseLikelihoodQuantifier):
         test_logits = np.log(predictions)
         test_logits -= test_logits.mean(axis=1, keepdims=True)
 
-        try:
-            calibrator = calib_factory(
-                train_logits,
-                self._encode_targets(train_labels),
-                posterior_supplied=False,
-            )
-        except Exception as exc:
-            calibrator = self._catch_calib_error(exc, "train")
+        onehot = self._encode_targets(train_labels)
 
         try:
-            return calibrator(test_logits)
+            calibrate = self._fit_calibrator(train_logits, onehot)
+        except Exception as exc:
+            calibrate = self._catch_calib_error(exc, "train")
+
+        if calibrate is None:
+            return predictions
+
+        try:
+            return calibrate(test_logits)
         except Exception as exc:
             self._catch_calib_error(exc, "test")
             return predictions
+
+    def _fit_calibrator(self, train_logits, onehot):
+        """Fit the calibration map; return a logits -> probabilities callable.
+
+        ``calib_function`` is either one of the scaling-method names -- handled
+        by :class:`~mlquantify.calibration.ClassifierCalibrator` -- or a custom
+        callable factory ``f(train_logits, onehot) -> g(test_logits)``.
+        """
+        if callable(self.calib_function):
+            return self.calib_function(train_logits, onehot)
+
+        calibrator = ClassifierCalibrator(
+            method=self.calib_function, input_type="logits"
+        )
+        calibrator.fit(onehot, train_logits)
+        return calibrator.predict
 
     def _encode_targets(self, y_train):
         y_idx = np.searchsorted(self.classes_, y_train)
@@ -334,8 +331,6 @@ class EMQ(BaseLikelihoodQuantifier):
             )
 
         if self.on_calib_error == "backup":
-            if method == "train":
-                return lambda P: P
             return None
 
         raise ValueError(f"Unknown on_calib_error={self.on_calib_error!r}")

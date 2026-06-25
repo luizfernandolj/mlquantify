@@ -101,7 +101,6 @@ Core dependencies (installed automatically with `pip install mlquantify`):
 - pandas
 - joblib
 - tqdm
-- abstention
 
 Optional extras:
 

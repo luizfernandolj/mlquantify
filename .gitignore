@@ -191,7 +191,4 @@ mlquantify/**/*_fast.c
 *.pyd
 build/
 VERSION.txt
-<<<<<<< HEAD
-=======
 mlquantify/datasets/_data/
->>>>>>> master

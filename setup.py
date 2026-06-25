@@ -33,18 +33,6 @@ try:
     from Cython.Build import cythonize
     import numpy as _np
 
-<<<<<<< HEAD
-# --- optional Cython acceleration -------------------------------------------
-# Compiled kernels are an optimisation: if Cython/numpy/a compiler are missing
-# the package still installs and runs via the pure-Python fallbacks.
-ext_modules = []
-try:
-    from setuptools import Extension
-    from Cython.Build import cythonize
-    import numpy as _np
-
-=======
->>>>>>> master
     ext_modules = cythonize(
         [
             Extension(
@@ -64,29 +52,4 @@ except Exception as _exc:  # pragma: no cover
     import warnings
     warnings.warn(f"mlquantify: building without Cython acceleration ({_exc}).")
 
-<<<<<<< HEAD
-setup(
-    ext_modules=ext_modules,
-    name="mlquantify",
-    version=VERSION,
-    url="https://github.com/luizfernandolj/QuantifyML/tree/master",
-    maintainer="Luiz Fernando Luth Junior",
-    description=DESCRIPTION,
-    long_description=long_description,
-    long_description_content_type="text/markdown",
-    packages=find_packages(),
-    include_package_data=True,
-    install_requires=['scikit-learn', 'numpy', 'scipy', 'joblib', 'tqdm', 'pandas', 'xlrd', 'matplotlib', 'abstention'],
-    keywords=['python', 'machine learning', 'quantification', 'quantify'],
-    classifiers=[
-        "Development Status :: 4 - Beta",
-        "Intended Audience :: Science/Research",
-        "Programming Language :: Python :: 3",
-        "Operating System :: Unix",
-        "Operating System :: MacOS :: MacOS X",
-        "Operating System :: Microsoft :: Windows",
-    ]
-)
-=======
 setup(version=VERSION, ext_modules=ext_modules)
->>>>>>> master

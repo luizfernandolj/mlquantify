@@ -57,7 +57,7 @@ API_REFERENCE = {
         ],
     },
     "mlquantify.datasets": {
-        "short_summary": "Synthetic sample generators for quantification.",
+        "short_summary": "Synthetic generators and real-world dataset loaders.",
         "description": None,
         "sections": [
             {
@@ -287,8 +287,12 @@ API_REFERENCE = {
         ],
     },
     "mlquantify.calibration": {
-        "short_summary": "Calibration utilities.",
-        "description": None,
+        "short_summary": "Post-hoc calibration of classifier posteriors.",
+        "description": (
+            "Scaling-based calibrators that rescale a classifier's logits to "
+            "minimise the held-out negative log-likelihood (temperature and "
+            "vector scaling), improving probabilistic quantifiers such as EMQ."
+        ),
         "sections": [
             {
                 "title": "Calibration",

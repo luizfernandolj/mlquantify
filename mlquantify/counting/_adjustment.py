@@ -301,11 +301,7 @@ class TMAX(ThresholdAdjustment):
     >>> X, y = make_classification(n_samples=100, n_classes=2, n_informative=5, random_state=42)
     >>> quantifier = TMAX(estimator=RandomForestClassifier(random_state=42))
     >>> _ = quantifier.fit(X, y)
-<<<<<<< HEAD
-    >>> quantifier.predict(X)
-=======
     >>> quantifier.predict(X)  # doctest: +SKIP
->>>>>>> master
     {0: 0.4938565891472869, 1: 0.5061434108527131}
 
     References
@@ -501,11 +497,7 @@ class MS2(MS):
     >>> X, y = make_classification(n_samples=100, n_classes=2, n_informative=5, random_state=42)
     >>> quantifier = MS2(estimator=RandomForestClassifier(random_state=42))
     >>> _ = quantifier.fit(X, y)
-<<<<<<< HEAD
-    >>> quantifier.predict(X)
-=======
     >>> quantifier.predict(X)  # doctest: +SKIP
->>>>>>> master
     {0: 0.6167188612099646, 1: 0.3832811387900355}
 
     References

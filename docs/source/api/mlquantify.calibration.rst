@@ -10,6 +10,8 @@ mlquantify.calibration
 .. automodule:: mlquantify.calibration
 
 
+Scaling-based calibrators that rescale a classifier's logits to minimise the held-out negative log-likelihood (temperature and vector scaling), improving probabilistic quantifiers such as EMQ.
+
 
 
 

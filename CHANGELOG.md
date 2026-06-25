@@ -4,8 +4,6 @@ All notable changes to mlquantify will be documented in this file.
 
 ---
 
-<<<<<<< HEAD
-=======
 ## [Unreleased]
 
 _Nothing yet. Add user-visible changes here as they land._
@@ -90,6 +88,15 @@ scikit-learn (a breaking change, below) and modernises packaging.
     `make_protocol` (turn a loaded dataset into protocol bags), and a
     download-progress hook (`set_progress_hook` / `get_progress_hook`).
 
+- **`mlquantify.calibration`** — a posterior-calibration subpackage.
+  `ClassifierCalibrator` implements the scaling family of post-hoc calibrators —
+  Temperature Scaling (`'ts'`), Bias-Corrected Temperature Scaling (`'bcts'`),
+  Vector Scaling (`'vs'`) and No-Bias Vector Scaling (`'nbvs'`) — fitting each by
+  minimising the held-out negative log-likelihood (Guo et al. 2017; Alexandari,
+  Kundaje & Shrikumar 2020). It accepts probabilities or logits and returns
+  calibrated probabilities, and is what `EMQ(calib_function=...)` now uses
+  internally. `QuantifierCalibrator` is reserved for a future release.
+
 ### Fixed
 
 - Removed stray ``print()`` calls in the metrics input helper that dumped
@@ -108,6 +115,9 @@ scikit-learn (a breaking change, below) and modernises packaging.
   search, method comparison, multiclass, protocols, confidence regions, intro).
 - Redesigned documentation homepage with per-module showcase cards (generated
   figures) and a dev banner flagging the non-stable version.
+- Added a **Calibration** User Guide page and a calibration example (reliability
+  diagram + confidence histogram before/after Bias-Corrected Temperature
+  Scaling).
 
 ### Build & Packaging
 
@@ -119,6 +129,10 @@ scikit-learn (a breaking change, below) and modernises packaging.
 - Project metadata moved from ``setup.py`` into ``pyproject.toml`` (PEP 621
   ``[project]`` table). ``setup.py`` now only resolves the version and builds
   the optional Cython kernel.
+- **Dropped the `abstention` dependency.** EMQ's posterior calibration now uses
+  the native `mlquantify.calibration` (identical results to ~1e-7), removing a
+  latent break under scipy 2.0 (`abstention` imported the removed
+  ``scipy.misc``).
 
 ### Internal
 
@@ -132,12 +146,11 @@ scikit-learn (a breaking change, below) and modernises packaging.
 - Added `tests/test_datasets.py` covering the generator and the fetchers; fixed
   the fetch tests.
 - Added `tests/test_confidence.py` (percentile intervals, simplex/CLR ellipses,
-  and the factory). Added ``xfail`` specification tests in
-  `tests/test_calibration.py` for the still-unimplemented calibration stubs.
+  and the factory) and `tests/test_calibration.py` (the four scaling methods,
+  temperature recoverability, and EMQ integration).
 
 ---
 
->>>>>>> master
 ## [v0.4.0]
 
 This release focuses on **performance** (a compiled Cython kernel + several
@@ -235,8 +248,6 @@ a full **documentation standardisation** across every module.
   doctest setup; fixed numerous broken examples (wrong `aggregate` calls, stale
   attribute names, incomplete snippets). Added a GitHub Actions workflow that runs
   the test suite and the doctests across Python 3.9–3.13 on Linux/macOS/Windows.
-<<<<<<< HEAD
-=======
 - **Restored Python 3.9 import** — `utils._tags` and `utils._constraints` used
   `X | Y` class annotations, which 3.9 evaluates at runtime (the `|` union syntax
   is 3.10+), breaking the whole package import. Added
@@ -244,7 +255,6 @@ a full **documentation standardisation** across every module.
 - **`MS2`/`TMAX` doctests** are now skipped (`# doctest: +SKIP`): their threshold
   selection is platform-sensitive and produced non-reproducible prevalences on
   macOS.
->>>>>>> master
 
 ### Documentation
 
@@ -273,8 +283,6 @@ a full **documentation standardisation** across every module.
 - CI now builds **portable binary wheels** with `cibuildwheel`
   (Linux / macOS x86_64+arm64 / Windows × CPython 3.9–3.13), verifies each wheel
   ships the compiled kernel, builds an sdist, and publishes to PyPI on a `v*` tag.
-<<<<<<< HEAD
-=======
   The kernel check inspects the wheel's contents for the compiled
   `_histogram_sweep` extension rather than importing `mlquantify` — importing
   would reinstall the full runtime stack, and recent scipy/scikit-learn no longer
@@ -284,7 +292,6 @@ a full **documentation standardisation** across every module.
   writes a PEP 440-compliant `0.4.0.dev0` to `VERSION.txt` instead of a bare `dev`
   (rejected by newer setuptools), and `setup.py` falls back to that version when
   `VERSION.txt` is absent, so local `pip install .`/`-e .` works again.
->>>>>>> master
 
 ### Tests
 
@@ -293,11 +300,8 @@ a full **documentation standardisation** across every module.
   Python == generic solver).
 - Added a cross-library comparison harness (`comparisons/`) validating prevalence
   agreement and speed against QuaPy, qunfold and quantificationlib.
-<<<<<<< HEAD
-=======
 - Removed the redundant `tests/test_mixture.py` (superseded by `test_matching.py`)
   and folded its remaining unique coverage (`SMM` binary fit/predict) into it.
->>>>>>> master
 
 ---
 
@@ -387,11 +391,6 @@ quantifier = CC(estimator=LogisticRegression())
 
 ---
 
-<<<<<<< HEAD
-[v0.4.0]: https://github.com/luizfernandolj/QuantifyML/compare/v0.3.0...v0.4.0
-[Unreleased]: https://github.com/luizfernandolj/QuantifyML/compare/v0.2.1...HEAD
-=======
 [v0.5.0]: https://github.com/luizfernandolj/mlquantify/compare/v0.4.0...v0.5.0
 [v0.4.0]: https://github.com/luizfernandolj/mlquantify/compare/v0.3.0...v0.4.0
 [Unreleased]: https://github.com/luizfernandolj/mlquantify/compare/v0.5.0...HEAD
->>>>>>> master

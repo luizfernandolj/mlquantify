@@ -18,43 +18,6 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-<<<<<<< HEAD
-        os: [ubuntu-latest, macos-13, macos-14, windows-latest]
-    steps:
-      - uses: actions/checkout@v4
-
-      - name: Generate VERSION.txt
-        shell: bash
-        run: |
-          if [[ "${GITHUB_REF}" == refs/tags/v* ]]; then
-            echo "${GITHUB_REF##*/}" | sed 's/^v//' > VERSION.txt
-          else
-            echo "0.0.0.dev0" > VERSION.txt
-          fi
-
-      - name: Build wheels
-        uses: pypa/cibuildwheel@v2.21
-        env:
-          # CPython 3.9-3.13, 64-bit; skip the slow/rare targets
-          CIBW_BUILD: "cp39-* cp310-* cp311-* cp312-* cp313-*"
-          CIBW_SKIP: "*-musllinux_* *_i686 *_ppc64le *_s390x pp*"
-          CIBW_ARCHS_MACOS: "auto"
-          # verify each wheel actually shipped the compiled kernel
-          CIBW_TEST_COMMAND: >-
-            python -c "import mlquantify.matching._histogram as H;
-            assert H._HAS_FAST_KERNEL, 'compiled histogram-sweep kernel missing from wheel'"
-
-      - uses: actions/upload-artifact@v4
-        with:
-          name: wheels-${{ matrix.os }}
-          path: ./wheelhouse/*.whl
-
-  build_sdist:
-    name: Source distribution
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-=======
         # macos-14 (Apple Silicon) cross-builds both macOS arches, so the
         # scarce/slow-to-schedule Intel macos-13 runner is no longer needed.
         os: [ubuntu-latest, macos-14, windows-latest]
@@ -65,7 +28,6 @@ jobs:
         with:
           python-version: "3.x"
 
->>>>>>> master
       - name: Generate VERSION.txt
         shell: bash
         run: |
@@ -74,15 +36,6 @@ jobs:
           else
             echo "0.0.0.dev0" > VERSION.txt
           fi
-<<<<<<< HEAD
-      - name: Build sdist
-        run: pipx run build --sdist
-      - uses: actions/upload-artifact@v4
-        with:
-          name: sdist
-          path: dist/*.tar.gz
-
-=======
 
       - name: Build wheels
         uses: pypa/cibuildwheel@v2.21
@@ -145,7 +98,6 @@ jobs:
           name: sdist
           path: dist/*.tar.gz
 
->>>>>>> master
   publish:
     name: Publish to PyPI
     needs: [build_wheels, build_sdist]
