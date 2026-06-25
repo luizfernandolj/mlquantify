@@ -59,8 +59,7 @@ class DistanceLoss(BaseLoss):
 
     Parameters
     ----------
-    distance : {'hellinger', 'topsoe', 'probsymm', 'sqEuclidean', 'euclidean'}, \
-               default='hellinger'
+    distance : {'hellinger', 'topsoe', 'probsymm', 'sqEuclidean', 'euclidean'}, default='hellinger'
         The distance measure to apply.
     normalize : bool, default=True
         If ``True``, both ``mixture`` and ``target`` are passed through

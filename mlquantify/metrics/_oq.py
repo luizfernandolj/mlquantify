@@ -1,33 +1,9 @@
 import numpy as np
 
-def process_inputs(prev_pred, prev_real):
-    """
-    .. :noindex:
-    
-    Process the input data for internal use.
-    """
-    if isinstance(prev_real, dict):
-        prev_real = np.asarray(list(prev_real.values()))
-    if isinstance(prev_pred, dict):
-        prev_pred = np.asarray(list(prev_pred.values()))
-    if isinstance(prev_real, list):
-        prev_real = np.asarray(prev_real)
-    if isinstance(prev_pred, list):
-        prev_pred = np.asarray(prev_pred)
-    
-    # Pad with zeros if lengths differ
-    len_real = len(prev_real)
-    len_pred = len(prev_pred)
-    
-    if len_real > len_pred:
-        prev_pred = np.pad(prev_pred, (0, len_real - len_pred), constant_values=0)
-    elif len_pred > len_real:
-        prev_real = np.pad(prev_real, (0, len_pred - len_real), constant_values=0)
-        
-    return prev_real, prev_pred
+from ._utils import process_inputs
 
 
-def NMD(prev_pred, prev_real, distances=None):
+def NMD(prev_real, prev_pred, distances=None):
     r"""
     Compute the Normalized Match Distance (NMD), also known as Earth Mover’s Distance (EMD),
     for ordinal quantification evaluation.
@@ -49,7 +25,7 @@ def NMD(prev_pred, prev_real, distances=None):
     nmd : float
         Normalized Match Distance between predicted and true prevalences.
     """
-    prev_real, prev_pred = process_inputs(prev_pred, prev_real)
+    prev_real, prev_pred = process_inputs(prev_real, prev_pred)
     n_classes = len(prev_real)
 
     if distances is None:
@@ -65,7 +41,7 @@ def NMD(prev_pred, prev_real, distances=None):
     return float(nmd)
 
 
-def RNOD(prev_pred, prev_real, distances=None):
+def RNOD(prev_real, prev_pred, distances=None):
     r"""
     Compute the Root Normalised Order-aware Divergence (RNOD) for ordinal quantification evaluation.
 
@@ -79,14 +55,14 @@ def RNOD(prev_pred, prev_real, distances=None):
 
     distances : 2D array-like of shape (n_classes, n_classes), optional
         Distance matrix between classes (d(y_i, y_j)).
-        If None, assumes d(y_i, y_j) = |i - j|.
+        If None, assumes d(y_i, y_j) = abs(i - j).
 
     Returns
     -------
     rnod : float
         Root Normalised Order-aware Divergence between predicted and true prevalences.
     """
-    prev_real, prev_pred = process_inputs(prev_pred, prev_real)
+    prev_real, prev_pred = process_inputs(prev_real, prev_pred)
     n_classes = len(prev_real)
     Y_star = np.where(prev_real > 0)[0]
 

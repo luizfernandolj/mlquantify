@@ -1,5 +1,7 @@
-![PyPI - Version](https://img.shields.io/pypi/v/mlquantify)
-[![docs](https://img.shields.io/badge/docs-sphinx-blue)](https://github.com/luizfernandolj/mlquantify/)
+[![unit tests](https://img.shields.io/github/actions/workflow/status/luizfernandolj/mlquantify/tests.yml?branch=master&label=unit%20tests)](https://github.com/luizfernandolj/mlquantify/actions/workflows/tests.yml)
+[![PyPI - Version](https://img.shields.io/pypi/v/mlquantify)](https://pypi.org/project/mlquantify/)
+[![python versions](https://img.shields.io/pypi/pyversions/mlquantify)](https://pypi.org/project/mlquantify/)
+[![docs](https://img.shields.io/badge/docs-sphinx-blue)](https://luizfernandolj.github.io/mlquantify/)
 
 
 <a href="https://luizfernandolj.github.io/mlquantify/"><img src="assets/logo_mlquantify-white.svg" alt="mlquantify logo"></a>
@@ -42,6 +44,7 @@ ___
 | **Confidence Regions** | `ConfidenceInterval`, `ConfidenceEllipseSimplex`, `ConfidenceEllipseCLR` for uncertainty estimation on prevalence predictions. |
 | **Model Selection** | `GridSearchQ` and evaluation protocols (APP, NPP, UPP, PPP) tailored for quantification tasks. |
 | **Evaluation Metrics** | Metrics for quantification performance: AE, MAE, NAE, SE, MSE, KLD, RAE, NRAE, NKLD, NMD, RNOD, VSE, CvM_L1. |
+| **Visualization** | scikit-learn-style `Display` classes for both single- and multiple-sample results: `DiagonalDisplay`, `BiasDisplay`, `ErrorByShiftDisplay`, `PrevalenceDisplay`, `ConfidenceRegionDisplay`. |
 | **Comprehensive Documentation** | Full API reference and user guide covering all modules and methods. |
 
 ___
@@ -84,10 +87,13 @@ print(f"Normalized Relative Absolute Error -> {nrae}")
 - In case you need any help, refer to the [User Guide](https://luizfernandolj.github.io/mlquantify/user_guide.html).
 - Explore the [API documentation](https://luizfernandolj.github.io/mlquantify/api/index.html) for detailed developer information.
 - See also the library in the pypi site in [pypi mlquantify](https://pypi.org/project/mlquantify/)
+- Check the [CHANGELOG](https://github.com/luizfernandolj/mlquantify/blob/master/CHANGELOG.md) to see what's currently beign developed!
 
 ___
 
 ## Requirements
+
+Core dependencies (installed automatically with `pip install mlquantify`):
 
 - scikit-learn
 - numpy
@@ -95,6 +101,10 @@ ___
 - pandas
 - joblib
 - tqdm
-- matplotlib
-- xlrd
 - abstention
+
+Optional extras:
+
+- `pip install mlquantify[viz]` — plotting via `mlquantify.visualization` (adds matplotlib)
+- `pip install mlquantify[neural]` — neural quantifiers such as QuaNet (adds PyTorch)
+- `pip install mlquantify[all]` — everything above

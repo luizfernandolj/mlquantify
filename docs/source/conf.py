@@ -47,9 +47,34 @@ extensions = [
     "sphinx_design",
     # See sphinxext/
     "override_pst_pagetoc",
+    "autoshortsummary",
 ]
 
 autosummary_generate = True
+
+# torch is an optional dependency (only ``mlquantify.neural`` needs it); mock it
+# so autodoc can import and document QuaNet without a torch install.
+autodoc_mock_imports = ["torch"]
+
+# -- intersphinx -------------------------------------------------------------
+# Resolve cross-references to the projects mlquantify builds on. This also
+# resolves the ``:ref:`metadata_routing``` (and similar) targets that
+# scikit-learn's inherited base-class docstrings emit.
+intersphinx_mapping = {
+    "python": ("https://docs.python.org/3", None),
+    "numpy": ("https://numpy.org/doc/stable", None),
+    "scipy": ("https://docs.scipy.org/doc/scipy", None),
+    "sklearn": ("https://scikit-learn.org/stable", None),
+    "matplotlib": ("https://matplotlib.org/stable", None),
+}
+
+# -- matplotlib plot_directive -----------------------------------------------
+# Render the example source inline (copyable, above each figure) like
+# scikit-learn, instead of emitting a "Source code" download link.
+plot_include_source = True
+plot_html_show_source_link = False
+plot_html_show_formats = False
+plot_formats = ["png"]
 
 templates_path = ['_templates']
 exclude_patterns = [
@@ -100,7 +125,12 @@ html_css_files = [
     "variables.css",
     "theme_overrides.css",
     "landing.css",
+    "dev_banner.css",
     # "custom.css" # Deprecated, split into modules above
+]
+
+html_js_files = [
+    "dev_banner.js",
 ]
 
 html_sidebars = {
@@ -151,7 +181,7 @@ html_theme_options = {
     "show_nav_level": 1,
     "show_toc_level": 1,
     "navbar_align": "left",
-    "header_links_before_dropdown": 5,
+    "header_links_before_dropdown": 4,
     "header_dropdown_text": "More",
     "switcher": {
         "json_url": "https://luizfernandolj.github.io/mlquantify/switcher.json",
@@ -192,6 +222,25 @@ html_theme_options = {
     "show_version_warning_banner": True,
     "announcement": None,
 }
+
+# On the development docs, replace the theme's default version-warning banner
+# with a prominent red announcement that links back to the stable release.
+# ``DOCS_VERSION`` is set to "dev" for non-release builds by the deploy workflow
+# (and defaults to "dev" locally).
+DOCS_VERSION = os.environ.get("DOCS_VERSION", "dev")
+if DOCS_VERSION == "dev":
+    html_theme_options["show_version_warning_banner"] = False
+    html_theme_options["announcement"] = (
+        '<div class="mlq-dev-banner">'
+        "This is the documentation for the <strong>unstable development "
+        "version</strong> of mlquantify. "
+        '<a class="mlq-dev-banner__btn" '
+        'href="https://luizfernandolj.github.io/mlquantify/stable/">'
+        "Switch to stable version</a>"
+        '<button class="mlq-dev-banner__close" type="button" '
+        'aria-label="Close development-version banner">&times;</button>'
+        "</div>"
+    )
 
 
 

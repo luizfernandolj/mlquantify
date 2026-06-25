@@ -1,8 +1,8 @@
 .. _installation:
 
-====================
+=====================
 Installing mlquantify
-====================
+=====================
 
 The `mlquantify` library can be easily installed via `pip`. Below are detailed installation instructions, including its dependencies and differences in using a virtual environment across operating systems.
 

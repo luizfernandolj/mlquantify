@@ -1,3 +1,5 @@
+:orphan:
+
 .. _non_parameters_scenarios:
 
 Non Parameters Scenarios

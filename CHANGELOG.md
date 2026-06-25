@@ -4,6 +4,140 @@ All notable changes to mlquantify will be documented in this file.
 
 ---
 
+<<<<<<< HEAD
+=======
+## [Unreleased]
+
+_Nothing yet. Add user-visible changes here as they land._
+
+---
+
+## [v0.5.0]
+
+This release adds two new subpackages — **`mlquantify.visualization`**
+(scikit-learn-style plotting) and **`mlquantify.datasets`** (synthetic and
+real-world quantification data) — plus an example gallery and a redesigned
+documentation homepage. It also aligns the evaluation-metrics API with
+scikit-learn (a breaking change, below) and modernises packaging.
+
+### Breaking Changes
+
+- **Evaluation metrics now follow the scikit-learn argument order
+  ``metric(y_true, y_pred)``** — the *true* prevalence comes first and the
+  prediction second (previously the order was reversed, ``metric(pred, true)``).
+  Symmetric metrics (`AE`, `MAE`, `SE`, `MSE`, `NMD`, `RNOD`, `CvM_L1`) are
+  unaffected numerically, but **asymmetric metrics (`KLD`, `NKLD`, `RAE`,
+  `NRAE`, `NAE`, `VSE`) now return different values** for callers that relied on
+  the old order. Most of the documentation and the README already used the
+  ``(true, pred)`` order and so become correct; update any code that passed the
+  prediction first. The `apply_protocol` scoring-callable contract is likewise
+  ``metric(true, pred)``.
+
+### New Features
+
+- **`mlquantify.visualization`** — a new plotting subpackage of scikit-learn-style
+  ``*Display`` classes for quantification results. Each exposes
+  ``from_predictions`` / ``from_estimator`` / ``from_protocol`` constructors, a
+  ``plot()`` method, stored ``ax_`` / ``figure_`` attributes, and forwards
+  matplotlib styling kwargs.
+
+  - *Multiple-sample diagnostics* (summarise a protocol run): ``DiagonalDisplay``
+    (true vs. predicted prevalence), ``BiasDisplay`` (signed-error boxplots,
+    global or binned), ``ErrorByShiftDisplay`` (error vs. prior-probability
+    shift, with Forman smoothing for RAE).
+  - *Single-sample displays*: ``PrevalenceDisplay`` (per-class prevalence bars)
+    and ``ConfidenceRegionDisplay`` (per-class intervals, or a ternary
+    confidence ellipse for 3-class problems, hooking into
+    ``mlquantify.confidence``).
+
+  The subpackage is not imported by ``import mlquantify`` so matplotlib stays
+  off the top-level import path; import it explicitly with
+  ``from mlquantify.visualization import DiagonalDisplay``.
+
+- **`mlquantify.datasets`** — a new subpackage (mirroring `sklearn.datasets`) for
+  quantification data, both synthetic and real-world. Unlike `visualization` it
+  *is* part of the top-level namespace (`import mlquantify` exposes
+  `mlquantify.datasets`). It provides:
+
+  - **`make_quantification`** — a synthetic-data generator, the quantification
+    analogue of `make_classification`: it builds one labelled population, then
+    draws `n_batches` *bags* whose class balance varies, returning each bag's
+    **true prevalence** alongside the data. Three shift kinds via `shift_type` —
+    `'prior'` (P(y) changes, clusters stay put), `'covariate'` (feature clouds
+    translated past a fixed boundary, tuned by `covariate_scale`), and `'concept'`
+    (the decision boundary rotated per bag, tuned by `concept_strength`); pass a
+    list to **stack** several per bag. Also: selectable per-bag prevalence sampling
+    (`prevalence=` `'uniform'` / Dirichlet `concentration` / `'grid'` / a fixed
+    `target_prevalence`), population difficulty knobs (`class_sep`, `flip_y`,
+    `n_features`, `weights`), an optional training split (`return_train`), the
+    decision boundary (`return_boundary` → `coef`/`intercept`), and output-layout
+    controls (`stack`, `pack`, `as_frame`).
+  - **25 real-world dataset fetchers** — `fetch_*` loaders that download and cache
+    well-known quantification benchmarks, following scikit-learn conventions
+    (keyword-only; return a `Bunch` or a `(X, y)` tuple with `return_X_y=True`;
+    cached once under `data_home`). Each also accepts an optional quantification
+    `protocol=` (e.g. `"app"`), in which case the returned `Bunch` additionally
+    carries `.samples` and `.prevalences` — test bags with known class prevalence,
+    ready to score against. Coverage spans tabular (`fetch_mushroom`,
+    `fetch_covertype`, `fetch_dry_bean`, `fetch_miniboone`, `fetch_wine_quality`,
+    … 15 in total), text (`fetch_newsgroups20`, `fetch_imdb`, `fetch_rcv1_v2`,
+    `fetch_sentiment140`, `fetch_multidomain_sentiment`), image (`fetch_mnist_usps`,
+    `fetch_cifar10`), graph (`fetch_planetoid_cora_citeseer_pubmed`), a concept-drift
+    stream (`fetch_sea_concepts`), and the LeQua 2024 competition
+    (`fetch_lequa2024`).
+  - **Dataset helpers** — `Bunch` (attribute-style dict), `get_data_home` /
+    `fetch_remote` (cache location and cached download with retries),
+    `make_protocol` (turn a loaded dataset into protocol bags), and a
+    download-progress hook (`set_progress_hook` / `get_progress_hook`).
+
+### Fixed
+
+- Removed stray ``print()`` calls in the metrics input helper that dumped
+  prevalence vectors to stdout whenever a metric was given a Python ``list``.
+
+### Documentation
+
+- New User Guide pages: **Synthetic Datasets** (the `make_quantification`
+  generator and the prior/covariate/concept shift types, with a 3-class
+  visualisation) and **Real-World Datasets** (the 25 fetchers, their shared
+  configuration, and protocol mode). Added a `datasets` API reference page.
+- New **example gallery** with runnable `.. plot::` examples: synthetic-data
+  walkthroughs (intro, prevalence sampling, shift, the three shift types,
+  difficulty, end-to-end quantifiers) plus quantification examples across modules
+  (CC under shift, distribution matching, EMQ convergence, error by shift, grid
+  search, method comparison, multiclass, protocols, confidence regions, intro).
+- Redesigned documentation homepage with per-module showcase cards (generated
+  figures) and a dev banner flagging the non-stable version.
+
+### Build & Packaging
+
+- **`matplotlib` is no longer a required dependency.** Plotting moves behind a
+  ``viz`` extra (``pip install mlquantify[viz]``), and the neural quantifiers
+  behind a ``neural`` extra; ``pip install mlquantify[all]`` pulls in both. A
+  bare ``import mlquantify`` never imports matplotlib.
+- Removed the unused ``xlrd`` dependency.
+- Project metadata moved from ``setup.py`` into ``pyproject.toml`` (PEP 621
+  ``[project]`` table). ``setup.py`` now only resolves the version and builds
+  the optional Cython kernel.
+
+### Internal
+
+- De-duplicated the metrics ``process_inputs`` helper into a single
+  ``mlquantify.metrics._utils`` module (was copy-pasted across three files).
+- Removed the dead ``mlquantify/model_selection/_split.py`` stub (empty ``# TODO``,
+  imported nowhere).
+
+### Tests
+
+- Added `tests/test_datasets.py` covering the generator and the fetchers; fixed
+  the fetch tests.
+- Added `tests/test_confidence.py` (percentile intervals, simplex/CLR ellipses,
+  and the factory). Added ``xfail`` specification tests in
+  `tests/test_calibration.py` for the still-unimplemented calibration stubs.
+
+---
+
+>>>>>>> master
 ## [v0.4.0]
 
 This release focuses on **performance** (a compiled Cython kernel + several
@@ -101,6 +235,16 @@ a full **documentation standardisation** across every module.
   doctest setup; fixed numerous broken examples (wrong `aggregate` calls, stale
   attribute names, incomplete snippets). Added a GitHub Actions workflow that runs
   the test suite and the doctests across Python 3.9–3.13 on Linux/macOS/Windows.
+<<<<<<< HEAD
+=======
+- **Restored Python 3.9 import** — `utils._tags` and `utils._constraints` used
+  `X | Y` class annotations, which 3.9 evaluates at runtime (the `|` union syntax
+  is 3.10+), breaking the whole package import. Added
+  `from __future__ import annotations` to the affected modules.
+- **`MS2`/`TMAX` doctests** are now skipped (`# doctest: +SKIP`): their threshold
+  selection is platform-sensitive and produced non-reproducible prevalences on
+  macOS.
+>>>>>>> master
 
 ### Documentation
 
@@ -129,6 +273,18 @@ a full **documentation standardisation** across every module.
 - CI now builds **portable binary wheels** with `cibuildwheel`
   (Linux / macOS x86_64+arm64 / Windows × CPython 3.9–3.13), verifies each wheel
   ships the compiled kernel, builds an sdist, and publishes to PyPI on a `v*` tag.
+<<<<<<< HEAD
+=======
+  The kernel check inspects the wheel's contents for the compiled
+  `_histogram_sweep` extension rather than importing `mlquantify` — importing
+  would reinstall the full runtime stack, and recent scipy/scikit-learn no longer
+  ship `manylinux2014` wheels, so that install tried to build scipy from source
+  and failed (no OpenBLAS) on Python 3.11+.
+- **Source builds no longer fail on the package version** — the docs workflow now
+  writes a PEP 440-compliant `0.4.0.dev0` to `VERSION.txt` instead of a bare `dev`
+  (rejected by newer setuptools), and `setup.py` falls back to that version when
+  `VERSION.txt` is absent, so local `pip install .`/`-e .` works again.
+>>>>>>> master
 
 ### Tests
 
@@ -137,6 +293,11 @@ a full **documentation standardisation** across every module.
   Python == generic solver).
 - Added a cross-library comparison harness (`comparisons/`) validating prevalence
   agreement and speed against QuaPy, qunfold and quantificationlib.
+<<<<<<< HEAD
+=======
+- Removed the redundant `tests/test_mixture.py` (superseded by `test_matching.py`)
+  and folded its remaining unique coverage (`SMM` binary fit/predict) into it.
+>>>>>>> master
 
 ---
 
@@ -226,5 +387,11 @@ quantifier = CC(estimator=LogisticRegression())
 
 ---
 
+<<<<<<< HEAD
 [v0.4.0]: https://github.com/luizfernandolj/QuantifyML/compare/v0.3.0...v0.4.0
 [Unreleased]: https://github.com/luizfernandolj/QuantifyML/compare/v0.2.1...HEAD
+=======
+[v0.5.0]: https://github.com/luizfernandolj/mlquantify/compare/v0.4.0...v0.5.0
+[v0.4.0]: https://github.com/luizfernandolj/mlquantify/compare/v0.3.0...v0.4.0
+[Unreleased]: https://github.com/luizfernandolj/mlquantify/compare/v0.5.0...HEAD
+>>>>>>> master

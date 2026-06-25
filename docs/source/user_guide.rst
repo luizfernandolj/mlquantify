@@ -13,7 +13,10 @@ User Guide
    Non Aggregative Quantification <non_aggregative_quantification.rst>
    Meta Quantification <meta_quantification.rst>
    Model Selection and Evaluation <model_selection_evaluation.rst>
+   Synthetic Datasets <synthetic_datasets.rst>
+   Real-World Datasets <datasets.rst>
    Confidence Intervals <modules/confidence_intervals.rst>
+   Visualization <visualization.rst>
    Building a Quantifier <building_a_quantifier.rst>
    Mlquantify methods <modules/mlquantify_methods.rst>
    Core Components <components.rst>

@@ -56,6 +56,28 @@ API_REFERENCE = {
             }
         ],
     },
+    "mlquantify.datasets": {
+        "short_summary": "Synthetic sample generators for quantification.",
+        "description": None,
+        "sections": [
+            {
+                "title": None,
+                "autosummary": [
+                    "make_quantification",
+                    "fetch_mushroom", "fetch_banknote_authentication", "fetch_haberman_survival", "fetch_miniboone",
+                    "fetch_digits_optical_penbased", "fetch_dry_bean", "fetch_covertype", "fetch_yeast",
+                    "fetch_sensorless_drive", "fetch_statlog_shuttle", "fetch_wine_quality", "fetch_online_news_popularity",
+                    "fetch_pima_diabetes", "fetch_electricity_elec2", "fetch_airlines",
+                    "fetch_newsgroups20", "fetch_imdb", "fetch_multidomain_sentiment", "fetch_sentiment140", "fetch_rcv1_v2",
+                    "fetch_mnist_usps", "fetch_cifar10",
+                    "fetch_planetoid_cora_citeseer_pubmed",
+                    "fetch_sea_concepts",
+                    "fetch_lequa2024",
+                    "Bunch", "get_data_home", "fetch_remote",
+                ],
+            }
+        ],
+    },
     "mlquantify.multiclass": {
         "short_summary": "Multiclass definitions and utilities.",
         "description": None,
@@ -87,6 +109,27 @@ API_REFERENCE = {
                     "construct_confidence_region"
                 ],
             }
+        ],
+    },
+    "mlquantify.visualization": {
+        "short_summary": "Plotting utilities for quantification results.",
+        "description": None,
+        "sections": [
+            {
+                "title": "Multiple-sample displays",
+                "autosummary": [
+                    "DiagonalDisplay",
+                    "BiasDisplay",
+                    "ErrorByShiftDisplay",
+                ],
+            },
+            {
+                "title": "Single-sample displays",
+                "autosummary": [
+                    "PrevalenceDisplay",
+                    "ConfidenceRegionDisplay",
+                ],
+            },
         ],
     },
     "mlquantify.counting": {

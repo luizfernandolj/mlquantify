@@ -23,7 +23,7 @@ mlQuantify was started in 2024 by Luiz Fernando Luth Junior and André Gustavo M
 Governance & Contributors
 =========================
 
-mlQuantify is built with a community-driven and transparent development process. All major decisions are discussed openly in the project's issue tracker and forum.
+mlQuantify is developed openly on GitHub. Bug reports, feature requests, and design discussions all take place in the public issue tracker, and contributions are welcome from anyone (see `How to Contribute`_).
 
 Core Maintainers
 ----------------
@@ -47,7 +47,7 @@ Core Maintainers
 
 .. note::
 
-   For help, bug reports, or feature requests, please use our `GitHub issues <https://github.com/mlquantify/mlquantify/issues>`__ page rather than emailing contributors directly.
+   For help, bug reports, or feature requests, please use our `GitHub issues <https://github.com/luizfernandolj/mlquantify/issues>`__ page rather than emailing contributors directly.
 
 How to Contribute
 =================
@@ -59,7 +59,7 @@ Whether you are a researcher, practitioner, or an open source enthusiast, you ca
 - Helping with documentation.
 - Sharing quantification use cases and benchmarks.
 
-For more details on contributing, see our :ref:`contributing` guide.
+For more details on contributing, see our `GitHub repository <https://github.com/luizfernandolj/mlquantify>`__.
 
 Citing mlQuantify
 =================
@@ -78,15 +78,15 @@ Bibtex entry::
 Branding & Logo
 ===============
 
-High-resolution logos are available in the `brand assets <https://github.com/mlquantify/mlquantify/tree/main/assets/logo>`_ folder.
+High-resolution logos are available in the `brand assets <https://github.com/luizfernandolj/mlquantify/tree/master/assets>`_ folder.
 
 .. image:: /logos/logo_mlquantify.svg
    :align: center
    :width: 500px
 
-Funding & Support
-=================
+Support
+=======
 
-mlQuantify is an independent community project. If you'd like to help support its development, consider sponsoring or donating via `GitHub Sponsors <https://github.com/sponsors/mlquantify>`__.
-
-All contributions directly support maintenance and continued innovation in quantification research.
+mlQuantify is an independent, volunteer-maintained research project. The best
+ways to support it are to contribute code or documentation, report issues, and
+cite the library if it is useful in your own work (see `Citing mlQuantify`_).

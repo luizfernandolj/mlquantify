@@ -81,9 +81,9 @@ relying on static training distributions.
 
 .. dropdown:: References
 
-    .. [1] Ortega, J. P., Junior, L. F. L., Zalewski, W., & Maletzke, A.  
-       *QuaDapt: Drift-Resilient Quantification via Parameters Adaptation.*  
-      5th International Workshop on Learning to Quantify.
+    .. [1] Ortega, J. P., Junior, L. F. L., Zalewski, W., & Maletzke, A.
+       *QuaDapt: Drift-Resilient Quantification via Parameters Adaptation.*
+       5th International Workshop on Learning to Quantify.
 
     .. [2] Maletzke, A., Reis, D. dos, Hassan, W., & Batista, G. (2021).  
        *Accurately Quantifying under Score Variability.* ICDM 2021.

@@ -14,6 +14,7 @@ from mlquantify.matching import (
     KDEyHD,
     KDEyML,
     MMD_RKHS,
+    SMM,
     SORD,
 )
 from mlquantify.matching._generalized import KDEyML as GeneralizedKDEyML
@@ -212,6 +213,17 @@ def test_sord_score_matching_binary(binary_dataset):
 
     _assert_valid_prevalence(prevalence, n_classes=2)
     assert q.best_distance_ is not None
+
+
+def test_smm_score_matching_binary(binary_dataset):
+    X, y = binary_dataset
+    q = SMM(estimator=LogisticRegression(max_iter=1000, random_state=42))
+
+    q.fit(X, y)
+    with config_context(prevalence_return_type="array"):
+        prevalence = q.predict(X)
+
+    _assert_valid_prevalence(prevalence, n_classes=2)
 
 
 @pytest.mark.parametrize("quantifier_class", [DyS, HDy, HDx, SORD])
