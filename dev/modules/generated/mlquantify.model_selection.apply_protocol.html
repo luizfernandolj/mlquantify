@@ -760,7 +760,7 @@ fitted.</p>
 case <code class="docutils literal notranslate"><span class="pre">batch_size</span></code>, <code class="docutils literal notranslate"><span class="pre">n_prevalences</span></code> and <code class="docutils literal notranslate"><span class="pre">repeats</span></code> are ignored.</p>
 </dd>
 <dt><strong>scoring</strong><span class="classifier">str, callable, or list, default=’mae’</span></dt><dd><p>Metric(s) used to score each sample. A metric name (e.g. <code class="docutils literal notranslate"><span class="pre">'mae'</span></code>,
-<code class="docutils literal notranslate"><span class="pre">'nmd'</span></code>), a callable <code class="docutils literal notranslate"><span class="pre">metric(pred,</span> <span class="pre">true)</span> <span class="pre">-&gt;</span> <span class="pre">float</span></code>, or a list mixing
+<code class="docutils literal notranslate"><span class="pre">'nmd'</span></code>), a callable <code class="docutils literal notranslate"><span class="pre">metric(true,</span> <span class="pre">pred)</span> <span class="pre">-&gt;</span> <span class="pre">float</span></code>, or a list mixing
 the two. Each becomes a key in the returned dictionary.</p>
 </dd>
 <dt><strong>batch_size</strong><span class="classifier">int or list of int, default=100</span></dt><dd><p>Size of each evaluation sample.</p>
