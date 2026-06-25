@@ -11,12 +11,12 @@
 <meta property="og:type" content="website" />
 <meta property="og:url" content="api/mlquantify.calibration.html" />
 <meta property="og:site_name" content="mlquantify" />
-<meta property="og:description" content="Calibration:" />
+<meta property="og:description" content="Post-hoc calibration of classifier posteriors and quantifier outputs. The scaling family of classifier calibrators (Temperature / Vector Scaling and their bias-corrected variants) is provided by Cl..." />
 <meta property="og:image:width" content="1146" />
 <meta property="og:image:height" content="600" />
-<meta property="og:image" content="_images/social_previews/summary_api_mlquantify.calibration_66b69ba6.png" />
-<meta property="og:image:alt" content="Calibration:" />
-<meta name="description" content="Calibration:" />
+<meta property="og:image" content="_images/social_previews/summary_api_mlquantify.calibration_62fc97c9.png" />
+<meta property="og:image:alt" content="Post-hoc calibration of classifier posteriors and quantifier outputs. The scaling family of classifier calibrators (Temperature / Vector Scaling and their bias-corrected variants) is provided by Cl..." />
+<meta name="description" content="Post-hoc calibration of classifier posteriors and quantifier outputs. The scaling family of classifier calibrators (Temperature / Vector Scaling and their bias-corrected variants) is provided by Cl..." />
 <meta name="twitter:card" content="summary_large_image" />
 
     <title>mlquantify.calibration &#8212; mlquantify</title>
@@ -722,18 +722,22 @@
                   
   <section id="module-mlquantify.calibration">
 <span id="mlquantify-calibration"></span><span id="calibration-ref"></span><h1>mlquantify.calibration<a class="headerlink" href="#module-mlquantify.calibration" title="Link to this heading">#</a></h1>
+<p>Post-hoc calibration of classifier posteriors and quantifier outputs.</p>
+<p>The scaling family of classifier calibrators (Temperature / Vector Scaling and
+their bias-corrected variants) is provided by <a class="reference internal" href="../modules/generated/mlquantify.calibration.ClassifierCalibrator.html#mlquantify.calibration.ClassifierCalibrator" title="mlquantify.calibration.ClassifierCalibrator"><code class="xref py py-class docutils literal notranslate"><span class="pre">ClassifierCalibrator</span></code></a>.</p>
+<p>Scaling-based calibrators that rescale a classifier’s logits to minimise the held-out negative log-likelihood (temperature and vector scaling), improving probabilistic quantifiers such as EMQ.</p>
 <section id="calibration">
 <span id="calibration-ref-calibration"></span><h2>Calibration<a class="headerlink" href="#calibration" title="Link to this heading">#</a></h2>
 <div class="pst-scrollable-table-container"><table class="autosummary longtable table autosummary">
 <tbody>
 <tr class="row-odd"><td><p><a class="reference internal" href="../modules/generated/mlquantify.calibration.Calibrator.html#mlquantify.calibration.Calibrator" title="mlquantify.calibration.Calibrator"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Calibrator</span></code></a></p></td>
-<td><p></p></td>
+<td><p>Base class for calibrators.</p></td>
 </tr>
 <tr class="row-even"><td><p><a class="reference internal" href="../modules/generated/mlquantify.calibration.ClassifierCalibrator.html#mlquantify.calibration.ClassifierCalibrator" title="mlquantify.calibration.ClassifierCalibrator"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ClassifierCalibrator</span></code></a></p></td>
-<td><p></p></td>
+<td><p>Post-hoc calibration of classifier posteriors by logit scaling.</p></td>
 </tr>
 <tr class="row-odd"><td><p><a class="reference internal" href="../modules/generated/mlquantify.calibration.QuantifierCalibrator.html#mlquantify.calibration.QuantifierCalibrator" title="mlquantify.calibration.QuantifierCalibrator"><code class="xref py py-obj docutils literal notranslate"><span class="pre">QuantifierCalibrator</span></code></a></p></td>
-<td><p></p></td>
+<td><p>Post-hoc calibration of quantifier prevalence estimates.</p></td>
 </tr>
 </tbody>
 </table>

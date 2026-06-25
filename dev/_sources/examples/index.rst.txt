@@ -112,6 +112,15 @@ Model selection and uncertainty
         Turn a point prevalence estimate into a bootstrap confidence interval
         and, for three classes, a confidence ellipse on the simplex.
 
+    .. grid-item-card:: Calibrating classifier posteriors
+        :link: sphx_calibration
+        :link-type: ref
+        :text-align: center
+
+        Fix an over-confident classifier with temperature / vector scaling and
+        watch the reliability diagram snap onto the diagonal — the posterior fix
+        that EMQ relies on.
+
 
 Multiclass
 ----------
@@ -126,6 +135,32 @@ Multiclass
 
         Quantify a three-class problem and inspect the per-class accuracy and
         the joint uncertainty on the probability simplex.
+
+
+Real-world datasets
+-------------------
+
+Load well-known quantification benchmarks with the
+:mod:`~mlquantify.datasets` fetchers, then score quantifiers on them.
+
+.. grid:: 1 1 2 2
+    :gutter: 3
+
+    .. grid-item-card:: Loading real-world datasets
+        :link: sphx_real_datasets_loading
+        :link-type: ref
+        :text-align: center
+
+        Fetch and cache benchmark datasets as a Bunch or an ``(X, y)`` tuple,
+        as NumPy arrays or pandas frames.
+
+    .. grid-item-card:: Evaluating a quantifier on real data
+        :link: sphx_real_datasets_evaluation
+        :link-type: ref
+        :text-align: center
+
+        Use a fetcher's built-in protocol to draw test bags with known
+        prevalence and score a quantifier against them.
 
 
 Synthetic datasets with ``make_quantification``
@@ -200,7 +235,10 @@ benchmark quantifiers on it with the true prevalences in hand.
    plot_error_by_shift
    plot_grid_search
    plot_confidence_regions
+   plot_calibration
    plot_multiclass
+   real_datasets_loading
+   real_datasets_evaluation
    plot_synthetic_intro
    plot_synthetic_shift
    plot_synthetic_prevalence

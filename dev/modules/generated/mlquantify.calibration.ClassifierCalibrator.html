@@ -729,8 +729,71 @@
 <h1>ClassifierCalibrator<a class="headerlink" href="#classifiercalibrator" title="Link to this heading">#</a></h1>
 <dl class="py class">
 <dt class="sig sig-object py" id="mlquantify.calibration.ClassifierCalibrator">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">mlquantify.calibration.</span></span><span class="sig-name descname"><span class="pre">ClassifierCalibrator</span></span><a class="reference external" href="https://github.com/luizfernandolj/mlquantify/tree/master/mlquantify/calibration.py#L12-L20"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mlquantify.calibration.ClassifierCalibrator" title="Link to this definition">#</a></dt>
-<dd></dd></dl>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">mlquantify.calibration.</span></span><span class="sig-name descname"><span class="pre">ClassifierCalibrator</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">method</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'bcts'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">input_type</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'proba'</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/luizfernandolj/mlquantify/tree/master/mlquantify/calibration/_classifier.py#L68-L172"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mlquantify.calibration.ClassifierCalibrator" title="Link to this definition">#</a></dt>
+<dd><p>Post-hoc calibration of classifier posteriors by logit scaling.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>method</strong><span class="classifier">{‘ts’, ‘bcts’, ‘vs’, ‘nbvs’}, default=’bcts’</span></dt><dd><p>Calibration map to fit:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">'ts'</span></code>   – Temperature Scaling (one temperature).</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">'bcts'</span></code> – Bias-Corrected Temperature Scaling (temperature + biases).</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">'vs'</span></code>   – Vector Scaling (per-class weights + biases).</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">'nbvs'</span></code> – No-Bias Vector Scaling (per-class weights).</p></li>
+</ul>
+</dd>
+<dt><strong>input_type</strong><span class="classifier">{‘proba’, ‘logits’}, default=’proba’</span></dt><dd><p>Whether <code class="docutils literal notranslate"><span class="pre">y_pred</span></code> holds probabilities (mapped to centred logits before
+scaling) or raw logits.</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Attributes<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt><strong>weights_</strong><span class="classifier">ndarray of shape (n_classes,)</span></dt><dd><p>Fitted multiplicative factors applied to the logits.</p>
+</dd>
+<dt><strong>biases_</strong><span class="classifier">ndarray of shape (n_classes,)</span></dt><dd><p>Fitted additive biases (zeros for <code class="docutils literal notranslate"><span class="pre">'ts'</span></code> and <code class="docutils literal notranslate"><span class="pre">'nbvs'</span></code>).</p>
+</dd>
+<dt><strong>classes_</strong><span class="classifier">ndarray</span></dt><dd><p>Distinct labels seen in <code class="docutils literal notranslate"><span class="pre">fit</span></code> (only set for 1-D <code class="docutils literal notranslate"><span class="pre">y_true</span></code>).</p>
+</dd>
+<dt><strong>n_features_in_</strong><span class="classifier">int</span></dt><dd><p>Number of classes (logit columns) seen in <code class="docutils literal notranslate"><span class="pre">fit</span></code>.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+<p class="rubric">Notes</p>
+<p>Calibration must be fit on predictions held out from classifier training
+(e.g. a validation split or cross-validated predictions); fitting it on the
+classifier’s own training predictions under-estimates the miscalibration.</p>
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span><span class="w"> </span><span class="nn">mlquantify.calibration</span><span class="w"> </span><span class="kn">import</span> <span class="n">ClassifierCalibrator</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">proba</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([[</span><span class="mf">0.6</span><span class="p">,</span> <span class="mf">0.4</span><span class="p">],</span> <span class="p">[</span><span class="mf">0.3</span><span class="p">,</span> <span class="mf">0.7</span><span class="p">],</span> <span class="p">[</span><span class="mf">0.8</span><span class="p">,</span> <span class="mf">0.2</span><span class="p">]])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">y</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">cal</span> <span class="o">=</span> <span class="n">ClassifierCalibrator</span><span class="p">(</span><span class="n">method</span><span class="o">=</span><span class="s2">&quot;ts&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">y</span><span class="p">,</span> <span class="n">proba</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">calibrated</span> <span class="o">=</span> <span class="n">cal</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">proba</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">np</span><span class="o">.</span><span class="n">allclose</span><span class="p">(</span><span class="n">calibrated</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">),</span> <span class="mf">1.0</span><span class="p">)</span>
+<span class="go">True</span>
+</pre></div>
+</div>
+<dl class="py method">
+<dt class="sig sig-object py" id="mlquantify.calibration.ClassifierCalibrator.fit">
+<span class="sig-name descname"><span class="pre">fit</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">y_true</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y_pred</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/luizfernandolj/mlquantify/tree/master/mlquantify/calibration/_classifier.py#L152-L166"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mlquantify.calibration.ClassifierCalibrator.fit" title="Link to this definition">#</a></dt>
+<dd><p>Fit the scaling map on held-out labels <code class="docutils literal notranslate"><span class="pre">y_true</span></code> and outputs <code class="docutils literal notranslate"><span class="pre">y_pred</span></code>.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="mlquantify.calibration.ClassifierCalibrator.fit_predict">
+<span class="sig-name descname"><span class="pre">fit_predict</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">y_true</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y_pred</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/luizfernandolj/mlquantify/tree/master/mlquantify/calibration/_base.py#L37-L39"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mlquantify.calibration.ClassifierCalibrator.fit_predict" title="Link to this definition">#</a></dt>
+<dd><p>Convenience: <code class="docutils literal notranslate"><span class="pre">fit(y_true,</span> <span class="pre">y_pred)</span></code> then <code class="docutils literal notranslate"><span class="pre">predict(y_pred)</span></code>.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="mlquantify.calibration.ClassifierCalibrator.predict">
+<span class="sig-name descname"><span class="pre">predict</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">y_pred</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/luizfernandolj/mlquantify/tree/master/mlquantify/calibration/_classifier.py#L168-L172"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mlquantify.calibration.ClassifierCalibrator.predict" title="Link to this definition">#</a></dt>
+<dd><p>Return calibrated probabilities for <code class="docutils literal notranslate"><span class="pre">y_pred</span></code>.</p>
+</dd></dl>
+
+</dd></dl>
 
 </section>
 
@@ -786,7 +849,12 @@
   <nav id="pst-page-toc-nav" class="page-toc" aria-labelledby="pst-page-navigation-heading-2">
     
 <ul class="pst-show_toc_level nav section-nav flex-column">
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#mlquantify.calibration.ClassifierCalibrator"><code class="docutils literal notranslate"><span class="pre">ClassifierCalibrator</span></code></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#mlquantify.calibration.ClassifierCalibrator"><code class="docutils literal notranslate"><span class="pre">ClassifierCalibrator</span></code></a><ul class="nav section-nav flex-column visible">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#mlquantify.calibration.ClassifierCalibrator.fit"><code class="docutils literal notranslate"><span class="pre">fit</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#mlquantify.calibration.ClassifierCalibrator.fit_predict"><code class="docutils literal notranslate"><span class="pre">fit_predict</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#mlquantify.calibration.ClassifierCalibrator.predict"><code class="docutils literal notranslate"><span class="pre">predict</span></code></a></li>
+</ul>
+</li>
 </ul>
 
 

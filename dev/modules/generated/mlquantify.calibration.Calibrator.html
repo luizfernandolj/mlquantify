@@ -729,8 +729,42 @@
 <h1>Calibrator<a class="headerlink" href="#calibrator" title="Link to this heading">#</a></h1>
 <dl class="py class">
 <dt class="sig sig-object py" id="mlquantify.calibration.Calibrator">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">mlquantify.calibration.</span></span><span class="sig-name descname"><span class="pre">Calibrator</span></span><a class="reference external" href="https://github.com/luizfernandolj/mlquantify/tree/master/mlquantify/calibration.py#L1-L9"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mlquantify.calibration.Calibrator" title="Link to this definition">#</a></dt>
-<dd></dd></dl>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">mlquantify.calibration.</span></span><span class="sig-name descname"><span class="pre">Calibrator</span></span><a class="reference external" href="https://github.com/luizfernandolj/mlquantify/tree/master/mlquantify/calibration/_base.py#L7-L39"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mlquantify.calibration.Calibrator" title="Link to this definition">#</a></dt>
+<dd><p>Base class for calibrators.</p>
+<p>A calibrator learns a post-hoc transformation of a model’s outputs from a
+labelled held-out set with <a class="reference internal" href="#mlquantify.calibration.Calibrator.fit" title="mlquantify.calibration.Calibrator.fit"><code class="xref py py-meth docutils literal notranslate"><span class="pre">fit</span></code></a>, then applies it to new outputs with
+<a class="reference internal" href="#mlquantify.calibration.Calibrator.predict" title="mlquantify.calibration.Calibrator.predict"><code class="xref py py-meth docutils literal notranslate"><span class="pre">predict</span></code></a>. Subclasses implement both methods.</p>
+<p class="rubric">Notes</p>
+<p>The argument order follows scikit-learn: <a class="reference internal" href="#mlquantify.calibration.Calibrator.fit" title="mlquantify.calibration.Calibrator.fit"><code class="xref py py-meth docutils literal notranslate"><span class="pre">fit</span></code></a> takes the ground-truth
+labels first and the model output second – <code class="docutils literal notranslate"><span class="pre">fit(y_true,</span> <span class="pre">y_pred)</span></code>.</p>
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span><span class="w"> </span><span class="nn">mlquantify.calibration</span><span class="w"> </span><span class="kn">import</span> <span class="n">Calibrator</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">class</span><span class="w"> </span><span class="nc">IdentityCalibrator</span><span class="p">(</span><span class="n">Calibrator</span><span class="p">):</span>
+<span class="gp">... </span>    <span class="k">def</span><span class="w"> </span><span class="nf">fit</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">y_true</span><span class="p">,</span> <span class="n">y_pred</span><span class="p">):</span>
+<span class="gp">... </span>        <span class="k">return</span> <span class="bp">self</span>
+<span class="gp">... </span>    <span class="k">def</span><span class="w"> </span><span class="nf">predict</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">y_pred</span><span class="p">):</span>
+<span class="gp">... </span>        <span class="k">return</span> <span class="n">y_pred</span>
+</pre></div>
+</div>
+<dl class="py method">
+<dt class="sig sig-object py" id="mlquantify.calibration.Calibrator.fit">
+<span class="sig-name descname"><span class="pre">fit</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">y_true</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y_pred</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/luizfernandolj/mlquantify/tree/master/mlquantify/calibration/_base.py#L29-L31"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mlquantify.calibration.Calibrator.fit" title="Link to this definition">#</a></dt>
+<dd><p>Fit the calibration map from held-out labels and predictions.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="mlquantify.calibration.Calibrator.fit_predict">
+<span class="sig-name descname"><span class="pre">fit_predict</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">y_true</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y_pred</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/luizfernandolj/mlquantify/tree/master/mlquantify/calibration/_base.py#L37-L39"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mlquantify.calibration.Calibrator.fit_predict" title="Link to this definition">#</a></dt>
+<dd><p>Convenience: <code class="docutils literal notranslate"><span class="pre">fit(y_true,</span> <span class="pre">y_pred)</span></code> then <code class="docutils literal notranslate"><span class="pre">predict(y_pred)</span></code>.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="mlquantify.calibration.Calibrator.predict">
+<span class="sig-name descname"><span class="pre">predict</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">y_pred</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/luizfernandolj/mlquantify/tree/master/mlquantify/calibration/_base.py#L33-L35"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mlquantify.calibration.Calibrator.predict" title="Link to this definition">#</a></dt>
+<dd><p>Apply the fitted calibration map to new predictions.</p>
+</dd></dl>
+
+</dd></dl>
 
 </section>
 
@@ -786,7 +820,12 @@
   <nav id="pst-page-toc-nav" class="page-toc" aria-labelledby="pst-page-navigation-heading-2">
     
 <ul class="pst-show_toc_level nav section-nav flex-column">
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#mlquantify.calibration.Calibrator"><code class="docutils literal notranslate"><span class="pre">Calibrator</span></code></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#mlquantify.calibration.Calibrator"><code class="docutils literal notranslate"><span class="pre">Calibrator</span></code></a><ul class="nav section-nav flex-column visible">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#mlquantify.calibration.Calibrator.fit"><code class="docutils literal notranslate"><span class="pre">fit</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#mlquantify.calibration.Calibrator.fit_predict"><code class="docutils literal notranslate"><span class="pre">fit_predict</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#mlquantify.calibration.Calibrator.predict"><code class="docutils literal notranslate"><span class="pre">predict</span></code></a></li>
+</ul>
+</li>
 </ul>
 
 

@@ -729,8 +729,34 @@
 <h1>QuantifierCalibrator<a class="headerlink" href="#quantifiercalibrator" title="Link to this heading">#</a></h1>
 <dl class="py class">
 <dt class="sig sig-object py" id="mlquantify.calibration.QuantifierCalibrator">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">mlquantify.calibration.</span></span><span class="sig-name descname"><span class="pre">QuantifierCalibrator</span></span><a class="reference external" href="https://github.com/luizfernandolj/mlquantify/tree/master/mlquantify/calibration.py#L23-L31"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mlquantify.calibration.QuantifierCalibrator" title="Link to this definition">#</a></dt>
-<dd></dd></dl>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">mlquantify.calibration.</span></span><span class="sig-name descname"><span class="pre">QuantifierCalibrator</span></span><a class="reference external" href="https://github.com/luizfernandolj/mlquantify/tree/master/mlquantify/calibration/_quantifier.py#L12-L26"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mlquantify.calibration.QuantifierCalibrator" title="Link to this definition">#</a></dt>
+<dd><p>Post-hoc calibration of quantifier prevalence estimates.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>This class is a placeholder: its semantics are not yet defined and both
+methods raise <a class="reference external" href="https://docs.python.org/3/library/exceptions.html#NotImplementedError" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">NotImplementedError</span></code></a>. Use
+<a class="reference internal" href="mlquantify.calibration.ClassifierCalibrator.html#mlquantify.calibration.ClassifierCalibrator" title="mlquantify.calibration.ClassifierCalibrator"><code class="xref py py-class docutils literal notranslate"><span class="pre">ClassifierCalibrator</span></code></a> to calibrate the posteriors a quantifier
+consumes.</p>
+</div>
+<dl class="py method">
+<dt class="sig sig-object py" id="mlquantify.calibration.QuantifierCalibrator.fit">
+<span class="sig-name descname"><span class="pre">fit</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">y_true</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y_pred</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/luizfernandolj/mlquantify/tree/master/mlquantify/calibration/_quantifier.py#L22-L23"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mlquantify.calibration.QuantifierCalibrator.fit" title="Link to this definition">#</a></dt>
+<dd><p>Fit the calibration map from held-out labels and predictions.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="mlquantify.calibration.QuantifierCalibrator.fit_predict">
+<span class="sig-name descname"><span class="pre">fit_predict</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">y_true</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y_pred</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/luizfernandolj/mlquantify/tree/master/mlquantify/calibration/_base.py#L37-L39"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mlquantify.calibration.QuantifierCalibrator.fit_predict" title="Link to this definition">#</a></dt>
+<dd><p>Convenience: <code class="docutils literal notranslate"><span class="pre">fit(y_true,</span> <span class="pre">y_pred)</span></code> then <code class="docutils literal notranslate"><span class="pre">predict(y_pred)</span></code>.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="mlquantify.calibration.QuantifierCalibrator.predict">
+<span class="sig-name descname"><span class="pre">predict</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">y_pred</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/luizfernandolj/mlquantify/tree/master/mlquantify/calibration/_quantifier.py#L25-L26"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mlquantify.calibration.QuantifierCalibrator.predict" title="Link to this definition">#</a></dt>
+<dd><p>Apply the fitted calibration map to new predictions.</p>
+</dd></dl>
+
+</dd></dl>
 
 </section>
 
@@ -786,7 +812,12 @@
   <nav id="pst-page-toc-nav" class="page-toc" aria-labelledby="pst-page-navigation-heading-2">
     
 <ul class="pst-show_toc_level nav section-nav flex-column">
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#mlquantify.calibration.QuantifierCalibrator"><code class="docutils literal notranslate"><span class="pre">QuantifierCalibrator</span></code></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#mlquantify.calibration.QuantifierCalibrator"><code class="docutils literal notranslate"><span class="pre">QuantifierCalibrator</span></code></a><ul class="nav section-nav flex-column visible">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#mlquantify.calibration.QuantifierCalibrator.fit"><code class="docutils literal notranslate"><span class="pre">fit</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#mlquantify.calibration.QuantifierCalibrator.fit_predict"><code class="docutils literal notranslate"><span class="pre">fit_predict</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#mlquantify.calibration.QuantifierCalibrator.predict"><code class="docutils literal notranslate"><span class="pre">predict</span></code></a></li>
+</ul>
+</li>
 </ul>
 
 
