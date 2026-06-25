@@ -41,7 +41,10 @@ jobs:
       - name: Install mlquantify (with compiled Cython kernel)
         # Compiling the extension means the accelerated histogram-sweep path is
         # exercised too; if it fails to build the package still falls back.
-        run: python -m pip install -e .
+        # The 'viz' extra installs matplotlib, which is an optional dependency
+        # but is needed by the visualization tests and by the doctest step
+        # (which imports mlquantify.visualization).
+        run: python -m pip install -e ".[viz]"
 
       - name: Run test suite
         # Neural (QuaNet) tests skip automatically because torch is not installed.
