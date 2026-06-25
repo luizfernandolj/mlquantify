@@ -6,6 +6,18 @@ All notable changes to mlquantify will be documented in this file.
 
 ## [Unreleased]
 
+_Nothing yet. Add user-visible changes here as they land._
+
+---
+
+## [v0.5.0]
+
+This release adds two new subpackages — **`mlquantify.visualization`**
+(scikit-learn-style plotting) and **`mlquantify.datasets`** (synthetic and
+real-world quantification data) — plus an example gallery and a redesigned
+documentation homepage. It also aligns the evaluation-metrics API with
+scikit-learn (a breaking change, below) and modernises packaging.
+
 ### Breaking Changes
 
 - **Evaluation metrics now follow the scikit-learn argument order
@@ -18,41 +30,6 @@ All notable changes to mlquantify will be documented in this file.
   ``(true, pred)`` order and so become correct; update any code that passed the
   prediction first. The `apply_protocol` scoring-callable contract is likewise
   ``metric(true, pred)``.
-user
-### Fixed
-
-- Removed stray ``print()`` calls in the metrics input helper that dumped
-  prevalence vectors to stdout whenever a metric was given a Python ``list``.
-
-### Changed
-
-- **`matplotlib` is no longer a required dependency.** Plotting moves behind a
-  ``viz`` extra (``pip install mlquantify[viz]``), and the neural quantifiers
-  behind a ``neural`` extra; ``pip install mlquantify[all]`` pulls in both. A
-  bare ``import mlquantify`` never imports matplotlib.
-- Removed the unused ``xlrd`` dependency.
-- Project metadata moved from ``setup.py`` into ``pyproject.toml`` (PEP 621
-  ``[project]`` table). ``setup.py`` now only resolves the version and builds
-  the optional Cython kernel.
-
-### Internal
-
-- De-duplicated the metrics ``process_inputs`` helper into a single
-  ``mlquantify.metrics._utils`` module (was copy-pasted across three files).
-- Removed the dead ``mlquantify/model_selection/_split.py`` stub (empty ``# TODO``,
-  imported nowhere).
-- Added test coverage for ``mlquantify.confidence`` (percentile intervals,
-  simplex/CLR ellipses, and the factory). Added ``xfail`` specification tests
-  for ``mlquantify.calibration``, whose classes are still unimplemented stubs.
-
----
-
-## [v0.5.0]
-
-This release adds two new subpackages — **`mlquantify.visualization`**
-(scikit-learn-style plotting) and **`mlquantify.datasets`** (synthetic and
-real-world quantification data) — plus an example gallery and a redesigned
-documentation homepage.
 
 ### New Features
 
@@ -111,6 +88,11 @@ documentation homepage.
     `make_protocol` (turn a loaded dataset into protocol bags), and a
     download-progress hook (`set_progress_hook` / `get_progress_hook`).
 
+### Fixed
+
+- Removed stray ``print()`` calls in the metrics input helper that dumped
+  prevalence vectors to stdout whenever a metric was given a Python ``list``.
+
 ### Documentation
 
 - New User Guide pages: **Synthetic Datasets** (the `make_quantification`
@@ -125,10 +107,31 @@ documentation homepage.
 - Redesigned documentation homepage with per-module showcase cards (generated
   figures) and a dev banner flagging the non-stable version.
 
+### Build & Packaging
+
+- **`matplotlib` is no longer a required dependency.** Plotting moves behind a
+  ``viz`` extra (``pip install mlquantify[viz]``), and the neural quantifiers
+  behind a ``neural`` extra; ``pip install mlquantify[all]`` pulls in both. A
+  bare ``import mlquantify`` never imports matplotlib.
+- Removed the unused ``xlrd`` dependency.
+- Project metadata moved from ``setup.py`` into ``pyproject.toml`` (PEP 621
+  ``[project]`` table). ``setup.py`` now only resolves the version and builds
+  the optional Cython kernel.
+
+### Internal
+
+- De-duplicated the metrics ``process_inputs`` helper into a single
+  ``mlquantify.metrics._utils`` module (was copy-pasted across three files).
+- Removed the dead ``mlquantify/model_selection/_split.py`` stub (empty ``# TODO``,
+  imported nowhere).
+
 ### Tests
 
 - Added `tests/test_datasets.py` covering the generator and the fetchers; fixed
   the fetch tests.
+- Added `tests/test_confidence.py` (percentile intervals, simplex/CLR ellipses,
+  and the factory). Added ``xfail`` specification tests in
+  `tests/test_calibration.py` for the still-unimplemented calibration stubs.
 
 ---
 
