@@ -1,0 +1,877 @@
+
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="../" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+<meta property="og:title" content="mlquantify.datasets" />
+<meta property="og:type" content="website" />
+<meta property="og:url" content="api/mlquantify.datasets.html" />
+<meta property="og:site_name" content="mlquantify" />
+<meta property="og:description" content="Synthetic and helper datasets for quantification. Mirrors the spirit of sklearn.datasets, but the generators produce bags(samples with controlled class prevalence) suitable for evaluating quantifie..." />
+<meta property="og:image:width" content="1146" />
+<meta property="og:image:height" content="600" />
+<meta property="og:image" content="_images/social_previews/summary_api_mlquantify.datasets_7478d009.png" />
+<meta property="og:image:alt" content="Synthetic and helper datasets for quantification. Mirrors the spirit of sklearn.datasets, but the generators produce bags(samples with controlled class prevalence) suitable for evaluating quantifie..." />
+<meta name="description" content="Synthetic and helper datasets for quantification. Mirrors the spirit of sklearn.datasets, but the generators produce bags(samples with controlled class prevalence) suitable for evaluating quantifie..." />
+<meta name="twitter:card" content="summary_large_image" />
+
+    <title>mlquantify.datasets &#8212; mlquantify</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
+  </script>
+  <!--
+    this give us a css class that will be invisible only if js is disabled
+  -->
+  <noscript>
+    <style>
+      .pst-js-only { display: none !important; }
+
+    </style>
+  </noscript>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../_static/styles/theme.css?digest=a95f357e85573c9b56d5" rel="stylesheet" />
+<link href="../_static/styles/pydata-sphinx-theme.css?digest=a95f357e85573c9b56d5" rel="stylesheet" />
+
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=8f2a1f02" />
+    <link rel="stylesheet" type="text/css" href="../_static/copybutton.css?v=76b2166b" />
+    <link rel="stylesheet" type="text/css" href="../_static/plot_directive.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinx-design.min.css?v=95c83b7e" />
+    <link rel="stylesheet" type="text/css" href="../_static/variables.css?v=fded66fe" />
+    <link rel="stylesheet" type="text/css" href="../_static/theme_overrides.css?v=dec63a3c" />
+    <link rel="stylesheet" type="text/css" href="../_static/landing.css?v=a73da8a0" />
+    <link rel="stylesheet" type="text/css" href="../_static/dev_banner.css?v=ad749d7a" />
+  
+  <!-- So that users can add custom icons -->
+  <script defer src="../_static/scripts/fontawesome.js?digest=a95f357e85573c9b56d5"></script>
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=a95f357e85573c9b56d5" />
+<link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=a95f357e85573c9b56d5" />
+
+    <script src="../_static/documentation_options.js?v=dc233e31"></script>
+    <script src="../_static/doctools.js?v=9bcbadda"></script>
+    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../_static/clipboard.min.js?v=a7894cd8"></script>
+    <script src="../_static/copybutton.js?v=f281be69"></script>
+    <script src="../_static/design-tabs.js?v=f930bc37"></script>
+    <script async="async" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'api/mlquantify.datasets';</script>
+    <script>
+        DOCUMENTATION_OPTIONS.theme_version = '0.19.0';
+        DOCUMENTATION_OPTIONS.theme_switcher_json_url = 'https://luizfernandolj.github.io/mlquantify/switcher.json';
+        DOCUMENTATION_OPTIONS.theme_switcher_version_match = '0.5.0';
+        DOCUMENTATION_OPTIONS.show_version_warning_banner =
+            true;
+        </script>
+    <script>DOCUMENTATION_OPTIONS.search_as_you_type = false;</script>
+    <script src="../_static/dev_banner.js?v=1edec9a1"></script>
+    <link rel="canonical" href="https://luizfernandolj.github.io/mlquantify/api/mlquantify.datasets.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="make_quantification" href="../modules/generated/mlquantify.datasets.make_quantification.html" />
+    <link rel="prev" title="compute_table" href="../modules/generated/mlquantify.counting.compute_table.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  <meta name="docsearch:version" content="" />
+  
+    
+    <script src="../_static/searchtools.js"></script>
+    <script src="../_static/language_data.js"></script>
+    <script src="../searchindex.js"></script>
+  
+  </head>
+  <body data-default-mode="">
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+  
+  
+  
+  
+  <dialog id="pst-search-dialog">
+    
+<form class="bd-search d-flex align-items-center"
+      action="../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         placeholder="Search the docs ..."
+         aria-label="Search the docs ..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form>
+  </dialog>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
+  
+    <header id="pst-header" class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+<div class="bd-header__inner bd-page-width">
+  <button class="pst-navbar-icon sidebar-toggle primary-toggle" aria-label="Site navigation">
+    <span class="fa-solid fa-bars"></span>
+  </button>
+  
+  
+  <div class=" navbar-header-items__start">
+    
+      <div class="navbar-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="../index.html">
+  
+  
+  
+  
+  
+    
+    
+      
+    
+    
+    <img src="../_static/logo_mlquantify.svg" class="logo__image only-light" alt="mlquantify homepage"/>
+    <img src="../_static/logo_mlquantify-white.svg" class="logo__image only-dark pst-js-only" alt="mlquantify homepage"/>
+  
+  
+</a></div>
+    
+  </div>
+  
+  <div class=" navbar-header-items">
+    
+    <div class="me-auto navbar-header-items__center">
+      
+        <div class="navbar-item">
+<div class="version-switcher__container dropdown pst-js-only">
+  <button id="pst-version-switcher-button-2"
+    type="button"
+    class="version-switcher__button btn btn-sm dropdown-toggle"
+    data-bs-toggle="dropdown"
+    aria-haspopup="listbox"
+    aria-controls="pst-version-switcher-list-2"
+    aria-label="Version switcher list"
+  >
+    Choose version  <!-- this text may get changed later by javascript -->
+    <span class="caret"></span>
+  </button>
+  <div id="pst-version-switcher-list-2"
+    class="version-switcher__menu dropdown-menu list-group-flush py-0"
+    role="listbox" aria-labelledby="pst-version-switcher-button-2">
+    <!-- dropdown will be populated by javascript on page load -->
+  </div>
+</div></div>
+      
+        <div class="navbar-item">
+<nav>
+  <ul class="bd-navbar-elements navbar-nav">
+    
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../install.html">
+    Install
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../user_guide.html">
+    User Guide
+  </a>
+</li>
+
+
+<li class="nav-item current active">
+  <a class="nav-link nav-internal" href="index.html">
+    API
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../getting_started.html">
+    Getting Started
+  </a>
+</li>
+
+            <li class="nav-item dropdown">
+                <button class="btn dropdown-toggle nav-item" type="button"
+                data-bs-toggle="dropdown" aria-expanded="false"
+                aria-controls="pst-nav-more-links">
+                    More
+                </button>
+                <ul id="pst-nav-more-links" class="dropdown-menu">
+                    
+<li class=" ">
+  <a class="nav-link dropdown-item nav-internal" href="../examples/index.html">
+    Examples
+  </a>
+</li>
+
+
+<li class=" ">
+  <a class="nav-link dropdown-item nav-internal" href="../about_us.html">
+    About Us
+  </a>
+</li>
+
+                </ul>
+            </li>
+            
+  </ul>
+</nav></div>
+      
+    </div>
+    
+    
+    <div class="navbar-header-items__end">
+      
+        <div class="navbar-item navbar-persistent--container">
+          
+
+<button class="btn btn-sm pst-navbar-icon search-button search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass fa-lg"></i>
+</button>
+        </div>
+      
+      
+        <div class="navbar-item">
+
+<div class="theme-switch-container dropdown pst-js-only" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Color mode">
+  <button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button dropdown-toggle" aria-label="Color mode" data-bs-toggle="dropdown">
+    <i class="theme-switch fa-solid fa-sun fa-lg fa-fw" data-mode="light" title="Light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg fa-fw" data-mode="dark" title="Dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg fa-fw" data-mode="auto" title="System Settings"></i>
+  </button>
+  <ul class="dropdown-menu dropdown-menu-end">
+    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="auto"><i class="fa-solid fa-circle-half-stroke fa-lg fa-fw me-1"></i>System Settings</button></li>
+    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="light"><i class="fa-solid fa-sun fa-lg fa-fw me-1"></i>Light</button></li>
+    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="dark"><i class="fa-solid fa-moon fa-lg fa-fw me-1"></i>Dark</button></li>
+  </ul>
+</div></div>
+      
+        <div class="navbar-item"><ul class="navbar-icon-links"
+    aria-label="Icon Links">
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://github.com/luizfernandolj/mlquantify/tree/master" title="GitHub" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><i class="fa-brands fa-square-github fa-lg" aria-hidden="true"></i><span class="visually-hidden">GitHub</span></a>
+        </li>
+</ul></div>
+      
+    </div>
+    
+  </div>
+  
+  
+    <div class="navbar-persistent--mobile">
+
+<button class="btn btn-sm pst-navbar-icon search-button search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass fa-lg"></i>
+</button>
+    </div>
+  
+
+  
+</div>
+
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+      <dialog id="pst-primary-sidebar-modal"></dialog>
+      <div id="pst-primary-sidebar" class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+      <div class="sidebar-header-items__center">
+        
+          
+          
+            <div class="navbar-item">
+<div class="version-switcher__container dropdown pst-js-only">
+  <button id="pst-version-switcher-button-3"
+    type="button"
+    class="version-switcher__button btn btn-sm dropdown-toggle"
+    data-bs-toggle="dropdown"
+    aria-haspopup="listbox"
+    aria-controls="pst-version-switcher-list-3"
+    aria-label="Version switcher list"
+  >
+    Choose version  <!-- this text may get changed later by javascript -->
+    <span class="caret"></span>
+  </button>
+  <div id="pst-version-switcher-list-3"
+    class="version-switcher__menu dropdown-menu list-group-flush py-0"
+    role="listbox" aria-labelledby="pst-version-switcher-button-3">
+    <!-- dropdown will be populated by javascript on page load -->
+  </div>
+</div></div>
+          
+        
+          
+          
+            <div class="navbar-item">
+<nav>
+  <ul class="bd-navbar-elements navbar-nav">
+    
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../install.html">
+    Install
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../user_guide.html">
+    User Guide
+  </a>
+</li>
+
+
+<li class="nav-item current active">
+  <a class="nav-link nav-internal" href="index.html">
+    API
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../getting_started.html">
+    Getting Started
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../examples/index.html">
+    Examples
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../about_us.html">
+    About Us
+  </a>
+</li>
+
+  </ul>
+</nav></div>
+          
+        
+      </div>
+    
+    
+    
+      <div class="sidebar-header-items__end">
+        
+          <div class="navbar-item">
+
+<div class="theme-switch-container dropdown pst-js-only" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Color mode">
+  <button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button dropdown-toggle" aria-label="Color mode" data-bs-toggle="dropdown">
+    <i class="theme-switch fa-solid fa-sun fa-lg fa-fw" data-mode="light" title="Light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg fa-fw" data-mode="dark" title="Dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg fa-fw" data-mode="auto" title="System Settings"></i>
+  </button>
+  <ul class="dropdown-menu dropdown-menu-end">
+    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="auto"><i class="fa-solid fa-circle-half-stroke fa-lg fa-fw me-1"></i>System Settings</button></li>
+    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="light"><i class="fa-solid fa-sun fa-lg fa-fw me-1"></i>Light</button></li>
+    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="dark"><i class="fa-solid fa-moon fa-lg fa-fw me-1"></i>Dark</button></li>
+  </ul>
+</div></div>
+        
+          <div class="navbar-item"><ul class="navbar-icon-links"
+    aria-label="Icon Links">
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://github.com/luizfernandolj/mlquantify/tree/master" title="GitHub" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><i class="fa-brands fa-square-github fa-lg" aria-hidden="true"></i><span class="visually-hidden">GitHub</span></a>
+        </li>
+</ul></div>
+        
+      </div>
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item pst-sidebar-collapse"><button id="pst-collapse-sidebar-button" aria-expanded="true" aria-controls="pst-primary-sidebar"><svg class="pst-icon svg-inline--fa" role="img" aria-hidden="true" focusable="false" viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg">
+    <path fill="currentColor" d="M3 15.5C2.36232 15.5 1.74874 15.2564 1.28478 14.8189C0.820828 14.3815 0.541576 13.7832 0.504167 13.1467L0.5 13L0.5 3C0.499965 2.36232 0.743605 1.74874 1.18107 1.28478C1.61854 0.820828 2.21676 0.541576 2.85333 0.504167L3 0.5L13 0.5C13.6377 0.499965 14.2513 0.743605 14.7152 1.18107C15.1792 1.61854 15.4584 2.21676 15.4958 2.85333L15.5 3L15.5 13C15.5 13.6377 15.2564 14.2513 14.8189 14.7152C14.3815 15.1792 13.7832 15.4584 13.1467 15.4958L13 15.5L3 15.5ZM3 13.8333L10.5 13.8333L10.5 2.16667L3 2.16667C2.79589 2.16669 2.59889 2.24163 2.44636 2.37726C2.29383 2.5129 2.19638 2.69979 2.1725 2.9025L2.16667 3L2.16667 13C2.16669 13.2041 2.24163 13.4011 2.37726 13.5536C2.5129 13.7062 2.69979 13.8036 2.9025 13.8275L3 13.8333ZM6.65583 10.325L6.5775 10.2558L4.91083 8.58917C4.76735 8.44567 4.68116 8.25476 4.66843 8.05223C4.65569 7.84971 4.71729 7.6495 4.84167 7.48917L4.91083 7.41083L6.5775 5.74417C6.72747 5.59471 6.9287 5.50794 7.14032 5.50148C7.35194 5.49502 7.55809 5.56935 7.7169 5.70937C7.8757 5.8494 7.97525 6.04463 7.99533 6.25539C8.01541 6.46616 7.95451 6.67667 7.825 6.84417L7.75583 6.9225L6.67917 8L7.75583 9.0775C7.89931 9.22099 7.98551 9.41191 7.99824 9.61443C8.01097 9.81695 7.94938 10.0172 7.825 10.1775L7.75583 10.2558C7.61234 10.3993 7.42142 10.4855 7.2189 10.4982C7.01638 10.511 6.81617 10.4494 6.65583 10.325Z"/>
+  </svg>
+  <span class="pst-collapse-sidebar-label">Collapse Sidebar</span>
+  <span class="pst-expand-sidebar-label">Expand Sidebar</span>
+</button></div>
+        <div class="sidebar-primary-item">
+
+<nav class="bd-docs-nav bd-links"
+     aria-label="Section Navigation">
+  <p class="bd-links__title" role="heading" aria-level="1">Section Navigation</p>
+  <div class="bd-toc-item navbar-nav"><ul class="current nav bd-sidenav">
+<li class="toctree-l1 has-children"><a class="reference internal" href="mlquantify.html">mlquantify</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../modules/generated/mlquantify.get_config.html">get_config</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../modules/generated/mlquantify.set_config.html">set_config</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../modules/generated/mlquantify.config_context.html">config_context</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="mlquantify.base.html">mlquantify.base</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../modules/generated/mlquantify.base.BaseQuantifier.html">BaseQuantifier</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../modules/generated/mlquantify.base.MetaquantifierMixin.html">MetaquantifierMixin</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../modules/generated/mlquantify.base.ProtocolMixin.html">ProtocolMixin</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="mlquantify.base_aggregative.html">mlquantify.base_aggregative</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../modules/generated/mlquantify.base_aggregative.AggregationMixin.html">AggregationMixin</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../modules/generated/mlquantify.base_aggregative.SoftPredictionMixin.html">SoftPredictionMixin</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../modules/generated/mlquantify.base_aggregative.CrispPredictionMixin.html">CrispPredictionMixin</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="mlquantify.calibration.html">mlquantify.calibration</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../modules/generated/mlquantify.calibration.Calibrator.html">Calibrator</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../modules/generated/mlquantify.calibration.ClassifierCalibrator.html">ClassifierCalibrator</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../modules/generated/mlquantify.calibration.QuantifierCalibrator.html">QuantifierCalibrator</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="mlquantify.compose.html">mlquantify.compose</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../modules/generated/mlquantify.compose.BaseComposeQuantifier.html">BaseComposeQuantifier</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../modules/generated/mlquantify.compose.LinearComposeQuantifier.html">LinearComposeQuantifier</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../modules/generated/mlquantify.compose.LikelihoodComposeQuantifier.html">LikelihoodComposeQuantifier</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../modules/generated/mlquantify.compose.ComposeQuantifier.html">ComposeQuantifier</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="mlquantify.confidence.html">mlquantify.confidence</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../modules/generated/mlquantify.confidence.BaseConfidenceRegion.html">BaseConfidenceRegion</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../modules/generated/mlquantify.confidence.ConfidenceInterval.html">ConfidenceInterval</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../modules/generated/mlquantify.confidence.ConfidenceEllipseSimplex.html">ConfidenceEllipseSimplex</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../modules/generated/mlquantify.confidence.ConfidenceEllipseCLR.html">ConfidenceEllipseCLR</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../modules/generated/mlquantify.confidence.construct_confidence_region.html">construct_confidence_region</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="mlquantify.counting.html">mlquantify.counting</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../modules/generated/mlquantify.counting.CC.html">CC</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../modules/generated/mlquantify.counting.PCC.html">PCC</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../modules/generated/mlquantify.counting.ACC.html">ACC</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../modules/generated/mlquantify.counting.ThresholdAdjustment.html">ThresholdAdjustment</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../modules/generated/mlquantify.counting.TAC.html">TAC</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../modules/generated/mlquantify.counting.TX.html">TX</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../modules/generated/mlquantify.counting.TMAX.html">TMAX</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../modules/generated/mlquantify.counting.T50.html">T50</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../modules/generated/mlquantify.counting.MS.html">MS</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../modules/generated/mlquantify.counting.MS2.html">MS2</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../modules/generated/mlquantify.counting.FM.html">FM</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../modules/generated/mlquantify.counting.GACC.html">GACC</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../modules/generated/mlquantify.counting.GPACC.html">GPACC</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../modules/generated/mlquantify.counting.evaluate_thresholds.html">evaluate_thresholds</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../modules/generated/mlquantify.counting.compute_tpr.html">compute_tpr</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../modules/generated/mlquantify.counting.compute_fpr.html">compute_fpr</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../modules/generated/mlquantify.counting.compute_table.html">compute_table</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1 current active has-children"><a class="current reference internal" href="#">mlquantify.datasets</a><details open="open"><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../modules/generated/mlquantify.datasets.make_quantification.html">make_quantification</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../modules/generated/mlquantify.datasets.fetch_mushroom.html">fetch_mushroom</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../modules/generated/mlquantify.datasets.fetch_banknote_authentication.html">fetch_banknote_authentication</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../modules/generated/mlquantify.datasets.fetch_haberman_survival.html">fetch_haberman_survival</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../modules/generated/mlquantify.datasets.fetch_miniboone.html">fetch_miniboone</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../modules/generated/mlquantify.datasets.fetch_digits_optical_penbased.html">fetch_digits_optical_penbased</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../modules/generated/mlquantify.datasets.fetch_dry_bean.html">fetch_dry_bean</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../modules/generated/mlquantify.datasets.fetch_covertype.html">fetch_covertype</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../modules/generated/mlquantify.datasets.fetch_yeast.html">fetch_yeast</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../modules/generated/mlquantify.datasets.fetch_sensorless_drive.html">fetch_sensorless_drive</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../modules/generated/mlquantify.datasets.fetch_statlog_shuttle.html">fetch_statlog_shuttle</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../modules/generated/mlquantify.datasets.fetch_wine_quality.html">fetch_wine_quality</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../modules/generated/mlquantify.datasets.fetch_online_news_popularity.html">fetch_online_news_popularity</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../modules/generated/mlquantify.datasets.fetch_pima_diabetes.html">fetch_pima_diabetes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../modules/generated/mlquantify.datasets.fetch_electricity_elec2.html">fetch_electricity_elec2</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../modules/generated/mlquantify.datasets.fetch_airlines.html">fetch_airlines</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../modules/generated/mlquantify.datasets.fetch_newsgroups20.html">fetch_newsgroups20</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../modules/generated/mlquantify.datasets.fetch_imdb.html">fetch_imdb</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../modules/generated/mlquantify.datasets.fetch_multidomain_sentiment.html">fetch_multidomain_sentiment</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../modules/generated/mlquantify.datasets.fetch_sentiment140.html">fetch_sentiment140</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../modules/generated/mlquantify.datasets.fetch_rcv1_v2.html">fetch_rcv1_v2</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../modules/generated/mlquantify.datasets.fetch_mnist_usps.html">fetch_mnist_usps</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../modules/generated/mlquantify.datasets.fetch_cifar10.html">fetch_cifar10</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../modules/generated/mlquantify.datasets.fetch_planetoid_cora_citeseer_pubmed.html">fetch_planetoid_cora_citeseer_pubmed</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../modules/generated/mlquantify.datasets.fetch_sea_concepts.html">fetch_sea_concepts</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../modules/generated/mlquantify.datasets.fetch_lequa2024.html">fetch_lequa2024</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../modules/generated/mlquantify.datasets.Bunch.html">Bunch</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../modules/generated/mlquantify.datasets.get_data_home.html">get_data_home</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../modules/generated/mlquantify.datasets.fetch_remote.html">fetch_remote</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="mlquantify.likelihood.html">mlquantify.likelihood</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../modules/generated/mlquantify.likelihood.CDE.html">CDE</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../modules/generated/mlquantify.likelihood.EMQ.html">EMQ</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../modules/generated/mlquantify.likelihood.MLPE.html">MLPE</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="mlquantify.losses.html">mlquantify.losses</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../modules/generated/mlquantify.losses.BaseLoss.html">BaseLoss</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../modules/generated/mlquantify.losses.DistanceLoss.html">DistanceLoss</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../modules/generated/mlquantify.losses.LeastSquaresLoss.html">LeastSquaresLoss</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../modules/generated/mlquantify.losses.HellingerSurrogateLoss.html">HellingerSurrogateLoss</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../modules/generated/mlquantify.losses.EnergyLoss.html">EnergyLoss</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../modules/generated/mlquantify.losses.NegativeLogLikelihoodLoss.html">NegativeLogLikelihoodLoss</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../modules/generated/mlquantify.losses.MixtureNegativeLogLikelihoodLoss.html">MixtureNegativeLogLikelihoodLoss</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../modules/generated/mlquantify.losses.RegularizedMixtureNLLLoss.html">RegularizedMixtureNLLLoss</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../modules/generated/mlquantify.losses.normalize_distribution.html">normalize_distribution</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../modules/generated/mlquantify.losses.get_loss.html">get_loss</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="mlquantify.matching.html">mlquantify.matching</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../modules/generated/mlquantify.matching.BaseMatchingQuantifier.html">BaseMatchingQuantifier</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../modules/generated/mlquantify.matching.MatchingHistogramQuantifier.html">MatchingHistogramQuantifier</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../modules/generated/mlquantify.matching.DyS.html">DyS</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../modules/generated/mlquantify.matching.HDy.html">HDy</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../modules/generated/mlquantify.matching.HDx.html">HDx</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../modules/generated/mlquantify.matching.SORD.html">SORD</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../modules/generated/mlquantify.matching.MatchingKernelQuantifier.html">MatchingKernelQuantifier</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../modules/generated/mlquantify.matching.MMD_RKHS.html">MMD_RKHS</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../modules/generated/mlquantify.matching.KDEyQuantifier.html">KDEyQuantifier</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../modules/generated/mlquantify.matching.KDEyML.html">KDEyML</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../modules/generated/mlquantify.matching.KDEyHD.html">KDEyHD</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../modules/generated/mlquantify.matching.KDEyCS.html">KDEyCS</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../modules/generated/mlquantify.matching.GKDEyML.html">GKDEyML</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../modules/generated/mlquantify.matching.GHDx.html">GHDx</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../modules/generated/mlquantify.matching.GHDy.html">GHDy</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../modules/generated/mlquantify.matching.SMM.html">SMM</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../modules/generated/mlquantify.matching.EDy.html">EDy</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../modules/generated/mlquantify.matching.EDx.html">EDx</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="mlquantify.meta.html">mlquantify.meta</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../modules/generated/mlquantify.meta.EnsembleQ.html">EnsembleQ</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../modules/generated/mlquantify.meta.QuaDapt.html">QuaDapt</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../modules/generated/mlquantify.meta.AggregativeBootstrap.html">AggregativeBootstrap</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="mlquantify.metrics.html">mlquantify.metrics</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../modules/generated/mlquantify.metrics.AE.html">AE</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../modules/generated/mlquantify.metrics.SE.html">SE</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../modules/generated/mlquantify.metrics.MAE.html">MAE</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../modules/generated/mlquantify.metrics.MSE.html">MSE</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../modules/generated/mlquantify.metrics.KLD.html">KLD</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../modules/generated/mlquantify.metrics.RAE.html">RAE</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../modules/generated/mlquantify.metrics.NAE.html">NAE</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../modules/generated/mlquantify.metrics.NRAE.html">NRAE</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../modules/generated/mlquantify.metrics.NKLD.html">NKLD</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../modules/generated/mlquantify.metrics.NMD.html">NMD</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../modules/generated/mlquantify.metrics.RNOD.html">RNOD</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../modules/generated/mlquantify.metrics.VSE.html">VSE</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../modules/generated/mlquantify.metrics.CvM_L1.html">CvM_L1</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="mlquantify.model_selection.html">mlquantify.model_selection</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../modules/generated/mlquantify.model_selection.GridSearchQ.html">GridSearchQ</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../modules/generated/mlquantify.model_selection.BaseProtocol.html">BaseProtocol</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../modules/generated/mlquantify.model_selection.APP.html">APP</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../modules/generated/mlquantify.model_selection.NPP.html">NPP</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../modules/generated/mlquantify.model_selection.UPP.html">UPP</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../modules/generated/mlquantify.model_selection.PPP.html">PPP</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../modules/generated/mlquantify.model_selection.apply_protocol.html">apply_protocol</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="mlquantify.multiclass.html">mlquantify.multiclass</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../modules/generated/mlquantify.multiclass.binary_quantifier.html">binary_quantifier</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../modules/generated/mlquantify.multiclass.BinaryQuantifier.html">BinaryQuantifier</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../modules/generated/mlquantify.multiclass.MulticlassStrategy.html">MulticlassStrategy</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../modules/generated/mlquantify.multiclass.register_strategy.html">register_strategy</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../modules/generated/mlquantify.multiclass.get_strategy.html">get_strategy</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../modules/generated/mlquantify.multiclass.available_strategies.html">available_strategies</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="mlquantify.neighbors.html">mlquantify.neighbors</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../modules/generated/mlquantify.neighbors.PWK.html">PWK</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="mlquantify.neural.html">mlquantify.neural</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../modules/generated/mlquantify.neural.QuaNet.html">QuaNet</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="mlquantify.representations.html">mlquantify.representations</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../modules/generated/mlquantify.representations.BaseRepresentation.html">BaseRepresentation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../modules/generated/mlquantify.representations.HistogramRepresentation.html">HistogramRepresentation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../modules/generated/mlquantify.representations.KDERepresentation.html">KDERepresentation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../modules/generated/mlquantify.representations.DistanceRepresentation.html">DistanceRepresentation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../modules/generated/mlquantify.representations.KernelMeanRepresentation.html">KernelMeanRepresentation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../modules/generated/mlquantify.representations.PredictionRepresentation.html">PredictionRepresentation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../modules/generated/mlquantify.representations.HardPredictionRepresentation.html">HardPredictionRepresentation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../modules/generated/mlquantify.representations.SoftPredictionRepresentation.html">SoftPredictionRepresentation</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="mlquantify.solvers.html">mlquantify.solvers</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../modules/generated/mlquantify.solvers.solve_binary.html">solve_binary</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../modules/generated/mlquantify.solvers.ternary_search.html">ternary_search</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../modules/generated/mlquantify.solvers.solve_simplex.html">solve_simplex</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../modules/generated/mlquantify.solvers.minimize_prevalence.html">minimize_prevalence</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../modules/generated/mlquantify.solvers.minimize_prevalence_blocks.html">minimize_prevalence_blocks</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="mlquantify.utils.html">mlquantify.utils</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../modules/generated/mlquantify.utils.get_prev_from_labels.html">get_prev_from_labels</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../modules/generated/mlquantify.utils.normalize_prevalence.html">normalize_prevalence</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../modules/generated/mlquantify.utils.load_quantifier.html">load_quantifier</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../modules/generated/mlquantify.utils.make_prevs.html">make_prevs</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../modules/generated/mlquantify.utils.apply_cross_validation.html">apply_cross_validation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../modules/generated/mlquantify.utils.simplex_uniform_kraemer.html">simplex_uniform_kraemer</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../modules/generated/mlquantify.utils.simplex_grid_sampling.html">simplex_grid_sampling</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../modules/generated/mlquantify.utils.simplex_uniform_sampling.html">simplex_uniform_sampling</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../modules/generated/mlquantify.utils.get_indexes_with_prevalence.html">get_indexes_with_prevalence</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="mlquantify.visualization.html">mlquantify.visualization</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../modules/generated/mlquantify.visualization.DiagonalDisplay.html">DiagonalDisplay</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../modules/generated/mlquantify.visualization.BiasDisplay.html">BiasDisplay</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../modules/generated/mlquantify.visualization.ErrorByShiftDisplay.html">ErrorByShiftDisplay</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../modules/generated/mlquantify.visualization.PrevalenceDisplay.html">PrevalenceDisplay</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../modules/generated/mlquantify.visualization.ConfidenceRegionDisplay.html">ConfidenceRegionDisplay</a></li>
+</ul>
+</details></li>
+</ul>
+</div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+  </div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item">
+
+<nav aria-label="Breadcrumb" class="d-print-none">
+  <ul class="bd-breadcrumbs">
+    
+    <li class="breadcrumb-item breadcrumb-home">
+      <a href="../index.html" class="nav-link" aria-label="Home">
+        <i class="fa-solid fa-home"></i>
+      </a>
+    </li>
+    
+    <li class="breadcrumb-item"><a href="index.html" class="nav-link">API Reference</a></li>
+    
+    <li class="breadcrumb-item active" aria-current="page"><span class="ellipsis">mlquantify.datasets</span></li>
+  </ul>
+</nav>
+</div>
+      
+    </div>
+  
+  
+</div>
+</div>
+              
+              
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <section id="module-mlquantify.datasets">
+<span id="mlquantify-datasets"></span><span id="datasets-ref"></span><h1>mlquantify.datasets<a class="headerlink" href="#module-mlquantify.datasets" title="Link to this heading">#</a></h1>
+<p>Synthetic and helper datasets for quantification.</p>
+<p>Mirrors the spirit of <a class="reference external" href="https://scikit-learn.org/stable/api/sklearn.datasets.html#module-sklearn.datasets" title="(in scikit-learn v1.9)"><code class="xref py py-mod docutils literal notranslate"><span class="pre">sklearn.datasets</span></code></a>, but the generators produce
+<em>bags</em> (samples with controlled class prevalence) suitable for evaluating
+quantifiers under distribution shift.</p>
+<div class="pst-scrollable-table-container"><table class="autosummary longtable table autosummary">
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="../modules/generated/mlquantify.datasets.make_quantification.html#mlquantify.datasets.make_quantification" title="mlquantify.datasets.make_quantification"><code class="xref py py-obj docutils literal notranslate"><span class="pre">make_quantification</span></code></a></p></td>
+<td><p>Generate synthetic quantification bags under prior-probability shift.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="../modules/generated/mlquantify.datasets.fetch_mushroom.html#mlquantify.datasets.fetch_mushroom" title="mlquantify.datasets.fetch_mushroom"><code class="xref py py-obj docutils literal notranslate"><span class="pre">fetch_mushroom</span></code></a></p></td>
+<td><p>Mushroom: edible vs.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="../modules/generated/mlquantify.datasets.fetch_banknote_authentication.html#mlquantify.datasets.fetch_banknote_authentication" title="mlquantify.datasets.fetch_banknote_authentication"><code class="xref py py-obj docutils literal notranslate"><span class="pre">fetch_banknote_authentication</span></code></a></p></td>
+<td><p>Banknote authentication from wavelet image features (binary).</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="../modules/generated/mlquantify.datasets.fetch_haberman_survival.html#mlquantify.datasets.fetch_haberman_survival" title="mlquantify.datasets.fetch_haberman_survival"><code class="xref py py-obj docutils literal notranslate"><span class="pre">fetch_haberman_survival</span></code></a></p></td>
+<td><p>Haberman survival after breast-cancer surgery (binary, hard).</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="../modules/generated/mlquantify.datasets.fetch_miniboone.html#mlquantify.datasets.fetch_miniboone" title="mlquantify.datasets.fetch_miniboone"><code class="xref py py-obj docutils literal notranslate"><span class="pre">fetch_miniboone</span></code></a></p></td>
+<td><p>MiniBooNE particle identification: signal vs.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="../modules/generated/mlquantify.datasets.fetch_digits_optical_penbased.html#mlquantify.datasets.fetch_digits_optical_penbased" title="mlquantify.datasets.fetch_digits_optical_penbased"><code class="xref py py-obj docutils literal notranslate"><span class="pre">fetch_digits_optical_penbased</span></code></a></p></td>
+<td><p>Optical / Pen-based handwritten digits (10-class, easy).</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="../modules/generated/mlquantify.datasets.fetch_dry_bean.html#mlquantify.datasets.fetch_dry_bean" title="mlquantify.datasets.fetch_dry_bean"><code class="xref py py-obj docutils literal notranslate"><span class="pre">fetch_dry_bean</span></code></a></p></td>
+<td><p>Dry Bean: seven bean varieties from grain morphology (multiclass).</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="../modules/generated/mlquantify.datasets.fetch_covertype.html#mlquantify.datasets.fetch_covertype" title="mlquantify.datasets.fetch_covertype"><code class="xref py py-obj docutils literal notranslate"><span class="pre">fetch_covertype</span></code></a></p></td>
+<td><p>Forest Covertype: 7 cover types from cartographic variables (multiclass, large).</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="../modules/generated/mlquantify.datasets.fetch_yeast.html#mlquantify.datasets.fetch_yeast" title="mlquantify.datasets.fetch_yeast"><code class="xref py py-obj docutils literal notranslate"><span class="pre">fetch_yeast</span></code></a></p></td>
+<td><p>Yeast protein localization site (10-class, hard, imbalanced).</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="../modules/generated/mlquantify.datasets.fetch_sensorless_drive.html#mlquantify.datasets.fetch_sensorless_drive" title="mlquantify.datasets.fetch_sensorless_drive"><code class="xref py py-obj docutils literal notranslate"><span class="pre">fetch_sensorless_drive</span></code></a></p></td>
+<td><p>Sensorless drive diagnosis from motor current signals (11-class, balanced).</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="../modules/generated/mlquantify.datasets.fetch_statlog_shuttle.html#mlquantify.datasets.fetch_statlog_shuttle" title="mlquantify.datasets.fetch_statlog_shuttle"><code class="xref py py-obj docutils literal notranslate"><span class="pre">fetch_statlog_shuttle</span></code></a></p></td>
+<td><p>Statlog (Shuttle): space-shuttle radiator states (multiclass, extreme imbalance).</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="../modules/generated/mlquantify.datasets.fetch_wine_quality.html#mlquantify.datasets.fetch_wine_quality" title="mlquantify.datasets.fetch_wine_quality"><code class="xref py py-obj docutils literal notranslate"><span class="pre">fetch_wine_quality</span></code></a></p></td>
+<td><p>Wine Quality: sensory score 3-9 from physicochemistry (ORDINAL).</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="../modules/generated/mlquantify.datasets.fetch_online_news_popularity.html#mlquantify.datasets.fetch_online_news_popularity" title="mlquantify.datasets.fetch_online_news_popularity"><code class="xref py py-obj docutils literal notranslate"><span class="pre">fetch_online_news_popularity</span></code></a></p></td>
+<td><p>Online News Popularity: will an article be popular? (binary, temporal).</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="../modules/generated/mlquantify.datasets.fetch_pima_diabetes.html#mlquantify.datasets.fetch_pima_diabetes" title="mlquantify.datasets.fetch_pima_diabetes"><code class="xref py py-obj docutils literal notranslate"><span class="pre">fetch_pima_diabetes</span></code></a></p></td>
+<td><p>Pima Indians Diabetes (binary, hard, noisy medical).</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="../modules/generated/mlquantify.datasets.fetch_electricity_elec2.html#mlquantify.datasets.fetch_electricity_elec2" title="mlquantify.datasets.fetch_electricity_elec2"><code class="xref py py-obj docutils literal notranslate"><span class="pre">fetch_electricity_elec2</span></code></a></p></td>
+<td><p>Electricity (Elec2): NSW market price up/down stream (binary, drift).</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="../modules/generated/mlquantify.datasets.fetch_airlines.html#mlquantify.datasets.fetch_airlines" title="mlquantify.datasets.fetch_airlines"><code class="xref py py-obj docutils literal notranslate"><span class="pre">fetch_airlines</span></code></a></p></td>
+<td><p>Airlines: flight-delay stream (binary, large, temporal).</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="../modules/generated/mlquantify.datasets.fetch_newsgroups20.html#mlquantify.datasets.fetch_newsgroups20" title="mlquantify.datasets.fetch_newsgroups20"><code class="xref py py-obj docutils literal notranslate"><span class="pre">fetch_newsgroups20</span></code></a></p></td>
+<td><p>20 Newsgroups: Usenet posts in 20 topics (text, multiclass).</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="../modules/generated/mlquantify.datasets.fetch_imdb.html#mlquantify.datasets.fetch_imdb" title="mlquantify.datasets.fetch_imdb"><code class="xref py py-obj docutils literal notranslate"><span class="pre">fetch_imdb</span></code></a></p></td>
+<td><p>IMDB Large Movie Review sentiment (text, binary, balanced).</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="../modules/generated/mlquantify.datasets.fetch_multidomain_sentiment.html#mlquantify.datasets.fetch_multidomain_sentiment" title="mlquantify.datasets.fetch_multidomain_sentiment"><code class="xref py py-obj docutils literal notranslate"><span class="pre">fetch_multidomain_sentiment</span></code></a></p></td>
+<td><p>Multi-Domain (Blitzer) Amazon review sentiment (text, covariate shift).</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="../modules/generated/mlquantify.datasets.fetch_sentiment140.html#mlquantify.datasets.fetch_sentiment140" title="mlquantify.datasets.fetch_sentiment140"><code class="xref py py-obj docutils literal notranslate"><span class="pre">fetch_sentiment140</span></code></a></p></td>
+<td><p>Sentiment140: 1.6M timestamped tweets (text, binary, temporal).</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="../modules/generated/mlquantify.datasets.fetch_rcv1_v2.html#mlquantify.datasets.fetch_rcv1_v2" title="mlquantify.datasets.fetch_rcv1_v2"><code class="xref py py-obj docutils literal notranslate"><span class="pre">fetch_rcv1_v2</span></code></a></p></td>
+<td><p>RCV1-v2: Reuters news topics (text, sparse TF-IDF, multilabel).</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="../modules/generated/mlquantify.datasets.fetch_mnist_usps.html#mlquantify.datasets.fetch_mnist_usps" title="mlquantify.datasets.fetch_mnist_usps"><code class="xref py py-obj docutils literal notranslate"><span class="pre">fetch_mnist_usps</span></code></a></p></td>
+<td><p>MNIST -&gt; USPS handwritten digits (image, covariate shift).</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="../modules/generated/mlquantify.datasets.fetch_cifar10.html#mlquantify.datasets.fetch_cifar10" title="mlquantify.datasets.fetch_cifar10"><code class="xref py py-obj docutils literal notranslate"><span class="pre">fetch_cifar10</span></code></a></p></td>
+<td><p>CIFAR-10 natural images (image, 10-class, balanced).</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="../modules/generated/mlquantify.datasets.fetch_planetoid_cora_citeseer_pubmed.html#mlquantify.datasets.fetch_planetoid_cora_citeseer_pubmed" title="mlquantify.datasets.fetch_planetoid_cora_citeseer_pubmed"><code class="xref py py-obj docutils literal notranslate"><span class="pre">fetch_planetoid_cora_citeseer_pubmed</span></code></a></p></td>
+<td><p>Planetoid citation graphs: Cora / CiteSeer / PubMed (graph nodes).</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="../modules/generated/mlquantify.datasets.fetch_sea_concepts.html#mlquantify.datasets.fetch_sea_concepts" title="mlquantify.datasets.fetch_sea_concepts"><code class="xref py py-obj docutils literal notranslate"><span class="pre">fetch_sea_concepts</span></code></a></p></td>
+<td><p>SEA Concepts: synthetic stream with abrupt concept drift (binary).</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="../modules/generated/mlquantify.datasets.fetch_lequa2024.html#mlquantify.datasets.fetch_lequa2024" title="mlquantify.datasets.fetch_lequa2024"><code class="xref py py-obj docutils literal notranslate"><span class="pre">fetch_lequa2024</span></code></a></p></td>
+<td><p>LeQua 2024 competition vectors, all tasks via <code class="docutils literal notranslate"><span class="pre">task</span></code> (text/ordinal).</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="../modules/generated/mlquantify.datasets.Bunch.html#mlquantify.datasets.Bunch" title="mlquantify.datasets.Bunch"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Bunch</span></code></a></p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="../modules/generated/mlquantify.datasets.get_data_home.html#mlquantify.datasets.get_data_home" title="mlquantify.datasets.get_data_home"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_data_home</span></code></a></p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="../modules/generated/mlquantify.datasets.fetch_remote.html#mlquantify.datasets.fetch_remote" title="mlquantify.datasets.fetch_remote"><code class="xref py py-obj docutils literal notranslate"><span class="pre">fetch_remote</span></code></a></p></td>
+<td><p>urllib download with local cache + retries (like sklearn).</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+
+
+                </article>
+              
+              
+              
+                <footer class="bd-footer-article">
+                  <div class="footer-article-items footer-article__inner">
+  
+    <div class="footer-article-item">
+<div class="prev-next-area">
+    <a class="left-prev"
+       href="../modules/generated/mlquantify.counting.compute_table.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title">compute_table</p>
+      </div>
+    </a>
+    <a class="right-next"
+       href="../modules/generated/mlquantify.datasets.make_quantification.html"
+       title="next page">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">make_quantification</p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
+    </a>
+</div></div>
+  
+</div>
+                </footer>
+              
+              
+              
+            </div>
+            
+            
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+          </footer>
+        
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script defer src="../_static/scripts/bootstrap.js?digest=a95f357e85573c9b56d5"></script>
+<script defer src="../_static/scripts/pydata-sphinx-theme.js?digest=a95f357e85573c9b56d5"></script>
+
+  <footer class="bd-footer">
+  </footer>
+  </body>
+</html>

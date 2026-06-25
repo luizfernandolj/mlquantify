@@ -1,0 +1,65 @@
+/* Development-version warning banner.
+ *
+ * Rendered only on the dev docs: conf.py sets the pydata-sphinx-theme
+ * ``announcement`` to an ``.mlq-dev-banner`` snippet when DOCS_VERSION == "dev".
+ * Bold red, with the stable-version link styled as a button and a close (×).
+ */
+
+.bd-header-announcement {
+    background-color: #b00020 !important;
+    position: relative;   /* anchor for the absolutely-positioned close button */
+}
+
+.bd-header-announcement,
+.bd-header-announcement p,
+.bd-header-announcement a {
+    color: #ffffff !important;
+}
+
+.mlq-dev-banner {
+    font-weight: 500;
+    text-align: center;
+    padding: 0.1rem 2.4rem;   /* leave room so the text never runs under the × */
+}
+
+/* Scoped under .bd-header-announcement so this wins over the theme's
+ * ``.bd-header-announcement a`` colour rule (higher specificity). Otherwise the
+ * button text inherits white and disappears on the white button background. */
+.bd-header-announcement .mlq-dev-banner__btn {
+    display: inline-block;
+    margin-left: 0.6rem;
+    padding: 0.15rem 0.75rem;
+    border: 2px solid #ffffff;
+    border-radius: 0.3rem;
+    background-color: #ffffff;
+    color: #b00020 !important;
+    font-weight: 700;
+    text-decoration: none;
+    white-space: nowrap;
+}
+
+.bd-header-announcement .mlq-dev-banner__btn:hover,
+.bd-header-announcement .mlq-dev-banner__btn:focus {
+    background-color: #ffd6d6;
+    color: #8a0019 !important;
+}
+
+/* Close (×) button, pinned to the right edge of the banner. */
+.mlq-dev-banner__close {
+    position: absolute;
+    right: 0.9rem;
+    top: 50%;
+    transform: translateY(-50%);
+    background: transparent;
+    border: none;
+    color: #ffffff;
+    font-size: 1.5rem;
+    line-height: 1;
+    cursor: pointer;
+    padding: 0 0.35rem;
+}
+
+.mlq-dev-banner__close:hover,
+.mlq-dev-banner__close:focus {
+    color: #ffd6d6;
+}

@@ -1,0 +1,1249 @@
+
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="./" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+<meta property="og:title" content="7. Real-World Datasets" />
+<meta property="og:type" content="website" />
+<meta property="og:url" content="datasets.html" />
+<meta property="og:site_name" content="mlquantify" />
+<meta property="og:description" content="Alongside the synthetic generator ( Synthetic Datasets), mlquantify.datasets ships 25 dataset fetchers that download and cache well-known quantification benchmarks. They follow the same conventions..." />
+<meta property="og:image:width" content="1146" />
+<meta property="og:image:height" content="600" />
+<meta property="og:image" content="_images/social_previews/summary_datasets_d7121b17.png" />
+<meta property="og:image:alt" content="Alongside the synthetic generator ( Synthetic Datasets), mlquantify.datasets ships 25 dataset fetchers that download and cache well-known quantification benchmarks. They follow the same conventions..." />
+<meta name="description" content="Alongside the synthetic generator ( Synthetic Datasets), mlquantify.datasets ships 25 dataset fetchers that download and cache well-known quantification benchmarks. They follow the same conventions..." />
+<meta name="twitter:card" content="summary_large_image" />
+
+    <title>7. Real-World Datasets &#8212; mlquantify</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
+  </script>
+  <!--
+    this give us a css class that will be invisible only if js is disabled
+  -->
+  <noscript>
+    <style>
+      .pst-js-only { display: none !important; }
+
+    </style>
+  </noscript>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="_static/styles/theme.css?digest=a95f357e85573c9b56d5" rel="stylesheet" />
+<link href="_static/styles/pydata-sphinx-theme.css?digest=a95f357e85573c9b56d5" rel="stylesheet" />
+
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=8f2a1f02" />
+    <link rel="stylesheet" type="text/css" href="_static/copybutton.css?v=76b2166b" />
+    <link rel="stylesheet" type="text/css" href="_static/plot_directive.css" />
+    <link rel="stylesheet" type="text/css" href="_static/sphinx-design.min.css?v=95c83b7e" />
+    <link rel="stylesheet" type="text/css" href="_static/variables.css?v=fded66fe" />
+    <link rel="stylesheet" type="text/css" href="_static/theme_overrides.css?v=dec63a3c" />
+    <link rel="stylesheet" type="text/css" href="_static/landing.css?v=a73da8a0" />
+    <link rel="stylesheet" type="text/css" href="_static/dev_banner.css?v=ad749d7a" />
+  
+  <!-- So that users can add custom icons -->
+  <script defer src="_static/scripts/fontawesome.js?digest=a95f357e85573c9b56d5"></script>
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="_static/scripts/bootstrap.js?digest=a95f357e85573c9b56d5" />
+<link rel="preload" as="script" href="_static/scripts/pydata-sphinx-theme.js?digest=a95f357e85573c9b56d5" />
+
+    <script src="_static/documentation_options.js?v=dc233e31"></script>
+    <script src="_static/doctools.js?v=9bcbadda"></script>
+    <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="_static/clipboard.min.js?v=a7894cd8"></script>
+    <script src="_static/copybutton.js?v=f281be69"></script>
+    <script src="_static/design-tabs.js?v=f930bc37"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'datasets';</script>
+    <script>
+        DOCUMENTATION_OPTIONS.theme_version = '0.19.0';
+        DOCUMENTATION_OPTIONS.theme_switcher_json_url = 'https://luizfernandolj.github.io/mlquantify/switcher.json';
+        DOCUMENTATION_OPTIONS.theme_switcher_version_match = '0.5.0';
+        DOCUMENTATION_OPTIONS.show_version_warning_banner =
+            true;
+        </script>
+    <script>DOCUMENTATION_OPTIONS.search_as_you_type = false;</script>
+    <script src="_static/dev_banner.js?v=1edec9a1"></script>
+    <link rel="canonical" href="https://luizfernandolj.github.io/mlquantify/datasets.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="8. Confidence Regions for Quantification" href="modules/confidence_intervals.html" />
+    <link rel="prev" title="6. Synthetic Datasets" href="synthetic_datasets.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  <meta name="docsearch:version" content="" />
+  
+    
+    <script src="_static/searchtools.js"></script>
+    <script src="_static/language_data.js"></script>
+    <script src="searchindex.js"></script>
+  
+  </head>
+  <body data-default-mode="">
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+  
+  
+  
+  
+  <dialog id="pst-search-dialog">
+    
+<form class="bd-search d-flex align-items-center"
+      action="search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         placeholder="Search the docs ..."
+         aria-label="Search the docs ..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form>
+  </dialog>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
+  
+    <header id="pst-header" class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+<div class="bd-header__inner bd-page-width">
+  <button class="pst-navbar-icon sidebar-toggle primary-toggle" aria-label="Site navigation">
+    <span class="fa-solid fa-bars"></span>
+  </button>
+  
+  
+  <div class=" navbar-header-items__start">
+    
+      <div class="navbar-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="index.html">
+  
+  
+  
+  
+  
+    
+    
+      
+    
+    
+    <img src="_static/logo_mlquantify.svg" class="logo__image only-light" alt="mlquantify homepage"/>
+    <img src="_static/logo_mlquantify-white.svg" class="logo__image only-dark pst-js-only" alt="mlquantify homepage"/>
+  
+  
+</a></div>
+    
+  </div>
+  
+  <div class=" navbar-header-items">
+    
+    <div class="me-auto navbar-header-items__center">
+      
+        <div class="navbar-item">
+<div class="version-switcher__container dropdown pst-js-only">
+  <button id="pst-version-switcher-button-2"
+    type="button"
+    class="version-switcher__button btn btn-sm dropdown-toggle"
+    data-bs-toggle="dropdown"
+    aria-haspopup="listbox"
+    aria-controls="pst-version-switcher-list-2"
+    aria-label="Version switcher list"
+  >
+    Choose version  <!-- this text may get changed later by javascript -->
+    <span class="caret"></span>
+  </button>
+  <div id="pst-version-switcher-list-2"
+    class="version-switcher__menu dropdown-menu list-group-flush py-0"
+    role="listbox" aria-labelledby="pst-version-switcher-button-2">
+    <!-- dropdown will be populated by javascript on page load -->
+  </div>
+</div></div>
+      
+        <div class="navbar-item">
+<nav>
+  <ul class="bd-navbar-elements navbar-nav">
+    
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="install.html">
+    Install
+  </a>
+</li>
+
+
+<li class="nav-item current active">
+  <a class="nav-link nav-internal" href="user_guide.html">
+    User Guide
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="api/index.html">
+    API
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="getting_started.html">
+    Getting Started
+  </a>
+</li>
+
+            <li class="nav-item dropdown">
+                <button class="btn dropdown-toggle nav-item" type="button"
+                data-bs-toggle="dropdown" aria-expanded="false"
+                aria-controls="pst-nav-more-links">
+                    More
+                </button>
+                <ul id="pst-nav-more-links" class="dropdown-menu">
+                    
+<li class=" ">
+  <a class="nav-link dropdown-item nav-internal" href="examples/index.html">
+    Examples
+  </a>
+</li>
+
+
+<li class=" ">
+  <a class="nav-link dropdown-item nav-internal" href="about_us.html">
+    About Us
+  </a>
+</li>
+
+                </ul>
+            </li>
+            
+  </ul>
+</nav></div>
+      
+    </div>
+    
+    
+    <div class="navbar-header-items__end">
+      
+        <div class="navbar-item navbar-persistent--container">
+          
+
+<button class="btn btn-sm pst-navbar-icon search-button search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass fa-lg"></i>
+</button>
+        </div>
+      
+      
+        <div class="navbar-item">
+
+<div class="theme-switch-container dropdown pst-js-only" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Color mode">
+  <button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button dropdown-toggle" aria-label="Color mode" data-bs-toggle="dropdown">
+    <i class="theme-switch fa-solid fa-sun fa-lg fa-fw" data-mode="light" title="Light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg fa-fw" data-mode="dark" title="Dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg fa-fw" data-mode="auto" title="System Settings"></i>
+  </button>
+  <ul class="dropdown-menu dropdown-menu-end">
+    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="auto"><i class="fa-solid fa-circle-half-stroke fa-lg fa-fw me-1"></i>System Settings</button></li>
+    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="light"><i class="fa-solid fa-sun fa-lg fa-fw me-1"></i>Light</button></li>
+    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="dark"><i class="fa-solid fa-moon fa-lg fa-fw me-1"></i>Dark</button></li>
+  </ul>
+</div></div>
+      
+        <div class="navbar-item"><ul class="navbar-icon-links"
+    aria-label="Icon Links">
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://github.com/luizfernandolj/mlquantify/tree/master" title="GitHub" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><i class="fa-brands fa-square-github fa-lg" aria-hidden="true"></i><span class="visually-hidden">GitHub</span></a>
+        </li>
+</ul></div>
+      
+    </div>
+    
+  </div>
+  
+  
+    <div class="navbar-persistent--mobile">
+
+<button class="btn btn-sm pst-navbar-icon search-button search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass fa-lg"></i>
+</button>
+    </div>
+  
+
+  
+    <button class="pst-navbar-icon sidebar-toggle secondary-toggle" aria-label="On this page">
+      <span class="fa-solid fa-outdent"></span>
+    </button>
+  
+</div>
+
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+      <dialog id="pst-primary-sidebar-modal"></dialog>
+      <div id="pst-primary-sidebar" class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+      <div class="sidebar-header-items__center">
+        
+          
+          
+            <div class="navbar-item">
+<div class="version-switcher__container dropdown pst-js-only">
+  <button id="pst-version-switcher-button-3"
+    type="button"
+    class="version-switcher__button btn btn-sm dropdown-toggle"
+    data-bs-toggle="dropdown"
+    aria-haspopup="listbox"
+    aria-controls="pst-version-switcher-list-3"
+    aria-label="Version switcher list"
+  >
+    Choose version  <!-- this text may get changed later by javascript -->
+    <span class="caret"></span>
+  </button>
+  <div id="pst-version-switcher-list-3"
+    class="version-switcher__menu dropdown-menu list-group-flush py-0"
+    role="listbox" aria-labelledby="pst-version-switcher-button-3">
+    <!-- dropdown will be populated by javascript on page load -->
+  </div>
+</div></div>
+          
+        
+          
+          
+            <div class="navbar-item">
+<nav>
+  <ul class="bd-navbar-elements navbar-nav">
+    
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="install.html">
+    Install
+  </a>
+</li>
+
+
+<li class="nav-item current active">
+  <a class="nav-link nav-internal" href="user_guide.html">
+    User Guide
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="api/index.html">
+    API
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="getting_started.html">
+    Getting Started
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="examples/index.html">
+    Examples
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="about_us.html">
+    About Us
+  </a>
+</li>
+
+  </ul>
+</nav></div>
+          
+        
+      </div>
+    
+    
+    
+      <div class="sidebar-header-items__end">
+        
+          <div class="navbar-item">
+
+<div class="theme-switch-container dropdown pst-js-only" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Color mode">
+  <button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button dropdown-toggle" aria-label="Color mode" data-bs-toggle="dropdown">
+    <i class="theme-switch fa-solid fa-sun fa-lg fa-fw" data-mode="light" title="Light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg fa-fw" data-mode="dark" title="Dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg fa-fw" data-mode="auto" title="System Settings"></i>
+  </button>
+  <ul class="dropdown-menu dropdown-menu-end">
+    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="auto"><i class="fa-solid fa-circle-half-stroke fa-lg fa-fw me-1"></i>System Settings</button></li>
+    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="light"><i class="fa-solid fa-sun fa-lg fa-fw me-1"></i>Light</button></li>
+    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="dark"><i class="fa-solid fa-moon fa-lg fa-fw me-1"></i>Dark</button></li>
+  </ul>
+</div></div>
+        
+          <div class="navbar-item"><ul class="navbar-icon-links"
+    aria-label="Icon Links">
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://github.com/luizfernandolj/mlquantify/tree/master" title="GitHub" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><i class="fa-brands fa-square-github fa-lg" aria-hidden="true"></i><span class="visually-hidden">GitHub</span></a>
+        </li>
+</ul></div>
+        
+      </div>
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item pst-sidebar-collapse"><button id="pst-collapse-sidebar-button" aria-expanded="true" aria-controls="pst-primary-sidebar"><svg class="pst-icon svg-inline--fa" role="img" aria-hidden="true" focusable="false" viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg">
+    <path fill="currentColor" d="M3 15.5C2.36232 15.5 1.74874 15.2564 1.28478 14.8189C0.820828 14.3815 0.541576 13.7832 0.504167 13.1467L0.5 13L0.5 3C0.499965 2.36232 0.743605 1.74874 1.18107 1.28478C1.61854 0.820828 2.21676 0.541576 2.85333 0.504167L3 0.5L13 0.5C13.6377 0.499965 14.2513 0.743605 14.7152 1.18107C15.1792 1.61854 15.4584 2.21676 15.4958 2.85333L15.5 3L15.5 13C15.5 13.6377 15.2564 14.2513 14.8189 14.7152C14.3815 15.1792 13.7832 15.4584 13.1467 15.4958L13 15.5L3 15.5ZM3 13.8333L10.5 13.8333L10.5 2.16667L3 2.16667C2.79589 2.16669 2.59889 2.24163 2.44636 2.37726C2.29383 2.5129 2.19638 2.69979 2.1725 2.9025L2.16667 3L2.16667 13C2.16669 13.2041 2.24163 13.4011 2.37726 13.5536C2.5129 13.7062 2.69979 13.8036 2.9025 13.8275L3 13.8333ZM6.65583 10.325L6.5775 10.2558L4.91083 8.58917C4.76735 8.44567 4.68116 8.25476 4.66843 8.05223C4.65569 7.84971 4.71729 7.6495 4.84167 7.48917L4.91083 7.41083L6.5775 5.74417C6.72747 5.59471 6.9287 5.50794 7.14032 5.50148C7.35194 5.49502 7.55809 5.56935 7.7169 5.70937C7.8757 5.8494 7.97525 6.04463 7.99533 6.25539C8.01541 6.46616 7.95451 6.67667 7.825 6.84417L7.75583 6.9225L6.67917 8L7.75583 9.0775C7.89931 9.22099 7.98551 9.41191 7.99824 9.61443C8.01097 9.81695 7.94938 10.0172 7.825 10.1775L7.75583 10.2558C7.61234 10.3993 7.42142 10.4855 7.2189 10.4982C7.01638 10.511 6.81617 10.4494 6.65583 10.325Z"/>
+  </svg>
+  <span class="pst-collapse-sidebar-label">Collapse Sidebar</span>
+  <span class="pst-expand-sidebar-label">Expand Sidebar</span>
+</button></div>
+        <div class="sidebar-primary-item">
+
+<nav class="bd-docs-nav bd-links"
+     aria-label="Section Navigation">
+  <p class="bd-links__title" role="heading" aria-level="1">Section Navigation</p>
+  <div class="bd-toc-item navbar-nav"><ul class="current nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="modules/quantification_foundations.html">1. Foundations</a></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="aggregative_quantification.html">2. Aggregative Quantification</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="modules/using_aggregative.html">2.1. Using Aggregative Quantification Methods</a></li>
+
+<li class="toctree-l2"><a class="reference internal" href="modules/counters.html">2.3. Counting Methods</a></li>
+<li class="toctree-l2"><a class="reference internal" href="modules/adjust_counting.html">2.4. Adjusted Counting</a></li>
+<li class="toctree-l2"><a class="reference internal" href="modules/likelihood.html">2.5. Likelihood Methods</a></li>
+<li class="toctree-l2"><a class="reference internal" href="modules/distribution_matching.html">2.6. Distribution Matching</a></li>
+<li class="toctree-l2"><a class="reference internal" href="modules/neighbors.html">2.7. Nearest Neighbours</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="non_aggregative_quantification.html">3. Non Aggregative Quantification</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="modules/mixture_models_non_agg.html">3.1. Mixture Models for Non-Aggregative Quantification</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="meta_quantification.html">4. Meta Quantification</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="modules/ensemble.html">4.1. Ensembles and Adaptation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="modules/bootstrap.html">4.2. Bootstrap in Quantification</a></li>
+<li class="toctree-l2"><a class="reference internal" href="modules/scores_adaptation.html">4.3. QuaDapt: Drift-Resilient Score Adaptation</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="model_selection_evaluation.html">5. Model Selection and Evaluation</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="modules/protocols.html">5.1. Evaluation Protocols</a></li>
+<li class="toctree-l2"><a class="reference internal" href="modules/tuning_hyperparameters.html">5.2. Hyperparameter Tuning</a></li>
+<li class="toctree-l2"><a class="reference internal" href="modules/evaluation_metrics.html">5.3. Evaluation Metrics</a></li>
+
+
+
+</ul>
+</details></li>
+<li class="toctree-l1"><a class="reference internal" href="synthetic_datasets.html">6. Synthetic Datasets</a></li>
+<li class="toctree-l1 current active"><a class="current reference internal" href="#">7. Real-World Datasets</a></li>
+<li class="toctree-l1"><a class="reference internal" href="modules/confidence_intervals.html">8. Confidence Intervals</a></li>
+<li class="toctree-l1"><a class="reference internal" href="modules/calibration.html">9. Calibration</a></li>
+<li class="toctree-l1"><a class="reference internal" href="visualization.html">10. Visualization</a></li>
+<li class="toctree-l1"><a class="reference internal" href="building_a_quantifier.html">11. Building a Quantifier</a></li>
+<li class="toctree-l1"><a class="reference internal" href="modules/mlquantify_methods.html">12. Mlquantify methods</a></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="components.html">13. Core Components</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="modules/representations.html">13.1.1. Representations</a></li>
+<li class="toctree-l2"><a class="reference internal" href="modules/losses.html">13.1.2. Loss Functions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="modules/solvers.html">13.1.3. Solvers</a></li>
+<li class="toctree-l2"><a class="reference internal" href="modules/compose.html">13.1.4. Composable Quantifiers</a></li>
+<li class="toctree-l2"><a class="reference internal" href="modules/multiclass.html">13.2.1. Multiclass Quantification</a></li>
+<li class="toctree-l2"><a class="reference internal" href="modules/prevalence_normalization.html">13.2.2. Prevalence Normalization</a></li>
+<li class="toctree-l2"><a class="reference internal" href="modules/cython_acceleration.html">13.3.1. Cython Acceleration</a></li>
+<li class="toctree-l2"><a class="reference internal" href="modules/calibration.html">9. Calibration</a></li>
+<li class="toctree-l2"><a class="reference internal" href="modules/neural.html">13.4.1. Neural Quantifiers</a></li>
+</ul>
+</details></li>
+</ul>
+</div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+  </div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item">
+
+<nav aria-label="Breadcrumb" class="d-print-none">
+  <ul class="bd-breadcrumbs">
+    
+    <li class="breadcrumb-item breadcrumb-home">
+      <a href="index.html" class="nav-link" aria-label="Home">
+        <i class="fa-solid fa-home"></i>
+      </a>
+    </li>
+    
+    <li class="breadcrumb-item"><a href="user_guide.html" class="nav-link">User Guide</a></li>
+    
+    <li class="breadcrumb-item active" aria-current="page"><span class="ellipsis"><span class="section-number">7. </span>Real-World Datasets</span></li>
+  </ul>
+</nav>
+</div>
+      
+    </div>
+  
+  
+</div>
+</div>
+              
+              
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <section id="real-world-datasets">
+<span id="datasets"></span><span id="id1"></span><h1><span class="section-number">7. </span>Real-World Datasets<a class="headerlink" href="#real-world-datasets" title="Link to this heading">#</a></h1>
+<p>Alongside the synthetic generator (<a class="reference internal" href="synthetic_datasets.html#synthetic-datasets"><span class="std std-ref">Synthetic Datasets</span></a>), <code class="docutils literal notranslate"><span class="pre">mlquantify.datasets</span></code>
+ships <strong>25 dataset fetchers</strong> that download and cache well-known quantification
+benchmarks. They follow the same conventions as <a class="reference external" href="https://scikit-learn.org/stable/api/sklearn.datasets.html#module-sklearn.datasets" title="(in scikit-learn v1.9)"><code class="xref py py-mod docutils literal notranslate"><span class="pre">sklearn.datasets</span></code></a>: every
+loader is a keyword-only <code class="docutils literal notranslate"><span class="pre">fetch_&lt;name&gt;(...)</span></code> function that returns a
+<a class="reference internal" href="modules/generated/mlquantify.datasets.Bunch.html#mlquantify.datasets.Bunch" title="mlquantify.datasets.Bunch"><code class="xref py py-class docutils literal notranslate"><span class="pre">Bunch</span></code></a> (or a plain <code class="docutils literal notranslate"><span class="pre">(X,</span> <span class="pre">y)</span></code> tuple), caching the raw file under a local
+<code class="docutils literal notranslate"><span class="pre">data_home</span></code> so it is downloaded only once.</p>
+<p>What sets them apart from the scikit-learn loaders is the optional
+<strong>quantification protocol</strong>: pass <code class="docutils literal notranslate"><span class="pre">protocol=&quot;app&quot;</span></code> (or another protocol) and the
+returned <a class="reference internal" href="modules/generated/mlquantify.datasets.Bunch.html#mlquantify.datasets.Bunch" title="mlquantify.datasets.Bunch"><code class="xref py py-class docutils literal notranslate"><span class="pre">Bunch</span></code></a> additionally carries <code class="docutils literal notranslate"><span class="pre">.samples</span></code> and <code class="docutils literal notranslate"><span class="pre">.prevalences</span></code> —
+a collection of test <em>bags</em> with known class prevalence, ready to score a
+quantifier against.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">mlquantify.datasets</span><span class="w"> </span><span class="kn">import</span> <span class="n">fetch_mushroom</span>
+
+<span class="n">b</span> <span class="o">=</span> <span class="n">fetch_mushroom</span><span class="p">()</span>                       <span class="c1"># plain load -&gt; Bunch(data, target, ...)</span>
+<span class="n">X</span><span class="p">,</span> <span class="n">y</span> <span class="o">=</span> <span class="n">fetch_mushroom</span><span class="p">(</span><span class="n">return_X_y</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>     <span class="c1"># sklearn-style tuple</span>
+
+<span class="c1"># quantification mode: 1000 bags of 500 instances drawn with the</span>
+<span class="c1"># Artificial Prevalence Protocol</span>
+<span class="n">b</span> <span class="o">=</span> <span class="n">fetch_mushroom</span><span class="p">(</span><span class="n">protocol</span><span class="o">=</span><span class="s2">&quot;app&quot;</span><span class="p">,</span> <span class="n">n_samples</span><span class="o">=</span><span class="mi">1000</span><span class="p">,</span> <span class="n">sample_size</span><span class="o">=</span><span class="mi">500</span><span class="p">,</span> <span class="n">random_state</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+<span class="n">b</span><span class="o">.</span><span class="n">samples</span>        <span class="c1"># list of index arrays into b.data, one per bag</span>
+<span class="n">b</span><span class="o">.</span><span class="n">prevalences</span>    <span class="c1"># (n_samples, n_classes) array of TRUE prevalences</span>
+</pre></div>
+</div>
+<section id="shared-configuration">
+<h2><span class="section-number">7.1. </span>Shared configuration<a class="headerlink" href="#shared-configuration" title="Link to this heading">#</a></h2>
+<p>Every fetcher accepts the same base keyword arguments:</p>
+<div class="pst-scrollable-table-container"><table class="table">
+<colgroup>
+<col style="width: 24.0%" />
+<col style="width: 76.0%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Parameter</p></th>
+<th class="head"><p>Meaning</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">data_home=None</span></code></p></td>
+<td><p>Folder used to cache the downloaded file(s). Defaults to a <code class="docutils literal notranslate"><span class="pre">_data/</span></code>
+directory next to the package.</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">download_if_missing=True</span></code></p></td>
+<td><p>If <code class="docutils literal notranslate"><span class="pre">False</span></code>, raise instead of downloading when the cache is empty.</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">return_X_y=False</span></code></p></td>
+<td><p>Return <code class="docutils literal notranslate"><span class="pre">(X,</span> <span class="pre">y)</span></code> instead of a <a class="reference internal" href="modules/generated/mlquantify.datasets.Bunch.html#mlquantify.datasets.Bunch" title="mlquantify.datasets.Bunch"><code class="xref py py-class docutils literal notranslate"><span class="pre">Bunch</span></code></a>.</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">as_frame=False</span></code></p></td>
+<td><p>Return <code class="docutils literal notranslate"><span class="pre">.data</span></code> as a <code class="xref py py-class docutils literal notranslate"><span class="pre">pandas.DataFrame</span></code> and <code class="docutils literal notranslate"><span class="pre">.target</span></code> as a
+<code class="xref py py-class docutils literal notranslate"><span class="pre">pandas.Series</span></code> (with a combined <code class="docutils literal notranslate"><span class="pre">.frame</span></code>), where applicable.</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">n_retries=3</span></code></p></td>
+<td><p>Number of download attempts before giving up.</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">delay=1.0</span></code></p></td>
+<td><p>Seconds to wait between attempts.</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">protocol=None</span></code></p></td>
+<td><p>Quantification sampling protocol: <code class="docutils literal notranslate"><span class="pre">None</span></code> (no bags), <code class="docutils literal notranslate"><span class="pre">&quot;app&quot;</span></code>, <code class="docutils literal notranslate"><span class="pre">&quot;npp&quot;</span></code>,
+<code class="docutils literal notranslate"><span class="pre">&quot;upp&quot;</span></code>, <code class="docutils literal notranslate"><span class="pre">&quot;ppp&quot;</span></code>, or an mlquantify protocol instance. When set, the
+<a class="reference internal" href="modules/generated/mlquantify.datasets.Bunch.html#mlquantify.datasets.Bunch" title="mlquantify.datasets.Bunch"><code class="xref py py-class docutils literal notranslate"><span class="pre">Bunch</span></code></a> also exposes <code class="docutils literal notranslate"><span class="pre">.samples</span></code>, <code class="docutils literal notranslate"><span class="pre">.prevalences</span></code> and <code class="docutils literal notranslate"><span class="pre">.protocol</span></code>.</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">n_samples=1000</span></code></p></td>
+<td><p>Number of prevalence points (bags) the protocol generates.</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">sample_size=500</span></code></p></td>
+<td><p>Instances per bag.</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">random_state=None</span></code></p></td>
+<td><p>Seed forwarded to the protocol.</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>The <code class="docutils literal notranslate"><span class="pre">protocol</span></code> / <code class="docutils literal notranslate"><span class="pre">n_samples</span></code> / <code class="docutils literal notranslate"><span class="pre">sample_size</span></code> triple is the
+quantification-specific part of the API; see <code class="xref py py-func docutils literal notranslate"><span class="pre">make_protocol</span></code> and
+<a class="reference internal" href="synthetic_datasets.html#synthetic-datasets"><span class="std std-ref">Synthetic Datasets</span></a> for how protocols turn a labelled table into evaluation
+bags.</p>
+</section>
+<section id="per-dataset-configuration">
+<h2><span class="section-number">7.2. </span>Per-dataset configuration<a class="headerlink" href="#per-dataset-configuration" title="Link to this heading">#</a></h2>
+<p>Each dataset adds a few of its own keyword arguments on top of the shared ones
+(shown in the <em>Fetcher (key params)</em> column). <code class="docutils literal notranslate"><span class="pre">target_col=</span></code> lets you override
+the column used as the label for the tabular CSV loaders.</p>
+<section id="binary-tabular">
+<h3><span class="section-number">7.2.1. </span>Binary (tabular)<a class="headerlink" href="#binary-tabular" title="Link to this heading">#</a></h3>
+<div class="pst-scrollable-table-container"><table class="table">
+<colgroup>
+<col style="width: 26.0%" />
+<col style="width: 36.0%" />
+<col style="width: 20.0%" />
+<col style="width: 18.0%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Dataset</p></th>
+<th class="head"><p>Fetcher (key params)</p></th>
+<th class="head"><p>Task / classes</p></th>
+<th class="head"><p>Source</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>Mushroom</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">fetch_mushroom(target_col=None)</span></code></p></td>
+<td><p>Binary (2) · easy</p></td>
+<td><p>UCI #73</p></td>
+</tr>
+<tr class="row-odd"><td><p>Banknote Authentication</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">fetch_banknote_authentication(target_col=None)</span></code></p></td>
+<td><p>Binary (2) · easy</p></td>
+<td><p>UCI #267</p></td>
+</tr>
+<tr class="row-even"><td><p>Haberman’s Survival</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">fetch_haberman_survival(target_col=None)</span></code></p></td>
+<td><p>Binary (2) · hard</p></td>
+<td><p>UCI #43</p></td>
+</tr>
+<tr class="row-odd"><td><p>Pima Indians Diabetes</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">fetch_pima_diabetes(target_col=None)</span></code></p></td>
+<td><p>Binary (2) · hard</p></td>
+<td><p>jbrownlee mirror</p></td>
+</tr>
+<tr class="row-even"><td><p>MiniBooNE Particle ID</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">fetch_miniboone()</span></code></p></td>
+<td><p>Binary (2) · med-hard</p></td>
+<td><p>UCI #199</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+<section id="multiclass-tabular">
+<h3><span class="section-number">7.2.2. </span>Multiclass (tabular)<a class="headerlink" href="#multiclass-tabular" title="Link to this heading">#</a></h3>
+<div class="pst-scrollable-table-container"><table class="table">
+<colgroup>
+<col style="width: 26.0%" />
+<col style="width: 36.0%" />
+<col style="width: 20.0%" />
+<col style="width: 18.0%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Dataset</p></th>
+<th class="head"><p>Fetcher (key params)</p></th>
+<th class="head"><p>Task / classes</p></th>
+<th class="head"><p>Source</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>Optical / Pen-Based Digits</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">fetch_digits_optical_penbased(which='optical'|'penbased',</span> <span class="pre">target_col=None)</span></code></p></td>
+<td><p>Multiclass (10) · easy</p></td>
+<td><p>UCI #80 / #81</p></td>
+</tr>
+<tr class="row-odd"><td><p>Dry Bean</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">fetch_dry_bean(target_col=None)</span></code></p></td>
+<td><p>Multiclass (7) · easy-med</p></td>
+<td><p>UCI #602</p></td>
+</tr>
+<tr class="row-even"><td><p>Covertype</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">fetch_covertype(target_col=None)</span></code></p></td>
+<td><p>Multiclass (7) · hard</p></td>
+<td><p>UCI #31</p></td>
+</tr>
+<tr class="row-odd"><td><p>Yeast</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">fetch_yeast(target_col=None)</span></code></p></td>
+<td><p>Multiclass (10) · hard</p></td>
+<td><p>UCI #110</p></td>
+</tr>
+<tr class="row-even"><td><p>Sensorless Drive Diagnosis</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">fetch_sensorless_drive(target_col=None)</span></code></p></td>
+<td><p>Multiclass (11) · med-hard</p></td>
+<td><p>UCI #325</p></td>
+</tr>
+<tr class="row-odd"><td><p>Statlog (Shuttle)</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">fetch_statlog_shuttle(target_col=None)</span></code></p></td>
+<td><p>Multiclass (7) · hard (imbalanced)</p></td>
+<td><p>UCI #148</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+<section id="ordinal">
+<h3><span class="section-number">7.2.3. </span>Ordinal<a class="headerlink" href="#ordinal" title="Link to this heading">#</a></h3>
+<div class="pst-scrollable-table-container"><table class="table">
+<colgroup>
+<col style="width: 26.0%" />
+<col style="width: 36.0%" />
+<col style="width: 20.0%" />
+<col style="width: 18.0%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Dataset</p></th>
+<th class="head"><p>Fetcher (key params)</p></th>
+<th class="head"><p>Task / classes</p></th>
+<th class="head"><p>Source</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>Wine Quality</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">fetch_wine_quality(target_col=None)</span></code></p></td>
+<td><p>Ordinal (quality 3–9)</p></td>
+<td><p>UCI #186</p></td>
+</tr>
+<tr class="row-odd"><td><p>LeQua 2024</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">fetch_lequa2024(task='T1'|'T2'|'T3'|'T4',</span> <span class="pre">include_test=False)</span></code></p></td>
+<td><p>T1 binary · T2 multiclass-28 · T3 ordinal · T4 binary (covariate)</p></td>
+<td><p>Zenodo</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+<section id="text">
+<h3><span class="section-number">7.2.4. </span>Text<a class="headerlink" href="#text" title="Link to this heading">#</a></h3>
+<div class="pst-scrollable-table-container"><table class="table">
+<colgroup>
+<col style="width: 26.0%" />
+<col style="width: 36.0%" />
+<col style="width: 20.0%" />
+<col style="width: 18.0%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Dataset</p></th>
+<th class="head"><p>Fetcher (key params)</p></th>
+<th class="head"><p>Task / classes</p></th>
+<th class="head"><p>Source</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>RCV1-v2</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">fetch_rcv1_v2()</span></code></p></td>
+<td><p>Multilabel topic (sparse)</p></td>
+<td><p>via scikit-learn</p></td>
+</tr>
+<tr class="row-odd"><td><p>20 Newsgroups</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">fetch_newsgroups20(subset='train'|'test')</span></code></p></td>
+<td><p>Multiclass (20)</p></td>
+<td><p>figshare</p></td>
+</tr>
+<tr class="row-even"><td><p>IMDB</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">fetch_imdb(subset='train'|'test')</span></code></p></td>
+<td><p>Binary (2)</p></td>
+<td><p>Stanford</p></td>
+</tr>
+<tr class="row-odd"><td><p>Multi-Domain Sentiment</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">fetch_multidomain_sentiment(domain='books'|'dvd'|'electronics'|'kitchen')</span></code></p></td>
+<td><p>Binary (2) · covariate / domain shift</p></td>
+<td><p>JHU (Blitzer)</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+<section id="temporal-time-shift">
+<h3><span class="section-number">7.2.5. </span>Temporal / time-shift<a class="headerlink" href="#temporal-time-shift" title="Link to this heading">#</a></h3>
+<div class="pst-scrollable-table-container"><table class="table">
+<colgroup>
+<col style="width: 26.0%" />
+<col style="width: 36.0%" />
+<col style="width: 20.0%" />
+<col style="width: 18.0%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Dataset</p></th>
+<th class="head"><p>Fetcher (key params)</p></th>
+<th class="head"><p>Task / classes</p></th>
+<th class="head"><p>Source</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>Sentiment140</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">fetch_sentiment140()</span></code></p></td>
+<td><p>Binary (2) · temporal</p></td>
+<td><p>Stanford</p></td>
+</tr>
+<tr class="row-odd"><td><p>Electricity (Elec2)</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">fetch_electricity_elec2(target_col=None)</span></code></p></td>
+<td><p>Binary (2) · concept drift</p></td>
+<td><p>scikit-multiflow</p></td>
+</tr>
+<tr class="row-even"><td><p>Airlines (flight delay)</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">fetch_airlines(target_col=None)</span></code></p></td>
+<td><p>Binary (2) · concept drift</p></td>
+<td><p>scikit-multiflow</p></td>
+</tr>
+<tr class="row-odd"><td><p>Online News Popularity</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">fetch_online_news_popularity(threshold=1400)</span></code></p></td>
+<td><p>Binary (popularity thresholded at <code class="docutils literal notranslate"><span class="pre">threshold</span></code>)</p></td>
+<td><p>UCI #332</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+<section id="image-graph-synthetic-other-shift">
+<h3><span class="section-number">7.2.6. </span>Image, graph &amp; synthetic (other shift)<a class="headerlink" href="#image-graph-synthetic-other-shift" title="Link to this heading">#</a></h3>
+<div class="pst-scrollable-table-container"><table class="table">
+<colgroup>
+<col style="width: 26.0%" />
+<col style="width: 36.0%" />
+<col style="width: 20.0%" />
+<col style="width: 18.0%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Dataset</p></th>
+<th class="head"><p>Fetcher (key params)</p></th>
+<th class="head"><p>Task / classes</p></th>
+<th class="head"><p>Source</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>SEA Concepts</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">fetch_sea_concepts(n=50000,</span> <span class="pre">drift=True,</span> <span class="pre">noise=0.1)</span></code></p></td>
+<td><p>Binary (2) · concept drift (generated, no download)</p></td>
+<td><p>synthetic</p></td>
+</tr>
+<tr class="row-odd"><td><p>MNIST → USPS</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">fetch_mnist_usps(domain='mnist'|'usps',</span> <span class="pre">subset='train'|'test'|'all')</span></code></p></td>
+<td><p>Multiclass (10) · covariate shift</p></td>
+<td><p>LIBSVM</p></td>
+</tr>
+<tr class="row-even"><td><p>CIFAR-10</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">fetch_cifar10(subset='train'|'test'|'all')</span></code></p></td>
+<td><p>Multiclass (10) · label / prior shift</p></td>
+<td><p>Toronto</p></td>
+</tr>
+<tr class="row-odd"><td><p>Planetoid (Cora / CiteSeer / PubMed)</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">fetch_planetoid_cora_citeseer_pubmed(name='cora'|'citeseer'|'pubmed')</span></code></p></td>
+<td><p>Multiclass (3–7) · graph, covariate / structural shift</p></td>
+<td><p>GitHub (Planetoid)</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+</section>
+<section id="optional-download-progress">
+<h2><span class="section-number">7.3. </span>Optional download progress<a class="headerlink" href="#optional-download-progress" title="Link to this heading">#</a></h2>
+<p>The fetchers print nothing by default and pull in <strong>no</strong> progress dependency. To
+display download progress, register any callable with <code class="xref py py-func docutils literal notranslate"><span class="pre">set_progress_hook</span></code>;
+every fetcher will then report its downloads to it as <code class="docutils literal notranslate"><span class="pre">hook(downloaded,</span> <span class="pre">total,</span> <span class="pre">url)</span></code>
+(<code class="docutils literal notranslate"><span class="pre">total</span></code> is <code class="docutils literal notranslate"><span class="pre">None</span></code> when the server sends no <code class="docutils literal notranslate"><span class="pre">Content-Length</span></code>). This keeps the
+choice of progress tool — plain <code class="docutils literal notranslate"><span class="pre">print</span></code>, <code class="docutils literal notranslate"><span class="pre">logging</span></code> or <code class="docutils literal notranslate"><span class="pre">tqdm</span></code> — entirely yours:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">mlquantify.datasets</span><span class="w"> </span><span class="kn">import</span> <span class="n">set_progress_hook</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">tqdm</span><span class="w"> </span><span class="kn">import</span> <span class="n">tqdm</span>          <span class="c1"># your dependency, not mlquantify&#39;s</span>
+
+<span class="n">bars</span> <span class="o">=</span> <span class="p">{}</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">show</span><span class="p">(</span><span class="n">downloaded</span><span class="p">,</span> <span class="n">total</span><span class="p">,</span> <span class="n">url</span><span class="p">):</span>
+    <span class="n">bar</span> <span class="o">=</span> <span class="n">bars</span><span class="o">.</span><span class="n">setdefault</span><span class="p">(</span><span class="n">url</span><span class="p">,</span> <span class="n">tqdm</span><span class="p">(</span><span class="n">total</span><span class="o">=</span><span class="n">total</span><span class="p">,</span> <span class="n">unit</span><span class="o">=</span><span class="s2">&quot;B&quot;</span><span class="p">,</span> <span class="n">unit_scale</span><span class="o">=</span><span class="kc">True</span><span class="p">))</span>
+    <span class="n">bar</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">downloaded</span> <span class="o">-</span> <span class="n">bar</span><span class="o">.</span><span class="n">n</span><span class="p">)</span>
+
+<span class="n">set_progress_hook</span><span class="p">(</span><span class="n">show</span><span class="p">)</span>        <span class="c1"># all fetchers now report progress</span>
+</pre></div>
+</div>
+</section>
+<section id="references">
+<h2><span class="section-number">7.4. </span>References<a class="headerlink" href="#references" title="Link to this heading">#</a></h2>
+<p>The table below lists, for each dataset, the quantification works in the
+literature that use it (numbers refer to the reference list underneath).</p>
+<div class="pst-scrollable-table-container"><table class="table">
+<colgroup>
+<col style="width: 40.0%" />
+<col style="width: 60.0%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Dataset</p></th>
+<th class="head"><p>Used by — quantification papers</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>Mushroom</p></td>
+<td><p><a class="footnote-reference brackets" href="#id47" id="id2" role="doc-noteref"><span class="fn-bracket">[</span>1<span class="fn-bracket">]</span></a> <a class="footnote-reference brackets" href="#id48" id="id3" role="doc-noteref"><span class="fn-bracket">[</span>2<span class="fn-bracket">]</span></a> <a class="footnote-reference brackets" href="#id49" id="id4" role="doc-noteref"><span class="fn-bracket">[</span>3<span class="fn-bracket">]</span></a></p></td>
+</tr>
+<tr class="row-odd"><td><p>Banknote Authentication</p></td>
+<td><p>— (new addition)</p></td>
+</tr>
+<tr class="row-even"><td><p>Haberman’s Survival</p></td>
+<td><p><a class="footnote-reference brackets" href="#id47" id="id5" role="doc-noteref"><span class="fn-bracket">[</span>1<span class="fn-bracket">]</span></a> <a class="footnote-reference brackets" href="#id50" id="id6" role="doc-noteref"><span class="fn-bracket">[</span>4<span class="fn-bracket">]</span></a> <a class="footnote-reference brackets" href="#id51" id="id7" role="doc-noteref"><span class="fn-bracket">[</span>5<span class="fn-bracket">]</span></a> <a class="footnote-reference brackets" href="#id52" id="id8" role="doc-noteref"><span class="fn-bracket">[</span>6<span class="fn-bracket">]</span></a></p></td>
+</tr>
+<tr class="row-odd"><td><p>Pima Indians Diabetes</p></td>
+<td><p><a class="footnote-reference brackets" href="#id47" id="id9" role="doc-noteref"><span class="fn-bracket">[</span>1<span class="fn-bracket">]</span></a> <a class="footnote-reference brackets" href="#id51" id="id10" role="doc-noteref"><span class="fn-bracket">[</span>5<span class="fn-bracket">]</span></a> <a class="footnote-reference brackets" href="#id52" id="id11" role="doc-noteref"><span class="fn-bracket">[</span>6<span class="fn-bracket">]</span></a> <a class="footnote-reference brackets" href="#id53" id="id12" role="doc-noteref"><span class="fn-bracket">[</span>7<span class="fn-bracket">]</span></a> <a class="footnote-reference brackets" href="#id54" id="id13" role="doc-noteref"><span class="fn-bracket">[</span>8<span class="fn-bracket">]</span></a></p></td>
+</tr>
+<tr class="row-even"><td><p>MiniBooNE Particle ID</p></td>
+<td><p><a class="footnote-reference brackets" href="#id55" id="id14" role="doc-noteref"><span class="fn-bracket">[</span>9<span class="fn-bracket">]</span></a></p></td>
+</tr>
+<tr class="row-odd"><td><p>Optical / Pen-Based Digits</p></td>
+<td><p><a class="footnote-reference brackets" href="#id56" id="id15" role="doc-noteref"><span class="fn-bracket">[</span>10<span class="fn-bracket">]</span></a> <a class="footnote-reference brackets" href="#id57" id="id16" role="doc-noteref"><span class="fn-bracket">[</span>11<span class="fn-bracket">]</span></a></p></td>
+</tr>
+<tr class="row-even"><td><p>Dry Bean</p></td>
+<td><p>— (new addition)</p></td>
+</tr>
+<tr class="row-odd"><td><p>Covertype</p></td>
+<td><p><a class="footnote-reference brackets" href="#id48" id="id17" role="doc-noteref"><span class="fn-bracket">[</span>2<span class="fn-bracket">]</span></a> <a class="footnote-reference brackets" href="#id52" id="id18" role="doc-noteref"><span class="fn-bracket">[</span>6<span class="fn-bracket">]</span></a> <a class="footnote-reference brackets" href="#id56" id="id19" role="doc-noteref"><span class="fn-bracket">[</span>10<span class="fn-bracket">]</span></a> <a class="footnote-reference brackets" href="#id58" id="id20" role="doc-noteref"><span class="fn-bracket">[</span>12<span class="fn-bracket">]</span></a> <a class="footnote-reference brackets" href="#id59" id="id21" role="doc-noteref"><span class="fn-bracket">[</span>13<span class="fn-bracket">]</span></a></p></td>
+</tr>
+<tr class="row-even"><td><p>Yeast</p></td>
+<td><p><a class="footnote-reference brackets" href="#id51" id="id22" role="doc-noteref"><span class="fn-bracket">[</span>5<span class="fn-bracket">]</span></a> <a class="footnote-reference brackets" href="#id52" id="id23" role="doc-noteref"><span class="fn-bracket">[</span>6<span class="fn-bracket">]</span></a> <a class="footnote-reference brackets" href="#id53" id="id24" role="doc-noteref"><span class="fn-bracket">[</span>7<span class="fn-bracket">]</span></a> <a class="footnote-reference brackets" href="#id60" id="id25" role="doc-noteref"><span class="fn-bracket">[</span>14<span class="fn-bracket">]</span></a></p></td>
+</tr>
+<tr class="row-odd"><td><p>Sensorless Drive Diagnosis</p></td>
+<td><p>— (new addition)</p></td>
+</tr>
+<tr class="row-even"><td><p>Statlog (Shuttle)</p></td>
+<td><p><a class="footnote-reference brackets" href="#id54" id="id26" role="doc-noteref"><span class="fn-bracket">[</span>8<span class="fn-bracket">]</span></a> <a class="footnote-reference brackets" href="#id55" id="id27" role="doc-noteref"><span class="fn-bracket">[</span>9<span class="fn-bracket">]</span></a></p></td>
+</tr>
+<tr class="row-odd"><td><p>Wine Quality</p></td>
+<td><p><a class="footnote-reference brackets" href="#id48" id="id28" role="doc-noteref"><span class="fn-bracket">[</span>2<span class="fn-bracket">]</span></a> <a class="footnote-reference brackets" href="#id52" id="id29" role="doc-noteref"><span class="fn-bracket">[</span>6<span class="fn-bracket">]</span></a> <a class="footnote-reference brackets" href="#id53" id="id30" role="doc-noteref"><span class="fn-bracket">[</span>7<span class="fn-bracket">]</span></a> <a class="footnote-reference brackets" href="#id57" id="id31" role="doc-noteref"><span class="fn-bracket">[</span>11<span class="fn-bracket">]</span></a> <a class="footnote-reference brackets" href="#id60" id="id32" role="doc-noteref"><span class="fn-bracket">[</span>14<span class="fn-bracket">]</span></a> <a class="footnote-reference brackets" href="#id61" id="id33" role="doc-noteref"><span class="fn-bracket">[</span>15<span class="fn-bracket">]</span></a></p></td>
+</tr>
+<tr class="row-even"><td><p>LeQua 2024 (T1–T4)</p></td>
+<td><p><a class="footnote-reference brackets" href="#id62" id="id34" role="doc-noteref"><span class="fn-bracket">[</span>16<span class="fn-bracket">]</span></a> <a class="footnote-reference brackets" href="#id63" id="id35" role="doc-noteref"><span class="fn-bracket">[</span>17<span class="fn-bracket">]</span></a></p></td>
+</tr>
+<tr class="row-odd"><td><p>RCV1-v2</p></td>
+<td><p><a class="footnote-reference brackets" href="#id64" id="id36" role="doc-noteref"><span class="fn-bracket">[</span>18<span class="fn-bracket">]</span></a> <a class="footnote-reference brackets" href="#id65" id="id37" role="doc-noteref"><span class="fn-bracket">[</span>19<span class="fn-bracket">]</span></a></p></td>
+</tr>
+<tr class="row-even"><td><p>20 Newsgroups</p></td>
+<td><p><a class="footnote-reference brackets" href="#id65" id="id38" role="doc-noteref"><span class="fn-bracket">[</span>19<span class="fn-bracket">]</span></a></p></td>
+</tr>
+<tr class="row-odd"><td><p>IMDB</p></td>
+<td><p><a class="footnote-reference brackets" href="#id65" id="id39" role="doc-noteref"><span class="fn-bracket">[</span>19<span class="fn-bracket">]</span></a> <a class="footnote-reference brackets" href="#id66" id="id40" role="doc-noteref"><span class="fn-bracket">[</span>20<span class="fn-bracket">]</span></a></p></td>
+</tr>
+<tr class="row-even"><td><p>Multi-Domain Sentiment</p></td>
+<td><p>— (new addition)</p></td>
+</tr>
+<tr class="row-odd"><td><p>Sentiment140</p></td>
+<td><p><a class="footnote-reference brackets" href="#id67" id="id41" role="doc-noteref"><span class="fn-bracket">[</span>21<span class="fn-bracket">]</span></a></p></td>
+</tr>
+<tr class="row-even"><td><p>Electricity (Elec2)</p></td>
+<td><p>— (new addition)</p></td>
+</tr>
+<tr class="row-odd"><td><p>Airlines</p></td>
+<td><p>— (new addition)</p></td>
+</tr>
+<tr class="row-even"><td><p>Online News Popularity</p></td>
+<td><p><a class="footnote-reference brackets" href="#id67" id="id42" role="doc-noteref"><span class="fn-bracket">[</span>21<span class="fn-bracket">]</span></a></p></td>
+</tr>
+<tr class="row-odd"><td><p>SEA Concepts</p></td>
+<td><p>— (new addition)</p></td>
+</tr>
+<tr class="row-even"><td><p>MNIST → USPS</p></td>
+<td><p><a class="footnote-reference brackets" href="#id68" id="id43" role="doc-noteref"><span class="fn-bracket">[</span>22<span class="fn-bracket">]</span></a></p></td>
+</tr>
+<tr class="row-odd"><td><p>CIFAR-10</p></td>
+<td><p><a class="footnote-reference brackets" href="#id68" id="id44" role="doc-noteref"><span class="fn-bracket">[</span>22<span class="fn-bracket">]</span></a> <a class="footnote-reference brackets" href="#id69" id="id45" role="doc-noteref"><span class="fn-bracket">[</span>23<span class="fn-bracket">]</span></a></p></td>
+</tr>
+<tr class="row-even"><td><p>Planetoid (Cora / CiteSeer / PubMed)</p></td>
+<td><p><a class="footnote-reference brackets" href="#id70" id="id46" role="doc-noteref"><span class="fn-bracket">[</span>24<span class="fn-bracket">]</span></a></p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>Datasets marked <em>new addition</em> are recent additions to the library that are not
+yet used by a quantification work in the surveyed bibliography; see the <em>Source</em>
+column above for each dataset’s original reference.</p>
+<aside class="footnote-list brackets">
+<aside class="footnote brackets" id="id47" role="doc-footnote">
+<span class="label"><span class="fn-bracket">[</span>1<span class="fn-bracket">]</span></span>
+<span class="backrefs">(<a role="doc-backlink" href="#id2">1</a>,<a role="doc-backlink" href="#id5">2</a>,<a role="doc-backlink" href="#id9">3</a>)</span>
+<p>Bella, A., Ferri, C., Hernández-Orallo, J., Ramírez-Quintana, M.J. (2010).
+Quantification via Probability Estimators. <em>IEEE ICDM 2010</em>, 737–742.</p>
+</aside>
+<aside class="footnote brackets" id="id48" role="doc-footnote">
+<span class="label"><span class="fn-bracket">[</span>2<span class="fn-bracket">]</span></span>
+<span class="backrefs">(<a role="doc-backlink" href="#id3">1</a>,<a role="doc-backlink" href="#id17">2</a>,<a role="doc-backlink" href="#id28">3</a>)</span>
+<p>Maletzke, A., dos Reis, D., Cherman, E., Batista, G. (2019).
+DyS: A Framework for Mixture Models in Quantification. <em>AAAI 2019</em>, 4552–4560.</p>
+</aside>
+<aside class="footnote brackets" id="id49" role="doc-footnote">
+<span class="label"><span class="fn-bracket">[</span><a role="doc-backlink" href="#id4">3</a><span class="fn-bracket">]</span></span>
+<p>Maletzke, A. (2019). Binary Quantification in Non-Stationary Scenarios.
+PhD thesis, ICMC, Universidade de São Paulo.</p>
+</aside>
+<aside class="footnote brackets" id="id50" role="doc-footnote">
+<span class="label"><span class="fn-bracket">[</span><a role="doc-backlink" href="#id6">4</a><span class="fn-bracket">]</span></span>
+<p>Barranquero, J., González, P., Díez, J., del Coz, J.J. (2013). On the study
+of nearest neighbor algorithms for prevalence estimation in binary problems.
+<em>Pattern Recognition</em> 46(2), 472–482.</p>
+</aside>
+<aside class="footnote brackets" id="id51" role="doc-footnote">
+<span class="label"><span class="fn-bracket">[</span>5<span class="fn-bracket">]</span></span>
+<span class="backrefs">(<a role="doc-backlink" href="#id7">1</a>,<a role="doc-backlink" href="#id10">2</a>,<a role="doc-backlink" href="#id22">3</a>)</span>
+<p>Pérez-Gállego, P., Castaño, A., Quevedo, J.R., del Coz, J.J. (2019).
+Dynamic ensemble selection for quantification tasks. <em>Information Fusion</em> 45, 1–15.</p>
+</aside>
+<aside class="footnote brackets" id="id52" role="doc-footnote">
+<span class="label"><span class="fn-bracket">[</span>6<span class="fn-bracket">]</span></span>
+<span class="backrefs">(<a role="doc-backlink" href="#id8">1</a>,<a role="doc-backlink" href="#id11">2</a>,<a role="doc-backlink" href="#id18">3</a>,<a role="doc-backlink" href="#id23">4</a>,<a role="doc-backlink" href="#id29">5</a>)</span>
+<p>Bunse, M., et al. (eds.) (2024; 2025). Proceedings of the 4th / 5th
+International Workshop on Learning to Quantify (LQ 2024 / LQ 2025).</p>
+</aside>
+<aside class="footnote brackets" id="id53" role="doc-footnote">
+<span class="label"><span class="fn-bracket">[</span>7<span class="fn-bracket">]</span></span>
+<span class="backrefs">(<a role="doc-backlink" href="#id12">1</a>,<a role="doc-backlink" href="#id24">2</a>,<a role="doc-backlink" href="#id30">3</a>)</span>
+<p>González-Castro, V., Alaiz-Rodríguez, R., Alegre, E. (2013). Class
+distribution estimation based on the Hellinger distance. <em>Information Sciences</em>
+218, 146–164.</p>
+</aside>
+<aside class="footnote brackets" id="id54" role="doc-footnote">
+<span class="label"><span class="fn-bracket">[</span>8<span class="fn-bracket">]</span></span>
+<span class="backrefs">(<a role="doc-backlink" href="#id13">1</a>,<a role="doc-backlink" href="#id26">2</a>)</span>
+<p>Iyer, A., Nath, S., Sarawagi, S. (2014). Maximum Mean Discrepancy for Class
+Ratio Estimation: Convergence Bounds and Kernel Selection. <em>ICML 2014</em>.</p>
+</aside>
+<aside class="footnote brackets" id="id55" role="doc-footnote">
+<span class="label"><span class="fn-bracket">[</span>9<span class="fn-bracket">]</span></span>
+<span class="backrefs">(<a role="doc-backlink" href="#id14">1</a>,<a role="doc-backlink" href="#id27">2</a>)</span>
+<p>Schumacher, T., Strohmaier, M., Lemmerich, F. (2023). A Comparative
+Evaluation of Quantification Methods. arXiv preprint.</p>
+</aside>
+<aside class="footnote brackets" id="id56" role="doc-footnote">
+<span class="label"><span class="fn-bracket">[</span>10<span class="fn-bracket">]</span></span>
+<span class="backrefs">(<a role="doc-backlink" href="#id15">1</a>,<a role="doc-backlink" href="#id19">2</a>)</span>
+<p>Joachims, T. (2005). A Support Vector Method for Multivariate Performance
+Measures. <em>ICML 2005</em>, 377–384.</p>
+</aside>
+<aside class="footnote brackets" id="id57" role="doc-footnote">
+<span class="label"><span class="fn-bracket">[</span>11<span class="fn-bracket">]</span></span>
+<span class="backrefs">(<a role="doc-backlink" href="#id16">1</a>,<a role="doc-backlink" href="#id31">2</a>)</span>
+<p>dos Reis, D., Maletzke, A., Cherman, E., Batista, G. (2018). One-class
+Quantification. <em>ECML-PKDD 2018</em>, 273–289.</p>
+</aside>
+<aside class="footnote brackets" id="id58" role="doc-footnote">
+<span class="label"><span class="fn-bracket">[</span><a role="doc-backlink" href="#id20">12</a><span class="fn-bracket">]</span></span>
+<p>Maletzke, A., dos Reis, D., Hassan, W., Batista, G. (2021). Accurately
+Quantifying under Score Variability (MoSS/DySyn). <em>IEEE ICDM 2021</em>.</p>
+</aside>
+<aside class="footnote brackets" id="id59" role="doc-footnote">
+<span class="label"><span class="fn-bracket">[</span><a role="doc-backlink" href="#id21">13</a><span class="fn-bracket">]</span></span>
+<p>Xue, J.C., Weiss, G.M. (2009). Quantification and semi-supervised
+classification methods for handling changes in class distribution.
+<em>ACM SIGKDD 2009</em>, 897–906.</p>
+</aside>
+<aside class="footnote brackets" id="id60" role="doc-footnote">
+<span class="label"><span class="fn-bracket">[</span>14<span class="fn-bracket">]</span></span>
+<span class="backrefs">(<a role="doc-backlink" href="#id25">1</a>,<a role="doc-backlink" href="#id32">2</a>)</span>
+<p>Moreo, A., Salvati, M. (2025). An Efficient Method for Deriving Confidence
+Intervals in Aggregative Quantification.</p>
+</aside>
+<aside class="footnote brackets" id="id61" role="doc-footnote">
+<span class="label"><span class="fn-bracket">[</span><a role="doc-backlink" href="#id33">15</a><span class="fn-bracket">]</span></span>
+<p>Hassan, W., Maletzke, A., Batista, G. (2020). Accurately Quantifying a
+Billion Instances per Second. <em>IEEE DSAA 2020</em>.</p>
+</aside>
+<aside class="footnote brackets" id="id62" role="doc-footnote">
+<span class="label"><span class="fn-bracket">[</span><a role="doc-backlink" href="#id34">16</a><span class="fn-bracket">]</span></span>
+<p>Pérez-Mon, O., Moreo, A., del Coz, J.J., González, P. (2024).
+Quantification using permutation-invariant networks based on histograms
+(HistNetQ). <em>Machine Learning</em>.</p>
+</aside>
+<aside class="footnote brackets" id="id63" role="doc-footnote">
+<span class="label"><span class="fn-bracket">[</span><a role="doc-backlink" href="#id35">17</a><span class="fn-bracket">]</span></span>
+<p>Pérez-Mon, O., del Coz, J.J., González, P. (2025). Quantification via
+Gaussian Latent Space Representations (GMNet).</p>
+</aside>
+<aside class="footnote brackets" id="id64" role="doc-footnote">
+<span class="label"><span class="fn-bracket">[</span><a role="doc-backlink" href="#id36">18</a><span class="fn-bracket">]</span></span>
+<p>Hassan, W., Maletzke, A., Batista, G. (2021). Pitfalls in Quantification
+Assessment.</p>
+</aside>
+<aside class="footnote brackets" id="id65" role="doc-footnote">
+<span class="label"><span class="fn-bracket">[</span>19<span class="fn-bracket">]</span></span>
+<span class="backrefs">(<a role="doc-backlink" href="#id37">1</a>,<a role="doc-backlink" href="#id38">2</a>,<a role="doc-backlink" href="#id39">3</a>)</span>
+<p>Esuli, A., Fabris, A., Moreo, A., Sebastiani, F. (2023). Learning to
+Quantify. Springer, The Information Retrieval Series.</p>
+</aside>
+<aside class="footnote brackets" id="id66" role="doc-footnote">
+<span class="label"><span class="fn-bracket">[</span><a role="doc-backlink" href="#id40">20</a><span class="fn-bracket">]</span></span>
+<p>Esuli, A., Moreo, A., Sebastiani, F. (2018). A Recurrent Neural Network for
+Sentiment Quantification (QuaNet). <em>ACM CIKM 2018</em>, 1775–1778.</p>
+</aside>
+<aside class="footnote brackets" id="id67" role="doc-footnote">
+<span class="label"><span class="fn-bracket">[</span>21<span class="fn-bracket">]</span></span>
+<span class="backrefs">(<a role="doc-backlink" href="#id41">1</a>,<a role="doc-backlink" href="#id42">2</a>)</span>
+<p>Li, et al. (2025). Quantification over Time. arXiv preprint.</p>
+</aside>
+<aside class="footnote brackets" id="id68" role="doc-footnote">
+<span class="label"><span class="fn-bracket">[</span>22<span class="fn-bracket">]</span></span>
+<span class="backrefs">(<a role="doc-backlink" href="#id43">1</a>,<a role="doc-backlink" href="#id44">2</a>)</span>
+<p>Alexandari, A., Kundaje, A., Shrikumar, A. (2020). Maximum Likelihood with
+Bias-Corrected Calibration is Hard-To-Beat at Label Shift Adaptation. <em>ICML 2020</em>.</p>
+</aside>
+<aside class="footnote brackets" id="id69" role="doc-footnote">
+<span class="label"><span class="fn-bracket">[</span><a role="doc-backlink" href="#id45">23</a><span class="fn-bracket">]</span></span>
+<p>Firat, A. (2016). Unified Framework for Quantification. arXiv:1606.00868.</p>
+</aside>
+<aside class="footnote brackets" id="id70" role="doc-footnote">
+<span class="label"><span class="fn-bracket">[</span><a role="doc-backlink" href="#id46">24</a><span class="fn-bracket">]</span></span>
+<p>Damke, C., Hüllermeier, E. (2025). Adjusted Count Quantification Learning on
+Graphs. preprint.</p>
+</aside>
+</aside>
+<div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<ul class="simple">
+<li><p><a class="reference internal" href="synthetic_datasets.html#synthetic-datasets"><span class="std std-ref">Synthetic Datasets</span></a> — the <a class="reference internal" href="modules/generated/mlquantify.datasets.make_quantification.html#mlquantify.datasets.make_quantification" title="mlquantify.datasets.make_quantification"><code class="xref py py-func docutils literal notranslate"><span class="pre">make_quantification</span></code></a> generator for
+fully controlled prior / covariate / concept shift.</p></li>
+<li><p><a class="reference internal" href="api/mlquantify.datasets.html#module-mlquantify.datasets" title="mlquantify.datasets"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mlquantify.datasets</span></code></a> — the full API reference for every fetcher.</p></li>
+</ul>
+</div>
+</section>
+</section>
+
+
+                </article>
+              
+              
+              
+                <footer class="bd-footer-article">
+                  <div class="footer-article-items footer-article__inner">
+  
+    <div class="footer-article-item">
+<div class="prev-next-area">
+    <a class="left-prev"
+       href="synthetic_datasets.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title"><span class="section-number">6. </span>Synthetic Datasets</p>
+      </div>
+    </a>
+    <a class="right-next"
+       href="modules/confidence_intervals.html"
+       title="next page">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title"><span class="section-number">8. </span>Confidence Regions for Quantification</p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
+    </a>
+</div></div>
+  
+</div>
+                </footer>
+              
+              
+              
+            </div>
+            
+            
+              
+                <dialog id="pst-secondary-sidebar-modal"></dialog>
+                <div id="pst-secondary-sidebar" class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item">
+<div
+    id="pst-page-navigation-heading-2"
+    class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> On this page
+  </div>
+  <nav id="pst-page-toc-nav" class="page-toc" aria-labelledby="pst-page-navigation-heading-2">
+    <ul class="pst-show_toc_level nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#shared-configuration">7.1. Shared configuration</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#per-dataset-configuration">7.2. Per-dataset configuration</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#binary-tabular">7.2.1. Binary (tabular)</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#multiclass-tabular">7.2.2. Multiclass (tabular)</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#ordinal">7.2.3. Ordinal</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#text">7.2.4. Text</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#temporal-time-shift">7.2.5. Temporal / time-shift</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#image-graph-synthetic-other-shift">7.2.6. Image, graph &amp; synthetic (other shift)</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#optional-download-progress">7.3. Optional download progress</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#references">7.4. References</a></li>
+</ul>
+  </nav></div>
+
+  <div class="sidebar-secondary-item">
+
+  <div class="tocsection sourcelink">
+    <a href="_sources/datasets.rst.txt">
+      <i class="fa-solid fa-file-lines"></i> Show Source
+    </a>
+  </div>
+</div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+          </footer>
+        
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script defer src="_static/scripts/bootstrap.js?digest=a95f357e85573c9b56d5"></script>
+<script defer src="_static/scripts/pydata-sphinx-theme.js?digest=a95f357e85573c9b56d5"></script>
+
+  <footer class="bd-footer">
+  </footer>
+  </body>
+</html>

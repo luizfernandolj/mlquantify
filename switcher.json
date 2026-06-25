@@ -1,6 +1,11 @@
 [
   {
-    "name": "v0.4.1 (stable)",
+    "name": "v0.5.0 (stable)",
+    "version": "0.5.0",
+    "url": "https://luizfernandolj.github.io/mlquantify/0.5.0/"
+  },
+  {
+    "name": "v0.4.1",
     "version": "0.4.1",
     "url": "https://luizfernandolj.github.io/mlquantify/0.4.1/"
   },
