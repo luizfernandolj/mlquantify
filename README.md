@@ -93,12 +93,18 @@ ___
 
 ## Requirements
 
+Core dependencies (installed automatically with `pip install mlquantify`):
+
 - scikit-learn
 - numpy
 - scipy
 - pandas
 - joblib
 - tqdm
-- matplotlib
-- xlrd
 - abstention
+
+Optional extras:
+
+- `pip install mlquantify[viz]` — plotting via `mlquantify.visualization` (adds matplotlib)
+- `pip install mlquantify[neural]` — neural quantifiers such as QuaNet (adds PyTorch)
+- `pip install mlquantify[all]` — everything above

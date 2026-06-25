@@ -23,7 +23,7 @@ def _per_sample_error(true, pred, metric, eps=0.0):
         n = true.shape[1]
         t = (true + eps) / (1 + n * eps)
         p = (pred + eps) / (1 + n * eps)
-        return np.array([float(RAE(p[i], t[i])) for i in range(len(t))])
+        return np.array([float(RAE(t[i], p[i])) for i in range(len(t))])
     raise ValueError(
         f"Unknown error_metric {metric!r}; expected one of "
         "'ae', 'se', 'rae'."

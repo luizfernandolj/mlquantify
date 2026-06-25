@@ -597,7 +597,7 @@ def apply_protocol(
         case ``batch_size``, ``n_prevalences`` and ``repeats`` are ignored.
     scoring : str, callable, or list, default='mae'
         Metric(s) used to score each sample. A metric name (e.g. ``'mae'``,
-        ``'nmd'``), a callable ``metric(pred, true) -> float``, or a list mixing
+        ``'nmd'``), a callable ``metric(true, pred) -> float``, or a list mixing
         the two. Each becomes a key in the returned dictionary.
     batch_size : int or list of int, default=100
         Size of each evaluation sample.
@@ -723,7 +723,7 @@ def apply_protocol(
 
     for name, fn in scorers.items():
         results[name] = np.asarray([
-            fn(pred, true)
+            fn(true, pred)
             for true, pred in zip(true_prevalences, predicted_prevalences)
         ])
 

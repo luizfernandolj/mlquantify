@@ -2,35 +2,10 @@ import numpy as np
 from scipy.stats import cumfreq
 from mlquantify.metrics._slq import SE
 
-
-def process_inputs(prev_pred, prev_real):
-    """
-    .. :noindex:
-    
-    Process the input data for internal use.
-    """
-    if isinstance(prev_real, dict):
-        prev_real = np.asarray(list(prev_real.values()))
-    if isinstance(prev_pred, dict):
-        prev_pred = np.asarray(list(prev_pred.values()))
-    if isinstance(prev_real, list):
-        prev_real = np.asarray(prev_real)
-    if isinstance(prev_pred, list):
-        prev_pred = np.asarray(prev_pred)
-    
-    # Pad with zeros if lengths differ
-    len_real = len(prev_real)
-    len_pred = len(prev_pred)
-    
-    if len_real > len_pred:
-        prev_pred = np.pad(prev_pred, (0, len_real - len_pred), constant_values=0)
-    elif len_pred > len_real:
-        prev_real = np.pad(prev_real, (0, len_pred - len_real), constant_values=0)
-        
-    return prev_real, prev_pred
+from ._utils import process_inputs
 
 
-def VSE(prev_pred, prev_real, train_values):
+def VSE(prev_real, prev_pred, train_values):
     r"""
     Compute the Variance-normalised Squared Error (VSE).
 
@@ -50,16 +25,16 @@ def VSE(prev_pred, prev_real, train_values):
     verror : float
         Variance-normalised squared error.
     """
-    prev_real, prev_pred = process_inputs(prev_pred, prev_real)
+    prev_real, prev_pred = process_inputs(prev_real, prev_pred)
     if isinstance(train_values, dict):
         train_values = np.asarray(list(train_values.values()))
     var_train = np.var(train_values, ddof=1)
     if var_train == 0:
         return np.nan
-    return SE(prev_pred, prev_real) / var_train
+    return SE(prev_real, prev_pred) / var_train
 
 
-def CvM_L1(prev_pred, prev_real, n_bins=100):
+def CvM_L1(prev_real, prev_pred, n_bins=100):
     r"""
     Compute the L1 version of the Cramér–von Mises statistic (Xiao et al., 2006)
     between two cumulative distributions, as suggested by Bella et al. (2014).
@@ -80,7 +55,7 @@ def CvM_L1(prev_pred, prev_real, n_bins=100):
     statistic : float
         L1 Cramér–von Mises distance between cumulative distributions.
     """
-    prev_real, prev_pred = process_inputs(prev_pred, prev_real)
+    prev_real, prev_pred = process_inputs(prev_real, prev_pred)
 
     # Compute empirical cumulative distributions
     min_val = min(np.min(prev_real), np.min(prev_pred))
