@@ -51,37 +51,36 @@ ___
 
 ## Quick example:
 
-This code first loads the breast cancer dataset from _sklearn_, which is then split into training and testing sets. It uses the _Expectation Maximisation Quantifier (EMQ)_ with a RandomForest classifier to predict class prevalence. After training the model, it evaluates performance by calculating and printing the absolute error and bias between the real and predicted prevalences.
+This snippet builds a synthetic 3-class dataset that combines **prior** and **covariate** shift with `make_quantification`, then evaluates a quantifier across the **Artificial Prevalence Protocol (APP)** with `apply_protocol` — which trains the model on a held-out split and scores it on many test samples drawn at controlled prevalences.
 
 ```python
-from mlquantify.likelihood import EMQ
-from mlquantify.metrics import MAE, NRAE
-from mlquantify.utils import get_prev_from_labels
-
+import numpy as np
 from sklearn.ensemble import RandomForestClassifier
-from sklearn.datasets import load_breast_cancer
-from sklearn.model_selection import train_test_split
 
-# Loading dataset from sklearn
-features, target = load_breast_cancer(return_X_y=True)
+from mlquantify.datasets import make_quantification
+from mlquantify.model_selection import apply_protocol
+from mlquantify.counting import ACC
 
-#Splitting into train and test
-X_train, X_test, y_train, y_test = train_test_split(features, target, test_size=0.3)
+# Synthetic 3-class data with a complex (stacked prior + covariate) shift
+Xs, ys, _ = make_quantification(
+    n_classes=5,
+    shift_type=["prior", "covariate"],   # compose two kinds of dataset shift
+    covariate_scale=1.0,
+    random_state=0,
+)
+X, y = np.concatenate(Xs), np.concatenate(ys)   # pool the bags into one dataset
 
-#Create the model, here it is the Expectation Maximisation Quantifier (EMQ) with a classifier
-model = EMQ(RandomForestClassifier())
-model.fit(X_train, y_train)
+# Evaluate ACC under the Artificial Prevalence Protocol. apply_protocol fits the
+# quantifier on a train split and scores it on many held-out test samples drawn
+# at controlled prevalences (the test instances never overlap with training).
+results = apply_protocol(
+    ACC(RandomForestClassifier(random_state=0)), X, y,
+    protocol="app", batch_size=[100, 500], scoring=["mae", "rae"], random_state=0, verbose=1
+)
 
-#Predict the class prevalence for X_test
-pred_prevalence = model.predict(X_test)
-real_prevalence = get_prev_from_labels(y_test)
-
-#Get the error for the prediction
-mae = MAE(real_prevalence, pred_prevalence)
-nrae = NRAE(real_prevalence, pred_prevalence)
-
-print(f"Mean Absolute Error -> {mae}")
-print(f"Normalized Relative Absolute Error -> {nrae}")
+print(f"APP over {results['n_batches']} test samples")
+print(f"  mean MAE -> {results['MAE'].mean():.4f}")
+print(f"  mean RAE -> {results['RAE'].mean():.4f}")
 ```
 
 - In case you need any help, refer to the [User Guide](https://luizfernandolj.github.io/mlquantify/user_guide.html).

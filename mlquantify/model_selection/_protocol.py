@@ -1,6 +1,8 @@
+import inspect
 import numpy as np
 
 from copy import deepcopy
+from functools import partial
 from joblib import Parallel, delayed
 from sklearn.model_selection import train_test_split
 
@@ -562,7 +564,7 @@ def apply_protocol(
     random_state=None,
     return_predictions=True,
     return_estimator=False,
-    verbose=False,
+    verbose=0,
     **protocol_params,
 ):
     r"""Evaluate a quantifier across an evaluation protocol.
@@ -598,7 +600,10 @@ def apply_protocol(
     scoring : str, callable, or list, default='mae'
         Metric(s) used to score each sample. A metric name (e.g. ``'mae'``,
         ``'nmd'``), a callable ``metric(true, pred) -> float``, or a list mixing
-        the two. Each becomes a key in the returned dictionary.
+        the two. Each becomes a key in the returned dictionary. Relative metrics
+        such as ``'rae'`` / ``'nrae'`` are automatically smoothed with
+        ``eps = 1 / (2 * sample_size)`` so classes absent from a sample (zero
+        true prevalence) do not yield ``inf``.
     batch_size : int or list of int, default=100
         Size of each evaluation sample.
     n_prevalences : int, default=11
@@ -622,8 +627,14 @@ def apply_protocol(
         Whether to include the true and predicted prevalence arrays.
     return_estimator : bool, default=False
         Whether to include the fitted quantifier under the ``'estimator'`` key.
-    verbose : bool, default=False
-        Print the number of samples generated.
+    verbose : int, default=0
+        Verbosity level, following the sklearn convention:
+
+        - ``0`` (or ``False``) — silent.
+        - ``1`` (or ``True``) — print a one-line summary: protocol name,
+          number of batches, and the mean score for each metric.
+        - ``2`` — additionally print one line per sample showing its index,
+          true prevalence, predicted prevalence, and per-metric scores.
     **protocol_params : dict
         Extra protocol arguments forwarded to the constructor (e.g.
         ``min_prev``, ``max_prev``, ``strategy`` and ``dirichlet_alpha`` for
@@ -698,10 +709,13 @@ def apply_protocol(
     proto = _build_protocol(protocol, batch_size, n_prevalences, repeats,
                             random_state, protocol_params)
 
+    verbose = int(verbose)
+
     batches = list(proto.split(X_pool, y_pool))
-    if verbose:
+
+    if verbose >= 1:
         print(f"[apply_protocol] {proto.__class__.__name__}: "
-              f"{len(batches)} samples")
+              f"{len(batches)} sample(s), batch_size={proto.batch_size}")
 
     def _evaluate(idx):
         X_batch, y_batch = X_pool[idx], y_pool[idx]
@@ -721,11 +735,50 @@ def apply_protocol(
         results["predicted_prevalences"] = predicted_prevalences
     results["n_batches"] = len(batches)
 
+    # Relative metrics (e.g. RAE/NRAE) divide by the true prevalence, which is
+    # zero for classes absent from a sample (common under APP). Smooth them with
+    # eps = 1/(2 * sample_size) (Sebastiani, 2020) by passing eps to any metric
+    # that accepts it; metrics without an eps parameter are called unchanged.
+    _sample_size = min((len(b) for b in batches), default=0)
+    _eps = 1.0 / (2.0 * _sample_size) if _sample_size else 0.0
+
+    per_metric = {}
     for name, fn in scorers.items():
-        results[name] = np.asarray([
-            fn(true, pred)
+        scorer = fn
+        try:
+            if _eps and "eps" in inspect.signature(fn).parameters:
+                scorer = partial(fn, eps=_eps)
+        except (TypeError, ValueError):
+            pass
+        per_metric[name] = np.asarray([
+            scorer(true, pred)
             for true, pred in zip(true_prevalences, predicted_prevalences)
         ])
+
+    results.update(per_metric)
+
+    if verbose >= 2:
+        _fmt_prev = lambda p: "[" + ", ".join(f"{v:.3f}" for v in p) + "]"
+        _score_w = max(len(n) for n in per_metric) if per_metric else 3
+        header = (f"  {'sample':>6}  {'true prevalence':<24}  "
+                  f"{'predicted prevalence':<24}  " +
+                  "  ".join(f"{n:>{max(_score_w,5)}}" for n in per_metric))
+        print(header)
+        print("  " + "-" * (len(header) - 2))
+        for i, (true, pred) in enumerate(
+                zip(true_prevalences, predicted_prevalences)):
+            scores_str = "  ".join(
+                f"{per_metric[n][i]:>{max(_score_w,5)}.4f}"
+                for n in per_metric
+            )
+            print(f"  {i:>6}  {_fmt_prev(true):<24}  "
+                  f"{_fmt_prev(pred):<24}  {scores_str}")
+
+    if verbose >= 1:
+        means_str = "  ".join(
+            f"{n}={v.mean():.4f}" for n, v in per_metric.items()
+        )
+        print(f"[apply_protocol] done — {means_str}")
 
     if return_estimator:
         results["estimator"] = estimator

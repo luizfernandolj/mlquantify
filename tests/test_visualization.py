@@ -1,14 +1,17 @@
 """Smoke + behaviour tests for mlquantify.visualization.
 
 Uses the non-interactive Agg backend so figures never try to open a window.
+matplotlib is the optional ``viz`` extra, so skip this whole module when it is
+not installed (e.g. a plain ``pip install -e .`` without ``[viz]``).
 """
 
-import matplotlib
+import numpy as np
+import pytest
+
+matplotlib = pytest.importorskip("matplotlib")
 matplotlib.use("Agg")
 
 import matplotlib.pyplot as plt
-import numpy as np
-import pytest
 from sklearn.linear_model import LogisticRegression
 
 from mlquantify.counting import CC

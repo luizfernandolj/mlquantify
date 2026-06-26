@@ -26,7 +26,7 @@
     background-clip: text;
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
-    text-shadow: 0px 4px 20px rgba(168, 85, 247, 0.3);
+    text-shadow: 0px 4px 20px rgba(167, 139, 250, 0.3);
     
     animation: shine 5s linear infinite;
 }
@@ -54,12 +54,12 @@
     font-weight: 600;
     letter-spacing: 0.5px;
     transition: all 0.3s ease;
-    box-shadow: 0 4px 15px rgba(217, 70, 239, 0.4);
+    box-shadow: 0 4px 15px rgba(167, 139, 250, 0.4);
 }
 
 .btn-premium:hover {
     transform: translateY(-2px);
-    box-shadow: 0 8px 25px rgba(217, 70, 239, 0.6);
+    box-shadow: 0 8px 25px rgba(167, 139, 250, 0.6);
 }
 
 .btn-outline-glow {
@@ -76,7 +76,7 @@
 .btn-outline-glow:hover {
     border-color: var(--brand-magenta);
     color: var(--brand-magenta);
-    box-shadow: 0 0 15px rgba(217, 70, 239, 0.2);
+    box-shadow: 0 0 15px rgba(167, 139, 250, 0.2);
 }
 
 /* Card Grid */
@@ -107,7 +107,7 @@
 
 .feature-card:hover {
     transform: translateY(-8px);
-    border-color: rgba(217, 70, 239, 0.3);
+    border-color: rgba(167, 139, 250, 0.3);
     box-shadow: var(--glow-shadow);
 }
 
@@ -198,7 +198,7 @@
 .showcase-card {
     display: flex;
     flex-direction: column;
-    background: rgba(51, 65, 85, 0.45);   /* softer, lighter slate than the cards above */
+    background: var(--bg-card);
     backdrop-filter: blur(12px);
     -webkit-backdrop-filter: blur(12px);
     border: 1px solid var(--glass-border);
@@ -224,7 +224,7 @@
 
 .showcase-card:hover {
     transform: translateY(-8px);
-    border-color: rgba(217, 70, 239, 0.35);
+    border-color: rgba(167, 139, 250, 0.35);
     box-shadow: var(--glow-shadow);
 }
 
@@ -234,7 +234,7 @@
 
 .showcase-thumb {
     background: radial-gradient(circle at 50% 0%,
-                rgba(168, 85, 247, 0.14), transparent 72%);
+                rgba(167, 139, 250, 0.14), transparent 72%);
     padding: 1.4rem 1.4rem 1.1rem;
     /* divider between the plot and the text below */
     border-bottom: 1px solid rgba(148, 163, 184, 0.22);
@@ -259,8 +259,8 @@
     letter-spacing: 0.05em;
     text-transform: uppercase;
     color: var(--brand-violet);
-    background: rgba(168, 85, 247, 0.1);
-    border: 1px solid rgba(168, 85, 247, 0.25);
+    background: rgba(167, 139, 250, 0.1);
+    border: 1px solid rgba(167, 139, 250, 0.25);
     border-radius: 999px;
     padding: 0.12rem 0.65rem;
     margin-bottom: 0.7rem;
@@ -309,7 +309,7 @@
 
 .showcase-methods .methods-list {
     font-family: var(--pst-font-family-monospace, monospace);
-    color: #cbd5e1;
+    color: var(--text-secondary);
 }
 
 .showcase-api-link {
@@ -331,7 +331,7 @@
 /* Landing footer                                                      */
 /* ------------------------------------------------------------------ */
 .landing-footer {
-    background: rgba(15, 23, 42, 0.95);
+    background: var(--bg-deep);
     border-top: 1px solid var(--glass-border);
     padding: 3rem 0 1.75rem;
 }

@@ -159,9 +159,13 @@ def NKLD(prev_real, prev_pred):
     return 2 * (euler / (euler + 1)) - 1
 
 
-def RAE(prev_real, prev_pred):
+def RAE(prev_real, prev_pred, eps=0.0):
     r"""
     Compute the relative absolute error between the real and predicted prevalences.
+
+    The relative absolute error is the per-class absolute error divided by the
+    true prevalence, averaged over classes:
+    :math:`\frac{1}{n}\sum_i |\hat{p}_i - p_i| / p_i`.
 
     Parameters
     ----------
@@ -171,16 +175,28 @@ def RAE(prev_real, prev_pred):
     prev_pred : array-like of shape (n_classes,)
         Predicted prevalence values for each class.
 
+    eps : float, default=0.0
+        Additive (Laplace) smoothing applied to both prevalence vectors as
+        ``(p + eps) / (1 + n_classes * eps)`` before the division. Evaluation
+        protocols such as APP produce samples with absent classes (zero true
+        prevalence); smoothing -- e.g. ``eps = 1 / (2 * sample_size)``
+        (Sebastiani, 2020) -- keeps the relative error finite. With ``eps=0`` a
+        class with zero true prevalence yields ``inf``.
+
     Returns
     -------
     error : float
         Relative absolute error across all classes.
     """
     prev_real, prev_pred = process_inputs(prev_real, prev_pred)
-    return (MAE(prev_real, prev_pred) / prev_real).mean(axis=-1)
+    if eps:
+        n = len(prev_real)
+        prev_real = (prev_real + eps) / (1.0 + n * eps)
+        prev_pred = (prev_pred + eps) / (1.0 + n * eps)
+    return np.mean(AE(prev_real, prev_pred) / prev_real)
 
 
-def NRAE(prev_real, prev_pred):
+def NRAE(prev_real, prev_pred, eps=0.0):
     r"""
     Compute the normalized relative absolute error between the real and predicted prevalences.
 
@@ -192,12 +208,21 @@ def NRAE(prev_real, prev_pred):
     prev_pred : array-like of shape (n_classes,)
         Predicted prevalence values for each class.
 
+    eps : float, default=0.0
+        Additive (Laplace) smoothing applied to both prevalence vectors; see
+        :func:`RAE`. Needed when the true prevalence can be zero (e.g. under
+        APP), since the normalisation also divides by ``min(prev_real)``.
+
     Returns
     -------
     error : float
         Normalized relative absolute error across all classes.
     """
     prev_real, prev_pred = process_inputs(prev_real, prev_pred)
+    if eps:
+        n = len(prev_real)
+        prev_real = (prev_real + eps) / (1.0 + n * eps)
+        prev_pred = (prev_pred + eps) / (1.0 + n * eps)
     relative = RAE(prev_real, prev_pred)
     z_relative = (len(prev_real) - 1 + ((1 - np.min(prev_real)) / np.min(prev_real))) / len(prev_real)
     return relative / z_relative

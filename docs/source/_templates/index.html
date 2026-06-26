@@ -152,6 +152,19 @@
     </div>
 
     <div class="showcase-card">
+      <div class="showcase-thumb"><img src="{{ pathto('_static/showcase/real_datasets.png', 1) }}" alt="Real-world dataset families"></div>
+      <div class="showcase-body">
+        <span class="showcase-tag">Datasets</span>
+        <h5><a class="showcase-title-link" href="{{ pathto('datasets') }}">Real-world datasets</a></h5>
+        <p>Ready-to-use benchmark datasets across text, tabular, image and graph domains.</p>
+        <p class="showcase-methods">
+          <span class="methods-list">fetch_newsgroups20 &middot; fetch_imdb &middot; fetch_mnist_usps &middot; fetch_dry_bean &middot; fetch_lequa2024</span><br>
+          <a class="showcase-api-link" href="{{ pathto('api/mlquantify.datasets') }}">API reference &rarr;</a>
+        </p>
+      </div>
+    </div>
+
+    <div class="showcase-card">
       <div class="showcase-thumb"><img src="{{ pathto('_static/showcase/metrics.png', 1) }}" alt="Error by prior-probability shift"></div>
       <div class="showcase-body">
         <span class="showcase-tag">Evaluation</span>
