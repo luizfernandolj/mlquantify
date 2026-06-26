@@ -7,13 +7,13 @@ body {
 
 /* Footer & Extras */
 footer {
-    background: #0b1120 !important;
+    background: var(--bg-deep) !important;
     border-top: 1px solid var(--glass-border);
 }
 
-/* Sidebar Fixes for Dark Mode */
+/* Sidebar */
 .bd-sidebar-primary, .bd-sidebar-secondary, .bd-toc, .bd-sidebar {
-    background: rgba(15, 23, 42, 0.6) !important; /* Semi-transparent dark */
+    background: var(--bg-card) !important;
     backdrop-filter: blur(10px);
     -webkit-backdrop-filter: blur(10px);
     border-right: 1px solid var(--glass-border);
@@ -117,8 +117,8 @@ a:focus, button:focus {
 }
 
 .bd-content table.docutils th {
-    background: linear-gradient(90deg, #1e1b4b, #312e81); /* Deep Indigo */
-    color: var(--text-primary);
+    background: linear-gradient(90deg, var(--brand-violet), var(--brand-magenta));
+    color: #ffffff;
     font-weight: 700;
     padding: 1rem 1.5rem;
     text-align: left;
@@ -131,7 +131,7 @@ a:focus, button:focus {
 .bd-content table.docutils td {
     padding: 1rem 1.5rem;
     color: var(--text-secondary);
-    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+    border-bottom: 1px solid var(--glass-border);
     vertical-align: middle;
     transition: color 0.2s ease;
 }
@@ -145,7 +145,7 @@ a:focus, button:focus {
 }
 
 .bd-content table.docutils tr:hover {
-    background-color: rgba(217, 70, 239, 0.05); /* Very subtle magenta tint */
+    background-color: rgba(167, 139, 250, 0.05); /* Very subtle magenta tint */
 }
 
 .bd-content table.docutils tr:hover td {
@@ -162,5 +162,5 @@ a:focus, button:focus {
 
 .bd-content table.docutils td a:hover {
     color: var(--brand-magenta);
-    text-shadow: 0 0 10px rgba(217, 70, 239, 0.4);
+    text-shadow: 0 0 10px rgba(167, 139, 250, 0.4);
 }

@@ -29,12 +29,12 @@ The table below lists all the quantification methods available in the ``mlquanti
      - `Firat (2016) <https://arxiv.org/abs/1606.00868>`_
      - Yes
      - Aggregative
-     - :mod:`~mlquantify.counting`
+     - :mod:`~mlquantify.compose`
    * - :class:`~mlquantify.counting.GPACC`
      - `Firat (2016) <https://arxiv.org/abs/1606.00868>`_
      - Yes
      - Aggregative
-     - :mod:`~mlquantify.counting`
+     - :mod:`~mlquantify.compose`
    * - :class:`~mlquantify.counting.TAC`
      - `Forman (2005) <https://link.springer.com/chapter/10.1007/11564096_55>`_
      - No
@@ -62,6 +62,11 @@ The table below lists all the quantification methods available in the ``mlquanti
      - :mod:`~mlquantify.counting`
    * - :class:`~mlquantify.counting.MS2`
      - `Forman (2006) <https://link.springer.com/article/10.1007/s10618-008-0097-y>`_
+     - No
+     - Aggregative
+     - :mod:`~mlquantify.counting`
+   * - :class:`~mlquantify.counting.ACC`
+     - `Forman (2005) <https://link.springer.com/chapter/10.1007/11564096_55>`_
      - No
      - Aggregative
      - :mod:`~mlquantify.counting`
@@ -115,6 +120,26 @@ The table below lists all the quantification methods available in the ``mlquanti
      - No
      - Non-aggregative
      - :mod:`~mlquantify.matching`
+   * - :class:`~mlquantify.matching.GHDy`
+     - `Bunse (2022) <https://github.com/mirkobunse/qunfold>`_
+     - Yes
+     - Aggregative
+     - :mod:`~mlquantify.compose`
+   * - :class:`~mlquantify.matching.GHDx`
+     - `Bunse (2022) <https://github.com/mirkobunse/qunfold>`_
+     - Yes
+     - Non-aggregative
+     - :mod:`~mlquantify.compose`
+   * - :class:`~mlquantify.matching.EDy`
+     - `Bunse (2022) <https://github.com/mirkobunse/qunfold>`_
+     - Yes
+     - Aggregative
+     - :mod:`~mlquantify.compose`
+   * - :class:`~mlquantify.matching.EDx`
+     - `Bunse (2022) <https://github.com/mirkobunse/qunfold>`_
+     - Yes
+     - Non-aggregative
+     - :mod:`~mlquantify.compose`
    * - :class:`~mlquantify.matching.KDEyML`
      - `Moreo et al. (2025) <https://link.springer.com/article/10.1007/s10994-024-06726-5>`_
      - Yes
@@ -130,6 +155,11 @@ The table below lists all the quantification methods available in the ``mlquanti
      - Yes
      - Aggregative
      - :mod:`~mlquantify.matching`
+   * - :class:`~mlquantify.matching.GKDEyML`
+     - `Bunse (2022) <https://github.com/mirkobunse/qunfold>`_
+     - Yes
+     - Aggregative
+     - :mod:`~mlquantify.compose`
    * - :class:`~mlquantify.neighbors.PWK`
      - `Barraquero et al. (2013) <https://www.sciencedirect.com/science/article/pii/S0031320312003391>`_
      - Yes

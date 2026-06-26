@@ -43,9 +43,9 @@
     <link rel="stylesheet" type="text/css" href="../../_static/copybutton.css?v=76b2166b" />
     <link rel="stylesheet" type="text/css" href="../../_static/plot_directive.css" />
     <link rel="stylesheet" type="text/css" href="../../_static/sphinx-design.min.css?v=95c83b7e" />
-    <link rel="stylesheet" type="text/css" href="../../_static/variables.css?v=fded66fe" />
-    <link rel="stylesheet" type="text/css" href="../../_static/theme_overrides.css?v=dec63a3c" />
-    <link rel="stylesheet" type="text/css" href="../../_static/landing.css?v=a73da8a0" />
+    <link rel="stylesheet" type="text/css" href="../../_static/variables.css?v=fbfe22d4" />
+    <link rel="stylesheet" type="text/css" href="../../_static/theme_overrides.css?v=3f619714" />
+    <link rel="stylesheet" type="text/css" href="../../_static/landing.css?v=15266586" />
     <link rel="stylesheet" type="text/css" href="../../_static/dev_banner.css?v=ad749d7a" />
   
   <!-- So that users can add custom icons -->
@@ -729,7 +729,7 @@
 <h1>NPP<a class="headerlink" href="#npp" title="Link to this heading">#</a></h1>
 <dl class="py class">
 <dt class="sig sig-object py" id="mlquantify.model_selection.NPP">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">mlquantify.model_selection.</span></span><span class="sig-name descname"><span class="pre">NPP</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">batch_size</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_samples</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">repeats</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">random_state</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/luizfernandolj/mlquantify/tree/master/mlquantify/model_selection/_protocol.py#L265-L314"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mlquantify.model_selection.NPP" title="Link to this definition">#</a></dt>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">mlquantify.model_selection.</span></span><span class="sig-name descname"><span class="pre">NPP</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">batch_size</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_samples</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">repeats</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">random_state</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/luizfernandolj/mlquantify/tree/master/mlquantify/model_selection/_protocol.py#L267-L316"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mlquantify.model_selection.NPP" title="Link to this definition">#</a></dt>
 <dd><p>Natural Prevalence Protocol (NPP).</p>
 <p>Samples evaluation batches uniformly at random from the dataset, preserving
 the natural class distribution without imposing any prevalence constraints.</p>
@@ -782,7 +782,7 @@ routing information.</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="mlquantify.model_selection.NPP.get_n_combinations">
-<span class="sig-name descname"><span class="pre">get_n_combinations</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference external" href="https://github.com/luizfernandolj/mlquantify/tree/master/mlquantify/model_selection/_protocol.py#L111-L115"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mlquantify.model_selection.NPP.get_n_combinations" title="Link to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">get_n_combinations</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference external" href="https://github.com/luizfernandolj/mlquantify/tree/master/mlquantify/model_selection/_protocol.py#L113-L117"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mlquantify.model_selection.NPP.get_n_combinations" title="Link to this definition">#</a></dt>
 <dd><p>Get the number of combinations for the current protocol.</p>
 </dd></dl>
 
@@ -839,7 +839,7 @@ possible to update each component of a nested object.</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="mlquantify.model_selection.NPP.split">
-<span class="sig-name descname"><span class="pre">split</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v2.4)"><span class="pre">ndarray</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v2.4)"><span class="pre">ndarray</span></a></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/luizfernandolj/mlquantify/tree/master/mlquantify/model_selection/_protocol.py#L83-L103"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mlquantify.model_selection.NPP.split" title="Link to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">split</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v2.4)"><span class="pre">ndarray</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v2.4)"><span class="pre">ndarray</span></a></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/luizfernandolj/mlquantify/tree/master/mlquantify/model_selection/_protocol.py#L85-L105"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mlquantify.model_selection.NPP.split" title="Link to this definition">#</a></dt>
 <dd><p>Split the data into samples for evaluation.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>

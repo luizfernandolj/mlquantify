@@ -312,6 +312,28 @@ def datasets():
     _save(fig, "datasets.png")
 
 
+# --------------------------------------------------------------------------- #
+# 12. Real-world datasets — domain families bar chart
+# --------------------------------------------------------------------------- #
+def real_datasets():
+    domains = ["Tabular", "Text", "Image", "Graph", "Competition"]
+    counts  = [15,         5,      2,       1,        1]
+    colors  = [VIOLET, MAGENTA, TEAL, SKY, AMBER]
+
+    fig, ax = _new(figsize=(5.0, 3.1))
+    bars = ax.barh(domains, counts, color=colors, alpha=0.82,
+                   edgecolor="none", height=0.55)
+    for bar, n in zip(bars, counts):
+        ax.text(n + 0.15, bar.get_y() + bar.get_height() / 2,
+                str(n), va="center", ha="left", color=INK, fontsize=9,
+                fontweight="bold")
+    ax.set_xlabel("Number of datasets")
+    ax.set_xlim(0, max(counts) + 2)
+    ax.invert_yaxis()
+    _style(ax)
+    _save(fig, "real_datasets.png")
+
+
 def main():
     counting()
     matching()
@@ -324,6 +346,7 @@ def main():
     calibration()
     meta()
     datasets()
+    real_datasets()
 
 
 if __name__ == "__main__":

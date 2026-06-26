@@ -43,9 +43,9 @@
     <link rel="stylesheet" type="text/css" href="../../_static/copybutton.css?v=76b2166b" />
     <link rel="stylesheet" type="text/css" href="../../_static/plot_directive.css" />
     <link rel="stylesheet" type="text/css" href="../../_static/sphinx-design.min.css?v=95c83b7e" />
-    <link rel="stylesheet" type="text/css" href="../../_static/variables.css?v=fded66fe" />
-    <link rel="stylesheet" type="text/css" href="../../_static/theme_overrides.css?v=dec63a3c" />
-    <link rel="stylesheet" type="text/css" href="../../_static/landing.css?v=a73da8a0" />
+    <link rel="stylesheet" type="text/css" href="../../_static/variables.css?v=fbfe22d4" />
+    <link rel="stylesheet" type="text/css" href="../../_static/theme_overrides.css?v=3f619714" />
+    <link rel="stylesheet" type="text/css" href="../../_static/landing.css?v=15266586" />
     <link rel="stylesheet" type="text/css" href="../../_static/dev_banner.css?v=ad749d7a" />
   
   <!-- So that users can add custom icons -->
@@ -729,7 +729,7 @@
 <h1>NRAE<a class="headerlink" href="#nrae" title="Link to this heading">#</a></h1>
 <dl class="py function">
 <dt class="sig sig-object py" id="mlquantify.metrics.NRAE">
-<span class="sig-prename descclassname"><span class="pre">mlquantify.metrics.</span></span><span class="sig-name descname"><span class="pre">NRAE</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">prev_real</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">prev_pred</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/luizfernandolj/mlquantify/tree/master/mlquantify/metrics/_slq.py#L183-L203"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mlquantify.metrics.NRAE" title="Link to this definition">#</a></dt>
+<span class="sig-prename descclassname"><span class="pre">mlquantify.metrics.</span></span><span class="sig-name descname"><span class="pre">NRAE</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">prev_real</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">prev_pred</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">eps</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.0</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/luizfernandolj/mlquantify/tree/master/mlquantify/metrics/_slq.py#L199-L228"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mlquantify.metrics.NRAE" title="Link to this definition">#</a></dt>
 <dd><p>Compute the normalized relative absolute error between the real and predicted prevalences.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -737,6 +737,10 @@
 <dt><strong>prev_real</strong><span class="classifier">array-like of shape (n_classes,)</span></dt><dd><p>True prevalence values for each class.</p>
 </dd>
 <dt><strong>prev_pred</strong><span class="classifier">array-like of shape (n_classes,)</span></dt><dd><p>Predicted prevalence values for each class.</p>
+</dd>
+<dt><strong>eps</strong><span class="classifier">float, default=0.0</span></dt><dd><p>Additive (Laplace) smoothing applied to both prevalence vectors; see
+<a class="reference internal" href="mlquantify.metrics.RAE.html#mlquantify.metrics.RAE" title="mlquantify.metrics.RAE"><code class="xref py py-func docutils literal notranslate"><span class="pre">RAE</span></code></a>. Needed when the true prevalence can be zero (e.g. under
+APP), since the normalisation also divides by <code class="docutils literal notranslate"><span class="pre">min(prev_real)</span></code>.</p>
 </dd>
 </dl>
 </dd>
