@@ -152,6 +152,12 @@ torch.
 
 ### Build & Packaging
 
+- The CI doctest step (`pytest --doctest-modules mlquantify/`) no longer
+  crashes on torch-less environments: a package-level `conftest.py` skips
+  collecting the torch-only modules (`readme/_readme2.py`,
+  `representations/_torch_*.py`) when torch is not installed — the same
+  mechanism scikit-learn uses. Public imports were already guarded by the
+  package `__init__` files; only direct module collection was affected.
 - The docs build now installs a CPU build of torch so the neural `.. plot::`
   examples execute, and `conf.py` only mocks torch for autodoc when it is not
   installed.
