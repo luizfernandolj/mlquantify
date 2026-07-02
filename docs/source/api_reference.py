@@ -215,6 +215,33 @@ API_REFERENCE = {
             }
         ],
     },
+    "mlquantify.readme": {
+        "short_summary": "ReadMe methods for quantification without classifiers.",
+        "description": None,
+        "sections": [
+            {
+                "title": "ReadMe Methods",
+                "autosummary": [
+                    "ReadMe",
+                    "ReadMe2",
+                ],
+            }
+        ],
+    },
+    "mlquantify.tree": {
+        "short_summary": "Tree-based methods for quantification.",
+        "description": None,
+        "sections": [
+            {
+                "title": "Tree-based Methods",
+                "autosummary": [
+                    "QuantificationTreeClassifier",
+                    "QuantificationTree",
+                    "QuantificationForest",
+                ],
+            }
+        ],
+    },
     "mlquantify.compose": {
         "short_summary": "Composable quantification methods.",
         "description": None,
@@ -267,7 +294,15 @@ API_REFERENCE = {
                     "HardPredictionRepresentation",
                     "SoftPredictionRepresentation",
                 ],
-            }
+            },
+            {
+                "title": "Differentiable representations (PyTorch)",
+                "autosummary": [
+                    "TorchRepresentation",
+                    "DifferentiableHistogramRepresentation",
+                    "GaussianRepresentation",
+                ],
+            },
         ],
     },
     "mlquantify.solvers": {
@@ -312,6 +347,12 @@ API_REFERENCE = {
                 "title": "Neural Methods",
                 "autosummary": [
                     "QuaNet",
+                    "HistNetQ",
+                    "GMNet",
+                    "HistNetQBags",
+                    "GMNetBags",
+                    "PrevalenceBagMixin",
+                    "TorchClassifierWrapper",
                 ],
             }
         ],

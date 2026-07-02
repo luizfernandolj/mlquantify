@@ -17,6 +17,7 @@ User Guide
    Real-World Datasets <datasets.rst>
    Confidence Intervals <modules/confidence_intervals.rst>
    Calibration <modules/calibration.rst>
+   Neural Quantifiers <modules/neural.rst>
    Visualization <visualization.rst>
    Building a Quantifier <building_a_quantifier.rst>
    Mlquantify methods <modules/mlquantify_methods.rst>

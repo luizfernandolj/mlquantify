@@ -52,9 +52,15 @@ extensions = [
 
 autosummary_generate = True
 
-# torch is an optional dependency (only ``mlquantify.neural`` needs it); mock it
-# so autodoc can import and document QuaNet without a torch install.
-autodoc_mock_imports = ["torch"]
+# torch is an optional dependency (only ``mlquantify.neural`` needs it). Mock it
+# for autodoc *only when it is not installed*, so the docs still build without a
+# torch install. When torch IS available (e.g. the docs CI installs the CPU
+# build), leave it un-mocked so the neural-quantifier ``.. plot::`` examples can
+# actually import torch and run.
+try:
+    import torch  # noqa: F401
+except ImportError:
+    autodoc_mock_imports = ["torch"]
 
 # -- intersphinx -------------------------------------------------------------
 # Resolve cross-references to the projects mlquantify builds on. This also

@@ -33,8 +33,10 @@ reference on core concepts, see the :ref:`Foundations <quantification_foundation
   mlquantify.multiclass
   mlquantify.neighbors
   mlquantify.neural
+  mlquantify.readme
   mlquantify.representations
   mlquantify.solvers
+  mlquantify.tree
   mlquantify.utils
   mlquantify.visualization
 
@@ -2180,6 +2182,138 @@ reference on core concepts, see the :ref:`Foundations <quantification_foundation
 
 
 
+  * - :obj:`~mlquantify.neural.HistNetQ`
+
+    - .. div:: sk-apisearch-desc
+
+        .. currentmodule:: mlquantify.neural
+
+        .. autoshortsummary:: mlquantify.neural.HistNetQ
+
+        .. div:: caption
+
+          :mod:`mlquantify.neural`
+
+
+
+
+
+  * - :obj:`~mlquantify.neural.GMNet`
+
+    - .. div:: sk-apisearch-desc
+
+        .. currentmodule:: mlquantify.neural
+
+        .. autoshortsummary:: mlquantify.neural.GMNet
+
+        .. div:: caption
+
+          :mod:`mlquantify.neural`
+
+
+
+
+
+  * - :obj:`~mlquantify.neural.HistNetQBags`
+
+    - .. div:: sk-apisearch-desc
+
+        .. currentmodule:: mlquantify.neural
+
+        .. autoshortsummary:: mlquantify.neural.HistNetQBags
+
+        .. div:: caption
+
+          :mod:`mlquantify.neural`
+
+
+
+
+
+  * - :obj:`~mlquantify.neural.GMNetBags`
+
+    - .. div:: sk-apisearch-desc
+
+        .. currentmodule:: mlquantify.neural
+
+        .. autoshortsummary:: mlquantify.neural.GMNetBags
+
+        .. div:: caption
+
+          :mod:`mlquantify.neural`
+
+
+
+
+
+  * - :obj:`~mlquantify.neural.PrevalenceBagMixin`
+
+    - .. div:: sk-apisearch-desc
+
+        .. currentmodule:: mlquantify.neural
+
+        .. autoshortsummary:: mlquantify.neural.PrevalenceBagMixin
+
+        .. div:: caption
+
+          :mod:`mlquantify.neural`
+
+
+
+
+
+  * - :obj:`~mlquantify.neural.TorchClassifierWrapper`
+
+    - .. div:: sk-apisearch-desc
+
+        .. currentmodule:: mlquantify.neural
+
+        .. autoshortsummary:: mlquantify.neural.TorchClassifierWrapper
+
+        .. div:: caption
+
+          :mod:`mlquantify.neural`
+
+
+
+
+
+
+
+
+
+  * - :obj:`~mlquantify.readme.ReadMe`
+
+    - .. div:: sk-apisearch-desc
+
+        .. currentmodule:: mlquantify.readme
+
+        .. autoshortsummary:: mlquantify.readme.ReadMe
+
+        .. div:: caption
+
+          :mod:`mlquantify.readme`
+
+
+
+
+
+  * - :obj:`~mlquantify.readme.ReadMe2`
+
+    - .. div:: sk-apisearch-desc
+
+        .. currentmodule:: mlquantify.readme
+
+        .. autoshortsummary:: mlquantify.readme.ReadMe2
+
+        .. div:: caption
+
+          :mod:`mlquantify.readme`
+
+
+
+
+
 
 
 
@@ -2314,6 +2448,56 @@ reference on core concepts, see the :ref:`Foundations <quantification_foundation
 
 
 
+  * - :obj:`~mlquantify.representations.TorchRepresentation`
+
+    - .. div:: sk-apisearch-desc
+
+        .. currentmodule:: mlquantify.representations
+
+        .. autoshortsummary:: mlquantify.representations.TorchRepresentation
+
+        .. div:: caption
+
+          :mod:`mlquantify.representations`
+
+
+
+
+
+  * - :obj:`~mlquantify.representations.DifferentiableHistogramRepresentation`
+
+    - .. div:: sk-apisearch-desc
+
+        .. currentmodule:: mlquantify.representations
+
+        .. autoshortsummary:: mlquantify.representations.DifferentiableHistogramRepresentation
+
+        .. div:: caption
+
+          :mod:`mlquantify.representations`
+
+
+
+
+
+  * - :obj:`~mlquantify.representations.GaussianRepresentation`
+
+    - .. div:: sk-apisearch-desc
+
+        .. currentmodule:: mlquantify.representations
+
+        .. autoshortsummary:: mlquantify.representations.GaussianRepresentation
+
+        .. div:: caption
+
+          :mod:`mlquantify.representations`
+
+
+
+
+
+
+
 
 
   * - :obj:`~mlquantify.solvers.solve_binary`
@@ -2391,6 +2575,58 @@ reference on core concepts, see the :ref:`Foundations <quantification_foundation
         .. div:: caption
 
           :mod:`mlquantify.solvers`
+
+
+
+
+
+
+
+
+
+  * - :obj:`~mlquantify.tree.QuantificationTreeClassifier`
+
+    - .. div:: sk-apisearch-desc
+
+        .. currentmodule:: mlquantify.tree
+
+        .. autoshortsummary:: mlquantify.tree.QuantificationTreeClassifier
+
+        .. div:: caption
+
+          :mod:`mlquantify.tree`
+
+
+
+
+
+  * - :obj:`~mlquantify.tree.QuantificationTree`
+
+    - .. div:: sk-apisearch-desc
+
+        .. currentmodule:: mlquantify.tree
+
+        .. autoshortsummary:: mlquantify.tree.QuantificationTree
+
+        .. div:: caption
+
+          :mod:`mlquantify.tree`
+
+
+
+
+
+  * - :obj:`~mlquantify.tree.QuantificationForest`
+
+    - .. div:: sk-apisearch-desc
+
+        .. currentmodule:: mlquantify.tree
+
+        .. autoshortsummary:: mlquantify.tree.QuantificationForest
+
+        .. div:: caption
+
+          :mod:`mlquantify.tree`
 
 
 

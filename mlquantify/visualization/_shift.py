@@ -20,10 +20,9 @@ def _per_sample_error(true, pred, metric, eps=0.0):
     if metric in ("rae", "nrae"):
         from mlquantify.metrics import RAE
 
-        n = true.shape[1]
-        t = (true + eps) / (1 + n * eps)
-        p = (pred + eps) / (1 + n * eps)
-        return np.array([float(RAE(t[i], p[i])) for i in range(len(t))])
+        return np.array([
+            float(RAE(true[i], pred[i], eps=eps)) for i in range(len(true))
+        ])
     raise ValueError(
         f"Unknown error_metric {metric!r}; expected one of "
         "'ae', 'se', 'rae'."

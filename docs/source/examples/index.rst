@@ -66,6 +66,38 @@ Comparing methods
         Watch the Expectation-Maximisation loop iteratively correct the prior
         until the adjusted prevalence converges to the true one.
 
+    .. grid-item-card:: Neural quantifiers (HistNetQ & GMNet)
+        :link: sphx_neural_quantifiers
+        :link-type: ref
+        :text-align: center
+
+        Train two symmetric neural quantifiers end-to-end on bags of instances
+        and read their bias and variance off diagonal plots.
+
+    .. grid-item-card:: QuaNet: deep quantification with LSTMs
+        :link: sphx_quanet
+        :link-type: ref
+        :text-align: center
+
+        Put a recurrent correction network on top of a regular classifier and
+        watch it undo the classifier's counting bias on shifted bags.
+
+    .. grid-item-card:: Quantification trees and forests
+        :link: sphx_quantification_trees
+        :link-type: ref
+        :text-align: center
+
+        Grow decision trees whose splits balance false positives against false
+        negatives, and compare them with a standard CART under shift.
+
+    .. grid-item-card:: Quantifying without a classifier (ReadMe)
+        :link: sphx_readme_methods
+        :link-type: ref
+        :text-align: center
+
+        Estimate prevalences directly from features with the ReadMe accounting
+        identity — no per-document prediction step at all.
+
 
 Evaluation and protocols
 -------------------------
@@ -231,6 +263,10 @@ benchmark quantifiers on it with the true prevalences in hand.
    plot_method_comparison
    plot_distribution_matching
    plot_emq_convergence
+   plot_neural_quantifiers
+   plot_quanet
+   plot_quantification_trees
+   plot_readme
    plot_protocols
    plot_error_by_shift
    plot_grid_search

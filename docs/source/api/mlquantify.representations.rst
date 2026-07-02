@@ -37,3 +37,24 @@ Representations
   PredictionRepresentation
   HardPredictionRepresentation
   SoftPredictionRepresentation
+
+
+.. _representations_ref-differentiable-representations-(pytorch):
+
+
+
+Differentiable representations (PyTorch)
+----------------------------------------
+
+
+
+
+.. autosummary::
+  :nosignatures:
+  :toctree: ../modules/generated/
+  :template: base.rst
+
+
+  TorchRepresentation
+  DifferentiableHistogramRepresentation
+  GaussianRepresentation

@@ -42,12 +42,3 @@ The optional compiled acceleration behind distribution matching.
    :maxdepth: 1
 
    modules/cython_acceleration.rst
-
-Calibration and neural quantifiers
-==================================
-
-.. toctree::
-   :maxdepth: 1
-
-   modules/calibration.rst
-   modules/neural.rst

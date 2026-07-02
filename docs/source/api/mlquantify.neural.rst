@@ -30,3 +30,9 @@ Neural Methods
 
 
   QuaNet
+  HistNetQ
+  GMNet
+  HistNetQBags
+  GMNetBags
+  PrevalenceBagMixin
+  TorchClassifierWrapper

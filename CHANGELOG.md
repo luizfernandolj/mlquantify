@@ -6,7 +6,175 @@ All notable changes to mlquantify will be documented in this file.
 
 ## [Unreleased]
 
-_Nothing yet. Add user-visible changes here as they land._
+This cycle adds three new method families to `mlquantify`. **Neural
+quantification**: two symmetric neural quantifiers (**HistNetQ** and
+**GMNet**), the differentiable bag representations they are built on, a
+wrapper to plug any PyTorch model into `QuaNet`, and a way to train directly
+on prevalence-labelled bags — faithful ports of the authors' code (Esuli et
+al. 2018; Pérez-Mon et al. 2024, 2025), numerically checked against it.
+**Quantification trees** (`tree`): decision trees and forests whose split
+criterion targets quantification directly (Milli et al. 2013). **ReadMe
+methods** (`readme`): the classifier-free quantifiers from automated content
+analysis (Hopkins & King 2010; Jerzak, King & Strezhnev 2022). Everything
+torch-based lives behind the `neural` extra
+(`pip install mlquantify[neural]`); a bare `import mlquantify` never imports
+torch.
+
+### New Features
+
+- **ReadMe methods** (`readme`, new family) — the classifier-free quantifiers
+  from automated content analysis: **`ReadMe`** (Hopkins & King 2010; King &
+  Lu 2008) solves the accounting identity `P(S) = P(S|D) P(D)` by
+  simplex-constrained least squares over the joint distribution of random
+  binary-feature subsets (with median auto-binarization and variance-weighted
+  feature sampling), and **`ReadMe2`** (Jerzak, King & Strezhnev 2022) — the
+  continuous-feature successor — learns softsign feature projections by SGD
+  (maximizing category and feature distinctiveness), kNN-matches the labeled
+  set to the unlabeled documents to resist semantic change, and averages
+  bootstrapped constrained-LS estimates. `ReadMe2` requires torch and is
+  exposed only when it is installed (same optional pattern as `neural`);
+  `ReadMe` is pure numpy/scipy.
+- **Quantification Trees** (`tree`, new family) — decision trees whose split
+  criterion is optimized for quantification rather than classification
+  (Milli et al. 2013): a split is chosen to balance false positives against
+  false negatives per class (criterion `'eb'`, or `'cqb'` to also trade off
+  classification error), so that counting the leaf predictions estimates the
+  prevalences directly. Three classes: `QuantificationTreeClassifier` (the
+  raw sklearn-style tree, composable with any aggregative quantifier, e.g.
+  `ACC(estimator=QuantificationTreeClassifier())` — the paper's AC(Q)),
+  `QuantificationTree` (Classify-and-Count over a single tree) and
+  `QuantificationForest` (the paper's Random Forest quantifier: averages
+  per-tree **Adjusted Count** estimates, with per-tree tpr/fpr rates from
+  cross-validation; the paper's best configuration).
+- **`HistNetQ`** (`neural`) — a symmetric neural quantifier that trains
+  end-to-end on bags labelled by prevalence, summarising each bag with a
+  **differentiable histogram** over learnable feature extractor outputs
+  (Pérez-Mon et al. 2024). You supply the feature-extraction `nn.Module`; the
+  network adds the histogram bag-representation and a softmax quantification
+  head, and optimises a quantification loss (`'rae'`/`'ae'`/`'mse'`) directly.
+- **`GMNet`** (`neural`) — a symmetric neural quantifier that represents each bag
+  with a mixture of **full-covariance Gaussians** across several independent
+  latent spaces (Pérez-Mon et al. 2025). The full covariance (Cholesky-
+  parameterised, so positive-definite without a `geotorch` dependency) captures
+  feature correlations a per-feature histogram cannot; a CKA penalty
+  (`cka_lambda`) keeps the latent spaces diverse.
+- **Training directly on prevalence-labelled bags** — `PrevalenceBagMixin` and
+  the ready-made `HistNetQBags` / `GMNetBags` accept `fit(Xs, ps)` (a collection
+  of bags and their class prevalences, no per-instance labels), the native
+  format of the LeQua competitions / learning-from-label-proportions. New bags
+  are synthesised by mixing the real ones (Bag Mixer).
+- **Differentiable bag representations** (`representations`, torch-only) —
+  `TorchRepresentation` (base class for permutation-invariant, differentiable
+  bag descriptors), `DifferentiableHistogramRepresentation` (learnable hard
+  histogram, the HistNetQ BRM) and `GaussianRepresentation` (full-covariance
+  Gaussian mixture, the GMNet BRM). Exported only when torch is available.
+- **`TorchClassifierWrapper`** (`neural`) — wraps any `torch.nn.Module` in the
+  scikit-learn `fit` / `predict_proba` / `transform` interface so a custom
+  PyTorch model can be used as the `estimator` (and embedding source) of
+  `QuaNet`.
+- **`QuaNet` gains an `embedder=` parameter** — supply a separate transformer
+  (e.g. `PCA`, `TfidfVectorizer`, a `TorchClassifierWrapper`) for the dense
+  embeddings when the base `estimator` has no `transform` method. The two bare
+  `assert`s were replaced with clear `ValueError`s.
+- **Training controls on the symmetric quantifiers** — configurable
+  `optimizer` (`'adam'`/`'adamw'`), `weight_decay`, an optional
+  `ReduceLROnPlateau` schedule (`end_lr` + `lr_factor`, stopping when the LR
+  bottoms out), multi-bag mini-batching (`batch_size`) with
+  `gradient_accumulation`, a `tqdm` progress bar (`verbose`), and
+  **checkpoint/resume** (`checkpoint_path` + `checkpoint_every`): re-fitting with
+  the same checkpoint continues where training stopped.
+
+### Fixed
+
+- **Metrics no longer divide by zero on degenerate prevalences** — every
+  metric in `mlquantify.metrics` is now finite on inputs with absent
+  classes (e.g. the extreme bags of an APP sweep) and on degenerate
+  single-class / zero-padded vectors, instead of emitting
+  `inf`/`NaN`/`RuntimeWarning`:
+  - `RAE`, `NRAE`, `KLD` and `NKLD` apply additive (Forman) smoothing,
+    `(p + eps) / (1 + n_classes * eps)` — new `eps` parameter, default
+    `1e-3`; pass `1/(2*sample_size)` for the LeQua convention, or `0` to
+    disable;
+  - `RAE` also fixed to normalise by the *per-class* absolute error rather
+    than the mean one (the two coincide only in the binary case);
+  - `NAE` and `NRAE` return `0.0` when the normaliser is zero (single-class
+    input, where the maximum attainable error is itself zero);
+  - `NMD` and `RNOD` return `0.0` for single-class input, and `RNOD` falls
+    back to the full class set instead of dividing by an empty support when
+    the true prevalence vector is all zeros.
+- **`QuaNet.fit` no longer crashes on multiclass aggregation** — the auxiliary
+  quantifier estimates are now read whether `aggregate` returns a dict or an
+  array (it depends on the global `prevalence_return_type`), fixing an
+  `AttributeError: 'numpy.ndarray' object has no attribute 'values'`.
+- **`QuaNet` boolean parameter constraints** — `fit_estimator` and
+  `bidirectional` were declared as positive-number intervals, which rejected
+  `False`; they are now `"boolean"` constraints.
+
+### Documentation
+
+- New **Quantification Trees** user guide (why FP/FN balance matters for
+  quantification, the EB/CQB criteria, the gain/stopping rule, the
+  Adjusted-Count forest, and the `ACC(estimator=QuantificationTreeClassifier())`
+  composition) under *Aggregative Quantification*, and a new **ReadMe
+  Methods** guide (the accounting identity, its `P(S|D)`-stability
+  assumption, feature-subset smoothing, ReadMe2's learned projections and
+  matching) under *Non-Aggregative Quantification*; both families registered
+  in the API reference and the MLQuantify Methods table.
+- Three new example-gallery pages: **QuaNet** (LSTM correction network over a
+  classifier, diagonal-plot read-out), **Quantification trees and forests**
+  (vs. a standard CART under shift), and **Quantifying without a classifier
+  (ReadMe)** (ReadMe vs. ReadMe2 across the prevalence range).
+- The example gallery now generates its data with
+  `mlquantify.datasets.make_quantification` (training sample + bags at
+  explicitly controlled prevalence values) instead of
+  `sklearn.datasets.make_classification` plus manual resampling — 12 pages
+  converted, every plot block re-executed and verified. Pages whose subject
+  is orthogonal (sampling protocols on raw data, classifier calibration)
+  keep their original data generation.
+- Honest performance narrative for quantification trees: the example page
+  and user-guide intro now explain that a single tree's `FP = FN` guarantee
+  makes it unbiased *at the training prevalence* only — CC's response slope
+  is the classifier's `tpr − fpr`, so the shallow tree errs more at extreme
+  prevalences than a deep CART, and the Adjusted-Count forest (or an `ACC`
+  composition) is the configuration that actually tracks the diagonal,
+  consistent with the paper's own results.
+- **Neural Quantifiers** (and **Calibration**) are now top-level User Guide
+  entries instead of nested under *Core Components*.
+- Rewrote the **Neural Quantifiers** guide: the symmetric FEM → BRM → QM
+  architecture, per-parameter tables for HistNetQ and GMNet (including how to
+  match the authors' training setup), training directly on labelled bags, and
+  the `TorchClassifierWrapper`, with an architecture diagram.
+- Extended the **Representations** guide with the differentiable histogram and
+  full-covariance Gaussian bag representations (live `.. plot::` figures).
+- New example-gallery page **Neural quantifiers (HistNetQ & GMNet)** with a
+  plotted diagonal comparison, plus `experiments/lequa_neural.py` — a runnable
+  LeQua reproduction script (auto-downloads the data, GPU-ready, checkpointing).
+
+### Build & Packaging
+
+- The docs build now installs a CPU build of torch so the neural `.. plot::`
+  examples execute, and `conf.py` only mocks torch for autodoc when it is not
+  installed.
+
+### Tests
+
+- New `tests/test_tree.py` (20 tests): classifier behaviour (criteria,
+  `max_depth`, determinism, the FP/FN-balancing property), quantifier
+  prevalence validity on binary and multiclass data, forest subsampling /
+  parallelism / per-tree adjustment rates, the `ACC` composition, and
+  parameter validation.
+- New `tests/test_readme.py` (14 tests): prevalence validity, shifted-bag
+  recovery, auto-binarization and the `binarize=False` guard, determinism,
+  `get_params`/`set_params` round-trips; `ReadMe2` tests skip cleanly when
+  torch is missing and the module imports without it.
+- `tests/test_metrics.py` gained divide-by-zero regression tests: RAE
+  per-class normalisation on multiclass input (the bug was invisible in
+  binary cases), finiteness of `RAE`/`KLD`/`NKLD` with zero-prevalence
+  classes under the default smoothing, exact `eps=0` opt-out behaviour, and
+  the degenerate single-class / all-zero guards of `NAE`, `NMD` and `RNOD`.
+- Extended `tests/test_neural.py` with HistNetQ/GMNet bag-training coverage
+  (list and 3-D array inputs, prevalence renormalisation, the equal-bag-size
+  guard) and fixed the stale QuaNet test.
 
 ---
 

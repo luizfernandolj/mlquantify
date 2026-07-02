@@ -19,28 +19,27 @@ truth.
 
     import numpy as np
     import matplotlib.pyplot as plt
-    from sklearn.datasets import make_classification
     from sklearn.linear_model import LogisticRegression
-    from sklearn.model_selection import train_test_split
 
+    from mlquantify.datasets import make_quantification
     from mlquantify.counting import CC
     from mlquantify.metrics import MAE
 
-    # A binary problem whose test split is intentionally more imbalanced
-    # than training, so counting alone has to work for its estimate.
-    X, y = make_classification(
-        n_samples=4000, n_features=20, weights=[0.5, 0.5], random_state=0,
+    # A balanced training sample plus one test bag whose prevalence is
+    # intentionally different (60% positive), so counting alone has to
+    # work for its estimate.
+    Xtr, ytr, Xs, ys, prevs = make_quantification(
+        n_batches=1, batch_size=1000, return_train=True, train_size=2000,
+        train_prevalence=[0.5, 0.5], prevalence=np.array([[0.4, 0.6]]),
+        n_features=20, random_state=0,
     )
-    X_tr, X_te, y_tr, y_te = train_test_split(
-        X, y, test_size=0.5, stratify=y, random_state=0,
-    )
+    X_te, true = Xs[0], prevs[0]
 
     quantifier = CC(LogisticRegression(max_iter=1000))
-    quantifier.fit(X_tr, y_tr)
+    quantifier.fit(Xtr, ytr)
 
     pred = quantifier.predict(X_te)                      # dict {class: prevalence}
     pred = np.array([pred[c] for c in quantifier.classes_])
-    true = np.array([(y_te == c).mean() for c in quantifier.classes_])
 
     # Side-by-side bars: true vs. predicted prevalence per class.
     fig, ax = plt.subplots(figsize=(6, 4))
@@ -55,9 +54,10 @@ truth.
     ax.legend()
     fig.tight_layout()
 
-The two bars almost coincide: when the test distribution resembles training,
-even plain counting does well. The next example shows what happens when it does
-*not* — and why dedicated quantifiers exist.
+The two bars almost coincide: under this mild shift, plain counting on a good
+classifier does well. The next example sweeps the test prevalence across the
+whole range and shows where counting breaks down — and why dedicated
+quantifiers exist.
 
 .. seealso::
 

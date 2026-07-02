@@ -19,42 +19,32 @@ and tracks what each method predicts.
 
     import numpy as np
     import matplotlib.pyplot as plt
-    from sklearn.datasets import make_classification
     from sklearn.linear_model import LogisticRegression
-    from sklearn.model_selection import train_test_split
 
+    from mlquantify.datasets import make_quantification
     from mlquantify.counting import CC, ACC
 
-    X, y = make_classification(
-        n_samples=6000, n_features=20, weights=[0.5, 0.5], random_state=1,
+    # One balanced training sample plus test bags whose true prevalence sweeps
+    # a grid across the full [0, 1] range.
+    Xtr, ytr, Xs, ys, prevs = make_quantification(
+        batch_size=500, return_train=True, train_size=2400,
+        train_prevalence=[0.5, 0.5],
+        prevalence="grid", n_prevalences=19,
+        n_features=20, random_state=1,
     )
-    X_tr, X_pool, y_tr, y_pool = train_test_split(
-        X, y, test_size=0.6, stratify=y, random_state=1,
-    )
 
-    cc = CC(LogisticRegression(max_iter=1000)).fit(X_tr, y_tr)
-    acc = ACC(LogisticRegression(max_iter=1000)).fit(X_tr, y_tr)
+    cc = CC(LogisticRegression(max_iter=1000)).fit(Xtr, ytr)
+    acc = ACC(LogisticRegression(max_iter=1000)).fit(Xtr, ytr)
 
-    pos = np.where(y_pool == 1)[0]
-    neg = np.where(y_pool == 0)[0]
-    rng = np.random.default_rng(0)
-
-    target_prev = np.linspace(0.05, 0.95, 19)
-    cc_pred, acc_pred = [], []
-    for p in target_prev:
-        n = 500
-        n_pos = int(round(p * n))
-        idx = np.concatenate([
-            rng.choice(pos, n_pos, replace=True),
-            rng.choice(neg, n - n_pos, replace=True),
-        ])
-        cc_pred.append(cc.predict(X_pool[idx])[1])
-        acc_pred.append(acc.predict(X_pool[idx])[1])
+    order = np.argsort(prevs[:, 1])
+    true_prev = prevs[order, 1]
+    cc_pred = [cc.predict(Xs[i])[1] for i in order]
+    acc_pred = [acc.predict(Xs[i])[1] for i in order]
 
     fig, ax = plt.subplots(figsize=(6, 5.5))
     ax.plot([0, 1], [0, 1], "k--", lw=1, label="ideal")
-    ax.plot(target_prev, cc_pred, "o-", color="#e76f51", label="CC (biased)")
-    ax.plot(target_prev, acc_pred, "s-", color="#2a9d8f", label="ACC (adjusted)")
+    ax.plot(true_prev, cc_pred, "o-", color="#e76f51", label="CC (biased)")
+    ax.plot(true_prev, acc_pred, "s-", color="#2a9d8f", label="ACC (adjusted)")
     ax.set_xlabel("True positive-class prevalence")
     ax.set_ylabel("Predicted positive-class prevalence")
     ax.set_title("CC drifts off the diagonal; ACC tracks it")

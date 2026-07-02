@@ -135,6 +135,26 @@ The table below lists all the quantification methods available in the ``mlquanti
      - Yes
      - Aggregative
      - :mod:`~mlquantify.neighbors`
+   * - :class:`~mlquantify.readme.ReadMe`
+     - `Hopkins & King (2010) <https://onlinelibrary.wiley.com/doi/10.1111/j.1540-5907.2009.00428.x>`_
+     - Yes
+     - Non-aggregative
+     - :mod:`~mlquantify.readme`
+   * - :class:`~mlquantify.readme.ReadMe2`
+     - `Jerzak et al. (2022) <https://www.cambridge.org/core/journals/political-analysis/article/improved-method-of-automated-nonparametric-content-analysis-for-social-science/60343978B77598E1E4229E7B85CD2081>`_
+     - Yes
+     - Non-aggregative
+     - :mod:`~mlquantify.readme`
+   * - :class:`~mlquantify.tree.QuantificationTree`
+     - `Milli et al. (2013) <https://ieeexplore.ieee.org/document/6729537>`_
+     - Yes
+     - Aggregative
+     - :mod:`~mlquantify.tree`
+   * - :class:`~mlquantify.tree.QuantificationForest`
+     - `Milli et al. (2013) <https://ieeexplore.ieee.org/document/6729537>`_
+     - Yes
+     - Aggregative
+     - :mod:`~mlquantify.tree`
    * - :class:`~mlquantify.meta.EnsembleQ`
      - `Pérez-Gállego et al. (2017) <https://www.sciencedirect.com/science/article/pii/S1566253516300628>`_ and `Pérez-Gállego et al. (2019) <https://www.sciencedirect.com/science/article/pii/S1566253517303652>`_
      - Method dependent
@@ -152,6 +172,16 @@ The table below lists all the quantification methods available in the ``mlquanti
      - :mod:`~mlquantify.meta`
    * - :class:`~mlquantify.neural.QuaNet`
      - `Esuli et al. (2018) <https://doi.org/10.1016/j.patrec.2019.11.012>`_
+     - Yes
+     - Neural
+     - :mod:`~mlquantify.neural`
+   * - :class:`~mlquantify.neural.HistNetQ`
+     - `Pérez-Mon et al. (2024) <https://doi.org/10.1007/s00521-024-10721-1>`_
+     - Yes
+     - Neural
+     - :mod:`~mlquantify.neural`
+   * - :class:`~mlquantify.neural.GMNet`
+     - `Pérez-Mon et al. (2025) <https://arxiv.org/abs/2501.13638>`_
      - Yes
      - Neural
      - :mod:`~mlquantify.neural`

@@ -19,29 +19,24 @@ the (wrong) training prior to the true test prevalence.
 
     import numpy as np
     import matplotlib.pyplot as plt
-    from sklearn.datasets import make_classification
     from sklearn.linear_model import LogisticRegression
-    from sklearn.model_selection import train_test_split
 
-    rng = np.random.default_rng(0)
-    X, y = make_classification(
-        n_samples=6000, n_features=20, weights=[0.5, 0.5], random_state=0,
-    )
-    X_tr, X_te, y_tr, y_te = train_test_split(X, y, test_size=0.5, random_state=0)
+    from mlquantify.datasets import make_quantification
 
-    clf = LogisticRegression(max_iter=1000).fit(X_tr, y_tr)
-    train_prior = np.array([(y_tr == 0).mean(), (y_tr == 1).mean()])
-
-    # A strongly positive test sample (true positive prevalence = 0.80).
-    pos = np.where(y_te == 1)[0]
-    neg = np.where(y_te == 0)[0]
+    # A balanced training sample plus one strongly positive test bag
+    # (true positive prevalence = 0.80).
     true_prev = 0.80
-    n = 800
-    idx = np.concatenate([
-        rng.choice(pos, int(true_prev * n), replace=True),
-        rng.choice(neg, n - int(true_prev * n), replace=True),
-    ])
-    Px = clf.predict_proba(X_te[idx])
+    Xtr, ytr, Xs, ys, prevs = make_quantification(
+        n_batches=1, batch_size=800, return_train=True, train_size=3000,
+        train_prevalence=[0.5, 0.5],
+        prevalence=np.array([[1 - true_prev, true_prev]]),
+        n_features=20, random_state=0,
+    )
+
+    clf = LogisticRegression(max_iter=1000).fit(Xtr, ytr)
+    train_prior = np.array([(ytr == 0).mean(), (ytr == 1).mean()])
+
+    Px = clf.predict_proba(Xs[0])
 
     # The EMQ fixed-point iteration (same update as mlquantify's EMQ.EM).
     qs = train_prior.copy()

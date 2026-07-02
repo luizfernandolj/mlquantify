@@ -13,3 +13,4 @@ The main non-aggregative quantification methods will be defined next, with detai
    :maxdepth: 2
 
    modules/mixture_models_non_agg.rst
+   ReadMe Methods <modules/readme.rst>

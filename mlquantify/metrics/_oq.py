@@ -27,6 +27,9 @@ def NMD(prev_real, prev_pred, distances=None):
     """
     prev_real, prev_pred = process_inputs(prev_real, prev_pred)
     n_classes = len(prev_real)
+    if n_classes < 2:
+        # A single class admits no ordering error.
+        return 0.0
 
     if distances is None:
         distances = np.ones(n_classes - 1)
@@ -64,7 +67,14 @@ def RNOD(prev_real, prev_pred, distances=None):
     """
     prev_real, prev_pred = process_inputs(prev_real, prev_pred)
     n_classes = len(prev_real)
+    if n_classes < 2:
+        # A single class admits no ordering error.
+        return 0.0
     Y_star = np.where(prev_real > 0)[0]
+    if len(Y_star) == 0:
+        # Degenerate all-zero truth (e.g. zero-padded input): fall back to
+        # the full class set rather than dividing by an empty support.
+        Y_star = np.arange(n_classes)
 
     # default distance: |i - j|
     if distances is None:

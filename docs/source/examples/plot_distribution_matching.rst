@@ -20,39 +20,31 @@ the observed test histogram, and the best-fit mixture found by sweeping
 
     import numpy as np
     import matplotlib.pyplot as plt
-    from sklearn.datasets import make_classification
     from sklearn.linear_model import LogisticRegression
-    from sklearn.model_selection import train_test_split
 
-    rng = np.random.default_rng(0)
-    X, y = make_classification(
-        n_samples=6000, n_features=20, weights=[0.5, 0.5], random_state=0,
-    )
-    X_tr, X_te, y_tr, y_te = train_test_split(
-        X, y, test_size=0.5, random_state=0,
+    from mlquantify.datasets import make_quantification
+
+    # A balanced training sample plus one test bag with 70% positives.
+    true_prev = 0.70
+    Xtr, ytr, Xs, ys, prevs = make_quantification(
+        n_batches=1, batch_size=800, return_train=True, train_size=3000,
+        train_prevalence=[0.5, 0.5],
+        prevalence=np.array([[1 - true_prev, true_prev]]),
+        n_features=20, random_state=0,
     )
 
-    clf = LogisticRegression(max_iter=1000).fit(X_tr, y_tr)
+    clf = LogisticRegression(max_iter=1000).fit(Xtr, ytr)
 
     bins = np.linspace(0, 1, 11)
     def hist(scores):
         h, _ = np.histogram(scores, bins=bins, density=False)
         return h / h.sum()
 
-    s_tr = clf.predict_proba(X_tr)[:, 1]
-    h_neg = hist(s_tr[y_tr == 0])            # class-conditional histograms
-    h_pos = hist(s_tr[y_tr == 1])
+    s_tr = clf.predict_proba(Xtr)[:, 1]
+    h_neg = hist(s_tr[ytr == 0])             # class-conditional histograms
+    h_pos = hist(s_tr[ytr == 1])
 
-    # Build a test sample with ~70% positives and histogram its scores.
-    pos = np.where(y_te == 1)[0]
-    neg = np.where(y_te == 0)[0]
-    true_prev = 0.70
-    n = 800
-    idx = np.concatenate([
-        rng.choice(pos, int(true_prev * n), replace=True),
-        rng.choice(neg, n - int(true_prev * n), replace=True),
-    ])
-    h_test = hist(clf.predict_proba(X_te[idx])[:, 1])
+    h_test = hist(clf.predict_proba(Xs[0])[:, 1])
 
     # Sweep alpha and pick the mixture closest to the test histogram (L2).
     alphas = np.linspace(0, 1, 201)

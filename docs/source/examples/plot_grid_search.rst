@@ -19,19 +19,23 @@ error across the whole grid to show *why* that value won.
 
     import numpy as np
     import matplotlib.pyplot as plt
-    from sklearn.datasets import make_classification
     from sklearn.linear_model import LogisticRegression
-    from sklearn.model_selection import train_test_split
 
+    from mlquantify import set_config
+    from mlquantify.datasets import make_quantification
     from mlquantify.matching import KDEyML
     from mlquantify.metrics import MAE
-    from mlquantify.model_selection import GridSearchQ, apply_protocol
+    from mlquantify.model_selection import GridSearchQ
 
-    X, y = make_classification(
-        n_samples=3000, n_features=20, weights=[0.5, 0.5], random_state=0,
-    )
-    X_tr, X_val, y_tr, y_val = train_test_split(
-        X, y, test_size=0.5, stratify=y, random_state=0,
+    set_config(prevalence_return_type="array")
+
+    # A balanced training sample plus validation bags on a grid of
+    # prevalence values across the whole [0, 1] range.
+    Xtr, ytr, Xs, ys, prevs = make_quantification(
+        batch_size=100, return_train=True, train_size=1500,
+        train_prevalence=[0.5, 0.5],
+        prevalence="grid", n_prevalences=11, repeats=3,
+        n_features=20, random_state=0,
     )
 
     bandwidths = [0.02, 0.05, 0.08, 0.1, 0.15, 0.2, 0.3, 0.5]
@@ -41,17 +45,15 @@ error across the whole grid to show *why* that value won.
         param_grid={"bandwidth": bandwidths},
         protocol="app", samples_sizes=100, n_repetitions=5,
         scoring=MAE, random_seed=0,
-    ).fit(X_tr, y_tr)
+    ).fit(Xtr, ytr)
 
-    # Re-trace the validation-error curve the search optimised over.
+    # Re-trace the validation-error curve the search optimised over,
+    # scoring each candidate on the prevalence-swept validation bags.
     scores = []
     for bw in bandwidths:
-        q = KDEyML(LogisticRegression(max_iter=1000), bandwidth=bw).fit(X_tr, y_tr)
-        res = apply_protocol(
-            q, X_val, y_val, protocol="app",
-            n_prevalences=11, repeats=3, batch_size=100, random_state=0,
-        )
-        scores.append(MAE(res["true_prevalences"], res["predicted_prevalences"]))
+        q = KDEyML(LogisticRegression(max_iter=1000), bandwidth=bw).fit(Xtr, ytr)
+        pred = np.vstack([q.predict(Xb) for Xb in Xs])
+        scores.append(MAE(prevs, pred))
 
     best_bw = search.best_params_["bandwidth"]
     fig, ax = plt.subplots(figsize=(7, 4.5))

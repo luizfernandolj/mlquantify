@@ -8,6 +8,8 @@ except PackageNotFoundError:  # pragma: no cover - running from a source tree
     __version__ = "0.0.0.dev0"
 
 from . import neighbors
+from . import tree
+from . import readme
 from . import likelihood
 from . import matching
 from . import meta
@@ -30,6 +32,8 @@ from ._config import get_config, set_config, config_context
 __all__ = [
     "__version__",
     "neighbors",
+    "tree",
+    "readme",
     "likelihood",
     "matching",
     "meta",

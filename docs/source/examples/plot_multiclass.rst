@@ -24,28 +24,31 @@ per-class diagonal plot.
 
 .. plot::
 
-    from sklearn.datasets import make_classification
+    import numpy as np
     from sklearn.linear_model import LogisticRegression
 
+    from mlquantify import set_config
+    from mlquantify.datasets import make_quantification
     from mlquantify.likelihood import EMQ
-    from mlquantify.model_selection import apply_protocol
     from mlquantify.visualization import DiagonalDisplay
 
-    X, y = make_classification(
-        n_samples=4500, n_features=20, n_informative=6,
-        n_classes=3, n_clusters_per_class=1, random_state=0,
+    set_config(prevalence_return_type="array")
+
+    # A balanced 3-class training sample plus bags whose prevalence vectors
+    # are drawn uniformly over the simplex.
+    Xtr, ytr, Xs, ys, prevs = make_quantification(
+        n_batches=400, batch_size=120, return_train=True, train_size=2250,
+        train_prevalence=[1 / 3, 1 / 3, 1 / 3], prevalence="uniform",
+        n_classes=3, n_features=20, n_informative=6,
+        n_clusters_per_class=1, random_state=0,
     )
 
-    q = EMQ(LogisticRegression(max_iter=1000))
-    results = apply_protocol(
-        q, X, y, protocol="upp",
-        n_prevalences=400, batch_size=120, random_state=0,
-    )
+    q = EMQ(LogisticRegression(max_iter=1000)).fit(Xtr, ytr)
+    pred = np.vstack([q.predict(Xb) for Xb in Xs])
 
     # DiagonalDisplay colour-codes the three classes on one axes for multiclass.
     disp = DiagonalDisplay.from_predictions(
-        results["true_prevalences"], results["predicted_prevalences"],
-        alpha=0.4, s=16,
+        prevs, pred, alpha=0.4, s=16,
     )
     disp.ax_.set_title("EMQ — 3-class diagonal (one colour per class)")
     disp.figure_.set_size_inches(6, 6)
@@ -70,18 +73,23 @@ The grid below runs four binary methods on the same three-class problem.
 
 .. plot::
 
+    import numpy as np
     import matplotlib.pyplot as plt
-    from sklearn.datasets import make_classification
     from sklearn.linear_model import LogisticRegression
 
+    from mlquantify import set_config
+    from mlquantify.datasets import make_quantification
     from mlquantify.counting import ACC
     from mlquantify.matching import HDy, DyS, SORD
-    from mlquantify.model_selection import apply_protocol
     from mlquantify.visualization import DiagonalDisplay
 
-    X, y = make_classification(
-        n_samples=4500, n_features=20, n_informative=6,
-        n_classes=3, n_clusters_per_class=1, random_state=0,
+    set_config(prevalence_return_type="array")
+
+    Xtr, ytr, Xs, ys, prevs = make_quantification(
+        n_batches=200, batch_size=120, return_train=True, train_size=2250,
+        train_prevalence=[1 / 3, 1 / 3, 1 / 3], prevalence="uniform",
+        n_classes=3, n_features=20, n_informative=6,
+        n_clusters_per_class=1, random_state=0,
     )
 
     # All four are binary quantifiers — they only know "positive vs. rest".
@@ -95,13 +103,10 @@ The grid below runs four binary methods on the same three-class problem.
     fig, axes = plt.subplots(2, 2, figsize=(9, 9))
     for (name, q), ax in zip(methods.items(), axes.ravel()):
         # No manual decomposition: the binary method handles 3 classes via OvR.
-        results = apply_protocol(
-            q, X, y, protocol="upp",
-            n_prevalences=200, batch_size=120, random_state=0,
-        )
+        q.fit(Xtr, ytr)
+        pred = np.vstack([q.predict(Xb) for Xb in Xs])
         DiagonalDisplay.from_predictions(
-            results["true_prevalences"], results["predicted_prevalences"],
-            ax=ax, alpha=0.4, s=14,
+            prevs, pred, ax=ax, alpha=0.4, s=14,
         )
         ax.set_title(f"{name}  (One-vs-Rest)")
     fig.suptitle("Binary quantifiers on a 3-class problem via OvR", y=0.99)

@@ -50,6 +50,9 @@ jobs:
         run: |
           python -m pip install --upgrade pip
           pip install .
+          # CPU-only torch so the neural-quantifier examples (HistNetQ, GMNet)
+          # can be executed by the matplotlib plot directive at build time.
+          pip install --index-url https://download.pytorch.org/whl/cpu "torch>=1.12"
           pip install sphinx pydata_sphinx_theme sphinx-rtd-theme \
                       sphinx-prompt sphinx_copybutton sphinxext-opengraph \
                       matplotlib sphinxcontrib-sass sphinx_remove_toctrees \

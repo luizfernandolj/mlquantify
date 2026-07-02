@@ -8,7 +8,7 @@
 .. currentmodule:: {{ module }}
 .. autoclass:: {{ objname }}
     :members:
-    :inherited-members:
+    :inherited-members: Module
     :special-members: __call__
 {%- else -%}
 .. currentmodule:: {{ module }}

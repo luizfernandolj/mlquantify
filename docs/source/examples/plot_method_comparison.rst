@@ -18,18 +18,26 @@ as a baseline — using :class:`~mlquantify.visualization.DiagonalDisplay`.
 
 .. plot::
 
+    import numpy as np
     import matplotlib.pyplot as plt
-    from sklearn.datasets import make_classification
     from sklearn.linear_model import LogisticRegression
 
+    from mlquantify import set_config
+    from mlquantify.datasets import make_quantification
     from mlquantify.counting import CC, ACC
     from mlquantify.likelihood import EMQ
     from mlquantify.matching import DyS
-    from mlquantify.model_selection import apply_protocol
     from mlquantify.visualization import DiagonalDisplay
 
-    X, y = make_classification(
-        n_samples=4000, n_features=20, weights=[0.5, 0.5], random_state=0,
+    set_config(prevalence_return_type="array")
+
+    # A balanced training sample plus test bags on a grid of prevalence values
+    # spanning the whole [0, 1] range (the Artificial Prevalence Protocol).
+    Xtr, ytr, Xs, ys, prevs = make_quantification(
+        batch_size=100, return_train=True, train_size=2000,
+        train_prevalence=[0.5, 0.5],
+        prevalence="grid", n_prevalences=21, repeats=5,
+        n_features=20, random_state=0,
     )
 
     methods = {
@@ -44,13 +52,10 @@ as a baseline — using :class:`~mlquantify.visualization.DiagonalDisplay`.
         methods.items(), axes.ravel(),
         ["#e76f51", "#2a9d8f", "#264653", "#e9c46a"],
     ):
-        results = apply_protocol(
-            q, X, y, protocol="app",
-            n_prevalences=21, repeats=5, batch_size=100, random_state=0,
-        )
+        q.fit(Xtr, ytr)
+        pred = np.vstack([q.predict(Xb) for Xb in Xs])
         DiagonalDisplay.from_predictions(
-            results["true_prevalences"], results["predicted_prevalences"],
-            ax=ax, color=color, alpha=0.5, s=18,
+            prevs, pred, ax=ax, color=color, alpha=0.5, s=18,
         )
         ax.set_title(name)
     fig.suptitle("Diagonal plots across quantifier families", y=0.99)

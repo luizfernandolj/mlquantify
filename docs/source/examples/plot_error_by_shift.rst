@@ -17,19 +17,24 @@ protocol samples by their shift and draws the mean error with a ``±std`` band.
 
     import numpy as np
     import matplotlib.pyplot as plt
-    from sklearn.datasets import make_classification
     from sklearn.linear_model import LogisticRegression
 
+    from mlquantify import set_config
+    from mlquantify.datasets import make_quantification
     from mlquantify.counting import CC, ACC
     from mlquantify.likelihood import EMQ
-    from mlquantify.model_selection import apply_protocol
     from mlquantify.visualization import ErrorByShiftDisplay
 
-    X, y = make_classification(
-        n_samples=4000, n_features=20, weights=[0.5, 0.5], random_state=0,
+    set_config(prevalence_return_type="array")
+
+    # A balanced training sample plus bags whose prevalences are drawn
+    # uniformly over the simplex, so the shift varies from none to extreme.
+    Xtr, ytr, Xs, ys, prevs = make_quantification(
+        n_batches=300, batch_size=100, return_train=True, train_size=2000,
+        train_prevalence=[0.5, 0.5],
+        prevalence="uniform", n_features=20, random_state=0,
     )
-    _, counts = np.unique(y, return_counts=True)
-    train_prevalence = counts / counts.sum()
+    train_prevalence = np.bincount(ytr) / len(ytr)
 
     methods = {
         "CC": (CC(LogisticRegression(max_iter=1000)), "#e76f51"),
@@ -39,12 +44,10 @@ protocol samples by their shift and draws the mean error with a ``±std`` band.
 
     fig, ax = plt.subplots(figsize=(7, 4.5))
     for name, (q, color) in methods.items():
-        results = apply_protocol(
-            q, X, y, protocol="upp",
-            n_prevalences=300, batch_size=100, random_state=0,
-        )
+        q.fit(Xtr, ytr)
+        pred = np.vstack([q.predict(Xb) for Xb in Xs])
         ErrorByShiftDisplay.from_predictions(
-            results["true_prevalences"], results["predicted_prevalences"],
+            prevs, pred,
             train_prevalence=train_prevalence, error_metric="ae",
             n_bins=10, name=name, ax=ax, color=color,
         )

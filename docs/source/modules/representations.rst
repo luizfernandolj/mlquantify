@@ -316,6 +316,138 @@ descriptors feed the constrained-regression counting methods.
 :class:`HardPredictionRepresentation` and :class:`SoftPredictionRepresentation`
 are the fixed-mode variants.
 
+----
+
+Differentiable (torch) representations
+======================================
+
+The representations above are NumPy descriptors consumed by analytical matching
+methods. The two below are instead ``torch`` ``nn.Module`` layers whose
+parameters are **learned jointly with a neural quantifier**: they are the *Bag
+Representation Module* of :class:`~mlquantify.neural.HistNetQ` and
+:class:`~mlquantify.neural.GMNet` (see :ref:`neural_quantifiers`). Both subclass
+:class:`TorchRepresentation`, take a bag ``(n_examples, n_features)`` and return
+a single fixed-length, **permutation-invariant** vector — a property each obtains
+by averaging a per-instance quantity over the bag.
+
+.. admonition:: PyTorch required
+
+   These two representations need ``torch``; install it with ``pip install
+   torch``. They are only exported from :mod:`mlquantify.representations` when
+   torch is available.
+
+Differentiable histogram
+------------------------
+
+:class:`DifferentiableHistogramRepresentation` computes one learnable histogram
+per feature. An instance contributes to a bin when it falls within the bin
+half-width of the center (Pérez-Mon et al., 2024, after the hard-binning
+differentiable histogram of Yusuf et al., 2020); the in-bin contribution is the
+continuous value :math:`1.01^{\,w-|v-\mu|}` gated by a threshold, so the binning
+stays **differentiable** and the centers, widths and upstream feature extractor
+all train end-to-end. Averaging the memberships over the bag gives a per-bin
+*density*, so the descriptor discriminates bags whose feature distributions differ.
+
+.. plot::
+   :caption: The histogram descriptor (counts / bag size) of two bags with different feature distributions.
+
+   import numpy as np
+   import torch
+   import matplotlib.pyplot as plt
+   from mlquantify.representations import DifferentiableHistogramRepresentation
+
+   rng = np.random.default_rng(0)
+   brm = DifferentiableHistogramRepresentation(n_features=1, n_bins=20)
+
+   # two bags over a single latent feature in [0, 1]
+   bag_low  = np.clip(rng.normal(0.30, 0.08, (400, 1)), 0, 1).astype("float32")
+   bag_high = np.clip(rng.normal(0.70, 0.10, (400, 1)), 0, 1).astype("float32")
+
+   with torch.no_grad():
+       h_low  = brm(torch.from_numpy(bag_low)).numpy()
+       h_high = brm(torch.from_numpy(bag_high)).numpy()
+   centers = brm.mu.detach().numpy().ravel()
+
+   fig, ax = plt.subplots(figsize=(6.4, 3))
+   w = 1.0 / 20 * 0.42
+   ax.bar(centers - w / 2, h_low,  width=w, color="#4477aa", label="bag A (low values)")
+   ax.bar(centers + w / 2, h_high, width=w, color="#cc6677", label="bag B (high values)")
+   ax.set_xlabel("latent feature value (bin centers)")
+   ax.set_ylabel("density (mean membership)")
+   ax.set_title("Differentiable histogram: one descriptor per bag", fontsize=10)
+   ax.legend(fontsize=8)
+   fig.tight_layout()
+
+``n_bins`` sets the resolution, exactly as for the analytical
+:class:`HistogramRepresentation`; the difference is that here the bins *move*
+during training to wherever they best separate prevalences.
+
+Gaussian latent-space representation
+------------------------------------
+
+:class:`GaussianRepresentation` models the latent space with ``n_gaussians``
+learnable **full-covariance** Gaussians, replicated across ``n_latent``
+independent latent spaces. Every instance's multivariate-normal likelihood under
+each Gaussian is computed; the K per-Gaussian likelihoods are normalised
+(BatchNorm) and averaged over the bag — the "Norm & Mean" of Pérez-Mon et al.
+(2025). Because each Gaussian's *full* covariance couples the latent dimensions,
+the descriptor captures feature correlations a per-feature histogram cannot
+(positive-definiteness is guaranteed by a Cholesky parameterisation, so no
+``geotorch`` dependency is needed).
+
+The descriptor is built like this: for every Gaussian, average — over all the
+instances in the bag — that Gaussian's likelihood at each instance. A Gaussian
+whose center sits *inside* the bag's cloud of points scores high; one in an empty
+region scores ≈ 0. So the K numbers are a "fingerprint of where the bag's mass
+lies". Below, the Gaussian centers on the left are **coloured by that score**, so
+you can see the same values as the bars on the right: the centers inside the blue
+cloud (e.g. #10, #11) light up, the far-away ones stay dark.
+
+.. plot::
+   :caption: Left: a bag (blue) with the Gaussian centers coloured by their score. Right: the same scores as the K-dim bag descriptor. Centers inside the cloud light up; distant ones are ~0.
+
+   import numpy as np
+   import torch
+   import matplotlib.pyplot as plt
+   from mlquantify.representations import GaussianRepresentation
+
+   torch.manual_seed(1)
+   K = 12
+   brm = GaussianRepresentation(latent_dim=2, n_gaussians=K, n_latent=1)
+   mu = brm.mu.detach().numpy()[0]                       # (K, 2) Gaussian centers
+
+   rng = np.random.default_rng(2)
+   # a bag clustered in the lower-left of the [0, 1]^2 latent cube
+   bag = np.clip(rng.normal([0.3, 0.3], 0.1, (300, 2)), 0, 1).astype("float32")
+   X = torch.from_numpy(bag).reshape(1, 1, -1, 2)        # (n_bags=1, n_latent=1, n, 2)
+   with torch.no_grad():
+       # mean likelihood per Gaussian (the interpretable pre-BatchNorm descriptor)
+       descr = brm._likelihoods(X)[0, 0].mean(0).numpy()  # (K,)
+   colors = plt.cm.viridis(descr / descr.max())
+
+   fig, (axL, axR) = plt.subplots(1, 2, figsize=(8.8, 3.3))
+   axL.scatter(bag[:, 0], bag[:, 1], s=8, color="#9bbcd6", alpha=0.5,
+               label="bag instances", zorder=1)
+   sc = axL.scatter(mu[:, 0], mu[:, 1], c=descr, cmap="viridis", s=170, marker="X",
+                    edgecolor="black", linewidth=0.6, label="Gaussian centers", zorder=2)
+   for k in range(K):                                    # label each center with its index
+       axL.annotate(str(k), (mu[k, 0], mu[k, 1]), fontsize=6.5, ha="center", va="center")
+   axL.set_xlim(0, 1); axL.set_ylim(0, 1)
+   axL.set_xlabel("latent dim 1"); axL.set_ylabel("latent dim 2")
+   axL.set_title("latent space (centers coloured by score)", fontsize=9)
+   axL.legend(fontsize=7, loc="upper right")
+   fig.colorbar(sc, ax=axL, fraction=0.046, pad=0.04, label="mean likelihood")
+
+   axR.bar(np.arange(K), descr, color=colors)
+   axR.set_xlabel("Gaussian index"); axR.set_ylabel("mean likelihood")
+   axR.set_title("bag descriptor (one value per Gaussian)", fontsize=9)
+   fig.tight_layout()
+
+Because changing a bag's class prevalence moves its points to different regions
+of the latent space, a *different* set of Gaussians lights up — so two bags with
+different prevalences produce different descriptors, which is exactly the signal
+the quantification head learns to read.
+
 .. _choosing-a-representation:
 
 ----
@@ -351,6 +483,14 @@ Summary and how to choose
      - Mean posterior (soft) or class-frequency (hard) vector.
      - GACC, GPACC, FM
      - ``method``
+   * - :class:`DifferentiableHistogramRepresentation`
+     - Learnable per-feature histogram densities (torch).
+     - HistNetQ
+     - ``n_bins``
+   * - :class:`GaussianRepresentation`
+     - Mean normalised likelihoods of full-covariance latent Gaussians (torch).
+     - GMNet
+     - ``n_gaussians``, ``n_latent``
 
 **Choosing one:**
 
@@ -362,6 +502,10 @@ Summary and how to choose
   sample as a compact vector, used by the energy-distance and MMD methods.
 - **Prediction** — the soft/hard descriptors that feed the constrained-regression
   counting methods.
+- **Differentiable histogram / Gaussian** — torch BRMs learned end-to-end by the
+  neural quantifiers :class:`~mlquantify.neural.HistNetQ` and
+  :class:`~mlquantify.neural.GMNet`; reach for these only when training a neural
+  quantifier, not an analytical matching method.
 
 Example
 =======
@@ -386,6 +530,11 @@ References
      for Multiclass Quantification. *Machine Learning*, 113, 3075–3107. (KDE)
    - Iyer, A., Nath, S., & Sarawagi, S. (2014). Maximum Mean Discrepancy for
      Class Ratio Estimation. *ICML*, 32. (kernel mean)
+   - Pérez-Mon, O., Moreo, A., del Coz, J. J., & González, P. (2024).
+     Quantification using permutation-invariant networks based on histograms.
+     *Neural Computing and Applications*, 37, 3505–3520. (differentiable histogram)
+   - Pérez-Mon, O., del Coz, J. J., & González, P. (2025). Quantification Via
+     Gaussian Latent Space Representations. *arXiv:2501.13638*. (Gaussian)
 
 .. seealso::
 

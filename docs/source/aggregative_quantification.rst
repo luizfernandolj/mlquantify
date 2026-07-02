@@ -56,4 +56,5 @@ shift means, and how to choose a method — see :ref:`quantification_foundations
    Likelihood Methods <modules/likelihood.rst>
    Distribution Matching <modules/distribution_matching.rst>
    Nearest Neighbours <modules/neighbors.rst>
+   Quantification Trees <modules/tree.rst>
 

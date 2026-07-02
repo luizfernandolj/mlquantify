@@ -424,6 +424,62 @@ def plot_method_comparison():
 
 
 # ─────────────────────────────────────────────────────────────────────────────
+#  Symmetric neural quantifier architecture (HistNetQ / GMNet)
+# ─────────────────────────────────────────────────────────────────────────────
+
+def plot_histnet_gmnet_architecture():
+    """Schematic of the FEM -> BRM -> QM symmetric neural quantifier pipeline."""
+    from matplotlib.patches import FancyArrowPatch, FancyBboxPatch
+
+    fig, ax = plt.subplots(figsize=(10, 3.2))
+    ax.set_xlim(0, 10)
+    ax.set_ylim(0, 3.2)
+    ax.axis("off")
+
+    def box(x, w, color, title, subtitle):
+        ax.add_patch(FancyBboxPatch(
+            (x, 0.9), w, 1.4, boxstyle="round,pad=0.04,rounding_size=0.12",
+            linewidth=1.5, edgecolor=color, facecolor=color + "22"))
+        ax.text(x + w / 2, 1.85, title, ha="center", va="center",
+                fontsize=11, fontweight="bold", color=color)
+        ax.text(x + w / 2, 1.32, subtitle, ha="center", va="center",
+                fontsize=8.5, color="0.25")
+
+    # input bag of points
+    rng = np.random.default_rng(3)
+    pts = rng.uniform(0.15, 1.05, (16, 2))
+    cols = np.where(rng.random(16) > 0.5, RED, BLUE)
+    ax.scatter(pts[:, 0], pts[:, 1] + 0.85, c=cols, s=26, edgecolor="white", linewidth=0.5)
+    ax.text(0.6, 0.55, "bag of\ninstances", ha="center", va="center", fontsize=8.5, color="0.25")
+
+    box(1.5, 1.9, GREEN,  "FEM",  "project each\ninstance")
+    box(4.0, 2.1, BLUE,   "BRM",  "permutation-invariant\nbag descriptor")
+    box(6.8, 1.6, PURPLE, "QM",   "MLP + softmax")
+
+    # output prevalence bars
+    ax.bar([8.85, 9.15], [0.9, 0.5], width=0.22, bottom=0.95,
+           color=[BLUE, RED], edgecolor="white")
+    ax.text(9.0, 0.55, "prevalences", ha="center", va="center", fontsize=8.5, color="0.25")
+
+    for x0, x1, label in [(1.25, 1.5, ""), (3.4, 4.0, "latent\nvectors"),
+                          (6.1, 6.8, "bag\nvector"), (8.4, 8.7, "")]:
+        ax.add_patch(FancyArrowPatch((x0, 1.6), (x1, 1.6),
+                     arrowstyle="-|>", mutation_scale=14, lw=1.4, color="0.4"))
+        if label:
+            ax.text((x0 + x1) / 2, 2.05, label, ha="center", va="center",
+                    fontsize=7.5, color="0.4")
+
+    ax.text(4.0, 0.2,
+            "BRM = differentiable histogram (HistNetQ)  or  Gaussian mixture (GMNet)",
+            ha="left", va="center", fontsize=9, style="italic", color="0.3")
+
+    path = os.path.join(OUT, "histnet_gmnet_architecture.png")
+    fig.savefig(path)
+    plt.close(fig)
+    print(f"Saved: {path}")
+
+
+# ─────────────────────────────────────────────────────────────────────────────
 # Entry point
 # ─────────────────────────────────────────────────────────────────────────────
 
@@ -436,4 +492,5 @@ if __name__ == "__main__":
     plot_app_protocol()
     plot_metrics_comparison()
     plot_method_comparison()
+    plot_histnet_gmnet_architecture()
     print("Done.")

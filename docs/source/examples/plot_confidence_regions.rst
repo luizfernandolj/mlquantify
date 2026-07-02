@@ -21,19 +21,23 @@ percentile interval via
 
     import numpy as np
     import matplotlib.pyplot as plt
-    from sklearn.datasets import make_classification
     from sklearn.linear_model import LogisticRegression
-    from sklearn.model_selection import train_test_split
 
+    from mlquantify.datasets import make_quantification
     from mlquantify.likelihood import EMQ
     from mlquantify.confidence import construct_confidence_region
 
-    X, y = make_classification(
-        n_samples=4000, n_features=20, weights=[0.5, 0.5], random_state=0,
+    # A balanced training sample plus one shifted test bag
+    # (true positive prevalence = 0.65).
+    Xtr, ytr, Xs, ys, prevs = make_quantification(
+        n_batches=1, batch_size=2000, return_train=True, train_size=2000,
+        train_prevalence=[0.5, 0.5],
+        prevalence=np.array([[0.35, 0.65]]),
+        n_features=20, random_state=0,
     )
-    X_tr, X_te, y_tr, y_te = train_test_split(X, y, test_size=0.5, random_state=0)
+    X_te, true = Xs[0], prevs[0]
 
-    q = EMQ(LogisticRegression(max_iter=1000)).fit(X_tr, y_tr)
+    q = EMQ(LogisticRegression(max_iter=1000)).fit(Xtr, ytr)
 
     rng = np.random.default_rng(0)
     boot = []
@@ -48,7 +52,6 @@ percentile interval via
     )
     low, high = region.get_region()
     point = boot.mean(axis=0)
-    true = np.array([(y_te == c).mean() for c in q.classes_])
 
     fig, ax = plt.subplots(figsize=(6, 4))
     xpos = np.arange(len(q.classes_))
@@ -76,20 +79,24 @@ cloud and its ellipse directly.
 .. plot::
 
     import numpy as np
-    from sklearn.datasets import make_classification
     from sklearn.linear_model import LogisticRegression
-    from sklearn.model_selection import train_test_split
 
+    from mlquantify.datasets import make_quantification
     from mlquantify.likelihood import EMQ
     from mlquantify.visualization import ConfidenceRegionDisplay
 
-    X, y = make_classification(
-        n_samples=4500, n_features=20, n_informative=6,
-        n_classes=3, n_clusters_per_class=1, random_state=0,
+    # A balanced 3-class training sample plus one shifted test bag
+    # (true prevalence = [0.2, 0.3, 0.5]).
+    Xtr, ytr, Xs, ys, prevs = make_quantification(
+        n_batches=1, batch_size=2000, return_train=True, train_size=2250,
+        train_prevalence=[1 / 3, 1 / 3, 1 / 3],
+        prevalence=np.array([[0.2, 0.3, 0.5]]),
+        n_classes=3, n_features=20, n_informative=6,
+        n_clusters_per_class=1, random_state=0,
     )
-    X_tr, X_te, y_tr, y_te = train_test_split(X, y, test_size=0.5, random_state=0)
+    X_te, true = Xs[0], prevs[0]
 
-    q = EMQ(LogisticRegression(max_iter=1000)).fit(X_tr, y_tr)
+    q = EMQ(LogisticRegression(max_iter=1000)).fit(Xtr, ytr)
 
     rng = np.random.default_rng(0)
     boot = []
@@ -98,7 +105,6 @@ cloud and its ellipse directly.
         pred = q.predict(X_te[idx])
         boot.append([pred[c] for c in q.classes_])
     boot = np.array(boot)
-    true = np.array([(y_te == c).mean() for c in q.classes_])
 
     ConfidenceRegionDisplay.from_estimates(
         boot, confidence_level=0.95,

@@ -101,3 +101,64 @@ class BaseRepresentation(ABC):
     @abstractmethod
     def _fit(self, X, y, sample_weight=None):
         """Fit representation internals."""
+
+
+try:
+    import torch
+    import torch.nn as nn
+    _torch_available = True
+except ImportError:  # pragma: no cover - runtime-dependent
+    _torch_available = False
+
+    class _NNStub:
+        class Module:
+            pass
+
+    nn = _NNStub()
+
+
+class TorchRepresentation(nn.Module, ABC):
+    """Base class for differentiable, permutation-invariant bag representations.
+
+    Subclasses must implement :meth:`forward` and expose :attr:`output_size`.
+    These representations are torch ``nn.Module`` instances — their parameters
+    are learned jointly with the quantifier network during training.
+
+    Unlike :class:`BaseRepresentation`, which is numpy-based and used by
+    matching methods, ``TorchRepresentation`` is designed for neural
+    quantifiers (HistNetQ, GMNet) that need end-to-end differentiability.
+
+    The contract for ``forward``:
+
+    - Input:  ``torch.Tensor`` of shape ``(n_examples, n_features)``
+              representing one bag, or ``(n_bags, n_examples, n_features)`` for
+              a batch of bags processed together (the neural quantifiers train
+              on mini-batches of bags).
+    - Output: ``torch.Tensor`` of shape ``(output_size,)`` for a single bag, or
+              ``(n_bags, output_size)`` for a batch — a fixed-length
+              permutation-invariant summary of each bag.
+
+    Permutation invariance means ``forward(X) == forward(X[perm])`` for
+    any permutation ``perm`` of the example axis (within each bag).
+    """
+
+    @abstractmethod
+    def forward(self, X: "torch.Tensor") -> "torch.Tensor":
+        """Map a bag (or batch of bags) to fixed-length representation vectors.
+
+        Parameters
+        ----------
+        X : torch.Tensor of shape (n_examples, n_features) or \
+            (n_bags, n_examples, n_features)
+            Feature matrix for one bag, or a batch of bags.
+
+        Returns
+        -------
+        repr : torch.Tensor of shape (output_size,) or (n_bags, output_size)
+            Permutation-invariant bag representation(s).
+        """
+
+    @property
+    @abstractmethod
+    def output_size(self) -> int:
+        """Dimensionality of the output representation vector."""

@@ -48,6 +48,9 @@ from mlquantify.utils import _fit_context
 
 from mlquantify.counting import CC, GACC, PCC, GPACC
 from mlquantify.likelihood import EMQ
+from mlquantify.neural._utils import (
+    rae_loss, bag_mixer, cka_regularization, BackgroundPrefetch,
+)
 
 EPS = 1e-12
 
@@ -382,7 +385,7 @@ class QuaNet(SoftPredictionMixin, AggregativeMixin, BaseQuantifier):
     """
 
     _parameter_constraints = {
-        "fit_estimator": [Interval(0, None, inclusive_left=False), Options([None])],
+        "fit_estimator": ["boolean"],
         "sample_size": [Interval(0, None, inclusive_left=False), Options([None])],
         "n_epochs": [Interval(0, None, inclusive_left=False), Options([None])],
         "tr_iter": [Interval(0, None, inclusive_left=False), Options([None])],
@@ -390,7 +393,7 @@ class QuaNet(SoftPredictionMixin, AggregativeMixin, BaseQuantifier):
         "lr": [Interval(0, None, inclusive_left=False), Options([None])],
         "lstm_hidden_size": [Interval(0, None, inclusive_left=False), Options([None])],
         "lstm_nlayers": [Interval(0, None, inclusive_left=False), Options([None])],
-        "bidirectional": [Interval(0, None, inclusive_left=False), Options([None])],
+        "bidirectional": ["boolean"],
         "qdrop_p": [Interval(0, None, inclusive_left=False), Options([None])],
         "patience": [Interval(0, None, inclusive_left=False), Options([None])],
         "checkpointdir": ["string"],
@@ -401,6 +404,7 @@ class QuaNet(SoftPredictionMixin, AggregativeMixin, BaseQuantifier):
     def __init__(
         self,
         estimator,
+        embedder=None,
         fit_estimator: bool = True,
         sample_size: int = 100,
         n_epochs: int = 100,
@@ -422,11 +426,9 @@ class QuaNet(SoftPredictionMixin, AggregativeMixin, BaseQuantifier):
         if torch is None:
             raise ImportError("PyTorch is required to use QuaNet.")
 
-        assert hasattr(estimator, "transform"), ...
-        assert hasattr(estimator, "predict_proba"), ...
-
         # save hyperparameters as attributes
         self.estimator = estimator
+        self.embedder = embedder
         self.fit_estimator = fit_estimator
         self.sample_size = sample_size
         self.n_epochs = n_epochs
@@ -502,6 +504,18 @@ class QuaNet(SoftPredictionMixin, AggregativeMixin, BaseQuantifier):
         y = validate_data(self, y=y)
         self.classes_ = check_classes_attribute(self, np.unique(y))
 
+        # resolve embedding source
+        _embedder = self.embedder if self.embedder is not None else self.estimator
+        if not hasattr(_embedder, "transform"):
+            raise ValueError(
+                "The estimator must have a transform() method, or pass a separate "
+                "`embedder` (e.g. TfidfVectorizer, PCA, TorchClassifierWrapper) "
+                "that does."
+            )
+        if not hasattr(self.estimator, "predict_proba"):
+            raise ValueError("estimator must implement predict_proba().")
+        self.embedder_ = _embedder
+
         os.makedirs(self.checkpointdir, exist_ok=True)
 
         if self.fit_estimator:
@@ -513,16 +527,18 @@ class QuaNet(SoftPredictionMixin, AggregativeMixin, BaseQuantifier):
             )
 
             self.estimator.fit(X_clf, y_clf)
+            if self.embedder is not None and hasattr(self.embedder, "fit"):
+                self.embedder.fit(X_clf, y_clf)
         else:
             X_train, X_val, y_train, y_val = train_test_split(
                 X, y, test_size=0.40, random_state=self.random_state, stratify=y
             )
-        
+
         self.tr_prev = get_prev_from_labels(y, format="array")
 
         # **CORREÇÃO: Obter embeddings e suas dimensões**
-        X_train_embeddings = self.estimator.transform(X_train)
-        X_val_embeddings = self.estimator.transform(X_val)
+        X_train_embeddings = _embedder.transform(X_train)
+        X_val_embeddings = _embedder.transform(X_val)
         
         valid_posteriors = self.estimator.predict_proba(X_val)
         train_posteriors = self.estimator.predict_proba(X_train)
@@ -603,7 +619,11 @@ class QuaNet(SoftPredictionMixin, AggregativeMixin, BaseQuantifier):
                 # explicitly so absent classes still appear in the estimate.
                 prev = qtf.aggregate(posteriors, classes=np.unique(y_train))
 
-            qtf_estims.extend(np.asarray(list(prev.values())))
+            # aggregate() may return either a dict (keyed by class) or an
+            # ndarray depending on the global prevalence_return_type config.
+            if isinstance(prev, dict):
+                prev = np.asarray(list(prev.values()))
+            qtf_estims.extend(np.asarray(prev, dtype=float).ravel())
 
         return qtf_estims
 
@@ -629,7 +649,8 @@ class QuaNet(SoftPredictionMixin, AggregativeMixin, BaseQuantifier):
         """
         estimator_function = _get_estimator_function(self)
         posteriors = getattr(self.estimator, estimator_function)(X)
-        embeddings = self.estimator.transform(X)
+        _embedder = self.embedder_ if self.embedder is not None else self.estimator
+        embeddings = _embedder.transform(X)
 
         qtf_estims = self._aggregate_qtf(posteriors, self.val_posteriors, self.y_val)
             
@@ -742,7 +763,691 @@ def mae_loss(y_true, y_pred):
     return torch.mean(torch.abs(y_true - y_pred))
 
 
+class _SymmetricNeuralQ(BaseQuantifier):
+    """Internal base for bag-labeled (symmetric) neural quantifiers.
+
+    Subclasses must implement:
+
+    - ``_build_network(n_features, n_classes) -> nn.Module``
+        Returns the full network (FEM + BRM + QM).
+    - ``_forward_batch(network, X_tensor) -> (torch.Tensor of shape (n_bags, n_classes), extras)``
+        One forward pass for a batch of bags (tensor of shape
+        ``(n_bags, bag_size, n_features)``); returns one prevalence vector per
+        bag. ``extras`` carries any auxiliary tensors needed by the loss
+        (e.g. the latent projections used by GMNet's CKA regulariser) or
+        ``None``.
+    """
+
+    def fit(self, X, y):
+        """Fit on individually labeled data.
+
+        Internally generates bags by sampling from ``(X, y)``, applies Bag
+        Mixer augmentation each epoch, and optimises the chosen loss directly.
+
+        Parameters
+        ----------
+        X : array-like of shape (n_samples, n_features)
+        y : array-like of shape (n_samples,)
+
+        Returns
+        -------
+        self
+        """
+        y = validate_data(self, y=y)
+        self.classes_ = check_classes_attribute(self, np.unique(y))
+        n_classes = len(self.classes_)
+        X = np.asarray(X, dtype=float)
+        # Standardise features at the *data* level (fixed mean/std over the whole
+        # training set). This keeps the sigmoid before the bag representation in
+        # its responsive range without normalising away each bag's class
+        # composition — the very signal we quantify (per-bag normalisation such
+        # as BatchNorm would erase it and collapse the network to a constant).
+        self._x_mean = X.mean(axis=0, keepdims=True)
+        self._x_std = X.std(axis=0, keepdims=True) + 1e-8
+        X = (X - self._x_mean) / self._x_std
+        rng = np.random.default_rng(self.random_state)
+
+        # Split into train / validation (80/20) and store the per-example pools;
+        # ``_sample_train_bags`` draws fresh APP bags from them every epoch.
+        X_tr, X_va, y_tr, y_va = train_test_split(
+            X, y, test_size=0.2, random_state=self.random_state, stratify=y
+        )
+        self._X_tr, self._y_tr = X_tr, y_tr
+        self._val_bags = self._sample_bags(X_va, y_va, self.val_bags, self.bag_size, rng)
+
+        return self._fit_loop(X_tr.shape[1], n_classes, rng)
+
+    def _sample_bag_chunk(self, rng, k):
+        """Sample ``k`` training bags — one mini-batch's worth.
+
+        Called lazily by :meth:`_train_batches`, so only ``batch_size`` bags are
+        ever materialised at once (sampling a whole epoch of large bags up front
+        would exhaust RAM). Default (individual-label) behaviour: draw ``k`` fresh
+        APP bags from the stored ``(X, y)`` pools and apply Bag Mixer
+        augmentation within the chunk. The bag-labelled training path (see
+        :class:`~mlquantify.neural.PrevalenceBagMixin`) overrides this to sample
+        from a pool of real, prevalence-labelled bags.
+        """
+        raw = self._sample_bags(self._X_tr, self._y_tr, k, self.bag_size, rng)
+        Xc = [b[0] for b in raw]
+        pc = [b[1] for b in raw]
+        return bag_mixer(Xc, None, pc, ratio=self.bag_mixer_ratio, rng=rng)
+
+    def _train_batches(self, rng):
+        """Yield stacked ``(X, prev)`` mini-batches for one training epoch.
+
+        Each item is ``(np.ndarray (k, bag_size, n_features), np.ndarray
+        (k, n_classes))``. Sampling *and* stacking happen here so they can be
+        overlapped with GPU compute by :class:`BackgroundPrefetch`.
+        """
+        bs = max(int(getattr(self, "batch_size", 1)), 1)
+        remaining = self.n_bags
+        while remaining > 0:
+            k = min(bs, remaining)
+            Xc, pc = self._sample_bag_chunk(rng, k)
+            yield np.stack(Xc), np.stack(pc)
+            remaining -= k
+
+    def _val_batches(self):
+        """Yield stacked ``(X, prev)`` mini-batches over the fixed val bags."""
+        bs = max(int(getattr(self, "batch_size", 1)), 1)
+        vx = [b[0] for b in self._val_bags]
+        vp = [b[1] for b in self._val_bags]
+        for s in range(0, len(vx), bs):
+            yield np.stack(vx[s:s + bs]), np.stack(vp[s:s + bs])
+
+    def _fit_loop(self, n_features, n_classes, rng):
+        """Build the network and run the shared training loop.
+
+        Reads training bags each epoch from :meth:`_sample_train_bags` and the
+        fixed validation bags from ``self._val_bags`` — both fit paths (the
+        default ``(X, y)`` and the bag-labelled mixin) funnel through here.
+        """
+        self.network_ = self._build_network(n_features, n_classes).to(
+            torch.device(self.device)
+        )
+
+        optim_cls = {"adam": torch.optim.Adam, "adamw": torch.optim.AdamW}[
+            str(getattr(self, "optimizer", "adam")).lower()
+        ]
+        optimiser = optim_cls(
+            self.network_.parameters(),
+            lr=self.lr,
+            weight_decay=getattr(self, "weight_decay", 0.0),
+        )
+        # When ``end_lr`` is set we follow the authors' schedule: reduce the LR on
+        # a validation-loss plateau and stop once it falls below ``end_lr``.
+        # Otherwise we keep the simple fixed-LR + EarlyStop behaviour.
+        end_lr = getattr(self, "end_lr", None)
+        if end_lr is not None:
+            scheduler = torch.optim.lr_scheduler.ReduceLROnPlateau(
+                optimiser, factor=self.lr_factor, patience=self.patience, cooldown=0
+            )
+            early_stop = None
+        else:
+            scheduler = None
+            early_stop = EarlyStop(patience=self.patience, lower_is_better=True)
+
+        best_val = np.inf
+        self._best_state = {k: v.clone() for k, v in self.network_.state_dict().items()}
+        start_epoch = 0
+
+        # Resume from a checkpoint if one exists (same ``checkpoint_path``).
+        ckpt_path = getattr(self, "checkpoint_path", None)
+        if ckpt_path and os.path.exists(ckpt_path):
+            ck = torch.load(ckpt_path, map_location=torch.device(self.device), weights_only=False)
+            self.network_.load_state_dict(ck["network"])
+            optimiser.load_state_dict(ck["optimizer"])
+            if scheduler is not None and ck.get("scheduler") is not None:
+                scheduler.load_state_dict(ck["scheduler"])
+            best_val = ck["best_val"]
+            self._best_state = ck["best_state"]
+            rng.bit_generator.state = ck["rng_state"]
+            start_epoch = ck["epoch"] + 1
+            if start_epoch >= self.n_epochs or ck.get("done", False):
+                self.network_.load_state_dict(self._best_state)
+                return self
+            print(f"[resumed from {ckpt_path} at epoch {start_epoch}]", flush=True)
+
+        # Optional tqdm progress bar (one row, updated per epoch).
+        pbar = None
+        if getattr(self, "verbose", False):
+            try:
+                from tqdm.auto import tqdm
+                pbar = tqdm(total=self.n_epochs, initial=start_epoch,
+                            desc="training", unit="epoch")
+            except ImportError:
+                pbar = None
+
+        def _save_checkpoint(epoch, done=False):
+            if not ckpt_path:
+                return
+            os.makedirs(os.path.dirname(ckpt_path) or ".", exist_ok=True)
+            tmp = ckpt_path + ".tmp"
+            torch.save({
+                "epoch": epoch,
+                "network": self.network_.state_dict(),
+                "optimizer": optimiser.state_dict(),
+                "scheduler": scheduler.state_dict() if scheduler is not None else None,
+                "best_val": best_val,
+                "best_state": self._best_state,
+                "rng_state": rng.bit_generator.state,
+                "done": done,
+            }, tmp)
+            os.replace(tmp, ckpt_path)  # atomic: never leaves a half-written file
+
+        every = int(getattr(self, "checkpoint_every", 0) or 0)
+        stopped = False
+        epoch = start_epoch - 1
+        for epoch in range(start_epoch, self.n_epochs):
+            # Prefetch bag sampling in a worker thread so it overlaps GPU compute
+            # (otherwise the GPU starves waiting on NumPy bag generation).
+            tr_loss = self._run_epoch(
+                BackgroundPrefetch(self._train_batches(rng)), optimiser, train=True
+            )
+            va_loss = self._run_epoch(
+                BackgroundPrefetch(self._val_batches()), optimiser, train=False
+            )
+
+            if va_loss < best_val:
+                best_val = va_loss
+                self._best_state = {
+                    k: v.clone() for k, v in self.network_.state_dict().items()
+                }
+
+            lr = optimiser.param_groups[0]["lr"]
+            if pbar is not None:
+                pbar.set_postfix(tr=f"{tr_loss:.4f}", va=f"{va_loss:.4f}", lr=f"{lr:.1e}")
+                pbar.update(1)
+
+            if scheduler is not None:
+                scheduler.step(va_loss)
+                if optimiser.param_groups[0]["lr"] < end_lr:
+                    stopped = True
+            else:
+                early_stop(va_loss, epoch)
+                stopped = early_stop.STOP
+
+            if every and ((epoch + 1) % every == 0 or stopped):
+                _save_checkpoint(epoch, done=stopped)
+            if stopped:
+                break
+
+        # Always leave a final checkpoint marking completion.
+        _save_checkpoint(epoch, done=True)
+
+        if pbar is not None:
+            pbar.close()
+        self.network_.load_state_dict(self._best_state)
+        return self
+
+    def _sample_bags(self, X, y, n_bags, bag_size, rng):
+        """Generate bags spanning the prevalence simplex (APP-style sampling).
+
+        Each bag is built for a target prevalence drawn uniformly from the
+        simplex: the per-class example counts are set to match that prevalence
+        and the examples are sampled (with replacement) from the corresponding
+        class pool. This is what gives the symmetric quantifier bags with
+        *varying* prevalences to learn from — naive uniform resampling would
+        produce only bags at the natural training prevalence.
+        """
+        n_classes = len(self.classes_)
+        class_indices = [np.flatnonzero(y == c) for c in self.classes_]
+        # Drop classes with no examples to avoid empty sampling pools.
+        present = [k for k in range(n_classes) if len(class_indices[k]) > 0]
+
+        bags = []
+        for _ in range(n_bags):
+            # Uniform draw over the simplex of the present classes.
+            prev = np.zeros(n_classes, dtype=float)
+            draw = rng.dirichlet(np.ones(len(present)))
+            prev[present] = draw
+
+            counts = np.floor(prev * bag_size).astype(int)
+            # Distribute the rounding remainder so counts sum to bag_size.
+            remainder = bag_size - counts.sum()
+            if remainder > 0:
+                order = np.argsort(-(prev * bag_size - counts))
+                for k in order[:remainder]:
+                    counts[k] += 1
+
+            parts = []
+            for k in range(n_classes):
+                if counts[k] == 0:
+                    continue
+                pool = class_indices[k]
+                chosen = pool[rng.integers(0, len(pool), size=counts[k])]
+                parts.append(chosen)
+            idx = np.concatenate(parts)
+            rng.shuffle(idx)
+            X_bag = X[idx]
+            # Use the realised prevalence (counts / bag_size) as the target.
+            prev_realised = counts / counts.sum()
+            bags.append((X_bag, prev_realised))
+        return bags
+
+    def _run_epoch(self, batches, optimiser, train: bool):
+        """Run one epoch over an iterator of stacked bag mini-batches.
+
+        ``batches`` yields ``(X, prev)`` NumPy arrays already stacked to
+        ``(n_bags, bag_size, n_features)`` / ``(n_bags, n_classes)`` — one
+        optimiser step covers a whole mini-batch of bags. The iterator is
+        consumed lazily (only one chunk resident) and, when wrapped with
+        :class:`BackgroundPrefetch`, sampling overlaps GPU compute. Returns the
+        mean loss.
+        """
+        device = torch.device(self.device)
+        pin = device.type == "cuda"
+        self.network_.train(mode=train)
+        accum = max(int(getattr(self, "gradient_accumulation", 1) or 1), 1)
+        losses = []
+        ctx = torch.enable_grad if train else torch.no_grad
+        with ctx():
+            if train:
+                optimiser.zero_grad()
+            step = 0
+            for X_np, prev_np in batches:
+                X_t = torch.from_numpy(np.ascontiguousarray(X_np, dtype=np.float32))
+                p_true = torch.from_numpy(np.ascontiguousarray(prev_np, dtype=np.float32))
+                if pin:
+                    X_t = X_t.pin_memory().to(device, non_blocking=True)
+                    p_true = p_true.pin_memory().to(device, non_blocking=True)
+                else:
+                    X_t, p_true = X_t.to(device), p_true.to(device)
+                p_pred, extras = self._forward_batch(self.network_, X_t)
+                loss = self._compute_loss(p_pred, p_true, extras)
+                losses.append(loss.item())
+                if train:
+                    # Average the gradient over ``accum`` mini-batches before
+                    # stepping, so the effective batch is accum * batch_size bags.
+                    (loss / accum).backward()
+                    step += 1
+                    if step % accum == 0:
+                        optimiser.step()
+                        optimiser.zero_grad()
+            if train and step % accum != 0:
+                optimiser.step()
+                optimiser.zero_grad()
+        return float(np.mean(losses))
+
+    def _compute_loss(self, p_pred, p_true, extras=None):
+        if self.loss == "rae":
+            # Smooth with the actual bag size (eps = 1 / (2 * bag_size)), matching
+            # the LeQua RAE definition used by the authors.
+            base = rae_loss(p_pred, p_true, epsilon=1.0 / (2 * self.bag_size))
+        elif self.loss == "ae":
+            base = torch.mean(torch.abs(p_pred - p_true))
+        else:
+            base = torch.mean((p_pred - p_true) ** 2)
+
+        # CKA regularization (only for GMNet, extras carries Z_list)
+        if extras is not None and getattr(self, "cka_lambda", 0) > 0:
+            base = base + self.cka_lambda * cka_regularization(extras)
+        return base
+
+    def predict(self, X):
+        """Predict class prevalences for a test bag.
+
+        Parameters
+        ----------
+        X : array-like of shape (n_samples, n_features)
+
+        Returns
+        -------
+        prevalences : ndarray of shape (n_classes,)
+        """
+        device = torch.device(self.device)
+        X = (np.asarray(X, dtype=float) - self._x_mean) / self._x_std
+        # Add a singleton bag axis -> (1, n_samples, n_features).
+        X_t = torch.as_tensor(X, dtype=torch.float32, device=device).unsqueeze(0)
+        self.network_.eval()
+        with torch.no_grad():
+            p_pred, _ = self._forward_batch(self.network_, X_t)
+        return p_pred.cpu().numpy().flatten()
 
 
-        
-        
+class HistNetQ(_SymmetricNeuralQ):
+    r"""Neural quantifier with differentiable histogram bag representation.
+
+    Implements the HistNetQ architecture from Pérez-Mon et al. (2024).
+    Trains end-to-end on bags labeled by prevalence (symmetric approach),
+    directly minimising a quantification loss (RAE by default).
+
+    Architecture::
+
+        FEM (feature_extractor) → DifferentiableHistogramRepresentation → QM (MLP + softmax)
+
+    The FEM maps each example in the bag to a latent vector. The histogram
+    layer summarises the bag permutation-invariantly. The QM predicts prevalences.
+
+    Parameters
+    ----------
+    feature_extractor : nn.Module
+        Feature Extraction Module. Maps (n_examples, n_input_features) →
+        (n_examples, n_latent_features) and outputs the **raw** latent vector
+        (no final ``nn.Sigmoid()``): the network squashes it into the ``[0, 1]``
+        histogram range internally with a sigmoid. Input features are
+        standardised at the data level inside :meth:`fit`, so the sigmoid stays
+        responsive; a deep FEM with dropout (e.g. ``0.5``) works well.
+    n_latent_features : int
+        Output dimensionality of ``feature_extractor``. Must be specified
+        explicitly so the histogram layer can be sized correctly.
+    n_bins : int, default=32
+        Number of histogram bins per latent feature.
+    ff_layers : tuple of int, default=(512, 256)
+        Hidden layer sizes in the Quantification Module (QM).
+    lr : float, default=1e-3
+        Initial learning rate.
+    optimizer : {'adam', 'adamw'}, default='adam'
+        Optimiser used for training.
+    weight_decay : float, default=0.0
+        L2 / decoupled weight-decay regularisation passed to the optimiser.
+    end_lr : float or None, default=None
+        If set, the learning rate is reduced on a validation-loss plateau
+        (:class:`~torch.optim.lr_scheduler.ReduceLROnPlateau`, factor
+        ``lr_factor``, patience ``patience``) and training stops once it falls
+        below ``end_lr``. If ``None``, a fixed learning rate with simple
+        early stopping (``patience``) is used instead.
+    lr_factor : float, default=0.1
+        Multiplicative LR-reduction factor used when ``end_lr`` is set.
+    n_epochs : int, default=100
+        Maximum training epochs.
+    patience : int, default=20
+        Epochs without validation improvement before the LR is reduced
+        (``end_lr`` set) or training is early-stopped (``end_lr=None``).
+    bag_size : int, default=500
+        Number of examples per training bag.
+    n_bags : int, default=1000
+        Training bags generated per epoch.
+    val_bags : int, default=300
+        Validation bags per epoch.
+    batch_size : int, default=10
+        Number of bags stacked into a single mini-batch per optimiser step.
+        Larger values give less noisy gradients (at higher memory cost).
+    gradient_accumulation : int, default=1
+        Number of mini-batches to accumulate gradients over before each
+        optimiser step (effective batch size ``gradient_accumulation *
+        batch_size`` bags).
+    bag_mixer_ratio : float, default=0.5
+        Fraction of training bags replaced by Bag Mixer augmented bags.
+    loss : {'rae', 'ae', 'mse'}, default='rae'
+        Loss function optimised during training.
+    device : str, default='cpu'
+    random_state : int or None, default=None
+
+    References
+    ----------
+    Pérez-Mon, O., Moreo, A., del Coz, J.J., & González, P. (2024).
+    Quantification using permutation-invariant networks based on histograms.
+    *Neural Computing and Applications*, 37, 3505–3520.
+    """
+
+    def __init__(
+        self,
+        feature_extractor,
+        n_latent_features: int,
+        n_bins: int = 32,
+        ff_layers=(512, 256),
+        lr: float = 1e-3,
+        optimizer: str = "adam",
+        weight_decay: float = 0.0,
+        end_lr: float = None,
+        lr_factor: float = 0.1,
+        n_epochs: int = 100,
+        patience: int = 20,
+        bag_size: int = 500,
+        n_bags: int = 1000,
+        val_bags: int = 300,
+        batch_size: int = 10,
+        gradient_accumulation: int = 1,
+        bag_mixer_ratio: float = 0.5,
+        loss: str = "rae",
+        device: str = "cpu",
+        random_state: int = None,
+        verbose: bool = False,
+        checkpoint_path: str = None,
+        checkpoint_every: int = 0,
+    ):
+        if torch is None:
+            raise ImportError("PyTorch is required to use HistNetQ.")
+        self.feature_extractor = feature_extractor
+        self.n_latent_features = n_latent_features
+        self.n_bins = n_bins
+        self.ff_layers = ff_layers
+        self.lr = lr
+        self.optimizer = optimizer
+        self.weight_decay = weight_decay
+        self.end_lr = end_lr
+        self.lr_factor = lr_factor
+        self.n_epochs = n_epochs
+        self.patience = patience
+        self.bag_size = bag_size
+        self.n_bags = n_bags
+        self.val_bags = val_bags
+        self.batch_size = batch_size
+        self.gradient_accumulation = gradient_accumulation
+        self.bag_mixer_ratio = bag_mixer_ratio
+        self.loss = loss
+        self.device = device
+        self.random_state = random_state
+        self.verbose = verbose
+        self.checkpoint_path = checkpoint_path
+        self.checkpoint_every = checkpoint_every
+
+    def _build_network(self, n_input_features, n_classes):
+        from mlquantify.representations import DifferentiableHistogramRepresentation
+
+        brm = DifferentiableHistogramRepresentation(
+            n_features=self.n_latent_features, n_bins=self.n_bins
+        )
+        qm_input_size = brm.output_size
+        layers = []
+        in_size = qm_input_size
+        for out_size in self.ff_layers:
+            layers += [nn.Linear(in_size, out_size), nn.LeakyReLU(), nn.Dropout(0.5)]
+            in_size = out_size
+        layers.append(nn.Linear(in_size, n_classes))
+        # Squash the FEM output into [0, 1] before binning (the histogram bins
+        # live in [0, 1]). Inputs are standardised at the data level in ``fit``,
+        # which keeps this sigmoid in its responsive range, so a plain sigmoid is
+        # enough — no per-bag normalisation (which would erase the prevalence
+        # signal).
+        return nn.ModuleDict({
+            "fem": self.feature_extractor,
+            "to_unit": nn.Sigmoid(),
+            "brm": brm,
+            "qm": nn.Sequential(*layers),
+        })
+
+    def _forward_batch(self, network, X):
+        # X: (B, n, n_input_features). Linear layers act on the last axis, so the
+        # bag and example axes pass through untouched.
+        latent = network["fem"](X)                  # (B, n, n_latent_features)
+        latent = network["to_unit"](latent)         # (B, n, n_latent_features) in [0, 1]
+        hist = network["brm"](latent)               # (B, n_bins * n_latent_features)
+        logits = network["qm"](hist)                # (B, n_classes)
+        p_pred = torch.softmax(logits, dim=-1)
+        return p_pred, None                          # no extras for HistNetQ
+
+
+class GMNet(_SymmetricNeuralQ):
+    r"""Neural quantifier with Gaussian latent-space bag representation.
+
+    Implements the GMNet architecture from Pérez-Mon et al. (2025).
+    Uses K learnable multivariate Gaussian distributions across L independent
+    latent spaces to represent bags permutation-invariantly.
+
+    Architecture::
+
+        L × FEM (replicated/independent projections, sigmoid output) →
+        GaussianRepresentation → QM (MLP + softmax)
+
+    Parameters
+    ----------
+    feature_extractor : nn.Module
+        Shared base FEM. Replicated L times internally (one projection
+        layer per latent space is appended, each outputting ``latent_dim``
+        units with sigmoid activation).
+    n_input_features : int
+        Input dimensionality fed into ``feature_extractor``.
+    latent_dim : int, default=8
+        Dimensionality d of each Gaussian latent space. The covariance is a full
+        ``d × d`` matrix per Gaussian, so keep this small (the paper uses ~3–8).
+    n_gaussians : int, default=100
+        Number K of Gaussians per latent space.
+    n_latent : int, default=9
+        Number L of independent latent spaces.
+    ff_layers : tuple of int, default=(512, 256)
+        Hidden layer sizes in the Quantification Module.
+    cka_lambda : float, default=0.01
+        Weight for CKA diversity regularization loss.
+        Set to 0.0 to disable.
+    lr : float, default=1e-3
+        Initial learning rate.
+    optimizer : {'adam', 'adamw'}, default='adam'
+        Optimiser used for training.
+    weight_decay : float, default=0.0
+        L2 / decoupled weight-decay regularisation passed to the optimiser.
+    end_lr : float or None, default=None
+        If set, reduce the LR on a validation-loss plateau (factor ``lr_factor``,
+        patience ``patience``) and stop once it falls below ``end_lr``; otherwise
+        use a fixed LR with simple early stopping.
+    lr_factor : float, default=0.1
+        Multiplicative LR-reduction factor used when ``end_lr`` is set.
+    n_epochs : int, default=100
+    patience : int, default=20
+    bag_size : int, default=1000
+    n_bags : int, default=1000
+    val_bags : int, default=300
+    batch_size : int, default=10
+        Number of bags stacked into a single mini-batch per optimiser step.
+    gradient_accumulation : int, default=1
+        Mini-batches to accumulate gradients over before each optimiser step.
+    bag_mixer_ratio : float, default=0.5
+    loss : {'rae', 'ae', 'mse'}, default='rae'
+    device : str, default='cpu'
+    random_state : int or None, default=None
+
+    References
+    ----------
+    Pérez-Mon, O., del Coz, J.J., & González, P. (2025).
+    Quantification Via Gaussian Latent Space Representations.
+    arXiv:2501.13638.
+    """
+
+    def __init__(
+        self,
+        feature_extractor,
+        n_input_features: int,
+        latent_dim: int = 8,
+        n_gaussians: int = 100,
+        n_latent: int = 9,
+        ff_layers=(512, 256),
+        cka_lambda: float = 0.01,
+        lr: float = 1e-3,
+        optimizer: str = "adam",
+        weight_decay: float = 0.0,
+        end_lr: float = None,
+        lr_factor: float = 0.1,
+        n_epochs: int = 100,
+        patience: int = 20,
+        bag_size: int = 1000,
+        n_bags: int = 1000,
+        val_bags: int = 300,
+        batch_size: int = 10,
+        gradient_accumulation: int = 1,
+        bag_mixer_ratio: float = 0.5,
+        loss: str = "rae",
+        device: str = "cpu",
+        random_state: int = None,
+        verbose: bool = False,
+        checkpoint_path: str = None,
+        checkpoint_every: int = 0,
+    ):
+        if torch is None:
+            raise ImportError("PyTorch is required to use GMNet.")
+        self.feature_extractor = feature_extractor
+        self.n_input_features = n_input_features
+        self.latent_dim = latent_dim
+        self.n_gaussians = n_gaussians
+        self.n_latent = n_latent
+        self.ff_layers = ff_layers
+        self.cka_lambda = cka_lambda
+        self.lr = lr
+        self.optimizer = optimizer
+        self.weight_decay = weight_decay
+        self.end_lr = end_lr
+        self.lr_factor = lr_factor
+        self.n_epochs = n_epochs
+        self.patience = patience
+        self.bag_size = bag_size
+        self.n_bags = n_bags
+        self.val_bags = val_bags
+        self.batch_size = batch_size
+        self.gradient_accumulation = gradient_accumulation
+        self.bag_mixer_ratio = bag_mixer_ratio
+        self.loss = loss
+        self.device = device
+        self.random_state = random_state
+        self.verbose = verbose
+        self.checkpoint_path = checkpoint_path
+        self.checkpoint_every = checkpoint_every
+
+    def _build_network(self, n_input_features, n_classes):
+        from mlquantify.representations import GaussianRepresentation
+
+        # L independent projection heads on top of shared FEM. Inputs are
+        # standardised at the data level in ``fit``, keeping the sigmoid in its
+        # responsive range (no per-bag normalisation, which would erase the
+        # prevalence signal carried by each bag's composition).
+        projections = nn.ModuleList([
+            nn.Sequential(
+                nn.Linear(self._get_fem_output_size(), self.latent_dim),
+                nn.Sigmoid(),
+            )
+            for _ in range(self.n_latent)
+        ])
+        brm = GaussianRepresentation(
+            latent_dim=self.latent_dim,
+            n_gaussians=self.n_gaussians,
+            n_latent=self.n_latent,
+        )
+        qm_input_size = brm.output_size
+        layers = []
+        in_size = qm_input_size
+        for out_size in self.ff_layers:
+            layers += [nn.Linear(in_size, out_size), nn.LeakyReLU(), nn.Dropout(0.5)]
+            in_size = out_size
+        layers.append(nn.Linear(in_size, n_classes))
+        return nn.ModuleDict({
+            "fem": self.feature_extractor,
+            "projections": projections,
+            "brm": brm,
+            "qm": nn.Sequential(*layers),
+        })
+
+    def _get_fem_output_size(self):
+        # Infer FEM output size by running a dummy forward pass
+        was_training = self.feature_extractor.training
+        self.feature_extractor.eval()
+        with torch.no_grad():
+            dummy = torch.zeros(1, self.n_input_features)
+            out = self.feature_extractor(dummy)
+        self.feature_extractor.train(was_training)
+        return out.shape[-1]
+
+    def _forward_batch(self, network, X):
+        # X: (B, n, n_input_features). The FEM and projections are Linear-based,
+        # so they act on the last axis and keep the bag/example axes.
+        fem_out = network["fem"](X)        # (B, n, fem_output_size)
+        Z_list = [proj(fem_out) for proj in network["projections"]]  # each (B, n, latent_dim)
+        # Stack the L latent spaces: (B, L, n, latent_dim)
+        Z_stacked = torch.stack(Z_list, dim=1)
+        repr_vec = network["brm"](Z_stacked)          # (B, L * n_gaussians)
+        logits = network["qm"](repr_vec)              # (B, n_classes)
+        p_pred = torch.softmax(logits, dim=-1)
+        # CKA regulariser works on (n_examples, latent_dim) per space; flatten the
+        # bag and example axes together so it sees all examples in the batch.
+        extras = [z.reshape(-1, z.shape[-1]) for z in Z_list]
+        return p_pred, extras
+
