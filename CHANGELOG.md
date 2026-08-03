@@ -22,6 +22,21 @@ torch.
 
 ### New Features
 
+- **Explicit Loss Minimization** (`elm`, new family) — quantifiers whose
+  linear SVM is *trained to minimize a quantification loss*, via a
+  **pure-Python reimplementation of Joachims' multivariate SVM** (the
+  cutting-plane algorithm behind `svmperf` — no external GPL binary, unlike
+  other libraries' wrappers; the most-violated-constraint search is fully
+  vectorized over all O(n²) contingency tables). `MultivariateLossSVM` is
+  the public sklearn-style learner (composable with any aggregative
+  quantifier, custom losses supported); `ELM` is the generic
+  Classify-and-Count quantifier over it; convenience classes **`SVMQ`**
+  (the Q-measure of Barranquero et al. 2015: recall × normalized absolute
+  score), **`SVMKLD`** / **`SVMNKLD`** (Esuli & Sebastiani 2015) and
+  **`SVMAE`** / **`SVMRAE`**. Binary methods; multiclass handled by the
+  automatic OvR decomposition. With `loss='error'` the learner provably
+  recovers a standard linear SVM (Joachims 2005, Theorem 3), which the
+  tests verify against `LinearSVC`.
 - **ReadMe methods** (`readme`, new family) — the classifier-free quantifiers
   from automated content analysis: **`ReadMe`** (Hopkins & King 2010; King &
   Lu 2008) solves the accounting identity `P(S) = P(S|D) P(D)` by
@@ -86,6 +101,14 @@ torch.
 
 ### Fixed
 
+- **`@binary_quantifier` now supports CC-style aggregation** — the
+  decorator's `aggregate` wrapper only handled quantifiers whose
+  aggregation needs training labels/probabilities and raised
+  `ValueError: Binary aggregation requires at least train labels` for
+  classify-and-count subclasses (whose `aggregate` takes predictions only),
+  breaking their `predict` in both the binary and OvR paths. A
+  predictions-only branch was added; aggregating >2 classes from
+  predictions alone still raises, now with an actionable message.
 - **Metrics no longer divide by zero on degenerate prevalences** — every
   metric in `mlquantify.metrics` is now finite on inputs with absent
   classes (e.g. the extreme bags of an APP sweep) and on degenerate

@@ -57,4 +57,5 @@ shift means, and how to choose a method — see :ref:`quantification_foundations
    Distribution Matching <modules/distribution_matching.rst>
    Nearest Neighbours <modules/neighbors.rst>
    Quantification Trees <modules/tree.rst>
+   Explicit Loss Minimization <modules/elm.rst>
 

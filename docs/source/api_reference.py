@@ -215,6 +215,24 @@ API_REFERENCE = {
             }
         ],
     },
+    "mlquantify.elm": {
+        "short_summary": "Explicit Loss Minimization methods for quantification.",
+        "description": None,
+        "sections": [
+            {
+                "title": "Explicit Loss Minimization Methods",
+                "autosummary": [
+                    "MultivariateLossSVM",
+                    "ELM",
+                    "SVMQ",
+                    "SVMKLD",
+                    "SVMNKLD",
+                    "SVMAE",
+                    "SVMRAE",
+                ],
+            }
+        ],
+    },
     "mlquantify.readme": {
         "short_summary": "ReadMe methods for quantification without classifiers.",
         "description": None,

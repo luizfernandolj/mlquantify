@@ -135,6 +135,21 @@ The table below lists all the quantification methods available in the ``mlquanti
      - Yes
      - Aggregative
      - :mod:`~mlquantify.neighbors`
+   * - :class:`~mlquantify.elm.SVMQ`
+     - `Barranquero et al. (2015) <https://www.sciencedirect.com/science/article/pii/S0031320314003501>`_
+     - No
+     - Aggregative
+     - :mod:`~mlquantify.elm`
+   * - :class:`~mlquantify.elm.SVMKLD`
+     - `Esuli & Sebastiani (2015) <https://dl.acm.org/doi/10.1145/2700406>`_
+     - No
+     - Aggregative
+     - :mod:`~mlquantify.elm`
+   * - :class:`~mlquantify.elm.SVMNKLD`
+     - `Esuli & Sebastiani (2015) <https://dl.acm.org/doi/10.1145/2700406>`_
+     - No
+     - Aggregative
+     - :mod:`~mlquantify.elm`
    * - :class:`~mlquantify.readme.ReadMe`
      - `Hopkins & King (2010) <https://onlinelibrary.wiley.com/doi/10.1111/j.1540-5907.2009.00428.x>`_
      - Yes

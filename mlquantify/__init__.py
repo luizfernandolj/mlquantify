@@ -10,6 +10,7 @@ except PackageNotFoundError:  # pragma: no cover - running from a source tree
 from . import neighbors
 from . import tree
 from . import readme
+from . import elm
 from . import likelihood
 from . import matching
 from . import meta
@@ -34,6 +35,7 @@ __all__ = [
     "neighbors",
     "tree",
     "readme",
+    "elm",
     "likelihood",
     "matching",
     "meta",

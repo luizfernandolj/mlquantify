@@ -512,8 +512,7 @@ class QuaNet(SoftPredictionMixin, AggregativeMixin, BaseQuantifier):
                 "`embedder` (e.g. TfidfVectorizer, PCA, TorchClassifierWrapper) "
                 "that does."
             )
-        if not hasattr(self.estimator, "predict_proba"):
-            raise ValueError("estimator must implement predict_proba().")
+
         self.embedder_ = _embedder
 
         os.makedirs(self.checkpointdir, exist_ok=True)
@@ -536,7 +535,6 @@ class QuaNet(SoftPredictionMixin, AggregativeMixin, BaseQuantifier):
 
         self.tr_prev = get_prev_from_labels(y, format="array")
 
-        # **CORREÇÃO: Obter embeddings e suas dimensões**
         X_train_embeddings = _embedder.transform(X_train)
         X_val_embeddings = _embedder.transform(X_val)
         
@@ -564,9 +562,8 @@ class QuaNet(SoftPredictionMixin, AggregativeMixin, BaseQuantifier):
         numQtf = len(self.quantifiers)
         numClasses = len(self.classes_)
 
-        # **CORREÇÃO: Use a dimensão dos embeddings, não das features originais**
         self.quanet = QuaNetModule(
-            doc_embedding_size=X_train_embeddings.shape[1],  # ← MUDANÇA AQUI
+            doc_embedding_size=X_train_embeddings.shape[1],
             n_classes=numClasses,
             stats_size=numQtf*numClasses,
             order_by=0 if numClasses == 2 else None,

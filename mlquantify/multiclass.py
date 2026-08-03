@@ -671,13 +671,32 @@ class BinaryQuantifier(MetaquantifierMixin, BaseQuantifier):
             preds, y_train = args
             args_dict = dict(preds=preds, y_train=y_train)
         else:
-            raise ValueError("Binary aggregation requires at least train labels")
+            # CC-style aggregation: only the test predictions are needed.
+            (preds,) = args
+            args_dict = dict(preds=preds)
 
-        resolved = np.unique(classes) if classes is not None else np.unique(args_dict["y_train"])
+        if classes is not None:
+            resolved = np.unique(classes)
+        elif "y_train" in args_dict:
+            resolved = np.unique(args_dict["y_train"])
+        else:
+            preds_arr = np.asarray(args_dict["preds"])
+            resolved = (
+                np.arange(preds_arr.shape[1])
+                if preds_arr.ndim == 2
+                else np.unique(preds_arr)
+            )
         n_jobs = getattr(qtf, "n_jobs", None)
 
         if (hasattr(qtf, "binary") and qtf.binary) or len(resolved) <= 2:
             return qtf._original_aggregate(*args_dict.values(), classes=classes)
+
+        if "y_train" not in args_dict:
+            raise ValueError(
+                "Aggregating more than two classes from predictions alone is "
+                "ambiguous for a binary quantifier; pass the training labels "
+                "or use predict()."
+            )
 
         strategy = get_strategy(_get_binary_strategy(qtf))
         prevalences = strategy.aggregate(qtf, resolved, args_dict, n_jobs=n_jobs)

@@ -51,13 +51,17 @@ neural = ["torch>=1.12"]
 all = ["matplotlib>=3.5", "torch>=1.12"]
 
 [project.urls]
-Homepage = "https://github.com/luizfernandolj/mlquantify"
-Documentation = "https://luizfernandolj.github.io/mlquantify/"
-Source = "https://github.com/luizfernandolj/mlquantify"
-"Issue Tracker" = "https://github.com/luizfernandolj/mlquantify/issues"
+Homepage = "https://github.com/coenlab/mlquantify"
+Documentation = "https://coenlab.github.io/mlquantify/"
+Source = "https://github.com/coenlab/mlquantify"
+"Issue Tracker" = "https://github.com/coenlab/mlquantify/issues"
 
 [tool.setuptools]
 include-package-data = true
 
 [tool.setuptools.packages.find]
 include = ["mlquantify*"]
+
+[tool.cibuildwheel]
+manylinux-x86_64-image = "manylinux_2_28"
+manylinux-aarch64-image = "manylinux_2_28"

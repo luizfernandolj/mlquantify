@@ -98,6 +98,14 @@ Comparing methods
         Estimate prevalences directly from features with the ReadMe accounting
         identity — no per-document prediction step at all.
 
+    .. grid-item-card:: Training the classifier for quantification (SVM(Q))
+        :link: sphx_elm
+        :link-type: ref
+        :text-align: center
+
+        Train an SVM whose loss is the Q-measure itself and watch its raw
+        counts stay honest where an error-trained SVM tilts.
+
 
 Evaluation and protocols
 -------------------------
@@ -267,6 +275,7 @@ benchmark quantifiers on it with the true prevalences in hand.
    plot_quanet
    plot_quantification_trees
    plot_readme
+   plot_elm
    plot_protocols
    plot_error_by_shift
    plot_grid_search

@@ -24,6 +24,7 @@ reference on core concepts, see the :ref:`Foundations <quantification_foundation
   mlquantify.confidence
   mlquantify.counting
   mlquantify.datasets
+  mlquantify.elm
   mlquantify.likelihood
   mlquantify.losses
   mlquantify.matching
@@ -1149,6 +1150,122 @@ reference on core concepts, see the :ref:`Foundations <quantification_foundation
         .. div:: caption
 
           :mod:`mlquantify.datasets`
+
+
+
+
+
+
+
+
+
+  * - :obj:`~mlquantify.elm.MultivariateLossSVM`
+
+    - .. div:: sk-apisearch-desc
+
+        .. currentmodule:: mlquantify.elm
+
+        .. autoshortsummary:: mlquantify.elm.MultivariateLossSVM
+
+        .. div:: caption
+
+          :mod:`mlquantify.elm`
+
+
+
+
+
+  * - :obj:`~mlquantify.elm.ELM`
+
+    - .. div:: sk-apisearch-desc
+
+        .. currentmodule:: mlquantify.elm
+
+        .. autoshortsummary:: mlquantify.elm.ELM
+
+        .. div:: caption
+
+          :mod:`mlquantify.elm`
+
+
+
+
+
+  * - :obj:`~mlquantify.elm.SVMQ`
+
+    - .. div:: sk-apisearch-desc
+
+        .. currentmodule:: mlquantify.elm
+
+        .. autoshortsummary:: mlquantify.elm.SVMQ
+
+        .. div:: caption
+
+          :mod:`mlquantify.elm`
+
+
+
+
+
+  * - :obj:`~mlquantify.elm.SVMKLD`
+
+    - .. div:: sk-apisearch-desc
+
+        .. currentmodule:: mlquantify.elm
+
+        .. autoshortsummary:: mlquantify.elm.SVMKLD
+
+        .. div:: caption
+
+          :mod:`mlquantify.elm`
+
+
+
+
+
+  * - :obj:`~mlquantify.elm.SVMNKLD`
+
+    - .. div:: sk-apisearch-desc
+
+        .. currentmodule:: mlquantify.elm
+
+        .. autoshortsummary:: mlquantify.elm.SVMNKLD
+
+        .. div:: caption
+
+          :mod:`mlquantify.elm`
+
+
+
+
+
+  * - :obj:`~mlquantify.elm.SVMAE`
+
+    - .. div:: sk-apisearch-desc
+
+        .. currentmodule:: mlquantify.elm
+
+        .. autoshortsummary:: mlquantify.elm.SVMAE
+
+        .. div:: caption
+
+          :mod:`mlquantify.elm`
+
+
+
+
+
+  * - :obj:`~mlquantify.elm.SVMRAE`
+
+    - .. div:: sk-apisearch-desc
+
+        .. currentmodule:: mlquantify.elm
+
+        .. autoshortsummary:: mlquantify.elm.SVMRAE
+
+        .. div:: caption
+
+          :mod:`mlquantify.elm`
 
 
 
