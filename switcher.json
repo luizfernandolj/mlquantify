@@ -1,6 +1,11 @@
 [
   {
-    "name": "v0.5.1 (stable)",
+    "name": "v0.5.2b3 (stable)",
+    "version": "0.5.2b3",
+    "url": "https://coenlab.github.io/mlquantify/0.5.2b3/"
+  },
+  {
+    "name": "v0.5.1",
     "version": "0.5.1",
     "url": "https://luizfernandolj.github.io/mlquantify/0.5.1/"
   },
