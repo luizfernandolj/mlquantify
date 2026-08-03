@@ -49,7 +49,7 @@ jobs:
       - name: Install dependencies
         run: |
           python -m pip install --upgrade pip
-          pip install .
+          pip install . packaging
           pip install sphinx pydata_sphinx_theme sphinx-rtd-theme \
                       sphinx-prompt sphinx_copybutton sphinxext-opengraph \
                       matplotlib sphinxcontrib-sass sphinx_remove_toctrees \
@@ -82,9 +82,10 @@ jobs:
 
             python3 - <<EOF
           import json, os
+          from packaging.version import parse, InvalidVersion
 
           pages_dir = "/tmp/gh-pages"
-          base_url = "https://luizfernandolj.github.io/mlquantify"
+          base_url = "https://coenlab.github.io/mlquantify"
 
           # Read existing switcher to preserve older versions
           switcher_path = os.path.join(pages_dir, "switcher.json")
@@ -112,17 +113,22 @@ jobs:
               "url": f"{base_url}/dev/"
           })
 
-          # Stable first, then versions descending, dev last
-          def sort_key(e):
-              v = e["version"]
-              if v == "dev":
-                  return (1, [])
+          # Stable first, then versions descending, dev last.
+          # packaging.version.parse understands pre-release suffixes
+          # (a/b/rc/.dev) correctly, unlike manual int parsing.
+          def parsed_version(v):
               try:
-                  return (0, [-int(x) for x in v.split(".")])
-              except ValueError:
-                  return (0, [v])
+                  return parse(v)
+              except InvalidVersion:
+                  return parse("0")
 
-          ordered = sorted(existing.values(), key=sort_key)
+          dev_entry = existing.pop("dev")
+          ordered = sorted(
+              existing.values(),
+              key=lambda e: parsed_version(e["version"]),
+              reverse=True,
+          )
+          ordered.append(dev_entry)
 
           with open(switcher_path, "w") as f:
               json.dump(ordered, f, indent=2)
@@ -139,7 +145,7 @@ jobs:
           <head>
           <meta charset="utf-8">
           <meta http-equiv="refresh" content="0; url=./stable/">
-          <link rel="canonical" href="https://luizfernandolj.github.io/mlquantify/stable/">
+          <link rel="canonical" href="https://coenlab.github.io/mlquantify/stable/">
           <title>mlquantify documentation</title>
           <script>window.location.replace("./stable/" + window.location.hash);</script>
           </head>
