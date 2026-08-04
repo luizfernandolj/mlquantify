@@ -4,7 +4,7 @@
 [![docs](https://img.shields.io/badge/docs-sphinx-blue)](https://luizfernandolj.github.io/mlquantify/)
 
 
-<a href="https://luizfernandolj.github.io/mlquantify/"><img src="assets/logo_mlquantify-white.svg" alt="mlquantify logo"></a>
+<a href="https://coenlab.github.io/mlquantify/stable/"><img src="assets/logo_mlquantify-white.svg" alt="mlquantify logo"></a>
 <h4 align="center">A Python Package for Quantification</h4>
 
 ___
