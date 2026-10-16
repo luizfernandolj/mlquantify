@@ -743,7 +743,7 @@ For multi-class problems it must accept an array of shape
 </dd>
 <dt><strong>n_classes</strong><span class="classifier">int</span></dt><dd><p>Number of classes.  Must be <code class="docutils literal notranslate"><span class="pre">&gt;=</span> <span class="pre">2</span></code>.</p>
 </dd>
-<dt><strong>solver</strong><span class="classifier">{‘auto’, ‘grid’, ‘ternary’, ‘bounded’, ‘slsqp’},              default=’auto’</span></dt><dd><p>Solver to use.  <code class="docutils literal notranslate"><span class="pre">'auto'</span></code> selects <code class="docutils literal notranslate"><span class="pre">'bounded'</span></code> for binary
+<dt><strong>solver</strong><span class="classifier">{‘auto’, ‘grid’, ‘ternary’, ‘bounded’, ‘slsqp’}, default=’auto’</span></dt><dd><p>Solver to use.  <code class="docutils literal notranslate"><span class="pre">'auto'</span></code> selects <code class="docutils literal notranslate"><span class="pre">'bounded'</span></code> for binary
 problems and <code class="docutils literal notranslate"><span class="pre">'slsqp'</span></code> for multi-class problems.</p>
 </dd>
 <dt><strong>grid_size</strong><span class="classifier">int, default=101</span></dt><dd><p>Number of evenly-spaced candidate values used by the <code class="docutils literal notranslate"><span class="pre">'grid'</span></code>
@@ -792,7 +792,7 @@ number of classes.</p>
 <span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span><span class="w"> </span><span class="nn">mlquantify.solvers</span><span class="w"> </span><span class="kn">import</span> <span class="n">minimize_prevalence</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">objective</span> <span class="o">=</span> <span class="k">lambda</span> <span class="n">alpha</span><span class="p">:</span> <span class="p">(</span><span class="n">alpha</span> <span class="o">-</span> <span class="mf">0.3</span><span class="p">)</span> <span class="o">**</span> <span class="mi">2</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">prevalence</span><span class="p">,</span> <span class="n">loss</span> <span class="o">=</span> <span class="n">minimize_prevalence</span><span class="p">(</span><span class="n">objective</span><span class="p">,</span> <span class="n">n_classes</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span>
-<span class="gp">... </span>                                       <span class="n">solver</span><span class="o">=</span><span class="s2">&quot;bounded&quot;</span><span class="p">)</span>
+<span class="gp">... </span>                                       <span class="n">solver</span><span class="o">=</span><span class="s2">"bounded"</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="nb">round</span><span class="p">(</span><span class="n">prevalence</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="mi">2</span><span class="p">)</span>
 <span class="go">np.float64(0.3)</span>
 </pre></div>

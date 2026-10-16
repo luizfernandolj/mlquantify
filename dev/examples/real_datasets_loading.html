@@ -539,7 +539,7 @@ only once.</p>
 <span class="n">data</span> <span class="o">=</span> <span class="n">fetch_mushroom</span><span class="p">()</span>      <span class="c1"># downloads + caches on first call</span>
 <span class="n">data</span><span class="o">.</span><span class="n">data</span>                    <span class="c1"># feature matrix, shape (n_samples, n_features)</span>
 <span class="n">data</span><span class="o">.</span><span class="n">target</span>                  <span class="c1"># integer class labels</span>
-<span class="n">data</span><span class="o">.</span><span class="n">target_names</span>            <span class="c1"># e.g. [&#39;edible&#39;, &#39;poisonous&#39;]</span>
+<span class="n">data</span><span class="o">.</span><span class="n">target_names</span>            <span class="c1"># e.g. ['edible', 'poisonous']</span>
 </pre></div>
 </div>
 </section>
@@ -558,7 +558,7 @@ only once.</p>
 <h2>Caching and offline use<a class="headerlink" href="#caching-and-offline-use" title="Link to this heading">#</a></h2>
 <p>Every fetcher accepts the same caching controls:</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Where the raw files are cached (default: a _data/ dir next to the package).</span>
-<span class="n">data</span> <span class="o">=</span> <span class="n">fetch_mushroom</span><span class="p">(</span><span class="n">data_home</span><span class="o">=</span><span class="s2">&quot;~/mlquantify_data&quot;</span><span class="p">)</span>
+<span class="n">data</span> <span class="o">=</span> <span class="n">fetch_mushroom</span><span class="p">(</span><span class="n">data_home</span><span class="o">=</span><span class="s2">"~/mlquantify_data"</span><span class="p">)</span>
 
 <span class="c1"># Fail instead of downloading when the cache is empty (e.g. offline / CI):</span>
 <span class="n">data</span> <span class="o">=</span> <span class="n">fetch_mushroom</span><span class="p">(</span><span class="n">download_if_missing</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>

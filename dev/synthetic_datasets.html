@@ -626,7 +626,7 @@ concentration spreads them out.</p></td>
 </div>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># bags concentrated near a 70/30 split</span>
 <span class="n">Xs</span><span class="p">,</span> <span class="n">ys</span><span class="p">,</span> <span class="n">prevs</span> <span class="o">=</span> <span class="n">make_quantification</span><span class="p">(</span>
-    <span class="n">n_batches</span><span class="o">=</span><span class="mi">30</span><span class="p">,</span> <span class="n">prevalence</span><span class="o">=</span><span class="s2">&quot;dirichlet&quot;</span><span class="p">,</span>
+    <span class="n">n_batches</span><span class="o">=</span><span class="mi">30</span><span class="p">,</span> <span class="n">prevalence</span><span class="o">=</span><span class="s2">"dirichlet"</span><span class="p">,</span>
     <span class="n">target_prevalence</span><span class="o">=</span><span class="p">[</span><span class="mf">0.7</span><span class="p">,</span> <span class="mf">0.3</span><span class="p">],</span> <span class="n">concentration</span><span class="o">=</span><span class="mi">150</span><span class="p">,</span> <span class="n">random_state</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
 </pre></div>
 </div>
@@ -678,7 +678,7 @@ features across that boundary; concept shift rotates the boundary itself.</p>
 <p>Because that boundary is explicit, <code class="docutils literal notranslate"><span class="pre">return_boundary=True</span></code> hands it back, so the
 exact labelling rule is known rather than hidden:</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">Xs</span><span class="p">,</span> <span class="n">ys</span><span class="p">,</span> <span class="n">prevs</span><span class="p">,</span> <span class="n">boundary</span> <span class="o">=</span> <span class="n">make_quantification</span><span class="p">(</span>
-    <span class="n">n_batches</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">shift_type</span><span class="o">=</span><span class="s2">&quot;covariate&quot;</span><span class="p">,</span> <span class="n">return_boundary</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">random_state</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+    <span class="n">n_batches</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">shift_type</span><span class="o">=</span><span class="s2">"covariate"</span><span class="p">,</span> <span class="n">return_boundary</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">random_state</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
 </pre></div>
 </div>
 <p><code class="docutils literal notranslate"><span class="pre">boundary</span></code> is a <code class="docutils literal notranslate"><span class="pre">DecisionBoundary</span></code> namedtuple with per-bag <code class="docutils literal notranslate"><span class="pre">coef</span></code> and
@@ -697,8 +697,8 @@ piecewise-linear regions rather than splitting it with a single line.</p>
 <p>Real data rarely shifts in one way only. Pass a <strong>list</strong> to <code class="docutils literal notranslate"><span class="pre">shift_type</span></code> to
 combine them:</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">Xs</span><span class="p">,</span> <span class="n">ys</span><span class="p">,</span> <span class="n">prevs</span> <span class="o">=</span> <span class="n">make_quantification</span><span class="p">(</span>
-    <span class="n">n_batches</span><span class="o">=</span><span class="mi">50</span><span class="p">,</span> <span class="n">shift_type</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;prior&quot;</span><span class="p">,</span> <span class="s2">&quot;covariate&quot;</span><span class="p">,</span> <span class="s2">&quot;concept&quot;</span><span class="p">],</span>
-    <span class="n">prevalence</span><span class="o">=</span><span class="s2">&quot;uniform&quot;</span><span class="p">,</span> <span class="n">covariate_scale</span><span class="o">=</span><span class="mf">0.4</span><span class="p">,</span> <span class="n">concept_strength</span><span class="o">=</span><span class="mf">0.3</span><span class="p">,</span>
+    <span class="n">n_batches</span><span class="o">=</span><span class="mi">50</span><span class="p">,</span> <span class="n">shift_type</span><span class="o">=</span><span class="p">[</span><span class="s2">"prior"</span><span class="p">,</span> <span class="s2">"covariate"</span><span class="p">,</span> <span class="s2">"concept"</span><span class="p">],</span>
+    <span class="n">prevalence</span><span class="o">=</span><span class="s2">"uniform"</span><span class="p">,</span> <span class="n">covariate_scale</span><span class="o">=</span><span class="mf">0.4</span><span class="p">,</span> <span class="n">concept_strength</span><span class="o">=</span><span class="mf">0.3</span><span class="p">,</span>
     <span class="n">random_state</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
 </pre></div>
 </div>

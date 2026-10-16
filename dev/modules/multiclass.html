@@ -588,11 +588,11 @@ set it afterwards as an attribute — both are equivalent:</p>
 <span class="kn">from</span><span class="w"> </span><span class="nn">sklearn.linear_model</span><span class="w"> </span><span class="kn">import</span> <span class="n">LogisticRegression</span>
 
 <span class="c1"># via the constructor</span>
-<span class="n">q</span> <span class="o">=</span> <span class="n">DyS</span><span class="p">(</span><span class="n">LogisticRegression</span><span class="p">(),</span> <span class="n">strategy</span><span class="o">=</span><span class="s2">&quot;ovo&quot;</span><span class="p">)</span>
+<span class="n">q</span> <span class="o">=</span> <span class="n">DyS</span><span class="p">(</span><span class="n">LogisticRegression</span><span class="p">(),</span> <span class="n">strategy</span><span class="o">=</span><span class="s2">"ovo"</span><span class="p">)</span>
 
 <span class="c1"># or as an attribute</span>
 <span class="n">q</span> <span class="o">=</span> <span class="n">DyS</span><span class="p">(</span><span class="n">LogisticRegression</span><span class="p">())</span>
-<span class="n">q</span><span class="o">.</span><span class="n">strategy</span> <span class="o">=</span> <span class="s2">&quot;ovo&quot;</span>
+<span class="n">q</span><span class="o">.</span><span class="n">strategy</span> <span class="o">=</span> <span class="s2">"ovo"</span>
 
 <span class="n">q</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">X_train</span><span class="p">,</span> <span class="n">y_train</span><span class="p">)</span>        <span class="c1"># 4-class data</span>
 <span class="n">q</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">X_test</span><span class="p">)</span>
@@ -661,9 +661,9 @@ implementations as <code class="docutils literal notranslate"><span class="pre">
 <span class="kn">from</span><span class="w"> </span><span class="nn">mlquantify.base</span><span class="w"> </span><span class="kn">import</span> <span class="n">BaseQuantifier</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">mlquantify.multiclass</span><span class="w"> </span><span class="kn">import</span> <span class="n">binary_quantifier</span>
 
-<span class="nd">@binary_quantifier</span><span class="p">(</span><span class="n">strategy_attr</span><span class="o">=</span><span class="s2">&quot;strategy&quot;</span><span class="p">)</span>
+<span class="nd">@binary_quantifier</span><span class="p">(</span><span class="n">strategy_attr</span><span class="o">=</span><span class="s2">"strategy"</span><span class="p">)</span>
 <span class="k">class</span><span class="w"> </span><span class="nc">MyBinaryQuantifier</span><span class="p">(</span><span class="n">BaseQuantifier</span><span class="p">):</span>
-    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">estimator</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">strategy</span><span class="o">=</span><span class="s2">&quot;ovr&quot;</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">estimator</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">strategy</span><span class="o">=</span><span class="s2">"ovr"</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">estimator</span> <span class="o">=</span> <span class="n">estimator</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">strategy</span> <span class="o">=</span> <span class="n">strategy</span>
 
@@ -689,7 +689,7 @@ decorator — no change to the dispatch</strong>. Subclass <a class="reference i
 register it with <a class="reference internal" href="generated/mlquantify.multiclass.register_strategy.html#mlquantify.multiclass.register_strategy" title="mlquantify.multiclass.register_strategy"><code class="xref py py-func docutils literal notranslate"><span class="pre">register_strategy</span></code></a>:</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">mlquantify.multiclass</span><span class="w"> </span><span class="kn">import</span> <span class="n">MulticlassStrategy</span><span class="p">,</span> <span class="n">register_strategy</span>
 
-<span class="nd">@register_strategy</span><span class="p">(</span><span class="s2">&quot;ecoc&quot;</span><span class="p">)</span>
+<span class="nd">@register_strategy</span><span class="p">(</span><span class="s2">"ecoc"</span><span class="p">)</span>
 <span class="k">class</span><span class="w"> </span><span class="nc">ECOCStrategy</span><span class="p">(</span><span class="n">MulticlassStrategy</span><span class="p">):</span>
     <span class="k">def</span><span class="w"> </span><span class="nf">fit</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">q</span><span class="p">,</span> <span class="n">X</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">n_jobs</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">fit_args</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">fit_kwargs</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
         <span class="c1"># return {key: fitted_binary_quantifier}</span>
@@ -708,7 +708,7 @@ register it with <a class="reference internal" href="generated/mlquantify.multic
         <span class="o">...</span>
 
 <span class="c1"># now usable on any binary method:</span>
-<span class="n">q</span> <span class="o">=</span> <span class="n">DyS</span><span class="p">(</span><span class="n">LogisticRegression</span><span class="p">(),</span> <span class="n">strategy</span><span class="o">=</span><span class="s2">&quot;ecoc&quot;</span><span class="p">)</span>
+<span class="n">q</span> <span class="o">=</span> <span class="n">DyS</span><span class="p">(</span><span class="n">LogisticRegression</span><span class="p">(),</span> <span class="n">strategy</span><span class="o">=</span><span class="s2">"ecoc"</span><span class="p">)</span>
 </pre></div>
 </div>
 <p>The four methods return prevalences <em>before</em> the shared normalisation that
@@ -716,7 +716,7 @@ register it with <a class="reference internal" href="generated/mlquantify.multic
 Inspect the available strategies with <a class="reference internal" href="generated/mlquantify.multiclass.available_strategies.html#mlquantify.multiclass.available_strategies" title="mlquantify.multiclass.available_strategies"><code class="xref py py-func docutils literal notranslate"><span class="pre">available_strategies</span></code></a>:</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">mlquantify.multiclass</span><span class="w"> </span><span class="kn">import</span> <span class="n">available_strategies</span>
 <span class="n">available_strategies</span><span class="p">()</span>
-<span class="c1"># [&#39;ecoc&#39;, &#39;ovo&#39;, &#39;ovr&#39;]</span>
+<span class="c1"># ['ecoc', 'ovo', 'ovr']</span>
 </pre></div>
 </div>
 <div class="admonition seealso">

@@ -783,7 +783,7 @@ objective).</p></li>
 <p class="rubric">Examples</p>
 <div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span><span class="w"> </span><span class="nn">mlquantify.solvers._binary</span><span class="w"> </span><span class="kn">import</span> <span class="n">solve_binary</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">prevalence</span><span class="p">,</span> <span class="n">loss</span> <span class="o">=</span> <span class="n">solve_binary</span><span class="p">(</span><span class="k">lambda</span> <span class="n">a</span><span class="p">:</span> <span class="p">(</span><span class="n">a</span> <span class="o">-</span> <span class="mf">0.3</span><span class="p">)</span> <span class="o">**</span> <span class="mi">2</span><span class="p">,</span>
-<span class="gp">... </span>                                <span class="n">solver</span><span class="o">=</span><span class="s2">&quot;bounded&quot;</span><span class="p">)</span>
+<span class="gp">... </span>                                <span class="n">solver</span><span class="o">=</span><span class="s2">"bounded"</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="nb">round</span><span class="p">(</span><span class="n">prevalence</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="mi">2</span><span class="p">)</span>
 <span class="go">np.float64(0.3)</span>
 </pre></div>

@@ -741,7 +741,7 @@ then applied at that chosen point.</p>
 <span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
 
 <span class="k">class</span><span class="w"> </span><span class="nc">HalfTPR</span><span class="p">(</span><span class="n">ThresholdAdjustment</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Select the threshold where TPR ≈ 0.5.&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""Select the threshold where TPR ≈ 0.5."""</span>
     <span class="k">def</span><span class="w"> </span><span class="nf">get_best_threshold</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">thresholds</span><span class="p">,</span> <span class="n">tprs</span><span class="p">,</span> <span class="n">fprs</span><span class="p">):</span>
         <span class="n">idx</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">argmin</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">tprs</span> <span class="o">-</span> <span class="mf">0.5</span><span class="p">))</span>
         <span class="k">return</span> <span class="n">thresholds</span><span class="p">[</span><span class="n">idx</span><span class="p">],</span> <span class="n">tprs</span><span class="p">[</span><span class="n">idx</span><span class="p">],</span> <span class="n">fprs</span><span class="p">[</span><span class="n">idx</span><span class="p">]</span>

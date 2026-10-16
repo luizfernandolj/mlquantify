@@ -962,8 +962,8 @@ prevalence vectors. The most important ones in <code class="docutils literal not
 <span class="n">true_prev</span>  <span class="o">=</span> <span class="n">get_prev_from_labels</span><span class="p">(</span><span class="n">y_test</span><span class="p">)</span>
 <span class="n">pred_prev</span>  <span class="o">=</span> <span class="n">quantifier</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">X_test</span><span class="p">)</span>
 
-<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;MAE:  </span><span class="si">{</span><span class="n">MAE</span><span class="p">(</span><span class="n">true_prev</span><span class="p">,</span><span class="w"> </span><span class="n">pred_prev</span><span class="p">)</span><span class="si">:</span><span class="s2">.4f</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;RAE:  </span><span class="si">{</span><span class="n">RAE</span><span class="p">(</span><span class="n">true_prev</span><span class="p">,</span><span class="w"> </span><span class="n">pred_prev</span><span class="p">)</span><span class="si">:</span><span class="s2">.4f</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"MAE:  </span><span class="si">{</span><span class="n">MAE</span><span class="p">(</span><span class="n">true_prev</span><span class="p">,</span><span class="w"> </span><span class="n">pred_prev</span><span class="p">)</span><span class="si">:</span><span class="s2">.4f</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"RAE:  </span><span class="si">{</span><span class="n">RAE</span><span class="p">(</span><span class="n">true_prev</span><span class="p">,</span><span class="w"> </span><span class="n">pred_prev</span><span class="p">)</span><span class="si">:</span><span class="s2">.4f</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
 </pre></div>
 </div>
 </section>
@@ -992,7 +992,7 @@ on <span class="math notranslate nohighlight">\(k\)</span> classes without decom
                            <span class="n">random_state</span><span class="o">=</span><span class="mi">42</span><span class="p">)</span>
 
 <span class="c1"># OvR decomposition is applied automatically</span>
-<span class="n">q</span> <span class="o">=</span> <span class="n">ACC</span><span class="p">(</span><span class="n">LogisticRegression</span><span class="p">(),</span> <span class="n">strategy</span><span class="o">=</span><span class="s1">&#39;ovr&#39;</span><span class="p">)</span>
+<span class="n">q</span> <span class="o">=</span> <span class="n">ACC</span><span class="p">(</span><span class="n">LogisticRegression</span><span class="p">(),</span> <span class="n">strategy</span><span class="o">=</span><span class="s1">'ovr'</span><span class="p">)</span>
 <span class="n">q</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">X</span><span class="p">[:</span><span class="mi">400</span><span class="p">],</span> <span class="n">y</span><span class="p">[:</span><span class="mi">400</span><span class="p">])</span>
 <span class="n">q</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">X</span><span class="p">[</span><span class="mi">400</span><span class="p">:])</span>
 </pre></div>

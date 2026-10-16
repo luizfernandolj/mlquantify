@@ -689,10 +689,10 @@ stops improving.</p></td>
 <span class="n">X_train</span><span class="p">,</span> <span class="n">X_test</span><span class="p">,</span> <span class="n">y_train</span><span class="p">,</span> <span class="n">y_test</span> <span class="o">=</span> <span class="n">train_test_split</span><span class="p">(</span>
     <span class="n">X</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">test_size</span><span class="o">=</span><span class="mf">0.3</span><span class="p">,</span> <span class="n">random_state</span><span class="o">=</span><span class="mi">42</span><span class="p">)</span>
 
-<span class="c1"># QuaNet uses the classifier&#39;s predict_proba as embedding</span>
+<span class="c1"># QuaNet uses the classifier's predict_proba as embedding</span>
 <span class="n">q</span> <span class="o">=</span> <span class="n">QuaNet</span><span class="p">(</span>
     <span class="n">estimator</span><span class="o">=</span><span class="n">LogisticRegression</span><span class="p">(),</span>
-    <span class="n">device</span><span class="o">=</span><span class="s1">&#39;cpu&#39;</span><span class="p">,</span>
+    <span class="n">device</span><span class="o">=</span><span class="s1">'cpu'</span><span class="p">,</span>
     <span class="n">hidden_size</span><span class="o">=</span><span class="mi">64</span><span class="p">,</span>
     <span class="n">max_epoch</span><span class="o">=</span><span class="mi">50</span><span class="p">,</span>
     <span class="n">patience</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span>

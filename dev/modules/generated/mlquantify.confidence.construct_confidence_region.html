@@ -741,7 +741,7 @@ based on the chosen <code class="docutils literal notranslate"><span class="pre"
 </dd>
 <dt><strong>confidence_level</strong><span class="classifier">float, default=0.95</span></dt><dd><p>Desired confidence level <span class="math notranslate nohighlight">\(1 - \alpha\)</span>.</p>
 </dd>
-<dt><strong>method</strong><span class="classifier">{‘intervals’, ‘ellipse’, ‘ellipse-clr’, ‘clr’},              default=’intervals’</span></dt><dd><p>Confidence region type.</p>
+<dt><strong>method</strong><span class="classifier">{‘intervals’, ‘ellipse’, ‘ellipse-clr’, ‘clr’}, default=’intervals’</span></dt><dd><p>Confidence region type.</p>
 <ul class="simple">
 <li><p><code class="docutils literal notranslate"><span class="pre">'intervals'</span></code> — <a class="reference internal" href="mlquantify.confidence.ConfidenceInterval.html#mlquantify.confidence.ConfidenceInterval" title="mlquantify.confidence.ConfidenceInterval"><code class="xref py py-class docutils literal notranslate"><span class="pre">ConfidenceInterval</span></code></a> (per-class
 percentile intervals).</p></li>
@@ -771,7 +771,7 @@ ellipse in simplex space).</p></li>
 <span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span><span class="w"> </span><span class="nn">mlquantify.confidence</span><span class="w"> </span><span class="kn">import</span> <span class="n">construct_confidence_region</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">samples</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">dirichlet</span><span class="p">([</span><span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">],</span> <span class="n">size</span><span class="o">=</span><span class="mi">200</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">cr</span> <span class="o">=</span> <span class="n">construct_confidence_region</span><span class="p">(</span><span class="n">samples</span><span class="p">,</span> <span class="n">confidence_level</span><span class="o">=</span><span class="mf">0.9</span><span class="p">,</span>
-<span class="gp">... </span>                                 <span class="n">method</span><span class="o">=</span><span class="s2">&quot;ellipse&quot;</span><span class="p">)</span>
+<span class="gp">... </span>                                 <span class="n">method</span><span class="o">=</span><span class="s2">"ellipse"</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">cr</span><span class="o">.</span><span class="n">get_point_estimate</span><span class="p">()</span><span class="o">.</span><span class="n">shape</span>
 <span class="go">(3,)</span>
 </pre></div>

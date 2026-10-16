@@ -604,15 +604,15 @@ Styling keywords such as <code class="docutils literal notranslate"><span class=
 
 <span class="c1"># Artificial Prevalence Protocol: fit once, predict on many test samples.</span>
 <span class="n">results</span> <span class="o">=</span> <span class="n">apply_protocol</span><span class="p">(</span>
-    <span class="n">ACC</span><span class="p">(</span><span class="n">LogisticRegression</span><span class="p">(</span><span class="n">max_iter</span><span class="o">=</span><span class="mi">1000</span><span class="p">)),</span> <span class="n">X</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">protocol</span><span class="o">=</span><span class="s2">&quot;app&quot;</span><span class="p">,</span>
+    <span class="n">ACC</span><span class="p">(</span><span class="n">LogisticRegression</span><span class="p">(</span><span class="n">max_iter</span><span class="o">=</span><span class="mi">1000</span><span class="p">)),</span> <span class="n">X</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">protocol</span><span class="o">=</span><span class="s2">"app"</span><span class="p">,</span>
     <span class="n">n_prevalences</span><span class="o">=</span><span class="mi">21</span><span class="p">,</span> <span class="n">repeats</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">batch_size</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> <span class="n">random_state</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>
 <span class="p">)</span>
 
 <span class="n">disp</span> <span class="o">=</span> <span class="n">DiagonalDisplay</span><span class="o">.</span><span class="n">from_predictions</span><span class="p">(</span>
-    <span class="n">results</span><span class="p">[</span><span class="s2">&quot;true_prevalences&quot;</span><span class="p">],</span> <span class="n">results</span><span class="p">[</span><span class="s2">&quot;predicted_prevalences&quot;</span><span class="p">],</span>
-    <span class="n">color</span><span class="o">=</span><span class="s2">&quot;#2a9d8f&quot;</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.6</span><span class="p">,</span> <span class="n">s</span><span class="o">=</span><span class="mi">20</span><span class="p">,</span>
+    <span class="n">results</span><span class="p">[</span><span class="s2">"true_prevalences"</span><span class="p">],</span> <span class="n">results</span><span class="p">[</span><span class="s2">"predicted_prevalences"</span><span class="p">],</span>
+    <span class="n">color</span><span class="o">=</span><span class="s2">"#2a9d8f"</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.6</span><span class="p">,</span> <span class="n">s</span><span class="o">=</span><span class="mi">20</span><span class="p">,</span>
 <span class="p">)</span>
-<span class="n">disp</span><span class="o">.</span><span class="n">ax_</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s2">&quot;ACC — diagonal plot&quot;</span><span class="p">)</span>
+<span class="n">disp</span><span class="o">.</span><span class="n">ax_</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s2">"ACC — diagonal plot"</span><span class="p">)</span>
 </pre></div>
 </div>
 <figure class="align-default">
@@ -623,7 +623,7 @@ Styling keywords such as <code class="docutils literal notranslate"><span class=
 <p><a class="reference internal" href="modules/generated/mlquantify.visualization.DiagonalDisplay.html#mlquantify.visualization.DiagonalDisplay.from_protocol" title="mlquantify.visualization.DiagonalDisplay.from_protocol"><code class="xref py py-meth docutils literal notranslate"><span class="pre">from_protocol</span></code></a> runs the
 protocol for you in a single call:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">DiagonalDisplay</span><span class="o">.</span><span class="n">from_protocol</span><span class="p">(</span><span class="n">ACC</span><span class="p">(</span><span class="n">LogisticRegression</span><span class="p">()),</span> <span class="n">X</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span>
-                              <span class="n">protocol</span><span class="o">=</span><span class="s2">&quot;app&quot;</span><span class="p">,</span> <span class="n">n_prevalences</span><span class="o">=</span><span class="mi">21</span><span class="p">)</span>
+                              <span class="n">protocol</span><span class="o">=</span><span class="s2">"app"</span><span class="p">,</span> <span class="n">n_prevalences</span><span class="o">=</span><span class="mi">21</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -646,17 +646,17 @@ boxes).</p>
 <span class="n">X</span><span class="p">,</span> <span class="n">y</span> <span class="o">=</span> <span class="n">make_classification</span><span class="p">(</span><span class="n">n_samples</span><span class="o">=</span><span class="mi">2000</span><span class="p">,</span> <span class="n">weights</span><span class="o">=</span><span class="p">[</span><span class="mf">0.6</span><span class="p">,</span> <span class="mf">0.4</span><span class="p">],</span> <span class="n">random_state</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
 
 <span class="n">results</span> <span class="o">=</span> <span class="n">apply_protocol</span><span class="p">(</span>
-    <span class="n">ACC</span><span class="p">(</span><span class="n">LogisticRegression</span><span class="p">(</span><span class="n">max_iter</span><span class="o">=</span><span class="mi">1000</span><span class="p">)),</span> <span class="n">X</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">protocol</span><span class="o">=</span><span class="s2">&quot;app&quot;</span><span class="p">,</span>
+    <span class="n">ACC</span><span class="p">(</span><span class="n">LogisticRegression</span><span class="p">(</span><span class="n">max_iter</span><span class="o">=</span><span class="mi">1000</span><span class="p">)),</span> <span class="n">X</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">protocol</span><span class="o">=</span><span class="s2">"app"</span><span class="p">,</span>
     <span class="n">n_prevalences</span><span class="o">=</span><span class="mi">21</span><span class="p">,</span> <span class="n">repeats</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">batch_size</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> <span class="n">random_state</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>
 <span class="p">)</span>
 
 <span class="n">disp</span> <span class="o">=</span> <span class="n">BiasDisplay</span><span class="o">.</span><span class="n">from_predictions</span><span class="p">(</span>
-    <span class="n">results</span><span class="p">[</span><span class="s2">&quot;true_prevalences&quot;</span><span class="p">],</span> <span class="n">results</span><span class="p">[</span><span class="s2">&quot;predicted_prevalences&quot;</span><span class="p">],</span>
+    <span class="n">results</span><span class="p">[</span><span class="s2">"true_prevalences"</span><span class="p">],</span> <span class="n">results</span><span class="p">[</span><span class="s2">"predicted_prevalences"</span><span class="p">],</span>
     <span class="n">bins</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">patch_artist</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
-    <span class="n">boxprops</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span><span class="n">facecolor</span><span class="o">=</span><span class="s2">&quot;#e9c46a&quot;</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.8</span><span class="p">),</span>
-    <span class="n">medianprops</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span><span class="n">color</span><span class="o">=</span><span class="s2">&quot;#264653&quot;</span><span class="p">,</span> <span class="n">linewidth</span><span class="o">=</span><span class="mi">2</span><span class="p">),</span>
+    <span class="n">boxprops</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span><span class="n">facecolor</span><span class="o">=</span><span class="s2">"#e9c46a"</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.8</span><span class="p">),</span>
+    <span class="n">medianprops</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span><span class="n">color</span><span class="o">=</span><span class="s2">"#264653"</span><span class="p">,</span> <span class="n">linewidth</span><span class="o">=</span><span class="mi">2</span><span class="p">),</span>
 <span class="p">)</span>
-<span class="n">disp</span><span class="o">.</span><span class="n">ax_</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s2">&quot;ACC — bias by true prevalence&quot;</span><span class="p">)</span>
+<span class="n">disp</span><span class="o">.</span><span class="n">ax_</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s2">"ACC — bias by true prevalence"</span><span class="p">)</span>
 </pre></div>
 </div>
 <figure class="align-default">
@@ -681,16 +681,16 @@ quantifier’s robustness to distribution shift. Keywords such as <code class="d
 <span class="n">X</span><span class="p">,</span> <span class="n">y</span> <span class="o">=</span> <span class="n">make_classification</span><span class="p">(</span><span class="n">n_samples</span><span class="o">=</span><span class="mi">2000</span><span class="p">,</span> <span class="n">weights</span><span class="o">=</span><span class="p">[</span><span class="mf">0.6</span><span class="p">,</span> <span class="mf">0.4</span><span class="p">],</span> <span class="n">random_state</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
 
 <span class="n">results</span> <span class="o">=</span> <span class="n">apply_protocol</span><span class="p">(</span>
-    <span class="n">ACC</span><span class="p">(</span><span class="n">LogisticRegression</span><span class="p">(</span><span class="n">max_iter</span><span class="o">=</span><span class="mi">1000</span><span class="p">)),</span> <span class="n">X</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">protocol</span><span class="o">=</span><span class="s2">&quot;upp&quot;</span><span class="p">,</span>
+    <span class="n">ACC</span><span class="p">(</span><span class="n">LogisticRegression</span><span class="p">(</span><span class="n">max_iter</span><span class="o">=</span><span class="mi">1000</span><span class="p">)),</span> <span class="n">X</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">protocol</span><span class="o">=</span><span class="s2">"upp"</span><span class="p">,</span>
     <span class="n">n_prevalences</span><span class="o">=</span><span class="mi">200</span><span class="p">,</span> <span class="n">batch_size</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> <span class="n">random_state</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>
 <span class="p">)</span>
 <span class="n">_</span><span class="p">,</span> <span class="n">counts</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">unique</span><span class="p">(</span><span class="n">y</span><span class="p">,</span> <span class="n">return_counts</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 <span class="n">train_prevalence</span> <span class="o">=</span> <span class="n">counts</span> <span class="o">/</span> <span class="n">counts</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span>
 
 <span class="n">ErrorByShiftDisplay</span><span class="o">.</span><span class="n">from_predictions</span><span class="p">(</span>
-    <span class="n">results</span><span class="p">[</span><span class="s2">&quot;true_prevalences&quot;</span><span class="p">],</span> <span class="n">results</span><span class="p">[</span><span class="s2">&quot;predicted_prevalences&quot;</span><span class="p">],</span>
-    <span class="n">train_prevalence</span><span class="o">=</span><span class="n">train_prevalence</span><span class="p">,</span> <span class="n">error_metric</span><span class="o">=</span><span class="s2">&quot;ae&quot;</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s2">&quot;ACC&quot;</span><span class="p">,</span>
-    <span class="n">color</span><span class="o">=</span><span class="s2">&quot;#e76f51&quot;</span><span class="p">,</span> <span class="n">marker</span><span class="o">=</span><span class="s2">&quot;s&quot;</span><span class="p">,</span> <span class="n">linewidth</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span>
+    <span class="n">results</span><span class="p">[</span><span class="s2">"true_prevalences"</span><span class="p">],</span> <span class="n">results</span><span class="p">[</span><span class="s2">"predicted_prevalences"</span><span class="p">],</span>
+    <span class="n">train_prevalence</span><span class="o">=</span><span class="n">train_prevalence</span><span class="p">,</span> <span class="n">error_metric</span><span class="o">=</span><span class="s2">"ae"</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s2">"ACC"</span><span class="p">,</span>
+    <span class="n">color</span><span class="o">=</span><span class="s2">"#e76f51"</span><span class="p">,</span> <span class="n">marker</span><span class="o">=</span><span class="s2">"s"</span><span class="p">,</span> <span class="n">linewidth</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span>
 <span class="p">)</span>
 </pre></div>
 </div>
@@ -712,8 +712,8 @@ bars.</p>
 <span class="n">PrevalenceDisplay</span><span class="o">.</span><span class="n">from_predictions</span><span class="p">(</span>
     <span class="p">[</span><span class="mf">0.18</span><span class="p">,</span> <span class="mf">0.55</span><span class="p">,</span> <span class="mf">0.27</span><span class="p">],</span>
     <span class="n">true_prevalence</span><span class="o">=</span><span class="p">[</span><span class="mf">0.20</span><span class="p">,</span> <span class="mf">0.50</span><span class="p">,</span> <span class="mf">0.30</span><span class="p">],</span>
-    <span class="n">class_names</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;setosa&quot;</span><span class="p">,</span> <span class="s2">&quot;versicolor&quot;</span><span class="p">,</span> <span class="s2">&quot;virginica&quot;</span><span class="p">],</span>
-    <span class="n">color</span><span class="o">=</span><span class="s2">&quot;#457b9d&quot;</span><span class="p">,</span>
+    <span class="n">class_names</span><span class="o">=</span><span class="p">[</span><span class="s2">"setosa"</span><span class="p">,</span> <span class="s2">"versicolor"</span><span class="p">,</span> <span class="s2">"virginica"</span><span class="p">],</span>
+    <span class="n">color</span><span class="o">=</span><span class="s2">"#457b9d"</span><span class="p">,</span>
 <span class="p">)</span>
 </pre></div>
 </div>
@@ -747,8 +747,8 @@ other number of classes it falls back to per-class intervals. The <code class="d
 
 <span class="n">ConfidenceRegionDisplay</span><span class="o">.</span><span class="n">from_estimates</span><span class="p">(</span>
     <span class="n">prev_estims</span><span class="p">,</span> <span class="n">confidence_level</span><span class="o">=</span><span class="mf">0.95</span><span class="p">,</span>
-    <span class="n">class_names</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;A&quot;</span><span class="p">,</span> <span class="s2">&quot;B&quot;</span><span class="p">,</span> <span class="s2">&quot;C&quot;</span><span class="p">],</span> <span class="n">true_prevalence</span><span class="o">=</span><span class="p">[</span><span class="mf">0.45</span><span class="p">,</span> <span class="mf">0.25</span><span class="p">,</span> <span class="mf">0.30</span><span class="p">],</span>
-    <span class="n">color</span><span class="o">=</span><span class="s2">&quot;#1d3557&quot;</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.25</span><span class="p">,</span>
+    <span class="n">class_names</span><span class="o">=</span><span class="p">[</span><span class="s2">"A"</span><span class="p">,</span> <span class="s2">"B"</span><span class="p">,</span> <span class="s2">"C"</span><span class="p">],</span> <span class="n">true_prevalence</span><span class="o">=</span><span class="p">[</span><span class="mf">0.45</span><span class="p">,</span> <span class="mf">0.25</span><span class="p">,</span> <span class="mf">0.30</span><span class="p">],</span>
+    <span class="n">color</span><span class="o">=</span><span class="s2">"#1d3557"</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.25</span><span class="p">,</span>
 <span class="p">)</span>
 </pre></div>
 </div>
@@ -759,8 +759,8 @@ other number of classes it falls back to per-class intervals. The <code class="d
 <a class="reference internal" href="modules/generated/mlquantify.visualization.ConfidenceRegionDisplay.html#mlquantify.visualization.ConfidenceRegionDisplay.from_region" title="mlquantify.visualization.ConfidenceRegionDisplay.from_region"><code class="xref py py-meth docutils literal notranslate"><span class="pre">from_region</span></code></a> instead:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">mlquantify.confidence</span><span class="w"> </span><span class="kn">import</span> <span class="n">construct_confidence_region</span>
 
-<span class="n">region</span> <span class="o">=</span> <span class="n">construct_confidence_region</span><span class="p">(</span><span class="n">prev_estims</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s2">&quot;ellipse&quot;</span><span class="p">)</span>
-<span class="n">ConfidenceRegionDisplay</span><span class="o">.</span><span class="n">from_region</span><span class="p">(</span><span class="n">region</span><span class="p">,</span> <span class="n">class_names</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;A&quot;</span><span class="p">,</span> <span class="s2">&quot;B&quot;</span><span class="p">,</span> <span class="s2">&quot;C&quot;</span><span class="p">])</span>
+<span class="n">region</span> <span class="o">=</span> <span class="n">construct_confidence_region</span><span class="p">(</span><span class="n">prev_estims</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s2">"ellipse"</span><span class="p">)</span>
+<span class="n">ConfidenceRegionDisplay</span><span class="o">.</span><span class="n">from_region</span><span class="p">(</span><span class="n">region</span><span class="p">,</span> <span class="n">class_names</span><span class="o">=</span><span class="p">[</span><span class="s2">"A"</span><span class="p">,</span> <span class="s2">"B"</span><span class="p">,</span> <span class="s2">"C"</span><span class="p">])</span>
 </pre></div>
 </div>
 </section>
@@ -779,21 +779,21 @@ artist — pass your own axes to draw several side by side:</p>
 
 <span class="n">X</span><span class="p">,</span> <span class="n">y</span> <span class="o">=</span> <span class="n">make_classification</span><span class="p">(</span><span class="n">n_samples</span><span class="o">=</span><span class="mi">2000</span><span class="p">,</span> <span class="n">weights</span><span class="o">=</span><span class="p">[</span><span class="mf">0.6</span><span class="p">,</span> <span class="mf">0.4</span><span class="p">],</span> <span class="n">random_state</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
 <span class="n">results</span> <span class="o">=</span> <span class="n">apply_protocol</span><span class="p">(</span>
-    <span class="n">ACC</span><span class="p">(</span><span class="n">LogisticRegression</span><span class="p">(</span><span class="n">max_iter</span><span class="o">=</span><span class="mi">1000</span><span class="p">)),</span> <span class="n">X</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">protocol</span><span class="o">=</span><span class="s2">&quot;app&quot;</span><span class="p">,</span>
+    <span class="n">ACC</span><span class="p">(</span><span class="n">LogisticRegression</span><span class="p">(</span><span class="n">max_iter</span><span class="o">=</span><span class="mi">1000</span><span class="p">)),</span> <span class="n">X</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">protocol</span><span class="o">=</span><span class="s2">"app"</span><span class="p">,</span>
     <span class="n">n_prevalences</span><span class="o">=</span><span class="mi">21</span><span class="p">,</span> <span class="n">repeats</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">batch_size</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> <span class="n">random_state</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>
 <span class="p">)</span>
-<span class="n">true_prev</span> <span class="o">=</span> <span class="n">results</span><span class="p">[</span><span class="s2">&quot;true_prevalences&quot;</span><span class="p">]</span>
-<span class="n">pred_prev</span> <span class="o">=</span> <span class="n">results</span><span class="p">[</span><span class="s2">&quot;predicted_prevalences&quot;</span><span class="p">]</span>
+<span class="n">true_prev</span> <span class="o">=</span> <span class="n">results</span><span class="p">[</span><span class="s2">"true_prevalences"</span><span class="p">]</span>
+<span class="n">pred_prev</span> <span class="o">=</span> <span class="n">results</span><span class="p">[</span><span class="s2">"predicted_prevalences"</span><span class="p">]</span>
 
 <span class="n">fig</span><span class="p">,</span> <span class="n">axes</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">11</span><span class="p">,</span> <span class="mf">4.5</span><span class="p">))</span>
 
 <span class="n">DiagonalDisplay</span><span class="o">.</span><span class="n">from_predictions</span><span class="p">(</span>
-    <span class="n">true_prev</span><span class="p">,</span> <span class="n">pred_prev</span><span class="p">,</span> <span class="n">ax</span><span class="o">=</span><span class="n">axes</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">color</span><span class="o">=</span><span class="s2">&quot;#2a9d8f&quot;</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.6</span><span class="p">,</span> <span class="n">s</span><span class="o">=</span><span class="mi">20</span><span class="p">,</span>
+    <span class="n">true_prev</span><span class="p">,</span> <span class="n">pred_prev</span><span class="p">,</span> <span class="n">ax</span><span class="o">=</span><span class="n">axes</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">color</span><span class="o">=</span><span class="s2">"#2a9d8f"</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.6</span><span class="p">,</span> <span class="n">s</span><span class="o">=</span><span class="mi">20</span><span class="p">,</span>
 <span class="p">)</span>
-<span class="n">axes</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s2">&quot;Diagonal&quot;</span><span class="p">)</span>
+<span class="n">axes</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s2">"Diagonal"</span><span class="p">)</span>
 
 <span class="n">BiasDisplay</span><span class="o">.</span><span class="n">from_predictions</span><span class="p">(</span><span class="n">true_prev</span><span class="p">,</span> <span class="n">pred_prev</span><span class="p">,</span> <span class="n">ax</span><span class="o">=</span><span class="n">axes</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">bins</span><span class="o">=</span><span class="mi">5</span><span class="p">)</span>
-<span class="n">axes</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s2">&quot;Per-class bias&quot;</span><span class="p">)</span>
+<span class="n">axes</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s2">"Per-class bias"</span><span class="p">)</span>
 
 <span class="n">fig</span><span class="o">.</span><span class="n">tight_layout</span><span class="p">()</span>
 </pre></div>

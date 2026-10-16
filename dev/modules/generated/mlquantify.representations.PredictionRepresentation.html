@@ -848,7 +848,7 @@ fitting to <code class="xref py py-meth docutils literal notranslate"><span clas
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><dl class="simple">
-<dt><strong>X</strong><span class="classifier">array-like of shape (n_samples, n_features) or             (n_samples,)</span></dt><dd><p>Feature matrix or pre-computed score array for the training
+<dt><strong>X</strong><span class="classifier">array-like of shape (n_samples, n_features) or (n_samples,)</span></dt><dd><p>Feature matrix or pre-computed score array for the training
 instances.</p>
 </dd>
 <dt><strong>y</strong><span class="classifier">array-like of shape (n_samples,)</span></dt><dd><p>Class labels for each training instance.</p>
@@ -856,7 +856,7 @@ instances.</p>
 <dt><strong>classes</strong><span class="classifier">array-like of shape (n_classes,) or None, default=None</span></dt><dd><p>Explicit list of class labels.  If <code class="docutils literal notranslate"><span class="pre">None</span></code>, the unique
 values in <code class="docutils literal notranslate"><span class="pre">y</span></code> are used.</p>
 </dd>
-<dt><strong>sample_weight</strong><span class="classifier">array-like of shape (n_samples,) or None,             default=None</span></dt><dd><p>Per-sample weights forwarded to <code class="xref py py-meth docutils literal notranslate"><span class="pre">_fit</span></code>.</p>
+<dt><strong>sample_weight</strong><span class="classifier">array-like of shape (n_samples,) or None, default=None</span></dt><dd><p>Per-sample weights forwarded to <code class="xref py py-meth docutils literal notranslate"><span class="pre">_fit</span></code>.</p>
 </dd>
 </dl>
 </dd>
@@ -905,7 +905,7 @@ When <code class="docutils literal notranslate"><span class="pre">average=True</
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><dl class="simple">
-<dt><strong>representation</strong><span class="classifier">ndarray of shape (n_classes,) or             (n_samples, n_classes)</span></dt><dd><p>Mean representation vector (when <code class="docutils literal notranslate"><span class="pre">average=True</span></code>) or
+<dt><strong>representation</strong><span class="classifier">ndarray of shape (n_classes,) or (n_samples, n_classes)</span></dt><dd><p>Mean representation vector (when <code class="docutils literal notranslate"><span class="pre">average=True</span></code>) or
 per-instance representation matrix.</p>
 </dd>
 </dl>

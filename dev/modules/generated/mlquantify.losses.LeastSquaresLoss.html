@@ -748,7 +748,7 @@ matrix <code class="docutils literal notranslate"><span class="pre">M</span></co
 </div>
 <p class="rubric">Examples</p>
 <div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span><span class="w"> </span><span class="nn">mlquantify.losses</span><span class="w"> </span><span class="kn">import</span> <span class="n">get_loss</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">loss</span> <span class="o">=</span> <span class="n">get_loss</span><span class="p">(</span><span class="s2">&quot;least_squares&quot;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">loss</span> <span class="o">=</span> <span class="n">get_loss</span><span class="p">(</span><span class="s2">"least_squares"</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">loss</span><span class="p">([</span><span class="mf">0.4</span><span class="p">,</span> <span class="mf">0.6</span><span class="p">],</span> <span class="p">[</span><span class="mf">0.5</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">])</span>
 <span class="go">0.02</span>
 </pre></div>
@@ -764,7 +764,7 @@ matrix <code class="docutils literal notranslate"><span class="pre">M</span></co
 </dd>
 <dt><strong>target</strong><span class="classifier">array-like of shape (n_components,)</span></dt><dd><p>Target representation vector.</p>
 </dd>
-<dt><strong>M</strong><span class="classifier">array-like of shape (n_components, n_classes) or None,             default=None</span></dt><dd><p>Optional mixing matrix.  When supplied, <code class="docutils literal notranslate"><span class="pre">mixture</span></code> is
+<dt><strong>M</strong><span class="classifier">array-like of shape (n_components, n_classes) or None, default=None</span></dt><dd><p>Optional mixing matrix.  When supplied, <code class="docutils literal notranslate"><span class="pre">mixture</span></code> is
 transformed as <code class="docutils literal notranslate"><span class="pre">M</span> <span class="pre">&#64;</span> <span class="pre">mixture</span></code> before computing the
 squared difference.</p>
 </dd>
@@ -779,7 +779,7 @@ squared difference.</p>
 </dl>
 <p class="rubric">Examples</p>
 <div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span><span class="w"> </span><span class="nn">mlquantify.losses</span><span class="w"> </span><span class="kn">import</span> <span class="n">get_loss</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">loss</span> <span class="o">=</span> <span class="n">get_loss</span><span class="p">(</span><span class="s2">&quot;ls&quot;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">loss</span> <span class="o">=</span> <span class="n">get_loss</span><span class="p">(</span><span class="s2">"ls"</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">loss</span><span class="p">([</span><span class="mf">0.3</span><span class="p">,</span> <span class="mf">0.7</span><span class="p">],</span> <span class="p">[</span><span class="mf">0.5</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">])</span>
 <span class="go">0.08</span>
 </pre></div>

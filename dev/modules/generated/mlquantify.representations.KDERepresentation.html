@@ -763,7 +763,7 @@
 <span class="gp">&gt;&gt;&gt; </span><span class="n">rng</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">default_rng</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">X</span> <span class="o">=</span> <span class="n">rng</span><span class="o">.</span><span class="n">standard_normal</span><span class="p">((</span><span class="mi">100</span><span class="p">,</span> <span class="mi">2</span><span class="p">))</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">y</span> <span class="o">=</span> <span class="p">(</span><span class="n">X</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">]</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">)</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">int</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">rep</span> <span class="o">=</span> <span class="n">KDERepresentation</span><span class="p">(</span><span class="n">bandwidth</span><span class="o">=</span><span class="mf">0.2</span><span class="p">,</span> <span class="n">kernel</span><span class="o">=</span><span class="s2">&quot;gaussian&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">rep</span> <span class="o">=</span> <span class="n">KDERepresentation</span><span class="p">(</span><span class="n">bandwidth</span><span class="o">=</span><span class="mf">0.2</span><span class="p">,</span> <span class="n">kernel</span><span class="o">=</span><span class="s2">"gaussian"</span><span class="p">)</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">rep</span><span class="o">.</span><span class="n">class_representations_</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
 <span class="go">KernelDensity(bandwidth=0.2)</span>
 </pre></div>
@@ -815,7 +815,7 @@ fitting to <code class="xref py py-meth docutils literal notranslate"><span clas
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><dl class="simple">
-<dt><strong>X</strong><span class="classifier">array-like of shape (n_samples, n_features) or             (n_samples,)</span></dt><dd><p>Feature matrix or pre-computed score array for the training
+<dt><strong>X</strong><span class="classifier">array-like of shape (n_samples, n_features) or (n_samples,)</span></dt><dd><p>Feature matrix or pre-computed score array for the training
 instances.</p>
 </dd>
 <dt><strong>y</strong><span class="classifier">array-like of shape (n_samples,)</span></dt><dd><p>Class labels for each training instance.</p>
@@ -823,7 +823,7 @@ instances.</p>
 <dt><strong>classes</strong><span class="classifier">array-like of shape (n_classes,) or None, default=None</span></dt><dd><p>Explicit list of class labels.  If <code class="docutils literal notranslate"><span class="pre">None</span></code>, the unique
 values in <code class="docutils literal notranslate"><span class="pre">y</span></code> are used.</p>
 </dd>
-<dt><strong>sample_weight</strong><span class="classifier">array-like of shape (n_samples,) or None,             default=None</span></dt><dd><p>Per-sample weights forwarded to <code class="xref py py-meth docutils literal notranslate"><span class="pre">_fit</span></code>.</p>
+<dt><strong>sample_weight</strong><span class="classifier">array-like of shape (n_samples,) or None, default=None</span></dt><dd><p>Per-sample weights forwarded to <code class="xref py py-meth docutils literal notranslate"><span class="pre">_fit</span></code>.</p>
 </dd>
 </dl>
 </dd>

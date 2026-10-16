@@ -569,7 +569,7 @@
 <span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
 
 <span class="k">class</span><span class="w"> </span><span class="nc">MyQuantifier</span><span class="p">(</span><span class="n">BaseQuantifier</span><span class="p">):</span>
-    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">param1</span><span class="o">=</span><span class="mi">42</span><span class="p">,</span> <span class="n">param2</span><span class="o">=</span><span class="s1">&#39;default&#39;</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">param1</span><span class="o">=</span><span class="mi">42</span><span class="p">,</span> <span class="n">param2</span><span class="o">=</span><span class="s1">'default'</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">param1</span> <span class="o">=</span> <span class="n">param1</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">param2</span> <span class="o">=</span> <span class="n">param2</span>
 
@@ -607,7 +607,7 @@
 <span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
 
 <span class="k">class</span><span class="w"> </span><span class="nc">MyAggregativeQuantifier</span><span class="p">(</span><span class="n">AggregativeQuantifierMixin</span><span class="p">,</span> <span class="n">BaseQuantifier</span><span class="p">):</span>
-    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">estimator</span><span class="p">,</span> <span class="n">param1</span><span class="o">=</span><span class="mi">42</span><span class="p">,</span> <span class="n">param2</span><span class="o">=</span><span class="s1">&#39;default&#39;</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">estimator</span><span class="p">,</span> <span class="n">param1</span><span class="o">=</span><span class="mi">42</span><span class="p">,</span> <span class="n">param2</span><span class="o">=</span><span class="s1">'default'</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">estimator</span> <span class="o">=</span> <span class="n">estimator</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">param1</span> <span class="o">=</span> <span class="n">param1</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">param2</span> <span class="o">=</span> <span class="n">param2</span>
@@ -652,9 +652,9 @@
 <span class="kn">from</span><span class="w"> </span><span class="nn">mlquantify.multiclass</span><span class="w"> </span><span class="kn">import</span> <span class="n">binary_quantifier</span>
 <span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
 
-<span class="nd">@binary_quantifier</span><span class="p">(</span><span class="n">strategy_attr</span><span class="o">=</span><span class="s2">&quot;strategy&quot;</span><span class="p">)</span>
+<span class="nd">@binary_quantifier</span><span class="p">(</span><span class="n">strategy_attr</span><span class="o">=</span><span class="s2">"strategy"</span><span class="p">)</span>
 <span class="k">class</span><span class="w"> </span><span class="nc">MyBinaryQuantifier</span><span class="p">(</span><span class="n">BaseQuantifier</span><span class="p">):</span>
-    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">strategy</span><span class="o">=</span><span class="s1">&#39;ovo&#39;</span><span class="p">,</span> <span class="n">param1</span><span class="o">=</span><span class="mi">42</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">strategy</span><span class="o">=</span><span class="s1">'ovo'</span><span class="p">,</span> <span class="n">param1</span><span class="o">=</span><span class="mi">42</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">strategy</span> <span class="o">=</span> <span class="n">strategy</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">param1</span> <span class="o">=</span> <span class="n">param1</span>
 
@@ -737,12 +737,12 @@
 
 <span class="k">class</span><span class="w"> </span><span class="nc">MyQuantifier</span><span class="p">(</span><span class="n">BaseQuantifier</span><span class="p">):</span>
     <span class="n">_param_constraints</span> <span class="o">=</span> <span class="p">{</span>
-        <span class="s1">&#39;param1&#39;</span><span class="p">:</span> <span class="p">[</span><span class="n">Interval</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="n">inclusive_left</span><span class="o">=</span><span class="kc">False</span><span class="p">)],</span>
-        <span class="s1">&#39;param2&#39;</span><span class="p">:</span> <span class="p">[</span><span class="n">Options</span><span class="p">([</span><span class="s1">&#39;default&#39;</span><span class="p">,</span> <span class="s1">&#39;option1&#39;</span><span class="p">,</span> <span class="s1">&#39;option2&#39;</span><span class="p">])],</span>
-        <span class="s1">&#39;param3&#39;</span><span class="p">:</span> <span class="s2">&quot;array-like&quot;</span>
+        <span class="s1">'param1'</span><span class="p">:</span> <span class="p">[</span><span class="n">Interval</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="n">inclusive_left</span><span class="o">=</span><span class="kc">False</span><span class="p">)],</span>
+        <span class="s1">'param2'</span><span class="p">:</span> <span class="p">[</span><span class="n">Options</span><span class="p">([</span><span class="s1">'default'</span><span class="p">,</span> <span class="s1">'option1'</span><span class="p">,</span> <span class="s1">'option2'</span><span class="p">])],</span>
+        <span class="s1">'param3'</span><span class="p">:</span> <span class="s2">"array-like"</span>
     <span class="p">}</span>
 
-    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">param1</span><span class="o">=</span><span class="mi">42</span><span class="p">,</span> <span class="n">param2</span><span class="o">=</span><span class="s1">&#39;default&#39;</span><span class="p">,</span> <span class="n">param3</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">param1</span><span class="o">=</span><span class="mi">42</span><span class="p">,</span> <span class="n">param2</span><span class="o">=</span><span class="s1">'default'</span><span class="p">,</span> <span class="n">param3</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">param1</span> <span class="o">=</span> <span class="n">param1</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">param2</span> <span class="o">=</span> <span class="n">param2</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">param3</span> <span class="o">=</span> <span class="n">param3</span>

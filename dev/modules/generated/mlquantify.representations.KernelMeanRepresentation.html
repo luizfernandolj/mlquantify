@@ -770,7 +770,7 @@ fitting to <code class="xref py py-meth docutils literal notranslate"><span clas
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><dl class="simple">
-<dt><strong>X</strong><span class="classifier">array-like of shape (n_samples, n_features) or             (n_samples,)</span></dt><dd><p>Feature matrix or pre-computed score array for the training
+<dt><strong>X</strong><span class="classifier">array-like of shape (n_samples, n_features) or (n_samples,)</span></dt><dd><p>Feature matrix or pre-computed score array for the training
 instances.</p>
 </dd>
 <dt><strong>y</strong><span class="classifier">array-like of shape (n_samples,)</span></dt><dd><p>Class labels for each training instance.</p>
@@ -778,7 +778,7 @@ instances.</p>
 <dt><strong>classes</strong><span class="classifier">array-like of shape (n_classes,) or None, default=None</span></dt><dd><p>Explicit list of class labels.  If <code class="docutils literal notranslate"><span class="pre">None</span></code>, the unique
 values in <code class="docutils literal notranslate"><span class="pre">y</span></code> are used.</p>
 </dd>
-<dt><strong>sample_weight</strong><span class="classifier">array-like of shape (n_samples,) or None,             default=None</span></dt><dd><p>Per-sample weights forwarded to <code class="xref py py-meth docutils literal notranslate"><span class="pre">_fit</span></code>.</p>
+<dt><strong>sample_weight</strong><span class="classifier">array-like of shape (n_samples,) or None, default=None</span></dt><dd><p>Per-sample weights forwarded to <code class="xref py py-meth docutils literal notranslate"><span class="pre">_fit</span></code>.</p>
 </dd>
 </dl>
 </dd>
@@ -836,7 +836,7 @@ using the kernel and hyperparameters configured at construction.</p>
 <p class="rubric">Examples</p>
 <div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span><span class="w"> </span><span class="nn">mlquantify.representations._kernel</span><span class="w"> </span><span class="kn">import</span> <span class="n">KernelMeanRepresentation</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">rep</span> <span class="o">=</span> <span class="n">KernelMeanRepresentation</span><span class="p">(</span><span class="n">kernel</span><span class="o">=</span><span class="s2">&quot;rbf&quot;</span><span class="p">,</span> <span class="n">gamma</span><span class="o">=</span><span class="mf">1.0</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">rep</span> <span class="o">=</span> <span class="n">KernelMeanRepresentation</span><span class="p">(</span><span class="n">kernel</span><span class="o">=</span><span class="s2">"rbf"</span><span class="p">,</span> <span class="n">gamma</span><span class="o">=</span><span class="mf">1.0</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">X</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([[</span><span class="mf">0.0</span><span class="p">],</span> <span class="p">[</span><span class="mf">1.0</span><span class="p">]])</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">Y</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([[</span><span class="mf">0.5</span><span class="p">]])</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">rep</span><span class="o">.</span><span class="n">pairwise</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">Y</span><span class="p">)</span><span class="o">.</span><span class="n">shape</span>
