@@ -9,7 +9,7 @@
 
 ___
 
- Website: [mlquantify](coenlab.github.io/mlquantify/)
+ Website: [coenlab.github.io/mlquantify/](https://coenlab.github.io/mlquantify/)
 
  **mlquantify** is a Python library for quantification, also known as supervised prevalence estimation, designed to estimate the distribution of classes within datasets. It offers a range of tools for various quantification methods, model selection tailored for quantification tasks, evaluation metrics, and protocols to assess quantification performance. Additionally, mlquantify includes calibration tools, confidence region estimation, pluggable solvers and representations, and visualization utilities to help analyze and interpret results.
 
